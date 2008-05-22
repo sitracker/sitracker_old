@@ -20,160 +20,134 @@ include ('mime.inc.php');
  * id - trigger name
  *   description - when the trigger is fired
  *   required - parameters the triggers needs to fire, 'provides' these to templates
- *   optional - Rules the trigger can check, mimics 'subscription'-type events
+ *   params - Rules the trigger can check, mimics 'subscription'-type events
  *   type - Trigger type (eg. incident, contact etc)
  */
 $triggerarray['TRIGGER_INCIDENT_CREATED'] =
 array('name' => 'Incident Created',
       'description' => 'Occurs when a new incident has been created',
       'required' => array('incidentid','contactid'),
-      'optional' => array('contactid', 'siteid', 'priority'),
-      'type' => 'system');
+      'params' => array('contactid', 'siteid', 'priority'),
+      );
 
 $triggerarray['TRIGGER_INCIDENT_ASSIGNED'] =
 array('name' => 'Incident Assigned',
       'description' => 'Occurs when a new incident is assigned to you',
       'required' => array('incidentid', 'userid'),
-      'optional' => array('userid'),
-      'type' => 'incident'
+      'params' => array('userid'),
       );
 
 $triggerarray['TRIGGER_INCIDENT_ASSIGNED_WHILE_AWAY'] =
 array('name' => 'Incident Assigned While Away',
       'description' => 'Occurs when a new incident is assigned to you and you are set to not accepting',
       'required' => array('incidentid', 'userid'),
-      'optional' => array(),
-      'type' => 'incident'
+      'params' => array(),
      );
 
 $triggerarray['TRIGGER_INCIDENT_ASSIGNED_WHILE_OFFLINE'] =
 array('name' => 'Incident Assigned While Offline',
       'description' => 'Occurs when a new incident is assigned to you and your status is offline',
       'required' => array('incidentid', 'userid'),
-      'optional' => array(),
-      'type' => 'incident'
+      'params' => array(),
       );
 
 $triggerarray['TRIGGER_INCIDENT_NEARING_SLA'] =
 array('name' => 'Incident Nearing SLA',
       'description' => 'Occurs when an incidents nears an SLA',
       'required' => array('incidentid', 'nextslatime', 'nextsla'),
-      'optional' => array('ownerid', 'townerid'),
-      'type' => 'incident'
+      'params' => array('ownerid', 'townerid'),
       );
 
 $triggerarray['TRIGGER_INCIDENT_REVIEW_DUE'] =
 array('name' => 'Incident Review Due',
       'description' => 'Occurs when an incident is due a review',
       'required' => array('revieweruserid'),
-      'optional' => array(),
-      'type' => 'incident'
+      'params' => array(),
       );
 
 $triggerarray['TRIGGER_KB_CREATED'] =
 array('name' => 'Knowledgebase Article Created',
       'description' => 'Occurs when a new Knowledgebase article is created',
       'required' => array('kbid', 'userid'),
-      'optional' => array(),
-      'type' => 'kb'
+      'params' => array(),
       );
 
 $triggerarray['TRIGGER_NEW_HELD_EMAIL'] =
 array('name' => 'New Held Email',
       'description' => 'Occurs when there is a new email in the holding queue',
       'required' => array(),
-      'optional' => array(),
-      'type' => 'incident'
+      'params' => array(),
       );
 
 $triggerarray['TRIGGER_WAITING_HELD_EMAIL'] =
 array('name' => 'Waiting Held Email',
       'description' => 'Occurs when there is a new email in the holding queue for x minutes',
       'required' => array('holdingmins'),
-      'optional' => array(),
-      'type' => 'user'
+      'params' => array(),
       );
 
 $triggerarray['TRIGGER_USER_SET_TO_AWAY'] =
 array('name' => 'User Set To Away',
       'description' => 'Occurs when one of your watched engineer goes away',
       'required' => array('engineerid'),
-      'optional' => array(),
-      'type' => 'user',
+      'params' => array(),
       );
 $triggerarray['TRIGGER_USER_RETURNS'] =
 array('name' => 'User Returns',
       'description' => 'Occurs when one of your watched engineers returns',
       'required' => array(),
-      'optional' => array(),
-      'type' => 'user'
+      'params' => array(),
       );
 
 $triggerarray['TRIGGER_SIT_UPGRADED'] =
 array('name' => 'SiT! Upgraded',
       'description' => 'Occurs when the system is upgraded',
       'required' => array('sitversion'),
-      'optional' => array(),
-      'type' => 'user'
-      );
-
-$triggerarray['TRIGGER_INCIDENT_OWNED_CLOSED_BY_USER'] =
-array('name' => 'Own Incident Closed By User',
-      'description' => 'Occurs when one of your incidents is closed by another engineer',
-      'required' => array('engineerid'),
-      'optional' => array(),
-      'type' => 'incident'
+      'params' => array(),
       );
 
 $triggerarray['TRIGGER_LANGUAGE_DIFFERS'] =
 array('name' => 'Current Language Differs',
       'description' => 'Occurs when your current language setting is different to your profile setting',
       'required' => array('currentlang', 'profilelang'),
-      'optional' => array(),
-      'type' => 'user'
+      'params' => array(),
      );
 
 $triggerarray['TRIGGER_CONTACT_RESET_PASSWORD'] =
 array('name' => 'Contact reset password',
       'description' => 'Occurs when a contact wants their password resetting',
       'required' => array('contactid', 'passwordreseturl'),
-      'type' => 'system'
       );
 
 $triggerarray['TRIGGER_USER_RESET_PASSWORD'] =
 array('name' => 'User reset password',
       'description' => 'Occurs when a user wants their password resetting',
       'required' => array('userid', 'passwordreseturl'),
-      'type' => 'system'
       );
 
 $triggerarray['TRIGGER_NEW_CONTACT'] =
 array('name' => 'New contact added',
       'description' => 'Occurs when a new contact is added',
       'required' => array('contactid', 'prepassword'),
-      'type' => 'system'
       );
 
 $triggerarray['TRIGGER_INCIDENT_CLOSED'] =
 array('name' => 'New contact added',
       'description' => 'Occurs when an incident is closed',
       'required' => array('incidentid'),
-      'type' => 'incident'
       );
 
 $triggerarray['TRIGGER_INCIDENT_CLOSED'] =
 array('name' => 'Incident closed',
       'description' => 'Occurs when an incident is closed',
       'required' => array('incidentid', 'userid'),
-      'optional' => array('userid'),
-      'type' => 'incident'
+      'params' => array('userid'),
       );
 
 $triggerarray['TRIGGER_CONTACT_ADDED'] =
 array('name' => 'Contact added',
       'description' => 'Occurs when an new contact is added',
       'required' => array('contactid', 'userid'),
-      'type' => 'system'
       );
 
 $triggerarray['TRIGGER_NEW_CONTRACT'] =
@@ -509,12 +483,12 @@ function create_trigger_notice($userid, $noticetext='', $triggertype='',
 /**
     * Displays a <select> with the list of email templates
     * @author Kieran Hogg, Ivan Lucas
-    * @param $triggertype string. The type of trigger (incident, contact...)
+    * @param $triggertype string. The type of trigger (incident, system...)
     * @param $name string. The name for the select
     * @param $selected string. The name of the selected item
     * @returns string. HTML snippet
 */
-function email_templates($triggertype, $name, $selected = '')
+function email_templates($name, $triggertype='system', $selected = '')
 {
     global $dbEmailTemplates, $dbTriggers;;
     $html .= "<select id='{$name}' name='{$name}'>";

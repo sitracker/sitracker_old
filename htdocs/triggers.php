@@ -113,6 +113,7 @@ switch ($_REQUEST['mode'])
                 $('emailtemplatesbox').hide();
                 $('journalbox').hide();
                 $('none').hide();
+                $('rules').show();
             }
             else if ($('new_action').value == 'ACTION_EMAIL')
             {
@@ -121,6 +122,8 @@ switch ($_REQUEST['mode'])
                 $('noticetemplatesbox').hide();
                 $('journalbox').hide();
                 $('none').hide();
+                $('rules').show();
+
             }
             else if ($('new_action').value == 'ACTION_JOURNAL')
             {
@@ -137,6 +140,8 @@ switch ($_REQUEST['mode'])
 //                 $('parametersbox').hide();
                 $('journalbox').hide();
                 $('none').show();
+                $('rules').hide();
+
             }
         }
         //]]>
@@ -186,21 +191,21 @@ switch ($_REQUEST['mode'])
         echo notice_templates('noticetemplate');
         echo "</div>\n";
         echo "<div id='emailtemplatesbox' style='display:none;'>";
-        echo email_templates($triggerarray[$id]['type'], 'emailtemplate');
+        echo email_templates('emailtemplate');
         echo "</div>\n";
         echo "<div id='journalbox' style='display:none;'>{$strNone}</div>";
         echo "<div id='none'>{$strNone}</div>";
 //         echo "<td><div id='parametersbox' style='display:none;'><input type='text' name='parameters' size='30' /></div></td>";
 
-        echo "<h3>{$strRules}</h3>";
-        if (is_array($triggerarray[$id]['optional']))
+        echo "<div id='rules' style='display:none'>";
+        echo "<h3><label for='rules'>{$strRules}</label></h3>";
+        if (is_array($triggerarray[$id]['params']))
         {
-            echo "{$strTheFollowingVariables} ";
-            echo "<br /><br /><tr><td colspan='3'><label for='rules'>{$strRules}:</label><br />";
+            echo "{$strTheFollowingVariables}<br /><br />";
             echo "<div class='bbcode_toolbar' id='paramlist'>";
             // Add built in params
-            $triggerarray[$id]['optional'][] = 'currentuserid';
-            foreach ($triggerarray[$id]['optional'] AS $param)
+            $triggerarray[$id]['params'][] = 'currentuserid';
+            foreach ($triggerarray[$id]['params'] AS $param)
             {
                 $replace = "{".$param."}";
                 $linktitle = $ttvararray[$replace]['description'];
@@ -219,13 +224,12 @@ switch ($_REQUEST['mode'])
             echo "</div>";
             echo "<textarea cols='30' rows='5' id='rules' name='rules' readonly='readonly'></textarea><br />";
             echo "<a href='javascript:void(0);' onclick='resetRules();'>{$strReset}</a>";
-            echo "</td></tr>";
         }
         else
         {
-            echo "<tr><td colspan='3'>Rules are not definable for this trigger action<td></tr>";
+            echo "Rules are not definable for this trigger action";
         }
-        echo "</table>\n";
+        echo "</div>";
         echo "<input type='hidden' name='mode' value='save' />";
         echo "<input type='hidden' name='id' value='{$id}' />";
         echo "<input type='hidden' name='user' value='{$selecteduser}' />";

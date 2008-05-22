@@ -287,9 +287,10 @@ $availabletimezones = array('-720' => 'UTC-12',
     * replacement - Quoted PHP code to be run to perform the template var replacement
     * requires -Optional field. single string or array. Specifies the 'required' params from the trigger that is needed for this replacement
     * action - Optional field, when set the var will only be available for that action
+    * type - Optional field, defines where a variable can be used, system, incident or user
 */
 $ttvararray['{applicationname}'] = array('description' => $CONFIG['application_name'],
-                                     'replacement' => '$CONFIG[\'application_name\'];');
+                                         'replacement' => '$CONFIG[\'application_name\'];');
 
 $ttvararray['{applicationurl}'] = array('description' => 'System URL',
                                         'replacement' => 'application_url();');
@@ -419,15 +420,16 @@ $ttvararray['{useremail}'] = array('description' => $strCurrentUserEmailAddress,
 $ttvararray['{userrealname}'] = array('description' => $strFullNameCurrentUser,
                                      'replacement' => 'user_realname($paramarray[\'userid\']);');
 
-$ttvararray['{passwordreseturl}'] = array('description' => '',
+$ttvararray['{passwordreseturl}'] = array('description' => 'Hashed URL to reset a password',
                                           'replacement' => '$paramarray[\'passwordreseturl\'];',
-                                          'requires' => 'passwordreseturl');
+                                          'requires' => 'passwordreseturl',
+                                          'type' => 'system');
 
-$ttvararray['{prepassword}'] = array('description' => '',
+$ttvararray['{prepassword}'] = array('description' => 'The plaintext contact password',
                                           'replacement' => '$paramarray[\'prepassword\'];',
                                           'requires' => 'prepassword');
 
-$ttvararray['{nextslatime}'] = array('description' => 'Time to next SLA',
+$ttvararray['{nextslatime}'] = array('description' => $strTimeToNextAction,
                                      'replacement' => 'format_workday_minutes($GLOBALS[\'now\'] - $paramarray[\'nextslatime\']);',
                                      'requires' => 'nextslatime');
 $ttvararray['{nextsla}'] = array('description' => 'Next SLA name',
@@ -446,10 +448,10 @@ $ttvararray['{contractsla}'] = array('description' => 'SLA of the maintenance',
                                   'replacement' => 'maintenance_servicelevel($paramarray[\'contractid\']);',
                                   'requires' => 'contractid');
 
-$ttvararray['{currentuserid}'] = array('description' => $sit[2],
+$ttvararray['{currentuserid}'] = array('description' => 'The current user',
                                        'replacement' => '$_SESSION[\'userid\'];');
 
-$ttvararray['{userid}'] = array('description' => 'user ID',
+$ttvararray['{userid}'] = array('description' => 'UserID the trigger passes',
                                 'replacement' => '$paramarray[\'userid\'];');
 
 $ttvararray['{ownerid}'] = array('description' => 'Incident owner ID',
