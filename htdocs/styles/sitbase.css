@@ -30,7 +30,8 @@ img { border:0px; }
 
 #footerbar select { font-size: 80%; }
 #footerbar form { margin: 0px; }
-#statusbar { background-color: #203894; }
+#statusbar { background-color: #203894; background-image: url('../images/top2.png');
+  background-position: top-left; background-repeat: x-repeat;}
 
 div.windowbox
 {
