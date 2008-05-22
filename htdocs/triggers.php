@@ -185,24 +185,28 @@ switch ($_REQUEST['mode'])
         echo "<h3>{$strRules}</h3>";
         if (is_array($triggerarray[$id]['optional']))
         {
-            echo "{$strTheFollowingVariables}<br />";
+            echo "{$strTheFollowingVariables} ";
+            echo "<br /><br /><tr><td colspan='3'><label for='rules'>{$strRules}:</label><br />";
+            echo "<div class='bbcode_toolbar' id='paramlist'>";
+            // Add built in params
+            $triggerarray[$id]['optional'][] = 'currentuserid';
             foreach ($triggerarray[$id]['optional'] AS $param)
             {
-                echo "<var><strong><a href='javascript:void(0);' ";
-                echo "onclick=\"insertRuletext('{{$param}}');\">{{$param}}</a>";
                 $replace = "{".$param."}";
-                echo "</strong></var> - {$ttvararray[$replace]['description']}<br />";
+                $linktitle = $ttvararray[$replace]['description'];
+                echo "<var><strong><a href='javascript:void(0);' title=\"{$linktitle}\" onclick=\"insertRuletext('{{$param}}');\">{{$param}}</a></strong></var> ";
             }
-            echo "<var><strong><a href='javascript:void(0);' ";
-            echo "onclick=\"insertRuletext('{currentuser}');\">{currentuser}";
-            echo "</a></strong></var> - {$ttvararray['{currentuser}']['description']} ";
-            echo "<br /><br />";
-            $operators = array('==', 'OR', 'AND');
-            foreach ($operators AS $op)
+            $compoperators = array('==', '!=');
+            foreach ($compoperators AS $op)
             {
-                echo "<var><strong><a href='javascript:void(0);' onclick=\"insertRuletext('{$op}');\">{$op}</a></strong></var> &nbsp; ";
+                echo "<var><strong><a href='javascript:void(0);' onclick=\"insertRuletext('{$op}');\">{$op}</a></strong></var> ";
             }
-            echo "<br /><br /><tr><td colspan='3'><label for='rules'>{$strRules}:</label><br />";
+            $logicaloperators = array('OR', 'AND', '(', ')');
+            foreach ($logicaloperators AS $op)
+            {
+                echo "<var><strong><a href='javascript:void(0);' onclick=\"insertRuletext('{$op}');\">{$op}</a></strong></var> ";
+            }
+            echo "</div>";
             echo "<textarea cols='30' rows='5' id='rules' name='rules' readonly='readonly'></textarea><br />";
             echo "<a href='javascript:void(0);' onclick='resetRules();'>{$strReset}</a>";
             echo "</td></tr>";
