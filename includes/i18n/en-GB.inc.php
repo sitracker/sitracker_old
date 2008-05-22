@@ -1110,6 +1110,7 @@ $strTemporaryOwner = 'Temporary Owner';
 $strTemporarilyAssignedto = 'Temporarily assigned to %s by %s';
 $strTerminated = 'Terminated';
 $strText = 'Text';
+$strTheFollowingVariables = 'The following variables may be used:';
 $strThereAreXIncidentsInThisList = 'There are %s incidents in this list';
 $strTheInfoInThisArticle = 'The information in this article applies to';
 $strThisMonth = 'This month';

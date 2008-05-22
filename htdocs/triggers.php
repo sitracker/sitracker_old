@@ -190,6 +190,7 @@ switch ($_REQUEST['mode'])
             {
                 echo "<var><strong><a href='javascript:void(0);' onclick=\"insertRuletext('{{$param}}');\">{{$param}}</a></strong></var> &nbsp; ";
             }
+            echo "<var><strong><a href='javascript:void(0);' onclick=\"insertRuletext('{currentuser}');\">{currentuser}</a></strong></var> &nbsp; ";
             echo "<br /><br />";
             $operators = array('==', 'OR', 'AND');
             foreach ($operators AS $op)
