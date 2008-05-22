@@ -84,7 +84,7 @@ elseif (empty($action))
 
     echo "<h2>{$title}</h2>";
 
-    $sql = "SELECT id, signature FROM `{$dbEmailsig}` ORDER BY id ASC";
+    $sql = "SELECT id, signature FROM `{$dbEmailSig}` ORDER BY id ASC";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(), E_USER_WARNING);
 
