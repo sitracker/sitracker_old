@@ -8332,18 +8332,25 @@ function kb_article($id, $mode='internal')
         exit;
     }
 
-    $html .= "<div id='kbarticle'>";
-
     $sql = "SELECT * FROM `{$GLOBALS['dbKBArticles']}` WHERE docid='{$id}' LIMIT 1";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     $kbarticle = mysql_fetch_object($result);
+
     if (empty($kbarticle->title))
     {
-        $kbarticle->title = $strUntitled;
+        $kbarticle->title = $GLOBALS['strUntitled'];
     }
-
+    $html .= "<div id='kbarticle'";
+    if ($kbarticle->distribution == 'private') $html .= " class='expired'";
+    if ($kbarticle->distribution == 'restricted') $html .= " class='urgent'";
+    $html .= ">";
     $html .= "<h2 class='kbtitle'>{$kbarticle->title}</h2>";
+
+    if ($kbarticle->distribution != 'public')
+    {
+        $html .= "<h2 class='kbdistribution'>{$GLOBALS['strDistribution']}: ".ucfirst($kbarticle->distribution)."</h2>";
+    }
 
     // Lookup what software this applies to
     $ssql = "SELECT * FROM `{$GLOBALS['dbKBSoftware']}` AS kbs, `{$GLOBALS['dbSoftware']}` AS s ";

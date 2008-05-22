@@ -85,6 +85,7 @@ if (empty($_REQUEST['process']))
             $('helptext').innerHTML = "Select the sections you'd like to include in the article by checking the boxes beside each heading, you can add further sections later.  You don't need to include all sections, just use the ones that are relevant.<br /><strong>Knowledge Base Article</strong>:";
             // Show the table rows for KB article
             $('titlerow').show();
+            $('distributionrow').show();
             $('symptomsrow').show();
             $('causerow').show();
             $('questionrow').show();
@@ -134,6 +135,7 @@ if (empty($_REQUEST['process']))
             $('helptext').innerHTML = "Enter some details about the incident to be stored in the incident log for future use.  You should provide a summary of the problem and information about how it was resolved.<br /><strong>Final Update</strong>:";
             // Hide the table rows for KB article
             $('titlerow').hide();
+            $('distributionrow').hide();
             $('symptomsrow').hide();
             $('causerow').hide();
             $('questionrow').hide();
@@ -168,6 +170,16 @@ if (empty($_REQUEST['process']))
     echo "<tr id='titlerow' style='display:none;'><th>{$strTitle}</th>";
     echo "<td><input type='text' name='kbtitle' id='kbtitle' size='30' value='{$incident_title}' disabled='disabled' />";
     echo "</td></tr>\n";
+    echo "<tr id='distributionrow' style='display:none;'><th>{$strDistribution}</th>";
+    echo "<td>";
+    echo "<select name='distribution'> ";
+    echo "<option value='public' selected='selected'>{$strPublic}</option>";
+    echo "<option value='private' style='color: blue;'>$strPrivate}</option>";
+    echo "<option value='restricted' style='color: red;'>{$strRestricted}</option>";
+    echo "</select> ";
+    echo help_link('KBDistribution');
+    echo "</td></tr>\n";
+
     echo "<tr><th>&nbsp;</th><td>";
     echo "<span id='helptext'>{$strEnterDetailsAboutIncidentToBeStoredInLog}";
     echo "{$strSummaryOfProblemAndResolution}<br /><strong>{$strFinalUpdate}</strong>:</span></td></tr>\n";
@@ -260,6 +272,7 @@ else
     $closingstatus = cleanvar($_POST['closingstatus']);
     $summary = cleanvar($_POST['summary']);
     $id = cleanvar($_POST['id']);
+    $distribution = cleanvar($_POST['distribution']);
     $solution = cleanvar($_POST['solution']);
     $kbarticle = cleanvar($_POST['kbarticle']);
     $kbtitle = cleanvar($_POST['kbtitle']);
@@ -477,7 +490,7 @@ else
                 $sql = "INSERT INTO `{$dbKBArticles}` (doctype, title, distribution, author, published, keywords) VALUES ";
                 $sql .= "('1', ";
                 $sql .= "'{$kbtitle}', ";
-                $sql .= "'public', ";
+                $sql .= "'{$distribution}', ";
                 $sql .= "'".mysql_real_escape_string($sit[2])."', ";
                 $sql .= "'".date('Y-m-d H:i:s', mktime(date('H'),date('i'),date('s'),date('m'),date('d'),date('Y')))."', ";
                 $sql .= "'[$id]') ";

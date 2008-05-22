@@ -302,6 +302,7 @@ div#container
   width: 100%;
   border-bottom: 1px #203894 solid;
 }
+h2.kbdistribution { text-align: left; }
 
 div#kbarticle textarea { width: 99%; }
 div#container textarea { width: 99%; }
