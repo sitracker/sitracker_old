@@ -53,15 +53,24 @@ if (empty($action) OR $action == 'showform' OR $action == 'list')
     ksort($templates);
     $shade='shade1';
     echo "<table align='center'>";
-    echo "<tr><th>{$strType}</th><th>{$strID}</th><th>{$strTemplate}</th><th>{$strDescription}</th><th>{$strOperation}</th></tr>";
+    echo "<tr><th>{$strType}</th><th>{$strTrigger}</th><th>{$strTemplate}</th><th>{$strOperation}</th></tr>";
     foreach ($templates AS $template)
     {
+        $editurl = "{$_SERVER['PHP_SELF']}?id={$template['id']}&amp;action=edit&amp;template={$template['template']}";
         echo "<tr class='{$shade}'>";
         echo "<td>{$template['type']} {$template['template']}</td>";
-        echo "<td>{$template['id']}</td>";
-        echo "<td>{$template['name']}</td>";
-        echo "<td>{$template['desc']}</td>";
-        echo "<td><a href='{$_SERVER['PHP_SELF']}?id={$template['id']}&amp;action=edit&amp;template={$template['template']}'>{$strEdit}</a></td>";
+        $tsql = "SELECT COUNT(id) FROM `{$dbTriggers}` WHERE template={$template['id']}";
+        $tresult = mysql_query($tsql);
+        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
+        list($numtriggers) = mysql_fetch_row($tresult);
+        echo "<td>";
+        if ($numtriggers > 0) echo icon('trigger',16);
+        if ($numtriggers > 1) echo " ({$numtriggers})";
+        echo "</td>";
+        echo "<td><a href='{$editurl}'>{$template['name']}</a>";
+        if (!empty($template['desc'])) echo "<br />{$template['desc']}";
+        echo "</td>";
+        echo "<td><a href='{$editurl}'>{$strEdit}</a></td>";
         echo "</tr>\n";
         if ($shade=='shade1') $shade='shade2';
         else $shade='shade1';
