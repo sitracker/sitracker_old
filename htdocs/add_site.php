@@ -218,9 +218,9 @@ elseif ($action == "add")
         // show success message
         else
         {
-            $id=mysql_insert_id();
+            $id = mysql_insert_id();
 
-            plugin_do('site_created');
+            trigger('TRIGGER_NEW_SITE', array('siteid' => $id));
             journal(CFG_LOGGING_NORMAL, 'Site Added', "Site {$id} was added", CFG_JOURNAL_SITES, $id);
             html_redirect("site_details.php?id={$id}");
         }
