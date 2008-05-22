@@ -106,7 +106,7 @@ if (is_array($pagescripts))
 
 echo "</head>\n";
 echo "<body>\n";
-echo "<h1 id='apptitle'>{$CONFIG['application_name']}</h1>\n";
+echo "<div id='masthead'><h1 id='apptitle'>{$CONFIG['application_name']}</h1></div>\n";
 if (!empty($_SESSION['lang']) AND $_SESSION['lang'] != $CONFIG['default_i18n'])
 {
     include("i18n/{$_SESSION['lang']}.inc.php");
