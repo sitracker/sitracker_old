@@ -76,7 +76,21 @@ switch ($_REQUEST['mode'])
         include ('htmlheader.inc.php');
         ?>
         <script type="text/javascript">
-        <!--
+        //<![CDATA[
+
+        function insertRuletext(tvar)
+        {
+            tvar = tvar + ' ';
+            var start = $('rules').selectionStart;
+            var end = $('rules').selectionEnd;
+            $('rules').value = $('rules').value.substring(0, start) + tvar + $('rules').value.substring(end, $('rules').textLength);
+        }
+
+        function resetRules()
+        {
+            $('rules').value = '';
+        }
+
         function switch_template()
         {
             if ($('new_action').value == 'ACTION_NOTICE')
@@ -112,7 +126,7 @@ switch ($_REQUEST['mode'])
                 $('none').show();
             }
         }
-        -->
+        //]]>
         </script>
         <?php
         echo "<h2>".icon('triggeraction', 32)." ";
@@ -167,17 +181,25 @@ switch ($_REQUEST['mode'])
         echo "<div id='journalbox' style='display:none;'>{$strNone}</div>";
         echo "<div id='none'>{$strNone}</div>";
 //         echo "<td><div id='parametersbox' style='display:none;'><input type='text' name='parameters' size='30' /></div></td>";
-        
+
         echo "<h3>{$strRules}</h3>";
         if (is_array($triggerarray[$id]['optional']))
         {
             echo "{$strTheFollowingVariables} ";
             foreach ($triggerarray[$id]['optional'] AS $param)
             {
-                echo "<var><strong>{{$param}}</strong></var> &nbsp; ";
+                echo "<var><strong><a href='javascript:void(0);' onclick=\"insertRuletext('{{$param}}');\">{{$param}}</a></strong></var> &nbsp; ";
+            }
+            echo "<br /><br />";
+            $operators = array('==', 'OR', 'AND');
+            foreach ($operators AS $op)
+            {
+                echo "<var><strong><a href='javascript:void(0);' onclick=\"insertRuletext('{$op}');\">{$op}</a></strong></var> &nbsp; ";
             }
             echo "<br /><br /><tr><td colspan='3'><label for='rules'>{$strRules}:</label><br />";
-            echo "<textarea cols='30' rows='5' id='rules' name='rules'></textarea></td></tr>";
+            echo "<textarea cols='30' rows='5' id='rules' name='rules' readonly='readonly'></textarea><br />";
+            echo "<a href='javascript:void(0);' onclick='resetRules();'>{$strReset}</a>";
+            echo "</td></tr>";
         }
         else
         {
@@ -295,13 +317,13 @@ switch ($_REQUEST['mode'])
                     {
                         if ($trigaction->userid == 0)
                         {
-                        	echo " (<img src='{$CONFIG['application_webpath']}";
-                        	echo "images/sit_favicon.png' />)";
+                            echo " (<img src='{$CONFIG['application_webpath']}";
+                            echo "images/sit_favicon.png' />)";
                         }
                         else
                         {
-                        	echo " (".icon('user', 16)." ";
-                        	echo user_realname($trigaction->userid).')';
+                            echo " (".icon('user', 16)." ";
+                            echo user_realname($trigaction->userid).')';
                         }
                     }
                     echo "<br />\n";
