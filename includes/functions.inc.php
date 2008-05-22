@@ -9047,6 +9047,14 @@ function setup_user_triggers($userid)
     return $return;
 }
 
+
+function contract_slaid($maintid)
+{
+    $maintid = intval($maintid);
+    $slaid = db_read_column('servicelevelid', $GLOBALS['dbMaintenance'], $maintid);
+    return $slaid;    
+}
+
 // -------------------------- // -------------------------- // --------------------------
 // leave this section at the bottom of functions.inc.php ================================
 
