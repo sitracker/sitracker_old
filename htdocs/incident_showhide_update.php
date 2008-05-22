@@ -27,12 +27,12 @@ switch ($mode)
 {
   case 'show':
     //echo "Showing update: $updateid for incident $incidentid";
-    $vsql = "UPDATE updates SET customervisibility='show' WHERE id='$updateid' LIMIT 1";
+    $vsql = "UPDATE `{$dbUpdates}` SET customervisibility='show' WHERE id='$updateid' LIMIT 1";
   break;
 
   case 'hide':
     //echo "Hiding update: $updateid for incident $incidentid";
-    $vsql = "UPDATE updates SET customervisibility='hide' WHERE id='$updateid' LIMIT 1";
+    $vsql = "UPDATE `{$dbUpdates}` SET customervisibility='hide' WHERE id='$updateid' LIMIT 1";
   break;
 
   default:
