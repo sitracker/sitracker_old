@@ -234,6 +234,7 @@ else
         else
         {
             journal(CFG_LOGGING_NORMAL, 'User Added', "User $username was added", CFG_JOURNAL_ADMIN, $id);
+            setup_user_triggers($newuserid);
             html_redirect("manage_users.php#userid{$newuserid}");
         }
         clear_form_data('add_user');

@@ -8926,6 +8926,13 @@ function kb_name($kbid)
     }
 }
 
+
+/**
+ * Outputs the full base url of the install, e.g. http://www.example.com/
+ *
+ * @return string base url of the install
+ * @author Kieran Hogg
+ */
 function application_url()
 {
     global $CONFIG;
@@ -8935,6 +8942,14 @@ function application_url()
     return $baseurl;
 }
 
+
+/**
+ * Outputs the product name of a contract
+ *
+ * @param $maintid ID of the contract
+ * @return string the name of the product
+ * @author Kieran Hogg
+ */
 function contract_product($maintid)
 {
     $maintid = intval($maintid);
@@ -8952,6 +8967,14 @@ function contract_product($maintid)
     }
 }
 
+
+/**
+ * Outputs the contract's site name
+ *
+ * @param $maintid ID of the contract
+ * @return string name of the site
+ * @author Kieran Hogg
+ */
 function contract_site($maintid)
 {
     $maintid = intval($maintid);
@@ -8968,6 +8991,49 @@ function contract_site($maintid)
     {
         return $GLOBALS['strUnknown'];
     }
+}
+
+
+/**
+ * Sets up default triggers for new users or upgraded users
+ *
+ * @param $userid ID of the user
+ * @return bool TRUE on success, FALSE if not
+ * @author Kieran Hogg
+ */
+function setup_user_triggers($userid)
+{
+    $return = TRUE;
+    $userid = intval($userid);
+    if ($userid != 0)
+    {
+        $sqls[] = "INSERT INTO `{$GLOBALS['dbTriggers']}` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`)
+                  VALUES('TRIGGER_INCIDENT_ASSIGNED', {$userid}, 'ACTION_NOTICE', 2, '', '{userid} == {currentuserid}');";
+        $sqls[] = "INSERT INTO `{$GLOBALS['dbTriggers']}` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`)
+                  VALUES('TRIGGER_SIT_UPGRADED', {$userid}, 'ACTION_NOTICE', 10, '', '');";
+        $sqls[] = "INSERT INTO `{$GLOBALS['dbTriggers']}` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`)
+                  VALUES('TRIGGER_INCIDENT_CLOSED', {$userid}, 'ACTION_NOTICE', 13, '', '{userid} != {currentuserid}');";
+        $sqls[] = "INSERT INTO `{$GLOBALS['dbTriggers']}` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`)
+                  VALUES('TRIGGER_INCIDENT_NEARING_SLA', {$userid}, 'ACTION_NOTICE', 3, '',
+                  '{ownerid} == {currentuserid} OR {townerid} == {currentuserid}');";
+                  
+        foreach ($sqls AS $sql)
+        {
+            mysql_query($sql);
+            if (mysql_error())
+            {
+                trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+                $return = FALSE;
+            }
+        }
+    }
+    else
+    {
+        trigger_error("Invalid userid specified");
+        $return = FALSE;
+    }
+    
+    return $return;
 }
 
 // -------------------------- // -------------------------- // --------------------------
