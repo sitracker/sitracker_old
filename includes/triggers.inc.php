@@ -230,16 +230,7 @@ function trigger_replace_specials($triggerid, $string, $paramarray)
             $trigger_regex[] = "/{$identifier}/s";
             if (!empty($ttvar['replacement']))
             {
-                echo $ttvar['replacement'];
-                if (strpos($ttvar['replacement'], "{"))
-                {
-                    $replace = trigger_replace_specials($triggerid, $ttvar[replacement], $paramarray);
-                    eval("\$res = {$replace};");                    
-                }
-                else
-                {
-                    eval("\$res = {$ttvar[replacement]};");                    
-                }
+                eval("\$res = {$ttvar[replacement]};");
             }
             $trigger_replace[] = $res;
             unset($res);
