@@ -228,13 +228,11 @@ else
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
         }
 
-        plugin_do('user_created');
-
         if (!$result) echo "<p class='error'>Addition of user failed\n";
         else
         {
-            journal(CFG_LOGGING_NORMAL, 'User Added', "User $username was added", CFG_JOURNAL_ADMIN, $id);
             setup_user_triggers($newuserid);
+            trigger('TRIGGER_NEW_USER', array('userid' => $newuserid));
             html_redirect("manage_users.php#userid{$newuserid}");
         }
         clear_form_data('add_user');
