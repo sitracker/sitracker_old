@@ -455,7 +455,7 @@ else
                 create_incident_feedback($CONFIG['feedback_form'], $id);
             }
 
-            plugin_do('incident_closed');
+            trigger('TRIGGER_INCIDENT_CLOSED', array('incidentid' => $incidentid, 'userid' => $sit[2]));
 
             if ($send_engineer_email == 'yes')
             {

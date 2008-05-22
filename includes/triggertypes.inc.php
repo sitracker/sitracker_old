@@ -24,7 +24,7 @@ $triggerarray['TRIGGER_INCIDENT_CREATED'] =
 array('name' => 'Incident Created',
       'description' => 'Occurs when a new incident has been created',
       'required' => array('incidentid'),
-      'params' => array('contactid', 'siteid', 'priority', 'contractid', 'slaid', 'sitesalespersonid'),
+      'params' => array('contactid', 'siteid', 'priority', 'contractid', 'slaid', 'sitesalespersonid')
       );
 
 $triggerarray['TRIGGER_INCIDENT_ASSIGNED'] =
@@ -164,6 +164,13 @@ $triggerarray['TRIGGER_NEW_SITE'] =
 array('name' => 'New site added',
       'description' => 'Occurs when a new site is added',
       'required' => array('siteid')
+      );
+      
+$triggerarray['TRIGGER_CLOSE_EXTERNAL_INCIDENT'] =
+array('name' => 'Close external incident',
+      'description' => 'Occurs when an incident with an external ID is closed',
+      'required' => 'incidentid',
+      'params' => 'escalation',
       );
       
 ?>
