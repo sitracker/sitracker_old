@@ -58,7 +58,7 @@ function trigger($triggerid, $paramarray='')
         trigger_error("Trigger '{$triggerid}' not defined", E_USER_WARNING);
         return;
     }
-
+    plugin_do($triggerid);
     if ($CONFIG['debug'] && $paramarray != '')
     {
         foreach (array_keys($paramarray) as $key)
@@ -230,7 +230,16 @@ function trigger_replace_specials($triggerid, $string, $paramarray)
             $trigger_regex[] = "/{$identifier}/s";
             if (!empty($ttvar['replacement']))
             {
-                eval("\$res = {$ttvar[replacement]};");
+                echo $ttvar['replacement'];
+                if (strpos($ttvar['replacement'], "{"))
+                {
+                    $replace = trigger_replace_specials($triggerid, $ttvar[replacement], $paramarray);
+                    eval("\$res = {$replace};");                    
+                }
+                else
+                {
+                    eval("\$res = {$ttvar[replacement]};");                    
+                }
             }
             $trigger_replace[] = $res;
             unset($res);
@@ -315,7 +324,7 @@ function create_trigger_notice($userid, $noticetext='', $triggertype='',
         {
             $notice = mysql_fetch_object($query);
             $noticetext = trigger_replace_specials($triggertype, $notice->text, $paramarray);
-            $noticelinktext = trigger_replace_specials($triggertype, $notice->linktext, $paramarray);
+            $noticelinktext = mysql_escape_string(trigger_replace_specials($triggertype, $notice->linktext, $paramarray));
             $noticelink = trigger_replace_specials($triggertype, $notice->link, $paramarray);
             $refid = trigger_replace_specials($triggertype, $notice->refid, $paramarray);
             
