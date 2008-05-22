@@ -59,7 +59,14 @@ switch ($_REQUEST['action'])
         else
         {
             // This is a SiT contact, not a user
-            $sql = "SELECT id, username, password, email FROM `{$dbContacts}` WHERE email = '{$email}' LIMIT 1";
+            if (empty($email) AND !empty($contactid))
+            {
+               $sql = "SELECT id, username, password, email FROM `{$dbContacts}` WHERE id = '{$contactid}' LIMIT 1";
+            }
+            else
+            {
+                $sql = "SELECT id, username, password, email FROM `{$dbContacts}` WHERE email = '{$email}' LIMIT 1";
+            }
             $contactresult = mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
@@ -70,10 +77,17 @@ switch ($_REQUEST['action'])
                 $hash = md5($row->username.'.'.$row->password);
                 $url = parse_url($_SERVER['HTTP_REFERER']);
                 $reseturl = "{$url['scheme']}://{$url['host']}{$url['path']}?action=confirmreset&amp;contactid={$row->id}&amp;hash={$hash}";
-                trigger('TRIGGER_CONTACT_RESET_PASSWORD', array('contactid' => $row->id, 'passwordreseturl' => $reseturl));         
+                trigger('TRIGGER_CONTACT_RESET_PASSWORD', array('contactid' => $row->id, 'passwordreseturl' => $reseturl));
                 echo "<h3>{$strInformationSent}</h3>";
                 echo "<p>{$strInformationSentRegardingSettingPassword}</p>";
-                echo "<p><a href='index.php'>{$strBackToLoginPage}</a></p>";                
+                if (empty($email) AND !empty($contactid))
+                {
+                   echo "<p><a href='contact_details.php?id={$contactid}'>{$strContactDetails}</a></p>";
+                }
+                else
+                {
+                    echo "<p><a href='index.php'>{$strBackToLoginPage}</a></p>";
+                }
             }
             else
             {
@@ -85,7 +99,7 @@ switch ($_REQUEST['action'])
         include ('htmlfooter.inc.php');
     break;
     }
-    
+
     case 'confirmreset':
     {
         include ('htmlheader.inc.php');
@@ -145,7 +159,7 @@ switch ($_REQUEST['action'])
         include ('htmlfooter.inc.php');
     break;
     }
-    
+
     case 'resetpasswordform':
         include ('htmlheader.inc.php');
         if ($mode == 'user')
@@ -156,7 +170,7 @@ switch ($_REQUEST['action'])
         {
             $sql = "SELECT id, username, password FROM `{$dbContacts}` WHERE id = '{$contactid}' LIMIT 1";
         }
-        
+
         $userresult = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
         $usercount = mysql_num_rows($userresult);
