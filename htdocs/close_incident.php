@@ -1,4 +1,4 @@
- <?php
+<?php
 // close_incident.php - Display a form for closing an incident
 //
 // SiT (Support Incident Tracker) - Support call tracking system
