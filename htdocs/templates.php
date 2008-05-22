@@ -58,7 +58,21 @@ if (empty($action) OR $action == 'showform' OR $action == 'list')
     {
         $editurl = "{$_SERVER['PHP_SELF']}?id={$template['id']}&amp;action=edit&amp;template={$template['template']}";
         echo "<tr class='{$shade}'>";
-        echo "<td>{$template['type']} {$template['template']}</td>";
+        echo "<td>";
+        if ($template['template'] == 'notice')
+        {
+            echo icon('info', 16).' '.$strNotice;
+        }
+        elseif ($template['template'] == 'email')
+        {
+            echo icon('email', 16).' '.$strEmail;
+        }
+        else
+        {
+            echo $strOther;
+        }
+        echo "</td>";
+        //echo "<td>{$template['type']} {$template['template']}</td>";
         $tsql = "SELECT COUNT(id) FROM `{$dbTriggers}` WHERE template={$template['id']}";
         $tresult = mysql_query($tsql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
