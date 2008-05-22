@@ -291,6 +291,9 @@ $ttvararray['{applicationname}'] = array('description' => $CONFIG['application_n
 $ttvararray['{applicationurl}'] = array('description' => 'System URL',
                                         'replacement' => 'application_url();');
 
+$ttvararray['{applicationpath}'] = array('description' => 'System base path',
+                                        'replacement' => '$CONFIG[\'application_webpath\'];');
+
 $ttvararray['{applicationshortname}'] = array('description' => $CONFIG['application_shortname'],
                                      'replacement' => '$CONFIG[\'application_shortname\'];');
 
@@ -444,18 +447,19 @@ $ttvararray['{contractsla}'] = array('description' => 'SLA of the maintenance',
                                   'replacement' => 'maintenance_servicelevel($paramarray[\'contractid\']);',
                                   'requires' => 'contractid');
 
-$ttvararray['{currentuserid}'] = array('description' => 'The current user',
-                                       'replacement' => '$_SESSION[\'userid\'];');
-
 $ttvararray['{userid}'] = array('description' => 'UserID the trigger passes',
                                 'replacement' => '$paramarray[\'userid\'];');
 
 $ttvararray['{ownerid}'] = array('description' => 'Incident owner ID',
-                                 'replacement' => 'incident_owner($paramarray[\'incidentid\'])',
+                                 'replacement' => 'incident_owner($paramarray[\'incidentid\']);',
                                  'requires' => 'incidentid');
 
 $ttvararray['{townerid}'] = array('description' => 'Incident temp owner ID',
-                                 'replacement' => 'incident_towner($paramarray[\'incidentid\'])',
+                                 'replacement' => 'incident_towner($paramarray[\'incidentid\']);',
                                  'requires' => 'incidentid');
+
+$ttvararray['{holdingemailid}'] = array('description' => 'ID of the new email in the holding queue',
+                                 'replacement' => '$paramarray[\'holdingemailid\'];',
+                                 'requires' => 'holdingemailid');
 
 ?>
