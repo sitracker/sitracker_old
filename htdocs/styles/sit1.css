@@ -2,7 +2,8 @@
 /* Webtrack Default Style: Light Blue */
 /* by Ivan Lucas. Original. August 2001, Updated March 2002, Remade November 2006 */
 
-h1 { font-size: 16pt; font-weight: bold; color: #DDDDFF; background-color: #203894; margin: 0px; padding: 3px 0px 3px 0px; }
+#masthead { background-image: none; background-color: #203894; text-align: center; }
+#masthead h1 { font-size: 16pt; font-weight: bold; color: #DDDDFF; background-color: #203894; margin: 0px; padding: 3px 0px 3px 0px; }
 
 th, th a, th a:active, th a:link, th a:visited { background-color: #B5D7E8; color: #203894; }
 th a:hover { text-decoration: underline; }
