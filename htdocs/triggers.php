@@ -319,9 +319,9 @@ switch ($_REQUEST['mode'])
             $sql = "SELECT * FROM `{$dbTriggers}` WHERE triggerid = '$trigger' ";
             if ($selecteduser > -1)
             {
-                $sql .= "AND userid = {$selecteduser} ";
+                $sql .= "AND userid = '{$selecteduser}' ";
             }
-            $sql .= "ORDER BY action, template";
+            $sql .= "ORDER BY action, template ";
             if (!$adminuser)
             {
                 $sql .= "AND userid='{$sit[2]}'";
