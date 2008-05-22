@@ -20,7 +20,7 @@ require ('auth.inc.php');
 
 $title = $strSetPermissions;
 
-// Restrict resetting passwords in demo mode for all but the first user (usually admin)
+// Restrict resetting permissions in demo mode for all but the first user (usually admin)
 if ($CONFIG['demo'] AND $_SESSION['userid']!=1)
 {
     html_redirect("manage_users.php", FALSE, $strCannotPerformOperationInDemo);
@@ -86,9 +86,18 @@ if (empty($action) OR $action == "showform")
 elseif ($action == "edit" && (!empty($user) OR !empty($role)))
 {
     // Show form
-    if (!empty($role) AND !empty($user)) trigger_error("Can't edit users and roles at the same time", E_USER_ERROR);
-    if (!empty($user)) $object = "user: ".user_realname($user);
-    else $object = "role: ".db_read_column('rolename', $dbRoles, $role);
+    if (!empty($role) AND !empty($user))
+    {
+        trigger_error("Can't edit users and roles at the same time", E_USER_ERROR);
+    }
+    if (!empty($user))
+    {
+        $object = "user: ".user_realname($user);
+    }
+    else
+    {
+        $object = "role: ".db_read_column('rolename', $dbRoles, $role);
+    }
     echo "<h2>Set Permissions for {$object}</h2>";
     if (!empty($user)) echo "<p align='center'>Permissions that are inherited from the users role can not be changed.</p>";
 
