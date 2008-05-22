@@ -74,13 +74,15 @@ elseif ($step == '1')
     $end = cleanvar($_REQUEST['end']);
     $type = cleanvar($_REQUEST['type']);
 
+    $today = mktime(0,0,0,date('m'),date('m'),date('Y'));
+
     include ('htmlheader.inc.php');
     $start = strtotime($start);
     $end = strtotime($end);
     if ($start == 0 && $end == 0)
     {
-        $start = $now;
-        $end = $now;
+        $start = $today;
+        $end = $today;
     }
     elseif ($end == 0 && $start>0)
     {
@@ -188,7 +190,7 @@ elseif ($step == '1')
                     }
                     elseif ($existing_holiday['length'] != 'day')
                     {
-                        if (($type=='2' && $day < $now) || ($type!='2'))
+                        if (($type=='2' && $day < $today) || ($type!='2'))
                         {
                             echo "<input type='radio' name='length{$daynumber}' value='am' checked='checked' />";
                             $options++;
@@ -209,7 +211,7 @@ elseif ($step == '1')
                     }
                     elseif ($existing_holiday['length'] != 'day')
                     {
-                        if (($type=='2' && $day < $now) || ($type!='2'))
+                        if (($type=='2' && $day < $today) || ($type!='2'))
                         {
                             echo "<input type='radio' name='length{$daynumber}' value='pm' checked='checked' />";
                             $options++;
@@ -237,7 +239,7 @@ elseif ($step == '1')
                 {
                     echo "<tr><td class='shade2' align='right'>".ldate('l jS M y',$day)." </td>";
                     // Don't allow booking sickness in the future, still not sure whether we should allow this or not, it could be useful in the case of long term illness
-                    if (($type == '2' && $day <= $now) || ($type != 2))
+                    if (($type == '2' && $day <= $today) || ($type != 2))
                     {
                         echo "<td class='shade1' align='center'><input type='radio' name='length{$daynumber}' value='none' /></td>";
                         echo "<td class='shade1' align='center'><input type='radio' name='length{$daynumber}' value='day' checked='checked' /></td>";
