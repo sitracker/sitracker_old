@@ -237,6 +237,7 @@ div#menu li:hover li ul,
 #topsearch { text-align: right; }
 #topsearch form {margin: 1px 7px 0px 0px; }
 #topsearch #searchfield {
+  background-color: white;
   border:1px solid #CCCCCC;
   padding:3px 3px 3px 20px;
   background:transparent url('../images/searchbg.png') no-repeat scroll 4px center;
