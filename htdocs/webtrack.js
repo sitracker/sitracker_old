@@ -1,5 +1,13 @@
-/* Javascript/ECMAscript Functions for SiT (previously known as Webtrack) by Ivan Lucas */
-/* Since v3.30 this requires prototype.js */
+// webtrack.js - Main SiT javascript library
+
+// SiT (Support Incident Tracker) - Support call tracking system
+// Copyright (C) 2000-2008 Salford Software Ltd. and Contributors
+//
+// This software may be used and distributed according to the terms
+// of the GNU General Public License, incorporated herein by reference.
+//
+// Javascript/ECMAscript Functions for SiT (previously known as Webtrack) by Ivan Lucas
+// Since v3.30 this requires prototype.js
 
 var popwin;
 
