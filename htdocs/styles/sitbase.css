@@ -1,4 +1,6 @@
 /* Base styles*/
+body {  margin: 0px; }
+
 h1 {
   font-size: 16pt; font-weight: bold; color: #FFF;
   background-color: #203894; margin: 0px; padding: 3px 0px 3px 0px;
