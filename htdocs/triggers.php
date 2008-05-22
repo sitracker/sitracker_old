@@ -185,12 +185,17 @@ switch ($_REQUEST['mode'])
         echo "<h3>{$strRules}</h3>";
         if (is_array($triggerarray[$id]['optional']))
         {
-            echo "{$strTheFollowingVariables} ";
+            echo "{$strTheFollowingVariables}<br />";
             foreach ($triggerarray[$id]['optional'] AS $param)
             {
-                echo "<var><strong><a href='javascript:void(0);' onclick=\"insertRuletext('{{$param}}');\">{{$param}}</a></strong></var> &nbsp; ";
+                echo "<var><strong><a href='javascript:void(0);' ";
+                echo "onclick=\"insertRuletext('{{$param}}');\">{{$param}}</a>";
+                $replace = "{".$param."}";
+                echo "</strong></var> - {$ttvararray[$replace]['description']}<br />";
             }
-            echo "<var><strong><a href='javascript:void(0);' onclick=\"insertRuletext('{currentuser}');\">{currentuser}</a></strong></var> &nbsp; ";
+            echo "<var><strong><a href='javascript:void(0);' ";
+            echo "onclick=\"insertRuletext('{currentuser}');\">{currentuser}";
+            echo "</a></strong></var> - {$ttvararray['{currentuser}']['description']} ";
             echo "<br /><br />";
             $operators = array('==', 'OR', 'AND');
             foreach ($operators AS $op)
