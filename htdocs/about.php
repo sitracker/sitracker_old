@@ -79,7 +79,10 @@ Copyright &copy; 2004-2006 The Dojo Foundation. Licensed under the BSD license.<
 Copyright &copy; Kellan Elliott-McCrea. Licensed under the GPLv2.</p>
 
 <p align='center'>Prototype JavaScript framework 1.6.0.2 by <a href='http://www.prototypejs.org/'>Sam Stephenson</a><br />
-Copyright &copy; 2005-2008 Sam Stephenson. Licensed under the MIT license.</p>
+Copyright &copy; 2005-2008 Sam Stephenson. Licensed under an MIT style license.</p>
+
+<p align='center'>script.aculo.us by <a href='http://script.aculo.us'>Thomas Fuchs</a><br />
+Copyright &copy; 2005-2007 Thomas Fuchs. Licensed under an MIT style license.</p>
 
 <p align='center'>Icons from the Crystal Project by <a href='http://www.everaldo.com/'>Everaldo Coelho</a><br />
 Copyright &copy;  2006-2007 Everaldo Coelho. Licensed under the LGPLv2</p>
