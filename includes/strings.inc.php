@@ -393,7 +393,7 @@ array('description' => 'Site name',
 $ttvararray['{sitename}'][] =
 array('description' => 'Site name',
       'requires' => 'siteid',
-      'replacement' => 'site_name($paramarray[\'sitetid\']);'
+      'replacement' => 'site_name($paramarray[\'siteid\']);'
       );
 
 $ttvararray['{feedbackurl}'] =
