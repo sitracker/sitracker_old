@@ -15,7 +15,7 @@ $dashboard_statistics_version = 1;
 
 function dashboard_statistics($row,$dashboardid)
 {
-    echo dashlet('statistics', $row, $dashboardid, icon('statistics', 16), $GLOBALS['strTodaysStats'], '', $content);
+    echo dashlet('statistics', $row, $dashboardid, icon('statistics', 16), $GLOBALS['strTodaysStats'], 'statistics.php', $content);
 }
 
 

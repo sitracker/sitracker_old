@@ -6088,7 +6088,8 @@ function dashlet($dashboard, $row, $dashboardid, $icon, $title='', $link='', $co
         $html .= icon('edit', 16)."</a>";
     }
     $html .= "</div>";
-    $html .= "{$icon} {$title}";
+    if (!empty($link)) $html .= "<a href=\"{$link}\">{$icon}</a> <a href=\"{$link}\">{$title}</a>";
+    else $html .= "{$icon} {$title}";
     $html .= "</div>\n";
     $html .= "<div class='window' id='win{$row}-{$dashboardid}'>\n";
     $html .= $content;

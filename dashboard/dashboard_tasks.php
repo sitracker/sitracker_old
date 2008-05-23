@@ -10,15 +10,10 @@
 
 $dashboard_tasks_version = 1;
 
-function dashboard_tasks($row,$dashboardid)
+function dashboard_tasks($row, $dashboardid)
 {
     global $sit, $CONFIG, $iconset, $dbTasks;
     $user = $sit[2];
-    echo "<div class='windowbox' id='$row-$dashboardid'>";
-    echo "<div class='windowtitle'><a href='tasks.php'>".icon('task', 16)." ";
-    printf($GLOBALS['strUsersTasks'], user_realname($user,TRUE));
-    echo "</a></div>";
-    echo "<div class='window'>";
 
     if ($CONFIG['tasks_enabled'] == TRUE)
     {
@@ -47,43 +42,43 @@ function dashboard_tasks($row,$dashboardid)
 
         if (mysql_num_rows($result) >=1 )
         {
-            echo "<table align='center' width='100%'>";
-            echo "<tr>";
-            echo colheader('id', $GLOBALS['strID']);
-            echo colheader('name', $GLOBALS['strTask']);
-            echo colheader('priority', $GLOBALS['strPriority']);
-            echo colheader('completion', $GLOBALS['strCompletion']);
-            echo "</tr>\n";
+            $content .= "<table align='center' width='100%'>";
+            $content .= "<tr>";
+            $content .= colheader('id', $GLOBALS['strID']);
+            $content .= colheader('name', $GLOBALS['strTask']);
+            $content .= colheader('priority', $GLOBALS['strPriority']);
+            $content .= colheader('completion', $GLOBALS['strCompletion']);
+            $content .= "</tr>\n";
             $shade='shade1';
             while ($task = mysql_fetch_object($result))
             {
                 $duedate = mysql2date($task->duedate);
                 $startdate = mysql2date($task->startdate);
                 if (empty($task->name)) $task->name = $GLOBALS['strUntitled'];
-                echo "<tr class='$shade'>";
-                echo "<td>{$task->id}</td>";
-                echo "<td><a href='view_task.php?id={$task->id}' class='info'>".truncate_string($task->name, 23);
-                if (!empty($task->description)) echo "<span>".nl2br($task->description)."</span>";
-                echo "</a></td>";
-                echo "<td>".priority_icon($task->priority).priority_name($task->priority)."</td>";
-                echo "<td>".percent_bar($task->completion)."</td>";
-                echo "</tr>\n";
+                $content .= "<tr class='$shade'>";
+                $content .= "<td>{$task->id}</td>";
+                $content .= "<td><a href='view_task.php?id={$task->id}' class='info'>".truncate_string($task->name, 23);
+                if (!empty($task->description)) $content .= "<span>".nl2br($task->description)."</span>";
+                $content .= "</a></td>";
+                $content .= "<td>".priority_icon($task->priority).priority_name($task->priority)."</td>";
+                $content .= "<td>".percent_bar($task->completion)."</td>";
+                $content .= "</tr>\n";
                 if ($shade=='shade1') $shade='shade2';
                 else $shade='shade1';
             }
-            echo "</table>\n";
+            $content .= "</table>\n";
         }
         else
         {
-            echo "<p align='center'>{$GLOBALS['strNoRecords']}</p>";
+            $content .= "<p align='center'>{$GLOBALS['strNoRecords']}</p>";
         }
     }
     else
     {
-        echo "<p class='warning'>{$GLOBALS['strDisabled']}</p>";
+        $content .= "<p class='warning'>{$GLOBALS['strDisabled']}</p>";
     }
-    echo "</div>";
-    echo "</div>";
+
+    echo dashlet('tasks', $row, $dashboardid, icon('task', 16), sprintf($GLOBALS['strUsersTasks'], user_realname($user,TRUE)), 'tasks.php', $content);
 }
 
 ?>
