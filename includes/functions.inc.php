@@ -1292,7 +1292,7 @@ function contact_drop_down($name, $id, $showsite=FALSE)
     }
     else
     {
-        $sql  = "SELECT c.id AS contactid, surname, forenames FROM `{$dbContacts}` AS c, sites ";
+        $sql  = "SELECT c.id AS contactid, surname, forenames FROM `{$dbContacts}` AS c, `{$dbSites}` AS s ";
         $sql .= "WHERE c.siteid = s.id AND s.active = 'true' AND c.active = 'true' ";
         $sql .= "ORDER BY forenames ASC, surname ASC";
     }
@@ -9052,7 +9052,7 @@ function contract_slaid($maintid)
 {
     $maintid = intval($maintid);
     $slaid = db_read_column('servicelevelid', $GLOBALS['dbMaintenance'], $maintid);
-    return $slaid;    
+    return $slaid;
 }
 
 
