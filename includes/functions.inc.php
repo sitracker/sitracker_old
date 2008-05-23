@@ -7909,11 +7909,12 @@ function contract_details($id, $mode='internal')
             $allowedcontacts = $maintrow['supportedcontacts'];
 
             $supportedcontacts = supported_contacts($id);
-
+            $numberofcontacts = 0;
+            
             if ($supportedcontacts != NULL)
             {
                 $numberofcontacts = sizeof($supportedcontacts);
-
+                
                 if ($allowedcontacts == 0)
                 {
                     $allowedcontacts = $GLOBALS[strUnlimited];
@@ -7956,7 +7957,7 @@ function contract_details($id, $mode='internal')
     }
 
 	if ($maintrow['allcontactssupported'] != 'yes')
-	{
+	{   
 	    $html .= "<p align='center'>$strUsedNofN";
 	    $html .= sprintf($GLOBALS['strUsedNofN'],
 	                     "<strong>".$numberofcontacts."</strong>",
