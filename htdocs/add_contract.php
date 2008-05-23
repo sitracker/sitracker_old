@@ -231,7 +231,7 @@ elseif ($action == "add")
 
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-        $maintid=mysql_insert_id();
+        $maintid = mysql_insert_id();
 
         if (!$result)
         {
@@ -239,6 +239,7 @@ elseif ($action == "add")
             $addition_errors_string .= "<p class='error'>Addition of contract failed</p>\n";
         }
 
+        clear_form_data('add_contract');
 
         if ($addition_errors == 1)
         {
@@ -250,13 +251,9 @@ elseif ($action == "add")
         else
         {
             // show success message
-            $id=mysql_insert_id();
-            trigger('TRIGGER_NEW_CONTRACT', array('contractid' => $id, 'userid' => $sit[2]));
-            journal(CFG_LOGGING_NORMAL, 'Contract Added', "Contract $id Added", CFG_JOURNAL_MAINTENANCE, $id);
-
+            trigger('TRIGGER_NEW_CONTRACT', array('contractid' => $maintid, 'userid' => $sit[2]));
             html_redirect("contract_details.php?id=$maintid");
         }
-        clear_form_data('add_contract');
     }
     else
     {
