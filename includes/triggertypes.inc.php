@@ -172,5 +172,12 @@ array('name' => 'Close external incident',
       'required' => 'incidentid',
       'params' => 'escalation',
       );
-      
+
+$triggerarray['TRIGGER_HOLIDAY_REQUESTED'] =
+array('name' => 'Holiday Requested',
+      'description' => 'Occurs when a user requests a holiday',
+      'params' => array('userid', 'approvaluser')
+      );     
+     
+plugin_do('trigger_types');
 ?>
