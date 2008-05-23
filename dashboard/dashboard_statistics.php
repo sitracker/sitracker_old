@@ -15,7 +15,14 @@ $dashboard_statistics_version = 1;
 
 function dashboard_statistics($row,$dashboardid)
 {
+    echo dashlet('statistics', $row, $dashboardid, icon('statistics', 16), $GLOBALS['strTodaysStats'], '', $content);
+}
+
+
+function dashboard_statistics_display()
+{
     global $todayrecent, $dbIncidents, $dbKBArticles, $iconset;
+
     // Count incidents logged today
     $sql = "SELECT id FROM `{$dbIncidents}` WHERE opened > '$todayrecent'";
     $result = mysql_query($sql);
@@ -51,10 +58,6 @@ function dashboard_statistics($row,$dashboardid)
     $kbpublished=mysql_num_rows($result);
     mysql_free_result($result);
 
-    echo "<div class='windowbox' id='$row-$dashboardid'>";
-    echo "<div class='windowtitle'><a href='statistics.php'>".icon('statistics', 16);
-    echo " {$GLOBALS['strTodaysStats']}</a></div>";
-    echo "<div class='window'>";
     if ($todaysincidents == 0) echo $GLOBALS['strNoIncidents'];
     elseif ($todaysincidents == 1) echo "<a href='statistics.php'>{$todaysincidents}</a> {$GLOBALS['strIncident']}";
     elseif ($todaysincidents > 1) echo "<a href='statistics.php'>".sprintf($GLOBALS['strIncidentsMulti'], $todaysincidents)."</a>";
@@ -79,9 +82,6 @@ function dashboard_statistics($row,$dashboardid)
     elseif ($kbpublished == 1) echo "<a href='browse_kb.php?mode=today' title='View articles published today'>{$kbpublished}</a> KB Article";
     elseif ($kbpublished > 1) echo "<a href='browse_kb.php?mode=today' title='View articles published today'>{$kbpublished}</a> KB Articles";
     echo " {$GLOBALS['strPublished']}<br />";
-
-    echo "</div>";
-    echo "</div>";
 }
 
 ?>
