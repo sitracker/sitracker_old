@@ -14,7 +14,7 @@ function dashboard_random_tip($row, $dashboardid)
 {
     global $iconset, $CONFIG;
 
-    echo dashlet('random_tip', $row, $dashboardid, icon('tip', 16), $GLOBALS['strRandomTip'], $content);
+    echo dashlet('random_tip', $row, $dashboardid, icon('tip', 16), $GLOBALS['strRandomTip'], '', $content);
 }
 
 

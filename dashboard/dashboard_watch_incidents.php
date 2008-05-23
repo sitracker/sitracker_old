@@ -15,7 +15,10 @@ function dashboard_watch_incidents($row, $dashboardid)
 {
     global $sit, $CONFIG, $iconset;
 
-    echo "<div class='windowbox' id='$row-$dashboardid'>";
+    $content = "<p align='center'><img src='{$CONFIG['application_webpath']}images/ajax-loader.gif' alt='Loading icon' /></p>";
+    echo dashlet('watch_incidents', $row, $dashboardid, icon('support', 16), $GLOBALS['strWatchIncidents'], '', $content);
+
+/*    echo "<div class='windowbox' id='$row-$dashboardid'>";
 
     // echo "<div class='windowtitle'><div><a href='edit_watch_incidents.php'>";
     echo "<div class='windowtitle'><div>";
@@ -26,12 +29,12 @@ function dashboard_watch_incidents($row, $dashboardid)
 
     echo "</div><div class='window' id='watch_incidents_windows'>";
 
-    echo "<p align='center'><img src='{$CONFIG['application_webpath']}images/ajax-loader.gif' alt='Loading icon' /></p>";
+
 
     echo "</div>";
     echo "</div>";
     //echo "<script type='text/javascript'>\n//<![CDATA[\nget_and_display('display_watch_incidents.inc.php','watch_incidents_windows');\n//]]>\n</script>";
-    echo "<script type='text/javascript'>\n//<![CDATA[\nget_and_display('ajaxdata.php?action=dashboard_display&dashboard=watch_incidents','watch_incidents_windows', false);\n//]]>\n</script>";
+    echo "<script type='text/javascript'>\n//<![CDATA[\nget_and_display('ajaxdata.php?action=dashboard_display&dashboard=watch_incidents','watch_incidents_windows', false);\n//]]>\n</script>";*/
 }
 
 function dashboard_watch_incidents_install()

@@ -6067,18 +6067,27 @@ function show_notes($linkid, $refid)
     * @author Ivan Lucas
     * @returns string HTML
 */
-function dashlet($dashboard, $row, $dashboardid, $icon, $title, $content)
+function dashlet($dashboard, $row, $dashboardid, $icon, $title='', $link='', $content='')
 {
     if (empty($icon)) $icon = icon('dashboard', 16);
+    if (empty($title)) $title = $GLOBALS['strUntitled'];
     $displayfn = "dashboard_{$dashboard}_display";
+    $editfn = "dashboard_{$dashboard}_edit";
 
     $html .= "<div class='windowbox' id='{$row}-{$dashboardid}'>";
     $html .= "<div class='windowtitle'>";
+    $html .= "<div>";
     if (function_exists($displayfn))
     {
-        $html .= "<div><a href=\"javascript:get_and_display('ajaxdata.php?action=dashboard_display&amp;dashboard={$dashboard}','win{$row}-{$dashboardid}', false);\">";
-        $html .= icon('reload', 16)."</a></div>";
+        $html .= "<a href=\"javascript:get_and_display('ajaxdata.php?action=dashboard_display&amp;dashboard={$dashboard}','win{$row}-{$dashboardid}', false);\">";
+        $html .= icon('reload', 16)."</a>";
     }
+    if (function_exists($editfn))
+    {
+        $html .= "<a href=\"javascript:get_and_display('ajaxdata.php?action=dashboard_edit&amp;dashboard={$dashboard}','win{$row}-{$dashboardid}', false);\">";
+        $html .= icon('edit', 16)."</a>";
+    }
+    $html .= "</div>";
     $html .= "{$icon} {$title}";
     $html .= "</div>\n";
     $html .= "<div class='window' id='win{$row}-{$dashboardid}'>\n";
