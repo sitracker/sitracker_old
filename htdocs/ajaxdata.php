@@ -50,11 +50,12 @@ switch($action)
     break;
 
     case 'dismiss_notice':
+        require('auth.inc.php');
         $noticeid = cleanvar($_REQUEST['noticeid']);
         $userid = cleanvar($_REQUEST['userid']);
         if (is_numeric($noticeid))
         {
-            $sql = "DELETE FROM `{$GLOBALS['dbNotices']}` WHERE id='{$noticeid}' AND userid='{$userid}'";
+            $sql = "DELETE FROM `{$GLOBALS['dbNotices']}` WHERE id='{$noticeid}' AND userid='{$sit[2]}'";
             mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
             else echo "deleted {$noticeid}";
@@ -66,6 +67,24 @@ switch($action)
             if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
             else echo "deleted {$noticeid}";
         }
+    break;
+
+    case 'dashboard_display':
+        require('auth.inc.php');
+        $dashboard = cleanvar($_REQUEST['dashboard']);
+        // FIXME need some sanitation here
+        include ("{$CONFIG['application_fspath']}dashboard{$fsdelim}dashboard_{$dashboard}.php");
+        $dashfn = "dashboard_{$dashboard}_display";
+        echo $dashfn();
+    break;
+
+    case 'dashboard_edit':
+        require('auth.inc.php');
+        $dashboard = cleanvar($_REQUEST['dashboard']);
+        // FIXME need some sanitation here
+        include ("{$CONFIG['application_fspath']}dashboard{$fsdelim}dashboard_{$dashboard}.php");
+        $dashfn = "dashboard_{$dashboard}_edit";
+        echo $dashfn();
     break;
 
     case 'autocomplete_sitecontact':

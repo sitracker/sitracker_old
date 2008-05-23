@@ -88,21 +88,39 @@ function pausecomp(millis)
 }
 
 
-function get_and_display(page, component)
+function get_and_display(page, component, update)
 {
-    new Ajax.Request(application_webpath + page + '?rand=' + get_random(),
+    if (update == true)
     {
-        method:'get',
-            onSuccess: function(transport)
-            {
-                var response = transport.responseText || "no response text";
-                if (transport.responseText)
+        new Ajax.PeriodicalUpdater(component, page, {
+        method: 'get', frequency: 3, decay: 2
+        });
+    }
+    else
+    {
+        new Ajax.Request(application_webpath + page + '&?rand=' + get_random(),
+        {
+            method:'get',
+                onSuccess: function(transport)
                 {
-                    $(component).innerHTML = transport.responseText;
-                }
-            },
-            onFailure: function(){ $(component).innerHTML = 'Error'; }
+                    var response = transport.responseText || "no response text";
+                    if (transport.responseText)
+                    {
+                        $(component).innerHTML = transport.responseText;
+                    }
+                },
+                onFailure: function(){ $(component).innerHTML = 'Error'; }
+        });
+    }
+}
+
+
+function ajax_save(page, component)
+{
+    new Ajax.Request(page, {
+    parameters: $(component).serialize(true)
     });
+    alert(component);
 }
 
 

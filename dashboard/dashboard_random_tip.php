@@ -8,14 +8,19 @@
 // of the GNU General Public License, incorporated herein by reference.
 //
 
-$dashboard_random_tip_version = 1;
+$dashboard_random_tip_version = 2;
 
-function dashboard_random_tip($row,$dashboardid)
+function dashboard_random_tip($row, $dashboardid)
 {
     global $iconset, $CONFIG;
-    echo "<div class='windowbox' id='$row-$dashboardid'>";
-    echo "<div class='windowtitle'>".icon('tip', 16)." {$GLOBALS['strRandomTip']}</div>";
-    echo "<div class='window'>";
+
+    echo dashlet('random_tip', $row, $dashboardid, icon('tip', 16), $GLOBALS['strRandomTip'], $content);
+}
+
+
+function dashboard_random_tip_display()
+{
+    global $CONFIG;
 
     $delim="\n";
     $tipsfile = "{$CONFIG['application_fspath']}htdocs/help/{$_SESSION['lang']}/tips.txt";
@@ -34,10 +39,9 @@ function dashboard_random_tip($row,$dashboardid)
     array_shift($tips);
     srand((double)microtime()*1000000);
     $atip = (rand(1, sizeof($tips))-1);
-    echo "#".($atip+1).": ".$tips[$atip];
+    $content = "#".($atip+1).": ".$tips[$atip];
 
-    echo "</div>";
-    echo "</div>";
+    echo $content;
 }
 
 ?>

@@ -6062,6 +6062,39 @@ function show_notes($linkid, $refid)
     return $html;
 }
 
+
+/**
+    * Produces a HTML dashlet 'window' for display on the dashboard
+    * @author Ivan Lucas
+    * @returns string HTML
+*/
+function dashlet($dashboard, $row, $dashboardid, $icon, $title, $content)
+{
+    if (empty($icon)) $icon = icon('dashboard', 16);
+    $displayfn = "dashboard_{$dashboard}_display";
+
+    $html .= "\n<div class='windowbox' id='{$row}-{$dashboardid}'>";
+    $html .= "<div class='windowtitle'>";
+    if (function_exists($displayfn))
+    {
+        $html .= "<div><a href=\"javascript:get_and_display('ajaxdata.php?action=dashboard_display&dashboard={$dashboard}','win{$row}-{$dashboardid}', false);\">R</a></div>\n";
+    }
+    $html .= "{$icon} {$title}";
+    $html .= "</div>\n";
+    $html .= "<div id='win{$row}-{$dashboardid}' class='window'>\n";
+    $html .= $content;
+    $html .= "\n</div>\n</div>\n";
+
+    $displayfn = "dashboard_{$dashboard}_display";
+    if (function_exists($displayfn))
+    {
+        $html .= "\n<script type='text/javascript'>\n//<![CDATA[\nget_and_display('ajaxdata.php?action=dashboard_display&dashboard={$dashboard}','win{$row}-{$dashboardid}', false);\n//]]>\n</script>\n";
+    }
+
+    return $html;
+}
+
+
 function dashboard_do($context, $row=0, $dashboardid=0)
 {
     global $DASHBOARDCOMP;

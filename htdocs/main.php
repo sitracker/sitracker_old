@@ -260,9 +260,9 @@ else
 }
 
 echo sprintf($strLoggedInAsXAndCurrentlyXAndX,
-             "<strong>{$sit[0]}</strong>",
-			 "<strong>".userstatus_name(user_status($sit[2]))."</strong>",
-			 $userstatus);
+            "<strong>{$sit[0]}</strong>",
+            "<strong>".userstatus_name(user_status($sit[2]))."</strong>",
+            $userstatus);
 
 
 
