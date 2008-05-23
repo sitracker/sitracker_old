@@ -209,6 +209,7 @@ elseif ($action == "add")
         $sql .= "'$telephone', '$fax', '$email', '$websiteurl', '$notes', '$typeid','$owner')";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+        $id = mysql_insert_id();
 
         // show error message if addition failed
         if (!$result)
@@ -218,13 +219,13 @@ elseif ($action == "add")
         // show success message
         else
         {
-            $id = mysql_insert_id();
+            clear_form_data('add_site');
+            clear_form_errors('add_site');
 
-            trigger('TRIGGER_NEW_SITE', array('siteid' => $id));
+            trigger('TRIGGER_NEW_SITE', array('siteid' => $id, 'userid' => $sit[2]));
             html_redirect("site_details.php?id={$id}");
         }
-        clear_form_data('add_site');
-        clear_form_errors('add_site');
+
     }
     else
     {
