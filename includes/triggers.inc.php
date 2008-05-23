@@ -90,7 +90,6 @@ function trigger($triggerid, $paramarray='')
             if (!trigger_checks($triggerobj->checks, $paramarray))
             {
                 $checks = trigger_replace_specials($triggerid, $triggerobj->checks, $paramarray);
-                echo $checks;
                 eval("return \$value = $checks;");
                 if($value === FALSE)
                 {
