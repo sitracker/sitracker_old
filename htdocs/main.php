@@ -190,13 +190,18 @@ echo "<a href=\"javascript:save_layout();\" id='savelayout' title='Save Dashboar
         }
 
         var toPass = "";
-        for(var i = 0; i < 3; i++){
-            var col = $("col"+i).childNodes;
+        for (var i = 0; i < 3; i++)
+        {
+            colid = 'col' + i;
+            var col = $(colid).childNodes;
             var s = "";
-            for(var x = 0; x < col.length; x++){
+//             alert(colid + '=' + col.length);
+            for (var x = 0; x < col.length; x++){
                 // s = s+col.item(x).id.substr(5)+"-";
+//                 alert('x = '+x + col.item(x).id);
                 s = s+i+"-"+col.item(x).id.substr(5)+",";
             }
+            //alert(s);
             toPass = toPass+s.substr(0,s.length-1)+",";
         }
 

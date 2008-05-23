@@ -6072,24 +6072,23 @@ function dashlet($dashboard, $row, $dashboardid, $icon, $title, $content)
     if (empty($icon)) $icon = icon('dashboard', 16);
     $displayfn = "dashboard_{$dashboard}_display";
 
-    $html .= "\n<div class='windowbox' id='{$row}-{$dashboardid}'>";
+    $html .= "<div class='windowbox' id='{$row}-{$dashboardid}'>";
     $html .= "<div class='windowtitle'>";
     if (function_exists($displayfn))
     {
-        $html .= "<div><a href=\"javascript:get_and_display('ajaxdata.php?action=dashboard_display&dashboard={$dashboard}','win{$row}-{$dashboardid}', false);\">";
-        $html .= icon('reload', 16)."</a></div>\n";
+        $html .= "<div><a href=\"javascript:get_and_display('ajaxdata.php?action=dashboard_display&amp;dashboard={$dashboard}','win{$row}-{$dashboardid}', false);\">";
+        $html .= icon('reload', 16)."</a></div>";
     }
     $html .= "{$icon} {$title}";
     $html .= "</div>\n";
-    $html .= "<div id='win{$row}-{$dashboardid}' class='window'>\n";
+    $html .= "<div class='window' id='win{$row}-{$dashboardid}'>\n";
     $html .= $content;
-    $html .= "</div>\n</div>\n";
-
     $displayfn = "dashboard_{$dashboard}_display";
     if (function_exists($displayfn))
     {
-        $html .= "<script type='text/javascript'>\n//<![CDATA[\nget_and_display('ajaxdata.php?action=dashboard_display&dashboard={$dashboard}','win{$row}-{$dashboardid}', false);\n//]]>\n</script>\n";
+         $html .= "<script type='text/javascript'>\n//<![CDATA[\nget_and_display('ajaxdata.php?action=dashboard_display&dashboard={$dashboard}','win{$row}-{$dashboardid}', false);\n//]]>\n</script>\n";
     }
+    $html .= "</div></div>";
 
     return $html;
 }
