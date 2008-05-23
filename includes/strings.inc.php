@@ -307,29 +307,29 @@ array('description' => $CONFIG['application_shortname'],
 
 $ttvararray['{applicationversion}'] =
 array('description' => $application_version_string,
-      'replacement' => '$application_version_string;'
+      'replacement' => 'application_version_string();'
       );
 
-$ttvararray['{contactid}'] =
+$ttvararray['{contactid}'][] =
 array('description' => 'Contact ID',
       'requires' => 'incidentid',
-      'replacement' => 'incident_contact($paramarray[\'incidentid\'];'
+      'replacement' => 'incident_contact($paramarray[\'incidentid\']);'
       );
 
-$ttvararray['{contactid}'] =
+$ttvararray['{contactid}'][] =
 array('description' => 'Contact ID',
       'requires' => 'incidentid',
       'replacement' => '$paramarray[\'contactid\'];'
       );
 
-$ttvararray['{contactemail}'] =
+$ttvararray['{contactemail}'][] =
 array('description' => $strIncidentsContactEmail,
       'requires' => 'incidentid',
       'replacement' => 'contact_email(incident_contact($paramarray[\'incidentid\']));',
       'action' => 'ACTION_EMAIL'
       );
 
-$ttvararray['{contactemail}'] =
+$ttvararray['{contactemail}'][] =
 array('description' => $strIncidentsContactEmail,
       'requires' => 'contactid',
       'replacement' => 'contact_email($paramarray[\'contactid\']);',
@@ -386,7 +386,7 @@ array('description' => $strGlobalSignature,
 $ttvararray['{incidentccemail}'] =
 array('description' => $strIncidentCCList,
       'requires' => 'incidentid',
-      'replacement' => 'incident_ccemail($paramarray[incidentid]);'
+      'replacement' => 'incident_ccemail($paramarray[\'incidentid\']);'
       );
 
 $ttvararray['{incidentexternalemail}'] =
@@ -400,7 +400,6 @@ array('description' => $strExternalEngineer,
       'requires' => 'incidentid',
       'replacement' => 'incident_externalengineer($paramarray[incidentid]);'
       );
-
 
 $ttvararray['{incidentexternalengineerfirstname}'] =
 array('description' => $strExternalEngineersFirstName,
@@ -422,7 +421,7 @@ array('description' => $strFirstCustomerVisibleUpdate,
 $ttvararray['{incidentid}'] =
 array('description' => $GLOBALS['strIncidentID'],
       'requires' => 'incidentid',
-      'replacement' => '$paramarray[incidentid];'
+      'replacement' => '$paramarray[\'incidentid\'];'
       );
 
 $ttvararray['{incidentowner}'] =
@@ -583,13 +582,13 @@ array('description' => 'The SLA tag',
 
 $ttvararray['{sitesalespersonid}'] = 
 array('description' => 'The ID of the site\'s salesperson',
-      'replacement' => 'site_salespersonid($paramarray[\siteid\']);',
+      'replacement' => 'site_salespersonid($paramarray[\'siteid\']);',
       'requires' => 'siteid'
       );
       
 $ttvararray['{sitesalesperson}'] = 
 array('description' => 'The name of the site\'s salesperson',
-      'replacement' => 'site_salesperson($paramarray[\siteid\']);',
+      'replacement' => 'site_salesperson($paramarray[\'siteid\']);',
       'requires' => 'siteid'
       );
       
