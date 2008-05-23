@@ -12,7 +12,7 @@
 $dashboard_rss_version = 2;
 
 
-function dashboard_rss($row,$dashboardid)
+function dashboard_rss($row, $dashboardid)
 {
     global $sit, $CONFIG, $iconset;
 

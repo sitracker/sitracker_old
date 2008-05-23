@@ -964,7 +964,7 @@ function emailtype_replyto($id)
 
 function emailtype_cc($id)
 {
-   return db_read_column('ccfield', $GLOBALS['dbEmailTemplates'], $id);
+return db_read_column('ccfield', $GLOBALS['dbEmailTemplates'], $id);
 }
 
 
@@ -1111,7 +1111,7 @@ function incident_productinfo_html($incidentid)
             }
         }
         echo $html;
-   }
+}
 }
 
 
@@ -1535,8 +1535,8 @@ function vendor_drop_down($name, $id)
         }
         $html .= " value='{$row['id']}'>{$row['name']}</option>\n";
     }
-   $html .= "</select>";
-   return $html;
+$html .= "</select>";
+return $html;
 }
 
 
@@ -1684,12 +1684,12 @@ function user_drop_down($name, $id, $accepting=TRUE, $exclude=FALSE, $attribs=""
 
     if ($return)
     {
-    	return $html;
-   	}
-   	else
-   	{
-   		echo $html;
-   	}
+        return $html;
+    }
+    else
+    {
+        echo $html;
+    }
 }
 
 
@@ -1914,7 +1914,7 @@ function incidentstatus_drop_down_all($name, $id)
         echo " value='{$statuses["id"]}'>{$statuses["name"]}";
         echo "</option>";
         echo "\n";
-   }
+}
     echo "</select>";
 }
 
@@ -2003,7 +2003,7 @@ function userstatus_drop_down($name, $id, $userdisable=FALSE)
     * @author Ivan Lucas
     * @param $name string. Name attribute
     * @param $id integer. ID of User Status to pre-select. None selected if 0 or blank.
-   * @todo move inline styles to main css file
+* @todo move inline styles to main css file
     * @returns string. HTML
 */
 function userstatus_bardrop_down($name, $id)
@@ -2201,8 +2201,8 @@ function accepting_drop_down($name, $userid)
         $html .= "<option value=\"Yes\">{$GLOBALS['strYes']}</option>\n";
         $html .= "<option selected='selected' value=\"No\">{$GLOBALS['strNo']}</option>\n";
         $html .= "</select>\n";
-   }
-   return $html;
+}
+return $html;
 }
 
 
@@ -2257,8 +2257,8 @@ function priority_name($id)
         case 4: $value = $GLOBALS['strCritical']; break;
         case '': $value = $GLOBALS['strNotSet']; break;
         default: $value = $GLOBALS['strUnknown']; break;
-   }
-   return $value;
+}
+return $value;
 }
 
 // Returns HTML for an icon to indicate priority
@@ -2820,23 +2820,23 @@ function format_date_friendly($date)
 */
 function confirmation_page($refreshtime, $location, $message)
 {
-   global $sit, $CONFIG;
-   ?>
-   <html>
-   <head>
+global $sit, $CONFIG;
+?>
+<html>
+<head>
 
-   <?php
-   echo "<title>{$CONFIG['application_shortname']} Confirmation Page</title>";
-   echo "<meta http-equiv=\"refresh\" content=\"$refreshtime; url=$location\" />\n";
-   $style = interface_style($_SESSION['style']);
-   echo "<link rel='stylesheet' href='{$CONFIG['application_webpath']}styles/webtrack.css' />\n";
-   ?>
-   </head>
-   <body>
-   <?php echo "$message\n" ?>
-   </body>
-   </html>
-   <?php
+<?php
+echo "<title>{$CONFIG['application_shortname']} Confirmation Page</title>";
+echo "<meta http-equiv=\"refresh\" content=\"$refreshtime; url=$location\" />\n";
+$style = interface_style($_SESSION['style']);
+echo "<link rel='stylesheet' href='{$CONFIG['application_webpath']}styles/webtrack.css' />\n";
+?>
+</head>
+<body>
+<?php echo "$message\n" ?>
+</body>
+</html>
+<?php
 }
 
 
@@ -2913,9 +2913,9 @@ function html_redirect($url, $success=TRUE, $message='')
 /* the current time.                                          */
 function calculate_time_of_next_action($days, $hours, $minutes)
 {
-   $now = time();
-   $return_value = $now + ($days * 86400) + ($hours * 3600) + ($minutes * 60);
-   return($return_value);
+$now = time();
+$return_value = $now + ($days * 86400) + ($hours * 3600) + ($minutes * 60);
+return($return_value);
 }
 
 
@@ -3205,9 +3205,9 @@ function sit_error_handler($errno, $errstr, $errfile, $errline, $errcontext)
         if (strpos($errstr, 'Unknown column')!==FALSE OR
             preg_match("/Table '(.*)' doesn't exist/", $errstr))
         {
-             echo "<p class='tip'>The SiT schema may need updating to fix this problem.";
-             if (user_permission($sit[2], 22)) echo "Visit <a href='setup.php'>Setup</a>"; // Only show this to admin
-             echo "</p>";
+            echo "<p class='tip'>The SiT schema may need updating to fix this problem.";
+            if (user_permission($sit[2], 22)) echo "Visit <a href='setup.php'>Setup</a>"; // Only show this to admin
+            echo "</p>";
         }
 
         if (strpos($errstr, 'You have an error in your SQL syntax')!==FALSE OR
@@ -3287,7 +3287,7 @@ function site_drop_down($name, $id, $required = FALSE)
     $html = "<select name='{$name}'";
     if ($required)
     {
-    	$html .= " class='required' ";
+        $html .= " class='required' ";
     }
     $html .= ">\n";
     if ($id == 0)
@@ -3411,9 +3411,9 @@ function reseller_drop_down($name, $id)
 }
 
 /**
- *
- * @deprecated  - PH
- */
+*
+* @deprecated  - PH
+*/
 function reseller_name($id)
 {
     return db_read_column('name', $GLOBALS['dbResellers'], $id);
@@ -3452,9 +3452,9 @@ function licence_type_drop_down($name, $id)
 }
 
 /**
- *
- * @deprecated  - PH
- */
+*
+* @deprecated  - PH
+*/
 function licence_type($id)
 {
     return db_read_column('name', $GLOBALS['dbLicenceTypes'], $id);
@@ -3712,16 +3712,16 @@ function send_email($to, $from, $subject, $body, $replyto='', $cc='', $bcc='')
 */
 function generate_password($length=8)
 {
-   $possible = '0123456789'.'abcdefghijkmnpqrstuvwxyz'.'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.'-';
-   // $possible = '23456789'.'abcdefghjkmnpqrstuvwxyz'.'ABCDEFGHJKLMNPQRSTUVWXYZ'.'-';
-               // not using 1's 0's etc. to save confusion
-               // '-=!&';
-   $str ="";
-   while (strlen($str) < $length)
-   {
+$possible = '0123456789'.'abcdefghijkmnpqrstuvwxyz'.'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.'-';
+// $possible = '23456789'.'abcdefghjkmnpqrstuvwxyz'.'ABCDEFGHJKLMNPQRSTUVWXYZ'.'-';
+            // not using 1's 0's etc. to save confusion
+            // '-=!&';
+$str ="";
+while (strlen($str) < $length)
+{
         $str .= substr($possible, (rand() % strlen($possible)),1);
-   }
-   return $str;
+}
+return $str;
 }
 
 
@@ -4171,10 +4171,10 @@ function holidaytype_drop_down($name, $id)
 }
 
 /**
- * @author Paul Heaney
- * @param $userid - userid to find group for
- * @return A int of the groupid
- */
+* @author Paul Heaney
+* @param $userid - userid to find group for
+* @return A int of the groupid
+*/
 function user_group_id($userid)
 {
     global $dbUsers;
@@ -4474,7 +4474,7 @@ function country_drop_down($name, $country, $extraattributes='')
 function check_email($email, $check_dns = FALSE)
 {
     if ((preg_match('/(@.*@)|(\.\.)|(@\.)|(\.@)|(^\.)/', $email)) ||
-       (preg_match('/^.+\@(\[?)[a-zA-Z0-9\-\.]+\.([a-zA-Z]{2,3}|[0-9]{1,3})(\]?)$/',$email)))
+    (preg_match('/^.+\@(\[?)[a-zA-Z0-9\-\.]+\.([a-zA-Z]{2,3}|[0-9]{1,3})(\]?)$/',$email)))
     {
         if ($check_dns)
         {
@@ -4547,9 +4547,9 @@ function target_type_name($targettype)
 
 
 /**
- * No long used anywhere, suggest removal
- * @deprecated
- * @note DEPRECATED remove after 3.40
+* No long used anywhere, suggest removal
+* @deprecated
+* @note DEPRECATED remove after 3.40
 */
 function target_radio_buttons($incidentid)
 {
@@ -4699,11 +4699,11 @@ function mysqlts2date($mysqldate)
 
 function iso_8601_date($timestamp)
 {
-   $date_mod = date('Y-m-d\TH:i:s', $timestamp);
-   $pre_timezone = date('O', $timestamp);
-   $time_zone = substr($pre_timezone, 0, 3).":".substr($pre_timezone, 3, 2);
-   $date_mod .= $time_zone;
-   return $date_mod;
+$date_mod = date('Y-m-d\TH:i:s', $timestamp);
+$pre_timezone = date('O', $timestamp);
+$time_zone = substr($pre_timezone, 0, 3).":".substr($pre_timezone, 3, 2);
+$date_mod .= $time_zone;
+return $date_mod;
 }
 
 /**
@@ -4720,9 +4720,9 @@ function is_public_holiday($time, $publicholidays)
         foreach ($publicholidays AS $holiday)
         {
             if ($time >= $holiday->starttime AND $time <= $holiday->endtime)
-	        {
-	            return $holiday->endtime-$time;
-	        }
+            {
+                return $holiday->endtime-$time;
+            }
         }
     }
 
@@ -4744,125 +4744,125 @@ function calculate_working_time($t1, $t2, $publicholidays) {
 // Note that this won't work if we have something
 // more complicated than a weekend
 
-  global $CONFIG;
-  $swd=$CONFIG['start_working_day']/3600;
-  $ewd=$CONFIG['end_working_day']/3600;
+global $CONFIG;
+$swd=$CONFIG['start_working_day']/3600;
+$ewd=$CONFIG['end_working_day']/3600;
 
-  // Just in case they are the wrong way around ...
+// Just in case they are the wrong way around ...
 
-  if ( $t1>$t2 ) {
+if ( $t1>$t2 ) {
     $t3=$t2;
     $t2=$t1;
     $t1=$t3;
-  }
+}
 
-  // We don't need all the elements here.  hours, days and year are used
-  // later on to calculate the difference.  wday is just used in this
-  // section
+// We don't need all the elements here.  hours, days and year are used
+// later on to calculate the difference.  wday is just used in this
+// section
 
-  $at1=getdate($t1);
-  $at2=getdate($t2);
+$at1=getdate($t1);
+$at2=getdate($t2);
 
-  // Make sure that the start time is on a valid day and within normal hours
-  // if it isn't then move it forward to the next work minute
+// Make sure that the start time is on a valid day and within normal hours
+// if it isn't then move it forward to the next work minute
 
-  if ($at1['hours']>$ewd) {
+if ($at1['hours']>$ewd) {
     do {
-      $at1['yday']++;
-      $at1['wday']++;
-      $at1['wday']%=7;
-      if ($at1['yday']>365) {
+    $at1['yday']++;
+    $at1['wday']++;
+    $at1['wday']%=7;
+    if ($at1['yday']>365) {
         $at1['year']++;
         $at1['yday']=0;
-      }
+    }
     } while (!in_array($at1['wday'],$CONFIG['working_days']));
 
     $at1['hours']=$swd;
     $at1['minutes']=0;
 
-  } else {
+} else {
     if (($at1['hours']<$swd) || (!in_array($at1['wday'],$CONFIG['working_days']))) {
-      while (!in_array($at1['wday'],$CONFIG['working_days'])) {
+    while (!in_array($at1['wday'],$CONFIG['working_days'])) {
         $at1['yday']++;
         $at1['wday']++;
         $at1['wday']%=7;
         if ($at1['days']>365) {
-          $at1['year']++;
-          $at1['yday']=0;
+        $at1['year']++;
+        $at1['yday']=0;
         }
-      }
-
-      $at1['hours']=$swd;
-      $at1['minutes']=0;
     }
-  }
 
-  // Same again but for the end time
-  // if it isn't then move it backward to the previous work minute
+    $at1['hours']=$swd;
+    $at1['minutes']=0;
+    }
+}
 
-  if ( $at2['hours']<$swd) {
+// Same again but for the end time
+// if it isn't then move it backward to the previous work minute
+
+if ( $at2['hours']<$swd) {
     do {
-      $at2['yday']--;
-      $at2['wday']--;
-      if ($at2['wday']<0) $at2['wday']=6;
-      if ($at2['yday']<0) {
+    $at2['yday']--;
+    $at2['wday']--;
+    if ($at2['wday']<0) $at2['wday']=6;
+    if ($at2['yday']<0) {
         $at2['yday']=365;
         $at2['year']--;
-      }
+    }
     } while (!in_array($at2['wday'],$CONFIG['working_days']));
 
     $at2['hours']=$ewd;
     $at2['minutes']=0;
 
-  } else {
+} else {
     if (($at2['hours']>$ewd) || (!in_array($at2['wday'],$CONFIG['working_days']))) {
-      while (!in_array($at2['wday'],$CONFIG['working_days'])) {
+    while (!in_array($at2['wday'],$CONFIG['working_days'])) {
         $at2['yday']--;
         $at2['wday']--;
         if ($at2['wday']<0) $at2['wday']=6;
         if ($at2['yday']<0) {
-          $at2['yday']=365;
-          $at2['year']--;
+        $at2['yday']=365;
+        $at2['year']--;
         }
-      }
-      $at2['hours']=$ewd;
-      $at2['minutes']=0;
     }
-  }
+    $at2['hours']=$ewd;
+    $at2['minutes']=0;
+    }
+}
 
 
-  $t1=mktime($at1['hours'],$at1['minutes'],0,1,$at1['yday']+1,$at1['year']);
-  $t2=mktime($at2['hours'],$at2['minutes'],0,1,$at2['yday']+1,$at2['year']);
+$t1=mktime($at1['hours'],$at1['minutes'],0,1,$at1['yday']+1,$at1['year']);
+$t2=mktime($at2['hours'],$at2['minutes'],0,1,$at2['yday']+1,$at2['year']);
 
-  $weeks=floor(($t2-$t1)/(60*60*24*7));
-  $t1+=$weeks*60*60*24*7;
+$weeks=floor(($t2-$t1)/(60*60*24*7));
+$t1+=$weeks*60*60*24*7;
 
-  while ( date('z',$t2) != date('z',$t1) ) {
+while ( date('z',$t2) != date('z',$t1) ) {
     if (in_array(date('w',$t1),$CONFIG['working_days'])) $days++;
     $t1+=(60*60*24);
-  }
+}
 
-  // this could be negative and that's not ok
+// this could be negative and that's not ok
 
-  $coefficient=1;
-  if ($t2<$t1) {
+$coefficient=1;
+if ($t2<$t1) {
     $t3=$t2;
     $t2=$t1;
     $t1=$t3;
     $coefficient=-1;
-  }
+}
 
-  $min=floor( ($t2-$t1)/60 )*$coefficient;
+$min=floor( ($t2-$t1)/60 )*$coefficient;
 
-  $minutes= $min + ($weeks * count($CONFIG['working_days']) + $days ) * ($ewd-$swd) * 60;
-  return $minutes;
- */
+$minutes= $min + ($weeks * count($CONFIG['working_days']) + $days ) * ($ewd-$swd) * 60;
+return $minutes;
+*/
 
     global $CONFIG;
     $swd = $CONFIG['start_working_day']/3600;
     $ewd = $CONFIG['end_working_day']/3600;
 
-  // Just in case they are the wrong way around ...
+// Just in case they are the wrong way around ...
 
     if ( $t1 > $t2 )
     {
@@ -4951,7 +4951,7 @@ function calculate_working_time($t1, $t2, $publicholidays) {
 
 
 /**
-  * @author Ivan Lucas
+* @author Ivan Lucas
 */
 function is_active_status($status, $states)
 {
@@ -4961,12 +4961,12 @@ function is_active_status($status, $states)
 
 
 /**
- * Function to get an array of public holdidays
- * @author Paul Heaney
- * @param $startdate int - Start of the period to find public holidays in
- * @param $enddate int - Start of the period to find public holidays in
- * @return array of Holiday
- */
+* Function to get an array of public holdidays
+* @author Paul Heaney
+* @param $startdate int - Start of the period to find public holidays in
+* @param $enddate int - Start of the period to find public holidays in
+* @return array of Holiday
+*/
 function get_public_holidays($startdate, $enddate)
 {
     $sql = "SELECT * FROM `{$GLOBALS['dbHolidays']}` ";
@@ -5001,7 +5001,7 @@ function get_public_holidays($startdate, $enddate)
     @param $t1 integer - UNIX Timestamp. Start of range
     @param $t2 integer - UNIX Timestamp. End of range
     @param $states array (optional) Does not count time when the incident is set to
-           any of the states in this array. (Default is closed, awaiting closure and awaiting customer action)
+        any of the states in this array. (Default is closed, awaiting closure and awaiting customer action)
 */
 function calculate_incident_working_time($incidentid, $t1, $t2, $states=array(2,7,8))
 {
@@ -5669,20 +5669,20 @@ function return_bytes($val)
 
 function draw_tabs($tabsarray, $selected='')
 {
-      if ($selected=='') $selected=key($tabsarray);
-      $html .= "<div id='tabcontainer'>";
-      $html .= "<ul id='tabnav'>";
-      foreach ($tabsarray AS $tab => $url)
-      {
+    if ($selected=='') $selected=key($tabsarray);
+    $html .= "<div id='tabcontainer'>";
+    $html .= "<ul id='tabnav'>";
+    foreach ($tabsarray AS $tab => $url)
+    {
         $html .= "<li><a href='$url'";
         if (strtolower($tab)==strtolower($selected)) $html .= " class='active'";
         $tab=str_replace('_', ' ', $tab);
         $html .= ">$tab</a></li>\n";
-      }
-      $html .= "</ul>";
-      $html .= "</div>";
+    }
+    $html .= "</ul>";
+    $html .= "</div>";
 
-  return ($html);
+return ($html);
 }
 
 
@@ -5770,13 +5770,13 @@ function cleanvar($var,$striphtml=TRUE, $transentities=TRUE)
 function external_escalation($escalated, $incid)
 {
 
-   foreach ($escalated as $i => $id){
-	if ($id == $incid){
-	   return "yes";
-	}
-   }
+foreach ($escalated as $i => $id){
+    if ($id == $incid){
+    return "yes";
+    }
+}
 
-   return "no";
+return "no";
 }
 
 function user_notification_on_reassign($user)
@@ -5794,18 +5794,18 @@ function user_notification_on_reassign($user)
 function bbcode($text)
 {
     $bbcode_regex = array(0 => '/\[b\](.*?)\[\/b\]/s',
-                          1 => '/\[i\](.*?)\[\/i\]/s',
-                          2 => '/\[u\](.*?)\[\/u\]/s',
-                          3 => '/\[quote\](.*?)\[\/quote\]/s',
-                          4 => '/\[quote\=(.*?)](.*?)\[\/quote\]/s',
-                          5 => '/\[url\](.*?)\[\/url\]/s',
-                          6 => '/\[url\=(.*?)\](.*?)\[\/url\]/s',
-                          7 => '/\[img\](.*?)\[\/img\]/s',
-                          8 => '/\[color\=(.*?)\](.*?)\[\/color\]/s',
-                          9 => '/\[size\=(.*?)\](.*?)\[\/size\]/s',
-                          10 => '/\[code\](.*?)\[\/code\]/s',
-                          11 => '/\[hr\]/s',
-                          12 => '/\[s\](.*?)\[\/s\]/s');
+                        1 => '/\[i\](.*?)\[\/i\]/s',
+                        2 => '/\[u\](.*?)\[\/u\]/s',
+                        3 => '/\[quote\](.*?)\[\/quote\]/s',
+                        4 => '/\[quote\=(.*?)](.*?)\[\/quote\]/s',
+                        5 => '/\[url\](.*?)\[\/url\]/s',
+                        6 => '/\[url\=(.*?)\](.*?)\[\/url\]/s',
+                        7 => '/\[img\](.*?)\[\/img\]/s',
+                        8 => '/\[color\=(.*?)\](.*?)\[\/color\]/s',
+                        9 => '/\[size\=(.*?)\](.*?)\[\/size\]/s',
+                        10 => '/\[code\](.*?)\[\/code\]/s',
+                        11 => '/\[hr\]/s',
+                        12 => '/\[s\](.*?)\[\/s\]/s');
 
     $bbcode_replace = array(0 => '<strong>$1</strong>',
                             1 => '<em>$1</em>',
@@ -6083,12 +6083,12 @@ function dashlet($dashboard, $row, $dashboardid, $icon, $title, $content)
     $html .= "</div>\n";
     $html .= "<div id='win{$row}-{$dashboardid}' class='window'>\n";
     $html .= $content;
-    $html .= "\n</div>\n</div>\n";
+    $html .= "</div>\n</div>\n";
 
     $displayfn = "dashboard_{$dashboard}_display";
     if (function_exists($displayfn))
     {
-        $html .= "\n<script type='text/javascript'>\n//<![CDATA[\nget_and_display('ajaxdata.php?action=dashboard_display&dashboard={$dashboard}','win{$row}-{$dashboardid}', false);\n//]]>\n</script>\n";
+        $html .= "<script type='text/javascript'>\n//<![CDATA[\nget_and_display('ajaxdata.php?action=dashboard_display&dashboard={$dashboard}','win{$row}-{$dashboardid}', false);\n//]]>\n</script>\n";
     }
 
     return $html;
@@ -6816,10 +6816,10 @@ function array_remove_duplicate($array, $field)
 // This function doesn't exist for PHP4 so use this instead
 if (!function_exists("stripos"))
 {
-  function stripos($str,$needle,$offset=0)
-  {
-      return strpos(strtolower($str),strtolower($needle),$offset);
-  }
+function stripos($str,$needle,$offset=0)
+{
+    return strpos(strtolower($str),strtolower($needle),$offset);
+}
 }
 
 
@@ -7111,7 +7111,7 @@ function ldate($format, $date='')
     {
         $days = array('Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday');
         $i18ndays = array($GLOBALS['strMonday'], $GLOBALS['strTuesday'], $GLOBALS['strWednesday'],
-                          $GLOBALS['strThursday'], $GLOBALS['strFriday'], $GLOBALS['strSaturday'], $GLOBALS['strSunday']);
+                        $GLOBALS['strThursday'], $GLOBALS['strFriday'], $GLOBALS['strSaturday'], $GLOBALS['strSunday']);
         $datestring = str_replace($days, $i18ndays, $datestring);
     }
 
@@ -7120,7 +7120,7 @@ function ldate($format, $date='')
     {
         $days = array('Mon','Tue','Wed','Thu','Fri','Sat','Sun');
         $i18ndays = array($GLOBALS['strMon'], $GLOBALS['strTue'], $GLOBALS['strWed'],
-                          $GLOBALS['strThu'], $GLOBALS['strFri'], $GLOBALS['strSat'], $GLOBALS['strSun']);
+                        $GLOBALS['strThu'], $GLOBALS['strFri'], $GLOBALS['strSat'], $GLOBALS['strSun']);
         $datestring = str_replace($days, $i18ndays, $datestring);
     }
 
@@ -7129,9 +7129,9 @@ function ldate($format, $date='')
     {
         $months = array('January','February','March','April','May','June','July','August','September','October','November','December');
         $i18nmonths = array($GLOBALS['strJanuary'], $GLOBALS['strFebruary'], $GLOBALS['strMarch'],
-                          $GLOBALS['strApril'], $GLOBALS['strMay'], $GLOBALS['strJune'], $GLOBALS['strJuly'],
-                          $GLOBALS['strAugust'], $GLOBALS['strSeptember'], $GLOBALS['strOctober'],
-                          $GLOBALS['strNovember'], $GLOBALS['strDecember']);
+                        $GLOBALS['strApril'], $GLOBALS['strMay'], $GLOBALS['strJune'], $GLOBALS['strJuly'],
+                        $GLOBALS['strAugust'], $GLOBALS['strSeptember'], $GLOBALS['strOctober'],
+                        $GLOBALS['strNovember'], $GLOBALS['strDecember']);
         $datestring = str_replace($months, $i18nmonths, $datestring);
     }
 
@@ -7140,9 +7140,9 @@ function ldate($format, $date='')
     {
         $months = array('Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec');
         $i18nmonths = array($GLOBALS['strJanAbbr'], $GLOBALS['strFebAbbr'], $GLOBALS['strMarAbbr'],
-                          $GLOBALS['strAprAbbr'], $GLOBALS['strMayAbbr'], $GLOBALS['strJunAbbr'], $GLOBALS['strJulAbbr'],
-                          $GLOBALS['strAugAbbr'], $GLOBALS['strSepAbbr'], $GLOBALS['strOctAbbr'],
-                          $GLOBALS['strNovAbbr'], $GLOBALS['strDecAbbr']);
+                        $GLOBALS['strAprAbbr'], $GLOBALS['strMayAbbr'], $GLOBALS['strJunAbbr'], $GLOBALS['strJulAbbr'],
+                        $GLOBALS['strAugAbbr'], $GLOBALS['strSepAbbr'], $GLOBALS['strOctAbbr'],
+                        $GLOBALS['strNovAbbr'], $GLOBALS['strDecAbbr']);
         $datestring = str_replace($months, $i18nmonths, $datestring);
     }
 
@@ -7311,18 +7311,18 @@ function schedule_action_done($doneaction, $success=TRUE)
 
 
 /**
- * Make a billing array for a incident
- * @author Paul Heaney
- * @param $incidentid - Incident number of the incident to create the array from
- * @todo Can this be merged into make_incident_billing_array? Does it serve any purpose on its own?
+* Make a billing array for a incident
+* @author Paul Heaney
+* @param $incidentid - Incident number of the incident to create the array from
+* @todo Can this be merged into make_incident_billing_array? Does it serve any purpose on its own?
 **/
 function get_incident_billing_details($incidentid)
 {
     global $dbUpdates;
     if (empty($incidentid)) trigger_error('Empty incident ID', E_USER_ERROR);
     /*
-     $array[owner][] = array(owner, starttime, duration)
-     */
+    $array[owner][] = array(owner, starttime, duration)
+    */
     $sql = "SELECT * FROM `{$dbUpdates}` WHERE incidentid = {$incidentid} AND duration IS NOT NULL";
     $result = mysql_query($sql);
     if (mysql_error())
@@ -7347,13 +7347,13 @@ function get_incident_billing_details($incidentid)
 
 
 /**
- * TODO
- * @author Paul Heaney
- * @param $count TODO
- * @param $countType TODO
- * @param $activity TODO
- * @param $period TODO
- * @return TODO
+* TODO
+* @author Paul Heaney
+* @param $count TODO
+* @param $countType TODO
+* @param $activity TODO
+* @param $period TODO
+* @return TODO
 **/
 function group_billing_periods(&$count, $countType, $activity, $period)
 {
@@ -7491,14 +7491,14 @@ function make_incident_billing_array($incidentid)
 }
 
 /**
- * TODO
- * NOTE: The following returns the billable periods of a site,
- * could run into issues if multiple different periods used for a site
- * @author Paul Heaney
- * @param $siteid TODO
- * @param $startdate TODO
- * @param $enddate TODO
- * @returns $units TODO
+* TODO
+* NOTE: The following returns the billable periods of a site,
+* could run into issues if multiple different periods used for a site
+* @author Paul Heaney
+* @param $siteid TODO
+* @param $startdate TODO
+* @param $enddate TODO
+* @returns $units TODO
 **/
 function billable_units_site($siteid, $startdate=0, $enddate=0)
 {
@@ -7536,10 +7536,10 @@ function billable_units_site($siteid, $startdate=0, $enddate=0)
 
 
 /**
- * Return an array of contacts allowed to use this contract
- * @author Kieran Hogg
- * @param $maintid integer - ID of the contract
- * @returns array of supported contacts, NULL if none
+* Return an array of contacts allowed to use this contract
+* @author Kieran Hogg
+* @param $maintid integer - ID of the contract
+* @returns array of supported contacts, NULL if none
 **/
 function supported_contacts($maintid)
 {
@@ -7562,10 +7562,10 @@ function supported_contacts($maintid)
 
 
 /**
- * Return an array of contracts which the contact is an admin contact for
- * @author Kieran Hogg
- * @param $maintid integer - ID of the contract
- * @returns array of supported contracts, NULL if none
+* Return an array of contracts which the contact is an admin contact for
+* @author Kieran Hogg
+* @param $maintid integer - ID of the contract
+* @returns array of supported contracts, NULL if none
 **/
 function admin_contact_contracts($contactid, $siteid)
 {
@@ -7592,10 +7592,10 @@ function admin_contact_contracts($contactid, $siteid)
 
 
 /**
- * Return an array of contracts which the contact is an named contact for
- * @author Kieran Hogg
- * @param $maintid integer - ID of the contract
- * @returns array of supported contracts, NULL if none
+* Return an array of contracts which the contact is an named contact for
+* @author Kieran Hogg
+* @param $maintid integer - ID of the contract
+* @returns array of supported contracts, NULL if none
 **/
 function contact_contracts($contactid, $siteid)
 {
@@ -7623,10 +7623,10 @@ function contact_contracts($contactid, $siteid)
 
 
 /**
- * Return an array of contracts which non-contract contacts can see incidents
- * @author Kieran Hogg
- * @param $maintid integer - ID of the contract
- * @returns array of supported contracts, NULL if none
+* Return an array of contracts which non-contract contacts can see incidents
+* @author Kieran Hogg
+* @param $maintid integer - ID of the contract
+* @returns array of supported contracts, NULL if none
 **/
 function all_contact_contracts($contactid, $siteid)
 {
@@ -7651,10 +7651,10 @@ function all_contact_contracts($contactid, $siteid)
 
 
 /**
- * Checks is a given username is unique
- * @author Kieran Hogg
- * @param $username string - username
- * @returns bool TRUE if valid, FALSE if not
+* Checks is a given username is unique
+* @author Kieran Hogg
+* @param $username string - username
+* @returns bool TRUE if valid, FALSE if not
 **/
 function valid_username($username)
 {
@@ -7677,9 +7677,9 @@ function valid_username($username)
 
 
 /**
- * Update the current session id with a newly generated one
- * @author Ivan Lucas
- * @note Wrap the php function for different versions of php
+* Update the current session id with a newly generated one
+* @author Ivan Lucas
+* @note Wrap the php function for different versions of php
 **/
 function session_regenerate()
 {
@@ -7692,9 +7692,9 @@ function session_regenerate()
 
 
 /**
- * Finds the software associated with a contract
- * @author Ivan Lucas
- * @note Wrap the php function for different versions of php
+* Finds the software associated with a contract
+* @author Ivan Lucas
+* @note Wrap the php function for different versions of php
 **/
 function contract_software()
 {
@@ -7730,9 +7730,9 @@ function contract_software()
 
 
 /**
- * HTML for an ajax help link
- * @author Ivan Lucas
- * @param $context string.  The base filename of the popup help file in htdocs/help/en-GB/ (without the .txt extension)
+* HTML for an ajax help link
+* @author Ivan Lucas
+* @param $context string.  The base filename of the popup help file in htdocs/help/en-GB/ (without the .txt extension)
 **/
 function help_link($context)
 {
@@ -7744,12 +7744,12 @@ function help_link($context)
 
 
 /**
- * Function to return an user error message when a file fails to upload
- * @author Paul Heaney
- * @param errorcode The error code from $_FILES['file']['error']
- * @param name The file name which was uploaded from $_FILES['file']['name']
- * @return String containing the error message (in HTML)
- */
+* Function to return an user error message when a file fails to upload
+* @author Paul Heaney
+* @param errorcode The error code from $_FILES['file']['error']
+* @param name The file name which was uploaded from $_FILES['file']['name']
+* @return String containing the error message (in HTML)
+*/
 function get_file_upload_error_message($errorcode, $name)
 {
     $str = "<div class='detailinfo'>\n";
@@ -7774,13 +7774,13 @@ function get_file_upload_error_message($errorcode, $name)
 
 
 /**
- * Function to produce a user readable file size i.e 2048 bytes 1KB etc
- *
- * @author Paul Heaney
- * @param filesize - filesize in bytes
- * @return String filesize in readable format
- *
- */
+* Function to produce a user readable file size i.e 2048 bytes 1KB etc
+*
+* @author Paul Heaney
+* @param filesize - filesize in bytes
+* @return String filesize in readable format
+*
+*/
 function readable_file_size($filesize)
 {
     global $strBytes, $strKBytes, $strMBytes, $strGBytes, $strTBytes;
@@ -7798,10 +7798,10 @@ function readable_file_size($filesize)
 
 
 /**
- * Return the html of contract detatils
- * @author Kieran Hogg
- * @param $maintid integer - ID of the contract
- * @returns array of supported contracts, NULL if none
+* Return the html of contract detatils
+* @author Kieran Hogg
+* @param $maintid integer - ID of the contract
+* @returns array of supported contracts, NULL if none
 **/
 function contract_details($id, $mode='internal')
 {
@@ -7854,15 +7854,15 @@ function contract_details($id, $mode='internal')
 
     if ($mode == 'internal')
     {
-    	$html .= "<td><a href=\"contact_details.php?id=";
-    	$html .= "{$maintrow['admincontact']}\">";
-    	$html .= contact_realname($maintrow['admincontact'])."</a></td></tr>";
-	}
-	else
-	{
-		$html .= "<td><a href='contactdetails.php?id={$maintrow['admincontact']}'>";
-		$html .= contact_realname($maintrow['admincontact'])."</a></td></tr>";
-	}
+        $html .= "<td><a href=\"contact_details.php?id=";
+        $html .= "{$maintrow['admincontact']}\">";
+        $html .= contact_realname($maintrow['admincontact'])."</a></td></tr>";
+    }
+    else
+    {
+        $html .= "<td><a href='contactdetails.php?id={$maintrow['admincontact']}'>";
+        $html .= contact_realname($maintrow['admincontact'])."</a></td></tr>";
+    }
 
     $html .= "<tr><th>{$GLOBALS[strReseller]}:</th><td>";
 
@@ -7923,10 +7923,10 @@ function contract_details($id, $mode='internal')
 
     if ($mode == 'internal')
     {
-	    $html .= "<p align='center'>";
-	    $html .= "<a href=\"edit_contract.php?action=edit&amp;maintid=$id\">{$GLOBALS[strEditContract]}</a></p>";
-	}
-	$html .= "<h3>{$GLOBALS['strContacts']}</h3>";
+        $html .= "<p align='center'>";
+        $html .= "<a href=\"edit_contract.php?action=edit&amp;maintid=$id\">{$GLOBALS[strEditContract]}</a></p>";
+    }
+    $html .= "<h3>{$GLOBALS['strContacts']}</h3>";
     if (mysql_num_rows($maintresult)<1)
     {
         throw_error("{$GLOBALS[strNoContractsFound]}: ",$id);
@@ -7943,11 +7943,11 @@ function contract_details($id, $mode='internal')
 
             $supportedcontacts = supported_contacts($id);
             $numberofcontacts = 0;
-            
+
             if ($supportedcontacts != NULL)
             {
                 $numberofcontacts = sizeof($supportedcontacts);
-                
+
                 if ($allowedcontacts == 0)
                 {
                     $allowedcontacts = $GLOBALS[strUnlimited];
@@ -7961,13 +7961,13 @@ function contract_details($id, $mode='internal')
                     $html .= "<td>".icon('contact', 16)." ";
                     if ($mode == 'internal')
                     {
-                    	$html .= "<a href=\"contact_details.php?";
-                	}
-                	else
-                	{
-                		$html .= "<a href=\"contactdetails.php?";
-                	}
-                	$html .= "id={$contact}\">".contact_realname($contact)."</a>, ";
+                        $html .= "<a href=\"contact_details.php?";
+                    }
+                    else
+                    {
+                        $html .= "<a href=\"contactdetails.php?";
+                    }
+                    $html .= "id={$contact}\">".contact_realname($contact)."</a>, ";
                     $html .= contact_site($contact). "</td>";
 
                     if ($mode == 'internal')
@@ -7989,16 +7989,16 @@ function contract_details($id, $mode='internal')
         }
     }
 
-	if ($maintrow['allcontactssupported'] != 'yes')
-	{   
-	    $html .= "<p align='center'>$strUsedNofN";
-	    $html .= sprintf($GLOBALS['strUsedNofN'],
-	                     "<strong>".$numberofcontacts."</strong>",
-	                     "<strong>".$allowedcontacts."</strong>");
-	    $html .= "</p>";
+    if ($maintrow['allcontactssupported'] != 'yes')
+    {
+        $html .= "<p align='center'>$strUsedNofN";
+        $html .= sprintf($GLOBALS['strUsedNofN'],
+                        "<strong>".$numberofcontacts."</strong>",
+                        "<strong>".$allowedcontacts."</strong>");
+        $html .= "</p>";
 
-	    if ($numberofcontacts < $allowedcontacts OR $allowedcontacts == 0 AND $mode == 'internal')
-	    {
+        if ($numberofcontacts < $allowedcontacts OR $allowedcontacts == 0 AND $mode == 'internal')
+        {
             $html .= "<p align='center'><a href='add_contact_support_contract.php?maintid={$id}&amp;siteid={$maintrow['site']}&amp;context=maintenance'>";
             $html .= "{$GLOBALS[strAddContact]}</a></p>";
         }
@@ -8018,7 +8018,7 @@ function contract_details($id, $mode='internal')
 
         $html .= "<p align='center'><a href='addcontact.php'>";
         $html .= "{$GLOBALS['strAddNewSiteContact']}</a></p>";
-	}
+    }
 
     $html .= "<br />";
     $html .= "<h3>{$GLOBALS[strSkillsSupportedUnderContract]}:</h3>";
@@ -8056,11 +8056,11 @@ function contract_details($id, $mode='internal')
 }
 
 /**
- * Uploads a file
- * @author Kieran Hogg
- * @param $file mixed file to upload
- * @param $id
- * @returns string path of file
+* Uploads a file
+* @author Kieran Hogg
+* @param $file mixed file to upload
+* @param $id
+* @returns string path of file
 **/
 function upload_file($file, $incidentid, $updateid, $type='public')
 {
@@ -8128,9 +8128,9 @@ function upload_file($file, $incidentid, $updateid, $type='public')
 
 
 /**
- * Function to return a logged in ftp connection
- * @author Ivan Lucas
- */
+* Function to return a logged in ftp connection
+* @author Ivan Lucas
+*/
 function create_ftp_connection()
 {
     global $CONFIG;
@@ -8155,14 +8155,14 @@ function create_ftp_connection()
 
 
 /**
- * Fucntion to return a HTML table row with two columns.
- * Giving radio boxes for groups and if the level is 'management' then you are able to view the users (de)selcting
- * @param $title - text to go in the first column
- * @param $level either management or engineer, management is able to (de)select users
- * @param $groupid  Defalt group to select
- * @return table of format <>tr><th /><td /></tr>
- * @author Paul Heaney
- */
+* Fucntion to return a HTML table row with two columns.
+* Giving radio boxes for groups and if the level is 'management' then you are able to view the users (de)selcting
+* @param $title - text to go in the first column
+* @param $level either management or engineer, management is able to (de)select users
+* @param $groupid  Defalt group to select
+* @return table of format <>tr><th /><td /></tr>
+* @author Paul Heaney
+*/
 function group_user_selector($title, $level="engineer", $groupid)
 {
     $str .= "<tr><th>{$title}</th>";
@@ -8225,11 +8225,11 @@ function group_user_selector($title, $level="engineer", $groupid)
 
 
 /**
- * Output html for the 'time to next action' box
- * Used in add incident and update incident
- * @return $html string html to output
- * @author Kieran Hogg
- */
+* Output html for the 'time to next action' box
+* Used in add incident and update incident
+* @return $html string html to output
+* @author Kieran Hogg
+*/
 function show_next_action()
 {
 
@@ -8238,7 +8238,7 @@ function show_next_action()
     $oldtimeofnextaction = incident_timeofnextaction($id);
     if ($oldtimeofnextaction < 1)
     {
-    	$oldtimeofnextaction = $now;
+        $oldtimeofnextaction = $now;
     }
     $wait_time = ($oldtimeofnextaction-$now);
 
@@ -8259,15 +8259,15 @@ function show_next_action()
     $html .= "timetonextaction_minutes.value = '';\" value='None' />Unspecified";
     $html .= "</label><br />";
 
- 	$html .= "<label><input type='radio' name='timetonextaction_none' ";
+    $html .= "<label><input type='radio' name='timetonextaction_none' ";
     $html .= "id='ttna_time' value='time' onchange=\"update_ttna();\" />";
     $html .= "{$GLOBALS['strForXDaysHoursMinutes']}</label><br />";
     $html .= "<span id='ttnacountdown'";
     if (empty($na_days) AND
-    	empty($na_hours) AND
-    	empty($na_minutes))
+        empty($na_hours) AND
+        empty($na_minutes))
     {
-    	$html .= " style='display: none;'";
+        $html .= " style='display: none;'";
     }
     $html .= ">";
     $html .= "&nbsp;&nbsp;&nbsp;<input maxlength='3' name='timetonextaction_days'";
@@ -8312,14 +8312,14 @@ function show_next_action()
 
 
 /**
- * Output the html for an icon
- *
- * @param string $filename filename of the string, minus extension, we assume .png
- * @param int $size size of the icon, from: 12, 16, 32
- * @param string $alt alt text of the icon
- * @return string $html icon html
- * @author Kieran Hogg
- */
+* Output the html for an icon
+*
+* @param string $filename filename of the string, minus extension, we assume .png
+* @param int $size size of the icon, from: 12, 16, 32
+* @param string $alt alt text of the icon
+* @return string $html icon html
+* @author Kieran Hogg
+*/
 function icon($filename, $size='', $alt='', $title='')
 {
     global $iconset, $CONFIG;
@@ -8348,13 +8348,13 @@ function icon($filename, $size='', $alt='', $title='')
 }
 
 /**
- * Output the html for a KB article
- *
- * @param int $id ID of the KB article
- * @param string $mode whether this is internal or external facing, defaults to internal
- * @return string $html kb article html
- * @author Kieran Hogg
- */
+* Output the html for a KB article
+*
+* @param int $id ID of the KB article
+* @param string $mode whether this is internal or external facing, defaults to internal
+* @return string $html kb article html
+* @author Kieran Hogg
+*/
 function kb_article($id, $mode='internal')
 {
     global $CONFIG, $iconset;
@@ -8521,29 +8521,29 @@ function kb_article($id, $mode='internal')
 }
 
 /**
- * Output the html for the edit site form
- *
- * @param int $site ID of the site
- * @param string $mode whether this is internal or external facing, defaults to internal
- * @return string $html edit site form html
- * @author Kieran Hogg
- */
+* Output the html for the edit site form
+*
+* @param int $site ID of the site
+* @param string $mode whether this is internal or external facing, defaults to internal
+* @return string $html edit site form html
+* @author Kieran Hogg
+*/
 function show_edit_site($site, $mode='internal')
 {
-	$sql = "SELECT * FROM `{$GLOBALS['dbSites']}` WHERE id='$site' ";
+    $sql = "SELECT * FROM `{$GLOBALS['dbSites']}` WHERE id='$site' ";
     $siteresult = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     while ($siterow = mysql_fetch_array($siteresult))
     {
         if ($mode == 'internal')
         {
-        	$html .= "<h2>".icon('site', 32)." {$GLOBALS['strEditSite']}: {$site} - ";
-        	$html .= site_name($site)."</h2>";
-    	}
-    	else
-    	{
-    		$html .= "<h2>".icon('site', 32)." ".site_name($site)."</h2>";
-    	}
+            $html .= "<h2>".icon('site', 32)." {$GLOBALS['strEditSite']}: {$site} - ";
+            $html .= site_name($site)."</h2>";
+        }
+        else
+        {
+            $html .= "<h2>".icon('site', 32)." ".site_name($site)."</h2>";
+        }
 
         $html .= "<form name='edit_site' action='{$_SERVER['PHP_SELF']}";
         $html .= "?action=update' method='post' onsubmit='return ";
@@ -8552,11 +8552,11 @@ function show_edit_site($site, $mode='internal')
         $html .= "<tr><th>{$GLOBALS['strName']}:</th>";
         $html .= "<td><input class='required' maxlength='50' name='name' size='40' value='{$siterow['name']}' />";
         $html .= "<span class='required'>{$GLOBALS['strRequired']}</span></td></tr>\n";
-		if ($mode == 'internal')
-		{
-        	$html .= "<tr><th>{$GLOBALS['strTags']}:</th><td><textarea rows='2' cols='60' name='tags'>";
-        	$html .= list_tags($site, TAG_SITE, false)."</textarea>\n";
-    	}
+        if ($mode == 'internal')
+        {
+            $html .= "<tr><th>{$GLOBALS['strTags']}:</th><td><textarea rows='2' cols='60' name='tags'>";
+            $html .= list_tags($site, TAG_SITE, false)."</textarea>\n";
+        }
         $html .= "<tr><th>{$GLOBALS['strDepartment']}:</th>";
         $html .= "<td><input maxlength='50' name='department' size='40' value='{$siterow['department']}' />";
         $html .= "</td></tr>\n";
@@ -8582,30 +8582,30 @@ function show_edit_site($site, $mode='internal')
         $html .= "<tr><th>{$GLOBALS['strSiteType']}:</th><td>\n";
         $html .= sitetype_drop_down('typeid', $siterow['typeid']);
         $html .= "</td></tr>\n";
-		if ($mode == 'internal')
-		{
-        	$html .= "<tr><th>{$GLOBALS['strSalesperson']}:</th><td>";
-        	$html .= user_drop_down('owner', $siterow['owner'], $accepting=FALSE, '', '', TRUE);
-        	$html .= "</td></tr>\n";
-    	}
         if ($mode == 'internal')
         {
-	        $html .= "<tr><th>{$GLOBALS['strIncidentPool']}:</th>";
-	        $incident_pools = explode(',', "{$GLOBALS['strNone']},{$CONFIG['incident_pools']}");
-	        if (array_key_exists($siterow['freesupport'], $incident_pools)==FALSE)
-	        {
-	        	array_unshift($incident_pools,$siterow['freesupport']);
-	        }
-	        $html .= "<td>".array_drop_down($incident_pools,'incident_poolid',$siterow['freesupport'])."</td></tr>";
-	        $html .= "<tr><th>{$GLOBALS['strActive']}:</th><td><input type='checkbox' name='active' ";
-	        if ($siterow['active'] == 'true')
-	        {
-	        	$html .= "checked='".$siterow['active']."'";
-	        }
-	        $html .= " value='true' /></td></tr>\n";
-	        $html .= "<tr><th>{$GLOBALS['strNotes']}:</th><td>";
-	        $html .= "<textarea rows='5' cols='30' name='notes'>{$siterow['notes']}</textarea>";
-	        $html .= "</td></tr>\n";
+            $html .= "<tr><th>{$GLOBALS['strSalesperson']}:</th><td>";
+            $html .= user_drop_down('owner', $siterow['owner'], $accepting=FALSE, '', '', TRUE);
+            $html .= "</td></tr>\n";
+        }
+        if ($mode == 'internal')
+        {
+            $html .= "<tr><th>{$GLOBALS['strIncidentPool']}:</th>";
+            $incident_pools = explode(',', "{$GLOBALS['strNone']},{$CONFIG['incident_pools']}");
+            if (array_key_exists($siterow['freesupport'], $incident_pools)==FALSE)
+            {
+                array_unshift($incident_pools,$siterow['freesupport']);
+            }
+            $html .= "<td>".array_drop_down($incident_pools,'incident_poolid',$siterow['freesupport'])."</td></tr>";
+            $html .= "<tr><th>{$GLOBALS['strActive']}:</th><td><input type='checkbox' name='active' ";
+            if ($siterow['active'] == 'true')
+            {
+                $html .= "checked='".$siterow['active']."'";
+            }
+            $html .= " value='true' /></td></tr>\n";
+            $html .= "<tr><th>{$GLOBALS['strNotes']}:</th><td>";
+            $html .= "<textarea rows='5' cols='30' name='notes'>{$siterow['notes']}</textarea>";
+            $html .= "</td></tr>\n";
         }
         plugin_do('edit_site_form');
         $html .= "</table>\n";
@@ -8617,12 +8617,12 @@ function show_edit_site($site, $mode='internal')
 }
 
 /**
- * Output the html for an add contact form
- *
- * @param string $mode whether this is internal or external facing, defaults to internal
- * @return string $html add contact form html
- * @author Kieran Hogg
- */
+* Output the html for an add contact form
+*
+* @param string $mode whether this is internal or external facing, defaults to internal
+* @return string $html add contact form html
+* @author Kieran Hogg
+*/
 function show_add_contact($mode = 'internal')
 {
     $html .= show_form_errors('add_contact');
@@ -8750,11 +8750,11 @@ function show_add_contact($mode = 'internal')
     if ($mode == 'internal')
     {
         $html .= "<tr><th>{$GLOBALS['strNotes']}</th><td><textarea cols='60' rows='5' name='notes'>";
-	    if ($_SESSION['formdata']['add_contact']['notes'] != '')
-	    {
-	        $html .= $_SESSION['formdata']['add_contact']['notes'];
-	    }
-	    $html .= "</textarea></td></tr>\n";
+        if ($_SESSION['formdata']['add_contact']['notes'] != '')
+        {
+            $html .= $_SESSION['formdata']['add_contact']['notes'];
+        }
+        $html .= "</textarea></td></tr>\n";
     }
     $html .= "<tr><th>{$GLOBALS['strEmailDetails']}</th>";
     $html .= "<td><input type='checkbox' name='emaildetails' checked='checked'>";
@@ -8770,13 +8770,13 @@ function show_add_contact($mode = 'internal')
 }
 
 /**
- * Procceses a new contact
- *
- * @author Kieran Hogg
- */
+* Procceses a new contact
+*
+* @author Kieran Hogg
+*/
 function process_add_contact()
 {
-	global $now, $CONFIG, $dbContacts;
+    global $now, $CONFIG, $dbContacts;
     // Add new contact
     // External variables
     $siteid = mysql_real_escape_string($_REQUEST['siteid']);
@@ -8952,12 +8952,12 @@ function process_add_contact()
 
 
 /**
- * Outputs the name of a KB article, used for triggers
- *
- * @param int $kbid ID of the KB article
- * @return string $name kb article name
- * @author Kieran Hogg
- */
+* Outputs the name of a KB article, used for triggers
+*
+* @param int $kbid ID of the KB article
+* @return string $name kb article name
+* @author Kieran Hogg
+*/
 function kb_name($kbid)
 {
     $kbid = intval($kbid);
@@ -8973,11 +8973,11 @@ function kb_name($kbid)
 
 
 /**
- * Outputs the full base url of the install, e.g. http://www.example.com/
- *
- * @return string base url of the install
- * @author Kieran Hogg
- */
+* Outputs the full base url of the install, e.g. http://www.example.com/
+*
+* @return string base url of the install
+* @author Kieran Hogg
+*/
 function application_url()
 {
     global $CONFIG;
@@ -8989,12 +8989,12 @@ function application_url()
 
 
 /**
- * Outputs the product name of a contract
- *
- * @param $maintid ID of the contract
- * @return string the name of the product
- * @author Kieran Hogg
- */
+* Outputs the product name of a contract
+*
+* @param $maintid ID of the contract
+* @return string the name of the product
+* @author Kieran Hogg
+*/
 function contract_product($maintid)
 {
     $maintid = intval($maintid);
@@ -9014,12 +9014,12 @@ function contract_product($maintid)
 
 
 /**
- * Outputs the contract's site name
- *
- * @param $maintid ID of the contract
- * @return string name of the site
- * @author Kieran Hogg
- */
+* Outputs the contract's site name
+*
+* @param $maintid ID of the contract
+* @return string name of the site
+* @author Kieran Hogg
+*/
 function contract_site($maintid)
 {
     $maintid = intval($maintid);
@@ -9040,12 +9040,12 @@ function contract_site($maintid)
 
 
 /**
- * Sets up default triggers for new users or upgraded users
- *
- * @param $userid ID of the user
- * @return bool TRUE on success, FALSE if not
- * @author Kieran Hogg
- */
+* Sets up default triggers for new users or upgraded users
+*
+* @param $userid ID of the user
+* @return bool TRUE on success, FALSE if not
+* @author Kieran Hogg
+*/
 function setup_user_triggers($userid)
 {
     $return = TRUE;
@@ -9053,14 +9053,14 @@ function setup_user_triggers($userid)
     if ($userid != 0)
     {
         $sqls[] = "INSERT INTO `{$GLOBALS['dbTriggers']}` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`)
-                  VALUES('TRIGGER_INCIDENT_ASSIGNED', {$userid}, 'ACTION_NOTICE', 2, '', '{userid} == {currentuserid}');";
+                VALUES('TRIGGER_INCIDENT_ASSIGNED', {$userid}, 'ACTION_NOTICE', 2, '', '{userid} == {currentuserid}');";
         $sqls[] = "INSERT INTO `{$GLOBALS['dbTriggers']}` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`)
-                  VALUES('TRIGGER_SIT_UPGRADED', {$userid}, 'ACTION_NOTICE', 10, '', '');";
+                VALUES('TRIGGER_SIT_UPGRADED', {$userid}, 'ACTION_NOTICE', 10, '', '');";
         $sqls[] = "INSERT INTO `{$GLOBALS['dbTriggers']}` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`)
-                  VALUES('TRIGGER_INCIDENT_CLOSED', {$userid}, 'ACTION_NOTICE', 13, '', '{userid} != {currentuserid}');";
+                VALUES('TRIGGER_INCIDENT_CLOSED', {$userid}, 'ACTION_NOTICE', 13, '', '{userid} != {currentuserid}');";
         $sqls[] = "INSERT INTO `{$GLOBALS['dbTriggers']}` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`)
-                  VALUES('TRIGGER_INCIDENT_NEARING_SLA', {$userid}, 'ACTION_NOTICE', 3, '',
-                  '{ownerid} == {$userid} OR {townerid} == {$userid}');";
+                VALUES('TRIGGER_INCIDENT_NEARING_SLA', {$userid}, 'ACTION_NOTICE', 3, '',
+                '{ownerid} == {$userid} OR {townerid} == {$userid}');";
 
         foreach ($sqls AS $sql)
         {
