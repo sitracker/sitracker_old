@@ -3338,7 +3338,6 @@ function site_name($id)
     return($sitename);
 }
 
-
 //  prints the HTML for a drop down list of
 // maintenance contracts, with the given name and with the
 // given id selected.
@@ -6077,7 +6076,8 @@ function dashlet($dashboard, $row, $dashboardid, $icon, $title, $content)
     $html .= "<div class='windowtitle'>";
     if (function_exists($displayfn))
     {
-        $html .= "<div><a href=\"javascript:get_and_display('ajaxdata.php?action=dashboard_display&dashboard={$dashboard}','win{$row}-{$dashboardid}', false);\">R</a></div>\n";
+        $html .= "<div><a href=\"javascript:get_and_display('ajaxdata.php?action=dashboard_display&dashboard={$dashboard}','win{$row}-{$dashboardid}', false);\">";
+        $html .= icon('reload', 16)."</a></div>\n";
     }
     $html .= "{$icon} {$title}";
     $html .= "</div>\n";
