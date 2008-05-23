@@ -19,6 +19,7 @@ define(ACTION_NONE, 1);
 define(ACTION_NOTICE, 2);
 define(ACTION_EMAIL, 3);
 define(ACTION_JOURNAL, 4);
+plugin_do('trigger_actions');
 
 $actionarray['ACTION_NONE'] =
 array('name' => $strNone,
@@ -209,37 +210,91 @@ function trigger_replace_specials($triggerid, $string, $paramarray)
         $dbg .= "\nTRIGGER: notice string before - $string\n";
         $dbg .= "TRIGGER: param array: ".print_r($paramarray,true);
     }
-
+    
+    //this loops through each variable and creates an array of useable varaibles' regexs
     foreach ($ttvararray AS $identifier => $ttvar)
     {
-        $usetvar = FALSE;
-        if (empty($ttvar['requires'])) $usetvar = TRUE;
-        else
+        $multiple = FALSE;
+        foreach ($ttvar AS $key => $value)
         {
-            if (!is_array($ttvar['requires'])) $ttvar['requires'] = array($ttvar['requires']);
-            foreach ($ttvar['requires'] as $needle)
+            //this checks if it's a multiply-defined variable
+            if (is_numeric($key))
             {
-                if (in_array($needle, $triggerarray[$triggerid]['required']))
+                $trigger_replaces = replace_vars(&$ttvar[$key], &$triggerid, &$identifier, &$paramarray);
+                if(!empty($trigger_replaces))
                 {
-                    $usetvar = TRUE;
+                    $trigger_regex[] = $trigger_replaces['trigger_regex'];
+                    $trigger_replace[] = $trigger_replaces['trigger_replace'];
                 }
+                $multiple = TRUE;
             }
         }
-        if ($usetvar)
+        if ($multiple == FALSE)
         {
-            $trigger_regex[] = "/{$identifier}/s";
-            if (!empty($ttvar['replacement']))
+            $trigger_replaces = replace_vars(&$ttvar, &$triggerid, &$identifier, &$paramarray);
+            if(!empty($trigger_replaces))
             {
-                eval("\$res = {$ttvar[replacement]};");
+                $trigger_regex[] = $trigger_replaces['trigger_regex'];
+                $trigger_replace[] = $trigger_replaces['trigger_replace'];
             }
-            $trigger_replace[] = $res;
-            unset($res);
         }
     }
-
-    return preg_replace($trigger_regex, $trigger_replace, $string);
+    return  preg_replace($trigger_regex, $trigger_replace, $string);
 }
 
+
+/**
+    * Actually do the replacement, used so we can define variables more than once
+    * @author Kieran Hogg
+    * @param &$ttvar array the array of the variable to replace
+    * @param &$triggerid string The name of the trigger
+    * @param &$identifier string the {variable} name
+    * @param &$paramarray the array of trigger parameters 
+    * @return mixed array if replacement found, NULL if not
+*/
+function replace_vars($ttvar, $triggerid, $identifier, $paramarray)
+{
+    global $triggerarray, $ttvararray, $CONFIG;
+    
+    $usetvar = FALSE;
+    
+    //if we don't have any requires, we can already use this var
+    if (empty($ttvar['requires']))
+    {
+        $usetvar = TRUE;
+    }
+    else
+    {
+        //otherwise we need to check all the requires
+        if (!is_array($ttvar['requires']))
+        {
+            $ttvar['requires'] = array($ttvar['requires']);
+        }
+        //compare the trigger 'provides' with the var 'requires'
+        foreach ($ttvar['requires'] as $needle)
+        {
+            if (in_array($needle, $triggerarray[$triggerid]['required']))
+            {
+                $usetvar = TRUE;
+            }
+        }
+    }
+    
+    //if we're able to use this variable
+    if ($usetvar)
+    {
+        $trigger_regex = "/{$identifier}/s";
+        if (!empty($ttvar['replacement']))
+        {
+            eval("\$res = {$ttvar[replacement]};");
+        }
+        echo "/{$identifier}/s - $res<br />";
+        $trigger_replace = $res;
+        unset($res);
+        return array('trigger_replace' => $trigger_replace,
+                     'trigger_regex' => $trigger_regex);
+    }
+}
 
 /**
     * Sends an email for a trigger
