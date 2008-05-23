@@ -150,7 +150,7 @@ array('name' => 'Contact added',
 $triggerarray['TRIGGER_NEW_CONTRACT'] =
 array('name' => 'New contract added',
       'description' => 'Occurs when a new contract is added',
-      'required' => array('maintid'),
+      'required' => array('contractid'),
       'params' => array('productid', 'slaid')
       );
 
