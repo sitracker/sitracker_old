@@ -230,27 +230,6 @@ if (!isset($refresh))
     if (mysql_error()) trigger_error(mysql_error(), E_USER_WARNING);
 }
 
-
-
-//dismiss any notices
-$noticeaction = cleanvar($_REQUEST['noticeaction']);
-$noticeid = cleanvar($_REQUEST['noticeid']);
-
-if ($noticeaction == 'dismiss_notice')
-{
-    if (is_numeric($noticeid))
-    {
-        $sql = "DELETE FROM `{$GLOBALS['dbNotices']}` WHERE id='{$noticeid}' AND userid='{$sit[2]}'";
-        mysql_query($sql);
-        if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
-    }
-    elseif ($noticeid == 'all')
-    {
-        $sql = "DELETE FROM `{$GLOBALS['dbNotices']}` WHERE userid={$sit[2]} LIMIT 20"; // only delete 20 max as we only show 20 max
-        mysql_query($sql);
-        if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
-    }
-}
 if ($sit[0] != '')
 {
     // Check users email address
@@ -268,6 +247,7 @@ if ($sit[0] != '')
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     if (mysql_num_rows($noticeresult) > 0)
     {
+        echo "<div id='noticearea'>\n";
         $keys = array_keys($_GET);
 
         foreach ($keys AS $key)
@@ -305,7 +285,7 @@ if ($sit[0] != '')
                 $class = 'info';
             }
 
-            echo "<div class='{$class}'><p class='{$class}' id='notice{$notice->id}'>";
+            echo "<div class='noticebar {$class}' id='notice{$notice->id}'><p class='{$class}'>";
             if ($notice->type == TRIGGER_NOTICE_TYPE)
             {
                 echo "<span><a href='{$CONFIG['application_webpath']}triggers.php'>";
@@ -346,7 +326,7 @@ if ($sit[0] != '')
 
         echo "<small>";
         echo "<em> (".format_date_friendly(strtotime($notice->timestamp)).")</em>";
-        echo "</small></p></div>";
+        echo "</small></p></div>\n";
         }
 
         if (mysql_num_rows($noticeresult) > 1)
@@ -366,8 +346,10 @@ if ($sit[0] != '')
                 }
             }
             $alink = $file."?".$link.$end;
-            echo "<p id='dismissall'><a href='{$alink}'>{$strDismissAll}</a></p>";
+            //echo "<p id='dismissall'><a href='{$alink}'>{$strDismissAll}</a></p>";
+            echo "\n<p id='dismissall'><a href='javascript:void(0);' onclick=\"dismissNotice('all', {$_SESSION['userid']})\">{$strDismissAll}</a></p>\n";
         }
+        echo "</div>\n";
     }
 }
 $headerdisplayed = TRUE; // Set a variable so we can check to see if the header was included

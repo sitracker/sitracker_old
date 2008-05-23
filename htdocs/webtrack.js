@@ -478,13 +478,17 @@ function insertBBCode(element, tag, endtag)
 
 function dismissNotice(noticeid, userid)
 {
-    var div = 'notice' + noticeid;
+    if (noticeid == 'all') var div = 'noticearea';
+    else var div = 'notice' + noticeid;
+
     new Ajax.Request(application_webpath + 'ajaxdata.php?action=dismiss_notice&noticeid=' + noticeid + '&userid=' + userid + '&rand=' + get_random(),
     {
         method:'get',
             onSuccess: function(transport)
             {
                 $(div).hide();
+                $(div).removeClassName('noticebar');
+                if ($$('.noticebar').length < 2) $('dismissall').hide();
             },
             onFailure: function(){ alert('Notice Error\nSorry, we could not dismiss the notice.') }
     });

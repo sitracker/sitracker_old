@@ -57,13 +57,14 @@ switch($action)
             $sql = "DELETE FROM `{$GLOBALS['dbNotices']}` WHERE id='{$noticeid}' AND userid='{$userid}'";
             mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
-            else echo "deleted {$noticeid} $sql";
+            else echo "deleted {$noticeid}";
         }
         elseif ($noticeid == 'all')
         {
-            $sql = "DELETE FROM `{$GLOBALS['dbNotices']}` WHERE userid={$sit[2]} LIMIT 20"; // only delete 20 max as we only show 20 max
+            $sql = "DELETE FROM `{$GLOBALS['dbNotices']}` WHERE userid={$userid} LIMIT 20"; // only delete 20 max as we only show 20 max
             mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+            else echo "deleted {$noticeid}";
         }
     break;
 
