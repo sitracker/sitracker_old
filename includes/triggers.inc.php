@@ -287,7 +287,6 @@ function replace_vars($ttvar, $triggerid, $identifier, $paramarray)
         {
             eval("\$res = {$ttvar[replacement]};");
         }
-        echo "/{$identifier}/s - $res<br />";
         $trigger_replace = $res;
         unset($res);
         return array('trigger_replace' => $trigger_replace,
