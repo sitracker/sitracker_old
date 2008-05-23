@@ -342,10 +342,16 @@ array('description' => 'First Name of contact',
       'replacement' => 'strtok(contact_realname($paramarray[\'contactid\'])," ");'
       );
 
-$ttvararray['{contactname}'] =
+$ttvararray['{contactname}'][] =
 array('description' => 'Full Name of contact',
       'requires' => 'contactid',
       'replacement' => 'contact_realname($paramarray[\'contactid\']);'
+      );
+
+$ttvararray['{contactname}'][] =
+array('description' => 'Full Name of contact',
+      'requires' => 'incidentid',
+      'replacement' => 'contact_realname(incident_contact($paramarray[\'incidentid\']));'
       );
 
 $ttvararray['{contactnotify}'] =
@@ -360,13 +366,19 @@ array('description' => 'Contact phone number',
       'replacement' => 'contact_site($paramarray[\'contactid\']);'
       );
 
-$ttvararray['{sitename}'] =
+$ttvararray['{sitename}'][] =
+array('description' => 'Site name',
+      'requires' => 'incidentid',
+      'replacement' => 'contact_site(incident_contact($paramarray[\'incidentid\']));'
+      );
+
+$ttvararray['{sitename}'][] =
 array('description' => 'Site name',
       'requires' => 'contactid',
       'replacement' => 'contact_site($paramarray[\'contactid\']);'
       );
 
-$ttvararray['{sitename}'] =
+$ttvararray['{sitename}'][] =
 array('description' => 'Site name',
       'requires' => 'contractid',
       'replacement' => 'contract_site($paramarray[\'contractid\']);'
