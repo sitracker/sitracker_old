@@ -9070,6 +9070,11 @@ function site_salesperson($siteid)
     return user_realname($salespersonid);
 }
 
+function application_version_string()
+{
+    return $application_version_string;
+}
+
 // -------------------------- // -------------------------- // --------------------------
 // leave this section at the bottom of functions.inc.php ================================
 
