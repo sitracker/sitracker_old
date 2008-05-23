@@ -18,7 +18,7 @@ function dashboard_watch_incidents($row,$dashboardid)
     echo "<div class='windowbox' id='$row-$dashboardid'>";
     echo "<div class='windowtitle'><div><a href='edit_watch_incidents.php'>";
     echo "{$GLOBALS['strEdit']}</a></div>".icon('support', 16)." ";
-    echo printf($GLOBALS['strWatchIncidents'], user_realname($user,TRUE));
+    echo $GLOBALS['strWatchIncidents'];
     echo "</div><div class='window' id='watch_incidents_windows'>";
 
     echo "<p align='center'><img src='{$CONFIG['application_webpath']}images/ajax-loader.gif' alt='Loading icon' /></p>";
