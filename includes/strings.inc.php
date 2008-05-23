@@ -324,15 +324,15 @@ array('description' => 'Contact ID',
 
 $ttvararray['{contactemail}'][] =
 array('description' => $strIncidentsContactEmail,
-      'requires' => 'incidentid',
-      'replacement' => 'contact_email(incident_contact($paramarray[\'incidentid\']));',
+      'requires' => 'contactid',
+      'replacement' => 'contact_email($paramarray[\'contactid\']);',
       'action' => 'ACTION_EMAIL'
       );
 
 $ttvararray['{contactemail}'][] =
 array('description' => $strIncidentsContactEmail,
-      'requires' => 'contactid',
-      'replacement' => 'contact_email($paramarray[\'contactid\']);',
+      'requires' => 'incidentid',
+      'replacement' => 'contact_email(incident_contact($paramarray[\'incidentid\']));',
       'action' => 'ACTION_EMAIL'
       );
 
