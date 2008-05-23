@@ -366,6 +366,12 @@ array('description' => 'Contact phone number',
       'replacement' => 'contact_site($paramarray[\'contactid\']);'
       );
 
+$ttvararray['{contractid}'] =
+array('description' => 'Contact ID',
+      'requires' => 'contractid',
+      'replacement' => '$paramarray[\'contractid\']);'
+      );
+
 $ttvararray['{sitename}'][] =
 array('description' => 'Site name',
       'requires' => 'incidentid',
@@ -382,6 +388,12 @@ $ttvararray['{sitename}'][] =
 array('description' => 'Site name',
       'requires' => 'contractid',
       'replacement' => 'contract_site($paramarray[\'contractid\']);'
+      );
+
+$ttvararray['{sitename}'][] =
+array('description' => 'Site name',
+      'requires' => 'siteid',
+      'replacement' => 'site_name($paramarray[\'sitetid\']);'
       );
 
 $ttvararray['{feedbackurl}'] =
