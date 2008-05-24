@@ -347,10 +347,8 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
                 xmlhttp.open("GET", "auto_save.php?userid="+<?php echo $_SESSION['userid']; ?>+"&type=email&incidentid="+<?php echo $id; ?>+"&draftid="+draftid+"&meta="+meta+"&content="+escape(toPass), true);
 
                 xmlhttp.onreadystatechange=function() {
-                    //remove this in the future after testing
                     if (xmlhttp.readyState==4) {
                         if (xmlhttp.responseText != ""){
-                            //alert(xmlhttp.responseText);
                             if (draftid == -1)
                             {
                                 draftid = xmlhttp.responseText;
