@@ -38,10 +38,18 @@ if ($action == 'new')
     echo "<tr><th>[hr]</th><td>".bbcode("[hr]")."</td></tr>";
     echo "</table>";
     echo "<div align='center'><form action='{$_SERVER[PHP_SELF]}?action=post' method='post'><br /><br />";
-    echo "<h3>{$strNotice}</h3>";
-    echo "<textarea cols='60' rows='4' name='text'></textarea><br />";
-    echo "<label for='session'>{$strDurability}:</label> <select name='durability'><option value='sticky'>{$strSticky}</option><option value='session'>{$strSession}</option></select><br /><br />";
-    echo "<label for='type'>{$strType}:</label> <select name='type'><option value='".NORMAL_NOTICE_TYPE."'>{$strInfo}</option><option value='".WARNING_NOTICE_TYPE."'>{$strWarning}</option></select><br /><br />";
+    echo "";
+    echo "<table align='center'>";
+    echo "<tr><th><h3>{$strNotice}</h3></th>";
+    echo "<td>";
+    echo bbcode_toolbar('noticetext');
+    echo "<textarea id='noticetext' cols='60' rows='4' name='text'></textarea><br />";
+    echo "</td></tr>";
+    echo "<tr><th><label for='durability'>{$strDurability}:</label></th>";
+    echo "<td><select name='durability'><option value='sticky'>{$strSticky}</option><option value='session'>{$strSession}</option></select></td></tr>";
+    echo "<tr><th><label for='type'>{$strType}:</label></th>";
+    echo "<td><select name='type'><option value='".NORMAL_NOTICE_TYPE."'>{$strInfo}</option><option value='".WARNING_NOTICE_TYPE."'>{$strWarning}</option></select></td></tr>";
+    echo "</table>";
     echo "<input type='submit' value='{$strSave}' />";
     echo "</form></div>";
     echo "<p align='center'><a href='notices.php'>{$strReturnWithoutSaving}</a></p>";
@@ -57,13 +65,13 @@ elseif ($action == 'post')
     //post new notice
     $sql = "SELECT id FROM `{$dbUsers}` WHERE status != 0";
     $result = mysql_query($sql);
-    
+
     //do this once so we can get a referenceID
     $user = mysql_fetch_object($result);
     $sql = "INSERT INTO `{$dbNotices}` (userid, type, text, timestamp, durability) ";
     $sql .= "VALUES({$user->id}, {$type}, '{$text}', NOW(), '{$durability}')";
     mysql_query($sql);
-    if (mysql_error()) 
+    if (mysql_error())
     {
         trigger_error(mysql_error(),E_USER_WARNING);
     }
@@ -73,7 +81,7 @@ elseif ($action == 'post')
         $sql = "UPDATE `$dbNotices` SET referenceid='{$refid}' WHERE id='{$refid}'";
         mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
-        
+
         while ($user = mysql_fetch_object($result))
         {
             $sql = "INSERT INTO `{$dbNotices}` (userid, referenceid, type, text, timestamp, durability) ";
