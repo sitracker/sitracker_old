@@ -20,7 +20,7 @@
 $schema = "CREATE TABLE IF NOT EXISTS `{$dbSystem}` (
   `id` int(1) NOT NULL default '0',
   `version` float(3,2) NOT NULL default '0.00',
-  `schema` bigint(20) unsigned NOT NULL COMMENT 'DateTime in YYYYMMDDHHMM format',
+  `schemaversion` bigint(20) unsigned NOT NULL COMMENT 'DateTime in YYYYMMDDHHMM format',
   PRIMARY KEY  (`id`)
 ) TYPE=MyISAM;
 
@@ -1759,7 +1759,7 @@ INSERT INTO `{$dbUserStatus}` (`id` ,`name`) VALUES ('0', 'Account Disabled');
 // This update is a pre-requisite for 3.35, there is no SiT release 3.34
 $upgrade_schema[334] = "
 -- INL 19/05/08 Last update using the < 335 schema upgrade system, next we'll use the new system and store the version in this col
-ALTER TABLE `{$dbSystem}` ADD `schema` BIGINT UNSIGNED NOT NULL COMMENT 'DateTime in YYYYMMDDHHMM format';
+ALTER TABLE `{$dbSystem}` ADD `schemaversion` BIGINT UNSIGNED NOT NULL COMMENT 'DateTime in YYYYMMDDHHMM format';
 ";
 
 $upgrade_schema[335]['t200805191400'] = "
@@ -2101,8 +2101,9 @@ INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES 
 INSERT INTO `{$dbUserPermissions}` VALUES (1, 77, 'true');";
 
 $upgrade_schema[335]["t200805221617"] = "ALTER TABLE `{$dbNoticeTemplates}` ADD `refid` VARCHAR( 255 ) NULL ;";
+$upgrade_schema[335]["t200805241500"] = "ALTER TABLE `{$dbSystem}`  CHANGE `schema` `schemaversion` BIGINT( 20 ) UNSIGNED NOT NULL COMMENT 'DateTime in YYYYMMDDHHMM format';";
+
 // Important: When making changes to the schema you must add SQL to make the alterations
 // to existing databases in $upgrade_schema[] *AND* you must also change $schema[] for
 // new installations (above the line of stars).
-
 ?>

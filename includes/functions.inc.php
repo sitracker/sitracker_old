@@ -9131,26 +9131,22 @@ function application_version_string()
  */
 function database_schema_version()
 {
-    // needs to be * as schema is a reserved work in SQL
-    $sql = "SELECT * FROM `{$GLOBALS['dbSystem']}` WHERE id = 0";
-
+    $return = "";
+    $sql = "SELECT `schemaversion` FROM `{$GLOBALS['dbSystem']}` WHERE id = 0";
     $result = mysql_query($sql);
     if (mysql_error())
     {
         trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
         $return = FALSE;
     }
-    
-    $return = "";
-    
     if (mysql_num_rows($result) > 0)
     {
-        $obj = mysql_fetch_object($result);
-        $return = $obj->schema;
+        list($return) = mysql_fetch_row($result);
     }
-    
+
     return $return;
 }
+
 
 // -------------------------- // -------------------------- // --------------------------
 // leave this section at the bottom of functions.inc.php ================================

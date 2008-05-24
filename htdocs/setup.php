@@ -282,7 +282,7 @@ function setup_exec_sql($sqlquerylist)
                     else
                     {
                         // Update the system schema version
-                        $vsql = "REPLACE INTO `{$dbSystem}` ( `id`, `version`, `schema`) VALUES (0, $application_version, $schemaversion)";
+                        $vsql = "REPLACE INTO `{$dbSystem}` ( `id`, `version`, `schemaversion`) VALUES (0, $application_version, $schemaversion)";
                         mysql_query($vsql);
                         if (mysql_error())
                         {
@@ -589,7 +589,7 @@ switch ($_REQUEST['action'])
                         echo $errors;
                     }
                     // Set the system version number
-                    $sql = "REPLACE INTO `{$dbSystem}` ( id, version, `schema`) VALUES (0, $application_version, $installed_schema)";
+                    $sql = "REPLACE INTO `{$dbSystem}` ( id, version, `schemaversion`) VALUES (0, $application_version, $installed_schema)";
                     mysql_query($sql);
                     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
                     $installed_version = $application_version;
@@ -621,7 +621,7 @@ switch ($_REQUEST['action'])
 
                         if ($installed_version >= 3.35)
                         {
-                            $sql = "SELECT `schema` FROM `{$dbSystem}` WHERE id = 0";
+                            $sql = "SELECT `schemaversion` FROM `{$dbSystem}` WHERE id = 0";
                             $result = mysql_query($sql);
                             if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
                             list($installed_schema) = mysql_fetch_row($result);
@@ -633,7 +633,7 @@ switch ($_REQUEST['action'])
                             $result = mysql_query($sql);
                             if (mysql_num_rows($result) < 1)
                             {
-                                $sql = "ALTER TABLE `{$dbSystem}` ADD `schema` BIGINT UNSIGNED NOT NULL COMMENT 'DateTime in YYYYMMDDHHMM format'";
+                                $sql = "ALTER TABLE `{$dbSystem}` ADD `schemaversion` BIGINT UNSIGNED NOT NULL COMMENT 'DateTime in YYYYMMDDHHMM format'";
                                 $result = mysql_query($sql);
                                 if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
                             }
