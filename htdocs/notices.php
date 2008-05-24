@@ -12,16 +12,15 @@
 @include ('set_include_path.inc.php');
 
 $permission = 69;
-
 require ('db_connect.inc.php');
 require ('functions.inc.php');
 require ('auth.inc.php');
+include ('htmlheader.inc.php');
 
 
 $action = cleanvar($_REQUEST['action']);
 if ($action == 'new')
 {
-    include ('htmlheader.inc.php');
     echo "<h2>{$strNotices}</h2>";
     echo "<p align='center'>{$strNoticesBlurb}</p>";
     echo "<table align='center'><tr><th>{$strCode}</th><th>{$strOutput}</th></tr>";
@@ -58,26 +57,44 @@ elseif ($action == 'post')
     //post new notice
     $sql = "SELECT id FROM `{$dbUsers}` WHERE status != 0";
     $result = mysql_query($sql);
-    while ($user = mysql_fetch_object($result))
+    
+    //do this once so we can get a referenceID
+    $user = mysql_fetch_object($result);
+    $sql = "INSERT INTO `{$dbNotices}` (userid, type, text, timestamp, durability) ";
+    $sql .= "VALUES({$user->id}, {$type}, '{$text}', NOW(), '{$durability}')";
+    mysql_query($sql);
+    if (mysql_error()) 
     {
-        $sql = "INSERT INTO `{$dbNotices}` (userid, gid, type, text, timestamp, durability) ";
-        $sql .= "VALUES({$user->id}, '{$gid}', {$type}, '{$text}', NOW(), '{$durability}')";
+        trigger_error(mysql_error(),E_USER_WARNING);
+    }
+    else
+    {
+        $refid = mysql_insert_id();
+        $sql = "UPDATE `$dbNotices` SET referenceid='{$refid}' WHERE id='{$refid}'";
         mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+        
+        while ($user = mysql_fetch_object($result))
+        {
+            $sql = "INSERT INTO `{$dbNotices}` (userid, referenceid, type, text, timestamp, durability) ";
+            $sql .= "VALUES({$user->id}, '{$refid}', {$type}, '{$text}', NOW(), '{$durability}')";
+            mysql_query($sql);
+            if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+        }
+        html_redirect('notices.php');
     }
-    html_redirect('notices.php');
-
 }
 elseif ($action == 'delete')
 {
     $noticeid = cleanvar($_REQUEST['id']);
 
-    $sql = "SELECT gid FROM `{$dbNotices}` WHERE id='{$noticeid}'";
+    $sql = "SELECT referenceid, type FROM `{$dbNotices}` WHERE id='{$noticeid}'";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
-    $gid = mysql_fetch_object($result);
+    $noticeobj = mysql_fetch_object($result);
 
-    $sql = "DELETE FROM `{$dbNotices}` WHERE gid='{$gid->gid}'";
+    $sql = "DELETE FROM `{$dbNotices}` WHERE referenceid='{$noticeobj->referenceid}' ";
+    $sql .= "AND type='{$noticeobj->type}' ";
     mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
@@ -85,12 +102,11 @@ elseif ($action == 'delete')
 }
 else
 {
-    include ('htmlheader.inc.php');
     echo "<h2>{$strNotices}</h2>";
 
     //get all notices
     $sql = "SELECT * FROM `{$dbNotices}` WHERE type=".NORMAL_NOTICE_TYPE." OR type=".WARNING_NOTICE_TYPE." ";
-    $sql .= "GROUP BY gid";
+    $sql .= "GROUP BY referenceid";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     $shade = 'shade1';
@@ -103,7 +119,8 @@ else
             echo "<tr class='$shade'><td>{$notice->id}</td><td>{$notice->timestamp}</td>";
             echo "<td>".bbcode($notice->text)."</td>";
             echo "<td>";
-            echo "<a href='{$_SERVER[PHP_SELF]}?action=delete&amp;id={$notice->id}'>{$strDelete}</a>";
+            echo "<a href='{$_SERVER[PHP_SELF]}?action=delete&amp;id=";
+            echo "{$notice->id}'>{$strRevoke}</a>".help_link('RevokeNotice');
             echo "</td></tr>\n";
             if ($shade == 'shade1') $shade = 'shade2';
             else $shade = 'shade1';
