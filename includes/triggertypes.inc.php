@@ -19,6 +19,10 @@
 // params - Rules the trigger can check, mimics 'subscription'-type events
 // type - Trigger type (eg. incident, contact etc)
 
+//used for replacing email templates in incidents
+$triggerarray['TRIGGER_DUMMY_INCIDENT'] =
+array('required' => array('incidentid'),
+      'type' => 'dummy');
 
 $triggerarray['TRIGGER_INCIDENT_CREATED'] =
 array('name' => 'Incident Created',
@@ -107,7 +111,7 @@ $triggerarray['TRIGGER_LANGUAGE_DIFFERS'] =
 array('name' => 'Current Language Differs',
       'description' => 'Occurs when your current language setting is different to your profile setting',
       'required' => array('currentlang', 'profilelang'),
-      'params' => array(),
+      'params' => array()
      );
 
 $triggerarray['TRIGGER_CONTACT_RESET_PASSWORD'] =
@@ -176,7 +180,7 @@ array('name' => 'Close external incident',
 $triggerarray['TRIGGER_HOLIDAY_REQUESTED'] =
 array('name' => 'Holiday Requested',
       'description' => 'Occurs when a user requests a holiday',
-      'params' => array('userid', 'approvaluser')
+      'params' => array('userid', 'approvaluserid')
       );     
      
 plugin_do('trigger_types');
