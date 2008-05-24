@@ -2049,13 +2049,14 @@ function userstatus_bardrop_down($name, $id)
     * @author Ivan Lucas
     * @param $name string. Name attribute
     * @param $id integer. ID of Template to pre-select. None selected if 0 or blank.
+    * @param $type string. Type to display.
     * @returns string. HTML
 */
-function emailtype_drop_down($name, $id)
+function emailtemplate_drop_down($name, $id, $type)
 {
     global $dbEmailTemplates;
     // INL 22Apr05 Added a filter to only show user templates
-    $sql  = "SELECT id, name, description FROM `{$dbEmailTemplates}` WHERE type='user' ORDER BY name ASC";
+    $sql  = "SELECT id, name, description FROM `{$dbEmailTemplates}` WHERE type='{$type}' ORDER BY name ASC";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
@@ -2065,19 +2066,19 @@ function emailtype_drop_down($name, $id)
         $html .= "<option selected='selected' value='0'></option>\n";
     }
 
-    while ($emailtypes = mysql_fetch_array($result))
+    while ($template = mysql_fetch_array($result))
     {
         $html .= "<option ";
-        if (!empty($emailtypes['description']))
+        if (!empty($template['description']))
         {
-            $html .= "title='{$emailtypes['description']}' ";
+            $html .= "title='{$template['description']}' ";
         }
 
-        if ($emailtypes["id"] == $id)
+        if ($template["id"] == $id)
         {
             $html .= "selected='selected' ";
         }
-        $html .= "value='{$emailtypes['id']}'>{$emailtypes['name']}</option>";
+        $html .= "value='{$template['id']}'>{$template['name']}</option>";
         $html .= "\n";
     }
     $html .= "</select>\n";

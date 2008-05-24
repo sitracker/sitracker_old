@@ -178,7 +178,7 @@ switch ($step)
         echo "<h2>".icon('email', 32)." {$strSendEmail}</h2>";
         echo "<form action='{$_SERVER['PHP_SELF']}?id={$id}' name='updateform' method='post'>";
         echo "<table align='center' class='vertical'>";
-        echo "<tr><th>{$strTemplate}</th><td>".emailtype_drop_down("emailtype", 1)."</td></tr>";
+        echo "<tr><th>{$strTemplate}</th><td>".emailtemplate_drop_down("emailtype", 1, 'incident')."</td></tr>";
         echo "<tr><th>{$strDoesThisUpdateMeetSLA}:</th><td>";
         $target = incident_get_next_target($id);
         echo "<select name='target' class='dropdown'>\n";
@@ -428,9 +428,9 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
                 $tresult = mysql_query($tsql);
                 if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
                 $template = mysql_fetch_object($tresult);
-                
+
                 $paramarray = array('incidentid' => $id, 'userid' => $sit[2]);
-                
+
                 $from = trigger_replace_specials('TRIGGER_DUMMY_INCIDENT', $template->fromfield, $paramarray);
                 $replyto = trigger_replace_specials('TRIGGER_DUMMY_INCIDENT', $template->replytofield, $paramarray);
                 $ccemail = trigger_replace_specials('TRIGGER_DUMMY_INCIDENT', $template->ccfield, $paramarray);
