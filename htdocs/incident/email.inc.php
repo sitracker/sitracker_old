@@ -428,7 +428,9 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
                 $tresult = mysql_query($tsql);
                 if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
                 $template = mysql_fetch_object($tresult);
-                $paramarray = array('incidentid' => $id);
+                
+                $paramarray = array('incidentid' => $id, 'userid' => $sit[2]);
+                
                 $from = trigger_replace_specials('TRIGGER_DUMMY_INCIDENT', $template->fromfield, $paramarray);
                 $replyto = trigger_replace_specials('TRIGGER_DUMMY_INCIDENT', $template->replytofield, $paramarray);
                 $ccemail = trigger_replace_specials('TRIGGER_DUMMY_INCIDENT', $template->ccfield, $paramarray);
