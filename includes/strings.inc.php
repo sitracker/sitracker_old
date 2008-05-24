@@ -336,13 +336,13 @@ array('description' => $strIncidentsContactEmail,
       'action' => 'ACTION_EMAIL'
       );
 
-$ttvararray['{contactfirstname}'] =
+$ttvararray['{contactfirstname}'][] =
 array('description' => 'First Name of contact',
       'requires' => 'contactid',
       'replacement' => 'strtok(contact_realname($paramarray[\'contactid\'])," ");'
       );
-      
-$ttvararray['{contactfirstname}'] =
+
+$ttvararray['{contactfirstname}'][] =
 array('description' => 'First Name of contact',
       'requires' => 'incidentid',
       'replacement' => 'strtok(contact_realname(incident_contact($paramarray[\'incidentid\']))," ");'
