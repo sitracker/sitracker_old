@@ -27,20 +27,24 @@ echo "<tr><td class='shade2' colspan='2' style='background-image: url(images/sit
 echo "background-repeat: no-repeat; background-position: 1% bottom;'>";
 echo "<h2>{$CONFIG['application_name']}</h2>";
 echo "<p align='center'>";
-echo "{$strVersion}: {$application_version} {$application_revision}</p><br />";
+echo "{$strVersion}: {$application_version} {$application_revision}<br />";
+echo "{$strSchemaVersion}: ".database_schema_version()."</p><br />";
 echo "</td></tr>\n";
 echo "<tr><td class='shade1' colspan='2'>{$strCredits}:</td></tr>\n";
 $fp = fopen($CONFIG['creditsfile'], "r");
+
 while (!feof($fp))
 {
     $line = trim(fgets($fp, 4096));
     if (substr($line, 0, 1) != '#' AND substr($line, 0, 1) != ' ' AND substr($line, 0, 1) != '') $credits[] = $line;
 }
+
 fclose($fp);
 $creditcount = count($credits);
 shuffle($credits);
 $count = 1;
 // TODO would be nice to scroll these credits using Javascript (degrading nicely)
+// FIXME i18n
 echo "<tr><td class='shade2' colspan='2'><p align='center'>Many thanks to everybody that has offered comments, ideas, ";
 echo "suggestions, bug reports and helped with testing or has contributed code. In particular thanks go to: (in random order)</p><h4>";
 foreach ($credits AS $credit)

@@ -9113,9 +9113,43 @@ function site_salesperson($siteid)
     return user_realname($salespersonid);
 }
 
+
+/**
+ * Function to return currently running SiT! version
+ * @return String - Currently running application version
+ */
 function application_version_string()
 {
     return $application_version_string;
+}
+
+
+/**
+ * Returns the currently running schema version
+ * @author Paul Heaney
+ * @return String - currently running schema version
+ */
+function database_schema_version()
+{
+    // needs to be * as schema is a reserved work in SQL
+    $sql = "SELECT * FROM `{$GLOBALS['dbSystem']}` WHERE id = 0";
+
+    $result = mysql_query($sql);
+    if (mysql_error())
+    {
+        trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+        $return = FALSE;
+    }
+    
+    $return = "";
+    
+    if (mysql_num_rows($result) > 0)
+    {
+        $obj = mysql_fetch_object($result);
+        $return = $obj->schema;
+    }
+    
+    return $return;
 }
 
 // -------------------------- // -------------------------- // --------------------------

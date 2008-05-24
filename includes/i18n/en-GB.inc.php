@@ -969,6 +969,7 @@ $strSat = 'Sat';
 $strSaturday = 'Saturday';
 $strSave = 'Save';
 $strScheduler = 'Scheduler';
+$strSchemaVersion = 'Schema Version';
 $strScore = 'Score';
 $strScreen = 'Screen';
 $strSearch = 'Search';
