@@ -33,23 +33,23 @@ array('name' => 'Incident Created',
 
 $triggerarray['TRIGGER_INCIDENT_ASSIGNED'] =
 array('name' => 'Incident Assigned',
-      'description' => 'Occurs when a new incident is assigned to you',
+      'description' => 'Occurs when a new incident is assigned to a user',
       'required' => array('incidentid', 'userid'),
       'params' => array('userid'),
       );
 
 $triggerarray['TRIGGER_INCIDENT_ASSIGNED_WHILE_AWAY'] =
 array('name' => 'Incident Assigned While Away',
-      'description' => 'Occurs when a new incident is assigned to you and you are set to not accepting',
+      'description' => 'Occurs when a new incident is assigned to a user and the user is set to not accepting',
       'required' => array('incidentid', 'userid'),
-      'params' => array(),
+      'params' => array('userid'),
      );
 
 $triggerarray['TRIGGER_INCIDENT_ASSIGNED_WHILE_OFFLINE'] =
 array('name' => 'Incident Assigned While Offline',
-      'description' => 'Occurs when a new incident is assigned to you and your status is offline',
+      'description' => 'Occurs when a new incident is assigned to a user and their status is offline',
       'required' => array('incidentid', 'userid'),
-      'params' => array(),
+      'params' => array('userid'),
       );
 
 $triggerarray['TRIGGER_INCIDENT_NEARING_SLA'] =
@@ -336,7 +336,7 @@ array('description' => $strExternalEngineerEmail,
 $ttvararray['{incidentexternalengineer}'] =
 array('description' => $strExternalEngineer,
       'requires' => 'incidentid',
-      'replacement' => 'incident_externalengineer($paramarray[incidentid])includes/triggertypes.php;'
+      'replacement' => 'incident_externalengineer($paramarray[incidentid]);'
       );
 
 $ttvararray['{incidentexternalengineerfirstname}'] =
