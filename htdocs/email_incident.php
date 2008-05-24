@@ -21,7 +21,7 @@ require ('auth.inc.php');
 $step = cleanvar($_REQUEST['step']);
 $id = cleanvar($_REQUEST['id']);
 $menu = cleanvar($_REQUEST['menu']);
-$incidentid=$id;
+$incidentid = $id;
 $draftid = cleanvar($_REQUEST['draftid']);
 if (empty($draftid)) $draftid = -1;
 
