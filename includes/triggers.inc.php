@@ -11,7 +11,6 @@
 //         Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
 include ('mime.inc.php');
-
 include ('triggertypes.inc.php');
 
 //set up all the action types
@@ -371,16 +370,15 @@ function create_trigger_notice($userid, $noticetext='', $triggertype='',
             $noticelinktext = cleanvar(trigger_replace_specials($triggertype, $notice->linktext, $paramarray));
             $noticelink = cleanvar(trigger_replace_specials($triggertype, $notice->link, $paramarray));
             $refid = cleanvar(trigger_replace_specials($triggertype, $notice->refid, $paramarray));
-            
+            $durability = $notice->durability;
             if ($CONFIG['debug']) $dbg .= $noticetext."\n";
 
             if ($userid == 0 AND $paramarray['userid'] > 0) $userid = $paramarray['userid'];
 
             $sql = "INSERT INTO `{$dbNotices}` (userid, type, text, linktext, link,
-                                        referenceid, timestamp) ";
+                                         durability, referenceid, timestamp) ";
             $sql .= "VALUES ({$userid}, '{$notice->type}', '{$noticetext}',
-                            '{$noticelinktext}', '{$noticelink}', '{$refid}', NOW())";
-                            //echo $sql;
+                            '{$noticelinktext}', '{$noticelink}', '{$durability}', '{$refid}', NOW())";
             mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
         }
@@ -594,7 +592,6 @@ function triggeraction_description($trigaction, $editlink=FALSE)
     else
     {
         $html .= "{$actionarray[$trigaction->action]['description']} ";
-        //                         echo "{$actionarray[$trigaction->action]['name']} ";
     }
     if (!empty($trigaction->userid)) $html .= " for ".user_realname($trigaction->userid).". ";
     if (!empty($trigaction->parameters)) $html .= " using {$trigaction->parameters}.";
