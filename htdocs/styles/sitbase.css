@@ -39,6 +39,7 @@ div.windowbox
 {
   border: 1px solid #203894;
   width: 95%;
+  margin-bottom: 10px;
 }
 
 div.windowtitle
