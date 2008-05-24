@@ -341,6 +341,12 @@ array('description' => 'First Name of contact',
       'requires' => 'contactid',
       'replacement' => 'strtok(contact_realname($paramarray[\'contactid\'])," ");'
       );
+      
+$ttvararray['{contactfirstname}'] =
+array('description' => 'First Name of contact',
+      'requires' => 'incidentid',
+      'replacement' => 'strtok(contact_realname(incident_contact($paramarray[\'incidentid\']))," ");'
+      );
 
 $ttvararray['{contactname}'][] =
 array('description' => 'Full Name of contact',
@@ -614,6 +620,18 @@ $ttvararray['{sitesalesperson}'] =
 array('description' => 'The name of the site\'s salesperson',
       'replacement' => 'site_salesperson($paramarray[\'siteid\']);',
       'requires' => 'siteid'
+      );
+      
+$ttvararray['{currentlang}'] = 
+array('description' => 'The language the user has selected to login using',
+      'replacement' => '$paramarray[\'currentlang\'];',
+      'requires' => 'currentlang'
+      );
+      
+$ttvararray['{profilelang}'] =
+array('description' => 'The language the user has stored in their profile',
+      'replacement' => '$paramarray[\'profilelang\'];',
+      'requires' => 'profilelang'
       );
       
       
