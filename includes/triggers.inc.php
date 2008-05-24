@@ -328,7 +328,7 @@ function send_trigger_email($userid, $triggerid, $template, $paramarray)
 
     $from = trigger_replace_specials($triggerid, $template->fromfield, $paramarray);
     $toemail = trigger_replace_specials($triggerid, $template->tofield, $paramarray);
-    $subject = trigger_replace_specials($triggerid, $template->subjectfield, $paramarray);
+    $subject = cleanvar(trigger_replace_specials($triggerid, $template->subjectfield, $paramarray));
     $body .= trigger_replace_specials($triggerid, $template->body, $paramarray);
 
 
@@ -367,7 +367,7 @@ function create_trigger_notice($userid, $noticetext='', $triggertype='',
         if ($query)
         {
             $notice = mysql_fetch_object($query);
-            $noticetext = cleanvar(trigger_replace_specials($triggertype, $notice->text, $paramarray));
+            $noticetext = mysql_escape_string(trigger_replace_specials($triggertype, $notice->text, $paramarray));
             $noticelinktext = cleanvar(trigger_replace_specials($triggertype, $notice->linktext, $paramarray));
             $noticelink = cleanvar(trigger_replace_specials($triggertype, $notice->link, $paramarray));
             $refid = cleanvar(trigger_replace_specials($triggertype, $notice->refid, $paramarray));
