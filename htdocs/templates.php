@@ -75,7 +75,7 @@ if (empty($action) OR $action == 'showform' OR $action == 'list')
         list($numtriggers) = mysql_fetch_row($tresult);
         echo "<td>";
         if ($numtriggers > 0) echo icon('trigger',16);
-        if ($numtriggers > 1) echo " ({$numtriggers})";
+        if ($numtriggers > 1) echo " (&#215;{$numtriggers})";
         echo "</td>";
         echo "<td><a href='{$editurl}'>{$template['name']}</a>";
         if (!empty($template['desc'])) echo "<br />{$template['desc']}";
