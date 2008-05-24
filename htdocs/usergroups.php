@@ -83,7 +83,7 @@ switch ($action)
         echo "<form action='{$_SERVER['PHP_SELF']}' method='post'>";
         echo "<table summary=\"{$strUserGroups}\" align='center'>";
         echo "<tr><th>{$strGroup}</th><th>{$strOperation}</th></tr>\n";
-        if ($numgroups >= 1)
+        if ($numgroups > 0)
         {
             foreach ($grouparr AS $groupid => $groupname)
             {
@@ -96,25 +96,27 @@ switch ($action)
         echo "</table>";
         echo "</form>";
 
-        echo "<h3>{$strGroupMembership}</h3>";
-
-        $sql = "SELECT * FROM `{$dbUsers}` WHERE status !=0 ORDER BY realname";  // status=0 means left company
-        $result = mysql_query($sql);
-        if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
-
-        echo "<form action='{$_SERVER['PHP_SELF']}' method='post'>";
-        echo "<table summary='{$strGroupMembership}' align='center'>";
-        echo "<tr><th>{$strUser}</th><th>{$strGroup}</th></tr>";
-        while ($user = mysql_fetch_object($result))
+        if ($numgroups > 0)
         {
-            echo "<tr><td>{$user->realname} ({$user->username})</td>";
-            echo "<td>".group_drop_down("group{$user->id}",$user->groupid)."</td></tr>\n";
+            echo "<h3>{$strGroupMembership}</h3>";
+
+            $sql = "SELECT * FROM `{$dbUsers}` WHERE status !=0 ORDER BY realname";  // status=0 means left company
+            $result = mysql_query($sql);
+            if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+
+            echo "<form action='{$_SERVER['PHP_SELF']}' method='post'>";
+            echo "<table summary='{$strGroupMembership}' align='center'>";
+            echo "<tr><th>{$strUser}</th><th>{$strGroup}</th></tr>";
+            while ($user = mysql_fetch_object($result))
+            {
+                echo "<tr><td>{$user->realname} ({$user->username})</td>";
+                echo "<td>".group_drop_down("group{$user->id}",$user->groupid)."</td></tr>\n";
+            }
+            echo "</table>\n";
+
+            echo "<p><input type='hidden' name='action' value='savemembers' /><input type='submit' value='{$strSave}' /></p>";
+            echo "</form>";
         }
-        echo "</table>\n";
-
-        echo "<p><input type='hidden' name='action' value='savemembers' /><input type='submit' value='{$strSave}' /></p>";
-        echo "</form>";
-
         include ('htmlfooter.inc.php');
 }
 ?>
