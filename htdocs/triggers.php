@@ -113,7 +113,7 @@ switch ($_REQUEST['mode'])
                 $('emailtemplatesbox').hide();
                 $('journalbox').hide();
                 $('none').hide();
-                $('rules').show();
+                $('rulessection').show();
             }
             else if ($('new_action').value == 'ACTION_EMAIL')
             {
@@ -122,7 +122,7 @@ switch ($_REQUEST['mode'])
                 $('noticetemplatesbox').hide();
                 $('journalbox').hide();
                 $('none').hide();
-                $('rules').show();
+                $('rulessection').show();
 
             }
             else if ($('new_action').value == 'ACTION_JOURNAL')
@@ -140,7 +140,7 @@ switch ($_REQUEST['mode'])
 //                 $('parametersbox').hide();
                 $('journalbox').hide();
                 $('none').show();
-                $('rules').hide();
+                $('rulessection').hide();
 
             }
         }
@@ -197,7 +197,7 @@ switch ($_REQUEST['mode'])
         echo "<div id='none'>{$strNone}</div>";
 //         echo "<td><div id='parametersbox' style='display:none;'><input type='text' name='parameters' size='30' /></div></td>";
 
-        echo "<div id='rules' style='display:none'>";
+        echo "<div id='rulessection' style='display:none'>";
         echo "<h3><label for='rules'>{$strRules}</label></h3>";
         if (is_array($triggerarray[$id]['params']))
         {
