@@ -350,5 +350,13 @@ div.bbcode_toolbar a:hover
 
 div#portaluser { float: right; text-align: right; }
 
-
 #loginform input[type=text], #loginform input[type=password]  { width: 90%; }
+
+
+#templatevariables
+{
+    width: 48%; max-height: 700px;
+    overflow: scroll; float: right;
+    border: 1px solid #CCCCFF;
+    z-index: 1;
+}

@@ -284,11 +284,10 @@ elseif ($action == "edit")
         echo "</form>";
         echo "</div>";
 
-
             // FIXME i18n email templates
         // Show a list of available template variables.  Only variables that have 'requires' matching the 'required'
         // that the trigger provides is shown
-        echo "<div id='templatevariables' style='width: 48%; max-height: 700px; overflow: scroll; float: right; border: 1px solid #CCCCFF; padding: 10px; display:none;'>";
+        echo "<div id='templatevariables' style='display:none;'>";
         echo "<h4>Template Variables</h4>"; // FIXME template variables
         echo "<p align='center'>{$strFollowingSpecialIdentifiers}</p>";
         if (!is_array($required)) echo "<p class='info'>Some of these identifiers might not be available once you add a trigger</p>";
