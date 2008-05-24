@@ -58,17 +58,17 @@ if (empty($action) OR $action == "showform")
 
     echo "<form name='edit_servicelevel' action='{$_SERVER['PHP_SELF']}' method='post'>";
     echo "<table class='vertical'>";
-    echo "<tr><th>{$strInitialResponse} ".icon('initialresponse')."</th>";
+    echo "<tr><th>{$strInitialResponse} ".icon('initialresponse', 16)."</th>";
     echo "<td><input type='text' size='5' name='initial_response_mins' maxlength='5' value='{$sla->initial_response_mins}' /> {$strMinutes}</td></tr>";
-    echo "<tr><th>{$strProblemDefinition} ".icon('probdef')."</th>";
+    echo "<tr><th>{$strProblemDefinition} ".icon('probdef', 16)."</th>";
     echo "<td><input type='text' size='5' name='prob_determ_mins' maxlength='5' value='{$sla->prob_determ_mins}' /> {$strMinutes}</td></tr>";
-    echo "<tr><th>{$strActionPlan} ".icon('actionplan')."</th>";
+    echo "<tr><th>{$strActionPlan} ".icon('actionplan', 16)."</th>";
     echo "<td><input type='text' size='5' name='action_plan_mins' maxlength='5' value='{$sla->action_plan_mins}' /> {$strMinutes}</td></tr>";
-    echo "<tr><th>{$strResolutionReprioritisation} ".icon('solution')."</th>";
+    echo "<tr><th>{$strResolutionReprioritisation} ".icon('solution', 16)."</th>";
     echo "<td><input type='text' size='5' name='resolution_days' maxlength='3' value='{$sla->resolution_days}' /> {$strDays}</td></tr>";
-    echo "<tr><th>{$strReview} ".icon('review')."</th>";
+    echo "<tr><th>{$strReview} ".icon('review', 16)."</th>";
     echo "<td><input type='text' size='5' name='review_days' maxlength='3' value='{$sla->review_days}' /> {$strDays}</td></tr>";
-    echo "<tr><th>{$strTimed} ".icon('timer')."</th><td>";
+    echo "<tr><th>{$strTimed} ".icon('timer', 16)."</th><td>";
     if ($sla->timed == 'yes')
     {
         echo "<input type='checkbox' name='timed' id='timed' onchange='enableBillingPeriod();' checked='checked' />";
