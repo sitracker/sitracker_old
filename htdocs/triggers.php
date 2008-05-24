@@ -254,7 +254,11 @@ switch ($_REQUEST['mode'])
         $emailtemplate = cleanvar($_POST['emailtemplate']);
         $parameters = cleanvar($_POST['parameters']);
         $rules = cleanvar($_POST['rules']);
-
+        
+        //TODO if we do more than one of these, we should probably use
+        //trigger_replace_specials()
+        $rules = str_replace("{currentuserid}", $sit[2], $rules);
+        
         if ($action == 'ACTION_NOTICE')
         {
             $templateid = $noticetemplate;
