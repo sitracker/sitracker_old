@@ -49,10 +49,16 @@ if (empty($action) OR $action == 'showform' OR $action == 'list')
     ksort($templates);
     $shade='shade1';
     echo "<table align='center'>";
-    echo "<tr><th>{$strType}</th><th>{$strTrigger}</th><th>{$strTemplate}</th><th>{$strOperation}</th></tr>";
+    echo "<tr><th>{$strType}</th><th>{$strUsed}</th><th>{$strTemplate}</th><th>{$strOperation}</th></tr>";
     foreach ($templates AS $template)
     {
+        $tsql = "SELECT COUNT(id) FROM `{$dbTriggers}` WHERE template={$template['id']}";
+        $tresult = mysql_query($tsql);
+        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
+        list($numtriggers) = mysql_fetch_row($tresult);
+
         $editurl = "{$_SERVER['PHP_SELF']}?id={$template['id']}&amp;action=edit&amp;template={$template['template']}";
+        if ($numtriggers < 1 AND ($template['template'] == 'email' AND $template['type'] != 'incident')) $shade = 'expired';
         echo "<tr class='{$shade}'>";
         echo "<td>";
         if ($template['template'] == 'notice')
@@ -69,11 +75,11 @@ if (empty($action) OR $action == 'showform' OR $action == 'list')
         }
         echo "</td>";
         //echo "<td>{$template['type']} {$template['template']}</td>";
-        $tsql = "SELECT COUNT(id) FROM `{$dbTriggers}` WHERE template={$template['id']}";
-        $tresult = mysql_query($tsql);
-        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
-        list($numtriggers) = mysql_fetch_row($tresult);
         echo "<td>";
+        if ($template['template'] == 'email' AND $template['type'] == 'incident')
+        {
+            echo icon('support',16, $strIncident);
+        }
         if ($numtriggers > 0) echo icon('trigger',16, $strTrigger);
         if ($numtriggers > 1) echo " (&#215;{$numtriggers})";
         echo "</td>";
