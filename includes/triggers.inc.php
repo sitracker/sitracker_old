@@ -367,10 +367,10 @@ function create_trigger_notice($userid, $noticetext='', $triggertype='',
         if ($query)
         {
             $notice = mysql_fetch_object($query);
-            $noticetext = trigger_replace_specials($triggertype, $notice->text, $paramarray);
-            $noticelinktext = mysql_escape_string(trigger_replace_specials($triggertype, $notice->linktext, $paramarray));
-            $noticelink = trigger_replace_specials($triggertype, $notice->link, $paramarray);
-            $refid = trigger_replace_specials($triggertype, $notice->refid, $paramarray);
+            $noticetext = cleanvar(trigger_replace_specials($triggertype, $notice->text, $paramarray));
+            $noticelinktext = cleanvar(trigger_replace_specials($triggertype, $notice->linktext, $paramarray));
+            $noticelink = cleanvar(trigger_replace_specials($triggertype, $notice->link, $paramarray));
+            $refid = cleanvar(trigger_replace_specials($triggertype, $notice->refid, $paramarray));
             
             if ($CONFIG['debug']) $dbg .= $noticetext."\n";
 
