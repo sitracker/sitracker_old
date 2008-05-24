@@ -56,8 +56,8 @@ echo "<th><a href='{$_SERVER['PHP_SELF']}?orderby=expiry'>{$strExpiryDate}</a></
 echo "<th><a href='{$_SERVER['PHP_SELF']}?orderby=published'>{$strPublished}</a></th>";
 echo "</tr>";
 
-$sql = "SELECT id, filename, size, userid, shortdescription, path, downloads, filedate, fileversion, productid, ";
-$sql .="releaseid, expiry, published FROM `{$dbFiles}` ";
+$sql = "SELECT id, filename, size, userid, shortdescription, path, downloads, filedate, fileversion, ";
+$sql .="expiry, published FROM `{$dbFiles}` ";
 
 switch ($orderby)
 {
@@ -100,10 +100,10 @@ if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERRO
 if (mysql_numrows($result) > 0)
 {
     while (list($id, $filename, $size, $userid, $shortdescription, $path, $downloads, $filedate, $fileversion,
-                $productid, $releaseid, $expiry, $published) = mysql_fetch_row($result))
+                $expiry, $published) = mysql_fetch_row($result))
     {
         $pretty_file_size = readable_file_size($size);
-    
+
         if ($published == 'no') echo "<tr class='urgent'>";
         else echo "<tr>";
         echo "<td align='right'><img src=\"".getattachmenticon($filename)."\" alt=\"$filename ($pretty_file_size)\" border='0' /></td>";
@@ -122,9 +122,9 @@ if (mysql_numrows($result) > 0)
             echo ldate($CONFIG['dateformat_filedatetime'],$expiry);
         }
         echo "</td>";
-        
+
         echo "<td>{$published}</td>";
-        
+
         echo "</tr>\n";
     }
 }
