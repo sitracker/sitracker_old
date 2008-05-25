@@ -62,8 +62,8 @@ array('name' => 'Incident Nearing SLA',
 $triggerarray['TRIGGER_INCIDENT_REVIEW_DUE'] =
 array('name' => 'Incident Review Due',
       'description' => 'Occurs when an incident is due a review',
-      'required' => array('revieweruserid'),
-      'params' => array(),
+      'required' => array('incidentid', 'time'),
+      'params' => array('incidentid'),
       );
 
 $triggerarray['TRIGGER_KB_CREATED'] =
@@ -91,8 +91,9 @@ $triggerarray['TRIGGER_USER_SET_TO_AWAY'] =
 array('name' => 'User Set To Away',
       'description' => 'Occurs when one of your watched engineer goes away',
       'required' => array('userid'),
-      'params' => array(),
+      'params' => array('userid'),
       );
+      
 $triggerarray['TRIGGER_USER_RETURNS'] =
 array('name' => 'User Returns',
       'description' => 'Occurs when one of your watched engineers returns',
@@ -143,12 +144,6 @@ array('name' => 'Incident closed',
       'description' => 'Occurs when an incident is closed',
       'required' => array('incidentid', 'userid'),
       'params' => array('userid'),
-      );
-
-$triggerarray['TRIGGER_CONTACT_ADDED'] =
-array('name' => 'Contact added',
-      'description' => 'Occurs when an new contact is added',
-      'required' => array('contactid', 'userid'),
       );
 
 $triggerarray['TRIGGER_NEW_CONTRACT'] =
