@@ -111,8 +111,7 @@ elseif (authenticate($username, $password) == 1)
     //check if the session lang is different the their profiles
     if ($_SESSION['lang'] != '' AND $_SESSION['lang'] != $user->var_i18n)
     {
-        //FIXME need to implement this trigger
-        trigger("TRIGGER_LANGUAGE_DIFFERS", array('currentlang' => $user->var_i18n, 'sessionlang' => $_SESSION['lang']));
+        $t = trigger('TRIGGER_LANGUAGE_DIFFERS', array('profilelang' => $user->var_i18n, 'currentlang' => $_SESSION['lang']));
     }
 
     if ($user->var_i18n != $CONFIG['default_i18n'] AND $_SESSION['lang']=='')

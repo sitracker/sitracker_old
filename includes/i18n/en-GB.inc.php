@@ -956,6 +956,7 @@ $strReviewby = 'Review %s by %s';
 $strReviewDueAgo = 'Review Due %s ago!';
 $strReviewDueNow = 'Review Due Now!';
 $strReviewIn = 'Review in %s';
+$strRevoke = 'Revoke';
 $strRole = 'Role';
 $strRolePermissions = 'Role Permissions';
 $strRSSAtomURL = 'RSS/Atom Feed URL';
