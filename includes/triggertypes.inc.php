@@ -112,19 +112,21 @@ $triggerarray['TRIGGER_LANGUAGE_DIFFERS'] =
 array('name' => 'Current Language Differs',
       'description' => 'Occurs when your current language setting is different to your profile setting',
       'required' => array('currentlang', 'profilelang'),
-      'params' => array()
+      'params' => array(),
      );
 
 $triggerarray['TRIGGER_CONTACT_RESET_PASSWORD'] =
 array('name' => 'Contact reset password',
       'description' => 'Occurs when a contact wants their password resetting',
       'required' => array('contactid', 'passwordreseturl'),
+      'type' => 'system'
       );
 
 $triggerarray['TRIGGER_USER_RESET_PASSWORD'] =
 array('name' => 'User reset password',
       'description' => 'Occurs when a user wants their password resetting',
       'required' => array('userid', 'passwordreseturl'),
+      'type' => 'system'
       );
 
 $triggerarray['TRIGGER_NEW_CONTACT'] =
@@ -170,12 +172,15 @@ array('name' => 'Close external incident',
       'description' => 'Occurs when an incident with an external ID is closed',
       'required' => 'incidentid',
       'params' => 'escalation',
+      'type' => 'system'
       );
 
 $triggerarray['TRIGGER_HOLIDAY_REQUESTED'] =
 array('name' => 'Holiday Requested',
       'description' => 'Occurs when a user requests a holiday',
-      'params' => array('userid', 'approvaluserid')
+      'params' => array('userid', 'approvaluserid'),
+      'type' => 'system',
+      'permission' => '{approvaluserid} == {currentuserid}'
       );     
      
 plugin_do('trigger_types');
