@@ -8992,7 +8992,16 @@ function application_url()
 {
     global $CONFIG;
     $url = parse_url($_SERVER['HTTP_REFERER']);
-    $baseurl = "{$url['scheme']}://{$url['host']}";
+    print_r($_SERVER['HTTPS']);
+    if ($_SERVER['HTTPS'] == 'off' OR empty($_SERVER['HTTPS']))
+    {
+        $baseurl = "http://";
+    }
+    else
+    {
+        $baseurl = "https://";
+    }
+    $baseurl .= "{$_SERVER['HTTP_HOST']}";
     $baseurl .= "{$CONFIG['application_webpath']}";
     return $baseurl;
 }
