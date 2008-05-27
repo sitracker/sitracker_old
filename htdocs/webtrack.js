@@ -98,7 +98,10 @@ function get_and_display(page, component, update)
     }
     else
     {
-        new Ajax.Request(application_webpath + page + '&?rand=' + get_random(),
+        if (page.indexOf('?') != -1) var sep = '&';
+        else var sep = '?';
+        var url = application_webpath + page + sep + 'rand=' + get_random();
+        new Ajax.Request(url,
         {
             method:'get',
                 onSuccess: function(transport)
@@ -109,7 +112,7 @@ function get_and_display(page, component, update)
                         $(component).innerHTML = transport.responseText;
                     }
                 },
-                onFailure: function(){ $(component).innerHTML = 'Error'; }
+                onFailure: function(){ $(component).innerHTML = 'Error: could not load data: ' + url; }
         });
     }
 }
