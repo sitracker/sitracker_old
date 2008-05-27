@@ -87,20 +87,13 @@ array('name' => 'Waiting Held Email',
       'params' => array(),
       );
 
-$triggerarray['TRIGGER_USER_SET_TO_AWAY'] =
-array('name' => 'User Set To Away',
-      'description' => 'Occurs when one of your watched engineer goes away',
-      'required' => array('userid'),
-      'params' => array('userid'),
+$triggerarray['TRIGGER_USER_CHANGED_STATUS'] =
+array('name' => 'User Changes Status',
+      'description' => 'Occurs when one of your watched engineer changes status',
+      'required' => array('userid', 'userstatus', 'useraccepting'),
+      'params' => array('userid', 'userstatus', 'useraccepting'),
       );
       
-$triggerarray['TRIGGER_USER_RETURNS'] =
-array('name' => 'User Returns',
-      'description' => 'Occurs when one of your watched engineers returns',
-      'required' => array('userid'),
-      'params' => array(),
-      );
-
 $triggerarray['TRIGGER_SIT_UPGRADED'] =
 array('name' => 'SiT! Upgraded',
       'description' => 'Occurs when the system is upgraded',
@@ -218,6 +211,12 @@ array('description' => $application_version_string,
       'replacement' => 'application_version_string();'
       );
 
+$ttvararray['{approveremail}'] =
+array('description' => 'Email address of the holiday approver',
+      'replacement' => 'user_email($paramarray[\'approveruserid\']);',
+      'requires' => 'approveruserid'
+      );
+
 $ttvararray['{contactid}'][] =
 array('description' => 'Contact ID',
       'requires' => 'incidentid',
@@ -321,6 +320,12 @@ array('description' => 'ID of the new email in the holding queue',
       'requires' => 'holdingemailid'
       );
 
+$ttvararray['{holdingemailmins}'] =
+array('description' => 'Number of minutes the email has been in the holding queue',
+      'replacement' => '$paramarray[\'holdingemailmins\'];',
+      'requires' => 'holdingemailmins'
+      );
+
 $ttvararray['{incidentccemail}'] =
 array('description' => $strIncidentCCList,
       'requires' => 'incidentid',
@@ -392,12 +397,30 @@ array('description' => $strIncidentTitle,
       'replacement' => 'incident_title($paramarray[incidentid]);'
       );
 
-$ttvararray['{kbname}'] =
+$ttvararray['{kbid}'] =
+array('description' => 'KB ID',
+      'requires' => 'kbid',
+      'replacement' => '$paramarray[\'kbid\'];'
+      );
+
+$ttvararray['{kbprefix}'] =
+array('description' => $CONFIG['kb_id_prefix'],
+      'requires' => array(),
+      'replacement' => '$CONFIG[\'kb_id_prefix\'];'
+     );
+
+$ttvararray['{kbtitle}'] =
 array('description' => $strKnowledgeBase,
       'requires' => 'kbid',
       'replacement' => 'kb_name($paramarray[\'kbid\']);'
       );
       
+$ttvararray['{listofholidays}'] =
+array('description' => 'List of holidays',
+      'replacement' => '$paramarray[\'listofholidays\'];',
+      'requires' => 'listofholidays'
+      );
+
 $ttvararray['{nextslatime}'] =
 array('description' => $strTimeToNextAction,
       'replacement' => 'format_workday_minutes($GLOBALS[\'now\'] - $paramarray[\'nextslatime\']);',
@@ -465,7 +488,7 @@ array('description' => 'Site name',
       'replacement' => 'contact_site($paramarray[\'contactid\']);'
       );
 
-      $ttvararray['{sitename}'][] =
+$ttvararray['{sitename}'][] =
 array('description' => 'Site name',
       'requires' => 'siteid',
       'replacement' => 'site_name($paramarray[\'siteid\']);'
@@ -515,10 +538,32 @@ array('description' => 'Incident temp owner ID',
       'replacement' => 'incident_towner($paramarray[\'incidentid\']);',
       'requires' => 'incidentid'
       );
+
+$ttvararray['{triggeruseremail}'] =
+array('description' => 'Email address to send an user trigger email to',
+      'replacement' => 'user_email($paramarray[\'triggeruserid\']);'
+      );
+
+$ttvararray['{useraccepting}'] =
+array('description' => 'Whether the user is accepting or not',
+      'replacement' => 'user_accepting_status($paramarray[\'userid\']);',
+      'requires' => 'userid'
+      );
       
 $ttvararray['{useremail}'] =
 array('description' => $strCurrentUserEmailAddress,
       'replacement' => 'user_email($paramarray[\'userid\']);'
+      );
+
+$ttvararray['{usergroup}'] =
+array('description' => 'The user\'s group',
+      'replacement' => 'user_group($paramarray[\'userid\']);',
+      'requires' => 'userid'
+      );
+
+$ttvararray['{userid}'] =
+array('description' => 'UserID the trigger passes',
+      'replacement' => '$paramarray[\'userid\'];'
       );
 
 $ttvararray['{userrealname}'] =
@@ -526,10 +571,11 @@ array('description' => $strFullNameCurrentUser,
       'replacement' => 'user_realname($paramarray[\'userid\']);'
       );
 
-$ttvararray['{userid}'] =
-array('description' => 'UserID the trigger passes',
-      'replacement' => '$paramarray[\'userid\'];'
+$ttvararray['{userstatus}'] =
+array('description' => 'Status of the user',
+      'replacement' => 'user_status($paramarray[\'userid\']);',
+      'requires' => 'userid'
       );
-      
+
 plugin_do('trigger_variables');
 ?>
