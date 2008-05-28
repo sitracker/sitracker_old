@@ -427,7 +427,6 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
                 if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
                 $template = mysql_fetch_object($tresult);
                 $paramarray = array('incidentid' => $id, 'triggeruserid' => $sit[2],);
-
                 $from = replace_specials($template->fromfield, $paramarray);
                 $replyto = replace_specials($template->replytofield, $paramarray);
                 $ccemail = replace_specials($template->ccfield, $paramarray);
@@ -455,7 +454,7 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
             echo "<form action='{$_SERVER['PHP_SELF']}?id={$id}' method='post' enctype='multipart/form-data' onsubmit='return confirm_send_mail();' >";
             echo "<table align='center' class='vertical' width='95%'>";
             echo "<tr><th width='30%'>{$strFrom}:</th><td><input maxlength='100' name='fromfield' id='fromfield' size='40' value=\"{$from}\" /></td></tr>\n";
-            echo "<tr><th>{$strReplyTo}:</th><td><input maxlength='100' name='replytofield' id='replytofield' size='40' value=\"{$replyTo}\" /></td></tr>\n";
+            echo "<tr><th>{$strReplyTo}:</th><td><input maxlength='100' name='replytofield' id='replytofield' size='40' value=\"{$replyto}\" /></td></tr>\n";
             if (trim($ccemail) == ",") $ccemail = "";
             if (substr($ccemail, 0, 1) == ",") $ccfield = substr($ccemail, 1, strlen($ccemail));
             echo "<tr><th>CC:</th><td><input maxlength='100' name='ccfield' id='ccfield' size='40' value=\"{$ccemail}\" /></td></tr>\n";
