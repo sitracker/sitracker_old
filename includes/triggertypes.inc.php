@@ -221,7 +221,7 @@ array('description' => 'First Name of contact',
       
 $ttvararray['{contactid}'][] =
 array('description' => 'Contact ID',
-      'requires' => 'incidentid',
+      'requires' => 'contactid',
       'replacement' => '$paramarray[\'contactid\'];'
       );
 
