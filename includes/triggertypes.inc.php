@@ -26,137 +26,123 @@ array('required' => array('incidentid'),
 
 $triggerarray['TRIGGER_INCIDENT_CREATED'] =
 array('name' => 'Incident Created',
-      'description' => 'Occurs when a new incident has been created',
+      'description' => $strTriggerNewIncidentHasBeenCreated,
       'required' => array('incidentid'),
       'params' => array('contactid', 'siteid', 'priority', 'contractid', 'slaid', 'sitesalespersonid')
       );
 
 $triggerarray['TRIGGER_INCIDENT_ASSIGNED'] =
 array('name' => 'Incident Assigned',
-      'description' => 'Occurs when a new incident is assigned to a user',
+      'description' => $strTriggerNewIncidentAssigned,
       'required' => array('incidentid', 'userid'),
       'params' => array('userid', 'userstatus'),
       );
 
 $triggerarray['TRIGGER_INCIDENT_NEARING_SLA'] =
 array('name' => 'Incident Nearing SLA',
-      'description' => 'Occurs when an incidents nears an SLA',
+      'description' => $strTriggerIncidentNearingSLA,
       'required' => array('incidentid', 'nextslatime', 'nextsla'),
       'params' => array('ownerid', 'townerid'),
       );
 
 $triggerarray['TRIGGER_INCIDENT_REVIEW_DUE'] =
 array('name' => 'Incident Review Due',
-      'description' => 'Occurs when an incident is due a review',
+      'description' => $strTriggerIncidentReviewDue,
       'required' => array('incidentid', 'time'),
       'params' => array('incidentid'),
       );
 
 $triggerarray['TRIGGER_KB_CREATED'] =
 array('name' => 'Knowledgebase Article Created',
-      'description' => 'Occurs when a new Knowledgebase article is created',
+      'description' => $strTriggerKBArticleCreated,
       'required' => array('kbid', 'userid'),
       'params' => array(),
       );
 
 $triggerarray['TRIGGER_NEW_HELD_EMAIL'] =
 array('name' => 'New Held Email',
-      'description' => 'Occurs when there is a new email in the holding queue',
+      'description' => $strTriggerNewHeldEmail,
       'required' => array('holdingemailid'),
       'params' => array(),
       );
 
 $triggerarray['TRIGGER_WAITING_HELD_EMAIL'] =
 array('name' => 'Waiting Held Email',
-      'description' => 'Occurs when there is a new email in the holding queue for x minutes',
+      'description' => $strTriggerNewHeldEmailMins,
       'required' => array('holdingmins'),
       'params' => array(),
       );
 
 $triggerarray['TRIGGER_USER_CHANGED_STATUS'] =
 array('name' => 'User Changes Status',
-      'description' => 'Occurs when one of your watched engineer changes status',
+      'description' => $strTriggerUserChangedStatus,
       'required' => array('userid', 'userstatus', 'useraccepting'),
       'params' => array('userid', 'userstatus', 'useraccepting'),
       );
       
 $triggerarray['TRIGGER_SIT_UPGRADED'] =
 array('name' => 'SiT! Upgraded',
-      'description' => 'Occurs when the system is upgraded',
+      'description' => $strTriggerSitUpgraded,
       'required' => array('applicationversion'),
       'params' => array(),
       );
 
 $triggerarray['TRIGGER_LANGUAGE_DIFFERS'] =
 array('name' => 'Current Language Differs',
-      'description' => 'Occurs when your current language setting is different to your profile setting',
+      'description' => $strTriggerLanguageDiffers,
       'required' => array('currentlang', 'profilelang'),
       'params' => array(),
      );
 
 $triggerarray['TRIGGER_CONTACT_RESET_PASSWORD'] =
 array('name' => 'Contact reset password',
-      'description' => 'Occurs when a contact wants their password resetting',
+      'description' => $strTriggerContactResetPassword,
       'required' => array('contactid', 'passwordreseturl'),
       'type' => 'system'
       );
 
 $triggerarray['TRIGGER_USER_RESET_PASSWORD'] =
 array('name' => 'User reset password',
-      'description' => 'Occurs when a user wants their password resetting',
+      'description' => $strTriggerUserResetPassword,
       'required' => array('userid', 'passwordreseturl'),
       'type' => 'system'
       );
 
 $triggerarray['TRIGGER_NEW_CONTACT'] =
 array('name' => 'New contact added',
-      'description' => 'Occurs when a new contact is added',
+      'description' => $strTriggerNewContact,
       'required' => array('contactid', 'prepassword'),
       );
 
 $triggerarray['TRIGGER_INCIDENT_CLOSED'] =
 array('name' => 'New contact added',
-      'description' => 'Occurs when an incident is closed',
-      'required' => array('incidentid'),
-      );
-
-$triggerarray['TRIGGER_INCIDENT_CLOSED'] =
-array('name' => 'Incident closed',
-      'description' => 'Occurs when an incident is closed',
+      'description' => $strTriggerIncidentClosed,
       'required' => array('incidentid', 'userid'),
-      'params' => array('userid'),
+      'params' => array('userid')
       );
 
 $triggerarray['TRIGGER_NEW_CONTRACT'] =
 array('name' => 'New contract added',
-      'description' => 'Occurs when a new contract is added',
+      'description' => $strTriggerNewContract,
       'required' => array('contractid'),
       'params' => array('productid', 'slaid')
       );
 
 $triggerarray['TRIGGER_NEW_USER'] = 
 array('name' => 'New user added',
-      'description' => 'Occurs when a new user is added',
+      'description' => $strTriggerNewUser,
       'required' => array('userid')
       );
 
 $triggerarray['TRIGGER_NEW_SITE'] = 
 array('name' => 'New site added',
-      'description' => 'Occurs when a new site is added',
+      'description' => $strTriggerNewSite,
       'required' => array('siteid')
       );
       
-$triggerarray['TRIGGER_CLOSE_EXTERNAL_INCIDENT'] =
-array('name' => 'Close external incident',
-      'description' => 'Occurs when an incident with an external ID is closed',
-      'required' => 'incidentid',
-      'params' => 'escalation',
-      'type' => 'system'
-      );
-
 $triggerarray['TRIGGER_HOLIDAY_REQUESTED'] =
 array('name' => 'Holiday Requested',
-      'description' => 'Occurs when a user requests a holiday',
+      'description' => $strTriggerHolidayRequested,
       'params' => array('userid', 'approvaluserid'),
       'type' => 'system',
       'permission' => '{approvaluserid} == {currentuserid}'
