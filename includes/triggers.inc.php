@@ -89,6 +89,7 @@ function trigger($triggerid, $paramarray='')
             if (!trigger_checks($triggerobj->checks, $paramarray))
             {
                 $checks = trigger_replace_specials($triggerid, $triggerobj->checks, $paramarray);
+                echo $checks;
                 eval("return \$value = $checks;");
                 if($value === FALSE)
                 {
@@ -250,7 +251,7 @@ function trigger_replace_specials($triggerid, $string, $paramarray)
     * @param &$paramarray the array of trigger parameters 
     * @return mixed array if replacement found, NULL if not
 */
-function replace_vars($ttvar, $triggerid, $identifier, $paramarray)
+function replace_vars($ttvar, $triggerid, $identifier, $paramarray, $required='')
 {
     global $triggerarray, $ttvararray, $CONFIG;
     
@@ -271,9 +272,19 @@ function replace_vars($ttvar, $triggerid, $identifier, $paramarray)
         //compare the trigger 'provides' with the var 'requires'
         foreach ($ttvar['requires'] as $needle)
         {
-            if (in_array($needle, $triggerarray[$triggerid]['required']))
+            if ($required != '')
             {
-                $usetvar = TRUE;
+                if (in_array($needle, $required))
+                {
+                    $usetvar = TRUE;
+                }
+            }
+            else
+            {
+                if (in_array($needle, $triggerarray[$triggerid]['required']))
+                {
+                    $usetvar = TRUE;
+                }
             }
         }
     }
@@ -292,6 +303,52 @@ function replace_vars($ttvar, $triggerid, $identifier, $paramarray)
                      'trigger_regex' => $trigger_regex);
     }
 }
+
+/**
+    * Replaces template variables with their values
+    * @author Ivan Lucas
+    * @param $string string. The string containing the variables
+    * @param $paramarray array. An array containing values to be substituted
+    * @return string. The string with variables replaced
+*/
+function replace_specials($string, $paramarray)
+{
+    global $CONFIG, $dbg, $dbIncidents, $ttvararray;
+
+    //manual variables
+    $required = array('incidentid');
+
+    //this loops through each variable and creates an array of useable varaibles' regexs
+    foreach ($ttvararray AS $identifier => $ttvar)
+    {
+        $multiple = FALSE;
+        foreach ($ttvar AS $key => $value)
+        {
+            //this checks if it's a multiply-defined variable
+            if (is_numeric($key))
+            {
+                $trigger_replaces = replace_vars(&$ttvar[$key], &$triggerid, &$identifier, &$paramarray, $required);
+                if(!empty($trigger_replaces))
+                {
+                    $trigger_regex[] = $trigger_replaces['trigger_regex'];
+                    $trigger_replace[] = $trigger_replaces['trigger_replace'];
+                }
+                $multiple = TRUE;
+            }
+        }
+        if ($multiple == FALSE)
+        {
+            $trigger_replaces = replace_vars(&$ttvar, &$triggerid, &$identifier, &$paramarray, $required);
+            if(!empty($trigger_replaces))
+            {
+                $trigger_regex[] = $trigger_replaces['trigger_regex'];
+                $trigger_replace[] = $trigger_replaces['trigger_replace'];
+            }
+        }
+    }
+    return  preg_replace($trigger_regex, $trigger_replace, $string);
+}
+
 
 /**
     * Sends an email for a trigger
@@ -324,6 +381,9 @@ function send_trigger_email($userid, $triggerid, $template, $paramarray)
     {
         $template = mysql_fetch_object($result);
     }
+
+    //add this in manually, this is who we're sending the email to
+    $paramarray['triggeruserid'] = $userid;
 
     $from = trigger_replace_specials($triggerid, $template->fromfield, $paramarray);
     $toemail = trigger_replace_specials($triggerid, $template->tofield, $paramarray);
@@ -403,12 +463,15 @@ function email_templates($name, $triggertype='system', $selected = '')
     global $dbEmailTemplates, $dbTriggers;;
     $html .= "<select id='{$name}' name='{$name}'>";
     $sql = "SELECT id, name, description FROM `{$dbEmailTemplates}` ";
-    $sql .= "WHERE type='{$triggertype}' ORDER BY id";
+    $sql .= "WHERE type='{$triggertype}' ORDER BY name";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
     while ($template = mysql_fetch_object($result))
     {
-        $html .= "<option value='{$template->id}' title=\"{$template->description}\">{$template->name}</option>\n";
+        //$name = strpos()
+        //$name = str_replace("_", " ", $name);
+        $name = strtolower($name);
+        $html .= "<option value='{$template->id}' title=\"{$template->description}\">{$name}</option>\n";
     }
     $html .= "</select>\n";
     return $html;
@@ -565,11 +628,11 @@ function triggeraction_description($trigaction, $editlink=FALSE)
 {
     global $CONFIG, $iconset, $actionarray, $dbEmailTemplates, $dbNoticeTemplates;
     $html = "".icon('triggeraction', 16)." ";
-    if (!empty($trigaction->checks)) $html .= "When {$trigaction->checks} ";
     if (!empty($trigaction->template))
     {
         if ($trigaction->action == 'ACTION_EMAIL')
         {
+            $html .= icon('email', 16)." ";
             $templatename = db_read_column('name', $dbEmailTemplates, $trigaction->template);
             if ($editlink) $template = "<a href='templates.php?id={$trigaction->template}&amp;action=edit&amp;template=email'>";
             $template .= "{$templatename}";
@@ -577,6 +640,7 @@ function triggeraction_description($trigaction, $editlink=FALSE)
         }
         elseif  ($trigaction->action == 'ACTION_NOTICE')
         {
+            $html .= icon('info', 16)." ";
             $templatename = db_read_column('name', $dbNoticeTemplates, $trigaction->template);
             if ($editlink) $template = "<a href='templates.php?id={$trigaction->template}&amp;action=edit&amp;template=notice'>";
             $template .= "{$templatename}";
@@ -593,9 +657,10 @@ function triggeraction_description($trigaction, $editlink=FALSE)
     {
         $html .= "{$actionarray[$trigaction->action]['description']} ";
     }
-    if (!empty($trigaction->userid)) $html .= " for ".user_realname($trigaction->userid).". ";
-    if (!empty($trigaction->parameters)) $html .= " using {$trigaction->parameters}.";
-
+    if (!empty($trigaction->userid)) $html .= " for ".user_realname($trigaction->userid);
+    if (!empty($trigaction->parameters)) $html .= ", using {$trigaction->parameters}";
+    if (!empty($trigaction->checks)) $html .= ", when {$trigaction->checks} ";
+    
     return $html;
 }
 
