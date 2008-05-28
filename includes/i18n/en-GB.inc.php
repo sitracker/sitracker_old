@@ -1146,6 +1146,7 @@ $strTranslateTheString = 'Translate the english string on the left to your reque
 $strTranslation = 'Translation';
 $strTrigger = 'Trigger';
 $strTriggerActions = 'Trigger Actions';
+$strTriggerFooter = 'You are being sent this email by the Triggers system. To stop these emails, please change your settings or talk to your administrator';
 $strTriggers = 'Triggers';
 # Short for 'Tuesday'
 $strTue = 'Tue';
