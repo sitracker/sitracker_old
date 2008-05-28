@@ -19,11 +19,6 @@
 // params - Rules the trigger can check, mimics 'subscription'-type events
 // type - Trigger type (eg. incident, contact etc)
 
-//used for replacing email templates in incidents
-$triggerarray['TRIGGER_DUMMY_INCIDENT'] =
-array('required' => array('incidentid'),
-      'type' => 'dummy');
-
 $triggerarray['TRIGGER_INCIDENT_CREATED'] =
 array('name' => 'Incident Created',
       'description' => $strTriggerNewIncidentHasBeenCreated,
