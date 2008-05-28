@@ -2564,54 +2564,6 @@ function emailtype_replace_specials($string, $incidentid=0, $userid=0)
 
 
 /**
-    * Replaces template variables with their values
-    * @author Ivan Lucas
-    * @param $string string. The string containing the variables
-    * @param $paramarray array. An array containing values to be substituted
-    * @return string. The string with variables replaced
-*/
-function replace_specials($string, $paramarray)
-{
-    global $CONFIG, $application_version, $application_version_string, $dbg;
-    global $dbIncidents;
-    global $ttvararray;
-
-    $required = array('incidentid');
-
-    $url = parse_url($_SERVER['HTTP_REFERER']);
-    $baseurl = "{$url['scheme']}://{$url['host']}";
-    $baseurl .= "{$CONFIG['application_webpath']}";
-
-    foreach ($ttvararray AS $identifier => $ttvar)
-    {
-        $usetvar = FALSE;
-        if (empty($ttvar['requires'])) $usetvar = TRUE;
-        else
-        {
-            if (!is_array($ttvar['requires'])) $ttvar['requires'] = array($ttvar['requires']);
-            foreach ($ttvar['requires'] as $needle)
-            {
-                if (in_array($needle, $required)) $usetvar = TRUE;
-            }
-        }
-        if ($usetvar)
-        {
-            $tregex[] = "/{$identifier}/s";
-            if (!empty($ttvar['replacement']))
-            {
-                eval("\$res = {$ttvar[replacement]};");
-            }
-            $treplace[] = $res;
-            unset($res);
-        }
-    }
-
-    return preg_replace($tregex, $treplace, $string);
-}
-
-
-
-/**
     * Formats a given number of seconds into a readable string showing days, hours and minutes.
     * If $seconds is less than 60 the function returns 1 minute.
     * @author Ivan Lucas
@@ -9130,6 +9082,7 @@ function site_salesperson($siteid)
  */
 function application_version_string()
 {
+    global $application_version_string;
     return $application_version_string;
 }
 
@@ -9157,6 +9110,24 @@ function database_schema_version()
     return $return;
 }
 
+
+function user_accepting_status($userid)
+{
+    if (user_accepting($userid) == 'Yes')
+    {
+        return 'Accepting';
+    }
+    else
+    {
+        return 'Not Accepting';
+    }
+}
+
+
+function user_group($userid)
+{
+    return db_read_column('name', $GLOBALS['dbGroups'], user_group_id($userid));
+}
 
 // -------------------------- // -------------------------- // --------------------------
 // leave this section at the bottom of functions.inc.php ================================
