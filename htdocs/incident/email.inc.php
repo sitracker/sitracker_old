@@ -426,16 +426,15 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
                 $tresult = mysql_query($tsql);
                 if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
                 $template = mysql_fetch_object($tresult);
+                $paramarray = array('incidentid' => $id, 'triggeruserid' => $sit[2],);
 
-                $paramarray = array('incidentid' => $id, 'userid' => $sit[2]);
-
-                $from = trigger_replace_specials('TRIGGER_DUMMY_INCIDENT', $template->fromfield, $paramarray);
-                $replyto = trigger_replace_specials('TRIGGER_DUMMY_INCIDENT', $template->replytofield, $paramarray);
-                $ccemail = trigger_replace_specials('TRIGGER_DUMMY_INCIDENT', $template->ccfield, $paramarray);
-                $bccemail = trigger_replace_specials('TRIGGER_DUMMY_INCIDENT', $template->bccfield, $paramarray);
-                $toemail = trigger_replace_specials('TRIGGER_DUMMY_INCIDENT', $template->tofield, $paramarray);
-                $subject = trigger_replace_specials('TRIGGER_DUMMY_INCIDENT', $template->subjectfield, $paramarray);
-                $body = trigger_replace_specials('TRIGGER_DUMMY_INCIDENT', $template->body, $paramarray);
+                $from = replace_specials($template->fromfield, $paramarray);
+                $replyto = replace_specials($template->replytofield, $paramarray);
+                $ccemail = replace_specials($template->ccfield, $paramarray);
+                $bccemail = replace_specials($template->bccfield, $paramarray);
+                $toemail = replace_specials($template->tofield, $paramarray);
+                $subject = replace_specials($template->subjectfield, $paramarray);
+                $body = replace_specials($template->body, $paramarray);
             }
             else
             {
