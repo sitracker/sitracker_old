@@ -151,7 +151,7 @@ else
 
         if ($CONFIG['portal'] AND $_POST['emaildetails'] == 'on')
         {
-            trigger('TRIGGER_NEW_CONTACT', array('contactid' => $newid, 'prepassword' => $prepassword));
+            trigger('TRIGGER_NEW_CONTACT', array('contactid' => $newid, 'prepassword' => $prepassword, 'userid' => $sit[2]));
         }
         $username = $username . $newid;
         $sql = "UPDATE `{$dbContacts}` SET username='$username' WHERE id='$newid'";
