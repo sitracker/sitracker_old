@@ -9115,11 +9115,11 @@ function user_accepting_status($userid)
 {
     if (user_accepting($userid) == 'Yes')
     {
-        return 'Accepting';
+        return 'accepting';
     }
     else
     {
-        return 'Not Accepting';
+        return 'not accepting';
     }
 }
 
@@ -9127,6 +9127,12 @@ function user_accepting_status($userid)
 function user_group($userid)
 {
     return db_read_column('name', $GLOBALS['dbGroups'], user_group_id($userid));
+}
+
+function user_status_name($userid)
+{
+    $status = db_read_column('name', $GLOBALS['dbUserStatus'], $userid);
+    return $GLOBALS[$status];
 }
 
 // -------------------------- // -------------------------- // --------------------------
