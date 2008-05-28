@@ -833,19 +833,7 @@ elseif ($action=='reassign')
     mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
-    //do assigned triggers
-    if (!user_online($uid))
-    {
-        trigger('TRIGGER_INCIDENT_ASSIGNED_WHILE_OFFLINE', array('userid' => $uid, 'incidentid' => $incidentid));
-    }
-    elseif (user_accepting($uid) == "No")
-    {
-        trigger('TRIGGER_INCIDENT_ASSIGNED_WHILE_AWAY', array('userid' => $uid, 'incidentid' => $incidentid));
-    }
-    else
-    {
-        trigger('TRIGGER_INCIDENT_ASSIGNED', array('userid' => $uid, 'incidentid' => $incidentid));
-    }
+    trigger('TRIGGER_INCIDENT_ASSIGNED', array('userid' => $uid, 'incidentid' => $incidentid));
 
     // add update
     $sql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, timestamp, currentowner, currentstatus, nextaction) ";
