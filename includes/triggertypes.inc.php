@@ -51,7 +51,7 @@ $triggerarray['TRIGGER_KB_CREATED'] =
 array('name' => 'Knowledgebase Article Created',
       'description' => $strTriggerKBArticleCreated,
       'required' => array('kbid', 'userid'),
-      'params' => array(),
+      'params' => array('userid'),
       );
 
 $triggerarray['TRIGGER_NEW_HELD_EMAIL'] =
@@ -71,7 +71,7 @@ array('name' => 'Waiting Held Email',
 $triggerarray['TRIGGER_USER_CHANGED_STATUS'] =
 array('name' => 'User Changes Status',
       'description' => $strTriggerUserChangedStatus,
-      'required' => array('userid', 'userstatus', 'useraccepting'),
+      'required' => array('userid'),
       'params' => array('userid', 'userstatus', 'useraccepting'),
       );
       
@@ -110,7 +110,7 @@ array('name' => 'New contact added',
       );
 
 $triggerarray['TRIGGER_INCIDENT_CLOSED'] =
-array('name' => 'New contact added',
+array('name' => 'Incident closed',
       'description' => $strTriggerIncidentClosed,
       'required' => array('incidentid', 'userid'),
       'params' => array('userid', 'externalid', 'externalengineer')
@@ -247,7 +247,7 @@ array('description' => 'Contact phone number',
 $ttvararray['{contractid}'] =
 array('description' => 'Contact ID',
       'requires' => 'contractid',
-      'replacement' => '$paramarray[\'contractid\']);'
+      'replacement' => '$paramarray[\'contractid\'];'
       );
 
 $ttvararray['{contractproduct}'] =
@@ -285,10 +285,10 @@ array('description' => 'ID of the new email in the holding queue',
       'requires' => 'holdingemailid'
       );
 
-$ttvararray['{holdingemailmins}'] =
+$ttvararray['{holdingmins}'] =
 array('description' => 'Number of minutes the email has been in the holding queue',
-      'replacement' => '$paramarray[\'holdingemailmins\'];',
-      'requires' => 'holdingemailmins'
+      'replacement' => '$paramarray[\'holdingmins\'];',
+      'requires' => 'holdingmins'
       );
 
 $ttvararray['{incidentccemail}'] =
@@ -312,18 +312,13 @@ array('description' => $strExternalEngineer,
 $ttvararray['{incidentexternalengineerfirstname}'] =
 array('description' => $strExternalEngineersFirstName,
       'requires' => 'incidentid',
-      'replacement' => 'strtok(incident_externalengineer($paramarray[incidentid]),\' \');'
+      'replacement' => 'strtok(incident_externalengineer($paramarray[\'incidentid\']), " ");'
       );
 
 $ttvararray['{incidentexternalid}'] =
 array('description' => "{$GLOBALS['strExternalID']}",
       'requires' => 'incidentid',
-      'replacement' => '$incident->externalid;'
-      );
-
-$ttvararray['{incidentfirstupdate}'] =
-array('description' => $strFirstCustomerVisibleUpdate,
-      'replacement' => ''
+      'replacement' => 'incident_externalid($paramarray[\'incidentid\']);'
       );
 
 $ttvararray['{incidentid}'] =
@@ -353,7 +348,7 @@ array('description' => $strIncidentPriority,
 $ttvararray['{incidentsoftware}'] =
 array('description' => $strSkillAssignedToIncident,
       'requires' => 'incidentid',
-      'replacement' => 'software_name(db_read_column("softwareid", $GLOBALS["dbIncidents"], $paramarray[incidentid]));'
+      'replacement' => 'software_name(db_read_column(\'softwareid\', $GLOBALS[\'dbIncidents\'], $paramarray[\'incidentid\']));'
       );
 
 $ttvararray['{incidenttitle}'] =
@@ -455,6 +450,12 @@ array('description' => 'Site name',
 
 $ttvararray['{sitename}'][] =
 array('description' => 'Site name',
+      'requires' => 'contractid',
+      'replacement' => 'contract_site($paramarray[\'contractid\']);'
+      );
+
+$ttvararray['{sitename}'][] =
+array('description' => 'Site name',
       'requires' => 'siteid',
       'replacement' => 'site_name($paramarray[\'siteid\']);'
       );
@@ -506,7 +507,7 @@ array('description' => 'Incident temp owner ID',
 
 $$ttvararray['{triggerfooter}'] =
 array('description' => 'The footer at the end of an email which explains where it has come from',
-      'replacement' => $SYSLANG['strTriggerFooter'],
+      'replacement' => '$SYSLANG[\'strTriggerFooter\'];',
       'requires' => 'triggerfooter'
      );
 
@@ -544,7 +545,7 @@ array('description' => $strFullNameCurrentUser,
 
 $ttvararray['{userstatus}'] =
 array('description' => 'Status of the user',
-      'replacement' => 'user_status($paramarray[\'userid\']);',
+      'replacement' => 'user_status_name($paramarray[\'userid\']);',
       'requires' => 'userid'
       );
 
