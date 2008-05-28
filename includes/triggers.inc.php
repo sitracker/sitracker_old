@@ -89,7 +89,6 @@ function trigger($triggerid, $paramarray='')
             if (!trigger_checks($triggerobj->checks, $paramarray))
             {
                 $checks = trigger_replace_specials($triggerid, $triggerobj->checks, $paramarray);
-                echo $checks;
                 eval("return \$value = $checks;");
                 if($value === FALSE)
                 {
@@ -488,7 +487,7 @@ function notice_templates($name, $selected = '')
 {
     global $dbNoticeTemplates;
     $html .= "<select id='{$name}' name='{$name}'>";
-    $sql = "SELECT * FROM `{$dbNoticeTemplates}`";
+    $sql = "SELECT * FROM `{$dbNoticeTemplates}` ORDER BY name ASC";
     $query = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
     while ($template = mysql_fetch_object($query))
