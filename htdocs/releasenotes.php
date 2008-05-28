@@ -11,6 +11,13 @@
 $permission = 0;
 require ('db_connect.inc.php');
 require ('functions.inc.php');
+$version = cleanvar($_GET['v']);
+//as passed by triggers
+$version = str_replace("v", "", $version);
+if (!empty($version))
+{
+    header("Location: {$_SERVER['PHP_SELF']}#{$version}");
+}
 
 // This page requires authentication
 require ('auth.inc.php');
@@ -19,7 +26,7 @@ echo "<h2>Release Notes</h2>";
 
 echo "<div id='help'>";
 echo "<p>For the latest notes on this release please <a href='http://sitracker.sourceforge.net/ReleaseNotes'>see the SiT website</a>, a summary is shown below:</p>";
-echo "<h3>v3.32</h3>";
+echo "<a name='3.32'><h3>v3.32</h3></a>";
 echo '<div>
     <p><strong>Internationalisation</strong></p>
     <ul><li>More strings are internationalised</li>
@@ -44,7 +51,7 @@ echo '<div>
 
 ';
 
-echo "<h3>v3.31</h3>";
+echo "<a name='3.31'><h3>v3.31</h3></a>";
 echo '<div>
 
     <p><strong>Internationalisation</strong></p>
