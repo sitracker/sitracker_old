@@ -367,7 +367,7 @@ function dashboard_watch_incidents_edit()
                         break;
                 }
                 echo "</strong></td><td align='right'>";
-                echo "<a href=\"javascript:get_and_display('ajaxdata.php?action=dashboard_edit&dashboard=watch_incidents&editaction=add&type={$i}','watch_incidents_windows', false);\">";
+                echo "<a href=\"javascript:get_and_display('ajaxdata.php?action=dashboard_edit&dashboard=watch_incidents&editaction=add&type={$i}', '', false);\">";
 
                 //'ajaxdata.php?action=dashboard_edit&amp;dashboard=watch_incidents&amp;type={$i}&amp;editaction=add'>";
                 switch ($i)

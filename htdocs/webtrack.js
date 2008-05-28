@@ -90,6 +90,11 @@ function pausecomp(millis)
 
 function get_and_display(page, component, update)
 {
+    if ($(component).hasClassName('window') == false)
+    {
+        component = this.up('div');
+    }
+//     alert(component);
     if (update == true)
     {
         new Ajax.PeriodicalUpdater(component, page, {
