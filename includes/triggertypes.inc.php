@@ -35,21 +35,7 @@ $triggerarray['TRIGGER_INCIDENT_ASSIGNED'] =
 array('name' => 'Incident Assigned',
       'description' => 'Occurs when a new incident is assigned to a user',
       'required' => array('incidentid', 'userid'),
-      'params' => array('userid'),
-      );
-
-$triggerarray['TRIGGER_INCIDENT_ASSIGNED_WHILE_AWAY'] =
-array('name' => 'Incident Assigned While Away',
-      'description' => 'Occurs when a new incident is assigned to a user and the user is set to not accepting',
-      'required' => array('incidentid', 'userid'),
-      'params' => array('userid'),
-     );
-
-$triggerarray['TRIGGER_INCIDENT_ASSIGNED_WHILE_OFFLINE'] =
-array('name' => 'Incident Assigned While Offline',
-      'description' => 'Occurs when a new incident is assigned to a user and their status is offline',
-      'required' => array('incidentid', 'userid'),
-      'params' => array('userid'),
+      'params' => array('userid', 'userstatus'),
       );
 
 $triggerarray['TRIGGER_INCIDENT_NEARING_SLA'] =
@@ -97,7 +83,7 @@ array('name' => 'User Changes Status',
 $triggerarray['TRIGGER_SIT_UPGRADED'] =
 array('name' => 'SiT! Upgraded',
       'description' => 'Occurs when the system is upgraded',
-      'required' => array('sitversion'),
+      'required' => array('applicationversion'),
       'params' => array(),
       );
 
@@ -538,6 +524,12 @@ array('description' => 'Incident temp owner ID',
       'replacement' => 'incident_towner($paramarray[\'incidentid\']);',
       'requires' => 'incidentid'
       );
+
+$$ttvararray['{triggerfooter}'] =
+array('description' => 'The footer at the end of an email which explains where it has come from',
+      'replacement' => $SYSLANG['strTriggerFooter'],
+      'requires' => 'triggerfooter'
+     );
 
 $ttvararray['{triggeruseremail}'] =
 array('description' => 'Email address to send an user trigger email to',
