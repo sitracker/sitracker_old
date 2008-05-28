@@ -118,7 +118,7 @@ $triggerarray['TRIGGER_INCIDENT_CLOSED'] =
 array('name' => 'New contact added',
       'description' => $strTriggerIncidentClosed,
       'required' => array('incidentid', 'userid'),
-      'params' => array('userid')
+      'params' => array('userid', 'externalid', 'externalengineer')
       );
 
 $triggerarray['TRIGGER_NEW_CONTRACT'] =
@@ -143,11 +143,9 @@ array('name' => 'New site added',
 $triggerarray['TRIGGER_HOLIDAY_REQUESTED'] =
 array('name' => 'Holiday Requested',
       'description' => $strTriggerHolidayRequested,
-      'params' => array('userid', 'approvaluserid'),
-      'type' => 'system',
-      'permission' => '{approvaluserid} == {currentuserid}'
+      'params' => array('userid', 'approvaluseremail', 'listofholidays'),
+      'permission' => 'user_permission($_SESSION[\'userid\'], 50);'
       );     
-     
 plugin_do('trigger_types');
 
 /**
@@ -183,10 +181,10 @@ array('description' => $application_version_string,
       'replacement' => 'application_version_string();'
       );
 
-$ttvararray['{approveremail}'] =
+$ttvararray['{approvaluseremail}'] =
 array('description' => 'Email address of the holiday approver',
-      'replacement' => 'user_email($paramarray[\'approveruserid\']);',
-      'requires' => 'approveruserid'
+      'replacement' => '$paramarray[\'approvaluseremail\'];',
+      'requires' => 'approvaluseremail'
       );
 
 $ttvararray['{contactid}'][] =

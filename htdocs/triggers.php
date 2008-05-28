@@ -191,7 +191,7 @@ switch ($_REQUEST['mode'])
         echo notice_templates('noticetemplate');
         echo "</div>\n";
         echo "<div id='emailtemplatesbox' style='display:none;'>";
-        echo email_templates('emailtemplate');
+        echo email_templates('emailtemplate', 'user');
         echo "</div>\n";
         echo "<div id='journalbox' style='display:none;'>{$strNone}</div>";
         echo "<div id='none'>{$strNone}</div>";
@@ -314,69 +314,86 @@ switch ($_REQUEST['mode'])
         $shade = 'shade1';
         foreach($triggerarray AS $trigger => $triggervar)
         {
-            echo "<tr class='$shade'>";
-            echo "<td style='vertical-align: top; width: 25%;'>";
-            echo trigger_description($triggervar);
-            echo "</td>";
-            // List actions for this trigger
-            echo "<td>";
-            $sql = "SELECT * FROM `{$dbTriggers}` WHERE triggerid = '$trigger' ";
-            if ($selecteduser > -1)
+            $perm = TRUE;
+            //echo $trigger;
+            if (isset($triggervar['permission']))
             {
-                $sql .= "AND userid = '{$selecteduser}' ";
-            }
-            $sql .= "ORDER BY action, template ";
-            if (!$adminuser)
-            {
-                $sql .= "AND userid='{$sit[2]}'";
-            }
-            $result = mysql_query($sql);
-            if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
-            if (mysql_num_rows($result) >= 1)
-            {
-                while ($trigaction = mysql_fetch_object($result))
+                //$triggervar['permission'] = trigger_replace_specials($trigger, $triggervar['permission'], array());
+                eval("\$res = {$triggervar['permission']}");
+                if (!$res)
                 {
-                    echo triggeraction_description($trigaction, TRUE);
-
-                    echo " <a href='{$_SERVER['PHP_SELF']}?mode=delete&amp;";
-                    echo "id={$trigaction->id}' title=\"{$strDelete}\">";
-                    echo icon('delete', 12)."</a>";
-                    if ($selecteduser == -1)
-                    {
-                        if ($trigaction->userid == 0)
-                        {
-                            echo " (<img src='{$CONFIG['application_webpath']}";
-                            echo "images/sit_favicon.png' />)";
-                        }
-                        else
-                        {
-                            echo " (".icon('user', 16)." ";
-                            echo user_realname($trigaction->userid).')';
-                        }
-                    }
-                    echo "<br />\n";
+                    $perm = FALSE;
                 }
             }
-            else
+            if ($perm)
             {
-                echo "{$strNone}";
-            }
-            echo "</td>";
-            echo "<td>";
-            if ($selecteduser != -1)
-            {
-                echo "<a href='{$_SERVER['PHP_SELF']}?mode=add&amp;id={$trigger}&amp;user={$selecteduser}'>{$strAdd}</a>";
-            }
-            echo "</td>";
-            echo "</tr>\n";
-            if ($shade == 'shade1')
-            {
-                $shade = 'shade2';
-            }
-            else
-            {
-                $shade = 'shade1';
-            }
+                if (($triggervar['type'] != 'system' AND !$adminuser) OR $adminuser)
+                {    
+                    echo "<tr class='$shade'>";
+                    echo "<td style='vertical-align: top; width: 25%;'>";
+                    echo trigger_description($triggervar);
+                    echo "</td>";
+                    // List actions for this trigger
+                    echo "<td>";
+                    $sql = "SELECT * FROM `{$dbTriggers}` WHERE triggerid = '$trigger' ";
+                    if ($selecteduser > -1)
+                    {
+                        $sql .= "AND userid = '{$selecteduser}' ";
+                    }
+                    $sql .= "ORDER BY action, template ";
+                    if (!$adminuser)
+                    {
+                        $sql .= "AND userid='{$sit[2]}'";
+                    }
+                    $result = mysql_query($sql);
+                    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
+                    if (mysql_num_rows($result) >= 1)
+                    {
+                        while ($trigaction = mysql_fetch_object($result))
+                        {
+                            echo triggeraction_description($trigaction, TRUE);
+        
+                            echo " <a href='{$_SERVER['PHP_SELF']}?mode=delete&amp;";
+                            echo "id={$trigaction->id}' title=\"{$strDelete}\">";
+                            echo icon('delete', 12)."</a>";
+                            if ($selecteduser == -1)
+                            {
+                                if ($trigaction->userid == 0)
+                                {
+                                    echo " (<img src='{$CONFIG['application_webpath']}";
+                                    echo "images/sit_favicon.png' />)";
+                                }
+                                else
+                                {
+                                    echo " (".icon('user', 16)." ";
+                                    echo user_realname($trigaction->userid).')';
+                                }
+                            }
+                            echo "<br />\n";
+                        }
+                    }
+                    else
+                    {
+                        echo "{$strNone}";
+                    }
+                    echo "</td>";
+                    echo "<td>";
+                    if ($selecteduser != -1)
+                    {
+                        echo "<a href='{$_SERVER['PHP_SELF']}?mode=add&amp;id={$trigger}&amp;user={$selecteduser}'>{$strAdd}</a>";
+                    }
+                    echo "</td>";
+                    echo "</tr>\n";
+                    if ($shade == 'shade1')
+                    {
+                        $shade = 'shade2';
+                    }
+                    else
+                    {
+                        $shade = 'shade1';
+                    }
+                }
+            }    
         }
         echo "</table>";
         echo "<p align='center'><a href='triggertest.php'>Test Triggers</a></p>";
