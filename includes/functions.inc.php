@@ -9053,6 +9053,13 @@ function setup_user_triggers($userid)
 }
 
 
+/**
+* Returns the SLA ID of a contract
+*
+* @param $maintid ID of the contract
+* @return int ID of the SLA
+* @author Kieran Hogg
+*/
 function contract_slaid($maintid)
 {
     $maintid = intval($maintid);
@@ -9061,6 +9068,13 @@ function contract_slaid($maintid)
 }
 
 
+/**
+* Returns the salesperson ID of a site
+*
+* @param $siteid ID of the site
+* @return int ID of the salesperson
+* @author Kieran Hogg
+*/
 function site_salespersonid($siteid)
 {
     $siteid = intval($siteid);
@@ -9068,6 +9082,14 @@ function site_salespersonid($siteid)
     return $salespersonid;
 }
 
+
+/**
+* Returns the salesperson's name of a site
+*
+* @param $siteid ID of the site
+* @return string name of the salesperson
+* @author Kieran Hogg
+*/
 function site_salesperson($siteid)
 {
     $siteid = intval($siteid);
@@ -9111,6 +9133,13 @@ function database_schema_version()
 }
 
 
+/**
+* Returns whether the user is accepting or not
+*
+* @param $userid ID of the user
+* @return string 'accepting'|'not accepting'
+* @author Kieran Hogg
+*/
 function user_accepting_status($userid)
 {
     if (user_accepting($userid) == 'Yes')
@@ -9123,12 +9152,13 @@ function user_accepting_status($userid)
     }
 }
 
-
-function user_group($userid)
-{
-    return db_read_column('name', $GLOBALS['dbGroups'], user_group_id($userid));
-}
-
+/**
+* Returns the status of a user
+*
+* @param $userid ID of the user
+* @return string user status
+* @author Kieran Hogg
+*/
 function user_status_name($userid)
 {
     $status = db_read_column('name', $GLOBALS['dbUserStatus'], $userid);
