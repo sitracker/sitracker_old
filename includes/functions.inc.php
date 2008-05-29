@@ -9129,6 +9129,20 @@ function user_status_name($userid)
     return $GLOBALS[$status];
 }
 
+
+/**
+* Returns the user's porta username
+*
+* @param $userid ID of the user
+* @return string username
+* @author Kieran Hogg
+*/
+function contact_username($userid)
+{
+    $userid = intval($userid);
+    return db_read_column('username', $GLOBALS['dbContacts'], $userid);
+}
+
 // -------------------------- // -------------------------- // --------------------------
 // leave this section at the bottom of functions.inc.php ================================
 
