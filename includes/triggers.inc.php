@@ -22,30 +22,30 @@ plugin_do('trigger_actions');
 
 $actionarray['ACTION_NONE'] =
 array('name' => $strNone,
-      'description' => 'Do nothing'
+      'description' => $strDoNothing,
       );
 
 $actionarray['ACTION_NOTICE'] =
 array('name' => 'Notice',
-      'description' => 'Create a notice based on %s'
+      'description' => $strCreateANotice
       );
 
 $actionarray['ACTION_EMAIL'] =
 array('name' => 'Email',
-      'description' => 'Send an email based on a %s template'
+      'description' => $strSendAnEmail
       );
 
 $actionarray['ACTION_JOURNAL'] =
 array('name' => 'Journal',
-      'description' => 'Log the trigger in the system journal'
+      'description' => $strLogTriggerInJournal
       );
 
 /**
     * Master trigger function, creates a new trigger
     * @author Kieran Hogg
-    * @param $triggerid integer. The id of the trigger to fire
-    * @param $paramarray array. Extra parameters to pass the trigger
-    * @return boolean. TRUE if the trigger created successfully, FALSE if not
+    * @param $triggerid string The name of the trigger to fire
+    * @param $paramarray array Extra parameters to pass the trigger
+    * @return bool TRUE if the trigger created successfully, FALSE if not
 */
 function trigger($triggerid, $paramarray='')
 {
@@ -117,20 +117,20 @@ function trigger($triggerid, $paramarray='')
             $dbg .= "TRIGGER: trigger_action({$triggerobj->userid}, {$triggerid},
                     {$triggerobj->action}, {$paramarray}) called \n";
         }
-        trigger_action($triggerobj->userid, $triggerid, $triggerobj->action,
+        $return = trigger_action($triggerobj->userid, $triggerid, $triggerobj->action,
                        $paramarray, $triggerobj->template);
     }
-    return;
+    return $return;
 }
 
 
 /**
     * Do the specific action for the specific user for a trigger
     * @author Kieran Hogg
-    * @param $userid integer. The user to apply the trigger action to
-    * @param $triggerid string. The id of the trigger to apply
-    * @param $action string. The type of action to perform
-    * @param $paramarray array. The array of extra parameters to apply to the
+    * @param $userid int The user to apply the trigger action to
+    * @param $triggerid string The name of the trigger to apply
+    * @param $action string The type of action to perform
+    * @param $paramarray array The array of extra parameters to apply to the
     * trigger
     * @param $template
     * @return boolean. TRUE if the user has the permission, otherwise FALSE
@@ -192,11 +192,11 @@ function trigger_action($userid, $triggerid, $action, $paramarray, $template)
 /**
     * Replaces template variables with their values
     * @author Kieran Hogg, Ivan Lucas
-    * @param $triggerid string. The id/name of the trigger being used
-    * @param $string string. The string containing the variables
-    * @param $paramarray array. An array containing values to be substituted
+    * @param $triggerid string The name of the trigger being used
+    * @param $string string The string containing the variables
+    * @param $paramarray array An array containing values to be substituted
     * into the string
-    * @return string. The string with variables replaced
+    * @return string The string with variables replaced
 */
 function trigger_replace_specials($triggerid, $string, $paramarray)
 {
@@ -248,7 +248,9 @@ function trigger_replace_specials($triggerid, $string, $paramarray)
     * @param &$ttvar array the array of the variable to replace
     * @param &$triggerid string The name of the trigger
     * @param &$identifier string the {variable} name
-    * @param &$paramarray the array of trigger parameters
+    * @param &$paramarray array the array of trigger parameters
+    * @param &$required array optional array of required vars to pass, used if
+    * we're not dealing with a trigger
     * @return mixed array if replacement found, NULL if not
 */
 function replace_vars($ttvar, $triggerid, $identifier, $paramarray, $required='')
@@ -308,8 +310,8 @@ function replace_vars($ttvar, $triggerid, $identifier, $paramarray, $required=''
     * Replaces template variables with their values
     * @author Ivan Lucas
     * @param $string string. The string containing the variables
-    * @param $paramarray array. An array containing values to be substituted
-    * @return string. The string with variables replaced
+    * @param $paramarray array An array containing values to be substituted
+    * @return string The string with variables replaced
 */
 function replace_specials($string, $paramarray)
 {
@@ -396,7 +398,16 @@ function send_trigger_email($userid, $triggerid, $template, $paramarray)
 
     $mailok = send_email($toemail, $from, $subject, $body, $replytoemail, $ccemail, $bccemail);
     $dbg .= "send_email($toemail, $from, $subject, $body, $replytoemail, $ccemail, $bccemail)"; // FIXME BUGBUG remove this debugging
-    if ($mailok==FALSE) trigger_error('Internal error sending email: '. $mailerror.' send_mail() failed', E_USER_ERROR);
+    if ($mailok==FALSE)
+    {
+        trigger_error('Internal error sending email: '. $mailerror.' send_mail() failed', E_USER_ERROR);
+        $return = FALSE;
+    }
+    else
+    {
+        $return = TRUE;
+    }
+    return $return;
 }
 
 
@@ -444,11 +455,15 @@ function create_trigger_notice($userid, $noticetext='', $triggertype='',
                             '{$noticelinktext}', '{$noticelink}', '{$durability}', '{$refid}', NOW())";
             mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
+            $return = TRUE;
         }
         else
         {
             throw_error("No such trigger type");
+            $return = FALSE;
         }
+        
+        return $return;
     }
 }
 
