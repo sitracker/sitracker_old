@@ -8619,7 +8619,7 @@ function show_add_contact($mode = 'internal')
     $html .= "<input class='required' maxlength='100' name='email' size='35'";
     if ($_SESSION['formdata']['add_contact']['email'])
     {
-        $html .= "value='{$_SESSION['formdata']['add_contact']['email']}";
+        $html .= "value='{$_SESSION['formdata']['add_contact']['email']}'";
     }
     $html .= "/><span class='required'>{$GLOBALS['strRequired']}</span> ";
 
