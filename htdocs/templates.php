@@ -137,14 +137,16 @@ elseif ($action == "edit")
     switch ($templatetype)
     {
         case 'email':
-            $sql = "SELECT * FROM `{$dbEmailTemplates}` WHERE id='$id'";
+            if (!is_numeric($id)) $sql = "SELECT * FROM `{$dbEmailTemplates}` WHERE name='$id' LIMIT 1";
+            else $sql = "SELECT * FROM `{$dbEmailTemplates}` WHERE id='$id'";
             $title = "{$strEdit}: $strEmailTemplate";
             $templateaction = 'ACTION_EMAIL';
             break;
 
         case 'notice':
         default:
-            $sql = "SELECT * FROM `{$dbNoticeTemplates}` WHERE id='$id' LIMIT 1";
+            if (!is_numeric($id)) $sql = "SELECT * FROM `{$dbNoticeTemplates}` WHERE name='$id' LIMIT 1";
+            else $sql = "SELECT * FROM `{$dbNoticeTemplates}` WHERE id='$id' LIMIT 1";
             $title = "{$strEdit}: Notice Template"; // FIXME i18n edit notice template
             $templateaction = 'ACTION_NOTICE';
     }
@@ -323,7 +325,8 @@ elseif ($action == "edit")
     }
     else
     {
-        echo "<p class='error'>{$strMustSelectEmailTemplate}</p>\n";
+        // FIXME 3.35 fix this i18n wording, remove debug
+        echo "<p class='error'>{$strMustSelectEmailTemplate} $sql</p>\n";
     }
 }
 elseif ($action == "delete")

@@ -6029,6 +6029,10 @@ function dashlet($dashboard, $dashletid, $icon, $title='', $link='', $content=''
 }
 
 
+/**
+    * @author Ivan Lucas
+    * @returns string HTML
+*/
 function dashlet_link($dashboard, $dashletid, $text='', $action='', $params='', $refresh=FALSE, $formid='')
 {
     if ($action == 'edit') $action = 'dashboard_edit';

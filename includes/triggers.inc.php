@@ -208,7 +208,7 @@ function trigger_replace_specials($triggerid, $string, $paramarray)
         $dbg .= "\nTRIGGER: notice string before - $string\n";
         $dbg .= "TRIGGER: param array: ".print_r($paramarray,true);
     }
-    
+
     //this loops through each variable and creates an array of useable varaibles' regexs
     foreach ($ttvararray AS $identifier => $ttvar)
     {
@@ -247,15 +247,15 @@ function trigger_replace_specials($triggerid, $string, $paramarray)
     * @param &$ttvar array the array of the variable to replace
     * @param &$triggerid string The name of the trigger
     * @param &$identifier string the {variable} name
-    * @param &$paramarray the array of trigger parameters 
+    * @param &$paramarray the array of trigger parameters
     * @return mixed array if replacement found, NULL if not
 */
 function replace_vars($ttvar, $triggerid, $identifier, $paramarray, $required='')
 {
     global $triggerarray, $ttvararray, $CONFIG;
-    
+
     $usetvar = FALSE;
-    
+
     //if we don't have any requires, we can already use this var
     if (empty($ttvar['requires']))
     {
@@ -287,7 +287,7 @@ function replace_vars($ttvar, $triggerid, $identifier, $paramarray, $required=''
             }
         }
     }
-    
+
     //if we're able to use this variable
     if ($usetvar)
     {
@@ -470,7 +470,7 @@ function email_templates($name, $triggertype='system', $selected = '')
         //$name = strpos()
         //$name = str_replace("_", " ", $name);
         $name = strtolower($name);
-        $html .= "<option value='{$template->id}' title=\"{$template->description}\">{$template->name}</option>\n";
+        $html .= "<option value='{$template->name}' title=\"{$template->description}\">{$template->name}</option>\n";
     }
     $html .= "</select>\n";
     return $html;
@@ -487,12 +487,12 @@ function notice_templates($name, $selected = '')
 {
     global $dbNoticeTemplates;
     $html .= "<select id='{$name}' name='{$name}'>";
-    $sql = "SELECT * FROM `{$dbNoticeTemplates}` ORDER BY name ASC";
+    $sql = "SELECT id, name FROM `{$dbNoticeTemplates}` ORDER BY name ASC";
     $query = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
     while ($template = mysql_fetch_object($query))
     {
-        $html .= "<option value='{$template->id}'>{$template->name}</option>\n";
+        $html .= "<option value='{$template->name}'>{$template->name}</option>\n";
     }
     $html .= "</select>\n";
     return $html;
@@ -632,7 +632,8 @@ function triggeraction_description($trigaction, $editlink=FALSE)
         if ($trigaction->action == 'ACTION_EMAIL')
         {
             $html .= icon('email', 16)." ";
-            $templatename = db_read_column('name', $dbEmailTemplates, $trigaction->template);
+            //$templatename = db_read_column('name', $dbEmailTemplates, $trigaction->template);
+            $templatename = $trigaction->template;
             if ($editlink) $template = "<a href='templates.php?id={$trigaction->template}&amp;action=edit&amp;template=email'>";
             $template .= "{$templatename}";
             if ($editlink) $template .= "</a>";
@@ -640,7 +641,7 @@ function triggeraction_description($trigaction, $editlink=FALSE)
         elseif  ($trigaction->action == 'ACTION_NOTICE')
         {
             $html .= icon('info', 16)." ";
-            $templatename = db_read_column('name', $dbNoticeTemplates, $trigaction->template);
+            $templatename = $trigaction->template;
             if ($editlink) $template = "<a href='templates.php?id={$trigaction->template}&amp;action=edit&amp;template=notice'>";
             $template .= "{$templatename}";
             if ($editlink) $template .= "</a>";
@@ -659,7 +660,7 @@ function triggeraction_description($trigaction, $editlink=FALSE)
     if (!empty($trigaction->userid)) $html .= " for ".user_realname($trigaction->userid);
     if (!empty($trigaction->parameters)) $html .= ", using {$trigaction->parameters}";
     if (!empty($trigaction->checks)) $html .= ", when {$trigaction->checks} ";
-    
+
     return $html;
 }
 
