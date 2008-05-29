@@ -2814,7 +2814,7 @@ function html_redirect($url, $success=TRUE, $message='')
     }
     // TODO 3.35 Add a link to refresh the dashlet if this is run inside a dashlet
 
-    if (!$headerdisplayed)
+    if ($headerdisplayed)
     {
         include ('htmlfooter.inc.php');
     }
