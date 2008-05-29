@@ -59,15 +59,14 @@ if (empty($_REQUEST['mode']))
 }
 else
 {
-    // FIXME sanitize input $_REQUEST vars
-    $monthbreakdownstatus = $_REQUEST['monthbreakdown'];
+    $monthbreakdownstatus = cleanvar($_REQUEST['monthbreakdown']);
     $startdate = strtotime($_REQUEST['startdate']);
     $enddate = strtotime($_REQUEST['enddate']);
     $sql = "SELECT count(s.id) AS softwarecount, s.name, s.id ";
     $sql .= "FROM `{$dbSoftware}` AS s, `{$dbIncidents}` AS i ";
     $sql .= "WHERE s.id = i.softwareid AND i.opened >= '{$startdate}' ";
     $sql .= "AND i.opened <= '{$enddate}' ";
-    $software = $_REQUEST['software'];
+    $software = cleanvar($_REQUEST['software']);
     if (!empty($software)) $sql .= "AND s.name LIKE '%{$software}%' ";
     $sql .= "GROUP BY s.id ORDER BY softwarecount DESC";
     $result = mysql_query($sql);
