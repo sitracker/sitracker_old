@@ -22,16 +22,9 @@ $adminuser = user_permission($sit[2],22); // Admin user
 
 // External vars
 // We only allow setting the selecteduser if the user is an admin, otherwise we use self
-if ($adminuser)
+if ($adminuser AND is_numeric($_REQUEST['user']))
 {
-    if (is_numeric($_REQUEST['user']))
-    {
-        $selecteduser = $_REQUEST['user'];
-    }
-    else
-    {
-        $selecteduser = 0;
-    }
+    $selecteduser = $_REQUEST['user'];
 }
 else
 {
@@ -254,11 +247,11 @@ switch ($_REQUEST['mode'])
         $emailtemplate = cleanvar($_POST['emailtemplate']);
         $parameters = cleanvar($_POST['parameters']);
         $rules = cleanvar($_POST['rules']);
-        
+
         //TODO if we do more than one of these, we should probably use
         //trigger_replace_specials()
         $rules = str_replace("{currentuserid}", $sit[2], $rules);
-        
+
         if ($action == 'ACTION_NOTICE')
         {
             $templateid = $noticetemplate;
@@ -328,7 +321,7 @@ switch ($_REQUEST['mode'])
             if ($perm)
             {
                 if (($triggervar['type'] != 'system' AND !$adminuser) OR $adminuser)
-                {    
+                {
                     echo "<tr class='$shade'>";
                     echo "<td style='vertical-align: top; width: 25%;'>";
                     echo trigger_description($triggervar);
@@ -352,7 +345,7 @@ switch ($_REQUEST['mode'])
                         while ($trigaction = mysql_fetch_object($result))
                         {
                             echo triggeraction_description($trigaction, TRUE);
-        
+
                             echo " <a href='{$_SERVER['PHP_SELF']}?mode=delete&amp;";
                             echo "id={$trigaction->id}' title=\"{$strDelete}\">";
                             echo icon('delete', 12)."</a>";
@@ -380,7 +373,7 @@ switch ($_REQUEST['mode'])
                     echo "<td>";
                     if ($selecteduser != -1)
                     {
-                        echo "<a href='{$_SERVER['PHP_SELF']}?mode=add&amp;id={$trigger}&amp;user={$selecteduser}'>{$strAdd}</a>";
+                        echo "<a href='{$_SERVER['PHP_SELF']}?mode=add&amp;id={$trigger}&amp;user={$selecteduser}'>{$strAddAction}</a>";
                     }
                     echo "</td>";
                     echo "</tr>\n";
@@ -393,7 +386,7 @@ switch ($_REQUEST['mode'])
                         $shade = 'shade1';
                     }
                 }
-            }    
+            }
         }
         echo "</table>";
         echo "<p align='center'><a href='triggertest.php'>Test Triggers</a></p>";

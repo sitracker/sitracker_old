@@ -43,6 +43,7 @@ $strActivityMarkedCompleteSuccessfully = 'Activity Marked Complete Successfully'
 $strActivitiesForX = 'Activities for %s';
 # i.e. Create, New
 $strAdd = 'Add';
+$strAddAction = 'Add Action';
 $strAddActionToXTrigger = 'Add Action to \'%s\' trigger';
 $strAddContact = 'Add Contact';
 $strAddContract = 'Add Contract';
@@ -702,6 +703,7 @@ $strMyHolidays = 'My Holidays';
 $strMyProfile = 'My Profile';
 $strMySkills = 'My Skills';
 $strMySubstitutes = 'My Substitutes';
+$strMyTriggers = 'My Triggers';
 
 $strName = 'Name';
 $strNeedsSubstitueEngineers = '%s need substitute engineers to be defined';
