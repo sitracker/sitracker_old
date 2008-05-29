@@ -6030,7 +6030,20 @@ function dashlet($dashboard, $dashletid, $icon, $title='', $link='', $content=''
 
 
 /**
+    * Creates a link that opens within a dashlet window
     * @author Ivan Lucas
+    * @param $dashboard string. Dashboard component name.
+    * @param $dashletid string. The table row ID of that we are 'drawing' this dashlet into and
+    *                           the ID of the dashboard component instance as recorded in the users settings
+    *                           as a single string, this is received by the dashlet from dashboard_do()
+    * @param $text string. The text of the hyperlink for the user to click
+    * @param $action string. edit|save|display
+                                edit = This is a link to a dashlet config form page
+                                save = Submit a dashlet config form (see $formid param)
+                                display = Display a regular dashlet page
+    * @param $params array. Associative array of parameters to pass on the URL of the link
+    * @param $refresh boolean. The link will be automatically refreshed when TRUE
+    * @param $formid string. The form element ID to be submitted when using 'save' action
     * @returns string HTML
 */
 function dashlet_link($dashboard, $dashletid, $text='', $action='', $params='', $refresh=FALSE, $formid='')
@@ -6045,8 +6058,6 @@ function dashlet_link($dashboard, $dashletid, $text='', $action='', $params='', 
     else $refresh = 'false';
 
     if ($action == 'dashboard_save' AND $formid == '') $formid = "{$dashboard}form";
-
-    // TODO save
 
     if ($action == 'dashboard_save') $html .= "<a href=\"javascript:ajax_save(";
     else  $html .= "<a href=\"javascript:get_and_display(";
