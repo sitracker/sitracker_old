@@ -220,7 +220,9 @@ while ($contactrow = mysql_fetch_array($contactresult))
         $sql  = "SELECT sc.maintenanceid AS maintenanceid, m.product, p.name AS productname, ";
         $sql .= "m.expirydate, m.term ";
         $sql .= "FROM `{$dbSupportContacts}` AS sc, `{$dbMaintenance}` AS m, `{$dbProducts}` AS p ";
-        $sql .= "WHERE sc.maintenanceid=m.id AND m.product=p.id AND sc.contactid='$id' ";
+        $sql .= "WHERE ((sc.maintenanceid=m.id AND sc.contactid='$id') ";
+        $sql .= "OR m.allcontactssupported = 'yes') ";
+        $sql .= "AND m.product=p.id  ";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
         if (mysql_num_rows($result)>0)
