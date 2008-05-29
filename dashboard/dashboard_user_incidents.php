@@ -12,6 +12,16 @@ $dashboard_user_incidents_version = 1;
 
 function dashboard_user_incidents($dashletid)
 {
+    $title = sprintf($GLOBALS['strUserIncidents'], user_realname($_SESSION['userid'],TRUE));
+    //"({$GLOBALS['strActionNeeded']})";
+
+    echo dashlet('user_incidents', $dashletid, icon('support', 16), $title, 'incidents.php?user=current&amp;queue=1&amp;type=support', $content);
+
+}
+
+
+function dashboard_user_incidents_display($dashletid)
+{
     global $user;
     global $sit;
     global $now;
@@ -46,13 +56,6 @@ function dashboard_user_incidents($dashletid)
     $sql .= "(IF ((status >= 5 AND status <=8), ($now - lastupdated) > ({$CONFIG['regular_contact_days']} * 86400), 1=2 ) ";  // awaiting
     $sql .= "OR IF (status='1' OR status='3' OR status='4', 1=1 , 1=2) ";  // active, research, left message - show all
     $sql .= ") AND timeofnextaction < $now ) ";
-
-    echo "<div class='windowbox' id='$row-$dashboardid'>";
-    echo "<div class='windowtitle'><a href='incidents.php?user=current&amp;queue=1&amp;type=support'>";
-    echo icon('support', '16')." ";
-    echo sprintf($GLOBALS['strUserIncidents'], user_realname($user,TRUE));
-    echo "</a> ({$GLOBALS['strActionNeeded']})</div>";
-    echo "<div class='window'>";
 
     $selectsql = "SELECT i.id, externalid, title, owner, towner, priority, status, siteid, forenames, surname, email, i.maintenanceid, ";
     $selectsql .= "servicelevel, softwareid, lastupdated, timeofnextaction, ";
@@ -124,9 +127,7 @@ function dashboard_user_incidents($dashletid)
     {
         echo "<p align='center'>{$GLOBALS['strNoRecords']}</p>";
     }
-    echo "</div>";
-    echo "</div>";
-    //echo "</div>";
+
 }
 
 ?>
