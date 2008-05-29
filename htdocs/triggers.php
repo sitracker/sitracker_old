@@ -44,15 +44,15 @@ switch ($_REQUEST['mode'])
         $triggerowner = db_read_column('userid', $dbTriggers, $id);
         if ($triggerowner == 0 AND !user_permission($sit[2], 72))
         {
-            html_redirect($_SERVER['PHP_SELF'], FALSE);
+            html_redirect($_SERVER['PHP_SELF']."?user={$selecteduser}", FALSE);
         }
         elseif ($triggerowner != 0 AND $triggerowner != $sit[2])
         {
-            html_redirect($_SERVER['PHP_SELF'], FALSE);
+            html_redirect($_SERVER['PHP_SELF']."?user={$selecteduser}", FALSE);
         }
         elseif ($triggerowner == $sit[2] AND !user_permission($sit[2], 71))
         {
-            html_redirect($_SERVER['PHP_SELF'], FALSE);
+            html_redirect($_SERVER['PHP_SELF']."?user={$selecteduser}", FALSE);
         }
         else
         {
@@ -61,11 +61,11 @@ switch ($_REQUEST['mode'])
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
             if (mysql_affected_rows() >= 1)
             {
-                html_redirect($_SERVER['PHP_SELF']);
+                html_redirect($_SERVER['PHP_SELF']."?user={$selecteduser}");
             }
             else
             {
-                html_redirect($_SERVER['PHP_SELF'], FALSE);
+                html_redirect($_SERVER['PHP_SELF']."?user={$selecteduser}", FALSE);
             }
         }
         break;
@@ -184,7 +184,14 @@ switch ($_REQUEST['mode'])
         echo notice_templates('noticetemplate');
         echo "</div>\n";
         echo "<div id='emailtemplatesbox' style='display:none;'>";
-        echo email_templates('emailtemplate', 'user');
+        if ($selecteduser == 0)
+        {
+            echo email_templates('emailtemplate', 'system');
+        }
+        else
+        {
+            echo email_templates('emailtemplate', 'user');
+        }
         echo "</div>\n";
         echo "<div id='journalbox' style='display:none;'>{$strNone}</div>";
         echo "<div id='none'>{$strNone}</div>";
