@@ -386,12 +386,15 @@ function send_trigger_email($userid, $triggerid, $template, $paramarray)
 
     $from = trigger_replace_specials($triggerid, $template->fromfield, $paramarray);
     $toemail = trigger_replace_specials($triggerid, $template->tofield, $paramarray);
+    $replytoemail = trigger_replace_specials($triggerid, $template->replytofield, $paramarray);
+    $ccemail = trigger_replace_specials($triggerid, $template->ccfield, $paramarray);
+    $bccemail = trigger_replace_specials($triggerid, $template->bccfield, $paramarray);
     $subject = cleanvar(trigger_replace_specials($triggerid, $template->subjectfield, $paramarray));
     $body .= trigger_replace_specials($triggerid, $template->body, $paramarray);
 
 
-    $mailok = send_email($toemail, $from, $subject, $body);
-    $dbg .= "send_email($toemail, $from, $subject, $body)"; // FIXME BUGBUG remove this debugging
+    $mailok = send_email($toemail, $from, $subject, $body, $replytoemail, $ccemail, $bccemail);
+    $dbg .= "send_email($toemail, $from, $subject, $body, $replytoemail, $ccemail, $bccemail)"; // FIXME BUGBUG remove this debugging
     if ($mailok==FALSE) trigger_error('Internal error sending email: '. $mailerror.' send_mail() failed', E_USER_ERROR);
 }
 
