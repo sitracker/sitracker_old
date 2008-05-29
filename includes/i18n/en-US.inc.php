@@ -12,6 +12,8 @@ $strCounty = 'State';
 $strEditHolidays = 'Edit Vacations';
 $strEditHolidayEntitlement = 'Edit Vacation Entitlement';
 
+$strHoliday = 'Vacation';
+$strHolidayList = 'Vacation List';
 $strHolidayEntitlement = 'Vacation Entitlement';
 $strHolidayPlanner = 'Vacation Planner';
 
