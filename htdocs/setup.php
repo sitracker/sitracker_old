@@ -700,6 +700,21 @@ switch ($_REQUEST['action'])
                                 }
                                 else echo "<p><strong>OK:</strong> $sql</p>";
                             }
+                            
+                            //add trigger to users, NOTE we do user 1(admin's) in the schema
+                            $sql = "SELECT id FROM `{$dbUsers}` WHERE id > 1";
+                            $result = mysql_query($sql);
+                            if (mysql_error())
+                            {
+                                    trigger_error(mysql_error(),E_USER_WARNING);
+                            }
+                            else
+                            {
+                                while ($row = mysql_fetch_row($result))
+                                {
+                                    setup_user_triggers($row->id);
+                                }
+                            }                            
                         }
                         elseif ($installed_version == $application_version)
                         {
