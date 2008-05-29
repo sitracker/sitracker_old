@@ -46,7 +46,7 @@ switch ($_REQUEST['mode'])
         {
             html_redirect($_SERVER['PHP_SELF'], FALSE);
         }
-        elseif ($triggerowner != $sit[2])
+        elseif ($triggerowner != 0 AND $triggerowner != $sit[2])
         {
             html_redirect($_SERVER['PHP_SELF'], FALSE);
         }
