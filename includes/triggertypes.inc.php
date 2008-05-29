@@ -21,7 +21,7 @@
 
 $triggerarray['TRIGGER_INCIDENT_CREATED'] =
 array('name' => 'Incident Created',
-      'description' => $strTriggerNewIncidentHasBeenCreated,
+      'description' => $strTriggerNewIncidentCreated,
       'required' => array('incidentid'),
       'params' => array('contactid', 'siteid', 'priority', 'contractid', 'slaid', 'sitesalespersonid')
       );
