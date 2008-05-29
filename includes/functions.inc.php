@@ -3583,28 +3583,34 @@ function send_template_email($template, $incidentid, $info1='', $info2='')
     return $rtnvalue;
 }
 
-
+/**
+    Send an email from SiT
+    * @param $to string. Destination email address
+    * @param $from string. Source email address
+    * @param $subject string. Email subject line
+    * @param $body string. Email body text
+    * @param $replyto string. (optional) Address to send reply to
+    * @param $cc string. (optional) Carbon copy address
+    * @param $bcc string. (optional) Blind carbon copy address
+*/
 function send_email($to, $from, $subject, $body, $replyto='', $cc='', $bcc='')
 {
     global $CONFIG;
 
     $extra_headers  = "From: {$from}\n";
     if (!empty($replyto)) $extra_headers .= "Reply-To: {$replyto}\n";
-    $extra_headers .= "Errors-To: {$CONFIG['support_email']}\n";
+    if (!empty($email_cc))
+    {
+        $extra_headers .= "CC: {$cc}\n";
+    }
+    if (!empty($email_bcc))
+    {
+        $extra_headers .= "BCC: {$bcc}\n";
+    }
+    if (!empty($CONFIG['support_email'])) $extra_headers .= "Errors-To: {$CONFIG['support_email']}\n";
     $extra_headers .= "X-Mailer: {$CONFIG['application_shortname']} {$application_version_string}/PHP " . phpversion()."\n";
     $extra_headers .= "X-Originating-IP: {$_SERVER['REMOTE_ADDR']}";
-
-    // FIXME CC and BCC
-
-//     if ($email_cc != '')
-//     {
-//         $extra_headers .= "CC: $cc";
-//     }
-//     if ($email_bcc != "")
-//     {
-//         $extra_headers .= "BCC: $bcc";
-//     }
-//     $extra_headers .= "\r\n";
+    $extra_headers .= "\r\n";
 
     if ($CONFIG['demo'])
     {
