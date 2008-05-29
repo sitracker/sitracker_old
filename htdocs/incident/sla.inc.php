@@ -62,57 +62,59 @@ $sql .= " ORDER BY timestamp ASC";
 $result = mysql_query($sql);
 if (mysql_error()) trigger_error(mysql_error(), E_USER_ERROR);
 
-$updatearray = array();
-$last = -1;
-$laststatus;
-while ($row = mysql_fetch_object($result))
+if (mysql_num_rows($result) > 0)
 {
-    $updatearray[$row->currentstatus]['name'] = $row->name;
-    if ($last == -1)
+    $updatearray = array();
+    $last = -1;
+    $laststatus;
+    while ($row = mysql_fetch_object($result))
     {
-        $updatearray[$row->currentstatus]['time'] = 0;
+        $updatearray[$row->currentstatus]['name'] = $row->name;
+        if ($last == -1)
+        {
+            $updatearray[$row->currentstatus]['time'] = 0;
+        }
+        else
+        {
+            $updatearray[$laststatus]['time'] += 60 * calculate_incident_working_time($row->incidentid, $last, $row->timestamp, array(2,7));
+        }
+
+        $laststatus = $row->currentstatus;
+        $last = $row->timestamp;
+    }
+
+    if ($incident->status == 7 OR $incident->status == 2) $end = $incident->closed;
+    else $end = $now;
+
+    $publicholidays = get_public_holidays($incident->opened, $end);
+
+    //calculate the last update
+    $updatearray[$laststatus]['time'] += 60 * calculate_working_time($last, time(), $publicholidays);
+    echo "<h3>{$strStatusSummary}</h3>";
+    if (extension_loaded('gd'))
+    {
+        $data = array();
+        $legends;
+        foreach ($updatearray as $row)
+        {
+            array_push($data, $row['time']);
+            $legends .= $row['name']."|";
+        }
+        $data = implode('|',$data);
+        $title = urlencode($strStatusSummary);
+        echo "<div style='text-align:center;'>";
+        echo "<img src='chart.php?type=pie&data=$data&legends=$legends&title=$title&unit=seconds' />";
+        echo "</div>";
     }
     else
     {
-        $updatearray[$laststatus]['time'] += 60 * calculate_incident_working_time($row->incidentid, $last, $row->timestamp, array(2,7));
+        echo "<table align='center'>";
+        echo "<tr><th>{$strStatus}</th><th>{$strTime}</th></tr>\n";
+        foreach ($updatearray as $row)
+        {
+            echo "<tr><td>".$row['name']. "</td><td>".format_seconds($row['time'])."</td></tr>";
+        }
+        echo '</table>';
     }
-
-    $laststatus = $row->currentstatus;
-    $last = $row->timestamp;
 }
-
-if ($incident->status == 7 OR $incident->status == 2) $end = $incident->closed;
-else $end = $now;
-
-$publicholidays = get_public_holidays($incident->opened, $end);
-
-//calculate the last update
-$updatearray[$laststatus]['time'] += 60 * calculate_working_time($last, time(), $publicholidays);
-echo "<h3>{$strStatusSummary}</h3>";
-if (extension_loaded('gd'))
-{
-    $data = array();
-    $legends;
-    foreach ($updatearray as $row)
-    {
-        array_push($data, $row['time']);
-        $legends .= $row['name']."|";
-    }
-    $data = implode('|',$data);
-    $title = urlencode($strStatusSummary);
-    echo "<div style='text-align:center;'>";
-    echo "<img src='chart.php?type=pie&data=$data&legends=$legends&title=$title&unit=seconds' />";
-    echo "</div>";
-}
-else
-{
-    echo "<table align='center'>";
-    echo "<tr><th>{$strStatus}</th><th>{$strTime}</th></tr>\n";
-    foreach ($updatearray as $row)
-    {
-        echo "<tr><td>".$row['name']. "</td><td>".format_seconds($row['time'])."</td></tr>";
-    }
-    echo '</table>';
-}
-
 ?>
