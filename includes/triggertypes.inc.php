@@ -519,10 +519,10 @@ array('description' => 'Incident temp owner ID',
       'requires' => 'incidentid'
       );
 
-$$ttvararray['{triggerfooter}'] =
+$$ttvararray['{triggersfooter}'] =
 array('description' => 'The footer at the end of an email which explains where it has come from',
       'replacement' => '$SYSLANG[\'strTriggerFooter\'];',
-      'requires' => 'triggerfooter'
+      'requires' => 'triggersfooter'
      );
 
 $ttvararray['{triggeruseremail}'] =

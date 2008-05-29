@@ -308,10 +308,6 @@ else
             $sql .= "VALUES ('{$user}', '$type', '{$$d}', '{$$len}', '0', '$approvaluser') ";
             mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-            else
-            {
-                trigger('TRIGGER_HOLIDAY_REQUESTED', array('userid' => $user, 'approvaluser' => $approvaluser));
-            }
         }
     }
     header("location:holiday_request.php?user={$user}");

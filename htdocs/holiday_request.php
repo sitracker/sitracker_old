@@ -242,8 +242,6 @@ else
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
         if (mysql_num_rows($result)>0)
         {
-            // FIXME this email should probably use the email template system
-            $bodytext = "Message from {$CONFIG['application_shortname']}: ".user_realname($user)." has requested that you approve the following holidays:\n\n";  //FIXME i18n
             while ($holiday=mysql_fetch_object($result))
             {
                 $holidaylist .= ldate('l j F Y', $holiday->startdate).", ";
@@ -253,29 +251,18 @@ else
                 $holidaylist .= ", ";
                 $holidaylist .= holiday_type($holiday->type)."\n";
             }
-            $bodytext .= "$holidaylist\n";
             if (strlen($memo)>3)
             {
-                $bodytext .= "{$strCommentsSentWithRequest}:\n\n";
-                $bodytext .= "---\n{$memo}\n---\n\n";
+                $holidaylist .= "{$SYSLANG['strCommentsSentWithRequest']}:\n\n";
+                $holidaylist .= "---\n{$memo}\n---\n\n";
             }
-            $url = parse_url($_SERVER['HTTP_REFERER']);
-            $approveurl = "{$url['scheme']}://{$url['host']}{$url['path']}";
-            $bodytext .= "Please point your browser to\n<{$approveurl}?user={$user}&mode=approval>\n ";
-            $bodytext .= "to approve or decline these requests."; //FIXME i18n
         }
         // Mark the userid of the person who will approve the request so that they can see them
         $sql = "UPDATE `{$dbHolidays}` SET approvedby='{$approvaluser}' WHERE userid='{$user}' AND approved=0";
         mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
-        $email_from = user_email($user);
-        $email_to = user_email($approvaluser);
-        $email_subject = "{$CONFIG['application_shortname']}: Holiday Approval Request";
-        $extra_headers  = "From: $email_from\nReply-To: $email_from\nErrors-To: {$CONFIG['support_email']}\n";
-        $extra_headers .= "X-Mailer: {$CONFIG['application_shortname']} {$application_version_string}/PHP " . phpversion()."\n";
-        $extra_headers .= "X-Originating-IP: {$_SERVER['REMOTE_ADDR']}\n";
-        $rtnvalue = mail($email_to, $email_subject, $bodytext, $extra_headers);
+        trigger('TRIGGER_HOLIDAY_REQUESTED', array('userid' => $user, 'approvaluseremail' => user_email($approvaluser), 'listofholidays' => $holidaylist));
 
         if ($rtnvalue === TRUE)
         {
