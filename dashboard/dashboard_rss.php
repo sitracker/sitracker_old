@@ -12,11 +12,11 @@
 $dashboard_rss_version = 2;
 
 
-function dashboard_rss($row, $dashboardid)
+function dashboard_rss($dashletid)
 {
     global $sit, $CONFIG, $iconset;
 
-    echo dashlet('rss', $row, $dashboardid, icon('feed-icon', 16), $GLOBALS['strFeeds'], '', $content);
+    echo dashlet('rss', $dashletid, icon('feed-icon', 16), $GLOBALS['strFeeds'], '', $content);
 }
 
 function dashboard_rss_install()
@@ -41,7 +41,7 @@ function dashboard_rss_install()
 }
 
 
-function dashboard_rss_display()
+function dashboard_rss_display($dashletid)
 {
     global $CONFIG, $dbInterfaceStyles, $dbDashboardRSS, $sit;
 

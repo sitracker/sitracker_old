@@ -10,15 +10,15 @@
 
 $dashboard_random_tip_version = 2;
 
-function dashboard_random_tip($row, $dashboardid)
+function dashboard_random_tip($dashletid)
 {
     global $iconset, $CONFIG;
 
-    echo dashlet('random_tip', $row, $dashboardid, icon('tip', 16), $GLOBALS['strRandomTip'], '', $content);
+    echo dashlet('random_tip', $dashletid, icon('tip', 16), $GLOBALS['strRandomTip'], '', $content);
 }
 
 
-function dashboard_random_tip_display()
+function dashboard_random_tip_display($dashletid)
 {
     global $CONFIG;
 

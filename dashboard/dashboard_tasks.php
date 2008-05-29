@@ -10,7 +10,7 @@
 
 $dashboard_tasks_version = 1;
 
-function dashboard_tasks($row, $dashboardid)
+function dashboard_tasks($dashletid)
 {
     global $sit, $CONFIG, $iconset, $dbTasks;
     $user = $sit[2];

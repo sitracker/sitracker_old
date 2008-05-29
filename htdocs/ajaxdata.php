@@ -72,19 +72,21 @@ switch($action)
     case 'dashboard_display':
         require('auth.inc.php');
         $dashboard = cleanvar($_REQUEST['dashboard']);
+        $dashletid = 'win'.cleanvar($_REQUEST['did']);
         // FIXME need some sanitation here
         include ("{$CONFIG['application_fspath']}dashboard{$fsdelim}dashboard_{$dashboard}.php");
         $dashfn = "dashboard_{$dashboard}_display";
-        echo $dashfn();
+        echo $dashfn($dashletid);
     break;
 
     case 'dashboard_edit':
         require('auth.inc.php');
         $dashboard = cleanvar($_REQUEST['dashboard']);
+        $dashletid = 'win'.cleanvar($_REQUEST['did']);
         // FIXME need some sanitation here
         include ("{$CONFIG['application_fspath']}dashboard{$fsdelim}dashboard_{$dashboard}.php");
         $dashfn = "dashboard_{$dashboard}_edit";
-        echo $dashfn();
+        echo $dashfn($dashletid);
     break;
 
     case 'autocomplete_sitecontact':

@@ -13,12 +13,12 @@
 
 $dashboard_incoming_version = 1;
 
-function dashboard_incoming($row,$dashboardid)
+function dashboard_incoming($dashletid)
 {
     global $sit, $CONFIG, $iconset;
     global $dbUpdates, $dbTempIncoming;
     $user = $sit[2];
-    echo "<div class='windowbox' style='width: 95%;' id='$row-$dashboardid'>";
+    echo "<div class='windowbox' style='width: 95%;' id='$dashletid'>";
     echo "<div class='windowtitle'><a href='review_incoming_updates.php'><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/emailin.png' width='16' height='16' alt='' /> ";
 
     // extract updates (query copied from review_incoming_email.php)

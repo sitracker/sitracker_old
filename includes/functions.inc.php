@@ -6019,8 +6019,9 @@ function show_notes($linkid, $refid)
     * Produces a HTML dashlet 'window' for display on the dashboard
     * @author Ivan Lucas
     * @param $dashboard string. Dashboard component name.
-    * @param $row integer. The table row ID of that we are 'drawing' this dashlet into
-    * @param $dashboardid integer. The ID of the dashboard component instance as recorded in the users settings
+    * @param $dashletid string. The table row ID of that we are 'drawing' this dashlet into and
+    *                           the ID of the dashboard component instance as recorded in the users settings
+    *                           as a single string, this is received by the dashlet from dashboard_do()
     * @param $icon string. HTML for an icon to be displayed on the dashlet window
     * @param $title string. A title for the dashlet, also displayed on the dashlet window
     * @param $link string. URL of a page to link to from the dashlet window (link on the title)
@@ -6031,36 +6032,36 @@ function show_notes($linkid, $refid)
     *       main display (and refreshing) and to edit settings.
     * @returns string HTML
 */
-function dashlet($dashboard, $row, $dashboardid, $icon, $title='', $link='', $content='')
+function dashlet($dashboard, $dashletid, $icon, $title='', $link='', $content='')
 {
     if (empty($icon)) $icon = icon('dashboard', 16);
     if (empty($title)) $title = $GLOBALS['strUntitled'];
     $displayfn = "dashboard_{$dashboard}_display";
     $editfn = "dashboard_{$dashboard}_edit";
 
-    $html .= "<div class='windowbox' id='{$row}-{$dashboardid}'>";
+    $html .= "<div class='windowbox' id='{$dashletid}'>";
     $html .= "<div class='windowtitle'>";
     $html .= "<div>";
     if (function_exists($displayfn))
     {
-        $html .= "<a href=\"javascript:get_and_display('ajaxdata.php?action=dashboard_display&amp;dashboard={$dashboard}','win{$row}-{$dashboardid}', false);\">";
+        $html .= "<a href=\"javascript:get_and_display('ajaxdata.php?action=dashboard_display&amp;dashboard={$dashboard}&amp;did={$dashletid}','win{$dashletid}', false);\">";
         $html .= icon('reload', 16)."</a>";
     }
     if (function_exists($editfn))
     {
-        $html .= "<a href=\"javascript:get_and_display('ajaxdata.php?action=dashboard_edit&amp;dashboard={$dashboard}','win{$row}-{$dashboardid}', false);\">";
+        $html .= "<a href=\"javascript:get_and_display('ajaxdata.php?action=dashboard_edit&amp;dashboard={$dashboard}&amp;did={$dashletid}','win{$dashletid}', false);\">";
         $html .= icon('edit', 16)."</a>";
     }
     $html .= "</div>";
     if (!empty($link)) $html .= "<a href=\"{$link}\">{$icon}</a> <a href=\"{$link}\">{$title}</a>";
     else $html .= "{$icon} {$title}";
     $html .= "</div>\n";
-    $html .= "<div class='window' id='win{$row}-{$dashboardid}'>\n";
+    $html .= "<div class='window' id='win{$dashletid}'>\n";
     $html .= $content;
     $displayfn = "dashboard_{$dashboard}_display";
     if (function_exists($displayfn))
     {
-         $html .= "<script type='text/javascript'>\n//<![CDATA[\nget_and_display('ajaxdata.php?action=dashboard_display&dashboard={$dashboard}','win{$row}-{$dashboardid}', false);\n//]]>\n</script>\n";
+         $html .= "<script type='text/javascript'>\n//<![CDATA[\nget_and_display('ajaxdata.php?action=dashboard_display&dashboard={$dashboard}','win{$dashletid}', false);\n//]]>\n</script>\n";
     }
     $html .= "</div></div>";
 
@@ -6071,10 +6072,11 @@ function dashlet($dashboard, $row, $dashboardid, $icon, $title='', $link='', $co
 function dashboard_do($context, $row=0, $dashboardid=0)
 {
     global $DASHBOARDCOMP;
+    $dashletid = "{$row}-{$dashboardid}";
     $action = $DASHBOARDCOMP[$context];
     if ($action != NULL || $action != "")
     {
-        if (function_exists($action)) $action($row,$dashboardid);
+        if (function_exists($action)) $action($dashletid);
     }
 }
 

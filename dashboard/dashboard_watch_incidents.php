@@ -11,12 +11,12 @@
 
 $dashboard_watch_incidents_version = 1;
 
-function dashboard_watch_incidents($row, $dashboardid)
+function dashboard_watch_incidents($dashletid)
 {
     global $sit, $CONFIG, $iconset;
 
     $content = "<p align='center'><img src='{$CONFIG['application_webpath']}images/ajax-loader.gif' alt='Loading icon' /></p>";
-    echo dashlet('watch_incidents', $row, $dashboardid, icon('support', 16), $GLOBALS['strWatchIncidents'], '', $content);
+    echo dashlet('watch_incidents', $dashletid, icon('support', 16), $GLOBALS['strWatchIncidents'], '', $content);
 
 /*    echo "<div class='windowbox' id='$row-$dashboardid'>";
 
@@ -60,7 +60,7 @@ function dashboard_watch_incidents_install()
 }
 
 
-function dashboard_watch_incidents_display()
+function dashboard_watch_incidents_display($dashletid)
 {
     global $CONFIG, $sit;
 
@@ -271,7 +271,7 @@ function dashboard_watch_incidents_display()
 }
 
 
-function dashboard_watch_incidents_edit()
+function dashboard_watch_incidents_edit($dashletid)
 {
     global $CONFIG, $sit;
     $editaction = $_REQUEST['editaction'];
@@ -307,7 +307,7 @@ function dashboard_watch_incidents_edit()
 
             echo "</td><tr>";
             echo "</table>";
-            echo "<p align='center'><a href=\"javascript:ajax_save('ajaxdata.php?action=dashboard_edit&dashboard=watch_incidents&editaction=do_add&type={$type}', 'dwiaddform');\">{$GLOBALS['strAdd']}</a></p>";
+            echo "<p align='center'><a href=\"javascript:ajax_save('ajaxdata.php?action=dashboard_edit&dashboard=watch_incidents&did={$dashletid}&editaction=do_add&type={$type}', 'dwiaddform');\">{$GLOBALS['strAdd']}</a></p>";
             // echo "<p align='center'><input name='submit' type='submit' value='{$GLOBALS['strAdd']}' /></p>";
             break;
 
@@ -367,7 +367,7 @@ function dashboard_watch_incidents_edit()
                         break;
                 }
                 echo "</strong></td><td align='right'>";
-                echo "<a href=\"javascript:get_and_display('ajaxdata.php?action=dashboard_edit&dashboard=watch_incidents&editaction=add&type={$i}', '', false);\">";
+                echo "<a href=\"javascript:get_and_display('ajaxdata.php?action=dashboard_edit&dashboard=watch_incidents&did={$dashletid}&editaction=add&type={$i}', '{$dashletid}', false);\">";
 
                 //'ajaxdata.php?action=dashboard_edit&amp;dashboard=watch_incidents&amp;type={$i}&amp;editaction=add'>";
                 switch ($i)

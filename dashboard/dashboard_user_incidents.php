@@ -10,7 +10,7 @@
 
 $dashboard_user_incidents_version = 1;
 
-function dashboard_user_incidents($row,$dashboardid)
+function dashboard_user_incidents($dashletid)
 {
     global $user;
     global $sit;

@@ -10,7 +10,7 @@
 
 $dashboard_tags_version = 1;
 
-function dashboard_tags($row,$dashboardid)
+function dashboard_tags($dashletid)
 {
     global $CONFIG, $iconset;
     echo "<div class='windowbox' id='$row-$dashboardid'>";
