@@ -34,7 +34,7 @@ function dashboard_incoming($dashletid)
         printf($GLOBALS['strHeldEmailsNum'], mysql_num_rows($result));
         echo "</a></div>";        
     
-    if (user_permission($sit[2], 142))
+    if (user_permission($sit[2], 42))
     {
         echo "<div class='window'>";
     
