@@ -306,7 +306,7 @@ if (!empty($q))
             echo "{$strPrevious}";
         }
         echo " | ";
-        if($end != $numtotal)
+        if ($end < $results)
         {
             echo " <a href='{$_SERVER['PHP_SELF']}?domain=sites&q={$q}&start=";
             echo $begin+$resultsperpage."&amp;sort={$sort}&amp;order={$order}&amp;view={$view}'>{$strNext} ";
