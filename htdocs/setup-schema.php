@@ -1240,6 +1240,7 @@ INSERT INTO `{$dbTriggers}` (`triggerid`, `userid`, `action`, `template`, `param
 INSERT INTO `{$dbTriggers}` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_INCIDENT_CLOSED', 1, 'ACTION_NOTICE', 'NOTICE_INCIDENT_CLOSED', '', '{userid} != 1');
 INSERT INTO `{$dbTriggers}` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_INCIDENT_NEARING_SLA', 1, 'ACTION_NOTICE', 'NOTICE_INCIDENT_NEARING_SLA', '', '{ownerid} == 1 OR {townerid} == 1');
 INSERT INTO `{$dbTriggers}` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_LANGUAGE_DIFFERS', 1, 'ACTION_NOTICE', 'NOTICE_LANGUAGE_DIFFERS', '', '');
+INSERT INTO `{$dbTriggers}` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_NEW_CONTACT', 0, 'ACTION_EMAIL', 'EMAIL_NEW_CONTACT_DETAILS', '', '');
 
 CREATE TABLE `{$dbUpdates}` (
   `id` int(11) NOT NULL auto_increment,
@@ -2118,6 +2119,7 @@ $upgrade_schema[335]["t200805211616"] = "INSERT INTO `{$dbTriggers}` (`triggerid
 $upgrade_schema[335]["t200805211617"] = "INSERT INTO `{$dbTriggers}` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_INCIDENT_CLOSED', 1, 'ACTION_NOTICE', 'NOTICE_INCIDENT_CLOSED', '', '{userid} != 1');";
 $upgrade_schema[335]["t200805211618"] = "INSERT INTO `{$dbTriggers}` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_INCIDENT_NEARING_SLA', 1, 'ACTION_NOTICE', 'NOTICE_INCIDENT_NEARING_SLA', '', '{ownerid} == 1 OR {townerid} == 1');";
 $upgrade_schema[335]["t200805211619"] = "INSERT INTO `{$dbTriggers}` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_LANGUAGE_DIFFERS', 1, 'ACTION_NOTICE', 'NOTICE_LANGUAGE_DIFFERS', '', '');";
+$upgrade_schema[335]["t200805211620"] = "INSERT INTO `{$dbTriggers}` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_NEW_CONTACT', 0, 'ACTION_EMAIL', 'EMAIL_NEW_CONTACT_DETAILS', '', '');";
 
 $upgrade_schema[335]["t200805221122"] = "-- INL 22May08
 INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (1, 72, 'true');
