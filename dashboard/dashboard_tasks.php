@@ -78,7 +78,7 @@ function dashboard_tasks($dashletid)
         $content .= "<p class='warning'>{$GLOBALS['strDisabled']}</p>";
     }
 
-    echo dashlet('tasks', $row, $dashboardid, icon('task', 16), sprintf($GLOBALS['strUsersTasks'], user_realname($user,TRUE)), 'tasks.php', $content);
+    echo dashlet('tasks', $dashletid, icon('task', 16), sprintf($GLOBALS['strUsersTasks'], user_realname($user,TRUE)), 'tasks.php', $content);
 }
 
 ?>
