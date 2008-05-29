@@ -266,7 +266,7 @@ else
     echo "<div id='answersection' style='display: none;'>";
     echo bbcode_toolbar('answer');
     echo "<textarea id='answer' name='answer' cols='100' rows='8' ";
-    echo "style='display: none' onchange='kbSectionCollapse();'>{$sections['Answer']}";
+    echo "onchange='kbSectionCollapse();'>{$sections['Answer']}";
     echo "</textarea>";
     echo "</div>";
 
