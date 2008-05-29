@@ -943,58 +943,6 @@ function contact_vcard($id)
     return $vcard;
 }
 
-
-function emailtype_to($id)
-{
-    return db_read_column('tofield', $GLOBALS['dbEmailTemplates'], $id);
-}
-
-
-function emailtype_from($id)
-{
-    return db_read_column('fromfield', $GLOBALS['dbEmailTemplates'], $id);
-}
-
-
-function emailtype_replyto($id)
-{
-    return db_read_column('replytofield', $GLOBALS['dbEmailTemplates'], $id);
-}
-
-
-function emailtype_cc($id)
-{
-return db_read_column('ccfield', $GLOBALS['dbEmailTemplates'], $id);
-}
-
-
-function emailtype_bcc($id)
-{
-    return db_read_column('bccfield', $GLOBALS['dbEmailTemplates'], $id);
-}
-
-
-function emailtype_subject($id)
-{
-    return db_read_column('subjectfield', $GLOBALS['dbEmailTemplates'], $id);
-}
-
-
-function emailtype_body($id)
-{
-    return db_read_column('body', $GLOBALS['dbEmailTemplates'], $id);
-}
-
-function emailtype_customervisibility($id)
-{
-    return db_read_column('customervisibility', $GLOBALS['dbEmailTemplates'], $id);
-}
-
-function emailtype_storeinlog($id)
-{
-    return db_read_column('storeinlog', $GLOBALS['dbEmailTemplates'], $id);
-}
-
 function incident_owner($id)
 {
     return db_read_column('owner', $GLOBALS['dbIncidents'], $id);
@@ -8653,7 +8601,7 @@ function show_add_contact($mode = 'internal')
     if ($mode == 'internal')
     {
         $html .= "<tr><th>{$GLOBALS['strSite']}</th><td>";
-        $html .= site_drop_down('siteid',$siteid, TRUE)."</td></tr>\n";
+        $html .= site_drop_down('siteid',$siteid, TRUE)."<span class='required'>{$GLOBALS['strRequired']}</span></td></tr>\n";
     }
     else
     {
@@ -9037,14 +8985,17 @@ function setup_user_triggers($userid)
     if ($userid != 0)
     {
         $sqls[] = "INSERT INTO `{$GLOBALS['dbTriggers']}` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`)
-                VALUES('TRIGGER_INCIDENT_ASSIGNED', {$userid}, 'ACTION_NOTICE', 2, '', '{userid} == {currentuserid}');";
+                VALUES('TRIGGER_INCIDENT_ASSIGNED', {$userid}, 'ACTION_NOTICE', 'NOTICE_INCIDENT_ASSIGNED', '', '{userid} == {$userid}');";
         $sqls[] = "INSERT INTO `{$GLOBALS['dbTriggers']}` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`)
-                VALUES('TRIGGER_SIT_UPGRADED', {$userid}, 'ACTION_NOTICE', 10, '', '');";
+                VALUES('TRIGGER_SIT_UPGRADED', {$userid}, 'ACTION_NOTICE', 'NOTICE_SIT_UPGRADED', '', '');";
         $sqls[] = "INSERT INTO `{$GLOBALS['dbTriggers']}` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`)
-                VALUES('TRIGGER_INCIDENT_CLOSED', {$userid}, 'ACTION_NOTICE', 13, '', '{userid} != {currentuserid}');";
+                VALUES('TRIGGER_INCIDENT_CLOSED', {$userid}, 'ACTION_NOTICE', 'NOTICE_INCIDENT_CLOSED', '', '{userid} != {$userid}');";
         $sqls[] = "INSERT INTO `{$GLOBALS['dbTriggers']}` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`)
-                VALUES('TRIGGER_INCIDENT_NEARING_SLA', {$userid}, 'ACTION_NOTICE', 3, '',
-                '{ownerid} == {$userid} OR {townerid} == {$userid}');";
+                VALUES('TRIGGER_INCIDENT_NEARING_SLA', {$userid}, 'ACTION_NOTICE', 'NOTICE_INCIDENT_NEARING_SLA', '',
+                '{ownerid} == {$userid} OR {townerid} == {$userid}');";                
+        $sqls[] = "INSERT INTO `{$GLOBALS['dbTriggers']}` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`)
+                VALUES('TRIGGER_LANGUAGE_DIFFERS', {$userid}, 'ACTION_NOTICE', 'NOTICE_LANGUAGE_DIFFERS', '', '');";
+
 
         foreach ($sqls AS $sql)
         {
