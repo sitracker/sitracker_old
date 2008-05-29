@@ -470,7 +470,7 @@ function email_templates($name, $triggertype='system', $selected = '')
         //$name = strpos()
         //$name = str_replace("_", " ", $name);
         $name = strtolower($name);
-        $html .= "<option value='{$template->id}' title=\"{$template->description}\">{$name}</option>\n";
+        $html .= "<option value='{$template->id}' title=\"{$template->description}\">{$template->name}</option>\n";
     }
     $html .= "</select>\n";
     return $html;
