@@ -5,6 +5,9 @@ h1 {
   font-size: 16pt; font-weight: bold; color: #FFF;
   background-color: #203894; margin: 0px; padding: 3px 0px 3px 0px;
 }
+
+select { background: white; }
+
 #masthead {
   background-image: url('../images/top2.png');
   background-position: top-left; background-repeat: x-repeat;
@@ -292,7 +295,7 @@ div#kbarticle
     padding: 5px;
     width: 55%;
     margin: 30px auto;
-    background-color: white;
+    background-color: #FBFBFB;
 }
 
 div#container
