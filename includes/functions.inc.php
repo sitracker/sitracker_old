@@ -3592,6 +3592,8 @@ function send_template_email($template, $incidentid, $info1='', $info2='')
     * @param $replyto string. (optional) Address to send reply to
     * @param $cc string. (optional) Carbon copy address
     * @param $bcc string. (optional) Blind carbon copy address
+    * @returns The return value from PHP mail() function or TRUE when in Demo mode
+    * @note Returns TRUE but does not actually send mail when SiT is in Demo mode
 */
 function send_email($to, $from, $subject, $body, $replyto='', $cc='', $bcc='')
 {
