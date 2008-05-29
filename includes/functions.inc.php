@@ -6018,6 +6018,16 @@ function show_notes($linkid, $refid)
 /**
     * Produces a HTML dashlet 'window' for display on the dashboard
     * @author Ivan Lucas
+    * @param $dashboard string. Dashboard component name.
+    * @param $row integer. The table row ID of that we are 'drawing' this dashlet into
+    * @param $dashboardid integer. The ID of the dashboard component instance as recorded in the users settings
+    * @param $icon string. HTML for an icon to be displayed on the dashlet window
+    * @param $title string. A title for the dashlet, also displayed on the dashlet window
+    * @param $link string. URL of a page to link to from the dashlet window (link on the title)
+    * @param $content string. HTML content to display inside the dashlet window
+    * @note This function looks for the existence of two dashboard component functions
+    *       dashboard_*_display() and dashboard_*_edit(), if these are found the dashlet will
+    *       Use ajax and call these functions for it's main display (and refreshing) and to edit settings.
     * @returns string HTML
 */
 function dashlet($dashboard, $row, $dashboardid, $icon, $title='', $link='', $content='')
