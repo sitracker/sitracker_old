@@ -6026,8 +6026,9 @@ function show_notes($linkid, $refid)
     * @param $link string. URL of a page to link to from the dashlet window (link on the title)
     * @param $content string. HTML content to display inside the dashlet window
     * @note This function looks for the existence of two dashboard component functions
-    *       dashboard_*_display() and dashboard_*_edit(), if these are found the dashlet will
-    *       Use ajax and call these functions for it's main display (and refreshing) and to edit settings.
+    *       dashboard_*_display() and dashboard_*_edit(), (where * is the name of the dashlet)
+    *       if these are found the dashlet will use ajax and call these functions for it's
+    *       main display (and refreshing) and to edit settings.
     * @returns string HTML
 */
 function dashlet($dashboard, $row, $dashboardid, $icon, $title='', $link='', $content='')
