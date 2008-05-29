@@ -373,7 +373,7 @@ function send_trigger_email($userid, $triggerid, $template, $paramarray)
         $incidentid = $paramarray['incidentid'];
     }
 
-    $sql = "SELECT * FROM `{$dbEmailTemplates}` WHERE id='{$template}'";
+    $sql = "SELECT * FROM `{$dbEmailTemplates}` WHERE name='{$template}'";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
     if ($result)
@@ -419,7 +419,7 @@ function create_trigger_notice($userid, $noticetext='', $triggertype='',
     if (!empty($template))
     {
         //this is a trigger notice, get notice template
-        $sql = "SELECT * FROM `{$dbNoticeTemplates}` WHERE id='{$template}'";
+        $sql = "SELECT * FROM `{$dbNoticeTemplates}` WHERE name='{$template}'";
         $query = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
         if ($query)
