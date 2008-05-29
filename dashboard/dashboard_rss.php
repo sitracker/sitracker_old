@@ -183,14 +183,14 @@ function dashboard_rss_edit($dashletid)
                 }
 
                 echo "<h2>".icon('feed-icon', 32)." {$GLOBALS['strEditRSSAtomFeed']}</h2>";
-                echo "<form action='{$_SERVER['PHP_SELF']}?action=do_edit' method='post'>";
+                echo "<form id='dashrsseditform' action='{$_SERVER['PHP_SELF']}?action=do_edit' method='post'>";
                 echo "<table class='vertical'>";
                 echo "<tr><td><label><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/12x12/feed-icon.png' alt='Feed Icon' /> ";
                 echo "{$GLOBALS['strRSSAtomURL']}: <input type='text' name='url' size='45' value='{$feed->url}' /></label></td></tr>\n";
                 echo "<tr><td><label>{$GLOBALS['strDisplay']}: <input type='text' name='items' size='3' value='{$feed->items}' /></label> ({$GLOBALS['str0MeansUnlimited']})</td></tr>";
                 echo "</table>";
                 echo "<input type='hidden' name='oldurl' size='45' value='{$feed->url}' />";
-                echo "<p align='center'><input name='submit' type='submit' value='{$GLOBALS['strSave']}' /></p>";
+                echo "<p align='center'>".dashlet_link('rss', $dashletid, $GLOBALS['strSave'], 'save', array('editaction'=>'do_edit'), false, 'dashrsseditform')."</p>";
                 echo "</form>";
             }
             else
