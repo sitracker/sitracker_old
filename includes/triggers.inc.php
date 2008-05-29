@@ -69,7 +69,7 @@ function trigger($triggerid, $paramarray='')
             {
                 $userid = $paramarray[$key];
             }
-            //TODO do we need to check for any 'special' keys here?
+            // TODO do we need to check for any 'special' keys here?
         }
     }
 
@@ -90,7 +90,7 @@ function trigger($triggerid, $paramarray='')
             {
                 $checks = trigger_replace_specials($triggerid, $triggerobj->checks, $paramarray);
                 eval("return \$value = $checks;");
-                if($value === FALSE)
+                if ($value === FALSE)
                 {
                     return;
                 }
@@ -132,6 +132,7 @@ function trigger($triggerid, $paramarray='')
     * @param $action string. The type of action to perform
     * @param $paramarray array. The array of extra parameters to apply to the
     * trigger
+    * @param $template
     * @return boolean. TRUE if the user has the permission, otherwise FALSE
 */
 function trigger_action($userid, $triggerid, $action, $paramarray, $template)

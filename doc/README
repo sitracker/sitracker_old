@@ -202,6 +202,7 @@ statistics_table_overview   Add to the statistics table
 about                       Add to the about page
 user_created                Perform an action after a user has been
                              created
+trigger_actions             Add a trigger action
 
 If your plugin needs to use additional pages, put those pages in a
 subdirectory (named for your plugin) inside htdocs/ext

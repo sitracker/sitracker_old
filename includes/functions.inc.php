@@ -122,13 +122,9 @@ $todayrecent = $now-(16*3600);  // past 16 hours
 
 $CONFIG['upload_max_filesize'] = return_bytes($CONFIG['upload_max_filesize']);
 
-
-
 // Set a string to be the full version number and revision of the application
 $application_version_string = trim("v{$application_version} {$application_revision}");
 
-// Email template settings
-$template_openincident_email = 12;
 
 //Prevent Magic Quotes from affecting scripts, regardless of server settings
 //Make sure when reading file data,
@@ -1483,8 +1479,9 @@ function vendor_drop_down($name, $id)
         }
         $html .= " value='{$row['id']}'>{$row['name']}</option>\n";
     }
-$html .= "</select>";
-return $html;
+    $html .= "</select>";
+
+    return $html;
 }
 
 
@@ -1867,7 +1864,6 @@ function incidentstatus_drop_down_all($name, $id)
 }
 
 
-
 /**
     * Return HTML for a select box of closing statuses
     * @author Ivan Lucas
@@ -1951,7 +1947,6 @@ function userstatus_drop_down($name, $id, $userdisable=FALSE)
     * @author Ivan Lucas
     * @param $name string. Name attribute
     * @param $id integer. ID of User Status to pre-select. None selected if 0 or blank.
-* @todo move inline styles to main css file
     * @returns string. HTML
 */
 function userstatus_bardrop_down($name, $id)
@@ -2185,14 +2180,6 @@ function escalation_path_drop_down($name, $id)
 }
 
 
-
-/*============================================================*/
-/*                                                            */
-/*                      OTHER FUNCTIONS                       */
-/*                                                            */
-/*============================================================*/
-
-
 /* Returns a string representing the name of   */
 /* the given priority. Returns an empty string if the         */
 /* priority does not exist.                                   */
@@ -2209,6 +2196,7 @@ function priority_name($id)
 }
 return $value;
 }
+
 
 // Returns HTML for an icon to indicate priority
 function priority_icon($id)
@@ -2707,47 +2695,13 @@ function format_date_friendly($date)
     return ($datestring);
 }
 
-
-/**
-    * Generate HTML for a redirect/confirmation page
-    * @author Ivan Lucas
-    * @deprecated
-    * @param $refreshtime integer. Number of seconds before redirection
-    * @param $location string. URL to redirect to
-    * @param $message string. HTML message to display on the page before redirection
-    * @returns string. Complete HTML page
-    * @note DEPRECATED replaced by html_redirect(). Delete after v3.40, keep until then in case plugins depend on it
-    * @note Uses HTML meta-tag redirection
-*/
-function confirmation_page($refreshtime, $location, $message)
-{
-global $sit, $CONFIG;
-?>
-<html>
-<head>
-
-<?php
-echo "<title>{$CONFIG['application_shortname']} Confirmation Page</title>";
-echo "<meta http-equiv=\"refresh\" content=\"$refreshtime; url=$location\" />\n";
-$style = interface_style($_SESSION['style']);
-echo "<link rel='stylesheet' href='{$CONFIG['application_webpath']}styles/webtrack.css' />\n";
-?>
-</head>
-<body>
-<?php echo "$message\n" ?>
-</body>
-</html>
-<?php
-}
-
-
 /**
     * Generate HTML for a redirect/confirmation page
     * @author Ivan Lucas
     * @param $url string. URL to redirect to
     * @param $success boolean. TRUE = Success, FALSE = Failure
     * @param $message string. HTML message to display on the page before redirection
-    * @note Replaces confirmation_page()
+    * @note Replaces confirmation_page() from versions prior to 3.35
     * @note If a header HTML has already been displayed a continue link is printed
     * @note a meta redirect will also be inserted, which is invalid HTML but appears
     * @note to work in most browswers.
@@ -2826,9 +2780,9 @@ function html_redirect($url, $success=TRUE, $message='')
 /* the current time.                                          */
 function calculate_time_of_next_action($days, $hours, $minutes)
 {
-$now = time();
-$return_value = $now + ($days * 86400) + ($hours * 3600) + ($minutes * 60);
-return($return_value);
+    $now = time();
+    $return_value = $now + ($days * 86400) + ($hours * 3600) + ($minutes * 60);
+    return($return_value);
 }
 
 
@@ -3185,10 +3139,6 @@ function throw_user_error($message, $details='')
 }
 
 
-
-/*              SITE FUNCTIONS                                */
-
-
 /*  prints the HTML for a drop down list of     */
 /* sites, with the given name and with the given id selected. */
 function site_drop_down($name, $id, $required = FALSE)
@@ -3250,6 +3200,7 @@ function site_name($id)
 
     return($sitename);
 }
+
 
 //  prints the HTML for a drop down list of
 // maintenance contracts, with the given name and with the
@@ -3323,9 +3274,11 @@ function reseller_drop_down($name, $id)
     echo "</select>";
 }
 
+
 /**
 *
 * @deprecated  - PH
+* @note DEPRECATED for 3.35, remove after 3.40
 */
 function reseller_name($id)
 {
