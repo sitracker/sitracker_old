@@ -85,7 +85,8 @@ array('name' => 'Current Language Differs',
 $triggerarray['TRIGGER_NEW_CONTACT'] =
 array('name' => 'New contact added',
       'description' => $strTriggerNewContact,
-      'required' => array('contactid', 'prepassword'),
+      'required' => array('contactid', 'prepassword', 'userid'),
+      'params' => array('siteid')
       );
 
 $triggerarray['TRIGGER_NEW_CONTRACT'] =
@@ -243,6 +244,12 @@ $ttvararray['{contactphone}'] =
 array('description' => 'Contact phone number',
       'requires' => 'contactid',
       'replacement' => 'contact_site($paramarray[\'contactid\']);'
+      );
+
+$ttvararray['{contactusername}'] =
+array('description' => 'The portal username of a contact',
+      'requires' => 'contactid',
+      'replacement' => 'contact_username($paramarray[\'contactid\']);'
       );
 
 $ttvararray['{contractid}'] =
