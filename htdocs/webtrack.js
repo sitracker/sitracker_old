@@ -128,7 +128,7 @@ function ajax_save(page, component)
     new Ajax.Request(page, {
     parameters: $(component).serialize(true)
     });
-    alert(component);
+    $(component).innerHTML = 'Saved';
 }
 
 

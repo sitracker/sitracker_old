@@ -21,6 +21,20 @@ require('functions.inc.php');
 
 $action = $_REQUEST['action'];
 
+if ($_SESSION['auth'] == TRUE)
+{
+    $styleid = $_SESSION['style'];
+}
+else
+{
+    $styleid = $CONFIG['default_interface_style'];
+}
+$iconsql = "SELECT iconset FROM `{$GLOBALS['dbInterfaceStyles']}` WHERE id='{$styleid}'";
+$iconresult = mysql_query($iconsql);
+if (mysql_error())trigger_error(mysql_error(),E_USER_WARNING);
+
+list($iconset) = mysql_fetch_row($iconresult);
+
 switch($action)
 {
     case 'servicelevel_timed':
@@ -79,8 +93,10 @@ switch($action)
         echo $dashfn($dashletid);
     break;
 
+    case 'dashboard_save':
     case 'dashboard_edit':
         require('auth.inc.php');
+
         $dashboard = cleanvar($_REQUEST['dashboard']);
         $dashletid = 'win'.cleanvar($_REQUEST['did']);
         // FIXME need some sanitation here

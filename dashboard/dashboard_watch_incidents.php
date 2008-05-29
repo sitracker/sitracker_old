@@ -141,7 +141,7 @@ function dashboard_watch_incidents_display($dashletid)
                     break;
                 case '1': //contact
                     $sql = "SELECT i.id, i.title, i.status, i.servicelevel, i.maintenanceid, i.priority, c.forenames, c.surname, c.siteid ";
-                    $sql .= "FROM `{$GLOBALS['dbIncidents']}` AS i, `{$dbContacts}`  AS c ";
+                    $sql .= "FROM `{$GLOBALS['dbIncidents']}` AS i, `{$GLOBALS['dbContacts']}`  AS c ";
                     $sql .= "WHERE i.contact = c.id AND i.contact = {$obj->id} ";
                     $sql .= "AND i.status != 2 AND i.status != 7 ";
 
@@ -307,7 +307,10 @@ function dashboard_watch_incidents_edit($dashletid)
 
             echo "</td><tr>";
             echo "</table>";
-            echo "<p align='center'><a href=\"javascript:ajax_save('ajaxdata.php?action=dashboard_edit&dashboard=watch_incidents&did={$dashletid}&editaction=do_add&type={$type}', 'dwiaddform');\">{$GLOBALS['strAdd']}</a></p>";
+            echo "<p align='center'>";
+            //echo "<a href=\"javascript:ajax_save('ajaxdata.php?action=dashboard_edit&dashboard=watch_incidents&did={$dashletid}&editaction=do_add&type={$type}', 'dwiaddform');\">{$GLOBALS['strAdd']}</a>";
+            echo dashlet_link('watch_incidents', $dashletid, $GLOBALS['strAdd'], 'save', array('editaction' => 'do_add', 'type'=>$type), false, 'dwiaddform');
+            echo "</p>";
             // echo "<p align='center'><input name='submit' type='submit' value='{$GLOBALS['strAdd']}' /></p>";
             break;
 
@@ -320,11 +323,11 @@ function dashboard_watch_incidents_edit($dashletid)
 
             if (!$result)
             {
-                echo "<p class='error'>{$strWatchAddFailed}</p>";
+                echo "<p class='error'>{$GLOBALS['strWatchAddFailed']}</p>";
             }
             else
             {
-                html_redirect("edit_watch_incidents.php", TRUE, $strAddedSuccessfully);
+                html_redirect("edit_watch_incidents.php", TRUE, $GLOBALS['strAddedSuccessfully']);
             }
             break;
         case 'delete':
@@ -336,11 +339,11 @@ function dashboard_watch_incidents_edit($dashletid)
 
             if (!$result)
             {
-                echo "<p class='error'>{$strWatchDeleteFailed}</p>";
+                echo "<p class='error'>{$GLOBALS['strWatchDeleteFailed']}</p>";
             }
             else
             {
-                html_redirect("edit_watch_incidents.php", TRUE, $strRemovedSuccessful);
+                html_redirect("edit_watch_incidents.php", TRUE, $GLOBALS['strRemovedSuccessful']);
             }
             break;
         default:
@@ -367,21 +370,21 @@ function dashboard_watch_incidents_edit($dashletid)
                         break;
                 }
                 echo "</strong></td><td align='right'>";
-                echo "<a href=\"javascript:get_and_display('ajaxdata.php?action=dashboard_edit&dashboard=watch_incidents&did={$dashletid}&editaction=add&type={$i}', '{$dashletid}', false);\">";
-
+                //echo "<a href=\"javascript:get_and_display('ajaxdata.php?action=dashboard_edit&dashboard=watch_incidents&did={$dashletid}&editaction=add&type={$i}', '{$dashletid}', false);\">";
                 //'ajaxdata.php?action=dashboard_edit&amp;dashboard=watch_incidents&amp;type={$i}&amp;editaction=add'>";
                 switch ($i)
                 {
-                    case 0: echo $GLOBALS['strAddSite'];
+                    case 0: $linktext = $GLOBALS['strAddSite'];
                         break;
-                    case 1: echo $GLOBALS['strAddContact'];
+                    case 1: $linktext = $GLOBALS['strAddContact'];
                         break;
-                    case 2: echo $GLOBALS['strAddUser'];
+                    case 2: $linktext = $GLOBALS['strAddUser'];
                         break;
-                    case 3: echo $GLOBALS['strAddIncident'];
+                    case 3: $linktext = $GLOBALS['strAddIncident'];
                         break;
                 }
-                echo "</a></td></tr>";
+                echo dashlet_link('watch_incidents', $dashletid, $linktext, 'edit', array('editaction' => 'add', 'type' => $i));
+                echo "</td></tr>";
 
                 if (mysql_num_rows($result) > 0)
                 {
@@ -421,7 +424,7 @@ function dashboard_watch_incidents_edit($dashletid)
                                 break;
                         }
 
-                        echo "<tr class='$shade'><td>{$name}</td><td><a href='{$_SERVER['PHP_SELF']}?type={$obj->type}&amp;id={$obj->id}&amp;action=delete'>{$strRemove}</a></td></tr>";
+                        echo "<tr class='$shade'><td>{$name}</td><td><a href='{$_SERVER['PHP_SELF']}?type={$obj->type}&amp;id={$obj->id}&amp;action=delete'>{$GLOBALS['strRemove']}</a></td></tr>";
                         if ($shade == 'shade1') $shade = 'shade2';
                         else $shade = 'shade1';
                     }

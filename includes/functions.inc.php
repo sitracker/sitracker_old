@@ -6017,6 +6017,48 @@ function dashlet($dashboard, $dashletid, $icon, $title='', $link='', $content=''
 }
 
 
+function dashlet_link($dashboard, $dashletid, $text='', $action='', $params='', $refresh=FALSE, $formid='')
+{
+    if ($action == 'edit') $action = 'dashboard_edit';
+    elseif ($action == 'save') $action = 'dashboard_save';
+    else $action = 'dashboard_display';
+    if (empty($text)) $text = $GLOBALS['strUntitled'];
+
+    // Convert refresh boolean to javascript text for boolean
+    if ($refresh) $refresh = 'true';
+    else $refresh = 'false';
+
+    if ($action == 'dashboard_save' AND $formid == '') $formid = "{$dashboard}form";
+
+    // TODO save
+
+    if ($action == 'dashboard_save') $html .= "<a href=\"javascript:ajax_save(";
+    else  $html .= "<a href=\"javascript:get_and_display(";
+    $html .= "'ajaxdata.php?action={$action}&dashboard={$dashboard}&did={$dashletid}";
+    if (is_array($params))
+    {
+        foreach ($params AS $pname => $pvalue)
+        {
+            $html .= "&{$pname}={$pvalue}";
+        }
+    }
+    //$html .= "&editaction=do_add&type={$type}";
+
+    if ($action != 'dashboard_save')
+    {
+        $html .= "', '{$dashletid}'";
+        $html .= ", $refresh";
+    }
+    else
+    {
+        $html .= "', '{$formid}'";
+    }
+    $html .= ");\">{$text}</a>";
+
+    return $html;
+}
+
+
 function dashboard_do($context, $row=0, $dashboardid=0)
 {
     global $DASHBOARDCOMP;
@@ -8262,7 +8304,7 @@ function icon($filename, $size='', $alt='', $title='')
 
     if (!file_exists($file))
     {
-        trigger_error("No such image: '$filename.png', size {$size}", E_USER_WARNING);
+        trigger_error("No such image: '$filename.png', ($file) size {$size}", E_USER_WARNING);
     }
     else
     {
@@ -8992,7 +9034,7 @@ function setup_user_triggers($userid)
                 VALUES('TRIGGER_INCIDENT_CLOSED', {$userid}, 'ACTION_NOTICE', 'NOTICE_INCIDENT_CLOSED', '', '{userid} != {$userid}');";
         $sqls[] = "INSERT INTO `{$GLOBALS['dbTriggers']}` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`)
                 VALUES('TRIGGER_INCIDENT_NEARING_SLA', {$userid}, 'ACTION_NOTICE', 'NOTICE_INCIDENT_NEARING_SLA', '',
-                '{ownerid} == {$userid} OR {townerid} == {$userid}');";                
+                '{ownerid} == {$userid} OR {townerid} == {$userid}');";
         $sqls[] = "INSERT INTO `{$GLOBALS['dbTriggers']}` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`)
                 VALUES('TRIGGER_LANGUAGE_DIFFERS', {$userid}, 'ACTION_NOTICE', 'NOTICE_LANGUAGE_DIFFERS', '', '');";
 

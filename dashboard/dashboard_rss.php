@@ -21,7 +21,7 @@ function dashboard_rss($dashletid)
 
 function dashboard_rss_install()
 {
-    $schema = "CREATE TABLE `{$CONFIG['db_tableprefiX']}dashboard_rss` (
+    $schema = "CREATE TABLE `{$CONFIG['db_tableprefix']}dashboard_rss` (
     `owner` tinyint(4) NOT NULL,
   `url` varchar(255) NOT NULL,
   `items` int(5) default NULL,
@@ -57,10 +57,9 @@ function dashboard_rss_display($dashletid)
     Originally from dashboard/dashboard.inc.php
     */
 
-
     require_once('magpierss/rss_fetch.inc');
 
-    $sql = "SELECT url, items FROM `{$dbDashboardRSS}` WHERE owner = {$sit[2]} AND enabled = 'true'";
+    $sql = "SELECT url, items FROM `{$CONFIG['db_tableprefix']}dashboard_rss` WHERE owner = {$sit[2]} AND enabled = 'true'";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
@@ -135,30 +134,31 @@ function dashboard_rss_display($dashletid)
 }
 
 
-function dashboard_rss_edit()
+function dashboard_rss_edit($dashletid)
 {
     global $CONFIG, $sit;
 
-    $action = $_REQUEST['action'];
+    $action = $_REQUEST['editaction'];
 
     switch ($action)
     {
         case 'add':
             echo "<h2>".icon('feed-icon', 32)." {$GLOBALS['strAddRSSAtomFeed']}</h2>";
-            echo "<form action='{$_SERVER['PHP_SELF']}?action=do_add' method='post'>";
+            echo "<form id='dashrssaddform' action='{$_SERVER['PHP_SELF']}?action=do_add' method='post'>";
             echo "<table class='vertical'>";
             echo "<tr><td><label>".icon('feed-icon', 12, $GLOBALS['strFeedIcon'])." ";
             echo "{$GLOBALS['strRSSAtomURL']}: <input type='text' name='url' size='45' /></label></td></tr>\n";
             echo "<tr><td><label>{$GLOBALS['strDisplay']}: <input type='text' name='items' size='3' value='0' /></label> ({$GLOBALS['str0MeansUnlimited']})</td></tr>";
             echo "</table>";
-            echo "<p align='center'><input name='submit' type='submit' value='{$GLOBALS['strAdd']}' /></p>";
+            // <input name='submit' type='submit' value='{$GLOBALS['strAdd']}' />
+            echo "<p align='center'>".dashlet_link('rss', $dashletid, $GLOBALS['strAdd'], 'save', array('editaction'=>'do_add'), false, 'dashrssaddform')."</p>";
             echo "</form>";
             break;
         case 'do_add':
             $url = cleanvar($_REQUEST['url']);
             $enable = cleanvar($_REQUEST['enable']);
             $items = cleanvar($_REQUEST['items']);
-            $sql = "INSERT INTO `{$dbDashboardRSS}` (owner, url, items, enabled) VALUES ({$sit[2]},'{$url}','{$items}','true')"; //SET enabled = '{$enable}' WHERE url = '{$url}' AND owner = {$sit[2]}";
+            $sql = "INSERT INTO `{$CONFIG['db_tableprefix']}dashboard_rss` (owner, url, items, enabled) VALUES ({$sit[2]},'{$url}','{$items}','true')"; //SET enabled = '{$enable}' WHERE url = '{$url}' AND owner = {$sit[2]}";
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
@@ -170,7 +170,7 @@ function dashboard_rss_edit()
             break;
         case 'edit':
             $url = cleanvar(urldecode($_REQUEST['url']));
-            $sql = "SELECT * FROM `{$dbDashboardRSS}` WHERE owner = {$sit[2]} AND url = '{$url}' LIMIT 1 ";
+            $sql = "SELECT * FROM `{$CONFIG['db_tableprefix']}dashboard_rss` WHERE owner = {$sit[2]} AND url = '{$url}' LIMIT 1 ";
             if ($CONFIG['debug']) $dbg .= print_r($sql,true);
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
@@ -202,7 +202,7 @@ function dashboard_rss_edit()
             $url = cleanvar($_REQUEST['url']);
             $oldurl = cleanvar($_REQUEST['oldurl']);
             $items = cleanvar($_REQUEST['items']);
-            $sql = "UPDATE dashboard_rss SET url = '{$url}', items = '{$items}' WHERE url = '{$oldurl}' AND owner = {$sit[2]}";
+            $sql = "UPDATE `{$CONFIG['db_tableprefix']}dashboard_rss` SET url = '{$url}', items = '{$items}' WHERE url = '{$oldurl}' AND owner = {$sit[2]}";
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
@@ -212,7 +212,7 @@ function dashboard_rss_edit()
         case 'enable':
             $url = urldecode(cleanvar($_REQUEST['url']));
             $enable = cleanvar($_REQUEST['enable']);
-            $sql = "UPDATE `dashboard_rss` SET `enabled` = '{$enable}' WHERE `url` = '{$url}' AND `owner` = {$sit[2]}";
+            $sql = "UPDATE `{$CONFIG['db_tableprefix']}dashboard_rss` SET `enabled` = '{$enable}' WHERE `url` = '{$url}' AND `owner` = {$sit[2]}";
             mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
@@ -229,7 +229,7 @@ function dashboard_rss_edit()
         case 'delete':
             $url = $_REQUEST['url'];
             $enable = $_REQUEST['enable'];
-            $sql = "DELETE FROM `{$dbDashboardRSS}` WHERE url = '{$url}' AND owner = {$sit[2]}";
+            $sql = "DELETE FROM `{$CONFIG['db_tableprefix']}dashboard_rss` WHERE url = '{$url}' AND owner = {$sit[2]}";
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
@@ -239,7 +239,7 @@ function dashboard_rss_edit()
         default:
             echo "<h2>".icon('feed-icon', 32)." {$GLOBALS['strEditRSSAtomFeed']}</h2>";
 
-            $sql = "SELECT * FROM `{$GLOBALS['dbDashboardRSS']}` WHERE owner = {$sit[2]}";
+            $sql = "SELECT * FROM `{$CONFIG['db_tableprefix']}dashboard_rss` WHERE owner = {$sit[2]}";
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
@@ -265,7 +265,9 @@ function dashboard_rss_edit()
                         $shade = 'expired';
                     }
 
-                    echo "<tr class='$shade'><td align='left'><a href=\"".htmlentities($obj->url,ENT_NOQUOTES, $GLOBALS['i18ncharset'])."\"><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/12x12/feed-icon.png' alt='{strFeedIcon}' /></a> <a href=\"{$obj->url}\">{$urlparts['host']}</a></td>";
+                    echo "<tr class='$shade'><td align='left'><a href=\"".htmlentities($obj->url,ENT_NOQUOTES, $GLOBALS['i18ncharset'])."\">";
+                    echo icon('feed-icon', 12, $strFeedIcon);
+                    echo "</a> <a href=\"{$obj->url}\">{$urlparts['host']}</a></td>";
                     echo "<td>";
                     if ($obj->items >= 1)
                     {
@@ -277,10 +279,10 @@ function dashboard_rss_edit()
                     }
 
                     echo "</td>";
-
-                    echo "<td><a href=\"javascript:get_and_display('ajaxdata.php?action=dashboard_edit&dashboard=watch_incidents&editaction=enable&amp;url=".urlencode($obj->url)."&amp;enable={$opposite}','rss_window',false);\">{$obj->enabled}</a></td>";
-                    echo "<td><a href='{$_SERVER['PHP_SELF']}?action=edit&amp;url=".urlencode($obj->url)."'>{$GLOBALS['strEdit']}</a> | ";
-                    echo "<a href='{$_SERVER['PHP_SELF']}?action=delete&amp;url=".urlencode($obj->url)."'>{$GLOBALS['strRemove']}</a></td></tr>\n";
+                    echo "<td>".dashlet_link('rss', $dashletid, $obj->enabled, 'edit', array('editaction'=>'enable', 'enable'=>$opposite))."</td>";
+                    echo "<td>".dashlet_link('rss', $dashletid, $GLOBALS['strEdit'], 'edit', array('editaction'=>'edit', 'url'=>urlencode($obj->url)));
+                    echo " | ".dashlet_link('rss', $dashletid, $GLOBALS['strRemove'], 'edit', array('editaction'=>'delete', 'url'=>urlencode($obj->url)));
+                    echo "</td></tr>\n";
                     if ($shade == 'shade1') $shade = 'shade2';
                     else $shade = 'shade1';
                 }
@@ -291,7 +293,7 @@ function dashboard_rss_edit()
                 echo "<p align='center'>{$GLOBALS['strNoFeedsCurrentlyPresent']}</p>";
             }
 
-            echo "<p align='center'><a href='{$_SERVER['PHP_SELF']}?action=add'>{$strAdd}</a></p>";
+            echo "<p align='center'>".dashlet_link('rss', $dashletid, $GLOBALS['strAdd'], 'edit', array('editaction'=>'add'))."</p>";
             break;
     }
 
@@ -303,7 +305,7 @@ function dashboard_rss_upgrade()
 {
     $upgrade_schema[2] = "
         -- INL 22Nov07
-        ALTER TABLE `{$CONFIG['db_tableprefiX']}dashboard_rss` ADD `items` INT( 5 ) NULL AFTER `url`;
+        ALTER TABLE `{$CONFIG['db_tableprefix']}dashboard_rss` ADD `items` INT( 5 ) NULL AFTER `url`;
     ";
 
     return $upgrade_schema;
