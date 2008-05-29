@@ -436,6 +436,12 @@ array('description' => $strCurrentUsersSignature,
       'replacement' => 'user_signature($_SESSION[\'userid\']);'
       );
 
+$ttvararray['{siteid}'] =
+array('description' => 'Site name',
+      'requires' => 'siteid',
+      'replacement' => '$paramarray[\'siteid\'];'
+      );
+
 $ttvararray['{sitename}'][] =
 array('description' => 'Site name',
       'requires' => 'incidentid',
@@ -525,12 +531,6 @@ array('description' => 'Whether the user is accepting or not',
 $ttvararray['{useremail}'] =
 array('description' => $strCurrentUserEmailAddress,
       'replacement' => 'user_email($paramarray[\'userid\']);'
-      );
-
-$ttvararray['{usergroup}'] =
-array('description' => 'The user\'s group',
-      'replacement' => 'user_group($paramarray[\'userid\']);',
-      'requires' => 'userid'
       );
 
 $ttvararray['{userid}'] =
