@@ -308,7 +308,6 @@ function dashboard_watch_incidents_edit($dashletid)
             echo "</td><tr>";
             echo "</table>";
             echo "<p align='center'>";
-            //echo "<a href=\"javascript:ajax_save('ajaxdata.php?action=dashboard_edit&dashboard=watch_incidents&did={$dashletid}&editaction=do_add&type={$type}', 'dwiaddform');\">{$GLOBALS['strAdd']}</a>";
             echo dashlet_link('watch_incidents', $dashletid, $GLOBALS['strAdd'], 'save', array('editaction' => 'do_add', 'type'=>$type), false, 'dwiaddform');
             echo "</p>";
             // echo "<p align='center'><input name='submit' type='submit' value='{$GLOBALS['strAdd']}' /></p>";
@@ -370,8 +369,6 @@ function dashboard_watch_incidents_edit($dashletid)
                         break;
                 }
                 echo "</strong></td><td align='right'>";
-                //echo "<a href=\"javascript:get_and_display('ajaxdata.php?action=dashboard_edit&dashboard=watch_incidents&did={$dashletid}&editaction=add&type={$i}', '{$dashletid}', false);\">";
-                //'ajaxdata.php?action=dashboard_edit&amp;dashboard=watch_incidents&amp;type={$i}&amp;editaction=add'>";
                 switch ($i)
                 {
                     case 0: $linktext = $GLOBALS['strAddSite'];
@@ -424,7 +421,7 @@ function dashboard_watch_incidents_edit($dashletid)
                                 break;
                         }
 
-                        echo "<tr class='$shade'><td>{$name}</td><td><a href='{$_SERVER['PHP_SELF']}?type={$obj->type}&amp;id={$obj->id}&amp;action=delete'>{$GLOBALS['strRemove']}</a></td></tr>";
+                        echo "<tr class='$shade'><td>{$name}</td><td>".dashlet_link('watch_incidents', $dashletid, $GLOBALS['strRemove'], 'edit', array('editaction' => 'delete', 'id' => $obj->id));
                         if ($shade == 'shade1') $shade = 'shade2';
                         else $shade = 'shade1';
                     }

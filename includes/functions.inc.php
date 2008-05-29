@@ -2757,6 +2757,12 @@ echo "<link rel='stylesheet' href='{$CONFIG['application_webpath']}styles/webtra
 function html_redirect($url, $success=TRUE, $message='')
 {
     global $CONFIG, $headerdisplayed;
+
+    if (!empty($_REQUEST['dashboard']))
+    {
+        $headerdisplayed = TRUE;
+    }
+
     if (empty($message))
     {
         $refreshtime = 1;
@@ -2798,14 +2804,20 @@ function html_redirect($url, $success=TRUE, $message='')
     }
 
     echo "</h3>";
-    echo "<h4>{$GLOBALS['strPleaseWaitRedirect']}</h4>";
-    if ($headerdisplayed)
+    if (empty($_REQUEST['dashboard']))
     {
-        echo "<p align='center'><a href=\"{$url}\">{$GLOBALS['strContinue']}</a></p>";
+        echo "<h4>{$GLOBALS['strPleaseWaitRedirect']}</h4>";
+        if ($headerdisplayed)
+        {
+            echo "<p align='center'><a href=\"{$url}\">{$GLOBALS['strContinue']}</a></p>";
+        }
     }
+    // TODO 3.35 Add a link to refresh the dashlet if this is run inside a dashlet
 
-    include ('htmlfooter.inc.php');
-
+    if (!$headerdisplayed)
+    {
+        include ('htmlfooter.inc.php');
+    }
 }
 
 
