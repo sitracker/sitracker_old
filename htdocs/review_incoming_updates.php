@@ -181,12 +181,10 @@ if (!empty($selected))
     foreach ($selected as $updateid)
     {
         $sql = "DELETE FROM `{$dbUpdates}` WHERE id='$updateid'";
-        echo $sql;
         mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
         $sql = "DELETE FROM `{$dbTempIncoming}` WHERE updateid='$updateid'";
-        echo $sql;
         mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
         $path = $CONFIG['attachment_fspath'].'updates/'.$updateid;
