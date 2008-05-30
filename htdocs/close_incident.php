@@ -382,13 +382,8 @@ else
                 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
             }
 
-            // Make Journal Entry
-            //FIXME add trigger for this
-            journal(CFG_LOGGING_NORMAL, 'Incident Closed',"Incident $id was closed",CFG_JOURNAL_SUPPORT,$id);
-            if (incident_owner($id) != $sit[2])
-            {
-                trigger("TRIGGER_INCIDENT_OWNED_CLOSED_BY_USER", array('incidentid' => id, 'userid' => incident_owner($id), 'closedby' => $sit[2]));
-            }
+            trigger('TRIGGER_INCIDENT_CLOSED', array('incidentid' => id, 'userid' => $sit[2]));
+            
 
 
             if (!$result)
