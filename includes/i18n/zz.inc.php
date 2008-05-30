@@ -148,7 +148,7 @@ $strAvoidDupes = 'strAvoidDupes';
 
 $strBackToList = 'strBackToList';
 $strBackToLoginPage = 'strBackToLoginPage';
-$strBackOnYear = 'strBackOnYear';
+$strBackOneYear = 'strBackOnYear';
 $strBCC = 'strBCC';
 $strBillingCustomerPeriod = 'strBillingCustomerPeriod';
 $strBillingEngineerPeriod = 'strBillingEngineerPeriod';

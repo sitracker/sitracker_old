@@ -721,7 +721,7 @@ function month_select($month, $year)
     $pmonth=$cmonth-5;
     $pyear=$cyear-1;
     $nyear=$cyear+1;
-    $html .= "<a href='{$SERVER['PHP_SELF']}?display=month&amp;month={$month}&amp;year={$pyear}' title='{$strBackOnYear}'>&lt;&lt;</a> ";
+    $html .= "<a href='{$SERVER['PHP_SELF']}?display=month&amp;month={$month}&amp;year={$pyear}' title='{$strBackOneYear}'>&lt;&lt;</a> ";
     for ($c = 1; $c <= 12; $c++)
     {
         if (mktime(0,0,0,$cmonth,1,$cyear)==mktime(0,0,0,date('m'),1,date('Y')))

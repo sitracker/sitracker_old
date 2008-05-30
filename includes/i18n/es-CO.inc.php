@@ -114,7 +114,7 @@ $strAverageIncidentDuration = 'Duración Promedio por Incidente';
 $strAvoidDupes = 'Por favor ayude a evitar duplicados verificando que el registro que está agregando no existe ya';
 
 $strBackToList = 'Volver a la lista';
-$strBackOnYear = 'Volver Un Año';
+$strBackOneYear = 'Volver Un Año';
 $strBCC = 'CCO';
 $strBillingCustomerPeriod = 'Periodo Cliente';
 $strBillingEngineerPeriod = 'Periodo Ingeniero';

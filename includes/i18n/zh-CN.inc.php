@@ -133,7 +133,7 @@ $strAvoidDupes = '请检查你要添加的记录是否已存在，帮助避免�
 
 $strBackToList = '返回列表';
 $strBackToLoginPage = '返回登录页';
-$strBackOnYear = '回退一年';
+$strBackOneYear = '回退一年';
 $strBCC = 'BCC';
 $strBillingCustomerPeriod = '客户循环';
 $strBillingEngineerPeriod = '工程师循环';
