@@ -142,7 +142,7 @@ if ($decoded_email->contenttype=='multipart/mixed' OR
             if (empty($filename)) $filename = "part{$part}";
             $attachment[] = $filename;
             
-            $sql = "INSERT into `{$dbFiles}`('filename', 'size', 'userid', 'filedate', 'createdby') ";
+            $sql = "INSERT into `{$GLOBALS['dbFiles']}` ('filename', 'size', 'userid', 'filedate', 'createdby') ";
             $sql .= "VALUES('{$filename}', '', '0', NOW(), '0')";
             mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
