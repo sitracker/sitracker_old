@@ -148,7 +148,7 @@ if ($decoded_email->contenttype=='multipart/mixed' OR
                 if (!mkdir($fa_dir, 0775)) trigger_error("Failed to create incident attachment directory",E_USER_WARNING);
             }
             $fa_update_dir = $fa_dir . "{$delim}{$now}";
-            if (!file_exists($fa__update_dir))
+            if (!file_exists($fa_update_dir))
             {
                 if (!mkdir($fa_update_dir, 0775)) trigger_error("Failed to create incident update attachment directory",E_USER_WARNING);
             }
