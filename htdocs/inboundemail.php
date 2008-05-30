@@ -142,8 +142,9 @@ if ($decoded_email->contenttype=='multipart/mixed' OR
             if (empty($filename)) $filename = "part{$part}";
             $attachment[] = $filename;
             
-            $sql = "INSERT into `{$GLOBALS['dbFiles']}` ('filename', 'size', 'userid', 'filedate', 'createdby') ";
-            $sql .= "VALUES('{$filename}', '', '0', NOW(), '0')";
+            $sql = "INSERT into `{$GLOBALS['dbFiles']}` ";
+            $sql .= "( `id` ,`category` ,`filename` ,`size` ,`userid` ,`usertype` ,`shortdescription` ,`longdescription` ,`webcategory` ,`path` ,`downloads` ,`filedate` ,`expiry` ,`fileversion` ,`published` ,`createdby` ,`modified` ,`modifiedby` ) ";
+            $sql .= "VALUES('', '', '{$filename}', '0', '0', '', '', '', '', '', '', NOW(), '', '', '', '0', '', '')";
             mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
             $updateid = mysql_insert_id();
