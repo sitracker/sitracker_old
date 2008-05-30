@@ -55,7 +55,7 @@ function deldir($location)
     rmdir($location);
 }
 
-$path=$incident_attachment_fspath.'updates/'.$updateid;
+$path = $CONFIG['attachment_fspath'].'updates/'.$updateid;
 if (file_exists($path)) deldir($path);
 
 journal(CFG_LOGGING_NORMAL, 'Incident Log Entry Deleted', "Incident Log Entry $updateid was deleted from Incident $incidentid", CFG_JOURNAL_INCIDENTS, $incidentid);
