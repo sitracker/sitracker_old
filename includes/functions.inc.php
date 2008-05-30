@@ -5846,12 +5846,15 @@ function colheader($colname, $coltitle, $sort=FALSE, $order='', $filter='', $def
 }
 
 
-function parse_updatebody($updatebody)
+function parse_updatebody($updatebody, $striptags=TRUE)
 {
     if (!empty($updatebody))
     {
         $updatebody=str_replace("&lt;hr&gt;", "[hr]\n", $updatebody);
-        $updatebody=strip_tags($updatebody);
+        if ($striptags)
+        {
+            $updatebody=strip_tags($updatebody);
+        }
         $updatebody=nl2br($updatebody);
         $updatebody=str_replace("&amp;quot;", "&quot;", $updatebody);
         $updatebody=str_replace("&amp;gt;", "&gt;", $updatebody);
