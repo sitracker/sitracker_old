@@ -82,11 +82,12 @@ if (mysql_num_rows($result) > 0)
     {
         $updatetime = readable_date($update->timestamp);
         $updatebody = preg_replace("/\[\[att=(.*?)\]\](.*?)\[\[\/att\]\]/s", "<a href='download.php?id=$1'>$2</a>", $update->bodytext);
+
         echo "<div class='detailhead'><div class='detaildate'>{$updatetime}</div>";
         echo icon('emailin', 16);
         echo " {$strFrom} <strong>{$incoming->emailfrom}</strong></div>";
         echo "<div class='detailentry'>";
-        echo parse_updatebody($updatebody);
+        echo parse_updatebody($updatebody, FALSE);
         echo "</div>";
     }
 
