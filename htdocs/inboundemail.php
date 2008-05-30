@@ -109,18 +109,19 @@ if ($decoded_email->contenttype=='multipart/mixed' OR
                     {
                         $fa_dir = $CONFIG['attachment_fspath']."updates/";
                     }
+                    
                     if (!file_exists($fa_dir))
                     {
                         if (!mkdir($fa_dir, 0775)) trigger_error("Failed to create incident attachment directory",E_USER_WARNING);
                     }
-                    $fa_update_dir = $fa_dir . "{$delim}{$now}";
-                    if (!file_exists($fa__update_dir))
+
+                    if (!file_exists($fa_dir))
                     {
-                        if (!mkdir($fa_update_dir, 0775)) trigger_error("Failed to create incident update attachment directory",E_USER_WARNING);
+                        if (!mkdir($fa_dir, 0775)) trigger_error("Failed to create incident update attachment directory",E_USER_WARNING);
                     }
-                    if (is_writable($fa_update_dir.$delim)) //File doesn't exist yet .$filename
+                    if (is_writable($fa_dir.$delim)) //File doesn't exist yet .$filename
                     {
-                        $fwp = fopen($fa_update_dir.$delim.$filename, 'a');
+                        $fwp = fopen($fa_dir.$delim.$filename, 'a');
                         // FIXME not actually writing content here yet
                         //fwrite($fwp, "This is a test\n");
                         fwrite($fwp, $block->mime_content);
