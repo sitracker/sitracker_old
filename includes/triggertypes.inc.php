@@ -31,7 +31,7 @@ array('name' => 'Holiday Requested',
       'description' => $strTriggerHolidayRequested,
       'params' => array('userid', 'approvaluseremail', 'listofholidays'),
       'permission' => 'user_permission($_SESSION[\'userid\'], 50);'
-      );     
+      );
 
 $triggerarray['TRIGGER_INCIDENT_ASSIGNED'] =
 array('name' => 'Incident Assigned',
@@ -103,13 +103,13 @@ array('name' => 'New Held Email',
       'params' => array(),
       );
 
-$triggerarray['TRIGGER_NEW_SITE'] = 
+$triggerarray['TRIGGER_NEW_SITE'] =
 array('name' => 'New site added',
       'description' => $strTriggerNewSite,
       'required' => array('siteid')
       );
 
-$triggerarray['TRIGGER_NEW_USER'] = 
+$triggerarray['TRIGGER_NEW_USER'] =
 array('name' => 'New user added',
       'description' => $strTriggerNewUser,
       'required' => array('userid')
@@ -135,14 +135,14 @@ array('name' => 'User reset password',
       'required' => array('userid', 'passwordreseturl'),
       'type' => 'system'
       );
-      
+
 $triggerarray['TRIGGER_WAITING_HELD_EMAIL'] =
 array('name' => 'Waiting Held Email',
       'description' => $strTriggerNewHeldEmailMins,
       'required' => array('holdingmins'),
       'params' => array(),
       );
-      
+
 plugin_do('trigger_types');
 
 /**
@@ -157,7 +157,7 @@ $ttvararray['{applicationname}'] =
 array('description' => $CONFIG['application_name'],
       'replacement' => '$CONFIG[\'application_name\'];'
       );
-      
+
 $ttvararray['{applicationpath}'] =
 array('description' => 'System base path',
       'replacement' => '$CONFIG[\'application_webpath\'];'
@@ -167,7 +167,7 @@ $ttvararray['{applicationshortname}'] =
 array('description' => $CONFIG['application_shortname'],
       'replacement' => '$CONFIG[\'application_shortname\'];'
       );
-      
+
 $ttvararray['{applicationurl}'] =
 array('description' => 'System URL',
       'replacement' => 'application_url();'
@@ -189,7 +189,7 @@ array('description' => 'Contact ID',
       'requires' => 'incidentid',
       'replacement' => 'incident_contact($paramarray[\'incidentid\']);'
       );
-      
+
 $ttvararray['{contactemail}'][] =
 array('description' => $strIncidentsContactEmail,
       'requires' => 'contactid',
@@ -215,7 +215,7 @@ array('description' => 'First Name of contact',
       'requires' => 'incidentid',
       'replacement' => 'strtok(contact_realname(incident_contact($paramarray[\'incidentid\']))," ");'
       );
-      
+
 $ttvararray['{contactid}'][] =
 array('description' => 'Contact ID',
       'requires' => 'contactid',
@@ -269,8 +269,8 @@ array('description' => 'SLA of the maintenance',
       'replacement' => 'maintenance_servicelevel($paramarray[\'contractid\']);',
       'requires' => 'contractid'
       );
-      
-$ttvararray['{currentlang}'] = 
+
+$ttvararray['{currentlang}'] =
 array('description' => 'The language the user has selected to login using',
       'replacement' => '$paramarray[\'currentlang\'];',
       'requires' => 'currentlang'
@@ -286,7 +286,7 @@ $ttvararray['{globalsignature}'] =
 array('description' => $strGlobalSignature,
       'replacement' => 'global_signature();'
       );
-      
+
 $ttvararray['{holdingemailid}'] =
 array('description' => 'ID of the new email in the holding queue',
       'replacement' => '$paramarray[\'holdingemailid\'];',
@@ -382,7 +382,7 @@ array('description' => $strKnowledgeBase,
       'requires' => 'kbid',
       'replacement' => 'kb_name($paramarray[\'kbid\']);'
       );
-      
+
 $ttvararray['{listofholidays}'] =
 array('description' => 'List of holidays',
       'replacement' => '$paramarray[\'listofholidays\'];',
@@ -400,13 +400,13 @@ array('description' => 'Next SLA name',
       'replacement' => '$paramarray[\'nextsla\'];',
       'requires' => 'nextsla'
       );
-      
+
 $ttvararray['{ownerid}'] =
 array('description' => 'Incident owner ID',
       'replacement' => 'incident_owner($paramarray[\'incidentid\']);',
       'requires' => 'incidentid'
       );
-            
+
 $ttvararray['{passwordreseturl}'] =
 array('description' => 'Hashed URL to reset a password',
       'replacement' => '$paramarray[\'passwordreseturl\'];',
@@ -473,19 +473,19 @@ array('description' => 'Site name',
       'requires' => 'siteid',
       'replacement' => 'site_name($paramarray[\'siteid\']);'
       );
-      
-$ttvararray['{sitesalespersonid}'] = 
+
+$ttvararray['{sitesalespersonid}'] =
 array('description' => 'The ID of the site\'s salesperson',
       'replacement' => 'site_salespersonid($paramarray[\'siteid\']);',
       'requires' => 'siteid'
       );
-      
-$ttvararray['{sitesalesperson}'] = 
+
+$ttvararray['{sitesalesperson}'] =
 array('description' => 'The name of the site\'s salesperson',
       'replacement' => 'site_salesperson($paramarray[\'siteid\']);',
       'requires' => 'siteid'
       );
-      
+
 $ttvararray['{slaid}'] =
 array('description' => 'ID of the SLA',
       'replacement' => 'contract_slaid($paramarray[\'contractid\']);',
@@ -497,7 +497,7 @@ array('description' => 'The SLA tag',
       'replacement' => 'servicelevel_id2tag(contract_slaid($paramarray[\'contractid\']));',
       'requires' => 'contractid'
       );
-      
+
 $ttvararray['{supportemail}'] =
 array('description' => $strSupportEmailAddress,
       'replacement' => '$CONFIG[\'support_email\'];'
@@ -535,7 +535,7 @@ array('description' => 'Whether the user is accepting or not',
       'replacement' => 'user_accepting_status($paramarray[\'userid\']);',
       'requires' => 'userid'
       );
-      
+
 $ttvararray['{useremail}'] =
 array('description' => $strCurrentUserEmailAddress,
       'replacement' => 'user_email($paramarray[\'userid\']);'

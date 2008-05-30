@@ -462,7 +462,7 @@ function create_trigger_notice($userid, $noticetext='', $triggertype='',
             throw_error("No such trigger type");
             $return = FALSE;
         }
-        
+
         return $return;
     }
 }
@@ -679,7 +679,6 @@ function triggeraction_description($trigaction, $editlink=FALSE)
     if (!empty($trigaction->userid)) $html .= " for ".user_realname($trigaction->userid);
     if (!empty($trigaction->parameters)) $html .= ", using {$trigaction->parameters}";
     if (!empty($trigaction->checks)) $html .= ", when {$trigaction->checks} ";
-
     return $html;
 }
 
