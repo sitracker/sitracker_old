@@ -957,6 +957,7 @@ $strReview = 'Review';
 $strReviewby = 'Review %s by %s';
 $strReviewDueAgo = 'Review Due %s ago!';
 $strReviewDueNow = 'Review Due Now!';
+$strReviewHeldUpdates = 'Review Held Updates';
 $strReviewIn = 'Review in %s';
 $strRevoke = 'Revoke';
 $strRole = 'Role';
