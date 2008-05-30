@@ -29,7 +29,10 @@ while (!feof($fp))
 fclose($fp);
 
 // DEBUG
-echo $rawemail;
+if ($CONFIG['debug'])
+{
+    echo $rawemail;
+}
 
 // Create and populate the email object
 $email = new mime_email;
@@ -92,10 +95,21 @@ if ($decoded_email->contenttype=='multipart/mixed' OR
                     if (empty($filename)) $filename = "part{$part}";
                     $attachment[] = $filename;
 
-                    // FIXME this assumes we always have an incident number, we don't, so this will fail for new incidents
+                    $sql = "INSERT into `{$dbFiles}`('filename', 'size', 'userid', 'filedate', 'createdby') ";
+                    $sql .= "VALUES('{$filename}', '', '0', NOW(), '0')";
+                    mysql_query($sql);
+                    if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+                    $updateid = mysql_insert_id();
 
                     // Write the attachment
-                    $fa_dir = $CONFIG['attachment_fspath'].$incidentid;
+                    if (!empty($incidentid))
+                    {
+                        $fa_dir = $CONFIG['attachment_fspath'].$incidentid;
+                    }
+                    else
+                    {
+                        $fa_dir = $CONFIG['attachment_fspath']."updates/";
+                    }
                     if (!file_exists($fa_dir))
                     {
                         if (!mkdir($fa_dir, 0775)) trigger_error("Failed to create incident attachment directory",E_USER_WARNING);
@@ -113,7 +127,10 @@ if ($decoded_email->contenttype=='multipart/mixed' OR
                         fwrite($fwp, $block->mime_content);
                         fclose($fwp);
                     }
-                    else echo "NOT WRITABLE $filename\n";
+                    elseif($CONFIG['debug'])
+                    {
+                        echo "NOT WRITABLE $filename\n";
+                    }
                }
         }
         else
@@ -135,7 +152,11 @@ if ($decoded_email->contenttype=='multipart/mixed' OR
             {
                 if (!mkdir($fa_update_dir, 0775)) trigger_error("Failed to create incident update attachment directory",E_USER_WARNING);
             }
-            echo "About to write to ".$fa_update_dir.$delim.$filename."\n";
+            if ($CONFIG['debug'])
+            {
+                echo "About to write to ".$fa_update_dir.$delim.$filename."\n";
+            }
+            
             if (is_writable($fa_update_dir.$delim)) //File doesn't exist yet .$filename
             {
                 $fwp = fopen($fa_update_dir.$delim.$filename, 'a');
@@ -144,7 +165,10 @@ if ($decoded_email->contenttype=='multipart/mixed' OR
                 fwrite($fwp, $block->mime_content);
                 fclose($fwp);
             }
-            else echo "NOT WRITABLE $filename\n";
+            elseif ($CONFIG['debug'])
+            {
+                echo "NOT WRITABLE $filename\n";
+            }
         }
     }
 }
@@ -184,7 +208,7 @@ if ($count_attachments >= 1)
     $c = 1;
     foreach ($attachment AS $att)
     {
-        $headertext .= "[[att]]{$att}[[/att]]";
+        $headertext .= "[[att={$updateid}]]{$att}[[/att]]";
         if ($c < $count_attachments) $headertext .= ", ";
         $c++;
     }
