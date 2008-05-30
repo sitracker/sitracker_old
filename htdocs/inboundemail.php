@@ -16,7 +16,6 @@
 @include ('set_include_path.inc.php');
 require ('db_connect.inc.php');
 require ('functions.inc.php');
-require ('triggers.inc.php');
 require ('mime_email.class.php');
 
 // read the email from stdin (it should be piped to us by the MTA)
