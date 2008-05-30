@@ -440,7 +440,8 @@ elseif ($mode == 'savesessionlang')
     $sql = "UPDATE `{$dbUsers}` SET var_i18n = '{$_SESSION['lang']}' WHERE id = {$sit[2]}";
     mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-    $sql = "DELETE FROM `{$dbNotices}` WHERE type=".USER_LANG_DIFFERS_TYPE." AND userid={$sit[2]}";
+    // FIXME 3.35 use revoke instead
+    $sql = "DELETE FROM `{$dbNotices}` WHERE type='".USER_LANG_DIFFERS_TYPE."' AND userid={$sit[2]}";
     mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     html_redirect("main.php");
