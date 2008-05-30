@@ -5855,6 +5855,10 @@ function parse_updatebody($updatebody, $striptags=TRUE)
         {
             $updatebody=strip_tags($updatebody);
         }
+        else
+        {
+            $updatebody = str_replace("<hr>", "", $updatebody);
+        }
         $updatebody=nl2br($updatebody);
         $updatebody=str_replace("&amp;quot;", "&quot;", $updatebody);
         $updatebody=str_replace("&amp;gt;", "&gt;", $updatebody);
