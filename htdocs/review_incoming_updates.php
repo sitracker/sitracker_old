@@ -124,7 +124,7 @@ function deldir($location)
     rmdir($location);
 }
 
-$title = 'Review Held Updates'; // FIXME i18n
+$title = $strReviewHeldUpdates;
 $refresh = $_SESSION['incident_refresh'];
 $selected = $_POST['selected'];
 include ('htmlheader.inc.php');
@@ -181,14 +181,17 @@ if (!empty($selected))
     foreach ($selected as $updateid)
     {
         $sql = "DELETE FROM `{$dbUpdates}` WHERE id='$updateid'";
+        echo $sql;
         mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
         $sql = "DELETE FROM `{$dbTempIncoming}` WHERE updateid='$updateid'";
+        echo $sql;
         mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-        $path = $incident_attachment_fspath.'updates/'.$updateid;
-        if (file_exists($path)) deldir($path);
+        $path = $CONFIG['attachment_fspath'].'updates/'.$updateid;
+
+        deldir($path);        
 
         journal(CFG_LOGGING_NORMAL, 'Incident Log Entry Deleted', "Incident Log Entry $updateid was deleted", CFG_JOURNAL_INCIDENTS, $updateid);
     }
