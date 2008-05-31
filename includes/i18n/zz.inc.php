@@ -525,7 +525,6 @@ $strIncoming = 'strIncoming';
 $strIncomingEmailText = 'strIncomingEmailText';
 $strIncomingEmailSpam = 'strIncomingEmailSpam';
 $strInfo = 'strInfo';
-$strInformationForResettingYourPassword = 'strInformationForResettingYourPassword';
 $strInformationSent = 'strInformationSent';
 $strInformationSentRegardingSettingPassword = 'strInformationSentRegardingSettingPassword';
 $strInformX = 'strInformX';
