@@ -21,124 +21,124 @@
 
 $triggerarray['TRIGGER_CONTACT_RESET_PASSWORD'] =
 array('name' => 'Contact reset password',
-      'description' => $strTriggerContactResetPassword,
+      'description' => 'strTriggerContactResetPasswordDesc',
       'required' => array('contactid', 'passwordreseturl'),
       'type' => 'system'
       );
 
 $triggerarray['TRIGGER_HOLIDAY_REQUESTED'] =
 array('name' => 'Holiday Requested',
-      'description' => $strTriggerHolidayRequested,
-      'params' => array('userid', 'approvaluseremail', 'listofholidays'),
+      'description' => 'strTriggerHolidayRequestedDesc',
+      'required' => array('userid', 'approvaluseremail', 'listofholidays'),
       'permission' => 'user_permission($_SESSION[\'userid\'], 50);'
       );
 
 $triggerarray['TRIGGER_INCIDENT_ASSIGNED'] =
 array('name' => 'Incident Assigned',
-      'description' => $strTriggerNewIncidentAssigned,
+      'description' => 'strTriggerNewIncidentAssignedDesc',
       'required' => array('incidentid', 'userid'),
       'params' => array('userid', 'userstatus'),
       );
 
 $triggerarray['TRIGGER_INCIDENT_CLOSED'] =
 array('name' => 'Incident closed',
-      'description' => $strTriggerIncidentClosed,
+      'description' => 'strTriggerIncidentClosedDesc',
       'required' => array('incidentid', 'userid'),
       'params' => array('userid', 'externalid', 'externalengineer')
       );
 
 $triggerarray['TRIGGER_INCIDENT_CREATED'] =
 array('name' => 'Incident Created',
-      'description' => $strTriggerNewIncidentCreated,
+      'description' => 'strTriggerNewIncidentCreatedDesc',
       'required' => array('incidentid'),
       'params' => array('contactid', 'siteid', 'priority', 'contractid', 'slaid', 'sitesalespersonid')
       );
 
 $triggerarray['TRIGGER_INCIDENT_NEARING_SLA'] =
 array('name' => 'Incident Nearing SLA',
-      'description' => $strTriggerIncidentNearingSLA,
+      'description' => 'strTriggerIncidentNearingSLADesc',
       'required' => array('incidentid', 'nextslatime', 'nextsla'),
       'params' => array('ownerid', 'townerid'),
       );
 
 $triggerarray['TRIGGER_INCIDENT_REVIEW_DUE'] =
 array('name' => 'Incident Review Due',
-      'description' => $strTriggerIncidentReviewDue,
+      'description' => 'strTriggerIncidentReviewDueDesc',
       'required' => array('incidentid', 'time'),
       'params' => array('incidentid'),
       );
 
 $triggerarray['TRIGGER_KB_CREATED'] =
 array('name' => 'Knowledgebase Article Created',
-      'description' => $strTriggerKBArticleCreated,
+      'description' => 'strTriggerKBArticleCreatedDesc',
       'required' => array('kbid', 'userid'),
       'params' => array('userid'),
       );
 
 $triggerarray['TRIGGER_LANGUAGE_DIFFERS'] =
 array('name' => 'Current Language Differs',
-      'description' => $strTriggerLanguageDiffers,
+      'description' => 'strTriggerLanguageDiffersDesc',
       'required' => array('currentlang', 'profilelang'),
       'params' => array(),
      );
 
 $triggerarray['TRIGGER_NEW_CONTACT'] =
 array('name' => 'New contact added',
-      'description' => $strTriggerNewContact,
+      'description' => 'strTriggerNewContactDesc',
       'required' => array('contactid', 'prepassword', 'userid'),
       'params' => array('siteid')
       );
 
 $triggerarray['TRIGGER_NEW_CONTRACT'] =
 array('name' => 'New contract added',
-      'description' => $strTriggerNewContract,
+      'description' => 'strTriggerNewContractDesc',
       'required' => array('contractid'),
       'params' => array('productid', 'slaid')
       );
 
 $triggerarray['TRIGGER_NEW_HELD_EMAIL'] =
 array('name' => 'New Held Email',
-      'description' => $strTriggerNewHeldEmail,
+      'description' => 'strTriggerNewHeldEmailDesc',
       'required' => array('holdingemailid'),
       'params' => array(),
       );
 
 $triggerarray['TRIGGER_NEW_SITE'] =
 array('name' => 'New site added',
-      'description' => $strTriggerNewSite,
+      'description' => 'strTriggerNewSiteDesc',
       'required' => array('siteid')
       );
 
 $triggerarray['TRIGGER_NEW_USER'] =
 array('name' => 'New user added',
-      'description' => $strTriggerNewUser,
+      'description' => 'strTriggerNewUserDesc',
       'required' => array('userid')
       );
 
 $triggerarray['TRIGGER_SIT_UPGRADED'] =
 array('name' => 'SiT! Upgraded',
-      'description' => $strTriggerSitUpgraded,
+      'description' => 'strTriggerSitUpgradedDesc',
       'required' => array('applicationversion'),
       'params' => array(),
       );
 
 $triggerarray['TRIGGER_USER_CHANGED_STATUS'] =
 array('name' => 'User Changes Status',
-      'description' => $strTriggerUserChangedStatus,
+      'description' => 'strTriggerUserChangedStatusDesc',
       'required' => array('userid'),
       'params' => array('userid', 'userstatus', 'useraccepting'),
       );
 
 $triggerarray['TRIGGER_USER_RESET_PASSWORD'] =
 array('name' => 'User reset password',
-      'description' => $strTriggerUserResetPassword,
+      'description' => 'strTriggerUserResetPasswordDesc',
       'required' => array('userid', 'passwordreseturl'),
       'type' => 'system'
       );
 
 $triggerarray['TRIGGER_WAITING_HELD_EMAIL'] =
 array('name' => 'Waiting Held Email',
-      'description' => $strTriggerNewHeldEmailMins,
+      'description' => 'strTriggerNewHeldEmailMinsDesc',
       'required' => array('holdingmins'),
       'params' => array(),
       );
