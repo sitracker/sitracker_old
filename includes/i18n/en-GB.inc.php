@@ -604,7 +604,6 @@ $strJunAbbr = 'Jun';
 $strJune = 'June';
 $strJustNow = 'Just Now';
 
-$strKBSelectSectionsText = 'Enable any other relevant sections below by checking their box.';
 $strKBytes = 'KBytes';
 #e.g. graph legend
 $strKey = 'Key';
@@ -620,7 +619,7 @@ $strLastUpdated = 'Last Updated';
 $strLastYear = 'Last year';
 $strLength = 'Length';
 $strLicense = 'Licence';
-$strLicenseAndCopyright = 'License &amp; Copyright Information';
+$strLicenseAndCopyright = 'Licence &amp; Copyright Information';
 $strLicenseType = 'Licence Type';
 $strLicenseQuantity = 'Licence Quantity';
 $strLifetime = 'Lifetime';
@@ -639,14 +638,14 @@ $strListSkills = 'List Skills';
 $strLinkSkillToX = 'Link skill to %s';
 $strLocked = 'Locked';
 $strLockedByX = 'Locked by %s';
-$strLoggedUnder = 'This incident is logged under contract %d';
 $strLogged = 'logged';
 # E.g. Logged in as: admin, currently On Holiday and Not Accepting calls
 $strLoggedInAsXAndCurrentlyXAndX = 'Logged in as: %s, currently %s and %s';
+$strLoggedUnder = 'This incident is logged under contract %d';
 $strLogIn = 'Log In';
 $strLogin = 'Login';
-$strLogTriggerInJournal = 'Log the trigger in the system journal';
 $strLogout = 'Logout';
+$strLogTriggerInJournal = 'Log the trigger in the system journal';
 $strLow = 'Low';
 $strLowPriority = 'Low Priority';
 

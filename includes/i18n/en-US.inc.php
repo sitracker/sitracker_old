@@ -18,6 +18,7 @@ $strHolidayEntitlement = 'Vacation Entitlement';
 $strHolidayPlanner = 'Vacation Planner';
 
 $strLicense = 'License';
+$strLicenseAndCopyright = 'License &amp; Copyright Information';
 $strLicenseType = 'License Type';
 $strLicenseQuantity = 'License Quantity';
 
