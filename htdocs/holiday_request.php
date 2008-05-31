@@ -185,7 +185,7 @@ if (!$sent)
                 // Force resend if there are no new additions to be requested
                 if ($waiting==FALSE AND $action!='resend') $action='resend';
                 echo "<input type='hidden' name='action' value='{$action}' />";
-                echo "<p align='center'>{$strRequestSentComments}<br />";
+                echo "<p align='center'>{$strRequestSendComments}<br />";
                 echo "<textarea name='memo' rows='3' cols='40'></textarea>";
                 echo "<input type='hidden' name='user' value='$user' />";
                 echo "<input type='hidden' name='sent' value='true' /><br /><br />";

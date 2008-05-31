@@ -156,7 +156,7 @@ else
     echo "<form action='{$_SERVER['PHP_SELF']}?id={$kbid}' method='post'>";
 
     echo "<h3>{$strEnvironment}</h3>";
-    echo "<p style='text-align:left'>{$strTheInfoInThisArticle}:</p>";
+    echo "<p style='text-align:left'>{$strSelectSkillsApplyToArticle}:</p>";
     if ($mode == 'edit')
     {
         $docsoftware = array();
