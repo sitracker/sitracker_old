@@ -25,6 +25,8 @@ $strLicenseQuantity = 'License Quantity';
 $strMobile = 'Cell Phone';
 $strMyHolidays = 'My Vacations';
 
+$strNoLicense = 'No License';
+
 $strPostcode = 'Zip Code';
 
 $strResolutionReprioritisation = 'Resolution/Reprioritization';
