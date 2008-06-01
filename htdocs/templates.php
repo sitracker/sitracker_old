@@ -147,7 +147,7 @@ elseif ($action == "edit")
         default:
             if (!is_numeric($id)) $sql = "SELECT * FROM `{$dbNoticeTemplates}` WHERE name='$id' LIMIT 1";
             else $sql = "SELECT * FROM `{$dbNoticeTemplates}` WHERE id='$id' LIMIT 1";
-            $title = "{$strEdit}: Notice Template"; // FIXME i18n edit notice template
+            $title = "{$strEdit}: {$strNoticeTemplate}";
             $templateaction = 'ACTION_NOTICE';
     }
     $result = mysql_query($sql);
@@ -184,7 +184,7 @@ elseif ($action == "edit")
 
         echo "<tr><th>{$strID}: <sup class='red'>*</sup></th><td>";
         echo "<input maxlength='50' name='name' size='5' value='{$template->id} 'readonly='readonly' disabled='disabled' /></td></tr>\n";
-        echo "<tr><th>Template Type:</th><td>";
+        echo "<tr><th>{$strTemplateType}:</th><td>";
         if ($templatetype == 'notice')
         {
             echo icon('info', 32).' '.$strNotice;
@@ -208,7 +208,7 @@ elseif ($action == "edit")
         switch ($templatetype)
         {
             case 'email':
-                echo "<tr><th colspan='2'>{$strEmail}</th></tr>"; // FIXME i18n defaults
+                echo "<tr><th colspan='2'>{$strEmail}</th></tr>";
                 echo "<tr><td colspan='2'>{$strTemplatesShouldNotBeginWith}</td></tr>";
                 echo "<tr><th>{$strTo}: <sup class='red'>*</sup></th>";
                 echo "<td><input id='tofield' maxlength='100' name='tofield' size='40' value=\"{$template->tofield}\" onfocus=\"recordFocusElement(this);\" /></td></tr>\n";
@@ -225,12 +225,11 @@ elseif ($action == "edit")
                 break;
 
             case 'notice':
-                // FIXME i18n
-                echo "<tr><th>Link Text</th>";
+                echo "<tr><th>{$strLinkText}</th>";
                 echo "<td><input id='linktext' maxlength='50' name='linktext' size='50' value=\"{$template->linktext}\" onfocus=\"recordFocusElement(this);\" /></td></tr>\n";
-                echo "<tr><th>Link</th>";
+                echo "<tr><th>{$strLink}</th>";
                 echo "<td><input id='link' maxlength='100' name='link' size='50' value=\"{$template->link}\"  onfocus=\"recordFocusElement(this);\" /></td></tr>\n";
-                echo "<tr><th>Durability</th>";
+                echo "<tr><th>{$strDurability}</th>";
                 echo "<td><select id='durability' onfocus=\"recordFocusElement(this);\">";
                 echo "<option";
                 if ($template->durability == 'sticky')
