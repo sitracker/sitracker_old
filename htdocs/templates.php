@@ -253,7 +253,9 @@ elseif ($action == "edit")
         if ($templatetype=='email') $body = $template->body;
         else $body = $template->text;
         echo "<tr><th>{$strText}</th>";
-        echo "<td><textarea id='bodytext' name='bodytext' rows='20' cols='50' onfocus=\"recordFocusElement(this);\">{$body}</textarea></td>";
+        echo "<td>";
+        if ($templatetype=='notice') echo bbcode_toolbar('bodytext');
+        echo "<textarea id='bodytext' name='bodytext' rows='20' cols='50' onfocus=\"recordFocusElement(this);\">{$body}</textarea></td>";
 
         if ($template->type=='incident')
         {

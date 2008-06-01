@@ -5724,7 +5724,7 @@ function strip_bbcode_tooltip($text)
 */
 function bbcode_toolbar($elementid)
 {
-    $html = "\n<div class='bbcode_toolbar'>";
+    $html = "\n<div class='bbcode_toolbar'>BBCode: ";
     $html .= "<a href=\"javascript:insertBBCode('{$elementid}', '[b]', '[/b]')\">B</a> ";
     $html .= "<a href=\"javascript:insertBBCode('{$elementid}', '[i]', '[/i]')\">I</a> ";
     $html .= "<a href=\"javascript:insertBBCode('{$elementid}', '[u]', '[/u]')\">U</a> ";
