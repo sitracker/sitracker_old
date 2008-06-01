@@ -94,7 +94,7 @@ p.tip
   border: 1px solid black;;
   background-color: #FFFFEB;
 }
-p.info
+p.info, p.trigger
 {
   background-image: url('../images/icons/sit/16x16/info.png');
   color: #17446B;
@@ -129,9 +129,9 @@ p.trigger
   background-image: url('../images/icons/oxygen/16x16/trigger.png');
   background-position: left;
   background-repeat: no-repeat;
-  color: black;
-  border: 1px solid black;
-  background-color: #FFFFEB;
+  color: #17446B;
+  border: 1px solid #17446B;
+  background-color: #F4F6FF;
 }
 
 #menu
