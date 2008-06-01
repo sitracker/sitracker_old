@@ -200,7 +200,10 @@ elseif ($action == "edit")
         // FIXME Temporary, remove before release
         if ($template->type == 'user') $required = array('incidentid', 'userid');
         else $required = $triggerarray[$trigaction->triggerid]['required'];
-        echo "<br />required: <code>".print_r($required, true)."</code><br />";
+        if (!empty($required))
+        {
+            echo "<br />required: <code>".print_r($required, true)."</code><br />";
+        }
         echo "</td><tr>";
 
         echo "<tr><th>{$strTemplate}: <sup class='red'>*</sup></th><td><input maxlength='100' name='name' size='40' value=\"{$template->name}\" /></td></tr>\n";
