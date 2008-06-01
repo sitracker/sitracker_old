@@ -36,7 +36,7 @@ if (mysql_num_rows($result) >= 1)
     echo colheader('name',$strName);
     echo colheader('track_url',$strTrackURL);
     echo colheader('home_url',$strHomeURL);
-    echo colheader('url_title',$strURLTile);
+    echo colheader('url_title',$strURLTitle);
     echo colheader('email_domain',$strEmailDomain);
     echo colheader('edit',$strOperation);
     echo "</tr>";

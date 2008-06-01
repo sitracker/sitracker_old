@@ -891,7 +891,7 @@ $strTue = 'Mar';
 $strTuesday = 'Martes';
 $strType = 'Tipo';
 
-$strURLTile = 'Título para el URL';
+$strURLTitle = 'Título para el URL';
 $strUpgrade = 'Convertir';
 $strUpdate = 'Actualizar';
 $strUpdated = 'actualizado';

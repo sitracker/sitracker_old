@@ -1110,7 +1110,7 @@ $strTue = 'strTue';
 $strTuesday = 'strTuesday';
 $strType = 'strType';
 
-$strURLTile = 'strURLTile';
+$strURLTitle = 'strURLTitle';
 $strUpgrade = 'strUpgrade';
 $strUpdate = 'strUpdate';
 $strUpdated = 'strUpdated';
