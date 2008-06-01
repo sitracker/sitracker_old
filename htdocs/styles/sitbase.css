@@ -33,6 +33,18 @@ tr.notice:hover { background-color: #F2F2F2; }
 
 img { border:0px; }
 
+blockquote
+{
+    background-color: transparent;
+    border-top: 3px double #203894;
+    border-bottom: 3px double #203894;
+    padding: 5px;
+    font-style: oblique;
+    font-size: 1em;
+    margin-left: 5%;
+    margin-right: 5%;
+}
+
 #footerbar select { font-size: 80%; }
 #footerbar form { margin: 0px; }
 #statusbar { background-color: #203894; background-image: url('../images/top2.png');
@@ -335,7 +347,7 @@ input.required, select.required{
 
 div#incidentfooter { border-top: 1px solid #203894; }
 
-
+div.bbcode_toolbar { margin-top: 5px; }
 div.bbcode_toolbar a
 {
     background: #3366CC;

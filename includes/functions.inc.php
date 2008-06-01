@@ -5676,11 +5676,12 @@ function bbcode($text)
                         6 => '/\[url\=(.*?)\](.*?)\[\/url\]/s',
                         7 => '/\[img\](.*?)\[\/img\]/s',
                         8 => '/\[color\=(.*?)\](.*?)\[\/color\]/s',
-                        9 => '/\[size\=(.*?)\](.*?)\[\/size\]/s',
-                        10 => '/\[code\](.*?)\[\/code\]/s',
-                        11 => '/\[hr\]/s',
-                        12 => '/\[color\](.*?)\[\/color\]/s',
-                        13 => '/\[s\](.*?)\[\/s\]/s');
+                        9 => '/\[color\](.*?)\[\/color\]/s',
+                        10 => '/\[size\=(.*?)\](.*?)\[\/size\]/s',
+                        11 => '/\[size\](.*?)\[\/size\]/s',
+                        12 => '/\[code\](.*?)\[\/code\]/s',
+                        13 => '/\[hr\]/s',
+                        14 => '/\[s\](.*?)\[\/s\]/s');
 
     $bbcode_replace = array(0 => '<strong>$1</strong>',
                             1 => '<em>$1</em>',
@@ -5691,11 +5692,12 @@ function bbcode($text)
                             6 => '<a href="$1" title="$1">$2</a>',
                             7 => '<img src="$1" alt="User submitted image" />',
                             8 => '<span style="color:$1">$2</span>',
-                            9 => '<span style="font-size:$1">$2</span>',
-                            10 => '<code>$1</code>',
-                            11 => '<hr />',
-                            12 => '<span style="color:red;">$1</span>',
-                            13 => '<span style="text-decoration:line-through">$1</span>');
+                            9 => '<span style="color:red;">$1</span>',
+                            10 => '<span style="font-size:$1">$2</span>',
+                            11 => '<span style="font-size:large">$1</span>',
+                            12 => '<code>$1</code>',
+                            13 => '<hr />',
+                            14 => '<span style="text-decoration:line-through">$1</span>');
 
     $html = preg_replace($bbcode_regex, $bbcode_replace, $text);
 
