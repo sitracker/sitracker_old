@@ -45,6 +45,11 @@ blockquote
     margin-right: 5%;
 }
 
+code
+{
+    white-space: pre;
+}
+
 #footerbar select { font-size: 80%; }
 #footerbar form { margin: 0px; }
 #statusbar { background-color: #203894; background-image: url('../images/top2.png');
