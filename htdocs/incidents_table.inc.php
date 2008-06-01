@@ -241,6 +241,10 @@ while ($incidents = mysql_fetch_array($result))
     echo "</td>";
     echo "<td>";
     if (!empty($incidents['softwareid'])) echo software_name($incidents['softwareid'])."<br />";
+    if (open_activities_for_incident($incidents['id']) > 0)
+    {
+        echo icon('timer', 16, $strOpenActivities).' ';
+    }
     echo "<a href=\"javascript:incident_details_window('{$incidents['id']}','incident{$incidents['id']}')\" class='info'>";
     if (trim($incidents['title']) !='')
     {
@@ -317,7 +321,7 @@ while ($incidents = mysql_fetch_array($result))
     }
     echo "<td align='center'>";
     echo "{$updated}";
-    if (empty($incidents_minimal)) echo "<br />by {$update_user}";
+    if (empty($incidents_minimal)) echo "<br />{$strby} {$update_user}";
 
     if (empty($incidents_minimal))
     {

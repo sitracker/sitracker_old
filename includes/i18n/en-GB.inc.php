@@ -177,6 +177,8 @@ $strBrowseJournal = 'Browse Journal';
 $strBrowseKB = 'Browse Knowledge Base';
 $strBrowseSites = 'Browse sites';
 $strBulkModify = 'Bulk Modify';
+# e.g. by Fred
+$strby = 'by';
 $strByGroup = 'By Group';
 $strByMaintenance = 'By Maintenance';
 $strByReseller = 'By Reseller';
