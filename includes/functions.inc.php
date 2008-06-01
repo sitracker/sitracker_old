@@ -5679,7 +5679,8 @@ function bbcode($text)
                         9 => '/\[size\=(.*?)\](.*?)\[\/size\]/s',
                         10 => '/\[code\](.*?)\[\/code\]/s',
                         11 => '/\[hr\]/s',
-                        12 => '/\[s\](.*?)\[\/s\]/s');
+                        12 => '/\[color\](.*?)\[\/color\]/s',
+                        13 => '/\[s\](.*?)\[\/s\]/s');
 
     $bbcode_replace = array(0 => '<strong>$1</strong>',
                             1 => '<em>$1</em>',
@@ -5693,7 +5694,8 @@ function bbcode($text)
                             9 => '<span style="font-size:$1">$2</span>',
                             10 => '<code>$1</code>',
                             11 => '<hr />',
-                            12 => '<span style="text-decoration:line-through">$1</span>');
+                            12 => '<span style="color:red;">$1</span>',
+                            13 => '<span style="text-decoration:line-through">$1</span>');
 
     $html = preg_replace($bbcode_regex, $bbcode_replace, $text);
 
