@@ -208,7 +208,7 @@ $updatetypes['auto_chased_phone'] = array('icon' => 'chased', 'text' => $strChas
 $updatetypes['auto_chased_manager'] = array('icon' => 'chased', 'text' => $strChased);
 $updatetypes['auto_chased_managers_manager'] = array('icon' => 'chased', 'text' => $strChased);
 $updatetypes['customerclosurerequest'] = array('icon' => 'close', 'text' => $strCustomerRequestedClosure);
-$updatetypes['fromtask'] = array('icon' => 'webupdate', text => sprintf($strUpdatedFromActivity, 'updateuser'));
+$updatetypes['fromtask'] = array('icon' => 'timer', text => sprintf($strUpdatedFromActivity, 'updateuser'));
 $slatypes['opened'] = array('icon' => 'open', 'text' => $strOpened);
 $slatypes['initialresponse'] = array('icon' => 'initialresponse', 'text' => $strInitialResponse);
 $slatypes['probdef'] = array('icon' => 'probdef', 'text' => $strProblemDefinition);
