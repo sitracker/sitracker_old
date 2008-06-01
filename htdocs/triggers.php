@@ -162,7 +162,7 @@ switch ($_REQUEST['mode'])
         echo "<strong>{$name}</strong>";
 
         echo "<h3>{$strOccurance}</h3>";
-        echo $triggerarray[$id]['description'];
+        echo $GLOBALS[$triggerarray[$id]['description']];
 
         echo "<h3>{$strAction}</h3>";
         echo "<form name='addtrigger' action='{$_SERVER['PHP_SELF']}' method='post'>";
@@ -285,7 +285,7 @@ switch ($_REQUEST['mode'])
 
         echo "<h2>".icon('trigger', 32)." ";
         echo "$title</h2>";
-        echo "<p align='center'>A list of available triggers and the actions that are set when triggers occur</p>"; // TODO triggers blurb
+        echo "<p align='center'>{$strAListOfAvailableTriggers}</p>";
 
         if ($adminuser)
         {
