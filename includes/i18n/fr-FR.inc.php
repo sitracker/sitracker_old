@@ -125,7 +125,6 @@ $strMySubstitutes = 'Mes Remplaçants';
 
 $strNo = 'Non';
 $strNoIncidents = 'Pas d\'Incident';
-$strNoKBArticles = 'Pas d\'articles de la Base de Connaissance';
 $strNovAbbr = 'Nov';
 $strNovember = 'Novembre';
 $strNow = 'Actuellement';

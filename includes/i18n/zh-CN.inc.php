@@ -643,7 +643,6 @@ $strNoFeedsCurrentlyPresent = '当前无FEED';
 $strNoIncidents = '无事件';
 $strNoIncidentsBeingWatchOfType = '没有对这类事件设置监控';
 $strNoLicense = '无授权';
-$strNoKBArticles = '无文章';
 $strNoNameAssociated = '没有和名字关联';
 $strNoNewDashboardComponentsToInstall = '没有心的控制中心模块可用';
 $strNoMatchingTask = '未找到匹配的任务';

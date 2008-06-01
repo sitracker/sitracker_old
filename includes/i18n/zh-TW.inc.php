@@ -642,7 +642,6 @@ $strNoFeedsCurrentlyPresent = '當前無FEED';
 $strNoIncidents = '無事件';
 $strNoIncidentsBeingWatchOfType = '沒有對這類事件設置監控';
 $strNoLicense = '無授權';
-$strNoKBArticles = '無文章';
 $strNoNameAssociated = '沒有和名字關聯';
 $strNoNewDashboardComponentsToInstall = '沒有心的控制中心模塊可用';
 $strNoMatchingTask = '未找到匹配的任務';

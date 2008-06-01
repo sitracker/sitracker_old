@@ -766,7 +766,6 @@ $strNoIncidents = 'No Incidents';
 $strNoIncidentsBeingWatchOfType = 'No watches set up for this type';
 $strNoLicense = 'No Licence';
 $strNoLongerRelevant = 'No Longer Relevant';
-$strNoKBArticles = 'No KB Articles';
 $strNoNameAssociated = 'No Name Associated';
 $strNone = 'None';
 $strNoNewDashboardComponentsToInstall = 'No new dashboard components available';

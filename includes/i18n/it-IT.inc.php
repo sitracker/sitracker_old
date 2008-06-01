@@ -443,7 +443,6 @@ $strNoEmailSet = 'Non hai un indirizzo Email. devi impostarne uno adesso';
 $strNoFeedbackFormsDefined = 'Nessun modulo di Feedback definito';
 $strNoIncidents = 'Nessuna Segnalazione';
 $strNoIncidentsBeingWatchOfType = 'Nessuna vista definita per questo tipo';
-$strNoKBArticles = 'Nessun articolo di Knowledge Base';
 $strNoNameAssociated = 'Nessun nome associato';
 $strNone = 'Nessuno';
 $strNoMatchingTask = 'Nessuna attività trovata';

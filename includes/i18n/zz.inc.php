@@ -708,7 +708,6 @@ $strNoIncidents = 'strNoIncidents';
 $strNoIncidentsBeingWatchOfType = 'strNoIncidentsBeingWatchOfType';
 $strNoLicense = 'strNoLicense';
 $strNoLongerRelevant = 'strNoLongerRelevant';
-$strNoKBArticles = 'strNoKBArticles';
 $strNoNameAssociated = 'strNoNameAssociated';
 $strNone = 'strNone';
 $strNoNewDashboardComponentsToInstall = 'strNoNewDashboardComponentsToInstall';

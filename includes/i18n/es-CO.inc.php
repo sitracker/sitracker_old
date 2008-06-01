@@ -581,7 +581,6 @@ $strNoEmailSet = 'Usted no tiene configurada una dirección de email. Debe confi
 $strNoFeedbackFormsDefined = 'No hay Formularios de Realimentación definidos';
 $strNoIncidents = 'No hay Incidentes';
 $strNoIncidentsBeingWatchOfType = 'No hay relojes configurados para este tipo';
-$strNoKBArticles = 'No hay articulos en la BC';
 $strNoNameAssociated = 'No hay nombres Asociados';
 $strNoNewDashboardComponentsToInstall = 'No hay nuevos componentes disponibles para el tablero';
 $strNoMatchingTask = 'No se encontraron tareas coincidentes';

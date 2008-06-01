@@ -266,7 +266,6 @@ $strNextAction = 'Sekantis veiksmas';
 $strNo = 'Ne';
 $strNoContractsForSite = 'Nėra su padaliniu susijusių sutarčių';
 $strNoPermission = 'Jūs neturite teisės žiūrėti šio puslapio';
-$strNoKBArticles = 'Tušti straipsniai';
 $strNoIncidents = 'Sutrikimų nerasta';
 $strNone = 'Nėra';
 $strNotAccepting = 'Nepriima';
