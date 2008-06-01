@@ -1,7 +1,7 @@
 /* Base styles*/
 body { margin: 0px; }
 h1 {
-  background-image: url('../images/top2.png');	
+  background-image: url('../images/top2.png');
   font-size: 16pt; font-weight: bold; color: #FFF;
   background-color: #203894; margin: 0px; padding: 3px 0px 3px 0px;
 }
@@ -266,7 +266,7 @@ div#menu li:hover li ul,
 #incidentqueues form { text-align: center; }
 
 
-.helplink { vertical-align: super; color: #555; margin-left: 2px; font-size: 85%; }
+.helplink { vertical-align: super; color: #555; margin-left: 2px; font-size: 10px; }
 .helplink a { text-decoration: none; cursor: help; position: relative; color: #CC0000; }
 .helplink a span { display: none; position: absolute;
   /*top: 20px;*/

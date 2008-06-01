@@ -1,4 +1,4 @@
-/* Base CSS2 Style Sheet for SiT! */
+/* Neoteric CSS2 Style Sheet for SiT! */
 /* by Ivan Lucas, ivan.lucas@users_sourceforge.net - December 2004 */
 
 body
@@ -192,7 +192,7 @@ div.iheader { color: #666; margin-bottom:5px;}
 /* Information and Errors */
 sup.red { color: #F00; font-size: 125%; } /* FIXME doesn't need a class for this */
 td sup { color: #444; }
-p.tip,p.info, p.warning, p.error, h5.warning, h5.error
+p.tip,p.info, p.warning, p.error, p.trigger, h5.warning, h5.error
 {
   background-position: 3px 2px;
   background-repeat: no-repeat;
