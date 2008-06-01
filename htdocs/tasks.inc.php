@@ -475,12 +475,13 @@ if (mysql_num_rows($result) >=1 )
     }
     else
     {
-        echo colheader('id', $strID, $sort, $order, $filter);
-        echo colheader('startdate', $strStartDate, $sort, $order, $filter);
-        echo colheader('completeddate', $strCompleted, $sort, $order, $filter);
-        echo colheader('duration', $strDuration, $sort, $order, $filter);
-        echo colheader('lastupdated', $strLastUpdated, $sort, $order, $filter);
-        echo colheader('owner', $strOwner, $sort, $order, $filter);
+        echo colheader('id', $strID);
+        echo colheader('startdate', $strStartDate);
+        echo colheader('completeddate', $strCompleted);
+        echo colheader('duration', $strDuration);
+        echo colheader('lastupdated', $strLastUpdated);
+        echo colheader('owner', $strOwner);
+        echo colheader('action', $strAction);
     }
     echo "</tr>\n";
     $shade='shade1';
@@ -532,7 +533,7 @@ if (mysql_num_rows($result) >=1 )
             if ($enddate == '0')
             {
                 echo "<td><a href='view_task.php?id={$task->id}&amp;mode=incident&amp;incident={$id}' class='info'>";
-                echo "".icon('timer')." {$task->id}</a></td>";
+                echo icon('timer', 16)." {$task->id}</a></td>";
             }
             else
             {
@@ -656,6 +657,13 @@ if (mysql_num_rows($result) >=1 )
         {
             echo "<td>".user_realname($task->owner)."</td>";
         }
+        
+        if ($mode == 'incident')
+        {
+            echo "<td><a href='view_task.php?id={$task->id}&amp;mode=incident&amp;incident={$id}' class='info'>";
+            echo "{$strViewActivity}</a></td>";
+        }
+          
         echo "</tr>\n";
         if ($shade == 'shade1') $shade = 'shade2';
         else $shade = 'shade1';
@@ -664,9 +672,7 @@ if (mysql_num_rows($result) >=1 )
     if ($mode == 'incident')
     {
         echo "<tr class='{$shade}'><td><strong>{$strTotal}:</strong></td>";
-        echo "<td colspan='5'>".format_seconds($totalduration)."</td></tr>";
-        echo "<tr class='{$shade}'><td><strong>{$strExact}:</strong></td>";
-        echo "<td colspan='5' id='totalduration'>".exact_seconds($totalduration);
+        echo "<td colspan='6' id='totalduration'>".exact_seconds($totalduration);
 
         echo "<script type='text/javascript'>\n//<![CDATA[\n";
         if (empty($closedduration)) $closedduration = 0;
@@ -680,6 +686,7 @@ if (mysql_num_rows($result) >=1 )
         echo "<td colspan='7'><a href=\"javascript: submitform()\">{$strMarkComplete}</a></td>";
         echo "</tr>";
     }
+    
     echo "</table>\n";
     echo "</form>";
 
@@ -753,21 +760,18 @@ if (mysql_num_rows($result) >=1 )
             echo "<td>{$totals['totalengineerperiods']}</td><td>{$totals['totalcustomerperiods']}</td></tr>";
             echo "</table></p>";
         }
+        else
+        {
+            echo "<p align='center'><strong>{$strNoRecords}</strong></p>";
+        }
     }
 }
 else
 {
-    echo "<p align='center'>";
-    if ($sit[2] == $user)
-    {
-        echo $strNoTasks;
-    }
-    else
-    {
-        echo $strNoPublicTasks;
-    }
-
+    echo "<br /><p align='center'>";
+    echo "<strong>{$strNoRecords}</strong>";
     echo "</p>";
+    
     if ($mode == 'incident')
     {
         echo "<p align='center'>";
