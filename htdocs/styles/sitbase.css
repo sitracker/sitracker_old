@@ -1,38 +1,12 @@
 /* Base styles*/
-body {  margin: 0px; }
-
+body { margin: 0px; }
 h1 {
   font-size: 16pt; font-weight: bold; color: #FFF;
   background-color: #203894; margin: 0px; padding: 3px 0px 3px 0px;
 }
-
 select { background: white; }
-
-#masthead {
-  background-image: url('../images/top2.png');
-  background-position: top-left; background-repeat: x-repeat;
-}
-#apptitle {
-  background-image: url('../images/sit_swirl2.png');
-  background-position: top-left; background-repeat: no-repeat;
-  height: 50px; background-color: transparent;}
-#menu { border-bottom: 1px solid #203894; padding-bottom: 4px;}
-.menuitem li { padding-top: 3px; }
 th { -moz-border-radius: 7px; -khtml-border-radius: 7px; border-radius: 7px; }
-th:hover { background: #E9E9E9; }
-
-tr.shade1:hover { background-color: #F2F2F2; }
-tr.shade2:hover { background-color: #F2F2F2; }
-tr.critical { background-color: #FF4433; }
-tr.critical:hover { background-color: #FFAAAB; }
-strong.critical { text-decoration: blink; }
-tr.critical strong.critical { color: #FFF; }
-tr.urgent:hover { background-color: #FFAAAB; }
-tr.expired:hover { background-color: #F2F2F2; }
-tr.notice:hover { background-color: #F2F2F2; }
-
 img { border:0px; }
-
 blockquote
 {
     background-color: transparent;
@@ -44,11 +18,32 @@ blockquote
     margin-left: 5%;
     margin-right: 5%;
 }
+code { white-space: pre; }
+td sup { color: #444; }
 
-code
-{
-    white-space: pre;
+/* ID & Class Selectors */
+
+#masthead {
+  background-image: url('../images/top2.png');
+  background-position: top-left; background-repeat: x-repeat;
 }
+#apptitle {
+  background-image: url('../images/sit_swirl2.png');
+  background-position: top-left; background-repeat: no-repeat;
+  height: 50px; background-color: transparent;}
+#menu { border-bottom: 1px solid #203894; padding-bottom: 4px;}
+.menuitem li { padding-top: 3px; }
+th:hover { background: #E9E9E9; }
+
+tr.shade1:hover { background-color: #F2F2F2; }
+tr.shade2:hover { background-color: #F2F2F2; }
+tr.critical { background-color: #FF4433; }
+tr.critical:hover { background-color: #FFAAAB; }
+strong.critical { text-decoration: blink; }
+tr.critical strong.critical { color: #FFF; }
+tr.urgent:hover { background-color: #FFAAAB; }
+tr.expired:hover { background-color: #F2F2F2; }
+tr.notice:hover { background-color: #F2F2F2; }
 
 #footerbar select { font-size: 80%; }
 #footerbar form { margin: 0px; }
@@ -76,7 +71,7 @@ option.seperator { border-top: 1px solid black; }
 
 /* Information and Errors */
 sup.red { color: #F00; font-size: 125%; } /* FIXME doesn't need a class for this */
-td sup { color: #444; }
+
 p.tip,p.info, p.warning, p.error, p.trigger, h5.warning, h5.error
 {
   background-position: 3px 2px;
