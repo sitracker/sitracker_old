@@ -343,6 +343,7 @@ function display_update_page($draftid=-1)
         $checkbox = "checked='checked'";
     }
     echo "<label><input type='checkbox' name='cust_vis' id='cust_vis' {$checkbox} value='yes' /> Make this update visible to the incident reporter<label><br />"; //FIXME i18n Make this update visible to the incident reporter
+    echo bbcode_toolbar('updatelog');
     echo "<textarea name='bodytext' id='updatelog' rows='13' cols='50'>";
     if ($draftid != -1) echo $draftobj->content;
     echo "</textarea>";
@@ -551,7 +552,7 @@ else
         $timetext .= "</b>\n\n";
         $bodytext = $timetext.$bodytext;
     }
-    
+
     // attach file - have to do it here to get fileid
     // TODO user file_upload
     $att_max_filesize = return_bytes($CONFIG['upload_max_filesize']);
@@ -566,7 +567,7 @@ else
         {
         	$category = 'private';
         }
-        
+
         $sql = "INSERT INTO `{$dbFiles}`(category, filename, size, userid, usertype, shortdescription, longdescription, filedate) ";
         $sql .= "VALUES ('{$category}', '{$filename}', '{$_FILES['attachment']['size']}', '{$sit[2]}', 'user', '', '', NOW())";
         mysql_query($sql);
@@ -579,7 +580,7 @@ else
             $fileid = mysql_insert_id();
         }
     }
-    
+
     // was '$attachment'
     if ($_FILES['attachment']['name'] != '' && isset($_FILES['attachment']['name']) == TRUE)
     {
@@ -618,7 +619,7 @@ else
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     $updateid = mysql_insert_id();
-    
+
     //upload file, here because we need updateid
     if ($_FILES['attachment']['name'] != "")
     {
@@ -669,7 +670,7 @@ else
         	$category = 'private';
         }
     }
-    
+
     //create link
     $sql = "INSERT INTO `{$dbLinks}`(linktype, origcolref, linkcolref, direction, userid) ";
     $sql .= "VALUES(5, '{$updateid}', '{$fileid}', 'left', '{$sit[2]}')";
@@ -678,7 +679,7 @@ else
     {
         trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     }
-    
+
     $sql = "UPDATE `{$dbIncidents}` SET status='$newstatus', priority='$newpriority', lastupdated='$now', timeofnextaction='$timeofnextaction' WHERE id='$id'";
     mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
