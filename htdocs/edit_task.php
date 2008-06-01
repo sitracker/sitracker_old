@@ -28,7 +28,7 @@ $title = $strEditTask;
 $action = $_REQUEST['action'];
 $id = cleanvar($_REQUEST['id']);
 $incident = cleanvar($_REQUEST['incident']);
-
+$SYSLANG = $_SESSION['syslang'];
 switch ($action)
 {
     case 'edittask':
@@ -210,9 +210,7 @@ switch ($action)
             $startdate = readable_date($startdate);
             $enddate = readable_date($enddate);
 
-            $updatehtml = "Update created from <a href=\"tasks.php?incident=";
-            $updatehtml .= "{$incident}\">Activity {$id}</a><br />Activity ";
-            $updatehtml .= "started: {$startdate}\n\n";
+            $updatehtml = sprintf($SYSLANG['strActivityStarted'], $startdate)."\n\n";
             
             for ($i = $numnotes-1; $i >= 0; $i--)
             {
@@ -220,8 +218,8 @@ switch ($action)
                 $updatehtml .= readable_date(mysql2date($notesarray[$i]->timestamp));
                 $updatehtml .= "[/b]\n{$notesarray[$i]->bodytext}\n\n";
             }
-            $updatehtml .= "Activity completed: {$enddate}, duration was: [b]";
-            $updatehtml .= format_seconds($duration)."[/b]";
+            
+            $updatehtml .= sprintf($SYSLANG['strActivityCompleted'], $enddate, "[b]".format_seconds($duration)."[/b]");
 
             //create update
             $sql = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, ";

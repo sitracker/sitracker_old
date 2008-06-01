@@ -658,10 +658,14 @@ if (mysql_num_rows($result) >=1 )
             echo "<td>".user_realname($task->owner)."</td>";
         }
         
-        if ($mode == 'incident')
+        if ($mode == 'incident' AND $enddate == '0')
         {
             echo "<td><a href='view_task.php?id={$task->id}&amp;mode=incident&amp;incident={$id}' class='info'>";
             echo "{$strViewActivity}</a></td>";
+        }
+        else
+        {
+            echo "<td></td>";
         }
           
         echo "</tr>\n";
