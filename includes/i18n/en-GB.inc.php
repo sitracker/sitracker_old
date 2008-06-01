@@ -473,6 +473,7 @@ $strFor = 'for';
 $strForce = 'Force';
 $strForceTo = 'Force To';
 $strForenames = 'Forenames';
+$strForFurtherAssistance = 'For further assistance please contact %s';
 $strForgottenDetails = 'Forgotten your details?';
 $strForgottenPasswordDetails = 'Forgotten Password Details';
 $strForm = 'Form';
@@ -622,6 +623,7 @@ $strKey = 'Key';
 $strKeywords = 'Keywords';
 $strKnowledgeBase = 'Knowledge Base';
 $strKnowledgeBaseArticle = 'Knowledge Base Article';
+$strKnowledgeBaseArticles = 'Knowledge Base Articles';
 
 $strLanguage = 'Language';
 $strLastMonth = 'Last month';
@@ -901,6 +903,7 @@ $strPublic = 'Public';
 $strPublicHoliday = 'Public Holiday';
 $strPublish = 'Publish';
 $strPublished = 'Published';
+$strPublishedToday = 'Published Today';
 $strPublishedOnX = 'Published on %s';
 
 $strQualifications = 'Qualifications';

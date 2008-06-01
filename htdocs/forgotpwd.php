@@ -14,9 +14,13 @@
 @include ('set_include_path.inc.php');
 $permission = 0; // not required
 require ('db_connect.inc.php');
-require ('functions.inc.php');
+
+session_name($CONFIG['session_name']);
+session_start();
 require 'strings.inc.php';
-$title = 'Forgotten Password';
+require ('functions.inc.php');
+
+$title = $strForgottenDetails;
 
 // External variables
 $email = cleanvar($_REQUEST['emailaddress']);
@@ -92,7 +96,7 @@ switch ($_REQUEST['action'])
             else
             {
                 echo "<h3>{$strInvalidEmailAddress}</h3>";
-                echo "<p>If you feel that you should have access to this portal please contact {$CONFIG['support_email']} for assistance</p>"; // FIXME i18n
+                echo "<p>".sprintf($strForFurtherAssistance, $CONFIG['support_email'])."</p>";
                 echo "<p><a href='index.php'>{$strBackToLoginPage}</a></p>";
             }
         }

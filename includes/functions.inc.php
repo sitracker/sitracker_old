@@ -1999,6 +1999,7 @@ function emailtemplate_drop_down($name, $id, $type)
 {
     global $dbEmailTemplates;
     // INL 22Apr05 Added a filter to only show user templates
+
     $sql  = "SELECT id, name, description FROM `{$dbEmailTemplates}` WHERE type='{$type}' ORDER BY name ASC";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
@@ -8881,26 +8882,8 @@ function process_add_contact()
             {
                 if ($CONFIG['portal'] AND $_POST['emaildetails'] == 'on')
                 {
-                    $extra_headers = "Reply-To: {$CONFIG['support_email']}\n";
-                    $extra_headers .= "X-Mailer: {$CONFIG['application_shortname']} {$application_version_string}/PHP " . phpversion() . "\n";
-                    $extra_headers .= "X-Originating-IP: {$_SERVER['REMOTE_ADDR']}\n";
-                    $extra_headers .= "\n"; // add an extra crlf to create a null line to separate headers from body
-
-                    $bodytext = "Hello $forenames\nYou have just been added as a ";
-                    $bodytext .= "contact on {$CONFIG['application_name']} ";
-                    $bodytext .= "{$CONFIG['application_uriprefix']}{$CONFIG['application_webpath']}";
-                    $bodytext .= "\nThese details allow you to the login to the portal,";
-                    $bodytext .= " where you can create, update and close your incidents";
-                    $bodytext .= ", as well as view your sites' incidents.\n\n";
-                    $bodytext .= "Your details are as follows:\n";
-                    $bodytext .= "username: {$username}\npassword: {$prepassword}\n";
-                    $bodytext .= "\nPlease note, this password cannot be recovered, ";
-                    $bodytext .= "only reset. You may change it in the portal.";
-
-                    //FIXME 3.35 use triggers
-                    echo "mail($email, $strContactDetails, $bodytext, $extra_headers)";
+                    trigger('TRIGGER_NEW_CONTACT', array('contactid' => $newid, 'prepasword' => $prepassword, 'userid' => $sit[2]));
                 }
-                journal(CFG_LOGGING_NORMAL,'Contact Added',"$forenames $surname was Added",CFG_JOURNAL_CONTACTS,$newid);
 
                 if ($mode == 'internal')
                 {

@@ -645,7 +645,7 @@ function trigger_description($triggervar)
 function triggeraction_description($trigaction, $editlink=FALSE)
 {
     global $CONFIG, $iconset, $actionarray, $dbEmailTemplates, $dbNoticeTemplates;
-    $html = "".icon('triggeraction', 16)." ";
+    $html = icon('triggeraction', 16)." ";
     if (!empty($trigaction->template))
     {
         if ($trigaction->action == 'ACTION_EMAIL')
@@ -669,16 +669,24 @@ function triggeraction_description($trigaction, $editlink=FALSE)
         {
             $template = $trigaction->template;
         }
-        $html .= sprintf($actionarray[$trigaction->action]['description'], $template);
-        $html .= " ";
+        $html .= sprintf($actionarray[$trigaction->action]['description'], $template).". ";
     }
     else
     {
         $html .= "{$actionarray[$trigaction->action]['description']} ";
     }
-    if (!empty($trigaction->userid)) $html .= " for ".user_realname($trigaction->userid);
-    if (!empty($trigaction->parameters)) $html .= ", using {$trigaction->parameters}";
-    if (!empty($trigaction->checks)) $html .= ", when {$trigaction->checks} ";
+    if (!empty($trigaction->userid) AND $trigaction->userid != $sit[2])
+    {
+        $html .= " <strong>{$GLOBALS['strUser']}:</strong> ".user_realname($trigaction->userid).". ";
+    }
+    if (!empty($trigaction->parameters))
+    {
+        $html .= "<strong>{$GLOBALS['strParameters']}:</strong> {$trigaction->parameters}. ";
+    }
+    if (!empty($trigaction->checks))
+    {
+        $html .= "<strong>{$GLOBALS['strRules']}:</strong> {$trigaction->checks}. ";
+    }
     return $html;
 }
 

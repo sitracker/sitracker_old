@@ -71,7 +71,7 @@ $site_name = $site->name;
 
 if (!empty($site->notes))
 {
-    $site_notes = "".icon('site', 16)." <strong>{$strSiteNotes}</strong><br />".nl2br($site->notes);
+    $site_notes = icon('site', 16)." <strong>{$strSiteNotes}</strong><br />".nl2br($site->notes);
 }
 else
 {
@@ -81,7 +81,7 @@ else
 unset($site);
 if (!empty($incident->contactnotes))
 {
-    $contact_notes = "".icon('contact')." <strong>{$strContactNotes}</strong><br />".nl2br($incident->contactnotes);
+    $contact_notes = icon('contact', 16)." <strong>{$strContactNotes}</strong><br />".nl2br($incident->contactnotes);
 }
 else
 {
@@ -233,5 +233,4 @@ else
     echo "<a class='barlink' href='javascript:window.close();'>{$strCloseWindow}</a>";
 }
 echo "</div>";
-
 ?>
