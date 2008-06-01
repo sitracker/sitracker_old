@@ -76,15 +76,7 @@ switch ($mode)
 
         incident_backup_switchover($sit[2], $accepting);
 
-        //if user is not accepting
-        if ($accepting == 'No')
-        {
-            trigger("TRIGGER_USER_SET_TO_AWAY", array('userid' => $sit[2]));
-        }
-        if ($accepting == 'Yes')
-        {
-            trigger("TRIGGER_USER_RETURNS", array('userid' => $sit[2]));
-        }
+        trigger("TRIGGER_USER_CHANGED_STATUS", array('userid' => $sit[2]));
 
         header('Location: index.php');
     break;
@@ -109,7 +101,7 @@ switch ($mode)
     case 'deleteassign':
         // this may not be the very best place for this functionality but it's all i could find - inl 19jan05
         // hide a record from tempassign as requested by clicking 'ignore' in the holding queue
-        $sql = "UPDATE tempassigns SET assigned='yes' WHERE incidentid='{$incidentid}' AND originalowner='{$originalowner}' LIMIT 1";
+        $sql = "UPDATE `{$dbTempAssigns}` SET assigned='yes' WHERE incidentid='{$incidentid}' AND originalowner='{$originalowner}' LIMIT 1";
         mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
         header("Location: review_incoming_updates.php");
