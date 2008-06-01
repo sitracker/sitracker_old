@@ -39,8 +39,10 @@ $strActivity = 'Activity';
 $strActivityAdded = 'Activity Added';
 $strActivityBilling = 'Activity Billing';
 $strActivityBillingInfo = 'Only closed activities are shown for billing.';
+$strActivityCompleted = 'Activity completed: %s, duration was: %s';
 $strActivityList = 'Activity List';
 $strActivityMarkedCompleteSuccessfully = 'Activity Marked Complete Successfully';
+$strActivityStarted = 'Activity started: %s';
 # i.e. Create, New
 $strAdd = 'Add';
 $strAddAction = 'Add Action';
@@ -88,6 +90,7 @@ $strAfternoon = 'Afternoon';
 $strAge = 'Age';
 # e.g. 4 hours ago
 $strAgo = '%s ago';
+$strAListOfAvailableTicket = 'A list of available triggers and the actions that are set when triggers occur';
 $strAll = 'All';
 $strAllClosed = 'All Closed';
 $strAllDay = 'all day';
@@ -255,12 +258,16 @@ $strCompleted = 'Completed';
 $strCompletion = 'Completion';
 $strCommentsSentWithRequest = 'The following comments were sent with the request';
 $strCreateANotice = 'Create a notice based on %s';
+$strCreateANoticeWhen = 'Create a notice based on %s, when %s';
+$strCreateANoticeForWhen = 'Create a notice based on %s for %s, when %s';
 $strCreateNewForm = 'Create New Form';
 # e.g. film credits
 $strCredits = 'Credits';
 $strCreateANotice = 'Create a notice based on %s';
 $strCriteria = 'Criteria';
 $strCritical = 'Critical';
+# e.g. JJohn Acme of ACME Widgets Co. 
+$strContactofSite = '%s of %s';
 $strCompassionateLeave = 'Maternity/Paternity/Compassionate Leave';
 $strCountContractsByProduct = 'Count contracts by product';
 # Region / State
@@ -609,6 +616,7 @@ $strJune = 'June';
 $strJustNow = 'Just Now';
 
 $strKBytes = 'KBytes';
+$strKeepCurrentLanguage = 'Keep current language';
 #e.g. graph legend
 $strKey = 'Key';
 $strKeywords = 'Keywords';

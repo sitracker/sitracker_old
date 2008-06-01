@@ -21,14 +21,15 @@ echo "<div id='detailsummary'>";
 echo "<table>";
 echo "<tr><td>";
 // First column: Contact Details
-echo "<a href='contact_details.php?id={$incident->contactid}' title=\"{$strContact}\" target='top.opener' class='info'>{$incident->forenames} {$incident->surname}";
-if (!empty($contact_notes)) echo "<span>{$contact_notes}</span>";
-echo "</a> ";
-echo "of <a href='site_details.php?id={$incident->siteid}' title='{$strSite}' target='top.opener' class='info'>{$site_name}";
-if (!empty($site_notes)) echo "<span>{$site_notes}</span>";
-echo "</a> ";
-echo list_tag_icons($incident->siteid, TAG_SITE); // site tag icons
-echo "<br />\n";
+$contact = "<a href='contact_details.php?id={$incident->contactid}' title=\"{$strContact}\" target='top.opener' class='info'>{$incident->forenames} {$incident->surname}";
+if (!empty($contact_notes)) $contact .= "<span>{$contact_notes}</span>";
+$contact .= "</a> ";
+$site = "<a href='site_details.php?id={$incident->siteid}' title='{$strSite}' target='top.opener' class='info'>{$site_name}";
+if (!empty($site_notes)) $site .= "<span>{$site_notes}</span>";
+$site .= "</a> ";
+$site .= list_tag_icons($incident->siteid, TAG_SITE); // site tag icons
+$site .= "<br />\n";
+echo sprintf($strContactofSite, $contact, $site);
 echo "<a href=\"mailto:{$incident->email}\">{$incident->email}</a><br />\n";
 if ($incident->ccemail != '') echo "CC: <a href=\"mailto:{$incident->ccemail}\">{$incident->ccemail}</a><br />\n";
 if ($incident->phone!='' OR $incident->phone!='')
