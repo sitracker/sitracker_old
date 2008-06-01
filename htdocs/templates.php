@@ -289,7 +289,7 @@ elseif ($action == "edit")
         // Show a list of available template variables.  Only variables that have 'requires' matching the 'required'
         // that the trigger provides is shown
         echo "<div id='templatevariables' style='display:none;'>";
-        echo "<h4>Template Variables</h4>"; // FIXME template variables
+        echo "<h4>{$strTemplateVariables}</h4>";
         echo "<p align='center'>{$strFollowingSpecialIdentifiers}</p>";
         if (!is_array($required)) echo "<p class='info'>Some of these identifiers might not be available once you add a trigger</p>";
 
@@ -310,6 +310,9 @@ elseif ($action == "edit")
             {
                 echo "<dt><code><a href=\"javascript:insertTemplateVar('{$identifier}');\">{$identifier}</a></code></dt>";
                 if (!empty($ttvar['description'])) echo "<dd>{$ttvar['description']}";
+                {
+                    if (!empty($ttvar[0]['description'])) echo "<dd>{$ttvar[0]['description']}";
+                }
                 echo "<br />";
             }
         }

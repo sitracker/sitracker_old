@@ -1119,6 +1119,7 @@ $strTemplate = 'Template';
 $strTemplates = 'Templates';
 $strTemplatesShouldNotBeginWith = 'Templates should not begin with any text that looks like an email header.  (e.g. <code>\'Name: \'</code>)';
 $strTemplateType = 'Template Type';
+$strTemplateVariables = 'Template Variables';
 $strTemporaryOwner = 'Temporary Owner';
 $strTemporarilyAssignedto = 'Temporarily assigned to %s by %s';
 $strTerminated = 'Terminated';

@@ -145,6 +145,7 @@ array('name' => 'Waiting Held Email',
 
 plugin_do('trigger_types');
 
+
 /**
     * Template variables (Alphabetical order)
     * description - Friendly label
