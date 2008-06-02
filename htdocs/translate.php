@@ -8,7 +8,8 @@
 // of the GNU General Public License, incorporated herein by reference.
 //
 
-// Author: Kieran Hogg <kieran_hogg[at]users.sourceforge.net>
+// Authors: Kieran Hogg <kieran_hogg[at]users.sourceforge.net>
+//          Ivan Lucas <ivan_lucas[at]users.sourceforge.net>
 
 @include ('set_include_path.inc.php');
 $permission = 0; // not required
@@ -158,8 +159,9 @@ elseif ($_REQUEST['mode'] == "show")
             }
         }
     }
-    echo "<h2>Word List</h2>";
-    echo "<p align='center'>{$strTranslateTheString}</p>";
+    echo "<h2>{$strWordList}</h2>";
+    echo "<p align='center'>{$strTranslateTheString}<br/>";
+    echo "<strong>{$strCharsToKeepWhenTranslating}</strong></p>";
     echo "<form method='post' action='{$_SERVER[PHP_SELF]}?mode=save'>";
     echo "<table align='center'><tr><th>{$strVariable}</th><th>en-GB ({$strEnglish})</th><th>{$_REQUEST['lang']}</th></tr>";
 
