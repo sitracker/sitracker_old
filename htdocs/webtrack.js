@@ -92,41 +92,62 @@ function pausecomp(millis)
 
 function get_and_display(page, component, update)
 {
-//     if ($(component).hasClassName('window') == false)
-//     {
-//         component = this.up('div');
-//     }
-//     alert(component);
+    // Do certain special things for dashlets
+    if (component.substr(0,3) == 'win')
+    {
+        // Get the ID for the refresh icon so we can replace it, store the original first
+        var refreshicon = component.replace(/win/, "refresh");
+        var origicon = '';
+        if (refreshicon != null)
+        {
+            origicon = $(refreshicon).src;
+        }
+
+        // If the dashlet content is blank, set a loading image
+        var loaderimg = "<p align='center'><img src='"+ application_webpath +"images/ajax-loader.gif' alt=\"{$strLoading}\" /></p>";
+        if ($(component).innerHTML.substr(0,7) == '<script') $(component).innerHTML = loaderimg + $(component).innerHTML
+    }
+
     if (update == true)
     {
         if (dashletrefresh[component] != null) dashletrefresh[component].stop();
         dashletrefresh[component] = new Ajax.PeriodicalUpdater(component, page, {
-        method: 'get', frequency: 30, decay: 2
+        method: 'get', frequency: 30, decay: 2,
+            onCreate: function(){
+                if (refreshicon != null)
+                {
+                    $(refreshicon).src = application_webpath + 'images/dashlet-ajax-loader.gif';
+                }
+            },
+            onComplete: function(){
+                if (refreshicon != null) $(refreshicon).src = origicon;
+            },
+            onLoaded: function(){
+            if (refreshicon != null) $(refreshicon).src = origicon;
+            }
         });
     }
     else
     {
-        dashletrefresh[component].stop();
+        if (component.substr(0,3) == 'win') dashletrefresh[component].stop();
         new Ajax.Updater(component, page, {
-        method: 'get',onFailure: function(){ $(component).innerHTML = 'Error: could not load data: ' + url; }
-        });
-//         dashletrefresh.stop();
-//         if (page.indexOf('?') != -1) var sep = '&';
-//         elsesocss var sep = '?';
-//         var url = application_webpath + page + sep + 'rand=' + get_random();
-//         new Ajax.Request(url,
-//         {
-//             method:'get',
-//                 onSuccess: function(transport)
-//                 {
-//                     var response = transport.responseText || "no response text";
-//                     if (transport.responseText)
-//                     {
-//                         $(component).innerHTML = transport.responseText;
-//                     }
-//                 },
-//                 onFailure: function(){ $(component).innerHTML = 'Error: could not load data: ' + url; }
-//         });
+        method: 'get',
+            onFailure: function() {
+                $(component).innerHTML = 'Error: could not load data: ' + url;
+            },
+            onCreate: function() {
+                if (refreshicon != null)
+                {
+                    $(refreshicon).src = application_webpath + 'images/dashlet-ajax-loader.gif';
+                }
+            },
+            onComplete: function() {
+                if (refreshicon != null) $(refreshicon).src = origicon;
+            },
+            onLoaded: function() {
+                if (refreshicon != null) $(refreshicon).src = origicon;
+            }
+       });
     }
 }
 

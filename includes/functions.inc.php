@@ -5982,15 +5982,13 @@ function dashlet($dashboard, $dashletid, $icon, $title='', $link='', $content=''
     $displayfn = "dashboard_{$dashboard}_display";
     $editfn = "dashboard_{$dashboard}_edit";
 
-    if (empty($content)) $content = "<p align='center'><img src='{$CONFIG['application_webpath']}images/ajax-loader.gif' alt=\"{$strLoading}\" /></p>";
-
     $html .= "<div class='windowbox' id='{$dashletid}'>";
     $html .= "<div class='windowtitle'>";
     $html .= "<div>";
     if (function_exists($displayfn))
     {
         $html .= "<a href=\"javascript:get_and_display('ajaxdata.php?action=dashboard_display&amp;dashboard={$dashboard}&amp;did={$dashletid}','win{$dashletid}',true);\">";
-        $html .= icon('reload', 16)."</a>";
+        $html .= icon('reload', 16, '', '', "refresh{$dashletid}")."</a>";
     }
     if (function_exists($editfn))
     {
@@ -6001,7 +5999,7 @@ function dashlet($dashboard, $dashletid, $icon, $title='', $link='', $content=''
     if (!empty($link)) $html .= "<a href=\"{$link}\">{$icon}</a> <a href=\"{$link}\">{$title}</a>";
     else $html .= "{$icon} {$title}";
     $html .= "</div>\n";
-    $html .= "<div class='window' id='win{$dashletid}'>\n";
+    $html .= "<div class='window' id='win{$dashletid}'>";
     $html .= $content;
     $displayfn = "dashboard_{$dashboard}_display";
     if (function_exists($displayfn))
@@ -8293,11 +8291,13 @@ function show_next_action()
 *
 * @param string $filename filename of the string, minus extension, we assume .png
 * @param int $size size of the icon, from: 12, 16, 32
-* @param string $alt alt text of the icon
+* @param string $alt alt text of the icon (optional)
+* @param string $title (optional)
+* @param string $id ID attribute (optional)
 * @return string $html icon html
-* @author Kieran Hogg
+* @author Kieran Hogg, Ivan Lucas
 */
-function icon($filename, $size='', $alt='', $title='')
+function icon($filename, $size='', $alt='', $title='', $id='')
 {
     global $iconset, $CONFIG;
     $sizes = array(12, 16, 32);
@@ -8316,12 +8316,18 @@ function icon($filename, $size='', $alt='', $title='')
 
     if (!file_exists($file))
     {
+        // TODO 3.35 Return a default (blank?) icon here instead of an error message
         trigger_error("No such image: '$filename.png', ($file) size {$size}", E_USER_WARNING);
     }
     else
     {
-        return "<img src=\"{$urlpath}\" alt=\"{$alt}\" title=\"{$alt}\" />";
+        $icon = "<img src=\"{$urlpath}\"";
+        if (!empty($alt)) $icon .= " alt=\"{$alt}\" ";
+        if (!empty($title)) $icon .= " title=\"{$alt}\"";
+        if (!empty($id)) $icon .= "id=\"{$id}\"";
+        $icon .= " />";
     }
+    return $icon;
 }
 
 /**
@@ -9192,7 +9198,7 @@ function populate_syslang()
     if (file_exists($file))
     {
         $fh = fopen($file, "r");
-    
+
         $theData = fread($fh, filesize($file));
         fclose($fh);
         $lines = explode("\n", $theData);
