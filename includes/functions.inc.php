@@ -6006,7 +6006,7 @@ function dashlet($dashboard, $dashletid, $icon, $title='', $link='', $content=''
     $displayfn = "dashboard_{$dashboard}_display";
     if (function_exists($displayfn))
     {
-         $html .= "<script type='text/javascript'>\n//<![CDATA[\nget_and_display('ajaxdata.php?action=dashboard_display&dashboard={$dashboard}','win{$dashletid}', true);\n//]]>\n</script>\n";
+         $html .= "<script type='text/javascript'>\n//<![CDATA[\nget_and_display('ajaxdata.php?action=dashboard_display&dashboard={$dashboard}','win{$dahletid}', false);\n//]]>\n</script>\n";
     }
     $html .= "</div></div>";
 
