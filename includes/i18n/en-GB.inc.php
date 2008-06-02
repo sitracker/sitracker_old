@@ -267,7 +267,7 @@ $strCredits = 'Credits';
 $strCreateANotice = 'Create a notice based on %s';
 $strCriteria = 'Criteria';
 $strCritical = 'Critical';
-# e.g. JJohn Acme of ACME Widgets Co. 
+# e.g. JJohn Acme of ACME Widgets Co.
 $strContactofSite = '%s of %s';
 $strCompassionateLeave = 'Maternity/Paternity/Compassionate Leave';
 $strCountContractsByProduct = 'Count contracts by product';
@@ -651,6 +651,7 @@ $strListShowsContacts = 'This list shows contacts that matched your search, if s
 $strListShowsContracts = 'This list shows contracts, i.e. supported contacts and the products they are supported for. Click on the appropriate \'%s\' link to begin adding the incident';
 $strListSkills = 'List Skills';
 $strLinkSkillToX = 'Link skill to %s';
+$strLoading = 'Loading';
 $strLocked = 'Locked';
 $strLockedByX = 'Locked by %s';
 $strLogTriggerInJournal = 'Log the trigger in the system journal';

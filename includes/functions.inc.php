@@ -5976,10 +5976,13 @@ function show_notes($linkid, $refid, $delete = TRUE)
 */
 function dashlet($dashboard, $dashletid, $icon, $title='', $link='', $content='')
 {
+    global $strLoading;
     if (empty($icon)) $icon = icon('dashboard', 16);
     if (empty($title)) $title = $GLOBALS['strUntitled'];
     $displayfn = "dashboard_{$dashboard}_display";
     $editfn = "dashboard_{$dashboard}_edit";
+
+    if (empty($content)) $content = "<p align='center'><img src='{$CONFIG['application_webpath']}images/ajax-loader.gif' alt=\"{$strLoading}\" /></p>";
 
     $html .= "<div class='windowbox' id='{$dashletid}'>";
     $html .= "<div class='windowtitle'>";
