@@ -51,7 +51,14 @@ else
     $access = FALSE;
 }
 
-$file_fspath = "{$CONFIG['attachment_fspath']}{$incidentid}{$fsdelim}u{$updateid}{$fsdelim}{$filename}";
+if ($incidentid == 0 OR empty($incidentid))
+{
+    $file_fspath = "{$CONFIG['attachment_fspath']}updates{$fsdelim}{$updateid}{$fsdelim}{$filename}";
+}
+else
+{
+    $file_fspath = "{$CONFIG['attachment_fspath']}{$incidentid}{$fsdelim}u{$updateid}{$fsdelim}{$filename}";
+}
 
 if (!file_exists($file_fspath))
 {
