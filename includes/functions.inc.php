@@ -5922,7 +5922,7 @@ function add_note_form($linkid, $refid)
 }
 
 
-function show_notes($linkid, $refid)
+function show_notes($linkid, $refid, $delete = TRUE)
 {
     global $sit, $iconset, $dbNotes;
     $sql = "SELECT * FROM `{$dbNotes}` WHERE link='{$linkid}' AND refid='{$refid}' ORDER BY timestamp DESC, id DESC";
@@ -5936,10 +5936,13 @@ function show_notes($linkid, $refid)
             $html .= "<div class='detailhead note'> <div class='detaildate'>".readable_date(mysqlts2date($note->timestamp));
             if ($sit[2]==$note->userid)
             {
-                $html .= "<a href='delete_note.php?id={$note->id}&amp;rpath=";
-                $html .= "{$_SERVER['PHP_SELF']}?{$_SERVER['QUERY_STRING']}' ";
-                $html .= "onclick=\"return confirm_action('{$strAreYouSureDelete}');\">";
-                $html .= icon('delete', 16)."</a>";
+                if ($delete)
+                {
+                    $html .= "<a href='delete_note.php?id={$note->id}&amp;rpath=";
+                    $html .= "{$_SERVER['PHP_SELF']}?{$_SERVER['QUERY_STRING']}' ";
+                    $html .= "onclick=\"return confirm_action('{$strAreYouSureDelete}');\">";
+                    $html .= icon('delete', 16)."</a>";
+                }
                 $html .= "</div>\n";
                 $html .= icon('note', 16)." ";
                 $html .= sprintf($GLOBALS['strNoteAddedBy'], user_realname($note->userid,TRUE));

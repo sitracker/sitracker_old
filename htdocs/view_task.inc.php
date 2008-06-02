@@ -116,7 +116,7 @@ if (mysql_num_rows($result) >= 1)
     {
         echo "<div style='width: 48%; margin-left: auto; margin-right: auto;border: 1px solid #CCCCFF;'>";
         echo add_note_form(NOTE_TASK, $taskid);
-        echo show_notes(NOTE_TASK, $taskid);
+        echo show_notes(NOTE_TASK, $taskid, FALSE);
 
         echo "</div>";
     }
