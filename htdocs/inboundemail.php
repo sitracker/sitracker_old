@@ -30,7 +30,7 @@ fclose($fp);
 // DEBUG
 if ($CONFIG['debug'])
 {
-    echo $rawemail;
+    //echo $rawemail;
 }
 
 // Create and populate the email object
@@ -71,7 +71,7 @@ if (empty($incidentid))
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
     // This could be a new incident or just spam
-    die('Invalid incident ID or incident ID not found');
+    //die('Invalid incident ID or incident ID not found');
     // FIXME incomplete, we shouldn't just die like that
 }
 else
