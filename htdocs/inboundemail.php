@@ -158,7 +158,7 @@ else
     }
 }
 
-
+$attachment = array();
 
 if ($decoded_email->contenttype=='multipart/mixed' OR
     $decoded_email->contenttype=='multipart/alternative')
