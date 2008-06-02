@@ -232,7 +232,7 @@ function do_attachment()
 
     if (!file_exists($fa_dir))
     {
-        if (!mkdir($fa_dir, 0775, TRUE)) trigger_error("Failed to create incident update attachment directory",E_USER_WARNING);
+        if (!mkdir($fa_dir, 0775, TRUE)) trigger_error("Failed to create incident update attachment directory $fa_dir",E_USER_WARNING);
     }
     
     if ($CONFIG['debug'])
@@ -253,7 +253,7 @@ function do_attachment()
         echo "NOT WRITABLE $filename\n";
     }
     
-    $sql = "INSERT into `{$GLOBLAS['dbLinks']}`('linktype', 'origcolref', 'linkcolref', 'direction', 'userid') ";
+    $sql = "INSERT into `{$GLOBALS['dbLinks']}`('linktype', 'origcolref', 'linkcolref', 'direction', 'userid') ";
     $sql .= "VALUES('5',  '{$updateid}', '{$fileid}', 'left', '0') ";
     mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
