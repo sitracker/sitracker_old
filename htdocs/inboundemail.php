@@ -246,7 +246,7 @@ if ($decoded_email->contenttype=='multipart/mixed' OR
                 echo "NOT WRITABLE $filename\n";
             }
             
-            $sql = "INSERT INTO `{$GLOBALS['dbLinks']}` ('linktype', 'origcolref', 'linkcolref', 'direction', 'userid') ";
+            $sql = "INSERT INTO `{$GLOBALS['dbLinks']}` (`linktype`, `origcolref`, `linkcolref`, `direction`, `userid`) ";
             $sql .= "VALUES('5', '{$updateid}', '{$fileid}', 'left', '0') ";
             echo $sql;
             mysql_query($sql);
@@ -302,7 +302,7 @@ function do_attachment()
         echo "NOT WRITABLE $filename\n";
     }
     
-    $sql = "INSERT INTO `{$GLOBALS['dbLinks']}` ('linktype', 'origcolref', 'linkcolref', 'direction', 'userid') ";
+    $sql = "INSERT INTO `{$GLOBALS['dbLinks']}` (`linktype`, `origcolref`, `linkcolref`, `direction`, `userid`) ";
     $sql .= "VALUES('5',  '{$updateid}', '{$fileid}', 'left', '0') ";
     mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
