@@ -37,7 +37,6 @@ if ($CONFIG['debug'])
 $email = new mime_email;
 $email->set_emaildata($rawemail);
 unset($rawemail);
-$attachment = array();
 
 $decoded_email = $email->go_decode();
 
@@ -356,7 +355,7 @@ function do_attachment()
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 }
 
-
+$headertext = '';
 // Build up header text to append to the incident log
 if (!empty($decoded_email->from))
 {
@@ -391,14 +390,13 @@ if ($count_attachments >= 1)
     }
     $headertext .= "\n";
 }
-$headertext .= "{$headertext}<hr>";
 
 $sql = "SELECT bodytext FROM `{$dbUpdates}` WHERE id='{$updateid}'";
 $result = mysql_query($sql);
 if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 $updateobj = mysql_fetch_object($result);
 
-$newupdate = $headertext.$updateobj->bodytext;
+$newupdate = $headertext."<hr>".$updateobj->bodytext;
 
 $sql = "UPDATE `{$dbUpdates}` SET bodytext = '{$newupdate}' WHERE id = '{$updateid}'";
 mysql_query($sql);
