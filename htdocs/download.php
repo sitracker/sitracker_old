@@ -63,10 +63,9 @@ else
 if (!file_exists($file_fspath))
 {
     header('HTTP/1.1 404 Not Found');
-    header('Status: 404 Not Found',1,403);
+    header('Status: 404 Not Found',1,404);
     echo "<h3>404 File Not Found</h3>";
-    echo "<p>{$file}</p>";
-        echo $file_fspath;
+    echo "<p>{$file_fspath}</p>";
     exit;
 }
 elseif ($access == TRUE)
