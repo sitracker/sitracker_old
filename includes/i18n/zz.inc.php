@@ -433,6 +433,7 @@ $strFor = 'strFor';
 $strForce = 'strForce';
 $strForceTo = 'strForceTo';
 $strForenames = 'strForenames';
+$strForFurtherAssistance = 'strForFurtherAssistance';
 $strForgottenDetails = 'strForgottenDetails';
 $strForgottenPasswordDetails = 'strForgottenPasswordDetails';
 $strForm = 'strForm';
@@ -573,6 +574,7 @@ $strKey = 'strKey';
 $strKeywords = 'strKeywords';
 $strKnowledgeBase = 'strKnowledgeBase';
 $strKnowledgeBaseArticle = 'strKnowledgeBaseArticle';
+$strKnowledgeBaseArticles = 'strKnowledgeBaseArticles';
 
 $strLanguage = 'strLanguage';
 $strLastMonth = 'strLastMonth';
@@ -839,6 +841,7 @@ $strPublic = 'strPublic';
 $strPublicHoliday = 'strPublicHoliday';
 $strPublish = 'strPublish';
 $strPublished = 'strPublished';
+$strPublishedToday = 'strPublishedToday';
 $strPublishedOnX = 'strPublishedOnX';
 
 $strQualifications = 'strQualifications';
