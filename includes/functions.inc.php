@@ -5939,13 +5939,14 @@ function show_notes($linkid, $refid)
                 $html .= "<a href='delete_note.php?id={$note->id}&amp;rpath=";
                 $html .= "{$_SERVER['PHP_SELF']}?{$_SERVER['QUERY_STRING']}' ";
                 $html .= "onclick=\"return confirm_action('{$strAreYouSureDelete}');\">";
-                $html = icon('delete', 16)."</a>";
+                $html .= icon('delete', 16)."</a>";
                 $html .= "</div>\n";
-                $html .= "".icon('note', 16)." ";
-                $html .= "Note added by ".user_realname($note->userid,TRUE)."</div>\n";
+                $html .= icon('note', 16)." ";
+                $html .= sprintf($GLOBALS['strNoteAddedBy'], user_realname($note->userid,TRUE));
+                $html .= "</div>\n";
                 $html .= "<div class='detailentry note'>";
                 $html .= nl2br(bbcode($note->bodytext));
-                $html .= "</div>\n";
+                $html .= "</div></div>\n";
             }
         }
     }
