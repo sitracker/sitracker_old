@@ -1,5 +1,12 @@
 All icons in this directory are taken from the Oxygen Icons project (www.oxygen-icons.org) licenced under the GNU LGPL, see below for licence information
 
+Exceptions:
+16x16/aim.png - Crystal Project
+16x16/icq.png - KDE Classic
+16x16/msn.png - Crystal Project
+
+Licences for these projects contained ../sit/LICENCE
+
 =======================================
 
 GNU LESSER GENERAL PUBLIC LICENSE
