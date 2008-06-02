@@ -115,10 +115,10 @@ switch ($_REQUEST['action'])
         {
             $count = count($dashboardcomponents);
 
-            $sql = "INSERT INTO `{$dbDashboard}` (name) VALUES ";
+            $sql = "INSERT INTO `{$dbDashboard}` (`name`, `enabled`) VALUES ";
             for($i = 0; $i < $count; $i++)
             {
-                $sql .= "('{$dashboardcomponents[$i]}'), ";
+                $sql .= "('{$dashboardcomponents[$i]}', 'true'), ";
             }
             $result = mysql_query(substr($sql, 0, strlen($sql)-2));
             if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
