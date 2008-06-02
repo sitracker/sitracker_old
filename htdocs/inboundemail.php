@@ -17,7 +17,7 @@
 require ('db_connect.inc.php');
 require ('functions.inc.php');
 require ('mime_email.class.php');
-
+populate_syslang();
 // read the email from stdin (it should be piped to us by the MTA)
 $fp = fopen("php://stdin", "r");
 $rawemail = '';
@@ -356,25 +356,11 @@ function do_attachment()
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 }
 
-$count_attachments = count($attachment);
-if ($count_attachments >= 1)
-{
-    $headertext .= $SYSLANG['strAttachments'].": [b]{$count_attachments}[/b] - ";
-    $c = 1;
-    foreach ($attachment AS $att)
-    {
-        $headertext .= "[[att={$att['fileid']}]]{$att['filename']}[[/att]]";
-        if ($c < $count_attachments) $headertext .= ", ";
-        $c++;
-    }
-    $headertext .= "\n";
-}
-
 
 // Build up header text to append to the incident log
 if (!empty($decoded_email->from))
 {
-    $headertext .= "From: [b]".htmlentities(mysql_real_escape_string($decoded_email->from), ENT_NOQUOTES)."[/b]\n";
+    $headertext = "From: [b]".htmlentities(mysql_real_escape_string($decoded_email->from), ENT_NOQUOTES)."[/b]\n";
 }
 
 if (!empty($decoded_email->to))
@@ -392,6 +378,19 @@ if (!empty($decoded_email->subject))
     $headertext .= "Subject: [b]".htmlentities(mysql_real_escape_string($decoded_email->subject))."[/b]\n";
 }
 
+$count_attachments = count($attachment);
+if ($count_attachments >= 1)
+{
+    $headertext .= $SYSLANG['strAttachments'].": [b]{$count_attachments}[/b] - ";
+    $c = 1;
+    foreach ($attachment AS $att)
+    {
+        $headertext .= "[[att={$att['fileid']}]]{$att['filename']}[[/att]]";
+        if ($c < $count_attachments) $headertext .= ", ";
+        $c++;
+    }
+    $headertext .= "\n";
+}
 $headertext .= "{$headertext}<hr>";
 
 $sql = "SELECT bodytext FROM `{$dbUpdates}` WHERE id='{$updateid}'";
