@@ -5949,7 +5949,7 @@ function show_notes($linkid, $refid, $delete = TRUE)
                 $html .= "</div>\n";
                 $html .= "<div class='detailentry note'>";
                 $html .= nl2br(bbcode($note->bodytext));
-                $html .= "</div></div>\n";
+                $html .= "</div>\n";
             }
         }
     }
