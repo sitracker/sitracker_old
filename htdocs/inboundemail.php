@@ -224,7 +224,7 @@ if ($decoded_email->contenttype=='multipart/mixed' OR
                     
                     if ($CONFIG['debug'])
                     {
-                        echo "About to write to ".$fa_dir.$filename."\n";
+                        echo "default:About to write to ".$fa_dir.$filename."\n";
                     }
                     
                     if (is_writable($fa_dir)) //File doesn't exist yet .$filename
@@ -278,7 +278,7 @@ if ($decoded_email->contenttype=='multipart/mixed' OR
             
             if ($CONFIG['debug'])
             {
-                echo "About to write to ".$fa_dir.$filename."\n";
+                echo "else:About to write to ".$fa_dir.$filename."\n";
             }
             
             if (is_writable($fa_dir)) //File doesn't exist yet .$filename
@@ -334,7 +334,7 @@ function do_attachment()
     
     if ($CONFIG['debug'])
     {
-        echo "About to write to ".$fa_update_dir.$fsdelim.$filename."\n";
+        echo "func:About to write to ".$fa_update_dir.$fsdelim.$filename."\n";
     }
     
     if (is_writable($fa_dir.$fsdelim)) //File doesn't exist yet .$filename
