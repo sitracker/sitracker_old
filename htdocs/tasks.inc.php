@@ -663,7 +663,7 @@ if (mysql_num_rows($result) >=1 )
             echo "<td><a href='view_task.php?id={$task->id}&amp;mode=incident&amp;incident={$id}' class='info'>";
             echo "{$strViewActivity}</a></td>";
         }
-        else
+        elseif ($mode == 'incident')
         {
             echo "<td></td>";
         }
