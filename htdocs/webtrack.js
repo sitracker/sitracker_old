@@ -98,7 +98,7 @@ function get_and_display(page, component, update)
     if (update == true)
     {
         new Ajax.PeriodicalUpdater(component, page, {
-        method: 'get', frequency: 3, decay: 2
+        method: 'get', frequency: 30, decay: 2
         });
     }
     else
