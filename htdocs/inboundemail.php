@@ -196,19 +196,19 @@ if ($decoded_email->contenttype=='multipart/mixed' OR
                 break;
 
                 default:
-                    do_attachment();
+                    do_attachment($updateid);
                }
         }
         else
         {
-            do_attachment();
+            do_attachment($updateid);
         }
     }
 }
 
 function do_attachment()
 {
-    global $fsdelim;
+    $fsdelim = (strstr($CONFIG['attachment_fspath'],"/")) ? "/" : "\\";;
 
     $filename = str_replace(' ','_',$block->mime_contentdispositionname);
     if (empty($filename)) $filename = "part{$part}";
@@ -253,7 +253,7 @@ function do_attachment()
         echo "NOT WRITABLE $filename\n";
     }
     
-    $sql = "INSERT into `{$GLOBALS['dbLinks']}`('linktype', 'origcolref', 'linkcolref', 'direction', 'userid') ";
+    $sql = "INSERT INTO`{$GLOBALS['dbLinks']}` ('linktype', 'origcolref', 'linkcolref', 'direction', 'userid') ";
     $sql .= "VALUES('5',  '{$updateid}', '{$fileid}', 'left', '0') ";
     mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
