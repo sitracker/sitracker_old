@@ -216,11 +216,11 @@ if ($decoded_email->contenttype=='multipart/mixed' OR
             // Write the attachment
             if (!empty($incidentid))
             {
-                $fa_dir = $CONFIG['attachment_fspath'].$incidentid.$fsdelim."u".$updateid;
+                $fa_dir = $CONFIG['attachment_fspath'].$incidentid.$fsdelim."u".$updateid.$fsdelim;
             }
             else
             {
-                $fa_dir = $CONFIG['attachment_fspath']."updates{$fsdelim}{$updateid}";
+                $fa_dir = $CONFIG['attachment_fspath']."updates{$fsdelim}{$updateid}{$fsdelim}";
             }
         
             if (!file_exists($fa_dir))
