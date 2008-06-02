@@ -34,9 +34,15 @@ if ($_FILES['attachment']['name'] != "")
     else
     {
         // OK to proceed
+        // Create an entry in the files table
+        $sql = "INSERT INTO `{$dbFiles}` (category, filename, size, userid, usertype, filedate) ";
+        $sql .= "VALUES ('public', '{$_FILES['attachment']['name']}', '{$_FILES['attachment']['size']}', '{$sit[2]}', 'user', NOW())";
+        mysql_query($sql);
+        if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+        $fileid =  mysql_insert_id();
 
         //create update
-        $updatetext = "File attached [[att]]{$_FILES['attachment']['name']}[[/att]]";
+        $updatetext = "File attached [[att={$fileid}]]{$_FILES['attachment']['name']}[[/att]]";
         $sql = "INSERT INTO `{$dbUpdates}` (incidentid, userid, `type`, ";
         $sql .= "bodytext, `timestamp`) ";
         $sql .= "VALUES ('{$incidentid}', '{$sit[2]}', 'research', ";
@@ -63,13 +69,6 @@ if ($_FILES['attachment']['name'] != "")
         // Move the uploaded file from the temp directory into the incidents attachment dir
         $mv = move_uploaded_file($_FILES['attachment']['tmp_name'], $newfilename);
         if (!$mv) trigger_error('!Error: Problem moving attachment from temp directory to: '.$newfilename, E_USER_WARNING);
-
-        // Create an entry in the files table
-        $sql = "INSERT INTO `{$dbFiles}` (category, filename, size, userid, usertype, filedate) ";
-        $sql .= "VALUES ('public', '{$_FILES['attachment']['name']}', '{$_FILES['attachment']['size']}', '{$sit[2]}', 'user', NOW())";
-        mysql_query($sql);
-        if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
-        $fileid =  mysql_insert_id();
 
         //create link
         $sql = "INSERT INTO `{$dbLinks}`(linktype, origcolref, linkcolref, direction, userid) ";
