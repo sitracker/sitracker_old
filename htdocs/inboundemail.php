@@ -232,7 +232,7 @@ function do_attachment()
 
     if (!file_exists($fa_dir))
     {
-        if (!mkdir($fa_dir, 0775)) trigger_error("Failed to create incident update attachment directory",E_USER_WARNING);
+        if (!mkdir($fa_dir, 0775, TRUE)) trigger_error("Failed to create incident update attachment directory",E_USER_WARNING);
     }
     
     if ($CONFIG['debug'])
