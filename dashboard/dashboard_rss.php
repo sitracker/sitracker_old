@@ -21,13 +21,18 @@ function dashboard_rss($dashletid)
 
 function dashboard_rss_install()
 {
+    global $CONFIG;
+
     $schema = "CREATE TABLE `{$CONFIG['db_tableprefix']}dashboard_rss` (
     `owner` tinyint(4) NOT NULL,
-  `url` varchar(255) NOT NULL,
-  `items` int(5) default NULL,
-  `enabled` enum('true','false') NOT NULL,
+    `url` varchar(255) NOT NULL,
+    `items` int(5) default NULL,
+    `enabled` enum('true','false') NOT NULL,
     KEY `owner` (`owner`,`url`)
-    ) ENGINE = MYISAM ;";
+    ) ENGINE = MYISAM ;
+
+    INSERT INTO `{$CONFIG['db_tableprefix']}dashboard_rss` (`owner`, `url`, `items`, `enabled`) VALUES(1, 'http://sourceforge.net/export/rss2_projfiles.php?group_id=160319', 3, 'true');
+    ";
 
     $result = mysql_query($schema);
     if (mysql_error())
@@ -279,7 +284,7 @@ function dashboard_rss_edit($dashletid)
                     }
 
                     echo "</td>";
-                    echo "<td>".dashlet_link('rss', $dashletid, $obj->enabled, 'edit', array('editaction'=>'enable', 'enable'=>$opposite))."</td>";
+                    echo "<td>".dashlet_link('rss', $dashletid, $obj->enabled, 'edit', array('editaction'=>'enable', 'enable'=>$opposite, 'url'=>urlencode($obj->url)))."</td>";
                     echo "<td>".dashlet_link('rss', $dashletid, $GLOBALS['strEdit'], 'edit', array('editaction'=>'edit', 'url'=>urlencode($obj->url)));
                     echo " | ".dashlet_link('rss', $dashletid, $GLOBALS['strRemove'], 'edit', array('editaction'=>'delete', 'url'=>urlencode($obj->url)));
                     echo "</td></tr>\n";
