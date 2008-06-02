@@ -230,12 +230,12 @@ if ($decoded_email->contenttype=='multipart/mixed' OR
             
             if ($CONFIG['debug'])
             {
-                echo "About to write to ".$fa_update_dir.$fsdelim.$filename."\n";
+                echo "About to write to ".$fa_dir.$filename."\n";
             }
             
-            if (is_writable($fa_dir.$fsdelim)) //File doesn't exist yet .$filename
+            if (is_writable($fa_dir)) //File doesn't exist yet .$filename
             {
-                $fwp = fopen($fa_dir.$fsdelim.$filename, 'a');
+                $fwp = fopen($fa_dir.$filename, 'a');
                 // FIXME not actually writing content here yet
                 //fwrite($fwp, "This is a test\n");
                 fwrite($fwp, $block->mime_content);
