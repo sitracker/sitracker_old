@@ -440,8 +440,27 @@ function create_trigger_notice($userid, $noticetext='', $triggertype='',
         if ($query)
         {
             $notice = mysql_fetch_object($query);
-            $noticetext = mysql_escape_string(trigger_replace_specials($triggertype, $notice->text, $paramarray));
-            $noticelinktext = cleanvar(trigger_replace_specials($triggertype, $notice->linktext, $paramarray));
+
+            if (substr($notice->text, 0, 3) == 'str')
+            {
+                $noticetext = $GLOBALS[$notice->text];
+            }
+            else
+            {
+                $noticetext = $notice->text;
+            }
+            
+            if (substr($notice->linktext, 0, 3) == 'str')
+            {
+                $noticelinktext = $GLOBALS[$notice->linktext];
+            }
+            else
+            {
+                $noticelinktext = $notice->linktext;
+            }
+            
+            $noticetext = mysql_escape_string(trigger_replace_specials($triggertype, $noticetext, $paramarray));
+            $noticelinktext = cleanvar(trigger_replace_specials($triggertype, $noticelinktext, $paramarray));
             $noticelink = cleanvar(trigger_replace_specials($triggertype, $notice->link, $paramarray));
             $refid = cleanvar(trigger_replace_specials($triggertype, $notice->refid, $paramarray));
             $durability = $notice->durability;
