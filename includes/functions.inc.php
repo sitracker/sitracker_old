@@ -5989,12 +5989,12 @@ function dashlet($dashboard, $dashletid, $icon, $title='', $link='', $content=''
     $html .= "<div>";
     if (function_exists($displayfn))
     {
-        $html .= "<a href=\"javascript:get_and_display('ajaxdata.php?action=dashboard_display&amp;dashboard={$dashboard}&amp;did={$dashletid}','win{$dashletid}', false);\">";
+        $html .= "<a href=\"javascript:get_and_display('ajaxdata.php?action=dashboard_display&amp;dashboard={$dashboard}&amp;did={$dashletid}','win{$dashletid}',true);\">";
         $html .= icon('reload', 16)."</a>";
     }
     if (function_exists($editfn))
     {
-        $html .= "<a href=\"javascript:get_and_display('ajaxdata.php?action=dashboard_edit&amp;dashboard={$dashboard}&amp;did={$dashletid}','win{$dashletid}', false);\">";
+        $html .= "<a href=\"javascript:get_and_display('ajaxdata.php?action=dashboard_edit&amp;dashboard={$dashboard}&amp;did={$dashletid}','win{$dashletid}',false);\">";
         $html .= icon('edit', 16)."</a>";
     }
     $html .= "</div>";
@@ -6006,7 +6006,7 @@ function dashlet($dashboard, $dashletid, $icon, $title='', $link='', $content=''
     $displayfn = "dashboard_{$dashboard}_display";
     if (function_exists($displayfn))
     {
-         $html .= "<script type='text/javascript'>\n//<![CDATA[\nget_and_display('ajaxdata.php?action=dashboard_display&dashboard={$dashboard}','win{$dahletid}', false);\n//]]>\n</script>\n";
+        $html .= "<script type='text/javascript'>\n//<![CDATA[\nget_and_display('ajaxdata.php?action=dashboard_display&dashboard={$dashboard}','win{$dashletid}',true);\n//]]>\n</script>\n";
     }
     $html .= "</div></div>";
 

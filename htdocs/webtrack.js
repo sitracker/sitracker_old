@@ -10,6 +10,8 @@
 // Since v3.30 this requires prototype.js
 
 var popwin;
+dashletrefresh = new Array();
+
 
 function incident_details_window(incidentid,win)
 {
@@ -97,29 +99,44 @@ function get_and_display(page, component, update)
 //     alert(component);
     if (update == true)
     {
-        new Ajax.PeriodicalUpdater(component, page, {
+        if (dashletrefresh[component] != null) dashletrefresh[component].stop();
+        dashletrefresh[component] = new Ajax.PeriodicalUpdater(component, page, {
         method: 'get', frequency: 30, decay: 2
         });
     }
     else
     {
-        if (page.indexOf('?') != -1) var sep = '&';
-        else var sep = '?';
-        var url = application_webpath + page + sep + 'rand=' + get_random();
-        new Ajax.Request(url,
-        {
-            method:'get',
-                onSuccess: function(transport)
-                {
-                    var response = transport.responseText || "no response text";
-                    if (transport.responseText)
-                    {
-                        $(component).innerHTML = transport.responseText;
-                    }
-                },
-                onFailure: function(){ $(component).innerHTML = 'Error: could not load data: ' + url; }
+        dashletrefresh[component].stop();
+        new Ajax.Updater(component, page, {
+        method: 'get',onFailure: function(){ $(component).innerHTML = 'Error: could not load data: ' + url; }
         });
+//         dashletrefresh.stop();
+//         if (page.indexOf('?') != -1) var sep = '&';
+//         elsesocss var sep = '?';
+//         var url = application_webpath + page + sep + 'rand=' + get_random();
+//         new Ajax.Request(url,
+//         {
+//             method:'get',
+//                 onSuccess: function(transport)
+//                 {
+//                     var response = transport.responseText || "no response text";
+//                     if (transport.responseText)
+//                     {
+//                         $(component).innerHTML = transport.responseText;
+//                     }
+//                 },
+//                 onFailure: function(){ $(component).innerHTML = 'Error: could not load data: ' + url; }
+//         });
     }
+}
+
+
+function ajaxfetch(url, element, unused)
+{
+    new Ajax.Updater(element, url, {
+    method: 'get',
+    parameters: { text: $F('text') }
+    });
 }
 
 
