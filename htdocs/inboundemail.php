@@ -201,7 +201,55 @@ if ($decoded_email->contenttype=='multipart/mixed' OR
         }
         else
         {
-            do_attachment($updateid);
+            $fsdelim = (strstr($CONFIG['attachment_fspath'],"/")) ? "/" : "\\";;
+
+            $filename = str_replace(' ','_',$block->mime_contentdispositionname);
+            if (empty($filename)) $filename = "part{$part}";
+            
+            $sql = "INSERT into `{$GLOBALS['dbFiles']}` ";
+            $sql .= "( `id` ,`category` ,`filename` ,`size` ,`userid` ,`usertype` ,`shortdescription` ,`longdescription` ,`webcategory` ,`path` ,`downloads` ,`filedate` ,`expiry` ,`fileversion` ,`published` ,`createdby` ,`modified` ,`modifiedby` ) ";
+            $sql .= "VALUES('', '', '{$filename}', '0', '0', '', '', '', '', '', '', NOW(), '', '', '', '0', '', '')";
+            mysql_query($sql);
+            if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+            $fileid = mysql_insert_id();
+            $attachment[] = array('filename' => $filename, 'fileid' => $fileid);        
+            // Write the attachment
+            if (!empty($incidentid))
+            {
+                $fa_dir = $CONFIG['attachment_fspath'].$incidentid.$fsdelim."u".$updateid;
+            }
+            else
+            {
+                $fa_dir = $CONFIG['attachment_fspath']."updates{$fsdelim}{$updateid}";
+            }
+        
+            if (!file_exists($fa_dir))
+            {
+                if (!mkdir($fa_dir, 0775, TRUE)) trigger_error("Failed to create incident update attachment directory $fa_dir",E_USER_WARNING);
+            }
+            
+            if ($CONFIG['debug'])
+            {
+                echo "About to write to ".$fa_update_dir.$fsdelim.$filename."\n";
+            }
+            
+            if (is_writable($fa_dir.$fsdelim)) //File doesn't exist yet .$filename
+            {
+                $fwp = fopen($fa_dir.$fsdelim.$filename, 'a');
+                // FIXME not actually writing content here yet
+                //fwrite($fwp, "This is a test\n");
+                fwrite($fwp, $block->mime_content);
+                fclose($fwp);
+            }
+            elseif ($CONFIG['debug'])
+            {
+                echo "NOT WRITABLE $filename\n";
+            }
+            
+            $sql = "INSERT INTO`{$GLOBALS['dbLinks']}` ('linktype', 'origcolref', 'linkcolref', 'direction', 'userid') ";
+            $sql .= "VALUES('5',  '{$updateid}', '{$fileid}', 'left', '0') ";
+            mysql_query($sql);
+            if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
         }
     }
 }
