@@ -383,9 +383,7 @@ else
                 $result = mysql_query($sql);
                 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
             }
-
-            trigger('TRIGGER_INCIDENT_CLOSED', array('incidentid' => id, 'userid' => $sit[2]));
-            
+          
             if (!$result)
             {
                 $addition_errors = 1;
@@ -450,23 +448,23 @@ else
                 create_incident_feedback($CONFIG['feedback_form'], $id);
             }
 
-            
+            $notifyexternal = $notifycontact = $awaitingclosure = 0;
 
             if ($send_engineer_email == 'yes')
             {
-                $notifyexternal = TRUE;
+                $notifyexternal = 1;
             }
 
             if ($send_email == 'yes')
             {
-                $notifycontact = TRUE;
+                $notifycontact = 1;
                 if ($wait=='yes')
                 {
-                    $awaitingclosure = TRUE;
+                    $awaitingclosure = 1;
                 }
                 else
                 {
-                    $awaitingclosure = FALSE;
+                    $awaitingclosure = 0;
                 }
             }
             
