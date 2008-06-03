@@ -6883,30 +6883,6 @@ function time_dropdown($name, $time='')
 /**
     * @author Kieran Hogg
     * @param $seconds Int. Number of seconds
-    * @returns string. Readable fuzzy time
-*/
-function fuzzy_time($seconds)
-{
-    if ($seconds < 0) $time = $GLOBALS['strError'];
-    elseif ($seconds > 0 AND $seconds < 60) $time = $GLOBALS['strJustNow'];
-    elseif ($seconds > 60 AND $seconds < 5 * 60) $time = $GLOBALS['strFewMinutesAgo'];
-    elseif ($seconds > 5 * 60 AND $seconds < 30 * 60)
-    {
-        $minutes = 5 * round($seconds / (5 * 60));
-        $time = sprintf($strAboutXMinutesAgo, $minutes);
-    }
-    elseif ($seconds > 30 * 60 AND $seconds < 2 * 60 * 60)
-    {
-        $hours = floor($seconds / (60 * 60));
-        $time = sprintf($strOverXHoursAgo, $hours);
-    }
-    return $time;
-}
-
-
-/**
-    * @author Kieran Hogg
-    * @param $seconds Int. Number of seconds
     * @returns string. Readable time in seconds
 */
 function exact_seconds($seconds)
