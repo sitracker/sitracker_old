@@ -194,7 +194,7 @@ if (empty($_REQUEST['process']))
     echo "setTimeout('document.articlform.summary.blur()',1); } else saveValue=this.value;\">";
 
     //  style="display: none;"
-    $sql = "SELECT * FROM `{$dbUpdates}` WHERE incidentid='$id' AND type='probdef' ORDER BY timestamp DESC LIMIT 1";
+    $sql = "SELECT * FROM `{$dbUpdates}` WHERE incidentid='$id' AND type='probdef' ORDER BY timestamp ASC";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     while ($row = mysql_fetch_object($result))
@@ -221,7 +221,7 @@ if (empty($_REQUEST['process']))
     echo "<tr><th><label>{$strSolution}: <sup class='red'>*</sup><input type='checkbox' name='incsolution' onclick=\"if (this.checked) {document.closeform.solution.disabled = false; document.closeform.solution.style.display=''} else { saveValue=document.closeform.solution.value; document.closeform.solution.disabled = true; document.closeform.solution.style.display='none'}\" checked='checked' disabled='disabled' /></label></th>";
 
     echo "<td><textarea id='solution' name='solution' cols='40' rows='8' onfocus=\"if (this.enabled) { this.value = saveValue; setTimeout('document.articleform.solution.blur()',1); } else saveValue=this.value;\">";
-    $sql = "SELECT * FROM `{$dbUpdates}` WHERE incidentid='$id' AND type='solution' ORDER BY timestamp DESC LIMIT 1";
+    $sql = "SELECT * FROM `{$dbUpdates}` WHERE incidentid='$id' AND type='solution' ORDER BY timestamp ASC";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     while ($row = mysql_fetch_object($result))
@@ -386,8 +386,6 @@ else
 
             trigger('TRIGGER_INCIDENT_CLOSED', array('incidentid' => id, 'userid' => $sit[2]));
             
-
-
             if (!$result)
             {
                 $addition_errors = 1;
@@ -452,30 +450,33 @@ else
                 create_incident_feedback($CONFIG['feedback_form'], $id);
             }
 
-            trigger('TRIGGER_INCIDENT_CLOSED', array('incidentid' => $incidentid, 'userid' => $sit[2]));
+            
 
             if ($send_engineer_email == 'yes')
             {
-                $eml=send_template_email('INCIDENT_CLOSED_EXTERNAL', $id);  // close with external engineer
-                if (!$eml) throw_error('!Error: Failed while sending close with engineer email, error code: ', $eml);
+                $notifyexternal = TRUE;
             }
 
             if ($send_email == 'yes')
             {
+                $notifycontact = TRUE;
                 if ($wait=='yes')
                 {
-                    // send awaiting closure email
-                    $eml=send_template_email('INCIDENT_CLOSURE', $id);  // awaiting closure
-                    if (!$eml) throw_error('!Error: Failed while sending awaiting closure email to customer, error code:', $eml);
+                    $awaitingclosure = TRUE;
                 }
                 else
                 {
-                    // send incident closed email
-                    $eml=send_template_email('INCIDENT_CLOSED', $id);  // incident closed
-                    if (!$eml) throw_error('!Error: Failed while sending incident closed email to customer, error code:', $eml);
+                    $awaitingclosure = FALSE;
                 }
             }
-
+            
+            trigger('TRIGGER_INCIDENT_CLOSED', array('incidentid' => $incidentid,
+                                                     'userid' => $sit[2],
+                                                     'notifyexternal' => $notifyexternal,
+                                                     'notifycontact' => $notifycontact,
+                                                     'awaitingclosure' => $awaitingclosure
+                                                    ));
+            
             // Tidy up drafts i.e. delete
             $draft_sql = "DELETE FROM `{$dbDrafts}` WHERE incidentid = {$id}";
             mysql_query($draft_sql);
