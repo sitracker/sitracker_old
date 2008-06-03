@@ -43,8 +43,8 @@ array('name' => 'Incident Assigned',
 $triggerarray['TRIGGER_INCIDENT_CLOSED'] =
 array('name' => 'Incident closed',
       'description' => 'strTriggerIncidentClosedDesc',
-      'required' => array('incidentid', 'userid'),
-      'params' => array('userid', 'externalid', 'externalengineer')
+      'required' => array('incidentid', 'userid', 'notifyexternal', 'notifycontact','awaitingclosure'),
+      'params' => array('userid', 'externalid', 'externalengineer', 'notifyexternal', 'notifycontact','awaitingclosure')
       );
 
 $triggerarray['TRIGGER_INCIDENT_CREATED'] =
