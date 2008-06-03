@@ -221,6 +221,11 @@ switch ($_REQUEST['mode'])
             {
                 echo "<var><strong><a href='javascript:void(0);' onclick=\"insertRuletext('{$op}');\">{$op}</a></strong></var> ";
             }
+            $values = array(1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 'TRUE', 'FALSE');
+            foreach ($values AS $value)
+            {
+                echo "<var><strong><a href='javascript:void(0);' onclick=\"insertRuletext('{$value}');\">{$value}</a></strong></var> ";
+            }
             echo "</div>";
             echo "<textarea cols='30' rows='5' id='rules' name='rules' readonly='readonly'></textarea><br />";
             echo "<a href='javascript:void(0);' onclick='resetRules();'>{$strReset}</a>";
