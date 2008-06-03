@@ -98,7 +98,7 @@ if (mysql_num_rows($result) > 0)
         foreach ($updatearray as $row)
         {
             array_push($data, $row['time']);
-            $legends .= $row['name']."|";
+            $legends .= $GLOBALS[$row['name']]."|";
         }
         $data = implode('|',$data);
         $title = urlencode($strStatusSummary);
