@@ -2142,7 +2142,6 @@ INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES 
 INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (2, 77, 'true');
 INSERT INTO `{$dbUserPermissions}` VALUES (1, 77, 'true');";
 
-$upgrade_schema[335]["t200805221617"] = "ALTER TABLE `{$dbNoticeTemplates}` ADD `refid` VARCHAR( 255 ) NULL ;";
 $upgrade_schema[335]["t200805241500"] = "ALTER TABLE `{$dbSystem}`  CHANGE `schema` `schemaversion` BIGINT( 20 ) UNSIGNED NOT NULL COMMENT 'DateTime in YYYYMMDDHHMM format';";
 
 $upgrade_schema[335]["t200805301540"] = "ALTER TABLE `{$dbFiles}` CHANGE `filename` `filename` varchar(255) NULL default '';";
