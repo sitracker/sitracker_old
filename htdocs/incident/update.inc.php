@@ -210,7 +210,7 @@ function display_update_page($draftid=-1)
                         {
                             seconds = "0"+seconds;
                         }
-                        $('updatestr').innerHTML = '<?php echo icon('info', 16, $GLOBALS['strDraftLastSaved']); ?>: '+hours+':'+minutes+':'+seconds;
+                        $('updatestr').innerHTML = '<?php echo icon('info', 16)." ".$GLOBALS['strDraftLastSaved']; ?>: '+hours+':'+minutes+':'+seconds;
                     }
                 }
             }
