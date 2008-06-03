@@ -112,7 +112,7 @@ function get_and_display(page, component, update)
     {
         if (dashletrefresh[component] != null) dashletrefresh[component].stop();
         dashletrefresh[component] = new Ajax.PeriodicalUpdater(component, page, {
-        method: 'get', frequency: 30, decay: 2,
+        method: 'get', frequency: 30, decay: 1.25,
             onCreate: function(){
                 if (refreshicon != null)
                 {
