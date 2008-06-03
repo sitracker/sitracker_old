@@ -185,6 +185,12 @@ array('description' => 'Email address of the holiday approver',
       'requires' => 'approvaluseremail'
       );
 
+$ttvararray['{awaitingclosure}'] =
+array('description' => 'Whether the incident is being closed now, or being marked for closure',
+      'replacement' => '$paramarray[\'awaitingclosure\'];',
+      'requires' => 'incidentid'
+      );
+
 $ttvararray['{contactid}'][] =
 array('description' => 'Contact ID',
       'requires' => 'incidentid',
@@ -400,6 +406,18 @@ $ttvararray['{nextsla}'] =
 array('description' => 'Next SLA name',
       'replacement' => '$paramarray[\'nextsla\'];',
       'requires' => 'nextsla'
+      );
+
+$ttvararray['{notifycontact}'] =
+array('description' => 'Whether to user requested to send a closing email, boolean',
+      'replacement' => '$paramarray[\'notifycontact\'];',
+      'requires' => 'incidentid'
+      );
+
+$ttvararray['{notifyexternal}'] =
+array('description' => 'Whether to user requested to notify an external engineer of incident closure, boolean',
+      'replacement' => '$paramarray[\'notifyexternal\'];',
+      'requires' => 'incidentid'
       );
 
 $ttvararray['{ownerid}'] =
