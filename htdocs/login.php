@@ -28,41 +28,12 @@ setcookie(session_name(), session_id(),ini_get("session.cookie_lifetime"), "/");
 $language = $_POST['lang'];
 
 require ('functions.inc.php');
-
+populate_syslang();
 // External vars
 $password = md5($_REQUEST['password']);
 $username = cleanvar($_REQUEST['username']);
 $public_browser = cleanvar($_REQUEST['public_browser']);
 $page = strip_tags(str_replace('..','',str_replace('//','',str_replace(':','',urldecode($_REQUEST['page'])))));
-
-// Populate $SYSLANG with system lang
-$file = "{$CONFIG['application_fspath']}includes/i18n/{$CONFIG['default_i18n']}.inc.php";
-if (file_exists($file))
-{
-    $fh = fopen($file, "r");
-
-    $theData = fread($fh, filesize($file));
-    fclose($fh);
-    $lines = explode("\n", $theData);
-    foreach ($lines as $values)
-    {
-        $badchars = array("$", "\"", "\\", "<?php", "?>");
-        $values = trim(str_replace($badchars, '', $values));
-        if (substr($values, 0, 3) == "str")
-        {
-            $vars = explode("=", $values);
-            $vars[0] = trim($vars[0]);
-            $vars[1] = trim(substr_replace($vars[1], "",-2));
-            $vars[1] = substr_replace($vars[1], "",0, 1);
-            $SYSLANG[$vars[0]] = $vars[1];
-        }
-    }
-    $_SESSION['syslang'] = $SYSLANG;
-}
-else
-{
-    die("File specified in \$CONFIG['default_i18n'] can't be found");
-}
 
 if (empty($_REQUEST['username']) AND empty($_REQUEST['password']) AND $language != $_SESSION['lang'])
 {
