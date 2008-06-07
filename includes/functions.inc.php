@@ -5382,10 +5382,13 @@ function suggest_reassign_userid($incidentid, $exceptuserid=0)
         {
             $sql = "SELECT us.userid, u.status, u.lastseen FROM `{$dbUserSoftware}` AS us, `{$dbUsers}` AS u ";
             $sql .= "WHERE u.id = us.userid AND u.status > 0 AND u.accepting='Yes' ";
-            if ($exceptuserid > 0) $sql .= "AND NOT users.id = '$exceptuserid' ";
+            if ($exceptuserid > 0) $sql .= "AND NOT u.id = '$exceptuserid' ";
             $sql .= "AND softwareid = {$incident->softwareid}";
         }
-        else $sql = "SELECT id AS userid, status, lastseen FROM `{$dbUsers}` WHERE status > 0 AND users.accepting='Yes'";
+        else
+        {
+            $sql = "SELECT id AS userid, status, lastseen FROM `{$dbUsers}` WHERE status > 0 AND users.accepting='Yes'";
+        }
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
