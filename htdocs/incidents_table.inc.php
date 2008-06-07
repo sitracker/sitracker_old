@@ -145,6 +145,8 @@ while ($incidents = mysql_fetch_array($result))
             $slaremain = 0;
             $slatarget = 0;
     }
+    
+    
     if ($slatarget > 0) $slaremain = ($slatarget - $target->since);
     else $slaremain = 0;
 
@@ -208,17 +210,17 @@ while ($incidents = mysql_fetch_array($result))
     }
 
     // Set Next Action text if not already set
-    if ($update_nextaction=='') $update_nextaction=$explain;
+    if ($update_nextaction == '') $update_nextaction = $explain;
 
     // Create URL for External ID's
-    $externalid='';
-    $escalationpath=$incidents['escalationpath'];
+    $externalid = '';
+    $escalationpath = $incidents['escalationpath'];
     if (!empty($incidents['escalationpath']) AND !empty($incidents['externalid']))
     {
         $epathurl = str_replace('%externalid%',$incidents['externalid'],$epath[$escalationpath]['track_url']);
         $externalid = "<a href=\"{$epathurl}\" title=\"{$epath[$escalationpath]['url_title']}\">{$incidents['externalid']}</a>";
     }
-    elseif (empty($incidents['externalid']) AND $incidents['escalationpath']>=1)
+    elseif (empty($incidents['externalid']) AND $incidents['escalationpath'] >= 1)
     {
         $epathurl = $epath[$escalationpath]['home_url'];
         $externalid = "<a href=\"{$epathurl}\" title=\"{$epath[$escalationpath]['url_title']}\">{$epath[$escalationpath]['name']}</a>";
@@ -246,7 +248,7 @@ while ($incidents = mysql_fetch_array($result))
         echo icon('timer', 16, $strOpenActivities).' ';
     }
     echo "<a href=\"javascript:incident_details_window('{$incidents['id']}','incident{$incidents['id']}')\" class='info'>";
-    if (trim($incidents['title']) !='')
+    if (trim($incidents['title']) != '')
     {
         echo ($incidents['title']);
     }
@@ -255,7 +257,7 @@ while ($incidents = mysql_fetch_array($result))
         echo $strUntitled;
     }
 
-    if (!empty($update_body) AND $update_body!='...')
+    if (!empty($update_body) AND $update_body != '...')
     {
         echo "<span>{$update_body}</span>";
     }

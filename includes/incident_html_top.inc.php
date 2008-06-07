@@ -97,7 +97,7 @@ if ($incident->softwareid > 0)
 $servicelevel_id = maintenance_servicelevel($incident->maintenanceid);
 
 $servicelevel_tag = $incident->servicelevel;
-if ($servicelevel_tag=='')
+if ($servicelevel_tag == '')
 {
     $servicelevel_tag = servicelevel_id2tag(maintenance_servicelevel($incident->maintenanceid));
 }
