@@ -2145,7 +2145,7 @@ INSERT INTO `{$dbUserPermissions}` VALUES (1, 77, 'true');";
 $upgrade_schema[335]["t200805241500"] = "ALTER TABLE `{$dbSystem}`  CHANGE `schema` `schemaversion` BIGINT( 20 ) UNSIGNED NOT NULL COMMENT 'DateTime in YYYYMMDDHHMM format';";
 
 $upgrade_schema[335]["t200805301540"] = "ALTER TABLE `{$dbFiles}` CHANGE `filename` `filename` varchar(255) NULL default '';";
-$upgrade_schema[335]["t200805301541"] = "ALTER TABLE `{$dbFiles}` CHANGE `shortdesc` shortdescription` varchar(255) NULL default '';";
+$upgrade_schema[335]["t200805301541"] = "ALTER TABLE `{$dbFiles}` CHANGE `shortdesc` `shortdescription` varchar(255) NULL default '';";
 $upgrade_schema[335]["t200805301542"] = "ALTER TABLE `{$dbFiles}` CHANGE `webcategory` `webcategory` varchar(255) NULL default '';";
 $upgrade_schema[335]["t200805301543"] = "ALTER TABLE `{$dbFiles}` CHANGE `path` `path` varchar(255) NULL default '';";
 $upgrade_schema[335]["t200805301544"] = "ALTER TABLE `{$dbFiles}` CHANGE `expiry` `expiry` DATETIME NULL;";
