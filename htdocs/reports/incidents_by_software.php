@@ -204,6 +204,8 @@ else
             echo "<tr><th>{$strMonth}</th><th>Number of calls</th></tr>"; // FIXME i18n Number of calls
             $shade = 'shade1';
 
+            $total = 0;
+
             foreach ($monthtotals AS $m)
             {
                 echo "<tr class='$shade'>";
@@ -323,15 +325,19 @@ else
 
             $javascript .= "var pA = new dojo.charting.Plot(xA, yA);";
 
-            echo "<th>Totals</th>";
+            $grandsum = 0;
+
+            echo "<th>{$strTotal}</th>";
             foreach ($months AS $m)
             {
                 echo "<td>";
                 echo $monthtotals[$m]['value'];
                 echo "</td>";
+                
+                $grandsum += $monthtotals[$m]['value'];
             }
 
-            echo "</table></p>";
+            echo "<td>{$grandsum}</td></table></p>";
 
 
             echo "<script type='text/javascript'>\n//<![CDATA[\n";
