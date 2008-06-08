@@ -49,12 +49,18 @@ echo "{$strUsers}</h2>";
 $numgroups = group_selector($groupid);
 
 $sql  = "SELECT * FROM `{$dbUsers}` WHERE status!=0 ";  // status=0 means account disabled
-if ($numgroups >= 1 AND $filtergroup=='0') $sql .= "AND (groupid='0' OR groupid='' OR groupid IS NULL) ";
+if ($numgroups >= 1 AND $filtergroup == '0')
+{
+    $sql .= "AND (groupid='0' OR groupid='' OR groupid IS NULL) ";
+}
 elseif ($numgroups < 1 OR $filtergroup=='all')
 {
     $sql .= "AND 1=1 ";
 }
-else $sql .= "AND groupid='{$filtergroup}'";
+else
+{
+    $sql .= "AND groupid='{$filtergroup}'";
+}
 
 // Sorting
 if (!empty($sort))
@@ -195,7 +201,7 @@ while ($users = mysql_fetch_array($result))
     echo "</td>";
     echo "<td align='left'>";
     //see if the users has been active in the last 30mins
-    echo user_online_icon($users[id]);
+    echo user_online_icon($users[id])." ";
     echo userstatus_name($users["status"]);
     echo "</td><td align='center'>";
     if ($users["accepting"] == 'Yes')

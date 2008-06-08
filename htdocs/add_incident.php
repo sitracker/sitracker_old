@@ -432,15 +432,15 @@ elseif ($action=='incidentform')
         }
     }
     </script>
-
-    <form action="<?php echo $_SERVER['PHP_SELF'] ?>?action=assign"
-    method="post" name="supportdetails" onsubmit="return validateForm(this)">
-    <input type="hidden" name="type" value="<?php echo $type ?>" />
-    <input type="hidden" name="contactid" value="<?php echo $contactid ?>" />
-    <input type="hidden" name="productid" value="<?php echo $productid ?>" />
-    <input type="hidden" name="maintid" value="<?php echo $maintid ?>" />
-    <input type="hidden" name="siteid" value="<?php echo $siteid ?>" />
     <?php
+    echo "<form action='{$_SERVER['PHP_SELF']}?action=assign'";
+    echo "method='post' name='supportdetails' onsubmit=\"return validateForm(this)\">";
+    echo "<input type='hidden' name='type' value=\"{$type}\" />";
+    echo "<input type='hidden' name='contactid' value=\"{$contactid}\" />";
+    echo "<input type='hidden' name='productid' value=\"{$productid}\" />";
+    echo "<input type='hidden' name='maintid' value=\"{$maintid}\" />";
+    echo "<input type='hidden' name='siteid' value=\"{$siteid}\" />";
+
     if (!empty($updateid))
     {
     	echo "<input type='hidden' name='updateid' value='$updateid' />";
@@ -477,7 +477,7 @@ elseif ($action=='incidentform')
         $sql = "SELECT * FROM `{$dbProductInfo}` WHERE productid='$productid'";
         $result=mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-        while ($productinforow=mysql_fetch_array($result))
+        while ($productinforow = mysql_fetch_array($result))
         {
             echo "<tr><th>{$productinforow['information']}";
             if ($productinforow['moreinformation'] != '')
@@ -535,12 +535,12 @@ elseif ($action=='incidentform')
 
     include ('htmlfooter.inc.php');
 }
-elseif ($action=='assign')
+elseif ($action == 'assign')
 {
     include ('htmlheader.inc.php');
     if ($type == "support" || $type == "free")
     {
-        echo "<h2>{$strAddIncident} - Assign</h2>";
+        echo "<h2>{$strAddIncident} - Assign</h2>"; // FIXME i18n
 
         // Assign SUPPORT incident
         // The incident will be added to the database assigned to the current user, and then a list of engineers
@@ -565,17 +565,38 @@ elseif ($action=='assign')
         // check form input
         $errors = 0;
         // check for blank contact
-        if ($contactid == 0) { $errors = 1; $error_string .= "You must select a contact"; }
+        if ($contactid == 0)
+        {
+            $errors = 1;
+            $error_string .= "You must select a contact";
+        }
+        
         // check for blank title
-        if ($incidenttitle == '')  { $incidenttitle = $strUntitled; }
+        if ($incidenttitle == '')
+        {
+            $incidenttitle = $strUntitled;
+        }
+        
         // check for blank priority
-        if ($priority == 0){ $priority=1; }
+        if ($priority == 0)
+        {
+            $priority=1;
+        }
+        
         // check for blank type
-        if ($type == "") { $errors = 1;   $error_string .= "Incident type was blank"; }
+        if ($type == "")
+        {
+            $errors = 1;
+            $error_string .= "Incident type was blank";
+        }
 
-        if ($type == 'free' AND $servicelevel=='' ) { $errors++; $error_string .= "You must select a service level";  }
+        if ($type == 'free' AND $servicelevel == '' )
+        {
+            $errors++;
+            $error_string .= "You must select a service level";
+        }
 
-        if ($errors==0)
+        if ($errors == 0)
         {
             // add incident (assigned to current user)
 
@@ -599,9 +620,16 @@ elseif ($action=='assign')
             }
 
             // Set the service level the contract
-            if ($servicelevel=='') $servicelevel = servicelevel_id2tag(maintenance_servicelevel($maintid));
+            if ($servicelevel == '')
+            {
+                $servicelevel = servicelevel_id2tag(maintenance_servicelevel($maintid));
+            }
+            
             // Use default service level if we didn't find one above
-            if ($servicelevel=='') $servicelevel = $CONFIG['default_service_level'];
+            if ($servicelevel == '')
+            {
+                $servicelevel = $CONFIG['default_service_level'];
+            }
 
             // Check the service level priorities, look for the highest possible and reduce the chosen priority if needed
             $sql = "SELECT priority FROM `{$dbServiceLevels}` WHERE tag='$servicelevel' ORDER BY priority DESC LIMIT 1";
@@ -744,23 +772,23 @@ elseif ($action=='assign')
             echo "<th align='center'>".priority_icon(3)."</th>";
             echo "<th align='center'>".priority_icon(2)."</th>";
             echo "<th align='center'>".priority_icon(1)."</th>";
-            ?>
-            <th></th>
-            </tr>
-            <?php
-            $shade='shade2';
+
+            echo "<th></th>";
+            echo "</tr>";
+
+            $shade = 'shade2';
             while ($userrow = mysql_fetch_array($result))
             {
-                if ($userrow['id']==$suggested_user) $shade='idle';
+                if ($userrow['id'] == $suggested_user) $shade = 'idle';
                 echo "<tr class='$shade'>";
                 // display reassign link only if person is accepting or if the current user has 'reassign when not accepting' permission
-                if ($userrow['accepting']=='Yes')
+                if ($userrow['accepting'] == 'Yes')
                 {
                     echo "<td align='right'><a href=\"{$_SERVER['PHP_SELF']}?action=reassign&amp;userid=".$userrow['id']."&amp;incidentid=$incidentid&amp;nextaction=".urlencode($nextaction)."&amp;win={$win}\" ";
                     // if ($priority >= 3) echo " onclick=\"alertform.submit();\"";
                     echo ">{$strAssignTo}</a></td>";
                 }
-                elseif (user_permission($sit[2],40) OR $userrow['id']==$sit[2])
+                elseif (user_permission($sit[2],40) OR $userrow['id'] == $sit[2])
                 {
                     echo "<td align='right'><a href=\"{$_SERVER['PHP_SELF']}?action=reassign&amp;userid=".$userrow['id']."&amp;incidentid=$incidentid&amp;nextaction=".urlencode($nextaction)."&amp;win={$win}\" ";
                     // if ($priority >= 3) echo " onclick=\"alertform.submit();\"";
@@ -773,20 +801,24 @@ elseif ($action=='assign')
                 echo "<td>";
 
                 // Have a look if this user has skills with this software
-                $ssql = "SELECT softwareid FROM `{$dbUserSoftware}` WHERE userid='{$userrow['id']}' AND softwareid='{$software}' ";
+                $ssql = "SELECT softwareid FROM `{$dbUserSoftware}` ";
+                $ssql .= "WHERE userid='{$userrow['id']}' AND softwareid='{$software}' ";
                 $sresult = mysql_query($ssql);
-                if (mysql_num_rows($sresult) >=1 ) echo "<strong>{$userrow['realname']}</strong>";
+                if (mysql_num_rows($sresult) >= 1)
+                {
+                    echo "<strong>{$userrow['realname']}</strong>";
+                }
                 else echo $userrow['realname'];
                 echo "</td>";
                 echo "<td>".$userrow['phone']."</td>";
-                echo "<td>".user_online_icon($userrow['id']).userstatus_name($userrow['status'])."</td>";
+                echo "<td>".user_online_icon($userrow['id'])." ".userstatus_name($userrow['status'])."</td>";
                 echo "<td>".$userrow['message']."</td>";
                 echo "<td align='center'>";
 
                 $incpriority = user_incidents($userrow['id']);
                 $countincidents = ($incpriority['1']+$incpriority['2']+$incpriority['3']+$incpriority['4']);
 
-                if ($countincidents >= 1) $countactive=user_activeincidents($userrow['id']);
+                if ($countincidents >= 1) $countactive = user_activeincidents($userrow['id']);
                 else $countactive=0;
 
                 $countdiff = $countincidents-$countactive;
@@ -801,8 +833,8 @@ elseif ($action=='assign')
                 echo $userrow['accepting']=='Yes' ? $strYes : "<span class='error'>{$strNo}</span>";
                 echo "</td>";
                 echo "</tr>\n";
-                if ($shade=='shade2') $shade='shade1';
-                else $shade='shade2';
+                if ($shade == 'shade2') $shade = 'shade1';
+                else $shade = 'shade2';
             }
             echo "</table>";
             echo "<p align='center'>{$strUsersBoldSkills}.</p>";
