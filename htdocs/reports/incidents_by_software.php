@@ -54,7 +54,7 @@ else
 {
     $monthbreakdownstatus = $_REQUEST['monthbreakdown'];
     $startdate = strtotime($_REQUEST['startdate']);
-    $sql = "SELECT count(software.id) AS softwarecount, s.name, s.id ";
+    $sql = "SELECT count(s.id) AS softwarecount, s.name, s.id ";
     $sql .= "FROM `{$dbSoftware}` AS s, `{$dbIncidents}` AS i ";
     $sql .= "WHERE s.id = i.softwareid AND i.opened > '{$startdate}' ";
     $software = $_REQUEST['software'];
@@ -63,8 +63,8 @@ else
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
-    $countArray[0]=0;
-    $softwareNames[0]='Name';
+    $countArray[0] = 0;
+    $softwareNames[0] = 'Name';
     $softwareID[0] = 0;
     $c = 0;
     $count = 0;
@@ -72,7 +72,7 @@ else
     {
         $countArray[$c] = $row['softwarecount'];
         $count += $countArray[$c];
-        $softwareNames[$c]  = $row['name'];
+        $softwareNames[$c] = $row['name'];
         $softwareID[$c] = $row['id'];
         $c++;
     }
@@ -99,9 +99,9 @@ else
         }
         echo "<tr>";
 
-        $others=0;
-        $shade='shade1';
-        for($i = 0; $i < $c; $i++)
+        $others = 0;
+        $shade = 'shade1';
+        for ($i = 0; $i < $c; $i++)
         {
             if ($i<=25)
             {
@@ -169,20 +169,20 @@ else
                 foreach ($monthbreakdown AS $month)
                 {//echo "<pre>".print_r($month)."</pre>";
                     echo "<td><table>";
-                    $total=0;
+                    $total = 0;
                     foreach ($slas AS $slaNames)
                     {
                         if (empty($month[$slaNames['name']])) $month[$slaNames['name']] = 0;
                         echo "<tr>";
                         echo "<td>".$slaNames['name']."</td><td>".$month[$slaNames['name']]."</td>";
                         echo "</tr>\n";
-                        $total+=$month[$slaNames['name']];
+                        $total += $month[$slaNames['name']];
                     }
                     echo "<tr><td><strong>TOTAL</strong></td><td><strong>";
                     echo $total;
                     echo "</strong></td></tr>\n";
-                    $monthtotals[$month['month']]['month']=$month['month'];
-                    $monthtotals[$month['month']]['value']+=$total;
+                    $monthtotals[$month['month']]['month'] = $month['month'];
+                    $monthtotals[$month['month']]['value'] += $total;
                     $skilltotals[$softwareNames[$i]]['name'] = $softwareNames[$i];
                     $skilltotals[$softwareNames[$i]][$month['month']]['month'] = $month['month'];
                     $skilltotals[$softwareNames[$i]][$month['month']]['numberofincidents'] = $total;
@@ -193,8 +193,8 @@ else
                 echo "</tr></table>";
                 echo "</td></tr>\n";
             }
-            if ($shade=='shade1') $shade='shade2';
-            else $shade='shade1';
+            if ($shade == 'shade1') $shade = 'shade2';
+            else $shade = 'shade1';
         }
         echo "</table>";
 
@@ -202,16 +202,16 @@ else
         {
             echo "<p><table align='center'>";
             echo "<tr><th>{$strMonth}</th><th>Number of calls</th></tr>"; // FIXME i18n Number of calls
-            $shade='shade1';
+            $shade = 'shade1';
 
             foreach ($monthtotals AS $m)
             {
                 echo "<tr class='$shade'>";
                 echo "<td>".$m['month']."</td><td align='center'>".$m['value']."</td><tr>";
-                $total+=$m['value'];
+                $total += $m['value'];
                 echo "</tr>";
-                if ($shade=='shade1') $shade='shade2';
-                else $shade='shade1';
+                if ($shade == 'shade1') $shade = 'shade2';
+                else $shade = 'shade1';
             }
             echo "<tfoot><tr><th>{$strTotal}</th><td align='center'><strong>{$total}</strong></td></tr></tfoot>";
             echo "</table>";
@@ -230,7 +230,7 @@ else
             {
                 echo "<th>{$m}</th>";
             }
-            echo "<th>Total</th></tr>";
+            echo "<th>{$strTotal}</th></tr>";
             $js_coordCounter = 0;
             $min = 0;
             $max = 0;
@@ -276,8 +276,7 @@ else
                     $javascript .= "label:\"{$skill['name']}\"";
                     $javascript .= "});\n\n\n\n";
 
-
-        //echo $javascript."<br />";
+                    //echo $javascript."<br />";
 
                     $js_coordCounter++;
                 }
