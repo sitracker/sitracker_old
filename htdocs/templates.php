@@ -52,6 +52,7 @@ if (empty($action) OR $action == 'showform' OR $action == 'list')
     echo "<tr><th>{$strType}</th><th>{$strUsed}</th><th>{$strTemplate}</th><th>{$strOperation}</th></tr>";
     foreach ($templates AS $template)
     {
+        $system = FALSE;
         $tsql = "SELECT COUNT(id) FROM `{$dbTriggers}` WHERE template='{$template['name']}'";
         $tresult = mysql_query($tsql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
@@ -89,6 +90,7 @@ if (empty($action) OR $action == 'showform' OR $action == 'list')
             if (substr('str', 0, 3))
             {
                 echo "<br />{$GLOBALS[$template['desc']]}";
+                $system = TRUE;
             }
             else
             {
@@ -96,7 +98,14 @@ if (empty($action) OR $action == 'showform' OR $action == 'list')
             }
         }
         echo "</td>";
-        echo "<td><a href='{$editurl}'>{$strEdit}</a></td>";
+        if (!$system)
+        {
+            echo "<td><a href='{$editurl}'>{$strEdit}</a></td>";
+        }
+        else
+        {
+            echo "<td></td>";
+        }
         echo "</tr>\n";
         if ($shade=='shade1') $shade='shade2';
         else $shade='shade1';
