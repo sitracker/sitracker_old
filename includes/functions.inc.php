@@ -8301,9 +8301,25 @@ function icon($filename, $size='', $alt='', $title='', $id='')
     else
     {
         $icon = "<img src=\"{$urlpath}\"";
-        if (!empty($alt)) $icon .= " alt=\"{$alt}\" ";
-        if (!empty($title)) $icon .= " title=\"{$alt}\"";
-        if (!empty($id)) $icon .= "id=\"{$id}\"";
+        if (empty($alt))
+        {
+            $alt = $filename;
+            $icon .= " alt=\"{$alt}\" ";
+        }
+        if (empty($title))
+        {
+            $icon .= " title=\"{$alt}\"";
+        }
+        else
+        {
+            $icon .= " title=\"{$title}\"";
+        }
+        
+        if (empty($id))
+        {
+            $icon .= "id=\"{$id}\"";
+        }
+
         $icon .= " />";
     }
     return $icon;
