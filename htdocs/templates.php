@@ -84,7 +84,17 @@ if (empty($action) OR $action == 'showform' OR $action == 'list')
         if ($numtriggers > 1) echo " (&#215;{$numtriggers})";
         echo "</td>";
         echo "<td><a href='{$editurl}'>{$template['name']}</a>";
-        if (!empty($template['desc'])) echo "<br />{$template['desc']}";
+        if (!empty($template['desc']))
+        {
+            if (substr('str', 0, 3))
+            {
+                echo "<br />{$GLOBALS[$template['desc']]}";
+            }
+            else
+            {
+                echo "<br />{$template['desc']}";
+            }
+        }
         echo "</td>";
         echo "<td><a href='{$editurl}'>{$strEdit}</a></td>";
         echo "</tr>\n";
