@@ -65,7 +65,7 @@ if (!file_exists($file_fspath))
     header('HTTP/1.1 404 Not Found');
     header('Status: 404 Not Found',1,404);
     echo "<h3>404 File Not Found</h3>";
-    echo "<p>{$file_fspath}</p>";
+    if ($CONFIG['debug'] == TRUE) echo "<p>Filename: {$file_fspath}</p>";
     exit;
 }
 elseif ($access == TRUE)
