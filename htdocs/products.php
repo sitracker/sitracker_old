@@ -116,7 +116,7 @@ if (empty($productid) AND $display!='skills')
             if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
             list($countincidents) = mysql_fetch_row($sresult);
 
-            echo "<tr class='$shade'><td>".icon('skill')." ";
+            echo "<tr class='$shade'><td>".icon('skill', 16)." ";
             echo "{$software['name']}</td>";
             echo "<td>";
             if ($software['lifetime_start'] > 1)
@@ -250,7 +250,8 @@ else
 
             if (!empty($product->description)) echo "<tr class='shade1'><td colspan='0'>".nl2br($product->description)."</td></tr>";
 
-            $swsql = "SELECT * FROM `{$dbSoftwareProducts}` AS sp, software WHERE sp.softwareid=software.id AND productid='{$product->id}' ORDER BY name";
+            $swsql = "SELECT * FROM `{$dbSoftwareProducts}` AS sp, `{$dbSoftware}` AS s ";
+            $swsql .= "WHERE sp.softwareid=s.id AND productid='{$product->id}' ORDER BY name";
             $swresult=mysql_query($swsql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
@@ -272,7 +273,7 @@ else
                     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
                     list($countincidents) = mysql_fetch_row($sresult);
 
-                    echo "<tr class='$shade'><td>".icon('skill')." ";
+                    echo "<tr class='$shade'><td>".icon('skill', 16)." ";
                     echo "{$software['name']}</td>";
                     echo "<td>";
                     if ($software['lifetime_start'] > 1)
@@ -328,7 +329,7 @@ else
                     }
 
                     echo "<tr class='{$shade}'>";
-                    echo "<td>".icon('contract')." ";
+                    echo "<td>".icon('contract', 16)." ";
                     echo "<a href='contract_details.php?id={$contract->id}'>".sprintf($strContractNum, $contract->id)."</a></td>";
                     echo "<td>".site_name($contract->site)."</td>";
                     echo "</tr>\n";
