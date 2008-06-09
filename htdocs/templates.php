@@ -144,7 +144,7 @@ elseif ($action == "edit")
         }
         else
         {
-            alert(<?php echo $strSelectAFieldForTemplates?>);
+            alert('<?php echo $strSelectAFieldForTemplates?>');
         }
     }
 //]]>
