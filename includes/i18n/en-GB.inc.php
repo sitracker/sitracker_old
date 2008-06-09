@@ -387,6 +387,7 @@ $strEmailFromCustomer = 'Email from customer';
 $strEmailMustBeUnique = 'Email must be unique';
 $strEmailOK = 'Email OK';
 $strEmailReceivedAbbrev = 'Email Rx';
+$strEmailreceivedby = 'Email received by %s';
 $strEmailsentby = 'Email sent by %s';
 $strEmailSettings = 'Email Settings';
 $strEmailSignature = 'Email Signature';
