@@ -1036,6 +1036,7 @@ $strSeeOlderVersions = 'See Older Versions';
 # Where you whould click for more information/details
 $strSeeHere = 'See Here';
 $strSelect = 'Select';
+$strSelectAFieldForTemplates = 'Select a field that supports template variables, then click a variable to insert it';
 $strSelectDays = 'Select Days';
 $strSelectSkillsApplyToArticle = 'Select the skills that apply to this article';
 $strSelectYourSkills = 'Select your skills. Having skills means that you are available to receive incidents with those skills.';

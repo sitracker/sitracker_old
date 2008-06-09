@@ -144,7 +144,7 @@ elseif ($action == "edit")
         }
         else
         {
-            alert('Select a field that supports template variables, then click a variable to insert it');
+            alert(<?php echo $strSelectAFieldForTemplates?>);
         }
     }
 //]]>
