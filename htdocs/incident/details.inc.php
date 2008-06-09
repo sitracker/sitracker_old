@@ -60,7 +60,7 @@ if ($incident->owner != $sit[2] OR ($incident->towner > 0 AND $incident->towner 
 {
     echo "{$strOwner}: <strong>".user_realname($incident->owner,TRUE)."</strong> ";
     $incidentowner_phone = user_phone($incident->owner);
-    if ($incidentowner_phone != '') echo "(Tel: {$incidentowner_phone}) ";
+    if ($incidentowner_phone != '') echo "({$strTel}: {$incidentowner_phone}) ";
     if ($incident->towner > 0 AND $incident->towner != $incident->owner)
     {
        echo "({$strTemp}: ".user_realname($incident->towner,TRUE).")";
@@ -101,6 +101,23 @@ if (open_activities_for_incident($incidentid) > 0)
     echo icon('timer', 16, $strOpenActivities);
     echo "</a> ";
 }
+
+// Product Info
+if (!empty($incident->product))
+{
+    $pisql = "SELECT pi.information AS label, ipi.information AS information ";
+    $pisql .= "FROM `{$dbIncidentProductInfo}` AS ipi, `{$dbProductInfo}` AS pi ";
+    $pisql .= "WHERE pi.id = ipi.productinfoid AND ipi.incidentid = {$incidentid}";
+    $piresult = mysql_query($pisql);
+    if (mysql_num_rows($piresult) > 0)
+    {
+        while ($pi = mysql_fetch_object($piresult))
+        {
+            echo "{$pi->label}: {$pi->information} <br />\n";
+        }
+    }
+}
+
 echo "Open for {$opened_for} ";
 echo incidentstatus_name($incident->status);
 if ($incident->status == 2) echo " (" . closingstatus_name($incident->closingstatus) . ")";

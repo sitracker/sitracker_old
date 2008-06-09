@@ -930,6 +930,7 @@ $strProblemReproductionCustomerText = 'Does the problem exist with more than one
 $strProduct = 'Product';
 $strProductCantBeDeleted = 'Sorry, this product cannot be deleted because it has been associated with one or more incidents, contracts or skills';
 $strProductOnly = 'Product Only';
+$strProductQuestions = 'Product Questions';
 $strProducts = 'Products';
 $strPublic = 'Public';
 $strPublicHoliday = 'Public Holiday';
@@ -1158,6 +1159,8 @@ $strTaskMarkedCompleteSuccessfully = 'Task marked completed successfully';
 $strTaskPrivateError = 'Sorry, you cannot view this task as it has been marked private and you are not the owner';
 $strTBytes = 'TBytes';
 $strTechnicalSupportAdmin = 'Technical Support Admin';
+# Abbreviation for 'Telephone'
+$strTel = 'Tel';
 $strTelephone = 'Telephone';
 # Abbreviated 'Temporary';
 $strTemp = 'Temp';

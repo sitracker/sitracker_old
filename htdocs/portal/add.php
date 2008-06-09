@@ -57,6 +57,26 @@ if (!$_REQUEST['action'])
     echo "<tr><th>{$strTitle}:</th><td class='shade1'>";
     echo "<input class='required' maxlength='100' name='title' size='40' type='text' />";
     echo " <span class='required'>{$strRequired}</span></td></tr>";
+
+    $sql = "SELECT * FROM `{$dbProductInfo}` WHERE productid='$productid'";
+    $result = mysql_query($sql);
+    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+    if (mysql_num_rows($result)  > 0)
+    {
+        while ($productinforow = mysql_fetch_array($result))
+        {
+            echo "<tr><th>{$productinforow['information']}:";
+            echo "<sup class='red'>*</sup>";
+            echo "</th>";
+            echo "<td>";
+            if ($productinforow['moreinformation'] != '')
+            {
+                echo $productinforow['moreinformation']."<br />\n";
+            }
+            echo "<input maxlength='100' name='pinfo{$productinforow['id']}' size='40' type='text' /></td></tr>\n";
+        }
+    }
+
     echo "<tr><th width='20%'>{$strProblemDescription}:</th><td class='shade1'>";
     echo "The more information you can provide, the better<br />";
     echo "<textarea name='probdesc' rows='20' cols='60'>";
@@ -88,9 +108,9 @@ else //submit
     $reproduction = cleanvar($_REQUEST['reproduction']);
     $servicelevel = servicelevel_id2tag(maintenance_servicelevel($contractid));
     $productid = cleanvar($_REQUEST['productid']);
-    
+
     $_SESSION['formdata']['portaladdincident'] = $_POST;
-    
+
     $errors = 0;
     if (!isset($incidenttitle))
     {
@@ -105,7 +125,7 @@ else //submit
         {
             $updatetext .= "<b>{$strProblemDescription}</b>\n{$probdesc}\n\n";
         }
-    
+
         //create new incident
         $sql  = "INSERT INTO `{$dbIncidents}` (title, owner, contact, priority, servicelevel, status, type, maintenanceid, ";
         $sql .= "product, softwareid, productversion, productservicepacks, opened, lastupdated) ";
@@ -113,10 +133,28 @@ else //submit
         $sql .= "'{$productid}', '{$software}', '{$softwareversion}', '{$softwareservicepacks}', '{$now}', '{$now}')";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-    
+
         $incidentid = mysql_insert_id();
         $_SESSION['incidentid'] = $incidentid;
-    
+
+
+        // Save productinfo if there is some
+        $sql = "SELECT * FROM `{$dbProductInfo}` WHERE productid='{$productid}'";
+        $result = mysql_query($sql);
+        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+        if (mysql_num_rows($result) > 0)
+        {
+            while ($productinforow = mysql_fetch_object($result))
+            {
+                $var = "pinfo{$productinforow->id}";
+                $pinfo = cleanvar($_POST[$var]);
+                $pisql = "INSERT INTO `{$dbIncidentProductInfo}` (incidentid, productinfoid, information) ";
+                $pisql .= "VALUES ('{$incidentid}', '{$productinforow->id}', '{$pinfo}')";
+                mysql_query($pisql);
+                if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+            }
+        }
+
         // Create a new update
         $sql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, bodytext, timestamp, currentowner, ";
         $sql .= "currentstatus, customervisibility) ";
@@ -124,7 +162,7 @@ else //submit
         $sql .= "'1', 'show')";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-    
+
         // get the service level
         // find out when the initial response should be according to the service level
         if (empty($servicelevel) OR $servicelevel == 0)
@@ -137,28 +175,28 @@ else //submit
         {
             $sql = "SELECT * FROM `{$dbServiceLevels}` WHERE tag='{$servicelevel}' AND priority='{$priority}' ";
         }
-    
+
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
         $level = mysql_fetch_object($result);
-    
+
         $targetval = $level->initial_response_mins * 60;
         $initialresponse = $now + $targetval;
-    
+
         // Insert the first SLA update, this indicates the start of an incident
         // This insert could possibly be merged with another of the 'updates' records, but for now we keep it seperate for clarity
         $sql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, timestamp, currentowner, currentstatus, customervisibility, sla, bodytext) ";
         $sql .= "VALUES ('{$incidentid}', '0', 'slamet', '{$now}', '0', '1', 'hide', 'opened','The incident is open and awaiting action.')";
         mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-    
+
         // Insert the first Review update, this indicates the review period of an incident has started
         // This insert could possibly be merged with another of the 'updates' records, but for now we keep it seperate for clarity
         $sql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, timestamp, currentowner, currentstatus, customervisibility, sla, bodytext) ";
         $sql .= "VALUES ('{$incidentid}', '0', 'reviewmet', '{$now}', '0', '1', 'hide', 'opened','')";
         mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-    
+
         trigger('TRIGGER_INCIDENT_CREATED', array('incidentid' => $incidentid));
         $_SESSION['formdata']['portaladdincident'] = NULL;
         $_SESSION['formerrors']['portaladdincident'] = NULL;

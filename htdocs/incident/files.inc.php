@@ -206,7 +206,7 @@ function draw_file_row($file, $fsdelim, $incidentid, $path)
 
 
     // FIXME url
-    $url = "download.php?file={$filename}&amp;incidentid={$incidentid}&amp;p={$path}";
+    $url = "download.php?file=".urlencode($filename)."&amp;incidentid={$incidentid}&amp;p={$path}";
 
     $html = "<tr>";
     $html .= "<td align='right' width='5%'>";
@@ -333,8 +333,8 @@ if (file_exists($incident_attachment_fspath))
                     echo draw_file_row($file, $fsdelim, $incidentid, $dirname);
 
                 }
-                
-                if (!empty($updatetext) AND 
+
+                if (!empty($updatetext) AND
                 	$updatetype == 'email' OR
                 	$updatetype == 'webupdate')
                 {

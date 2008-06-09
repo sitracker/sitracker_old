@@ -20,28 +20,32 @@ require ('functions.inc.php');
 // This page requires authentication
 require ('auth.inc.php');
 
-include ('htmlheader.inc.php');
+// External variables
+$product = cleanvar($_REQUEST['product']);
+$information = cleanvar($_POST['information']);
+$moreinformation = cleanvar($_POST['moreinformation']);
+
 
 // Show add product information form
 if (empty($_REQUEST['submit']))
 {
+    include ('htmlheader.inc.php');
     echo "<h2>{$strAddProductQuestion}</h2>";
     echo "<h5>".sprintf($strMandatoryMarked,"<sup class='red'>*</sup>")."</h5>";
     echo "<form action='{$_SERVER['PHP_SELF']}' method='post' onsubmit='return confirm_action(\"{$strAreYouSureAddProductInfo}\")'>";
-    echo "<table align='center'>";
-    echo "<tr><th>Product:</th><td>".product_drop_down("product", 0)."</td></tr>";
-    echo "<tr><th>Question: <sup class='red'>*</sup></th><td><input name='information' size='30' /></td></tr>";
-    echo "<tr><th>More Information: <sup class='red'>*</sup></th><td><input name='moreinformation' size='30' /></td></tr>";
+    echo "<table class='vertical' align='center'>";
+    echo "<tr><th>{$strProduct}: <sup class='red'>*</sup></th><td>".product_drop_down("product", $product)."</td></tr>";
+    echo "<tr><th>{$strQuestion}: <sup class='red'>*</sup></th><td><input name='information' size='30' /></td></tr>";
+    echo "<tr><th>{$strAdditionalInfo}:</th><td><input name='moreinformation' size='30' /></td></tr>";
     echo "</table>";
     echo "<p align='center'><input name='submit' type='submit' value='{$strAdd}' /></p>";
     echo "</form>";
+    include ('htmlfooter.inc.php');
 }
 else
 {
-    // External variables
-    $product = mysql_real_escape_string($_POST['product']);
-    $information = cleanvar($_POST['information']);
-    $moreinformation = cleanvar($_POST['moreinformation']);
+
+    // FIXME these errors need tidying INL 9Jun08
 
     // Add product information
     $errors = 0;
@@ -70,9 +74,9 @@ else
         else
         {
             journal(CFG_LOGGING_NORMAL, 'Product Info Added', "Info was added to Product $product", CFG_JOURNAL_PRODUCTS, $product);
-            html_redirect("products.php");
+            html_redirect("products.php?productid={$product}");
+            exit;
         }
     }
 }
-include ('htmlfooter.inc.php');
 ?>

@@ -312,6 +312,26 @@ else
             echo "</table>\n";
             echo "<p align='center'><a href='add_product_software.php?productid={$product->id}'>".sprintf($strLinkSkillToX, $product->name)."</a></p>\n";
 
+            $sql = "SELECT * FROM `{$dbProductInfo}` WHERE productid='{$product->id}'";
+            $result = mysql_query($sql);
+            if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+            if (mysql_num_rows($result) > 0)
+            {
+                echo "<h3>{$strProductQuestions}</h3>";
+                echo "<table align='center'>";
+                echo "<tr><th>{$strQuestion}</th><th>{$strAdditionalInfo}</th></tr>";
+                $shade = 'shade1';
+                while ($productinforow = mysql_fetch_array($result))
+                {
+                    echo "<tr class='$shade'><td>{$productinforow['information']}</td>";
+                    echo "<td>{$productinforow['moreinformation']}</td></tr>\n";
+                    if ($shade == 'shade1') $shade = 'shade2';
+                    else $shade = 'shade1';
+                }
+                echo "</table>";
+            }
+            echo "<p align='center'><a href='add_productinfo.php?product={$product->id}'>{$strAddProductQuestion}</a></p>";
+
             $sql = "SELECT * FROM `{$dbMaintenance}` WHERE product='{$product->id}' ORDER BY id DESC";
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);

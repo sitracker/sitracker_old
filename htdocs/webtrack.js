@@ -100,7 +100,7 @@ function get_and_display(page, component, update)
         var origicon = '';
         if (refreshicon != null)
         {
-            origicon = $(refreshicon).src;
+            if ($(refreshicon)) origicon = $(refreshicon).src;
         }
 
         // If the dashlet content is blank, set a loading image

@@ -475,18 +475,19 @@ elseif ($action=='incidentform')
         // Insert pre-defined per-product questions from the database, these should be required fields
         // These 'productinfo' questions don't have a GUI as of 27Oct05
         $sql = "SELECT * FROM `{$dbProductInfo}` WHERE productid='$productid'";
-        $result=mysql_query($sql);
+        $result = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
         while ($productinforow = mysql_fetch_array($result))
         {
-            echo "<tr><th>{$productinforow['information']}";
+            echo "<tr><th>{$productinforow['information']}:";
+            echo "<sup class='red'>*</sup>";
+            echo "</th>";
+            echo "<td>";
             if ($productinforow['moreinformation'] != '')
             {
-                echo "<br />\n".$productinforow['moreinformation'];
+                echo $productinforow['moreinformation']."<br />\n";
             }
-            echo ": <sup class='red'>*</sup>";
-            echo "</th>";
-            echo "<td><input maxlength='100' name='{$productinforow['id']}' size='40' type='text' /></td></tr>\n";
+            echo "<input maxlength='100' name='pinfo{$productinforow['id']}' size='40' type='text' /></td></tr>\n";
         }
         echo "<tr><th>{$strWorkAroundsAttempted}:".help_link('WorkAroundsAttemptedEngineer')."</th>";
         echo "<td><textarea name='workarounds' rows='5' cols='60'></textarea></td></tr>\n";
@@ -570,19 +571,19 @@ elseif ($action == 'assign')
             $errors = 1;
             $error_string .= "You must select a contact";
         }
-        
+
         // check for blank title
         if ($incidenttitle == '')
         {
             $incidenttitle = $strUntitled;
         }
-        
+
         // check for blank priority
         if ($priority == 0)
         {
             $priority=1;
         }
-        
+
         // check for blank type
         if ($type == "")
         {
@@ -624,7 +625,7 @@ elseif ($action == 'assign')
             {
                 $servicelevel = servicelevel_id2tag(maintenance_servicelevel($maintid));
             }
-            
+
             // Use default service level if we didn't find one above
             if ($servicelevel == '')
             {
@@ -651,6 +652,23 @@ elseif ($action == 'assign')
 
             $incidentid = mysql_insert_id();
             $_SESSION['incidentid'] = $incidentid;
+
+            // Save productinfo if there is some
+            $sql = "SELECT * FROM `{$dbProductInfo}` WHERE productid='{$productid}'";
+            $result = mysql_query($sql);
+            if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+            if (mysql_num_rows($result) > 0)
+            {
+                while ($productinforow = mysql_fetch_object($result))
+                {
+                    $var = "pinfo{$productinforow->id}";
+                    $pinfo = cleanvar($_POST[$var]);
+                    $pisql = "INSERT INTO `{$dbIncidentProductInfo}` (incidentid, productinfoid, information) ";
+                    $pisql .= "VALUES ('{$incidentid}', '{$productinforow->id}', '{$pinfo}')";
+                    mysql_query($pisql);
+                    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+                }
+            }
 
             // We use <b> tags in updatetext, not <strong>
             $updatetext = "Opened as Priority: <b>" . priority_name($priority) . "</b>";
