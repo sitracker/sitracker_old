@@ -8314,10 +8314,10 @@ function icon($filename, $size='', $alt='', $title='', $id='')
         {
             $icon .= " title=\"{$title}\"";
         }
-        
-        if (empty($id))
+
+        if (!empty($id))
         {
-            $icon .= "id=\"{$id}\"";
+            $icon .= " id=\"{$id}\"";
         }
 
         $icon .= " />";
