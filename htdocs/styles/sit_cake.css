@@ -6,7 +6,7 @@ body {
 }
 h1 { color: white; }
 h2,h3,h4 { color: #3366AC; }
-h2 { text-align: center; }
+h2, h3 { text-align: center; }
 h2 img { vertical-align: middle; }
 
 table {
@@ -34,8 +34,8 @@ td {
     color: #537AB7;
 }
 
-form table.vertical th { text-align: right; background-color: #537AB7; }
-form table.vertical td { background-color: #C3E7FB; }
+table.vertical th { text-align: right; background-color: #537AB7; }
+table.vertical td { background-color: #C3E7FB; }
 
 
 input[type=submit], input[type=button], input[type=reset] {
