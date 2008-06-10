@@ -163,5 +163,33 @@ if ($CONFIG['portal_site_incidents'])
 
 }
 
+echo "<h2>".icon('contact', 32)." {$strContacts}</h2>";
+echo "<table width='30%' align='center'><tr>";
+echo colheader('name', $strName);
+echo colheader('action', $strAction, FALSE, FALSE, FALSE, FALSE, 10);
+echo "</tr>";
+
+$sql = "SELECT * FROM `{$dbContacts}` ";
+$sql .= "WHERE siteid='{$_SESSION['siteid']}'";
+
+if ($result = mysql_query($sql))
+{
+    $shade = 'shade1';
+    while ($row = mysql_fetch_object($result))
+    {
+        echo "<tr class='{$shade}'><td>{$row->forenames} {$row->surname}</td>";
+        echo "<td><a href='contactdetails.php?id={$row->id}'>{$strView}</a> </td></tr>";
+        
+        if ($shade == 'shade1')
+        {
+            $shade == 'shade2';
+        }
+        else
+        {
+            $shade = 'shade1';
+        }
+    }
+}
+echo "</table>";
 include 'htmlfooter.inc.php';
 ?>
