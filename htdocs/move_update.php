@@ -184,10 +184,12 @@ else
             while (false !== ($file = readdir($dh)))
             {
                 //Don't list subdirectories
-                if (!is_dir("$update_path/$file")) {
-                if (!rename("$update_path/$file", "$new_path/$file"))
+                if (!is_dir("$update_path/$file"))
                 {
-                    throw_error("Couldn't move file $file");
+                    if (!rename("$update_path/$file", "$new_path/$file"))
+                    {
+                        throw_error("Couldn't move file $file");
+                    }
                 }
             }
         }
