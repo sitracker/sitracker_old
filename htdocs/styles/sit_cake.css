@@ -52,11 +52,12 @@ input[type=submit]:hover, input[type=button]:hover, input[type=reset]:hover {
 }
 
 
-
-
-#noticearea { font-size: 8pt; }
+#menu, #noticearea { font-size: 8pt; }
 
 #masthead { text-align: center; }
 
 div.windowtitle, div.windowtitle a { color: white; }
+div.windowtitle img { vertical-align: middle; }
+.window table th { background-color: #ccc; }
 
+.helplink { background-color: #fff; }

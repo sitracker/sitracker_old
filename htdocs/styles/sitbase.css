@@ -1,10 +1,14 @@
 /* Base styles*/
-body { margin: 0px; }
+body {
+  margin: 0px;
+  font-family: Tahoma, Helvetica, Arial, 'sans serif';
+}
 h1 {
   background-image: url('../images/top2.png');
   font-size: 16pt; font-weight: bold; color: #FFF;
   background-color: #203894; margin: 0px; padding: 3px 0px 3px 0px;
 }
+h1,h2,h3 { text-align: center; }
 select { background: white; }
 th { -moz-border-radius: 7px; -khtml-border-radius: 7px; border-radius: 7px; }
 img { border:0px; }
@@ -34,108 +38,10 @@ td sup { color: #444; }
   height: 50px; background-color: transparent;}
 #menu { border-bottom: 1px solid #203894; padding-bottom: 4px;}
 .menuitem li { padding-top: 3px; }
-th:hover { background: #E9E9E9; }
 
-tr.shade1:hover { background-color: #F2F2F2; }
-tr.shade2:hover { background-color: #F2F2F2; }
-tr.critical { background-color: #FF4433; }
-tr.critical:hover { background-color: #FFAAAB; }
-strong.critical { text-decoration: blink; }
-tr.critical strong.critical { color: #FFF; }
-tr.urgent:hover { background-color: #FFAAAB; }
-tr.expired:hover { background-color: #F2F2F2; }
-tr.notice:hover { background-color: #F2F2F2; }
+#menu, #noticearea { font-size: 8pt; }
 
-#footerbar select { font-size: 80%; }
-#footerbar form { margin: 0px; }
-#statusbar { clear: both; background-color: #203894; background-image: url('../images/top2.png');
-  background-position: top-left; background-repeat: x-repeat;}
-
-div.windowbox
-{
-  border: 1px solid #203894;
-  width: 95%;
-  margin-bottom: 10px;
-}
-
-div.windowtitle
-{
-  background-color: #3B5CA7;
-}
-div.windowtitle div { float: right; }
-div.window table { width: 100%; }
-
-em.important, strong.important { color: red; }
-option.disable { color: red; }
-option.enable { color: #00AA00; }
-option.seperator { border-top: 1px solid black; }
-
-/* Information and Errors */
-sup.red { color: #F00; font-size: 125%; } /* FIXME doesn't need a class for this */
-
-p.tip,p.info, p.warning, p.error, p.trigger, h5.warning, h5.error
-{
-  background-position: 3px 2px;
-  background-repeat: no-repeat;
-  padding: 3px 3px 3px 22px;
-  min-height: 16px;
-  -moz-border-radius: 5px;
-  /* display: inline; */
-  border: 1px solid #000;
-  margin-left: 2em;
-  margin-right: 2em;
-  width: auto;
-  text-align: left;
-}
-p.tip
-{
-  background-image: url('../images/icons/sit/16x16/tip.png');
-  color: black;
-  border: 1px solid black;;
-  background-color: #FFFFEB;
-}
-p.info, p.trigger
-{
-  background-image: url('../images/icons/sit/16x16/info.png');
-  color: #17446B;
-  border: 1px solid #17446B;
-  background-color: #F4F6FF;
-}
-p.info span, p.error span, p.warning span, p.trigger span { float: right; margin-right: 10px; }
-p.warning, h5.warning
-{
-  background-image: url('../images/icons/sit/16x16/warning.png');
-  color: #5A3612;
-  border: 1px solid #A26120;
-  background-color: #FFECD7;
-}
-p.error, h5.error
-{
-  background-image: url('../images/icons/sit/16x16/error.png');
-  color: #f00;
-  border: 1px solid #f00;
-  background-color: #FFE1E1;
-}
-p.error, span.error{ color: #f00; }
-p.warning span a { color: #5A3612; }
-p#dismissall { text-align: right; padding-right:32px; }
-
-strong.info,em.info,u.info,span.info
-{
-   background: #E1FFFF; border: 1px solid #BFD8D8; padding: 2px; cursor: help;
-}
-p.trigger
-{
-  background-image: url('../images/icons/oxygen/16x16/trigger.png');
-  background-position: left;
-  background-repeat: no-repeat;
-  color: #17446B;
-  border: 1px solid #17446B;
-  background-color: #F4F6FF;
-}
-
-#menu
-{
+#menu {
 /*  float: left; */
   display: block;
   color: #000;
@@ -242,6 +148,109 @@ div#menu li:hover li ul,
   opacity: 0.75;
   -moz-opacity:0.75;
 }
+
+
+
+th:hover { background: #E9E9E9; }
+
+tr.shade1:hover { background-color: #F2F2F2; }
+tr.shade2:hover { background-color: #F2F2F2; }
+tr.critical { background-color: #FF4433; }
+tr.critical:hover { background-color: #FFAAAB; }
+strong.critical { text-decoration: blink; }
+tr.critical strong.critical { color: #FFF; }
+tr.urgent:hover { background-color: #FFAAAB; }
+tr.expired:hover { background-color: #F2F2F2; }
+tr.notice:hover { background-color: #F2F2F2; }
+
+#footerbar select { font-size: 80%; }
+#footerbar form { margin: 0px; }
+#statusbar { clear: both; background-color: #203894; background-image: url('../images/top2.png');
+  background-position: top-left; background-repeat: x-repeat;}
+
+div.windowbox
+{
+  border: 1px solid #203894;
+  width: 95%;
+  margin-bottom: 10px;
+}
+
+div.windowtitle
+{
+  background-color: #3B5CA7;
+}
+div.windowtitle div { float: right; }
+div.window table { width: 100%; }
+
+em.important, strong.important { color: red; }
+option.disable { color: red; }
+option.enable { color: #00AA00; }
+option.seperator { border-top: 1px solid black; }
+
+/* Information and Errors */
+sup.red { color: #F00; font-size: 125%; } /* FIXME doesn't need a class for this */
+
+p.tip,p.info, p.warning, p.error, p.trigger, h5.warning, h5.error
+{
+  background-position: 3px 2px;
+  background-repeat: no-repeat;
+  padding: 3px 3px 3px 22px;
+  min-height: 16px;
+  -moz-border-radius: 5px;
+  /* display: inline; */
+  border: 1px solid #000;
+  margin-left: 2em;
+  margin-right: 2em;
+  width: auto;
+  text-align: left;
+}
+p.tip
+{
+  background-image: url('../images/icons/sit/16x16/tip.png');
+  color: black;
+  border: 1px solid black;;
+  background-color: #FFFFEB;
+}
+p.info, p.trigger
+{
+  background-image: url('../images/icons/sit/16x16/info.png');
+  color: #17446B;
+  border: 1px solid #17446B;
+  background-color: #F4F6FF;
+}
+p.info span, p.error span, p.warning span, p.trigger span { float: right; margin-right: 10px; }
+p.warning, h5.warning
+{
+  background-image: url('../images/icons/sit/16x16/warning.png');
+  color: #5A3612;
+  border: 1px solid #A26120;
+  background-color: #FFECD7;
+}
+p.error, h5.error
+{
+  background-image: url('../images/icons/sit/16x16/error.png');
+  color: #f00;
+  border: 1px solid #f00;
+  background-color: #FFE1E1;
+}
+p.error, span.error{ color: #f00; }
+p.warning span a { color: #5A3612; }
+p#dismissall { text-align: right; padding-right:32px; }
+
+strong.info,em.info,u.info,span.info
+{
+   background: #E1FFFF; border: 1px solid #BFD8D8; padding: 2px; cursor: help;
+}
+p.trigger
+{
+  background-image: url('../images/icons/oxygen/16x16/trigger.png');
+  background-position: left;
+  background-repeat: no-repeat;
+  color: #17446B;
+  border: 1px solid #17446B;
+  background-color: #F4F6FF;
+}
+
 
 .portaleft
 {
@@ -375,4 +384,99 @@ div#portaluser { float: right; text-align: right; }
     overflow: scroll; float: right;
     border: 1px solid #CCCCFF;
     z-index: 1;
+}
+
+/* tooltip */
+a.info img { border: 0px; text-decoration:none;}
+a.info span { display: none; z-index: 15; }
+a.info:hover { text-decoration: none; }
+a.info:hover span
+{
+  display: block;
+  position:absolute;
+  background: white;
+  width: 34em;
+  padding: 1px;
+  border:1px solid InfoText;
+  text-decoration: none;
+  font-weight: normal;
+  background-color:#FFFF99; color:#000000 ;
+  text-align: left;
+  -moz-border-radius: 7px;
+  -khtml-border-radius: 7px;
+  border-radius: 7px;
+  filter:alpha(opacity=85);
+  opacity: 0.85;
+  -moz-opacity:0.85;
+}
+
+
+div.detailentry, div.detailentryhidden
+{
+    border: 1px dotted #9C9C9C;
+    width: 95%;
+    background: #F7FAFF; /* #F7FAFF; */
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 2em;
+    padding-top: 20px;
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+    padding-bottom: 0.2em;
+}
+
+.detailentry img, .detailentryhidden img { border: 0px; }
+
+.detailentry table tr:hover { color: white; }
+.detailentry table td { background-color: transparent; }
+
+div.detailhead, div.detailinfo, div.detailheadhidden, div.detailinfohidden
+{
+    border: 1px solid #CDCEFF;
+    background: #F0F0FF;  /* #C5B2D5; */
+    padding: 0.2em 0.7em;
+    font-size: 120%;
+    margin-top: 10px;
+    -moz-border-radius: 6px;
+    top: 10px;
+    margin-left: 7%;
+}
+
+div.detailentryhidden, div.detailheadhidden { background: transparent; }
+
+div.detailhead, div.detailheadhidden
+{
+    max-width: 80%;
+    width: 80%;
+    position: relative;
+}
+div.detailinfo, div.detailinfohidden
+{
+    width: 80%;
+    margin-bottom: 2em;
+    position: relative;
+}
+div.detailinfohidden, div.detailheadhidden
+{
+    border-color: #BDBDBD;
+    background: white;
+    /* color: #8A888A; */
+}
+div.detaildate
+{
+    float: right;
+    color: #06377F;
+    padding-left: 1em;
+    position: relative;
+    top: 3px;
+}
+div.detaildate input[type=text] { color: #06377F; border: 1px dotted #06377F; background: transparent; }
+
+div.detailfoot
+{
+    border: 1px solid black;
+    width: 20%;
+    background: #D5DEE6;
+    margin-bottom: 1em;
+    margin-left: 60%;
 }
