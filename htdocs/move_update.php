@@ -177,7 +177,8 @@ else
         }
         
         $new_path = $CONFIG['attachment_fspath'] ."$incidentid".$fsdelim."u$new_update_id";
-        $update_path=$CONFIG['attachment_fspath'].'updates'.$fsdelim.$updateid;
+        $update_path = $CONFIG['attachment_fspath'].'updates'.$fsdelim.$updateid;
+        echo $new_path." ".$update_path;
         if (file_exists($update_path))
         {
             $dh = opendir($update_path);
@@ -202,7 +203,7 @@ else
 
         journal(CFG_LOGGING_NORMAL, 'Incident Update Moved', "Incident update $update moved to incident $incidentid", CFG_JOURNAL_INCIDENTS, $incidentid);
 
-        html_redirect("review_incoming_updates.php");
+        echo "<script>window.close();</script>'";
     }
     else
     {
