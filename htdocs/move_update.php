@@ -203,7 +203,7 @@ else
 
         journal(CFG_LOGGING_NORMAL, 'Incident Update Moved', "Incident update $update moved to incident $incidentid", CFG_JOURNAL_INCIDENTS, $incidentid);
 
-        echo "<script>window.close();</script>'";
+        html_redirect("incident_details.php?id=$incidentid");
     }
     else
     {
