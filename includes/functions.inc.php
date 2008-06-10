@@ -3067,6 +3067,21 @@ function sit_error_handler($errno, $errstr, $errfile, $errline, $errcontext)
                     }
                 }
             }
+            if (!empty($CONFIG['error_logfile']) AND is_writable($CONFIG['error_logfile']))
+            {
+                $fp=fopen($CONFIG['error_logfile'], 'a+');
+                if ($errno != E_NOTICE)
+                {
+                    fwrite($fp, date('r')." {$errortype[$errno]} [{$errno}] {$errstr} (in line {$errline} of file {$errfile})\n");
+                }
+                if ($errno==E_ERROR
+                    || $errno==E_USER_ERROR
+                    || $errno==E_CORE_ERROR
+                    || $errno==E_CORE_WARNING
+                    || $errno==E_COMPILE_ERROR
+                    || $errno==E_COMPILE_WARNING) fwrite($fp, "Context:\n".print_r($errcontext, TRUE)."\n----------\n\n");
+                fclose($fp);
+            }
         }
         echo "</p>";
         // Tips, to help diagnose errors
