@@ -458,7 +458,8 @@ INSERT INTO `{$dbInterfaceStyles}` (`id`, `name`, `cssurl`, `iconset`, `headerht
 (12, 'Ex Pea', 'sit11.css', 'sit', ''),
 (13, 'GUI Colours', 'sit12.css', 'sit', ''),
 (14, 'Flashy', 'sit14/sit14.css', 'sit', ''),
-(15, 'Richard', 'sit15.css', 'sit', '');
+(15, 'Richard', 'sit15.css', 'sit', ''),
+(16, 'Cake', 'sit_cake.css', 'sit', '');
 
 
 CREATE TABLE `{$dbJournal}` (
@@ -2152,7 +2153,9 @@ $upgrade_schema[335]["t200805301543"] = "ALTER TABLE `{$dbFiles}` CHANGE `path` 
 $upgrade_schema[335]["t200805301544"] = "ALTER TABLE `{$dbFiles}` CHANGE `expiry` `expiry` DATETIME NULL;";
 $upgrade_schema[335]["t200805301545"] = "ALTER TABLE `{$dbFiles}` CHANGE `fileversion` `fileversion` varchar(50) NULL default '';";
 
+$upgrade_schema[335]["t200806101407"] = "INSERT INTO `{$dbInterfaceStyles}` (`id` ,`name` ,`cssurl` ,`iconset` ,`headerhtml`) VALUES ('16', 'Cake', 'sit_cake.css', 'sit', '');";
 $upgrade_schema[335]["t200805101411"] = "INSERT INTO `{$dbPermissions}` VALUES (78, 'Post System Notices');";
+
 // Important: When making changes to the schema you must add SQL to make the alterations
 // to existing databases in $upgrade_schema[] *AND* you must also change $schema[] for
 // new installations (above the line of stars).

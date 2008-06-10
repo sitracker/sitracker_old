@@ -48,7 +48,7 @@ tr.notice:hover { background-color: #F2F2F2; }
 
 #footerbar select { font-size: 80%; }
 #footerbar form { margin: 0px; }
-#statusbar { background-color: #203894; background-image: url('../images/top2.png');
+#statusbar { clear: both; background-color: #203894; background-image: url('../images/top2.png');
   background-position: top-left; background-repeat: x-repeat;}
 
 div.windowbox

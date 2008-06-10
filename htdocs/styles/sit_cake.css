@@ -1,0 +1,62 @@
+/* Cake.  A SiT theme for the portal */
+body {
+  font-family: Verdana, Arial, Helvetica, sans-serif;
+  font-size: 10pt;
+
+}
+h1 { color: white; }
+h2,h3,h4 { color: #3366AC; }
+h2 { text-align: center; }
+h2 img { vertical-align: middle; }
+
+table {
+  font-size: 8pt;
+}
+th {
+    font: bold 11px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+    color: white;
+    border-right: 1px solid #537AB7;
+    border-bottom: 1px solid #537AB7;
+    border-top: 1px solid #537AB7;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    text-align: left;
+    padding: 4px 4px 4px 8px;
+    background-color: #6593DD;
+}
+
+th:hover { background-color: #C3E7FB; color: #000; }
+
+td {
+    border-right: 1px solid #537AB7;
+    border-bottom: 1px solid #537AB7;
+    padding: 6px 6px 6px 12px;
+    color: #537AB7;
+}
+
+form table.vertical th { text-align: right; background-color: #537AB7; }
+form table.vertical td { background-color: #C3E7FB; }
+
+
+input[type=submit], input[type=button], input[type=reset] {
+ background: #537AB7;
+ color: white;
+ border: 1px solid #537AB7;
+ text-transform: uppercase;
+ font-family: "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;;
+}
+input[type=reset] {margin-left: 2px;}
+input[type=submit]:hover, input[type=button]:hover, input[type=reset]:hover {
+  background: #6593DD;
+  border: 1px solid #6593DD;
+}
+
+
+
+
+#noticearea { font-size: 8pt; }
+
+#masthead { text-align: center; }
+
+div.windowtitle, div.windowtitle a { color: white; }
+
