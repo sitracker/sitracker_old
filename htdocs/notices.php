@@ -11,7 +11,7 @@
 
 @include ('set_include_path.inc.php');
 
-$permission = 69;
+$permission = 78;
 require ('db_connect.inc.php');
 require ('functions.inc.php');
 require ('auth.inc.php');
