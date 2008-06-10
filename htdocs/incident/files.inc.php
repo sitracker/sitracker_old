@@ -204,9 +204,17 @@ function draw_file_row($file, $fsdelim, $incidentid, $path)
         $mime_type = '';
     }
 
+    $updateid = str_replace("u", "", $filedir);
+    $sql = "SELECT f.id FROM `{$GLOBALS['dbLinks']}`, `{$GLOBALS['dbFiles']}` AS f  ";
+    $sql .= "WHERE linktype = '5' AND origcolref='$updateid' ";
+    $sql .= "AND f.id = linkcolref AND f.filename='$filename'";
+    $result = mysql_query($sql);
+    $fileobj = mysql_fetch_object($result);
+    $fileid = $fileobj->id;
 
     // FIXME url
-    $url = "download.php?file=".urlencode($filename)."&amp;incidentid={$incidentid}&amp;p={$path}";
+    
+    $url = "download.php?id=$fileid";
 
     $html = "<tr>";
     $html .= "<td align='right' width='5%'>";
