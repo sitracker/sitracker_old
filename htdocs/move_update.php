@@ -165,14 +165,9 @@ else
         $sql = "UPDATE `{$dbIncidents}` SET status='1', lastupdated='$now', timeofnextaction='0' WHERE id='$incidentid'";
         mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-
-        // move files associated with this incident
-        // first find out the path where the attachment files are stored
-        /*$tsql = "SELECT * FROM tempincoming WHERE updateid='$updateid'";
-        $tresult = mysql_query($tsql);
-        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-        $trow=mysql_fetch_array($tresult);    */
-
+        $new_update_id = mysql_insert_id();
+        
+        //move attachments from updates to incident
         if (!file_exists($CONFIG['attachment_fspath'] ."$incidentid"))
         {
             $umask=umask(0000);
@@ -180,18 +175,23 @@ else
             umask($umask);
             //     if (!$mk) throw_error('Failed creating incident directory: ',$incident_attachment_fspath ."$incidentid");
         }
-        $update_path=$CONFIG['attachment_fspath'].'updates/'.$updateid;
+        
+        $new_path = $CONFIG['attachment_fspath'] ."$incidentid".$fsdelim."u$new_update_id";
+        $update_path=$CONFIG['attachment_fspath'].'updates'.$fsdelim.$updateid;
         if (file_exists($update_path))
         {
-            $sym=symlink($update_path, $CONFIG['attachment_fspath'] . "$incidentid/" . $now);
-            if (!$sym) throw_error('!Error creating symlink for update','');
+            $dh = opendir($update_path);
+            while (false !== ($file = readdir($dh)))
+            {
+                //Don't list subdirectories
+                if (!is_dir("$update_path/$file")) {
+                if (!rename("$update_path/$file", "$new_path/$file"))
+                {
+                    throw_error("Couldn't move file $file");
+                }
+            }
         }
-
-        if ($send_email == "yes")
-        {
-            // send an email to the customer
-            send_template_email('INCIDENT_UPDATED', $incidentid);
-        }
+        rmdir($update_path);
 
         //remove from tempincoming to prevent build up
         $sql = "DELETE FROM `{$dbTempIncoming}` WHERE updateid='$updateid'";
