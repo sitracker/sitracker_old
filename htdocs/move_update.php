@@ -15,7 +15,6 @@ require ('functions.inc.php');
 
 // This page requires authentication
 require ('auth.inc.php');
-
 // External variables
 $incidentid = cleanvar($_REQUEST['incidentid']);
 $updateid = cleanvar($_REQUEST['updateid']);
@@ -25,7 +24,7 @@ $send_email = cleanvar($_REQUEST['send_email']);
 if ($incidentid=='')
 {
     $title = "Move Update $updateid";
-    include ('htmlheader.inc.php');
+    include 'incident_html_top.inc.php';
     echo "<h2>$title</h2>";
     if ($error=='1')
     {
@@ -37,7 +36,6 @@ if ($incidentid=='')
     <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method='post'>
     To Incident ID: <input type="text" name="incidentid" value="<?php echo $incidentid; ?>" />
     <input type="submit" value="Move" /><br />
-    Check here <input type="checkbox" name="send_email" checked='checked' value="yes" /> to send an email reply to the customer.
     <input type="hidden" name="updateid" value="<?php echo $updateid; ?>" />
     </form>
     </div>

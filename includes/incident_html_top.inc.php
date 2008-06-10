@@ -188,14 +188,14 @@ if ($menu != 'hide')
     {
         $insql = "SELECT emailfrom, contactid, updateid, ti.id, timestamp
                 FROM `{$dbTempIncoming}` AS ti, `{$dbUpdates}` AS u
-                WHERE ti.id = {$id}
+                WHERE ti.id = '{$id}'
                 AND ti.updateid = u.id";
         $query = mysql_query($insql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
         while ($inupdate = mysql_fetch_object($query))
         {
             echo "<a class='barlink' href='unlock_update.php?id={$id}'>{$strUnlock}</a> | ";
-            echo "<a class='barlink' href=\"javascript:window.opener.location='move_update.php?updateid={$inupdate->updateid}&amp;incidentidnumber={$update['incidentid']}'; window.close();\" >{$strAssign}</a> | ";
+            echo "<a class='barlink' href=\"javascript:window.location='move_update.php?updateid={$inupdate->updateid}&amp;win=incomingview'\" >{$strAssign}</a> | ";
             echo "<a class='barlink' href=\"javascript:window.opener.location='add_incident.php?action=findcontact&amp;incomingid={$id}&amp;search_string={$inupdate->emailfrom}&amp;contactid={$inupdate->contactid}&amp;win=incomingcreate'; window.close();\">{$strCreate}</a> | ";
             echo "<a class='barlink' href=\"javascript:window.opener.location='delete_update.php?updateid={$inupdate->updateid}&amp;tempid={$inupdate->id}&amp;timestamp={$inupdate->timestamp}'; window.close(); \">{$strDelete}</a>";
         }
