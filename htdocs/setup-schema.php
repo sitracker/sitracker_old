@@ -734,6 +734,7 @@ INSERT INTO `{$dbPermissions}` VALUES (74, 'Set duration without activity (for b
 INSERT INTO `{$dbPermissions}` VALUES (75, 'Set negative time for duration on incidents (for billable incidents - refunds)');
 INSERT INTO `{$dbPermissions}` VALUES (76, 'View Transactions');
 INSERT INTO `{$dbPermissions}` VALUES (77, 'View Billing Information');
+INSERT INTO `{$dbPermissions}` VALUES (78, 'Post System Notices');
 
 
 CREATE TABLE `{$dbPriority}` (
@@ -2151,6 +2152,7 @@ $upgrade_schema[335]["t200805301543"] = "ALTER TABLE `{$dbFiles}` CHANGE `path` 
 $upgrade_schema[335]["t200805301544"] = "ALTER TABLE `{$dbFiles}` CHANGE `expiry` `expiry` DATETIME NULL;";
 $upgrade_schema[335]["t200805301545"] = "ALTER TABLE `{$dbFiles}` CHANGE `fileversion` `fileversion` varchar(50) NULL default '';";
 
+$upgrade_schema[335]["t200805101411"] = "INSERT INTO `{$dbPermissions}` VALUES (78, 'Post System Notices');";
 // Important: When making changes to the schema you must add SQL to make the alterations
 // to existing databases in $upgrade_schema[] *AND* you must also change $schema[] for
 // new installations (above the line of stars).
