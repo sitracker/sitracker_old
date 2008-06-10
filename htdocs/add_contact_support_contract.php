@@ -27,9 +27,9 @@ $action = $_REQUEST['action'];
 // Valid user, check permissions
 if (empty($action) || $action == "showform")
 {
-    $title="Associate person with Contract"; // TODO i18n
     include ('htmlheader.inc.php');
-    echo "<h2>Link a contract with a support contact</h2>"; //TODO i18n
+    echo "<h2>{$strAssociateContactWithContract}</h2>";
+    
     echo "<form action='{$_SERVER['PHP_SELF']}?action=add' method='post'>";
     echo "<input type='hidden' name='context' value='{$context}' />";
     echo "<table align='center' class='vertical'>";

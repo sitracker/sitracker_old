@@ -3221,7 +3221,7 @@ function site_name($id)
 //  prints the HTML for a drop down list of
 // maintenance contracts, with the given name and with the
 // given id selected.
-function maintenance_drop_down($name, $id)
+function maintenance_drop_down($name, $id, $excludes = '', $return = FALSE)
 {
     global $GLOBALS;
     // TODO make maintenance_drop_down a hierarchical selection box sites/contracts
@@ -3230,26 +3230,42 @@ function maintenance_drop_down($name, $id)
     $sql .= "FROM `{$GLOBALS['dbMaintenance']}` AS m, `{$GLOBALS['dbSites']}` AS s, `{$GLOBALS['dbProducts']}` AS p ";
     $sql .= "WHERE site = s.id AND product = p.id ORDER BY s.name ASC";
     $result = mysql_query($sql);
-
+    $results = 0;
     // print HTML
-    echo "<select name='{$name}'>";
+    $html .= "<select name='{$name}'>";
     if ($id == 0)
     {
-        echo "<option selected='selected' value='0'></option>\n";
+        $html .= "<option selected='selected' value='0'></option>\n";
     }
 
     while ($maintenance = mysql_fetch_array($result))
     {
-        echo "<option ";
-        if ($maintenance["id"] == $id)
+        if (!is_array($excludes) OR (is_array($excludes) AND !in_array($maintenance['id'], $excludes)))
         {
-            echo "selected='selected' ";
+            $html .= "<option ";
+            if ($maintenance["id"] == $id)
+            {
+                $html .= "selected='selected' ";
+            }
+            $html .= "value='{$maintenance['id']}'>{$maintenance['sitename']} | {$maintenance['productname']}</option>";
+            $html .= "\n";
+            $results++;
         }
-        echo "value='{$maintenance['id']}'>{$maintenance['sitename']} | {$maintenance['productname']}</option>";
-        echo "\n";
     }
-
-    echo "</select>";
+    if ($results == 0)
+    {
+        $html .= "<option>{$GLOBALS['strNoRecords']}</option>";
+    }
+    $html .= "</select>";
+    
+    if ($return)
+    {
+        return $html;
+    }
+    else
+    {
+        echo $html;
+    }
 }
 
 
@@ -7566,7 +7582,7 @@ function admin_contact_contracts($contactid, $siteid)
 * @param $maintid integer - ID of the contract
 * @returns array of supported contracts, NULL if none
 **/
-function contact_contracts($contactid, $siteid)
+function contact_contracts($contactid, $siteid, $checkvisible = TRUE)
 {
     $sql = "SELECT DISTINCT m.id AS id
             FROM `{$GLOBALS['dbMaintenance']}` AS m,
@@ -7577,9 +7593,12 @@ function contact_contracts($contactid, $siteid)
             AND c.siteid={$siteid}
             AND c.id={$contactid}
             AND sc.maintenanceid=m.id
-            AND sc.contactid=c.id
-            AND m.var_incident_visible_contacts = 'yes'
-            ";
+            AND sc.contactid=c.id ";
+    if ($checkvisible)
+    {
+        $sql .= "AND m.var_incident_visible_contacts = 'yes'";
+    }
+
     if ($result = mysql_query($sql))
     {
         while ($row = mysql_fetch_object($result))
@@ -9231,6 +9250,97 @@ function populate_syslang()
     {
         die("File specified in \$CONFIG['default_i18n'] can't be found");
     }
+}
+
+
+/**
+* Outputs a user's contract associate, if the viewing user is allowed
+*
+* @param $userid ID of the user
+* @return string output html
+* @author Kieran Hogg
+*/
+function user_contracts_table($userid, $mode = 'internal')
+{
+    global $now, $CONFIG, $sit;
+    if ((!empty($sit[2]) AND user_permission($sit[2], 30)
+    OR ($_SESSION['usertype'] == 'admin'))) // view supported products
+    {
+        $html .= "<h4>".icon('contract', 16)." {$GLOBALS['strContracts']}:</h4>";
+        $sql  = "SELECT sc.maintenanceid AS maintenanceid, m.product, p.name AS productname, ";
+        $sql .= "m.expirydate, m.term ";
+        $sql .= "FROM `{$GLOBALS['dbSupportContacts']}` AS sc, ";
+        $sql .= "`{$GLOBALS['dbMaintenance']}` AS m, ";
+        $sql .= "`{$GLOBALS['dbProducts']}` AS p ";
+        $sql .= "WHERE ((sc.maintenanceid=m.id AND sc.contactid='$userid') ";
+        $sql .= "OR m.allcontactssupported = 'yes') ";
+        $sql .= "AND m.product=p.id  ";
+        $result = mysql_query($sql);
+        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+        if (mysql_num_rows($result)>0)
+        {
+            $html .= "<table align='center' class='vertical'>";
+            $html .= "<tr>";
+            $html .= "<th>{$GLOBALS['strID']}</th><th>{$GLOBALS['strProduct']}</th><th>{$GLOBALS['strExpiryDate']}</th>";
+            $html .= "</tr>\n";
+
+            $supportcount=1;
+            $shade='shade2';
+            while ($supportedrow = mysql_fetch_array($result))
+            {
+                if ($supportedrow['term'] == 'yes')
+                {
+                    $shade='expired';
+                }
+
+                if ($supportedrow['expirydate'] < $now)
+                {
+                    $shade='expired';
+                }
+
+                $html .= "<tr><td class='$shade'>";
+                $html .= "".icon('contract', 16)." ";
+                if ($mode == 'internal')
+                {
+                    $html .= "<a href='contract_details.php?id=";
+                }
+                else
+                {
+                    $html .= "<a href='contracts.php?id=";
+                }
+                $html .= "{$supportedrow['maintenanceid']}'>";
+                $html .= "{$GLOBALS['strContract']}: ";
+                $html .= "{$supportedrow['maintenanceid']}</a></td>";
+                $html .= "<td class='$shade'>{$supportedrow['productname']}</td>";
+                $html .= "<td class='$shade'>";
+                $html .= ldate($CONFIG['dateformat_date'], $supportedrow['expirydate']);
+                if ($supportedrow['term'] == 'yes')
+                {
+                    $html .= " {$GLOBALS['strTerminated']}";
+                }
+
+                $html .= "</td>";
+                $html .= "</tr>\n";
+                $supportcount++;
+                $shade = 'shade2';
+            }
+            $html .= "</table>\n";
+        }
+        else
+        {
+            $html .= "<p align='center'>{$GLOBALS['strNone']}</p>\n";
+        }
+        
+        if ($mode == 'internal')
+        {
+            $html .= "<p align='center'>";
+            $html .= "<a href='add_contact_support_contract.php?contactid={$userid}&amp;context=contact'>";
+            $html .= "{$GLOBALS['strAssociateContactWithContract']}</a></p>\n";
+        }
+    
+    }
+    
+    return $html;
 }
 
 // -------------------------- // -------------------------- // --------------------------

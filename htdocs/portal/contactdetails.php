@@ -109,7 +109,7 @@ if (cleanvar($_REQUEST['action']) == 'update')
         $updatesql .= "WHERE id='{$id}'";
         mysql_query($updatesql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-        html_redirect($_SERVER['PHP_SELF']);
+        html_redirect($_SERVER['PHP_SELF']."?id={$id}");
     }
     else
     {
@@ -117,6 +117,25 @@ if (cleanvar($_REQUEST['action']) == 'update')
     }
     
     
+}
+elseif (isset($_POST['add']))
+{
+    print_r($_POST);
+    $maintid = intval($_POST['maintid']);
+    $contactid = intval($_GET['id']);
+    
+    if ($maintid == 0 OR $contactid == 0)
+    {
+        trigger_error("Maintid or contactid blank", E_USER_ERROR);
+    }
+    else
+    {
+        $sql = "INSERT into `{$dbSupportContacts}`(`maintenanceid`, `contactid`) ";
+        $sql .= "VALUES('{$maintid}', '{$contactid}') ";
+        mysql_query($sql);
+        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+        html_redirect($_SERVER['PHP_SELF']."?id={$id}");
+    }
 }
 else
 {
@@ -168,6 +187,12 @@ else
     echo "</table>";
     echo "<p align='center'><input type='submit' value='{$strUpdate}' /></p></form>";
     
+    echo "<br />".user_contracts_table($id, 'external');
+    echo "<h4>{$strAssociateContactWithContract}</h4>";
+    echo "<form method='post' action='{$_SERVER['PHP_SELF']}?id={$id}'>";
+    $exclude = contact_contracts($id, $_SESSION['siteid'], FALSE);
+    echo "<p align='center'>".maintenance_drop_down('maintid', $_SESSION['siteid'], $exclude, TRUE)."<br />";
+    echo "<input type='submit' name='add' value='{$strAdd}' /></form></p>";
     include 'htmlfooter.inc.php';
 }
 ?>

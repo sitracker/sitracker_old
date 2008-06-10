@@ -162,7 +162,7 @@ if ($CONFIG['portal_site_incidents'])
     echo "<p align='center'><input type='submit' id='submit' name='submit'  value='{$strUpdate}' /></form></p>";
 
 }
-
+echo "<br />";
 echo "<h2>".icon('contact', 32)." {$strContacts}</h2>";
 echo "<table width='30%' align='center'><tr>";
 echo colheader('name', $strName);

@@ -238,7 +238,6 @@ if ($sit[0] != '')
         echo "<p class='error'>{$strInvalidEmailAddress} - <a href='edit_profile.php'>{$strEditEmail}</a></p>";
     }
 
-
     //display (trigger) notices
     $noticesql = "SELECT * FROM `${GLOBALS['dbNotices']}` ";
     // Don't show more than 20 notices, saftey cap
@@ -312,10 +311,9 @@ if ($sit[0] != '')
             if (!empty($notice->link))
             {
                 echo " - <a href='{$notice->link}'>";
-                if (substr($notice->linktext, 0, 4)=='$str')
+                if (substr($notice->linktext, 0, 3)=='str')
                 {
-                    $v = substr($notice->linktext, 1);
-                    echo $GLOBALS[$v];
+                    echo $GLOBALS[$notice->linktext];
                 }
                 else
                 {

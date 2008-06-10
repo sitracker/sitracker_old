@@ -214,67 +214,8 @@ while ($contactrow = mysql_fetch_array($contactresult))
 
 
     // Check if user has permission to view maintenace contracts, if so display those related to this contact
-    if (user_permission($sit[2],30)) // view supported products
-    {
-        echo "<h4>{$strContracts}:</h4>";
-        $sql  = "SELECT sc.maintenanceid AS maintenanceid, m.product, p.name AS productname, ";
-        $sql .= "m.expirydate, m.term ";
-        $sql .= "FROM `{$dbSupportContacts}` AS sc, `{$dbMaintenance}` AS m, `{$dbProducts}` AS p ";
-        $sql .= "WHERE ((sc.maintenanceid=m.id AND sc.contactid='$id') ";
-        $sql .= "OR m.allcontactssupported = 'yes') ";
-        $sql .= "AND m.product=p.id  ";
-        $result = mysql_query($sql);
-        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-        if (mysql_num_rows($result)>0)
-        {
-            echo "<table align='center' class='vertical'>";
-            echo "<tr>";
-            echo "<th>{$strID}</th><th>{$strProduct}</th><th>{$strExpiryDate}</th>";
-            echo "</tr>\n";
-
-            $supportcount=1;
-            $shade='shade2';
-            while ($supportedrow = mysql_fetch_array($result))
-            {
-                if ($supportedrow['term'] == 'yes')
-                {
-                    $shade='expired';
-                }
-
-                if ($supportedrow['expirydate'] < $now)
-                {
-                    $shade='expired';
-                }
-
-                echo "<tr><td class='$shade'>";
-                echo "".icon('contract', 16)." ";
-                echo "<a href='contract_details.php?id={$supportedrow['maintenanceid']}'>{$strContract}: {$supportedrow['maintenanceid']}</a></td>";
-                echo "<td class='$shade'>{$supportedrow['productname']}</td>";
-                echo "<td class='$shade'>".ldate($CONFIG['dateformat_date'], $supportedrow['expirydate']);
-                if ($supportedrow['term'] == 'yes')
-                {
-                    echo " {$strTerminated}";
-                }
-
-                echo "</td>";
-                echo "</tr>\n";
-                $supportcount++;
-                $shade = 'shade2';
-            }
-            echo "</table>\n";
-        }
-        else
-        {
-            echo "<p align='center'>{$strNone}</p>\n";
-        }
-        echo "<p align='center'>";
-        echo "<a href='add_contact_support_contract.php?contactid={$id}&amp;context=contact'>";
-        echo "{$strAssociateContactWithContract}</a></p>\n";
-    }
-    else
-    {
-        echo "<p align='center'>".sprintf($strPermissionDeniedForX, $strContracts)."</p>\n";
-    }
+    
+    echo user_contracts_table($id);
 }
 mysql_free_result($contactresult);
 

@@ -24,16 +24,24 @@ $contactid = intval($_GET['contactid']);
 $action = cleanvar($_GET['action']);
 if ($id != 0 AND $contactid != 0 AND $action == 'remove')
 {
-    $sql = "DELETE FROM `{$dbSupportContacts}`
-            WHERE maintenanceid='{$id}'
-            AND contactid='{$contactid}'
-            LIMIT 1";
-    $result = mysql_query($sql);
-    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+    if (in_array($id, 
+                 admin_contact_contracts($_SESSION['contactid'], $_SESSION['siteid'])))
+    {
+        $sql = "DELETE FROM `{$dbSupportContacts}`
+                WHERE maintenanceid='{$id}'
+                AND contactid='{$contactid}'
+                LIMIT 1";
+        $result = mysql_query($sql);
+        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+        else
+        {
+            html_redirect($_SERVER['PHP_SELF']."?id={$id}");
+            exit;
+        }
+    }
     else
     {
-        html_redirect($_SERVER['PHP_SELF']."?id={$id}");
-        exit;
+        echo "<p class='error'>{$strPermissionDenied}</p>";
     }
 }
 elseif ($id != 0 AND $action == 'add' AND intval($_POST['contactid'] != 0))
