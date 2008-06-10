@@ -75,8 +75,9 @@ ajax-loader.gif                           ajaxload.info
 16x16/triggeraction.png                   Crystal Project
 16x16/dashboardadd.png                    Crystal Project
 16x16/vcard.png                           Crystal Project
-16x16/add.png                             Crystal Project	
-16x16/statistics.png                      Crystal Project 
+16x16/add.png                             Crystal Project
+16x16/statistics.png                      Crystal Project
+16x16/attach.png                          Crystal Project
 32x32/mimetypes/*                         Crystal Project
 32x32/blackflag.png                       SiT
 32x32/whiteflag.png                       SiT
@@ -106,6 +107,8 @@ ajax-loader.gif                           ajaxload.info
 32x32/trigger.png                         Crystal Project
 32x32/triggeraction.png                   Crystal Project
 32x32/settings.png                        Crystal Project
+32x32/note.png                            Crystal Project
+32x32/add.png                             Crystal Project
 
 
 KDE Classic
