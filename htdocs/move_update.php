@@ -160,12 +160,13 @@ else
         $sql = "UPDATE updates SET incidentid='$incidentid', userid='$sit[2]', bodytext='$bodytext', timestamp='$now' WHERE id='$updateid'";
         mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-
+        $new_update_id = mysql_insert_id();
+        
         // update the incident record, change the incident status to active
         $sql = "UPDATE `{$dbIncidents}` SET status='1', lastupdated='$now', timeofnextaction='0' WHERE id='$incidentid'";
         mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-        $new_update_id = mysql_insert_id();
+        
         
         //move attachments from updates to incident
         if (!file_exists($CONFIG['attachment_fspath'] ."$incidentid"))
