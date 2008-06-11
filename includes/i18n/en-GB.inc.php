@@ -19,6 +19,7 @@ $strAbout = 'About';
 $strAboutPerson = 'About %s';
 $strAboutXMinutesAgo = 'About %d Mins Ago';
 $strAbsentSick = 'Absent Sick';
+$strAcceptingIncidents = 'Accepting Incidents';
 $strActual = 'Actual';
 $strAcknowledge = 'Acknowledge';
 # e.g. Accepting incidents
@@ -796,6 +797,7 @@ $strNoSubstitute = 'No substitute engineer set';
 $strNoSubstitutes = 'No substitute engineers set';
 $strNoTasks = 'No Tasks';
 $strNotAccepting = 'Not Accepting';
+$strAcceptingIncidents = 'Not Accepting Incidents';
 # Short for not applicable
 $strNotApplicableAbbrev = 'N/A';
 $strNotApproved = 'Not Approved';
