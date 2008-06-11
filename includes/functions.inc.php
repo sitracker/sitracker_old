@@ -5716,7 +5716,8 @@ function bbcode($text)
                         11 => '/\[size\](.*?)\[\/size\]/s',
                         12 => '/\[code\](.*?)\[\/code\]/s',
                         13 => '/\[hr\]/s',
-                        14 => '/\[s\](.*?)\[\/s\]/s');
+                        14 => '/\[s\](.*?)\[\/s\]/s',
+                        15 => '/\[att\=(.*?)](.*?)\[\/att\]/s');
 
     $bbcode_replace = array(0 => '<strong>$1</strong>',
                             1 => '<em>$1</em>',
@@ -5732,7 +5733,8 @@ function bbcode($text)
                             11 => '<span style="font-size:large">$1</span>',
                             12 => '<code>$1</code>',
                             13 => '<hr />',
-                            14 => '<span style="text-decoration:line-through">$1</span>');
+                            14 => '<span style="text-decoration:line-through">$1</span>',
+                            15 => '<a href="download.php?id=$1">$2</a>');
 
     $html = preg_replace($bbcode_regex, $bbcode_replace, $text);
 
