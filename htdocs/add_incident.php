@@ -541,7 +541,7 @@ elseif ($action == 'assign')
     include ('htmlheader.inc.php');
     if ($type == "support" || $type == "free")
     {
-        echo "<h2>{$strAddIncident} - {$strAssign}</h2>";
+        $html .= "<h2>{$strAddIncident} - {$strAssign}</h2>";
 
         // Assign SUPPORT incident
         // The incident will be added to the database assigned to the current user, and then a list of engineers
@@ -761,7 +761,7 @@ elseif ($action == 'assign')
 
             $html .= "<h3>{$strIncident}: $incidentid</h3>";
             $html .=  "<p align='center'>";
-            $html .= printf($strIncidentLoggedEngineer, $incidentid);
+            $html .= sprintf($strIncidentLoggedEngineer, $incidentid);
             $html .= "</p>\n";
 
             $suggested_user = suggest_reassign_userid($incidentid);
