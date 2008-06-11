@@ -30,9 +30,10 @@ echo "<a name='3.35'><h3>v3.35</h3></a>";
 echo "<div>
 <p><strong>Better Searching</strong><br />
 This release introduces much speedier searching, and the search feature now searches the whole of SiT in a single operation, saving you time.</p>
-<div class='img-dec'><img src='images/changelog/335searchbar.png' alt='Search' />
+<div class='img-dec'><img src='images/changelog/335search.png' alt='Search' />
 <p>Search is also easier to access with a new search box on the right of the menu bar.
 You can also enter an incident number in the search bar to open that incident.</p>
+<div class='img-dec'><img src='images/changelog/335searchbar.png' alt='Search' />
 
 <p><strong>Portal</strong><br />
 The built-in portal now has been extended and now contains all the features you would expect, including the ability for contacts to view all the incidents logged for their site, and for admin contacts to be able to manage all their contracts and supported contacts.</p>
