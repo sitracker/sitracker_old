@@ -25,8 +25,57 @@ include_once('htmlheader.inc.php');
 echo "<h2>Release Notes</h2>";
 
 echo "<div id='help'>";
-echo "<p>For the latest notes on this release please <a href='http://sitracker.sourceforge.net/ReleaseNotes'>see the SiT website</a>, a summary is shown below:</p>";
-echo "<a name='3.32'><h3>v3.32</h3></a>";
+echo "<p>This release notes are user-based. For the latest and more detailed notes on this release please <a href='http://sitracker.sourceforge.net/ReleaseNotes'>see the SiT website</a>, a summary is shown below:</p>";
+echo "<a name='3.35'><h3>v3.35</h3></a>";
+echo "<div>
+<p><strong>Better Searching</strong><br />
+This release introduces much speedier searching, and the search feature now searches the whole of SiT in a single operation, saving you time.</p>
+<div class='img-dec'><img src='images/changelog/335searchbar.png' alt='Search' />
+<p>Search is also easier to access with a new search box on the right of the menu bar.
+You can also enter an incident number in the search bar to open that incident.</p>
+
+<p><strong>Portal</strong><br />
+The built-in portal now has been extended and now contains all the features you would expect, including the ability for contacts to view all the incidents logged for their site, and for admin contacts to be able to manage all their contracts and supported contacts.</p>
+<div class='img-dec'><img src='images/changelog/335portal.png' alt='portal' /><br />
+<div class='img-dec'><img src='images/changelog/335portallog.png' alt='portal log' /><br />
+
+<p><strong>Dashboard</strong><br />
+The dashboard has been improved and now dashlets can be editing in-line and can refreshed, (automatically too) if needed.
+<div class='img-dec'><img src='images/changelog/335dashlets.png' alt='dashlets' /></p>
+<p>We've also added two new dashlets, one for monitoring the holding queue, another for seeing who's away today.
+These are available to add from the dashboard configure icon, if they are not present, please ask your administrator to install them.</p>
+<div class='img-dec'><img src='images/changelog/335holdingqueue.png' alt='Search' /><br />
+<div class='img-dec'><img src='images/changelog/335holidays.png' alt='Search' />
+
+<p><strong>More strings internationalised</strong><br />
+Many more strings that were previously fixed as English strings can be translated, including status strings that are now stored in the database as i18n keys.</p>
+
+<p><strong>Oxygen Icons</strong><br />
+Icons from the oxygen icon set are included in this release.</p>
+
+<p><strong>Contracts</strong><br />
+In addition the existing ability to restrict the number of supported contacts, you can now specify \"All site contacts\", which will mean that any contact associated with a particular site will be able to log incidents under the contract.</p>
+
+<p><strong>Knowledge Base</strong><br />
+The knowledge base editor has been completely re-written, to the delight of everybody that has struggled with the old editor I'm sure. The new knowledge base editor is much much easier to use and supports BBcode.</p>
+
+<p><strong>New Scheduler</strong><br />
+SiT now has an easy to use built in scheduler, all you need to do is ensure that auto.php is called periodically, via a cron or other some method (e.g. http://www.webcron.org/) and SiT will do the rest. Administrators can alter the schedules of each task, see when they last run, and disable them individually if necessary.
+The SetUserStatus action will automatically set users' status based on entries in their holiday calendar, so incidents can be reassigned automatically to substitute users when somebody goes on holiday.</p>
+
+<p><strong>Triggers</strong><br />
+New in this release is a very powerful triggers system. Instead of the old system where emails would always be sent if (say) an incident was logged, with triggers you can configure exactly what happens.</p>
+<div class='img-dec'><img src='images/changelog/335triggerssettings.png' alt='Search' />
+<div class='img-dec'><img src='images/changelog/335triggernotice.png' alt='Search' />
+<p><strong>Consolidated Attachments</strong><br />
+Previously, attachments weren't viewable until the incident was logged, and frequently clicking attachments from different locations resulted in 404 errors.
+The way of storing attachments has no been improved so attachments can be viewed prior to creating an incident. (Requires the use of inboundmail.php)
+
+<p><strong>Help Tips</strong><br />
+We've begun adding helpful hints in the form of [?] links that have a popup message that offers useful tips and documentation on less obvious features.</p>
+<div class='img-dec'><img src='images/changelog/335help.png' alt='help' />
+</div>";
+echo "<hr /><a name='3.32'><h3>v3.32</h3></a>";
 echo '<div>
     <p><strong>Internationalisation</strong></p>
     <ul><li>More strings are internationalised</li>
