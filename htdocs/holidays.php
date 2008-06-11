@@ -191,10 +191,9 @@ if ($user==$sit[2])
             echo "<tr><td class='shade2'>";
             $title=userstatus_name($users["status"]);
             $title.=" - ";
-            if ($users['accepting']=='Yes') $title .= "{$strAccepting}";
-            else $title .= "{$strNotAccepting}";
-            $title .= " {$strIncidents}";
-            if (!empty($users['message'])) $title.="\n(".$users['message'].")";
+            if ($users['accepting']=='Yes') $title .= "{$GLOBALS['strAcceptingIncidents']}";
+            else $title .= "{$GLOBALS['strNotAcceptingIncidents']}";
+            if (!empty($users['message'])) $title.= "\n(".$users['message'].")";
 
             echo "<strong>{$users['realname']}</strong>, $title";
             echo "</td></tr>\n";
