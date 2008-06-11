@@ -258,6 +258,7 @@ input.error, textarea.error, select.error { border: 2px solid red; }
 .urgent { background-color: #f08080; color: black; } /* #E8B7DD; */
 .notice { background-color: #FFFFB0; color: black; } /* yellow -- was #ffbbaa; mild red */
 .critical { background-color: #ff4500; } /* fire-engine red */
+h1.critical { background-image: url('../images/top_red.png'); }                                           
 .expired { background-color: #D6D6D6; } /* grey */
 .review { background-color: #7AC5CD; } /* teal */
 .idle     { background-color: #CCffCC; } /* green - #90ee90; */
