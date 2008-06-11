@@ -348,7 +348,7 @@ if (file_exists($incident_attachment_fspath))
                 {
                 	$updatetext = substr($updatetext, 0, 80)."...";
 	                echo "<span style='font-size:400%';>“</span>";
-	                echo $updatetext;
+	                echo bbcode($updatetext);
 	                echo "<span style='font-size:400%';>„</span>";
                 }
                 echo "</table>\n";
