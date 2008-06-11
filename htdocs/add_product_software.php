@@ -60,7 +60,7 @@ if (empty($action) OR $action == "showform")
     }
     if (empty($softwareid))
     {
-        echo "<p align='center'>{$strSkill}: ".icon('skill')." ";
+        echo "<p align='center'>{$strSkill}: ".icon('skill', 16)." ";
         echo software_drop_down("softwareid", 0);
         echo "</p>\n";
     }
