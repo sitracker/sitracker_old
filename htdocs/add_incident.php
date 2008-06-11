@@ -541,7 +541,7 @@ elseif ($action == 'assign')
     include ('htmlheader.inc.php');
     if ($type == "support" || $type == "free")
     {
-        echo "<h2>{$strAddIncident} - Assign</h2>"; // FIXME i18n
+        echo "<h2>{$strAddIncident} - {$strAssign}</h2>";
 
         // Assign SUPPORT incident
         // The incident will be added to the database assigned to the current user, and then a list of engineers
@@ -759,13 +759,21 @@ elseif ($action == 'assign')
                 plugin_do('incident_created_contract');
             }
 
-            echo "<h3>{$strIncident}: $incidentid</h3>";
-            echo "<p align='center'>";
-            printf($strIncidentLoggedEngineer, $incidentid);
-            echo "</p>\n";
+            $html .= "<h3>{$strIncident}: $incidentid</h3>";
+            $html .=  "<p align='center'>";
+            $html .= printf($strIncidentLoggedEngineer, $incidentid);
+            $html .= "</p>\n";
 
             $suggested_user = suggest_reassign_userid($incidentid);
-
+            if ($CONFIG['auto_assign_incidents'])
+            {
+                html_redirect("add_incident.php?action=reassign&userid={$suggested_user}&incidentid={$incidentid}");
+                exit;
+            }
+            else
+            {
+                echo $html;
+            }
             // List Engineers
             // We need a user type 'engineer' so we don't just list everybody
             // Status zero means account disabled
