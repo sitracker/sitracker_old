@@ -5721,7 +5721,7 @@ function bbcode($text)
                         12 => '/\[code\](.*?)\[\/code\]/s',
                         13 => '/\[hr\]/s',
                         14 => '/\[s\](.*?)\[\/s\]/s',
-                        15 => '/\[att\=(.*?)](.*?)\[\/att\]/s');
+                        15 => '/\[\[att\=(.*?)]](.*?)\[\[\/att]]/s');
 
     $bbcode_replace = array(0 => '<strong>$1</strong>',
                             1 => '<em>$1</em>',
