@@ -797,7 +797,7 @@ $strNoSubstitute = 'No substitute engineer set';
 $strNoSubstitutes = 'No substitute engineers set';
 $strNoTasks = 'No Tasks';
 $strNotAccepting = 'Not Accepting';
-$strAcceptingIncidents = 'Not Accepting Incidents';
+$strNotAcceptingIncidents = 'Not Accepting Incidents';
 # Short for not applicable
 $strNotApplicableAbbrev = 'N/A';
 $strNotApproved = 'Not Approved';
