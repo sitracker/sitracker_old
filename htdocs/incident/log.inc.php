@@ -181,7 +181,6 @@ while ($update = mysql_fetch_object($result))
     //{
     //    $attachment_webpath = "{$CONFIG['attachment_webpath']}updates/{$update->id}";
     //}
-    $updatebody = preg_replace("/\[\[att=(.*?)\]\](.*?)\[\[\/att\]\]/s", "<a href='download.php?id=$1'>$2</a>", $updatebody);
 
     // Put the header part (up to the <hr /> in a seperate DIV)
     if (strpos($updatebody, '<hr>')!==FALSE)
