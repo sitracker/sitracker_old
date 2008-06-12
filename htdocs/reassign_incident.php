@@ -112,10 +112,6 @@ switch ($action)
         mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
-        if (user_notification_on_reassign($userid)=='true') send_template_email('INCIDENT_REASSIGNED_USER_NOTIFY', $id);
-
-        journal(CFG_LOGGING_FULL,'Incident Reassigned', "Incident $id reassigned to user id $newowner", CFG_JOURNAL_SUPPORT, $id);
-
         html_redirect("incident_details.php?id={$id}");
         break;
 
