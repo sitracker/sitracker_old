@@ -42,7 +42,7 @@ if (!$_REQUEST['action'])
     $productid = $contract->productid;
     echo "<h2>".icon('add', 32, $strAddIncident)." {$strAddIncident}</h2>";
 
-    if(mysql_num_rows($checkcontract) == 0)
+    if (mysql_num_rows($checkcontract) == 0)
     {
         echo "<p class='error'>{$strPermissionDenied}</p>";
        	include 'htmlfooter.inc.php';
@@ -52,10 +52,10 @@ if (!$_REQUEST['action'])
     echo "<form action='{$_SERVER[PHP_SELF]}?page=add&amp;action=submit' method='post'>";
     echo "<table align='center' width='50%' class='vertical'>";
     echo "<tr><th>{$strArea}:</th><td class='shade1'>".softwareproduct_drop_down('software', 0, $productid, 'external')."<br />";
-    //FIXME 3.35 which language
-    echo "NOTE: Not setting one may slow down processing your incident</td></tr>"; // FIXME i18n
+    echo $strNotSettingArea."</td></tr>";
     echo "<tr><th>{$strTitle}:</th><td class='shade1'>";
-    echo "<input class='required' maxlength='100' name='title' size='40' type='text' />";
+    echo "<input class='required' maxlength='100' name='title' size='40' type='text' ";
+    echo "value='{$_SESSION['formdata']['portaladdincident']['title']}' />";
     echo " <span class='required'>{$strRequired}</span></td></tr>";
 
     $sql = "SELECT * FROM `{$dbProductInfo}` WHERE productid='$productid'";
@@ -65,20 +65,23 @@ if (!$_REQUEST['action'])
     {
         while ($productinforow = mysql_fetch_array($result))
         {
-            echo "<tr><th>{$productinforow['information']}:";
-            echo "<sup class='red'>*</sup>";
+            echo "<tr><th>{$productinforow['information']}";
             echo "</th>";
             echo "<td>";
             if ($productinforow['moreinformation'] != '')
             {
                 echo $productinforow['moreinformation']."<br />\n";
             }
-            echo "<input maxlength='100' name='pinfo{$productinforow['id']}' size='40' type='text' /></td></tr>\n";
+            $pinfo = "pinfo{$productinforow['id']}";
+            echo "<input maxlength='100' name='{$pinfo}' ";
+            echo "class='required' size='40' type='text' ";
+            echo "value='{$_SESSION['formdata']['portaladdincident'][$pinfo]}' />";
+            echo " <span class='required'>{$strRequired}</span></td></tr>\n";
         }
     }
 
     echo "<tr><th width='20%'>{$strProblemDescription}:</th><td class='shade1'>";
-    echo "The more information you can provide, the better<br />";
+    echo $strTheMoreInformation."<br />";
     echo "<textarea name='probdesc' rows='20' cols='60'>";
     if (!empty($_SESSION['formdata']['portaladdincident']['probdesc']))
     {
@@ -112,18 +115,42 @@ else //submit
     $_SESSION['formdata']['portaladdincident'] = $_POST;
 
     $errors = 0;
-    if (!isset($incidenttitle))
+    if (empty($incidenttitle))
     {
         $_SESSION['formerrors']['portaladdincident'] .= "<p class='error'>{$strYouMustEnterAnIncidentTitle}</p>";
         $errors = 1;
     }
 
+    if (empty($probdesc))
+    {
+        $_SESSION['formerrors']['portaladdincident'] .= "<p class='error'>{$strYouMustEnterAProblemDescription}</p>";
+        $errors = 1;
+    }
+    
+    foreach ($_POST AS $key => $value)
+    {
+        if (substr($key, 0, 5) == 'pinfo' AND empty($value))
+        {
+            $id = intval(str_replace("pinfo", "", $key));
+            $sql = "SELECT information FROM `$dbProductInfo` ";
+            $sql .= "WHERE id='{$id}' ";
+            $result = mysql_query($sql);
+            $fieldobj = mysql_fetch_object($result);
+            $field = $fieldobj->information;
+            
+            $_SESSION['formerrors']['portaladdincident'] .= 
+            "<p class='error'>{$strYouMissedARequiredField}: {$field}</p>";
+            $errors = 1;
+        }
+    }
+    
     if ($errors == 0)
     {
-        $updatetext = "Opened via the portal by <b>".contact_realname($contactid)."</b>\n\n";
+        $updatetext = sprintf($SYSLANG['strOpenedViaThePortalByX'], "[b]".contact_realname($contactid)."[/b]");
+        $updatetext .= "\n\n";
         if (!empty($probdesc))
         {
-            $updatetext .= "<b>{$strProblemDescription}</b>\n{$probdesc}\n\n";
+            $updatetext .= "[b]{$SYSLANG['strProblemDescription']}[/b]\n{$probdesc}\n\n";
         }
 
         //create new incident

@@ -259,6 +259,7 @@ p.trigger
   border: 1px dotted #9C9C9C;
   background: #F7FAFF;
   padding-left: 5px;
+  margin-bottom: 15px;
 }
 
 
@@ -479,4 +480,9 @@ div.detailfoot
     background: #D5DEE6;
     margin-bottom: 1em;
     margin-left: 60%;
+}
+
+div.portalfileicon
+{
+	float: left;
 }

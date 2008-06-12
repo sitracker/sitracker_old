@@ -127,6 +127,12 @@ while ($filerow = mysql_fetch_object($fileresult))
 {
     $fileid = intval($filerow->fileid);
     $filename = cleanvar($filerow->filename);
+    if (strlen($filename) > 30)
+    {
+        $filename = substr($filename, 0, 30)."...";
+    }
+    $icon = getattachmenticon($filename);
+    echo "<div class='portalfileicon'><img src='{$icon}' /></div>";
     echo "<a href='download.php?id={$fileid}'>{$filename}</a><br />";
     if ($filerow->userid != 0)
     {        

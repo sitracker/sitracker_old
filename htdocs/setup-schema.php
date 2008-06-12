@@ -674,8 +674,8 @@ INSERT INTO `{$dbPermissions}` VALUES (12, 'View Contacts');
 INSERT INTO `{$dbPermissions}` VALUES (13, 'Reassign Incidents');
 INSERT INTO `{$dbPermissions}` VALUES (14, 'View Users');
 INSERT INTO `{$dbPermissions}` VALUES (15, 'Add Supported Products');
-INSERT INTO `{$dbPermissions}` VALUES (16, 'Add Email Templates');
-INSERT INTO `{$dbPermissions}` VALUES (17, 'Edit Email Templates');
+INSERT INTO `{$dbPermissions}` VALUES (16, 'Add Templates');
+INSERT INTO `{$dbPermissions}` VALUES (17, 'Edit Templates');
 INSERT INTO `{$dbPermissions}` VALUES (18, 'Close Incidents');
 INSERT INTO `{$dbPermissions}` VALUES (19, 'View Maintenance Contracts');
 INSERT INTO `{$dbPermissions}` VALUES (20, 'Add Users');
@@ -2155,6 +2155,9 @@ $upgrade_schema[335]["t200805301545"] = "ALTER TABLE `{$dbFiles}` CHANGE `fileve
 
 $upgrade_schema[335]["t200806101407"] = "INSERT INTO `{$dbInterfaceStyles}` (`id` ,`name` ,`cssurl` ,`iconset` ,`headerhtml`) VALUES ('16', 'Cake', 'sit_cake.css', 'sit', '');";
 $upgrade_schema[335]["t200805101411"] = "INSERT INTO `{$dbPermissions}` VALUES (78, 'Post System Notices');";
+
+$upgrade_schema[335]["t200806121254"] = "UPDATE `{$dbPermissions}` SET `name` = 'Add Templates' WHERE id` =16;";
+$upgrade_schema[335]["t200806121255"] = "UPDATE `{$dbPermissions}` SET `name` = 'Edit Templates' WHERE `id` =17;";
 
 // Important: When making changes to the schema you must add SQL to make the alterations
 // to existing databases in $upgrade_schema[] *AND* you must also change $schema[] for
