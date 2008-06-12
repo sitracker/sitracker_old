@@ -18,7 +18,7 @@ if ($_SESSION['auth'] == TRUE)
 echo "</div>\n";
 if ($CONFIG['debug'] == TRUE)
 {
-    echo "<div id='tail' style='background:#AAA; color: #fff; padding: 10px 10px; overflow: hidden;'><strong>DEBUG</strong><br />";
+    echo "<div id='tail'><strong>DEBUG</strong><br />";
     $exec_time_end = getmicrotime();
     $exec_time = $exec_time_end - $exec_time_start;
     echo "<p>CPU Time: ".number_format($exec_time,3)." seconds</p>";

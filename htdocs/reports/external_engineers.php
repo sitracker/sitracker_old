@@ -82,7 +82,7 @@ if (!empty($filterby))
 
 echo "<form action='{$_SERVER['PHP_SELF']}' method='post' id='filterform'><p align='center'>\n";
 echo "{$strFilter}:\n";
-echo "<input type='radio' name='filterby' value='none' onclick=\"hide_filter(true);\" {$nonChecked} />{$strNone} \n";
+echo "<input type='radio' name='filterby' value='none' checked='checked' onclick=\"hide_filter(true);\" {$nonChecked} />{$strNone} \n";
 echo "<input type='radio' name='filterby' value='sla' onclick=\"get_and_display('../get_bits_and_pieces.inc.php?toget=slas', 'filter'); hide_filter(false);\" {$slaChecked} />{$strBySLA} \n";
 echo "<input type='radio' name='filterby' value='softwareid' onclick=\"get_and_display('../get_bits_and_pieces.inc.php?toget=skills', 'filter'); hide_filter(false);\" {$softwareChecked} />{$strBySkill} \n";
 echo "<input type='radio' name='filterby' value='product' onclick=\"get_and_display('../get_bits_and_pieces.inc.php?toget=products', 'filter'); hide_filter(false);\" {$productCheck} />{$strByProduct} \n";

@@ -16,6 +16,7 @@
     <li><a href='#contracts'>Contracts</a></li>
     <li><a href='#softwareproducts'>Skills &amp; Products</a></li>
     <li><a href='#tags'>Tags</a></li>
+    <li><a href='#triggers'>Triggers</a></li>
     <li>Control Panel
     <ul>
         <li><a href='#adduser'>Adding Users</a></li>
@@ -188,11 +189,12 @@ dragging on and on.</p>
 
 
 <h3><a name='activities'>Activities</a></h3>
-<p>
-Activities are timed tasks, which are useful for when the support is chargeable based on time spent on the incident.</p>
+<p>Activities are timed tasks, which are useful for when the support is chargeable based on time spent on the incident.</p>
 <p>The idea is to start a new activity for any related actions you do, and stop it when you have finished.
 For incidents logged under service levels were timing is enabled there will be an <strong>Activities</strong> tab at
 the top of incident popup window.  For other incident this tab will be hidden.</p>
+
+<p class='info'>The activities tab is only displayed if the service level is timed.</p>
 
 <p>On a new incident the Activities page will be blank. Starting a new activity starts an individual timer for that
 activity as well as an overall timer which totals all the activies for that incident.  Clicking on the ID of the
@@ -242,12 +244,14 @@ support, these agreements are referred to within SiT as 'contracts'.</p>
 <p>To add a new contract select <strong>Customers</strong> | <strong>Maintenance</strong> | <strong>New Contract</strong>
 and fill in the details on the form.</p>
 <p class='info'>Admin Contacts are not supported contacts, you must add supported contacts seperately.</p>
-<p>Each contract holds information about the agreement such as the <a href='#softwareproducts'>product</a> supported, the number of incidents included
-with the contract and the expiration date.</p>
+<p>Each contract holds information about the agreement such as the <a href='#softwareproducts'>product</a> supported,
+the number of supported contacts allowed, the number of incidents included with the contract and the expiration date.</p>
 <p>To be useful each contract must have at least one contact associated with it.  To add a contact simply follow the link
 <strong>Add a support contact to this contract</strong> on the contract details page.  These supported contacts are the
 only people who can log incidents.</p>
-
+<p>You can set a contract to allow all the contacts from the associated site to be supported, if you do this then all
+the contacts that are currently associated with the site along with any future contacts that may be added will all be
+supported.</p>
 
 <h3><a name='softwareproducts'>Skills &amp; Products</a></h3>
 <p>Each item that is supported by SiT! is called a skill and each should have it's own skill record.  For example if
@@ -276,6 +280,15 @@ Then to link skills to that, go to <strong>Customers</strong> |
 categorise data in any way you like.  Add tags from the edit page of the relevant record, simply seperate
 a list of single word keywords with space or comma.</p>
 <p>The tags dashboard component, when enabled, displays a tag 'cloud' on your dashboard.</p>
+
+<h3><a name='triggers'>Triggers</a></h3>
+<p>A 'trigger' is a event within SiT, there are many such, for example a trigger might be that a new incident is created.
+You can set up actions to respond to these triggers, for example you can cause a notice to appear at the top of your SiT screen
+whenever an incident is assigned to you.</p>
+
+<p>To configure your trigger actions go to <strong>SiT!</strong> | <strong>My Details</strong> | <strong>My Triggers</strong></p>
+<p>Administrators can also configure system trigger actions by going to <strong>SiT!</strong> | <strong>Control Panel</strong> | <strong>Triggers</strong></p>
+
 
 <h3><a name='adduser'>Adding Users</a></h3>
 <p>If you have appropriate permission you can create additional SiT users. (The 'admin' user always has this

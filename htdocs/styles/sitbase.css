@@ -482,7 +482,11 @@ div.detailfoot
     margin-left: 60%;
 }
 
+#tail { background:#AAA; color: #fff; padding: 10px 10px; overflow: hidden; }
+.datepicker { background-color: #CCCCFF; border: 1px solid black; font-family: monospace; }=======
+
 div.portalfileicon
 {
 	float: left;
 }
+

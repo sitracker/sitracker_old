@@ -16,7 +16,7 @@ function dashboard_holidays($dashletid)
     $user = $sit[2];
     echo "<div class='windowbox' style='width: 95%;' id='$dashletid'>";
     echo "<div class='windowtitle'>".icon('holiday', 16)." {$GLOBALS['strWhosAwayToday']}</div>";
-    echo "<div class='window'>";  
+    echo "<div class='window'>";
     $sql  = "SELECT * FROM `{$dbUsers}` WHERE status!=0 AND status!=1 ";  // status=0 means left company
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
@@ -34,7 +34,7 @@ function dashboard_holidays($dashletid)
             echo "<br />";
         }
     }
-    else echo "<em>{$GLOBALS['strNobody']}</em>\n";
+    else echo "<p align='center'>{$GLOBALS['strNobody']}</p>\n";
     echo "</div></div></div>";
 }
 

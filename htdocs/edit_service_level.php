@@ -87,6 +87,7 @@ if (empty($action) OR $action == "showform")
         $customerPeriod = "120";
         $engineerPeriod = "60";
     }
+    echo help_link('ServiceLevelTimed');
     echo "</td></tr>";
     echo "<tr id='engineerBillingPeriod'><th>{$strBillingEngineerPeriod}</th><td><input type='text' size='5' name='engineerPeriod' maxlength='5' value='{$engineerPeriod}' /> {$strMinutes}</td></tr>";
     echo "<tr id='customerBillingPeriod'><th>{$strBillingCustomerPeriod}</th><td><input type='text' size='5' name='customerPeriod' maxlength='5' value='{$customerPeriod}' /> {$strMinutes}</td></tr>";

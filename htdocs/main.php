@@ -278,7 +278,7 @@ if ($sit[3] == 'public')
     echo "- Public/Shared Computer (Increased Security)"; // FIXME i18n
 }
 
-echo "</div>\n<br />\n";
+echo "</div>\n";
 echo "<div id='footerbar'>";
 echo "<form action='{$_SERVER['PHP_SELF']}'>";
 echo "{$strSetYourStatus}: ";
