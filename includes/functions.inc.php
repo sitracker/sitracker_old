@@ -4648,8 +4648,9 @@ function is_public_holiday($time, $publicholidays)
 */
 function calculate_working_time($t1, $t2, $publicholidays) {
 
-/*
+
 // PH 16/12/07 Old function commented out, rewritten to support public holidays. Old code to be removed once we're happy this is stable
+// KH 13/07/08 Use old function again for 3.35 beta
 
 // Note that this won't work if we have something
 // more complicated than a weekend
@@ -4766,8 +4767,9 @@ $min=floor( ($t2-$t1)/60 )*$coefficient;
 
 $minutes= $min + ($weeks * count($CONFIG['working_days']) + $days ) * ($ewd-$swd) * 60;
 return $minutes;
-*/
 
+//new version below
+/*
     global $CONFIG;
     $swd = $CONFIG['start_working_day']/3600;
     $ewd = $CONFIG['end_working_day']/3600;
@@ -4857,6 +4859,7 @@ return $minutes;
     }
 
     return $timeworked;
+ */
 }
 
 
