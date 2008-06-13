@@ -5914,6 +5914,9 @@ function parse_updatebody($updatebody, $striptags=TRUE)
         $updatebody=str_replace("&amp;gt;", "&gt;", $updatebody);
         $updatebody=str_replace("&amp;lt;", "&lt;", $updatebody);
         // Insert path to attachments
+        //new style
+        $updatebody = preg_replace("/\[\[att\=(.*?)\]\](.*?)\[\[\/att\]\]/","$2", $updatebody);
+        //old style
         $updatebody = preg_replace("/\[\[att\]\](.*?)\[\[\/att\]\]/","$1", $updatebody);
         //remove tags that are incompatable with tool tip
         $updatebody = strip_bbcode_tooltip($updatebody);
