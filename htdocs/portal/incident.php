@@ -23,7 +23,7 @@ $sql = "SELECT title, contact, status, opened FROM `{$dbIncidents}` WHERE id={$i
 $result = mysql_query($sql);
 $user = mysql_fetch_object($result);
 
-echo "<h2>[{$incidentid}] {$user->title}</h2>";
+echo "<h2>[{$incidentid}] - {$user->title}</h2>";
 echo "<p align='center'><strong>{$strContact}</strong>: ".contact_realname($user->contact);
 echo "<br /><strong>{$strOpened}</strong>: ".date("jS M Y", $user->opened)."</p>";
 
@@ -92,8 +92,8 @@ if ($user->status != 2)
     echo " <a href='update.php?id={$incidentid}'>{$strUpdate}</a></p>";
 
     //check if the customer has requested a closure
-    $lastupdate = list($update_userid, $update_type, $update_currentowner, 
-                       $update_currentstatus, $update_body, $update_timestamp, 
+    $lastupdate = list($update_userid, $update_type, $update_currentowner,
+                       $update_currentstatus, $update_body, $update_timestamp,
                        $update_nextaction, $update_id)
                        = incident_lastupdate($incidentid);
 
@@ -118,7 +118,7 @@ $filesql = "SELECT *, f.id AS fileid, u.id AS updateid, f.userid AS userid
             AND l.origcolref=u.id
             AND u.incidentid='{$incidentid}'
             ORDER BY f.filedate DESC";
-            
+
 $fileresult = mysql_query($filesql);
 if (mysql_error()) trigger_error("MySQL Query Error $sql".mysql_error(), E_USER_ERROR);
 $delim = $fsdelim;
@@ -135,7 +135,7 @@ while ($filerow = mysql_fetch_object($fileresult))
     echo "<div class='portalfileicon'><img src='{$icon}' /></div>";
     echo "<a href='download.php?id={$fileid}'>{$filename}</a><br />";
     if ($filerow->userid != 0)
-    {        
+    {
         if ($filerow->usertype == 'contact')
         {
             echo sprintf($strUploadedBy, contact_realname($filerow->userid))." ";
@@ -158,7 +158,7 @@ while ($update = mysql_fetch_object($result))
     }
 
     $updateid = $update->id;
-    $updatebody=trim($update->bodytext);    
+    $updatebody=trim($update->bodytext);
     $updatebody = preg_replace("/\[\[att=(.*?)\]\](.*?)\[\[\/att\]\]/s", "<a href='download.php?id=$1'>$2</a>\n", $updatebody);
 
 

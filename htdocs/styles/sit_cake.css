@@ -59,6 +59,10 @@ input[type=submit]:hover, input[type=button]:hover, input[type=reset]:hover {
 
 div.windowtitle, div.windowtitle a { color: white; }
 div.windowtitle img { vertical-align: middle; }
+
+.window table th { background-color: #eee; letter-spacing: normal; }
+.window table td { border: 0px; padding: 2px 2px 2px 4px; }
+
 .window { padding: 2px; }
 /*.window table th { background-color: #ccc; }*/
 #userbar, #footerbar, #statusbar { font-size: 85%; }

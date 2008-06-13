@@ -1,15 +1,6 @@
 /* Neoteric CSS2 Style Sheet for SiT! */
 /* by Ivan Lucas, ivan.lucas@users_sourceforge.net - December 2004 */
-
-body
-{
-  background-color: #FFFFFF;
-  color: #000;
-  font-family: Tahoma, Helvetica, Arial, 'sans serif';
-  font-size: 8pt;
-  margin: 0px 0px 15px 0px;
-  behavior: url('styles/csshover.htc');
-}
+/* Neoteric now uses the base style with no modifications */
 
 p, table, td, center, input, textarea, select
 {

@@ -1,8 +1,15 @@
 /* Base styles*/
 body {
-  margin: 0px;
   font-family: Tahoma, Helvetica, Arial, 'sans serif';
+  background-color: #FFFFFF;
+  color: #000;
+  font-size: 8pt;
+  margin: 0px 0px 15px 0px;
+  behavior: url('styles/csshover.htc');
 }
+
+
+
 h1 {
   background-image: url('../images/top2.png');
   font-size: 16pt; font-weight: bold; color: #FFF;
@@ -260,6 +267,7 @@ p.trigger
   background: #F7FAFF;
   padding-left: 5px;
   margin-bottom: 15px;
+  margin-left: 25px;
 }
 
 
@@ -483,10 +491,10 @@ div.detailfoot
 }
 
 #tail { background:#AAA; color: #fff; padding: 10px 10px; overflow: hidden; }
-.datepicker { background-color: #CCCCFF; border: 1px solid black; font-family: monospace; }=======
+.datepicker { background-color: #CCCCFF; border: 1px solid black; font-family: monospace; }
 
 div.portalfileicon
 {
-	float: left;
+    float: left; margin-right: 5px;
 }
 
