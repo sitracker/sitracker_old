@@ -41,9 +41,9 @@ if (empty($_POST['update']) AND empty($_FILES))
 
     echo "(&lt;{$att_file_size}): ";
     echo "<input type='hidden' name='MAX_FILE_SIZE' value='{$CONFIG['upload_max_filesize']}' />";
-    echo "<input type='file' name='attachment' size='40' maxfilesize='{$CONFIG['upload_max_filesize']}' /></p>";
-    echo "<input type='submit' value=\"{$strUpdate}\"/></form></div>";
-    
+    echo "<input type='file' name='attachment' size='20' maxfilesize='{$CONFIG['upload_max_filesize']}' /></p>";
+    echo "<p><input type='submit' value=\"{$strUpdate}\"/></p></form></div>";
+
     include 'htmlfooter.inc.php';
 }
 else
@@ -57,7 +57,7 @@ else
     $forenames = cleanvar($user->forenames);
     $surname = $user->surname;
     $update = cleanvar($_REQUEST['update']);
-    
+
     if (!empty($forenames) AND !empty($surname))
     {
         //TODO change order for a name such as Chinese?
@@ -87,7 +87,7 @@ else
     }
     //add the update
     $updatebody .= $update;
-    
+
     $sql = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, currentstatus, bodytext, timestamp, customervisibility) ";
     $sql .= "VALUES('{$id}', '0', 'webupdate', '1', '{$updatebody}', '{$now}', 'show')";
     mysql_query($sql);
@@ -96,7 +96,7 @@ else
     {
         $updateid = mysql_insert_id();
     }
-    
+
     //upload file, here because we need updateid
     if ($_FILES['attachment']['name'] != "")
     {
@@ -146,7 +146,7 @@ else
         }
         $filename = cleanvar($_FILES['attachment']['name']);
     }
-    
+
     //create link
     $sql = "INSERT INTO `{$dbLinks}`(linktype, origcolref, linkcolref, direction, userid) ";
     $sql .= "VALUES(5, '{$updateid}', '{$fileid}', 'left', '0')";
@@ -156,7 +156,7 @@ else
         $errors++;
         trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     }
-    
+
     //set incident back to active
     $id = intval($_REQUEST['id']);
     $sql = "UPDATE `{$dbIncidents}` SET status=1, lastupdated='$now' WHERE id='{$id}'";
@@ -166,7 +166,7 @@ else
         $errors++;
         trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     }
-    
+
     if ($errors > 0)
     {
         html_redirect($_SERVER['PHP_SELF']."?id={$id}", FALSE);

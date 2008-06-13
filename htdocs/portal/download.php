@@ -30,7 +30,7 @@ $sql = "SELECT *, u.id AS updateid
         AND l.direction='left'
         AND l.linkcolref=f.id
         ORDER BY f.filedate DESC";
-        
+
 $result = mysql_query($sql);
 $fileobj = mysql_fetch_object($result);
 $incidentid = cleanvar(intval($fileobj->incidentid));
@@ -63,12 +63,25 @@ elseif ($access == TRUE)
 {
     $file_size = filesize($file_fspath);
     $fp = fopen($file_fspath, 'r');
+    $file_ext = substr($file_fspath, ((strlen($file_fspath)-1 - strrpos($file_fspath, '.')) * -1 ));
+
+    $display_mimetypes['jpg'] = 'image/jpeg';
+    $display_mimetypes['txt'] = 'text/plain';
     if ($fp && ($file_size !=-1))
     {
-        header("Content-Type: application/octet-stream\r\n");
-        header("Content-Length: {$file_size}\r\n");
-        header("Content-Disposition-Type: attachment\r\n");
-        header("Content-Disposition: filename={$filename}\r\n");
+        if (array_key_exists($file_ext, $display_mimetypes))
+        {
+            header("Content-Type: {$display_mimetypes[$file_ext]}\r\n");
+            header("Content-Length: {$file_size}\r\n");
+            header("Content-Disposition: filename={$filename}\r\n");
+        }
+        else
+        {
+            header("Content-Type: application/octet-stream\r\n");
+            header("Content-Length: {$file_size}\r\n");
+            header("Content-Disposition-Type: attachment\r\n");
+            header("Content-Disposition: filename={$filename}\r\n");
+        }
         $buffer = '';
         while (!feof($fp))
         {

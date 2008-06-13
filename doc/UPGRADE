@@ -37,9 +37,6 @@ config file unless your needs are very specific.
 This version supports table prefixes, if you use this feature
 any plugins you have installed that are not designed to work
 with 3.35 may break.
-will default to UTC until they explicity set it by editing
-their profile.  You should pass this information on to your
-users that reside in timezones other than system timezone.
 
 The scheduler, auto.php no longer accepts parameters. Scheduled
 actions are now configured from within SiT by going to SiT! ->
@@ -69,7 +66,6 @@ users that reside in timezones other than system timezone.
 
 Incidents can no longer be closed if they have not been
 assigned.  It was never intended that this be the case.
-
 
 Upgrading to 3.31
 -----------------

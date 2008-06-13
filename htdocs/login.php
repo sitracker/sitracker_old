@@ -159,6 +159,7 @@ elseif ($CONFIG['portal'] == TRUE)
         $_SESSION['contactid'] = $contact->id;
         $_SESSION['siteid'] = $contact->siteid;
         $_SESSION['style'] = $CONFIG['portal_interface_style'];
+        $_SESSION['contracts'] = array();
 
         //if we're an admin contact
         if (admin_contact_contracts($_SESSION['contactid'], $_SESSION['siteid']) != NULL)

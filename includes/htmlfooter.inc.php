@@ -16,6 +16,14 @@ if ($_SESSION['auth'] == TRUE)
     echo " at ".ldate('H:i',$now);
 }
 echo "</div>\n";
+if (!empty($application_revision) AND (substr($application_revision, 0, 4)=='beta')
+                                   OR (substr($application_revision, 0, 5)=='alpha'))
+{
+    echo "<p class='warning'>You are using a pre-release version of SiT (v{$application_version} {$application_revision}). <br />";
+    echo "Pre-release versions are for you to test, provide feedback and to help with further development and should never be used in a live production environment. ";
+    echo "<a href=\"{$CONFIG['bugtracker_url']}\">{$strReportBug}</a></p>";
+}
+
 if ($CONFIG['debug'] == TRUE)
 {
     echo "<div id='tail'><strong>DEBUG</strong><br />";

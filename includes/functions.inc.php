@@ -3257,7 +3257,7 @@ function maintenance_drop_down($name, $id, $excludes = '', $return = FALSE)
         $html .= "<option>{$GLOBALS['strNoRecords']}</option>";
     }
     $html .= "</select>";
-    
+
     if ($return)
     {
         return $html;
@@ -3834,9 +3834,9 @@ function getattachmenticon($filename)
     $filetype[]="eml";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/mimetypes/message.png";
     $filetype[]=".sh";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/mimetypes/shellscript.png";
     $filetype[]="bz2";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/mimetypes/tgz.png";
-    $filetype[]="out";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/mimetypes/log.png";  
+    $filetype[]="out";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/mimetypes/log.png";
     $filetype[]="cfg";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/mimetypes/log.png";
-    
+
     $cnt = count($filetype);
     if ( $cnt > 0 )
     {
@@ -7801,6 +7801,7 @@ function readable_file_size($filesize)
 * Return the html of contract detatils
 * @author Kieran Hogg
 * @param $maintid integer - ID of the contract
+* @param $mode string. 'internal' or 'external'
 * @returns array of supported contracts, NULL if none
 **/
 function contract_details($id, $mode='internal')
@@ -8347,18 +8348,22 @@ function icon($filename, $size='', $alt='', $title='', $id='')
     else
     {
         $icon = "<img src=\"{$urlpath}\"";
-        if (empty($alt))
+        if (!empty($alt))
+        {
+            $icon .= " alt=\"{$alt}\" ";
+        }
+        else
         {
             $alt = $filename;
             $icon .= " alt=\"{$alt}\" ";
         }
-        if (empty($title))
+        if (!empty($title))
         {
-            $icon .= " title=\"{$alt}\"";
+            $icon .= " title=\"{$title}\"";
         }
         else
         {
-            $icon .= " title=\"{$title}\"";
+            $icon .= " title=\"{$alt}\"";
         }
 
         if (!empty($id))
@@ -9342,16 +9347,16 @@ function user_contracts_table($userid, $mode = 'internal')
         {
             $html .= "<p align='center'>{$GLOBALS['strNone']}</p>\n";
         }
-        
+
         if ($mode == 'internal')
         {
             $html .= "<p align='center'>";
             $html .= "<a href='add_contact_support_contract.php?contactid={$userid}&amp;context=contact'>";
             $html .= "{$GLOBALS['strAssociateContactWithContract']}</a></p>\n";
         }
-    
+
     }
-    
+
     return $html;
 }
 

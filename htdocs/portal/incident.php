@@ -18,24 +18,24 @@ $accesslevel = 'any';
 include 'portalauth.inc.php';
 include 'portalheader.inc.php';
 
-$incidentid = $_REQUEST['id'];
-$sql = "SELECT title, contact, status, opened FROM `{$dbIncidents}` WHERE id={$incidentid}";
+$incidentid = cleanvar($_REQUEST['id']);
+$sql = "SELECT title, contact, status, opened, maintenanceid FROM `{$dbIncidents}` WHERE id={$incidentid}";
 $result = mysql_query($sql);
+if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 $user = mysql_fetch_object($result);
+
+// FIXME check if this user owns the incident
+if ($user->contact != $_SESSION['contactid']
+    AND !in_array($user->maintenanceid, $_SESSION['contracts']))
+{
+    echo "<p class='warning'>$strNoPermission.</p>";
+    include ('htmlfooter.inc.php');
+    exit;
+}
 
 echo "<h2>[{$incidentid}] - {$user->title}</h2>";
 echo "<p align='center'><strong>{$strContact}</strong>: ".contact_realname($user->contact);
 echo "<br /><strong>{$strOpened}</strong>: ".date("jS M Y", $user->opened)."</p>";
-
-
-/*
-//check if this user owns the incident
-if ($user->contact != $_SESSION['contactid'])
-{
-    echo "<p align='center'>$strNoPermission.</p>";
-    include ('htmlfooter.inc.php');
-    exit;
-}*/
 
 $records = strtolower(cleanvar($_REQUEST['records']));
 
