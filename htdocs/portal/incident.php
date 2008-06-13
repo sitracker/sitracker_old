@@ -84,7 +84,7 @@ foreach ($keeptags AS $keeptag)
         $temptag[] = "[[/'.strtoupper($keeptag).']]";
     }
 }
-echo "<div class='portaleft'>";
+echo "<div id='portalleft'>";
 echo "<h3>{$strActions}</h3>";
 if ($user->status != 2)
 {
@@ -149,7 +149,7 @@ while ($filerow = mysql_fetch_object($fileresult))
 }
 echo "</div>";
 
-echo "<div style='width:50%;margin:0 auto;'>";
+echo "<div id='portalright'>";
 while ($update = mysql_fetch_object($result))
 {
     if (empty($firstid))
