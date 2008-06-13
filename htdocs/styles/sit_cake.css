@@ -6,7 +6,7 @@ body {
 form { margin: 0px; padding: 0px; }
 h1 { color: white; }
 h2,h3,h4 { color: #3366AC; }
-h2, h3, h4 h5 { text-align: center; }
+h2, h3, h4, h5 { text-align: center; }
 h2 img { vertical-align: middle; }
 
 table {
@@ -19,7 +19,7 @@ table th {
   border-radius: 3px;
   color: #1F3794;
 }
-th:hover { background-color: #C3E7FB; color: #000; }
+th:hover { background-color: #EBF4FF; color: #000; }
 
 td {
 /*     border-right: 1px solid #537AB7; */
@@ -28,9 +28,9 @@ td {
     color: #537AB7;
 }
 
-table.vertical th, form table th { text-align: right; background-color: #537AB7; }
-table.vertical td, form table td { background-color: #C3E7FB; }
-
+table.vertical th, form table th { text-align: right; background-color: #537AB7; color: white; padding: 2px 5px 2px 5px;}
+table.vertical td, form table td { background-color: #EBF4FF; }
+#C7E0FF
 a:link { text-decoration: none; color: #3B5CA7; }
 a:active { text-decoration: underline; color: #1F3794; }
 a:visited { text-decoration: none; color: #3B5CA7; }
@@ -87,6 +87,6 @@ div.windowtitle img { vertical-align: middle; }
 }
 .helplink { background-color: transparent; }
 
-.datepicker { background-color: #C3E7FB; }
+.datepicker { background-color: #EBF4FF; }
 
 #detailsummary table td { border: 0px; }
