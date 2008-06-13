@@ -26,27 +26,27 @@ echo "<h2>Release Notes</h2>";
 
 echo "<div id='help'>";
 echo "<p>This release notes are user-based. For the latest and more detailed notes on this release please <a href='http://sitracker.sourceforge.net/ReleaseNotes'>see the SiT website</a>, a summary is shown below:</p>";
-echo "<a name='3.35'><h3>v3.35</h3></a>";
+echo "<h3><a name='3.35'>v3.35</a></h3>";
 echo "<div>
 <p><strong>Better Searching</strong><br />
 This release introduces much speedier searching, and the search feature now searches the whole of SiT in a single operation, saving you time.</p>
-<div class='img-dec'><img src='images/changelog/335search.png' alt='Search' />
+<div class='img-dec'><img src='images/changelog/335search.png' alt='Search' /></div>
 <p>Search is also easier to access with a new search box on the right of the menu bar.
 You can also enter an incident number in the search bar to open that incident.</p>
-<div class='img-dec'><img src='images/changelog/335searchbar.png' alt='Search' />
+<div class='img-dec'><img src='images/changelog/335searchbar.png' alt='Search' /></div>
 
 <p><strong>Portal</strong><br />
 The built-in portal now has been extended and now contains all the features you would expect, including the ability for contacts to view all the incidents logged for their site, and for admin contacts to be able to manage all their contracts and supported contacts.</p>
-<div class='img-dec'><img src='images/changelog/335portal.png' alt='portal' /><br />
-<div class='img-dec'><img src='images/changelog/335portallog.png' alt='portal log' /><br />
+<div class='img-dec'><img src='images/changelog/335portal.png' alt='portal' /></div><br />
+<div class='img-dec'><img src='images/changelog/335portallog.png' alt='portal log' /></div><br />
 
 <p><strong>Dashboard</strong><br />
-The dashboard has been improved and now dashlets can be editing in-line and can refreshed, (automatically too) if needed.
-<div class='img-dec'><img src='images/changelog/335dashlets.png' alt='dashlets' /></p>
+The dashboard has been improved and now dashlets can be editing in-line and can refreshed, (automatically too) if needed.</p>
+<div class='img-dec'><img src='images/changelog/335dashlets.png' alt='dashlets' /></div>
 <p>We've also added two new dashlets, one for monitoring the holding queue, another for seeing who's away today.
 These are available to add from the dashboard configure icon, if they are not present, please ask your administrator to install them.</p>
-<div class='img-dec'><img src='images/changelog/335holdingqueue.png' alt='Search' /><br />
-<div class='img-dec'><img src='images/changelog/335holidays.png' alt='Search' />
+<div class='img-dec'><img src='images/changelog/335holdingqueue.png' alt='Search' /></div><br />
+<div class='img-dec'><img src='images/changelog/335holidays.png' alt='Search' /></div>
 
 <p><strong>More strings internationalised</strong><br />
 Many more strings that were previously fixed as English strings can be translated, including status strings that are now stored in the database as i18n keys.</p>
@@ -66,17 +66,18 @@ The SetUserStatus action will automatically set users' status based on entries i
 
 <p><strong>Triggers</strong><br />
 New in this release is a very powerful triggers system. Instead of the old system where emails would always be sent if (say) an incident was logged, with triggers you can configure exactly what happens.</p>
-<div class='img-dec'><img src='images/changelog/335triggerssettings.png' alt='Search' />
-<div class='img-dec'><img src='images/changelog/335triggernotice.png' alt='Search' />
+<div class='img-dec'><img src='images/changelog/335triggerssettings.png' alt='Search' /></div>
+<div class='img-dec'><img src='images/changelog/335triggernotice.png' alt='Search' /></div>
 <p><strong>Consolidated Attachments</strong><br />
 Previously, attachments weren't viewable until the incident was logged, and frequently clicking attachments from different locations resulted in 404 errors.
-The way of storing attachments has no been improved so attachments can be viewed prior to creating an incident. (Requires the use of inboundmail.php)
+The way of storing attachments has no been improved so attachments can be viewed prior to creating an incident. (Requires the use of inboundmail.php)</p>
 
 <p><strong>Help Tips</strong><br />
 We've begun adding helpful hints in the form of [?] links that have a popup message that offers useful tips and documentation on less obvious features.</p>
-<div class='img-dec'><img src='images/changelog/335help.png' alt='help' />
+<div class='img-dec'><img src='images/changelog/335help.png' alt='help' /></div>
 </div>";
-echo "<hr /><a name='3.32'><h3>v3.32</h3></a>";
+
+echo "<hr /><h3><a name='3.32'>v3.32</a></h3>";
 echo '<div>
     <p><strong>Internationalisation</strong></p>
     <ul><li>More strings are internationalised</li>
@@ -101,7 +102,7 @@ echo '<div>
 
 ';
 
-echo "<a name='3.31'><h3>v3.31</h3></a>";
+echo "<h3><a name='3.31'>v3.31</a></h3>";
 echo '<div>
 
     <p><strong>Internationalisation</strong></p>
