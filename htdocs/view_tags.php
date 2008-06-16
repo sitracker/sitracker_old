@@ -68,7 +68,7 @@ else
                     if (mysql_num_rows($resultcon) > 0)
                     {
                         $objcon = mysql_fetch_object($resultcon);
-                        echo "<th>".icon('contact')." {$strContact}</th><td><a href='contact_details.php?id={$obj->id}'>";
+                        echo "<th>".icon('contact', 16)." {$strContact}</th><td><a href='contact_details.php?id={$obj->id}'>";
                         echo "{$objcon->forenames} {$objcon->surname}</a></td>";
                     }
                 break;
@@ -80,7 +80,7 @@ else
                     if (mysql_num_rows($resultinc) > 0)
                     {
                         $objinc = mysql_fetch_object($resultinc);
-                        echo "<th>".icon('support')." {$strIncident}</th><td><a href=\"javascript:incident_details_window('{$obj->id}','incident{$obj->id}')\">";
+                        echo "<th>".icon('support', 16)." {$strIncident}</th><td><a href=\"javascript:incident_details_window('{$obj->id}','incident{$obj->id}')\">";
                         echo "{$obj->id}: {$objinc->title}</a></td>";
                     }
                 break;
@@ -92,7 +92,7 @@ else
                     if (mysql_num_rows($resultsite) > 0)
                     {
                         $objsite = mysql_fetch_object($resultsite);
-                        echo "<th>".icon('site')." {$strSite}</th><td><a href='site_details.php?id={$obj->id}&amp;action=show'>";
+                        echo "<th>".icon('site', 16)." {$strSite}</th><td><a href='site_details.php?id={$obj->id}&amp;action=show'>";
                         echo "{$objsite->name}</a></td>";
                     }
                 break;
@@ -104,7 +104,7 @@ else
                     if (mysql_num_rows($resulttask) > 0)
                     {
                         $objtask = mysql_fetch_object($resulttask);
-                        echo "<th>".icon('task')." {$strTask}</th><td><a href='view_task.php?id={$obj->id}'>";
+                        echo "<th>".icon('task', 16)." {$strTask}</th><td><a href='view_task.php?id={$obj->id}'>";
                         echo "{$objtask->name}</a></td>";
                     }
                 break;
@@ -116,7 +116,7 @@ else
                     if (mysql_num_rows($resultskill) > 0)
                     {
                         $objtask = mysql_fetch_object($resultskill);
-                        echo "<th>".icon('skill')." {$strSkill}</th><td>";
+                        echo "<th>".icon('skill', 16)." {$strSkill}</th><td>";
                         echo "{$objtask->name}</td>";
                     }
                 break;
@@ -128,7 +128,7 @@ else
                     if (mysql_num_rows($resultprod) > 0)
                     {
                         $objtask = mysql_fetch_object($resultprod);
-                        echo "<th>".icon('product')." {$strProduct}</th>";
+                        echo "<th>".icon('product', 16)." {$strProduct}</th>";
                         echo "<td><a href='products.php?productid={$obj->id}'>{$objtask->name}</a></td>";
                     }
                 break;
