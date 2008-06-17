@@ -125,7 +125,7 @@ if ($countcontacts > 0)
         if ($contactrow['active'] == 'false') $shade='expired';
         echo "<tr class='$shade'>";
         echo "<td>".icon('contact', 16, $strContact);
-        echo "<a href=\"contact_details.php?id=".$contactrow['id']."\">{$contactrow['forenames']} {$contactrow['surname']}</a></td>";
+        echo " <a href=\"contact_details.php?id=".$contactrow['id']."\">{$contactrow['forenames']} {$contactrow['surname']}</a></td>";
         echo "<td>{$contactrow['jobtitle']}</td>";
         echo "<td>{$contactrow['department']}</td>";
         if ($contactrow['dataprotection_phone'] != 'Yes')
@@ -250,7 +250,7 @@ if (user_permission($sit[2],19)) // View contracts
             	$class = "expired";
             }
             echo "<tr>";
-            echo "<td class='{$class}'>".icon('contract')." ";
+            echo "<td class='{$class}'>".icon('contract', 16)." ";
             echo "<a href='contract_details.php?id={$results['maintid']}'>{$strContract} {$results['maintid']}</a></td>";
             echo "<td class='{$class}'>{$results['product']}</td>";
             echo "<td class='{$class}'>";
