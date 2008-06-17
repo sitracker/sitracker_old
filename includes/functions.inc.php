@@ -8410,7 +8410,7 @@ function kb_article($id, $mode='internal')
     $html .= ">";
     $html .= "<h2 class='kbtitle'>{$kbarticle->title}</h2>";
 
-    if ($kbarticle->distribution != 'public')
+    if (!empty($kbarticle->distribution) AND $kbarticle->distribution != 'public')
     {
         $html .= "<h2 class='kbdistribution'>{$GLOBALS['strDistribution']}: ".ucfirst($kbarticle->distribution)."</h2>";
     }
