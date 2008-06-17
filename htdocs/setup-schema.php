@@ -1758,23 +1758,23 @@ ALTER TABLE `{$dbDashboard}` ADD `version` MEDIUMINT NOT NULL DEFAULT '1' AFTER 
 ALTER TABLE `{$dbContacts}` ADD INDEX ( `active` );
 ALTER TABLE `{$dbSites}` ADD INDEX ( `active` );
 ALTER TABLE `{$dbUpdates}` ADD INDEX ( `customervisibility` );
-DELETE FROM `{$dbIncidentstatus}` WHERE id = 0 OR id = 10;
-INSERT INTO `{$dbIncidentstatus}` VALUES (10, 'Active (Unassigned)', 'Active');
+DELETE FROM `{$dbIncidentStatus}` WHERE id = 0 OR id = 10;
+INSERT INTO `{$dbIncidentStatus}` VALUES (10, 'Active (Unassigned)', 'Active');
 ";
 
 $upgrade_schema[332] = "
 -- INL 12Jan08
 ALTER TABLE `{$dbContacts}` CHANGE `salutation` `courtesytitle` VARCHAR( 50 ) NOT NULL COMMENT 'Was ''salutation'' before 3.32';
 -- INL 13Jan08
-UPDATE `{$dbIncidentstatus}` SET `name` = 'strActive' WHERE `id` =1 LIMIT 1 ;
-UPDATE `{$dbIncidentstatus}` SET `name` = 'strClosed' WHERE `id` =2 LIMIT 1 ;
-UPDATE `{$dbIncidentstatus}` SET `name` = 'strResearchNeeded' WHERE `id` =3 LIMIT 1 ;
-UPDATE `{$dbIncidentstatus}` SET `name` = 'strCalledAndLeftMessage' WHERE `id` =4 LIMIT 1 ;
-UPDATE `{$dbIncidentstatus}` SET `name` = 'strAwaitingColleagueResponse' WHERE `id` =5 LIMIT 1 ;
-UPDATE `{$dbIncidentstatus}` SET `name` = 'strAwaitingSupportResponse' WHERE `id` =6 LIMIT 1 ;
-UPDATE `{$dbIncidentstatus}` SET `name` = 'strAwaitingClosure' WHERE `id` =7 LIMIT 1 ;
-UPDATE `{$dbIncidentstatus}` SET `name` = 'strAwaitingCustomerAction' WHERE `id` =8 LIMIT 1 ;
-UPDATE `{$dbIncidentstatus}` SET `name` = 'strUnsupported' WHERE `id` =9 LIMIT 1 ;
+UPDATE `{$dbIncidentStatus}` SET `name` = 'strActive' WHERE `id` =1 LIMIT 1 ;
+UPDATE `{$dbIncidentStatus}` SET `name` = 'strClosed' WHERE `id` =2 LIMIT 1 ;
+UPDATE `{$dbIncidentStatus}` SET `name` = 'strResearchNeeded' WHERE `id` =3 LIMIT 1 ;
+UPDATE `{$dbIncidentStatus}` SET `name` = 'strCalledAndLeftMessage' WHERE `id` =4 LIMIT 1 ;
+UPDATE `{$dbIncidentStatus}` SET `name` = 'strAwaitingColleagueResponse' WHERE `id` =5 LIMIT 1 ;
+UPDATE `{$dbIncidentStatus}` SET `name` = 'strAwaitingSupportResponse' WHERE `id` =6 LIMIT 1 ;
+UPDATE `{$dbIncidentStatus}` SET `name` = 'strAwaitingClosure' WHERE `id` =7 LIMIT 1 ;
+UPDATE `{$dbIncidentStatus}` SET `name` = 'strAwaitingCustomerAction' WHERE `id` =8 LIMIT 1 ;
+UPDATE `{$dbIncidentStatus}` SET `name` = 'strUnsupported' WHERE `id` =9 LIMIT 1 ;
 -- INL 24Jan08
 ALTER TABLE `{$dbUsers}` ADD `var_utc_offset` INT NOT NULL DEFAULT '0' COMMENT 'Offset from UTC (timezone) in minutes' AFTER `var_i18n` ;
 INSERT INTO `{$dbUserStatus}` (`id` ,`name`) VALUES ('0', 'Account Disabled');
