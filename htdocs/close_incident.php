@@ -168,13 +168,14 @@ if (empty($_REQUEST['process']))
     echo "{$strNewKBArticle}</label></td></tr>\n";
 
     echo "<tr id='titlerow' style='display:none;'><th>{$strTitle}</th>";
-    echo "<td><input type='text' name='kbtitle' id='kbtitle' size='30' value='{$incident_title}' disabled='disabled' />";
-    echo "</td></tr>\n";
+    echo "<td><input class='required' type='text' name='kbtitle' id='kbtitle' ";
+    echo "size='30' value='{$incident_title}' disabled='disabled' /> ";
+    echo "<span class='required'>{$strRequired}</span></td></tr>\n";
     echo "<tr id='distributionrow' style='display:none;'><th>{$strDistribution}</th>";
     echo "<td>";
     echo "<select name='distribution'> ";
     echo "<option value='public' selected='selected'>{$strPublic}</option>";
-    echo "<option value='private' style='color: blue;'>$strPrivate}</option>";
+    echo "<option value='private' style='color: blue;'>{$strPrivate}</option>";
     echo "<option value='restricted' style='color: red;'>{$strRestricted}</option>";
     echo "</select> ";
     echo help_link('KBDistribution');
