@@ -39,11 +39,24 @@ elseif ($_REQUEST['win']=='jump')
         if(!empty($_GET['return']))
         {
             $return = cleanvar($_GET['return']);
-            echo "</head><body onload=\"incident_details_window($incidentid,'win');window.location='{$return}';\"></body></html>";
+            echo "</head><body onload=\"\"><a href=\"$return\">{$strPleaseWaitRedirect}</a>";
+            echo "<script type='text/javascript'>\n//<![CDATA[\n";
+            echo "var popwin = incident_details_window($incidentid,'win');\n";
+            echo "if (!popwin) alert('Did your browser block the popup window?');\n";
+            echo "else window.location='{$return}';\n";
+            echo "\n//]]>\n</script>\n";
+            echo "</body></html>";
         }
         else
         {
-            echo "</head><body onload=\"incident_details_window($incidentid,'win');window.location='{$_SERVER['HTTP_REFERER']}';\"></body></html>";
+            // echo "</head><body onload=\"incident_details_window($incidentid,'win');window.location='{$_SERVER['HTTP_REFERER']}';\">{$strPleaseWaitRedirect}</body></html>";
+            echo "</head><body onload=\"\"><a href=\"{$_SERVER['HTTP_REFERER']}\"{$strPleaseWaitRedirect}</a>";
+            echo "<script type='text/javascript'>\n//<![CDATA[\n";
+            echo "var popwin = incident_details_window($incidentid,'win');\n";
+            echo "if (!popwin) alert('Did your browser block the popup window?');\n";
+            echo "else window.location='{$_SERVER['HTTP_REFERER']}';\n";
+            echo "\n//]]>\n</script>\n";
+            echo "</body></html>";
         }
     }
     else
@@ -77,7 +90,7 @@ elseif ($_REQUEST['win'] == 'holdingview')
 else
 {
     $title = $strDetails;
-    
+
     include ('incident_html_top.inc.php');
 
     include ('incident/details.inc.php');

@@ -20,6 +20,7 @@ $q = cleanvar($_GET['q']);
 
 ?>
 <script type='text/javascript'>
+//<![CDATA[
 var id = <?php echo $q; ?>;
 if (!isNaN(id))
 {
@@ -44,8 +45,9 @@ if (!isNaN(id))
             <?php
             }
     }?>
-        
+
 }
+//]]>
 </script>
 <?php
 $resultsperpage = 20;
@@ -118,7 +120,7 @@ if (!empty($q))
 {
     //for the search plugin
     $search = $q;
-    
+
     //INCIDENT RESULTS
     $incidentsql = "SELECT *,incidentid AS id, i.title, ";
     $incidentsql .= "MATCH (bodytext) AGAINST ('{$search}' IN BOOLEAN MODE) AS score ";
@@ -157,7 +159,7 @@ if (!empty($q))
         $incidentsql .= " ORDER BY score DESC ";
     }
     $countsql = $incidentsql;
-    
+
     if ($domain == 'incidents')
     {
         $incidentsql .= "LIMIT {$start}, {$resultsperpage} ";
@@ -173,7 +175,7 @@ if (!empty($q))
         $hits++;
         $countresult = mysql_query($countsql);
         $results = mysql_num_rows($countresult);
-        
+
         if ($domain == 'incidents')
         {
             $end = $start + $resultsperpage;
@@ -184,7 +186,7 @@ if (!empty($q))
             $end = $resultsperpage;
             $begin = 0;
         }
-        
+
         if($end > $results)
         {
             $end = $results;
@@ -196,7 +198,7 @@ if (!empty($q))
         echo "<p align='center'>";
         if (!empty($start) AND $domain == 'incidents')
         {
-            echo " <a href='{$_SERVER['PHP_SELF']}?domain=incidents&q={$q}&start=";            
+            echo " <a href='{$_SERVER['PHP_SELF']}?domain=incidents&q={$q}&start=";
             echo $begin-$resultsperpage."&amp;sort={$sort}&amp;order={$order}&amp;view={$view}'>";
             echo icon('leftarrow', 16, $strPrevious)." {$strPrevious}</a> ";
         }
@@ -243,7 +245,7 @@ if (!empty($q))
         echo "</table>";
     }
 
-    
+
     //SITE RESULTS
     $sitesql = "SELECT *,MATCH (name) AGAINST ('{$search}' IN BOOLEAN MODE) AS score ";
     $sitesql .= "FROM `{$dbSites}` as s ";
@@ -255,17 +257,17 @@ if (!empty($q))
         elseif ($sort=='incident') $sitesql .= " ORDER BY k.published ";
         elseif ($sort=='date') $sitesql .= " ORDER BY k.keywords ";
         else $sitesql .= " ORDER BY u.score ";
-    
+
         if ($order=='a' OR $order=='ASC' OR $order='') $sitesql .= "ASC";
         else $sitesql .= "DESC";
     }
     else
     {
         $sitesql .= " ORDER BY score DESC ";
-    }    
+    }
 
     $countsql = $sitesql;
-    
+
     if ($domain == 'sites')
     {
         $sitesql .= "LIMIT {$start}, {$resultsperpage} ";
@@ -278,7 +280,7 @@ if (!empty($q))
         $results = mysql_num_rows($siteresult);
         $countresult = mysql_query($countsql);
         $results = mysql_num_rows($countresult);
-        
+
         if ($domain == 'sites')
         {
             $end = $start + $resultsperpage;
@@ -289,7 +291,7 @@ if (!empty($q))
             $end = $resultsperpage;
             $begin = 0;
         }
-        
+
         if($end > $results)
         {
             $end = $results;
@@ -368,7 +370,7 @@ if (!empty($q))
 
 
     $countsql = $contactsql;
-    
+
     if ($domain == 'contacts')
     {
         $contactsql .= "LIMIT {$start}, {$resultsperpage} ";
@@ -391,7 +393,7 @@ if (!empty($q))
             $end = $resultsperpage;
             $begin = 0;
         }
-        
+
         if($end > $results)
         {
             $end = $results;
@@ -459,7 +461,7 @@ if (!empty($q))
 
         echo "</table>";
     }
-    
+
     //USER RESULTS
     $usersql = "SELECT *,MATCH (realname) AGAINST ('{$search}' IN BOOLEAN MODE) AS score ";
     $usersql .= "FROM `{$dbUsers}` ";
@@ -479,15 +481,15 @@ if (!empty($q))
     {
         $usersql .= " ORDER BY score DESC ";
     }
-    
+
 
     $countsql = $usersql;
-    
+
     if ($domain == 'users')
     {
         $usersql .= "LIMIT {$start}, {$resultsperpage} ";
     }
-    
+
     if($userresult = mysql_query($usersql) AND mysql_num_rows($userresult) > 0)
     {
         echo "<h3>".icon('user', 32)." {$strUsers}</h3>";
@@ -505,7 +507,7 @@ if (!empty($q))
             $end = $resultsperpage;
             $begin = 0;
         }
-        
+
         if($end > $results)
         {
             $end = $results;
@@ -542,7 +544,7 @@ if (!empty($q))
         echo "<tr>".colheader(name, $strID, $sort, $order, $filter);
         echo colheader(email, $strEmail, $sort, $order, $filter);
         echo colheader(telephone, $strTelephone, $sort, $order, $filter);
-        
+
         $shade = 'shade1';
         while($row = mysql_fetch_object($userresult))
         {
@@ -561,7 +563,7 @@ if (!empty($q))
 
         echo "</table>";
     }
-    
+
     //KB RESULTS
     $kbsql = "SELECT *,MATCH (title, keywords) AGAINST ('{$search}' IN BOOLEAN MODE) AS score ";
     $kbsql .= "FROM `{$dbKBArticles}` as k ";
@@ -581,15 +583,15 @@ if (!empty($q))
     {
         $kbsql .= " ORDER BY score DESC ";
     }
-    
+
 
     $countsql = $kbsql;
-    
+
     if ($domain == 'kb')
     {
         $kbsql .= "LIMIT {$start}, {$resultsperpage} ";
     }
-    
+
     if($kbresult = mysql_query($kbsql) AND mysql_num_rows($kbresult) > 0)
     {
         echo "<h3>".icon('kb', 32)." {$strKnowledgeBase}</h3>";
@@ -607,7 +609,7 @@ if (!empty($q))
             $end = $resultsperpage;
             $begin = 0;
         }
-        
+
         if($end > $results)
         {
             $end = $results;
@@ -666,7 +668,7 @@ if (!empty($q))
 
         echo "</table>";
     }
-    
+
     $sql = "SELECT * FROM `{$dbTags}` WHERE name LIKE '%{$q}%'";
 
     $result = mysql_query($sql);
@@ -682,7 +684,7 @@ if (!empty($q))
             $countsql .= "ORDER BY counted ASC LIMIT 1";
             $countresult = mysql_query($countsql);
             $countrow = mysql_fetch_object($countresult);
-            
+
             echo "<a href='view_tags.php?tagid=$row->tagid' class='taglevel1' style='font-size: 400%; font-weight: normal;' title='{$countrow->counted}'>";
             if (array_key_exists($row->name, $CONFIG['tag_icons']))
             {
