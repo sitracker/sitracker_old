@@ -36,10 +36,16 @@ $view = $_GET['view'];
 $end = $start + $perpage;
 $filter = array('start' => $start, 'view' => $view);
 
-$sql = "SELECT DISTINCT k.*, s.name FROM `{$dbKBArticles}` AS k, `{$dbSoftware}` as s ";
-$sql .= "LEFT JOIN `{$dbKBSoftware}` as kbs ";
-$sql .= "ON kbs.softwareid=s.id ";
-$sql .= "WHERE k.docid = kbs.docid AND k.distribution='public' ";
+$sql = "SELECT k.*, s.name FROM `{$dbKBArticles}` AS k,
+                                `{$dbKBSoftware}` as kbs,
+                                `{$dbSoftware}` as s
+
+        WHERE k.docid = kbs.docid AND kbs.softwareid = s.id AND k.distribution = 'public' ";
+
+// $sql = "SELECT DISTINCT k.*, s.name FROM `{$dbKBArticles}` AS k, `{$dbSoftware}` as s ";
+// $sql .= "LEFT JOIN `{$dbKBSoftware}` as kbs ";
+// $sql .= "ON kbs.softwareid=s.id ";
+// $sql .= "WHERE k.docid = kbs.docid AND k.distribution='public' ";
 
 if($view != 'all')
 {
