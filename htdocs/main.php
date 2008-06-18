@@ -40,6 +40,7 @@ $sql = "SELECT dashboard FROM `{$dbUsers}` WHERE id = '".$_SESSION['userid']."'"
 $result = mysql_query($sql);
 if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
+$dashboardcomponents = array();
 if(mysql_num_rows($result) > 0)
 {
     $obj = mysql_fetch_object($result);
