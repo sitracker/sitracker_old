@@ -119,30 +119,23 @@ $contractid = cleanvar($_REQUEST['contractid']);
 
 $filter = array('page' => $page);
 
-//find contracts
-$sql = "SELECT m.*, p.name, ";
-$sql .= "(m.incident_quantity - m.incidents_used) AS availableincidents ";
-$sql .= "FROM `{$dbSupportContacts}` AS sc, `{$dbMaintenance}` AS m, `{$dbProducts}` AS p ";
-$sql .= "WHERE m.product=p.id ";
-$sql .= "AND ((sc.contactid='{$_SESSION['contactid']}' AND sc.maintenanceid=m.id) ";
-$sql .= "OR m.allcontactssupported = 'yes') ";
-$sql .= "AND (expirydate > (UNIX_TIMESTAMP(NOW()) - 15778463) OR expirydate = -1) ";
-$sql .= "ORDER BY expirydate DESC";
-
-$contractresult = mysql_query($sql);
-if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
-$numcontracts = mysql_num_rows($contractresult);
+////find contracts
+//$sql = "SELECT DISTINCT m.*, p.name, ";
+//$sql .= "(m.incident_quantity - m.incidents_used) AS availableincidents ";
+//$sql .= "FROM `{$dbSupportContacts}` AS sc, `{$dbMaintenance}` AS m, `{$dbProducts}` AS p ";
+//$sql .= "WHERE m.product=p.id ";
+//$sql .= "AND ((sc.contactid='{$_SESSION['contactid']}' AND sc.maintenanceid=m.id) ";
+//$sql .= "OR m.allcontactssupported = 'yes') ";
+//$sql .= "AND (expirydate > (UNIX_TIMESTAMP(NOW()) - 15778463) OR expirydate = -1) ";
+//$sql .= "ORDER BY expirydate DESC";
+//$contractresult = mysql_query($sql);
+//if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+//$numcontracts = mysql_num_rows($contractresult);
 echo "<div id='menu'>\n";
 echo "<ul id='menuList'>\n";
 echo "<li><a href='index.php'>{$strIncidents}</a></li>";
-if($numcontracts == 1)
+if(sizeof($_SESSION['entitlement']) == 1)
 {
-    //only one contract
-    $contractobj = mysql_fetch_object($contractresult);
-
-    //reset the pointer
-    mysql_data_seek($contractresult, 0);
-    $contractid = $contractobj->id;
     echo "<li><a href='add.php?contractid={$contractid}'>{$strAddIncident}</a></li>";
 }
 else

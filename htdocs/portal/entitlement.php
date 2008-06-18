@@ -21,7 +21,7 @@ include 'portalheader.inc.php';
 echo "<h2>".icon('support', 32, $strYourSupportEntitlement);
 echo " {$strYourSupportEntitlement}</h2>";
 
-if ($numcontracts >= 1)
+if (sizeof($_SESSION['entitlement']) >= 1)
 {
     echo "<table align='center'>";
     echo "<tr>";
@@ -33,7 +33,7 @@ if ($numcontracts >= 1)
     echo colheader('actions', $strOperation);
     echo "</tr>";
     $shade = 'shade1';
-    while ($contract = mysql_fetch_object($contractresult))
+    foreach ($_SESSION['entitlement'] AS $contract)
     {
         echo "<tr class='$shade'>";
         echo "<td><a href='contracts.php?id={$contract->id}'>{$contract->id}</a></td>";

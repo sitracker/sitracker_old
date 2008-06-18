@@ -161,23 +161,47 @@ elseif ($CONFIG['portal'] == TRUE)
         $_SESSION['style'] = $CONFIG['portal_interface_style'];
         $_SESSION['contracts'] = array();
 
-        //if we're an admin contact
+        //get admin contacts
         if (admin_contact_contracts($_SESSION['contactid'], $_SESSION['siteid']) != NULL)
         {
             $_SESSION['contracts'] = admin_contact_contracts($_SESSION['contactid'], $_SESSION['siteid']);
             $_SESSION['usertype'] = 'admin';
         }
-        //if we're a named contact
-        elseif (contact_contracts($_SESSION['contactid'], $_SESSION['siteid']) != NULL)
+        
+        //get named contact contracts
+        if (contact_contracts($_SESSION['contactid'], $_SESSION['siteid']) != NULL)
         {
-            $_SESSION['contracts'] = contact_contracts($_SESSION['contactid'], $_SESSION['siteid']);
-            $_SESSION['usertype'] = 'contact';
+            $_SESSION['contracts'] .= contact_contracts($_SESSION['contactid'], $_SESSION['siteid']);
+            if (!isset($_SESSION['usertype']))
+            {
+               $_SESSION['usertype'] = 'contact';
+            }
         }
-        //we're a contact(we logged in) but not on any contracts
-        elseif (all_contact_contracts($_SESSION['contactid'], $_SESSION['siteid']) != NULL)
+        
+        //get other contracts
+        if (all_contact_contracts($_SESSION['contactid'], $_SESSION['siteid']) != NULL)
         {
-            $_SESSION['contracts'] = all_contact_contracts($_SESSION['contactid'], $_SESSION['siteid']);
-            $_SESSION['usertype'] = 'user';
+            $_SESSION['contracts'] .= all_contact_contracts($_SESSION['contactid'], $_SESSION['siteid']);
+            if (!isset($_SESSION['usertype']))
+            {
+                $_SESSION['usertype'] = 'user';
+            }
+        }
+        
+        //get entitlement
+        $sql = "SELECT DISTINCT m.*, p.name, ";
+        $sql .= "(m.incident_quantity - m.incidents_used) AS availableincidents ";
+        $sql .= "FROM `{$dbSupportContacts}` AS sc, `{$dbMaintenance}` AS m, `{$dbProducts}` AS p ";
+        $sql .= "WHERE m.product=p.id ";
+        $sql .= "AND ((sc.contactid='{$_SESSION['contactid']}' AND sc.maintenanceid=m.id) ";
+        $sql .= "OR m.allcontactssupported = 'yes') ";
+        $sql .= "AND (expirydate > (UNIX_TIMESTAMP(NOW()) - 15778463) OR expirydate = -1) ";
+        $sql .= "ORDER BY expirydate DESC";
+        $contractresult = mysql_query($sql);
+        if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+        while ($contract = mysql_fetch_object($contractresult))
+        {
+            $_SESSION['entitlement'][] = $contract;
         }
 
         header("Location: portal/");
