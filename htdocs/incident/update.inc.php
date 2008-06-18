@@ -30,6 +30,7 @@ function display_update_page($draftid=-1)
     global $iconset;
     global $now;
     global $dbDrafts;
+    global $sit;
 
     if ($draftid != -1)
     {
@@ -379,12 +380,19 @@ function display_update_page($draftid=-1)
 
     $setStatusTo = incident_status($id);
 
-    if (!empty($metadata))
+    $disabled = FALSE;
+    echo "if ({$sit[2]} != ".incident_owner($incidentid).")";
+    if ($sit[2] != incident_owner($incidentid))
+    {
+        $setStatusTo = '0';
+        $disabled = TRUE;
+    }
+    elseif (!empty($metadata))
     {
         $setStatusTo = $metadata[4];
     }
 
-    echo "<td class='shade1'>".incidentstatus_drop_down("newstatus", $setStatusTo)."</td>";
+    echo "<td class='shade1'>".incidentstatus_drop_down("newstatus", $setStatusTo, $disabled)."</td>";
     echo "</tr>";
     echo "<tr>";
     echo "<th align='right' valign='top'>{$GLOBALS['strNextAction']}:</th>";
@@ -400,7 +408,6 @@ function display_update_page($draftid=-1)
     echo "id='nextaction' maxlength='50' size='30' value='{$nextAction}' /></td></tr>";
     echo "<tr>";
     echo "<th align='right'>";
-    // FIXME i18n will be placed in the waiting queue
     echo "<strong>{$GLOBALS['strTimeToNextAction']}</strong>:</th>";
     echo "<td class='shade2'>";
    	echo show_next_action();

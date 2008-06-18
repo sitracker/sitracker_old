@@ -1795,7 +1795,7 @@ function interface_style($id)
 //  prints the HTML for a drop down list of
 // incident status names (EXCLUDING 'CLOSED'), with the given
 // name and with the given id selected.
-function incidentstatus_drop_down($name, $id)
+function incidentstatus_drop_down($name, $id, $disabled=FALSE)
 {
     global $dbIncidentStatus;
     // extract statuses
@@ -1807,7 +1807,12 @@ function incidentstatus_drop_down($name, $id)
         trigger_error("Zero rows returned",E_USER_WARNING);
     }
 
-    $html = "<select id='{$name}' name='{$name}'>";
+    $html = "<select id='{$name}' name='{$name}'";
+    if ($disabled)
+    {
+        $html .= " disabled='true' ";
+    }
+    $html .= ">";
     // if ($id == 0) $html .= "<option selected='selected' value='0'></option>\n";
     while ($statuses = mysql_fetch_array($result))
     {
@@ -7540,21 +7545,21 @@ function billable_units_site($siteid, $startdate=0, $enddate=0)
 **/
 function supported_contacts($maintid)
 {
-    global $dbSupportContacts, $dbContacts;
-    $sql  = "SELECT c.forenames, c.surname, sc.contactid AS contactid ";
-    $sql .= "FROM `{$dbSupportContacts}` AS sc, `{$dbContacts}` AS c ";
-    $sql .= "WHERE sc.contactid=c.id AND sc.maintenanceid='{$maintid}' ";
-    $result = mysql_query($sql);
-    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
-    if (!empty($result))
-    {
-        while ($row = mysql_fetch_object($result))
-        {
-            $returnarray[] = $row->contactid;
-        }
-        return $returnarray;
-    }
-    else return NULL;
+    //global $dbSupportContacts, $dbContacts;
+    //$sql  = "SELECT c.forenames, c.surname, sc.contactid AS contactid ";
+    //$sql .= "FROM `{$dbSupportContacts}` AS sc, `{$dbContacts}` AS c ";
+    //$sql .= "WHERE sc.contactid=c.id AND sc.maintenanceid='{$maintid}' ";
+    //$result = mysql_query($sql);
+    //if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
+    //if (!empty($result))
+    //{
+    //    while ($row = mysql_fetch_object($result))
+    //    {
+    //        $returnarray[] = $row->contactid;
+    //    }
+    //    return $returnarray;
+    //}
+    //else return NULL;
 }
 
 
@@ -7566,7 +7571,7 @@ function supported_contacts($maintid)
 **/
 function admin_contact_contracts($contactid, $siteid)
 {
-    $sql = "SELECT DISTINCT m.id ";
+   /* $sql = "SELECT DISTINCT m.id ";
     $sql .= "FROM `{$GLOBALS['dbMaintenance']}` AS m,
             `{$GLOBALS['dbContacts']}` AS c,
             `{$GLOBALS['dbSites']}` AS s ";
@@ -7581,10 +7586,12 @@ function admin_contact_contracts($contactid, $siteid)
         while ($row = mysql_fetch_object($result))
         {
             $contractsarray[] = $row->id;
+            echo "<pre>$i</pre><br />";
+            $i++;
         }
     }
 
-    return $contractsarray;
+    return $contractsarray;*/
 }
 
 
