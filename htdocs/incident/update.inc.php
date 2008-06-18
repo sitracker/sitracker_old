@@ -381,7 +381,6 @@ function display_update_page($draftid=-1)
     $setStatusTo = incident_status($id);
 
     $disabled = FALSE;
-    echo "if ({$sit[2]} != ".incident_owner($incidentid).")";
     if ($sit[2] != incident_owner($incidentid))
     {
         $setStatusTo = '0';
