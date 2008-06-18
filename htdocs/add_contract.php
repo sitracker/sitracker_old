@@ -34,21 +34,20 @@ if ($action == "showform" OR $action=='')
     clear_form_errors('add_contract');
     echo "<h2>".icon('contract', 32)." ";
     echo "{$strAddContract}</h2>";
-    echo "<h5>".sprintf($strMandatoryMarked,"<sup class='red'>*</sup>")."</h5>";
     echo "<form name='addcontract' action='{$_SERVER['PHP_SELF']}?action=add' method='post' onsubmit='return confirm_action(\"{$strAreYouSureAddContract}\");'>";
     echo "<table align='center' class='vertical'>";
 
-    echo "<tr><th>{$strSite} <sup class='red'>*</sup></th><td>";
+    echo "<tr><th>{$strSite}</th><td>";
     if ($_SESSION['formdata']['add_contract']['site'] != "")
     {
-        echo site_drop_down("site", $_SESSION['formdata']['add_contract']['site'])." </td></tr>\n";
+        echo site_drop_down("site", $_SESSION['formdata']['add_contract']['site'], TRUE);
     }
     else
     {
-        echo site_drop_down("site", $siteid)." </td></tr>\n";
+        echo site_drop_down("site", $siteid, TRUE);
     }
-
-    echo "<tr><th>{$strContacts}<sup class='red'>*</sup></th><td>";
+    echo " <span class='required'>{$strRequired}</span></td></tr>\n";
+    echo "<tr><th>{$strContacts}</th><td>";
     echo "<input value='amount' type='radio' name='contacts' checked='checked' />";
 
     echo "{$strLimitTo} <input size='2' name='amount' ";
@@ -64,18 +63,19 @@ if ($action == "showform" OR $action=='')
     echo "<input type='radio' value='all' name='contacts' />";
     echo "{$strAllSiteContactsSupported}";
     echo "</td></tr>";
-    echo "<tr><th>{$strProduct} <sup class='red'>*</sup></th><td>";
+    echo "<tr><th>{$strProduct}</th><td>";
     if ($_SESSION['formdata']['add_contract']['product'] != "")
     {
-        echo product_drop_down("product", $_SESSION['formdata']['add_contract']['product'])."</td></tr>\n";
+        echo product_drop_down("product", $_SESSION['formdata']['add_contract']['product'], TRUE);
     }
     else
     {
-        echo product_drop_down("product", 0)."</td></tr>\n";
+        echo product_drop_down("product", 0, TRUE);
     }
+    echo " <span class='required'>{$strRequired}</span></td></tr>\n";
 
-    echo "<tr><th>{$strExpiryDate} <sup class='red'>*</sup></th>";
-    echo "<td><input name='expiry' size='10' ";
+    echo "<tr><th>{$strExpiryDate}</th>";
+    echo "<td><input class='required' name='expiry' size='10' ";
     if ($_SESSION['formdata']['add_contract']['expiry'] != "")
         echo "value='{$_SESSION['formdata']['add_contract']['expiry']}'";
     echo "/> ".date_picker('addcontract.expiry');
@@ -84,7 +84,8 @@ if ($action == "showform" OR $action=='')
     {
         echo "checked='checked' ";
     }
-    echo "onclick=\"this.form.expiry.value=''\" /> {$strUnlimited}</td></tr>\n";
+    echo "onclick=\"this.form.expiry.value=''\" /> {$strUnlimited}";
+    echo " <span class='required'>{$strRequired}</span></td></tr>\n";
 
     echo "<tr><th>{$strServiceLevel}</th><td>";
     if ($_SESSION['formdata']['add_contract']['servicelevelid'] != "")
@@ -96,7 +97,9 @@ if ($action == "showform" OR $action=='')
         echo servicelevel_drop_down('servicelevelid', 1, TRUE)."</td></tr>\n";
     }
 
-    echo "<tr><th>{$strAdminContact} <sup class='red'>*</sup></th><td>".contact_drop_down("admincontact", 0, true)."</td></tr>\n";
+    echo "<tr><th>{$strAdminContact}</th>";
+    echo "<td>".contact_drop_down("admincontact", 0, TRUE, TRUE);
+    echo " <span class='required'>{$strRequired}</span></td></tr>\n";
     echo "<tr><th>{$strNotes}</th><td><textarea cols='40' name='notes' rows='5'></textarea></td></tr>\n";
 
     echo "<tr><th></th><td><a href=\"javascript:void(0);\" onclick=\"$('hidden').toggle();\">{$strMore}</a></td></tr>\n";
