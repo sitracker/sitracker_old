@@ -50,6 +50,7 @@ $cssresult = mysql_query($csssql);
 if (mysql_error())trigger_error(mysql_error(),E_USER_WARNING);
 
 list($cssurl, $iconset) = mysql_fetch_row($cssresult);
+if (empty($iconset)) $iconset = 'sit';
 unset($styleid);
 echo "<link rel='stylesheet' href='{$CONFIG['application_webpath']}styles/{$cssurl}' />\n";
 

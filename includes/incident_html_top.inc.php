@@ -17,6 +17,7 @@ echo "</title>";
 echo "<meta http-equiv=\"Content-Type\" content=\"text/html; charset={$i18ncharset}\" />\n";
 echo "<meta name=\"GENERATOR\" content=\"{$CONFIG['application_name']} {$application_version_string}\" />\n";
 echo "<style type='text/css'>@import url('{$CONFIG['application_webpath']}styles/sitbase.css');</style>\n";
+
 if ($_SESSION['auth'] == TRUE)
 {
     $style = interface_style($_SESSION['style']);
@@ -33,6 +34,7 @@ $csssql = "SELECT cssurl, iconset FROM `{$dbInterfaceStyles}` WHERE id='{$stylei
 $cssresult = mysql_query($csssql);
 if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 else list($cssurl, $iconset) = mysql_fetch_row($cssresult);
+if (empty($iconset)) $iconset = 'sit';
 unset($styleid);
 echo "<script src='{$CONFIG['application_webpath']}scripts/prototype/prototype.js' type='text/javascript'></script>\n";
 echo "<script src='{$CONFIG['application_webpath']}webtrack.js' type='text/javascript'></script>\n";
