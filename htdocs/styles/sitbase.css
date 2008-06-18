@@ -172,8 +172,10 @@ tr.notice:hover { background-color: #F2F2F2; }
 
 #footerbar select { font-size: 80%; }
 #footerbar form { margin: 0px; }
-#statusbar { clear: both; background-color: #203894; background-image: url('../images/top2.png');
-  background-position: top-left; background-repeat: x-repeat;}
+#statusbar { clear: both; background-color: #203894; color: #FFF; text-align: left; padding: 2px 0px 2px 0px; margin-top: 1em;}
+#statusbar a { text-decoration: none; color: #FFF; }
+#statusbar a:hover { text-decoration: underline; }
+#statusbar a:active { text-decoration: underline; }
 
 div.windowbox
 {
