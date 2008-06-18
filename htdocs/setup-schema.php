@@ -2228,7 +2228,12 @@ INSERT INTO `{$dbInterfaceStyles}` (`id` ,`name` ,`cssurl` ,`iconset` ,`headerht
 INSERT INTO `{$dbPermissions}` VALUES (78, 'Post System Notices');
 
 UPDATE `{$dbPermissions}` SET `name` = 'Add Templates' WHERE id` =16;
-UPDATE `{$dbPermissions}` SET `name` = 'Edit Templates' WHERE `id` =17;";
+UPDATE `{$dbPermissions}` SET `name` = 'Edit Templates' WHERE `id` =17;
+
+-- KMH 18/06/08
+ALTER TABLE `maintenance` ADD INDEX ( `expirydate` ) ;
+
+";
 
 // Important: When making changes to the schema you must add SQL to make the alterations
 // to existing databases in $upgrade_schema[] *AND* you must also change $schema[] for
