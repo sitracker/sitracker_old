@@ -39,7 +39,7 @@ $filter = array('start' => $start, 'view' => $view);
 $sql = "SELECT DISTINCT k.*, s.name FROM `{$dbKBArticles}` AS k, `{$dbSoftware}` as s ";
 $sql .= "LEFT JOIN `{$dbKBSoftware}` as kbs ";
 $sql .= "ON kbs.softwareid=s.id ";
-$sql .= "WHERE k.distribution='public' ";
+$sql .= "WHERE k.docid = kbs.docid AND k.distribution='public' ";
 
 if($view != 'all')
 {
