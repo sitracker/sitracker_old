@@ -7570,13 +7570,9 @@ function supported_contacts($maintid)
 function admin_contact_contracts($contactid, $siteid)
 {
     $sql = "SELECT DISTINCT m.id ";
-    $sql .= "FROM `{$GLOBALS['dbMaintenance']}` AS m,
-            `{$GLOBALS['dbSites']}` AS s,
-            `{$GLOBALS['dbContacts']}` AS c ";
-    $sql .= "WHERE m.site";
+    $sql .= "FROM `{$GLOBALS['dbMaintenance']}` AS m ";
+    $sql .= "WHERE m.admincontact={$contactid} ";
     $sql .= "AND m.site={$siteid} ";
-    $sql .= "AND c.siteid={$siteid}";
-
 
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
@@ -7603,18 +7599,14 @@ function contact_contracts($contactid, $siteid, $checkvisible = TRUE)
     $sql = "SELECT DISTINCT m.id AS id
             FROM `{$GLOBALS['dbMaintenance']}` AS m,
             `{$GLOBALS['dbContacts']}` AS c,
-            `{$GLOBALS['dbSites']}` AS s,
             `{$GLOBALS['dbSupportContacts']}` AS sc
             WHERE m.site={$siteid}
-            AND c.siteid={$siteid}
-            AND c.id={$contactid}
             AND sc.maintenanceid=m.id
             AND sc.contactid=c.id ";
     if ($checkvisible)
     {
         $sql .= "AND m.var_incident_visible_contacts = 'yes'";
     }
-
     if ($result = mysql_query($sql))
     {
         while ($row = mysql_fetch_object($result))
@@ -7636,13 +7628,9 @@ function all_contact_contracts($contactid, $siteid)
 {
     $sql = "SELECT DISTINCT m.id AS id
             FROM `{$GLOBALS['dbMaintenance']}` AS m,
-            `{$GLOBALS['dbContacts']}` AS c,
-            `{$GLOBALS['dbSites']}` AS s,
-            `{$GLOBALS['dbSupportContacts']}` AS sc
             WHERE m.site={$siteid}
             AND m.var_incident_visible_all = 'yes'
             ";
-
     if ($result = mysql_query($sql))
     {
         while ($row = mysql_fetch_object($result))
