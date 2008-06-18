@@ -108,7 +108,7 @@ switch ($action)
             if ($enddate > 0) $enddate = date('Y-m-d',$enddate);
             else $enddate='';
             if ($startdate < 1 AND $completion > 0) $startdate = date('Y-m-d H:i:s');
-            $sql = "UPDATE tasks ";
+            $sql = "UPDATE `{$dbTasks}`` ";
             $sql .= "SET name='$name', description='$description', priority='$priority', ";
             $sql .= "duedate='$duedate', startdate='$startdate', ";
             $sql .= "completion='$completion', enddate='$enddate', value='$value', ";
@@ -155,14 +155,14 @@ switch ($action)
             if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
             $status = mysql_fetch_object($result);
             $status = $status->status;
-			
+
             //if we don't get an update from the incident, create one
             //shouldn't happen in sit, but 3rd party might not set one
             if (!isset($status) OR $status == 0)
             {
             	$status = 1;
             }
-            
+
             $sql = "SELECT * FROM `{$dbTasks}` WHERE id='{$id}'";
 
             $result = mysql_query($sql);
@@ -197,7 +197,7 @@ switch ($action)
             else
             {
             	trigger_error("Couldn't find any notes, dying" ,E_USER_ERROR);
-            	die();          	
+            	die();
             }
             //delete all the notes
             $sql = "DELETE FROM `{$dbNotes}` WHERE refid='{$id}'";
@@ -211,14 +211,14 @@ switch ($action)
             $enddate = readable_date($enddate);
 
             $updatehtml = sprintf($SYSLANG['strActivityStarted'], $startdate)."\n\n";
-            
+
             for ($i = $numnotes-1; $i >= 0; $i--)
             {
                 $updatehtml .= "[b]";
                 $updatehtml .= readable_date(mysql2date($notesarray[$i]->timestamp));
                 $updatehtml .= "[/b]\n{$notesarray[$i]->bodytext}\n\n";
             }
-            
+
             $updatehtml .= sprintf($SYSLANG['strActivityCompleted'], $enddate, "[b]".format_seconds($duration)."[/b]");
 
             //create update
@@ -234,7 +234,7 @@ switch ($action)
             	echo "Couldn't add update, update will need to be done manually: {$sql}'</p>";
             	die();
             }
-            
+
             mark_task_completed($id, TRUE);
         }
         else
