@@ -17,8 +17,17 @@ PUBDIR=/tmp/sit.$$/packages
 mkdir -p $TMPDIR
 cd $TMPDIR
 
+args=("$@")
+
+# See if a different branch or tag was specified, otherwise checkout trunk
+if [ -z ${args[0]} ]; then
+    SVNBRANCH="trunk"
+else
+    SVNBRANCH=${args[0]}
+fi
+
 # We checkout rather than export so we can determine the svn revision
-svn co --non-interactive https://sitracker.svn.sourceforge.net/svnroot/sitracker/trunk sit
+svn co --non-interactive https://sitracker.svn.sourceforge.net/svnroot/sitracker/$SVNBRANCH sit
 cd sit
 
 SVNREV=`svnversion .`
@@ -37,6 +46,14 @@ SITSIZE=`du -sk | cut -f1`
 # Now we've got version and rev Create the release name
 if [ -n $SITREV ]; then
   	RELNAME="sit_$SITVER"
+elif [ $SITREV = "beta1" ]; then
+        RELNAME="sit_$SITVER+$SITREV"
+elif [ $SITREV = "beta2" ]; then
+        RELNAME="sit_$SITVER+$SITREV"
+elif [ $SITREV = "beta3" ]; then
+        RELNAME="sit_$SITVER+$SITREV"
+elif [ $SITREV = "beta4" ]; then
+        RELNAME="sit_$SITVER+$SITREV"
 elif [ $SITREV = "svn" ]; then
 	RELNAME="sit_$SITVER+$SITREV$SVNREV"
 else
@@ -103,3 +120,4 @@ dpkg -b /tmp/sit.$$/deb/ $PUBDIR/$SITDIR.deb
 
 # Make a tar.gz package
 cp $TMPDIR/$RELNAME.orig.tar.gz $PUBDIR/$RELNAME.tar.gz
+

@@ -506,3 +506,7 @@ div.portalfileicon
     float: left; margin-right: 5px;
 }
 
+.taglevel1 { color: #7AA3CC; } /*#518BFF;  */
+.taglevel2 { color: #3A64B8; }
+.taglevel3 { color: #27437B; }
+.taglevel4 { color: #1F3663; }

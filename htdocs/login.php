@@ -161,7 +161,7 @@ elseif ($CONFIG['portal'] == TRUE)
         $_SESSION['style'] = $CONFIG['portal_interface_style'];
         $_SESSION['contracts'] = array();
 
-        //get admin contacts
+        //get admin contracts
         if (admin_contact_contracts($_SESSION['contactid'], $_SESSION['siteid']) != NULL)
         {
             $admincontracts = admin_contact_contracts($_SESSION['contactid'], $_SESSION['siteid']);
@@ -187,7 +187,7 @@ elseif ($CONFIG['portal'] == TRUE)
                 $_SESSION['usertype'] = 'user';
             }
         }
-        
+
         $_SESSION['contracts'] = array_merge((array)$admincontracts, (array)$contactcontracts, (array)$allcontracts);
         
         //get entitlement

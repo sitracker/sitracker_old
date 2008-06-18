@@ -34,7 +34,7 @@ if (empty($submit) OR !empty($_SESSION['formerrors']['add_contact']))
     //]]>
     </script>
     <?php
-    echo show_add_contact();
+    echo show_add_contact($siteid, 'internal');
     include ('htmlfooter.inc.php');
 }
 else

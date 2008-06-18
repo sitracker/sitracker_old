@@ -8640,11 +8640,12 @@ function show_edit_site($site, $mode='internal')
 /**
 * Output the html for an add contact form
 *
-* @param string $mode whether this is internal or external facing, defaults to internal
+* @param int $siteid - the site you want to add the contact to
+* @param string $mode - whether this is internal or external facing, defaults to internal
 * @return string $html add contact form html
 * @author Kieran Hogg
 */
-function show_add_contact($mode = 'internal')
+function show_add_contact($siteid = 0, $mode = 'internal')
 {
     $html .= show_form_errors('add_contact');
     clear_form_errors('add_contact');
@@ -8703,6 +8704,7 @@ function show_add_contact($mode = 'internal')
     }
     else
     {
+        // For external always force the site to be the session site
         $html .= "<input type='hidden' name='siteid' value='{$_SESSION['siteid']}' />";
     }
 
