@@ -978,6 +978,7 @@ $strReopenedby = 'Reopened by %s';
 $strRepeat = 'Repeat';
 $strReplyTo = 'Reply To';
 $strReportBug = 'Report a Bug';
+$strReportedBug = 'Reported Bug';
 $strReports = 'Reports';
 $strRequested = 'Requested';
 $strRequestClosure = 'Request Closure';

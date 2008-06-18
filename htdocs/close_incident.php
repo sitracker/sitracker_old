@@ -389,7 +389,7 @@ else
                 $result = mysql_query($sql);
                 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
             }
-          
+
             if (!$result)
             {
                 $addition_errors = 1;
@@ -473,14 +473,14 @@ else
                     $awaitingclosure = 0;
                 }
             }
-            
+
             trigger('TRIGGER_INCIDENT_CLOSED', array('incidentid' => $incidentid,
                                                      'userid' => $sit[2],
                                                      'notifyexternal' => $notifyexternal,
                                                      'notifycontact' => $notifycontact,
                                                      'awaitingclosure' => $awaitingclosure
                                                     ));
-            
+
             // Tidy up drafts i.e. delete
             $draft_sql = "DELETE FROM `{$dbDrafts}` WHERE incidentid = {$id}";
             mysql_query($draft_sql);
