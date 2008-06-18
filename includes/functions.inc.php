@@ -7545,21 +7545,21 @@ function billable_units_site($siteid, $startdate=0, $enddate=0)
 **/
 function supported_contacts($maintid)
 {
-    //global $dbSupportContacts, $dbContacts;
-    //$sql  = "SELECT c.forenames, c.surname, sc.contactid AS contactid ";
-    //$sql .= "FROM `{$dbSupportContacts}` AS sc, `{$dbContacts}` AS c ";
-    //$sql .= "WHERE sc.contactid=c.id AND sc.maintenanceid='{$maintid}' ";
-    //$result = mysql_query($sql);
-    //if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
-    //if (!empty($result))
-    //{
-    //    while ($row = mysql_fetch_object($result))
-    //    {
-    //        $returnarray[] = $row->contactid;
-    //    }
-    //    return $returnarray;
-    //}
-    //else return NULL;
+    global $dbSupportContacts, $dbContacts;
+    $sql  = "SELECT c.forenames, c.surname, sc.contactid AS contactid ";
+    $sql .= "FROM `{$dbSupportContacts}` AS sc, `{$dbContacts}` AS c ";
+    $sql .= "WHERE sc.contactid=c.id AND sc.maintenanceid='{$maintid}' ";
+    $result = mysql_query($sql);
+    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
+    if (!empty($result))
+    {
+        while ($row = mysql_fetch_object($result))
+        {
+            $returnarray[] = $row->contactid;
+        }
+        return $returnarray;
+    }
+    else return NULL;
 }
 
 
@@ -7571,7 +7571,7 @@ function supported_contacts($maintid)
 **/
 function admin_contact_contracts($contactid, $siteid)
 {
-   /* $sql = "SELECT DISTINCT m.id ";
+    $sql = "SELECT DISTINCT m.id ";
     $sql .= "FROM `{$GLOBALS['dbMaintenance']}` AS m,
             `{$GLOBALS['dbContacts']}` AS c,
             `{$GLOBALS['dbSites']}` AS s ";
@@ -7591,7 +7591,7 @@ function admin_contact_contracts($contactid, $siteid)
         }
     }
 
-    return $contractsarray;*/
+    return $contractsarray;
 }
 
 
