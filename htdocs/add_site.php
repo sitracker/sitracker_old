@@ -30,52 +30,32 @@ if ($action == "showform" OR $action == '')
 
     echo "<h2>".icon('site', 32)." ";
     echo "{$strNewSite}</h2>";
-    echo "<h5>".sprintf($strMandatoryMarked, "<sup class='red'>*</sup>")."</h5>";
-    echo "<form action='{$_SERVER['PHP_SELF']}?action=add' method='post' onsubmit='return confirm_action(\"{$strAreYouSureAddSite}\");'>";
+    echo "<form action='{$_SERVER['PHP_SELF']}?action=add' method='post' ";
+    echo "onsubmit='return confirm_action(\"{$strAreYouSureAddSite}\");'>";
     echo "<table align='center' class='vertical'>";
-    echo "<tr><th>{$strName} <sup class='red'>*</sup></th><td><input maxlength='255' name='name' size='30' ";
-    if ($_SESSION['formdata']['add_site']['name'] != "")
-    {
-        echo "value='{$_SESSION['formdata']['add_site']['name']}'";
-    }
-    echo " /></td></tr>\n";
+    echo "<tr><th>{$strName}</th><td><input maxlength='255' class='required' ";
+    echo "name='name' size='30' ";
+    echo "value='{$_SESSION['formdata']['add_site']['name']}'";
+    echo " /> <span class='required'>{$strRequired}</span></td></tr>\n";
 
     echo "<tr><th>{$strDepartment}</th><td><input maxlength='255' name='department' size='30'";
-    if ($_SESSION['formdata']['add_site']['department'] != "")
-    {
-        echo "value='{$_SESSION['formdata']['add_site']['department']}'";
-    }
-    echo " /></td></tr>\n";
+    echo "value='{$_SESSION['formdata']['add_site']['department']}' /></td></tr>\n";
 
-    echo "<tr><th>{$strAddress1}<sup class='red'>*</sup></th><td><input maxlength='255' name='address1' size='30'";
-    if ($_SESSION['formdata']['add_site']['address1'] != "")
-    {
-        echo "value='{$_SESSION['formdata']['add_site']['address1']}'";
-    }
-    echo " /></td></tr>\n";
+    echo "<tr><th>{$strAddress1}</th><td>";
+    echo "<input class='required' maxlength='255' name='address1' size='30'";
+    echo "value='{$_SESSION['formdata']['add_site']['address1']}' />";
+    echo " <span class='required'>{$strRequired}</span></td></tr>\n";
 
-    echo "<tr><th>{$strAddress2}</th><td><input maxlength='255' name='address2' size='30'";
-    if ($_SESSION['formdata']['add_site'][''] != "address2")
-    {
-        echo "value='{$_SESSION['formdata']['add_site']['address2']}'";
-    }
-    echo " /></td></tr>\n";
+    echo "<tr><th>{$strAddress2}</th><td><input maxlength='255' name='address2' size='30' ";
+    echo "value='{$_SESSION['formdata']['add_site']['address2']}' /></td></tr>\n";
 
     echo "<tr><th>{$strCity}</th><td><input maxlength='255' name='city' size='30'";
-    if ($_SESSION['formdata']['add_site']['city'] != "")
-    {
-        echo "value='{$_SESSION['formdata']['add_site']['city']}'";
-    }
-    echo " /></td></tr>\n";
+    echo "value='{$_SESSION['formdata']['add_site']['city']}' /></td></tr>\n";
 
     echo "<tr><th>{$strCounty}</th><td><input maxlength='255' name='county' size='30'";
-    if ($_SESSION['formdata']['add_site']['county'] != "")
-    {
-        echo "value='{$_SESSION['formdata']['add_site']['county']}'";
-    }
-    echo " /></td></tr>\n";
+    echo "value='{$_SESSION['formdata']['add_site']['county']}' /></td></tr>\n";
 
-    echo "<tr><th>{$strCountry} <sup class='red'>*</sup></th><td>";
+    echo "<tr><th>{$strCountry}</th><td>";
     if ($_SESSION['formdata']['add_site']['country'] != "")
     {
         echo country_drop_down('country', $_SESSION['formdata']['add_site']['country'])."</td></tr>\n";
@@ -93,34 +73,20 @@ if ($action == "showform" OR $action == '')
     echo " /></td></tr>\n";
 
     echo "<tr><th>{$strTelephone}</th><td><input maxlength='255' name='telephone' size='30'";
-    if ($_SESSION['formdata']['add_site']['telephone'] != "")
-    {
-        echo "value='{$_SESSION['formdata']['add_site']['telephone']}'";
-    }
-    echo " /></td></tr>\n";
+    echo "value='{$_SESSION['formdata']['add_site']['telephone']}' /></td></tr>\n";
 
-    echo "<tr><th>{$strEmail} <sup class='red'>*</sup></th><td><input maxlength='255' name='email' size='30'";
-    if ($_SESSION['formdata']['add_site']['email'] != "")
-    {
-        echo "value='{$_SESSION['formdata']['add_site']['email']}'";
-    }
-    echo " /></td></tr>\n";
+    echo "<tr><th>{$strEmail}</th><td>";
+    echo "<input class='required' maxlength='255' name='email' size='30'";
+    echo "value='{$_SESSION['formdata']['add_site']['email']}' />";
+    echo " <span class='required'>{$strRequired}</span></td></tr>\n";
 
     echo "<tr><th></th><td><a href=\"javascript:void(0);\" onclick=\"$('hidden').toggle();\">{$strMore}</a></td></tr>\n";
     echo "<tbody id='hidden' class='hidden' style='display:none'>";
     echo "<tr><th>{$strFax}</th><td><input maxlength='255' name='fax' size='30'";
-    if ($_SESSION['formdata']['add_site']['fax'] != "")
-    {
-        echo "value='{$_SESSION['formdata']['add_site']['fax']}'";
-    }
-    echo " /></td></tr>\n";
+    echo "value='{$_SESSION['formdata']['add_site']['fax']}' /></td></tr>\n";
 
     echo "<tr><th>{$strWebsite}</th><td><input maxlength='255' name='websiteurl' size='30'";
-    if ($_SESSION['formdata']['add_site']['websiteurl'] != "")
-    {
-        echo "value='{$_SESSION['formdata']['add_site']['websiteurl']}'";
-    }
-    echo " /></td></tr>\n";
+    echo "value='{$_SESSION['formdata']['add_site']['websiteurl']}' /></td></tr>\n";
 
     echo "<tr><th>{$strSiteType}</th><td>";
     if ($_SESSION['formdata']['add_site']['typeid'] != "")
@@ -144,11 +110,7 @@ if ($action == "showform" OR $action == '')
 
     echo "</td></tr>\n";
     echo "<tr><th>{$strNotes}</th><td><textarea cols='30' name='notes' rows='5'>";
-    if ($_SESSION['formdata']['add_site']['notes'] != "")
-    {
-        echo $_SESSION['formdata']['add_site']['notes'];
-    }
-
+    echo $_SESSION['formdata']['add_site']['notes'];
     echo "</textarea></td></tr>\n";
     echo "</tbody>";
     echo "</table>\n";
