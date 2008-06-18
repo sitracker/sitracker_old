@@ -25,36 +25,50 @@ $rid = cleanvar($_REQUEST['rid']);
 switch ($action)
 {
     case 'add':
-        // First check there isn't already a relationship to that incident
-        $sql = "SELECT id FROM `{$dbRelatedIncidents}` WHERE (incidentid='$relatedid' AND relatedid='$id') OR (relatedid='$relatedid' AND incidentid='$id')";
+        // First check that the incident we're trying to relate to actually exists
+        $sql = "SELECT COUNT(id) FROM `{$dbIncidents}` WHERE id = $relatedid";
         $result = mysql_query($sql);
-        if (mysql_num_rows($result) < 1 AND $relatedid!=$id)
+        list($countincidents) = mysql_fetch_row($result);
+        if ($countincidents > 0)
         {
-            echo "<p align='center'>Adding a relation</p>";
-            switch ($relation)
+            // Next check there isn't already a relationship to that incident
+            $sql = "SELECT id FROM `{$dbRelatedIncidents}` WHERE (incidentid='$relatedid' AND relatedid='$id') OR (relatedid='$relatedid' AND incidentid='$id')";
+            $result = mysql_query($sql);
+            if (mysql_num_rows($result) < 1 AND $relatedid!=$id)
             {
-                case 'sibling':
-                    $sql = "INSERT INTO `{$dbRelatedIncidents}` (incidentid, relation, relatedid, owner) ";
-                    $sql .= "VALUES ('$id', 'sibling', '$relatedid', '{$_SESSION['userid']}')";
-                    mysql_query($sql);
-                    if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+                echo "<p align='center'>Adding a relation</p>";
+                switch ($relation)
+                {
+                    case 'sibling':
+                        $sql = "INSERT INTO `{$dbRelatedIncidents}` (incidentid, relation, relatedid, owner) ";
+                        $sql .= "VALUES ('$id', 'sibling', '$relatedid', '{$_SESSION['userid']}')";
+                        mysql_query($sql);
+                        if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
-                    // Insert an entry into the update log for this incident
-                    $sql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, timestamp, currentowner, customervisibility, sla, bodytext) ";
-                    $sql .= "VALUES ('$id', '".$sit[2]."', 'editing', '$now', '".$sit[2]."', 'hide', '','Added relationship with Incident $relatedid')";
-                    mysql_query($sql);
-                    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+                        // Insert an entry into the update log for this incident
+                        $sql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, timestamp, currentowner, customervisibility, sla, bodytext) ";
+                        $sql .= "VALUES ('$id', '".$sit[2]."', 'editing', '$now', '".$sit[2]."', 'hide', '','Added relationship with Incident $relatedid')";
+                        mysql_query($sql);
+                        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
-                    // Insert an entry into the update log for the related incident
-                    $sql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, timestamp, currentowner, customervisibility, sla, bodytext) ";
-                    $sql .= "VALUES ('$relatedid', '".$sit[2]."', 'editing', '$now', '".$sit[2]."', 'hide', '','Added relationship with Incident $id')";
-                    mysql_query($sql);
-                    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-                break;
+                        // Insert an entry into the update log for the related incident
+                        $sql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, timestamp, currentowner, customervisibility, sla, bodytext) ";
+                        $sql .= "VALUES ('$relatedid', '".$sit[2]."', 'editing', '$now', '".$sit[2]."', 'hide', '','Added relationship with Incident $id')";
+                        mysql_query($sql);
+                        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+                    break;
+                }
+                // TODO v3.2x Child/Parent incident relationships
             }
-            // TODO v3.2x Child/Parent incident relationships
+            else
+            {
+                echo "<br /><p class='error' align='center'>A relationship already exists with that incident</p>";
+            }
         }
-        else echo "<br /><p class='error' align='center'>A relationship already exists with that incident</p>";
+        else
+        {
+            echo "<br /><p class='error' align='center'>".sprintf($strNoResultsFor, sprintf($strIncidentNum, $relatedid))."</p>";
+        }
     break;
 
     case 'delete':
@@ -124,7 +138,7 @@ if (mysql_num_rows($rresult) >= 1)
 }
 else echo "<p align='center'>There are no related incidents</p>";
 
-echo "<form action='incident_relationships.php' method='post'>";
+echo "\n<form action='incident_relationships.php' method='post'>";
 echo "<h2>Add a relation</h2>";
 echo "<table summary='Add a relationship' class='vertical'>";
 echo "<tr><th>Incident ID</th><td><input type='text' name='relatedid' size='10' /></td></tr>\n";
