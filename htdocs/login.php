@@ -164,29 +164,31 @@ elseif ($CONFIG['portal'] == TRUE)
         //get admin contacts
         if (admin_contact_contracts($_SESSION['contactid'], $_SESSION['siteid']) != NULL)
         {
-            $_SESSION['contracts'] = admin_contact_contracts($_SESSION['contactid'], $_SESSION['siteid']);
+            $admincontracts = admin_contact_contracts($_SESSION['contactid'], $_SESSION['siteid']);
             $_SESSION['usertype'] = 'admin';
         }
-        
+
         //get named contact contracts
         if (contact_contracts($_SESSION['contactid'], $_SESSION['siteid']) != NULL)
         {
-            $_SESSION['contracts'] .= contact_contracts($_SESSION['contactid'], $_SESSION['siteid']);
+            $contactcontracts = contact_contracts($_SESSION['contactid'], $_SESSION['siteid']);
             if (!isset($_SESSION['usertype']))
             {
                $_SESSION['usertype'] = 'contact';
             }
         }
-        
+
         //get other contracts
         if (all_contact_contracts($_SESSION['contactid'], $_SESSION['siteid']) != NULL)
         {
-            $_SESSION['contracts'] .= all_contact_contracts($_SESSION['contactid'], $_SESSION['siteid']);
+            $allcontracts = all_contact_contracts($_SESSION['contactid'], $_SESSION['siteid']);
             if (!isset($_SESSION['usertype']))
             {
                 $_SESSION['usertype'] = 'user';
             }
         }
+        
+        $_SESSION['contracts'] = array_merge((array)$admincontracts, (array)$contactcontracts, (array)$allcontracts);
         
         //get entitlement
         $sql = "SELECT DISTINCT m.*, p.name, ";
