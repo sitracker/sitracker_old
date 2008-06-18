@@ -7586,8 +7586,6 @@ function admin_contact_contracts($contactid, $siteid)
         while ($row = mysql_fetch_object($result))
         {
             $contractsarray[] = $row->id;
-            echo "<pre>$i</pre><br />";
-            $i++;
         }
     }
 
