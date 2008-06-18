@@ -60,8 +60,8 @@ if (empty($mode))
     }
 
     echo "</th></tr>\n";
-    echo "<tr><th>{$strUsername}:</th><td>{$user->username}</td></tr>";
-    echo "<tr><th>{$strRole}:</th>";
+    echo "<tr><th>{$strUsername}</th><td>{$user->username}</td></tr>";
+    echo "<tr><th>{$strRole}</th>";
     if ($edituserid == $sit[2] OR $edituserid == 1)
     {
         echo "<td>".db_read_column('rolename', $dbRoles, $user->roleid)."</td>";
@@ -72,28 +72,33 @@ if (empty($mode))
     }
 
     echo "</tr>";
-    echo "<tr><th>{$strRealName}:</th><td><input maxlength='50' name='realname' size='30' type='text' value=\"".$user->realname."\" /></td></tr>\n";
-    echo "<tr><th>{$strJobTitle}:</th><td><input maxlength='50' name='jobtitle' size='30' type='text' value=\"".$user->title."\" /></td></tr>\n";
-    echo "<tr><th>{$strQualifications}: ".help_link('QualificationsTip')."</th>";
+    echo "<tr><th>{$strRealName}</th>";
+    echo "<td><input class='required' maxlength='50' name='realname' size='30'";
+    echo " type='text' value=\"".$user->realname."\" />";
+    echo " <span class='required'>{$strRequired}</span></td></tr>\n";
+    echo "<tr><th>{$strJobTitle}</th>";
+    echo "<td><input maxlength='50' name='jobtitle' size='30' type='text' ";
+    echo "value=\"".$user->title."\" /></td></tr>\n";
+    echo "<tr><th>{$strQualifications} ".help_link('QualificationsTip')."</th>";
     echo "<td><input maxlength='100' size='100' name='qualifications' value='".$user->qualifications."' /></td></tr>\n";
-    echo "<tr><th>{$strEmailSignature}: ".help_link('EmailSignatureTip')."</th>";
+    echo "<tr><th>{$strEmailSignature} ".help_link('EmailSignatureTip')."</th>";
     echo "<td><textarea name='signature' rows='4' cols='40'>".strip_tags($user->signature)."</textarea></td></tr>\n";
     $entitlement = user_holiday_entitlement($edituserid);
     if ($edituserpermission && $edituserid!=$sit[2])
     {
-        echo "<tr><th>{$strHolidayEntitlement}:</th><td>";
+        echo "<tr><th>{$strHolidayEntitlement}</th><td>";
         echo "<input type='text' name='holiday_entitlement' value='$entitlement' size='2' /> {$strDays}";
         echo "</td></tr>";
     }
     elseif ($entitlement > 0)
     {
         $holidaystaken=user_count_holidays($edituserid, 1);
-        echo "<tr><th>{$strHolidayEntitlement}:</th><td>";
+        echo "<tr><th>{$strHolidayEntitlement}</th><td>";
         echo "{$entitlement} {$strdays}, ";
         echo "{$holidaystaken} {$strtaken}, ";
         echo sprintf($strRemaining, $entitlement-$holidaystaken);
         echo "</td></tr>\n";
-        echo "<tr><th>{$strOtherLeave}:</th><td>";
+        echo "<tr><th>{$strOtherLeave}</th><td>";
         echo user_count_holidays($edituserid, 2)." {$strdayssick}, ";
         echo user_count_holidays($edituserid, 3)." {$strdaysworkingaway}, ";
         echo user_count_holidays($edituserid, 4)." {$strdaystraining}";
@@ -102,7 +107,7 @@ if (empty($mode))
         echo "</td></tr>";
     }
 
-    echo "<tr><th>{$strGroupMembership}:</th><td valign='top'>";
+    echo "<tr><th>{$strGroupMembership}</th><td valign='top'>";
 
     if ($user->groupid >= 1)
     {
@@ -128,24 +133,27 @@ if (empty($mode))
         $userdisable = FALSE;
     }
 
-    echo "<tr><th>{$strStatus}:</th><td>";
+    echo "<tr><th>{$strStatus}</th><td>";
     echo userstatus_drop_down("status", $user->status, $userdisable);
     echo "</td></tr>\n";
-    echo "<tr><th>{$strAccepting} {$strIncidents}:</th><td>";
+    echo "<tr><th>{$strAccepting} {$strIncidents}</th><td>";
     echo accepting_drop_down("accepting", $edituserid);
     echo "</td></tr>\n";
-    echo "<tr><th>{$strMessage}: ".help_link('MessageTip')."</th>";
+    echo "<tr><th>{$strMessage} ".help_link('MessageTip')."</th>";
     echo "<td><textarea name='message' rows='4' cols='40'>".strip_tags($user->message)."</textarea></td></tr>\n";
     echo "<tr><th colspan='2'>{$strContactDetails}</th></tr>";
-    echo "<tr id='email'><th>{$strEmail}:<sup class='red'>*</sup></th><td><input maxlength='50' name='email' size='30' type='text' value='".strip_tags($user->email)."' /></td></tr>";
-    echo "<tr id='phone'><th>{$strTelephone}:</th><td><input maxlength='50' name='phone' size='30' type='text' value='".strip_tags($user->phone)."' /></td></tr>";
-    echo "<tr><th>{$strFax}:</th><td><input maxlength='50' name='fax' size='30' type='text' value='".strip_tags($user->fax)."' /></td></tr>";
-    echo "<tr><th>{$strMobile}:</th><td><input maxlength='50' name='mobile' size='30' type='text' value='".user_mobile($edituserid)."' /></td></tr>";
-    echo "<tr><th>AIM: <img src=\"images/icons/{$iconset}/16x16/aim.png\" width=\"16\" height=\"16\" alt=\"AIM\" /></th>";
+    echo "<tr id='email'><th>{$strEmail}</th>";
+    echo "<td><input class='required' maxlength='50' name='email' size='30' ";
+    echo "type='text' value='".strip_tags($user->email)."' />";
+    echo " <span class='required'>{$strRequired}</span></td></tr>";
+    echo "<tr id='phone'><th>{$strTelephone}</th><td><input maxlength='50' name='phone' size='30' type='text' value='".strip_tags($user->phone)."' /></td></tr>";
+    echo "<tr><th>{$strFax}</th><td><input maxlength='50' name='fax' size='30' type='text' value='".strip_tags($user->fax)."' /></td></tr>";
+    echo "<tr><th>{$strMobile}</th><td><input maxlength='50' name='mobile' size='30' type='text' value='".user_mobile($edituserid)."' /></td></tr>";
+    echo "<tr><th>AIM ".icon('aim', 16, 'AIM')."</th>";
     echo "<td><input maxlength=\"50\" name=\"aim\" size=\"30\" type=\"text\" value=\"".strip_tags($user->aim)."\" /></td></tr>";
-    echo "<tr><th>ICQ: <img src=\"images/icons/{$iconset}/16x16/icq.png\" width=\"16\" height=\"16\" alt=\"ICQ\" /></th>";
+    echo "<tr><th>ICQ ".icon('icq', 16, 'ICQ')."</th>";
     echo "<td><input maxlength=\"50\" name=\"icq\" size=\"30\" type=\"text\" value=\"".strip_tags($user->icq)."\" /></td></tr>";
-    echo "<tr><th>MSN: <img src=\"images/icons/{$iconset}/16x16/msn.png\" width=\"16\" height=\"16\" alt=\"MSN\" /></th>";
+    echo "<tr><th>MSN ".icon('msn', 16, 'MSN')."</th>";
     echo "<td><input maxlength=\"50\" name=\"msn\" size=\"30\" type=\"text\" value=\"".strip_tags($user->msn)."\" /></td></tr>";
 
     echo "<tr><th colspan='2'>{$strDisplayPreferences}</th></tr>\n";
@@ -175,13 +183,13 @@ if (empty($mode))
     echo "</td></tr>\n";
 
     if ($user->var_utc_offset == '') $user->var_utc_offset = 0;
-    echo "<tr><th>{$strUTCOffset}:</th><td>".array_drop_down($availabletimezones, 'utcoffset', $user->var_utc_offset)."</td></tr>\n";
+    echo "<tr><th>{$strUTCOffset}</th><td>".array_drop_down($availabletimezones, 'utcoffset', $user->var_utc_offset)."</td></tr>\n";
 
-    echo "<tr><th>{$strInterfaceStyle}:</th><td>".interfacestyle_drop_down('style', $user->var_style)."</td></tr>\n";
-    echo "<tr><th>{$strIncidentRefresh}:</th>";
+    echo "<tr><th>{$strInterfaceStyle}</th><td>".interfacestyle_drop_down('style', $user->var_style)."</td></tr>\n";
+    echo "<tr><th>{$strIncidentRefresh}</th>";
     echo "<td><input maxlength='10' name='incidentrefresh' size='3' type='text' value=\"{$user->var_incident_refresh}\" /> {$strSeconds}</td></tr>\n";
 
-    echo "<tr><th>{$strIncidentLogOrder}:</th><td>";
+    echo "<tr><th>{$strIncidentLogOrder}</th><td>";
     echo "<select name='updateorder'>";
     echo "<option ";
     if ($user->var_update_order == "desc")
@@ -200,7 +208,7 @@ if (empty($mode))
     echo "</select>";
     echo "</td></tr>\n";
 
-    echo "<tr><th>{$strIncidentUpdatesPerPage}:</th>";
+    echo "<tr><th>{$strIncidentUpdatesPerPage}</th>";
     echo "<td><input maxlength='5' name='updatesperpage' size='3' type='text' value=\"".$user->var_num_updates_view."\" /></td></tr>\n";
 
     echo "<tr><th colspan='2'>{$strNotifications}</th></tr>\n";
@@ -213,9 +221,9 @@ if (empty($mode))
     {
         echo "<tr class='password'><th colspan='2'>{$strChangePassword}</th></tr>";
         echo "<tr class='password'><th>&nbsp;</th><td>{$strToChangePassword}</td></tr>";
-        echo "<tr class='password'><th>{$strOldPassword}:</th><td><input maxlength='50' name='oldpassword' size='30' type='password' /></td></tr>";
-        echo "<tr class='password'><th>{$strNewPassword}:</th><td><input maxlength='50' name='newpassword1' size='30' type='password' /></td></tr>";
-        echo "<tr class='password'><th>{$strConfirmNewPassword}:</th><td><input maxlength='50' name='newpassword2' size='30' type='password' /></td></tr>";
+        echo "<tr class='password'><th>{$strOldPassword}</th><td><input maxlength='50' name='oldpassword' size='30' type='password' /></td></tr>";
+        echo "<tr class='password'><th>{$strNewPassword}</th><td><input maxlength='50' name='newpassword1' size='30' type='password' /></td></tr>";
+        echo "<tr class='password'><th>{$strConfirmNewPassword}</th><td><input maxlength='50' name='newpassword2' size='30' type='password' /></td></tr>";
     }
     echo "</table>\n";
     echo "<input type='hidden' name='userid' value='{$edituserid}' />";
