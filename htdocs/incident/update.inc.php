@@ -343,7 +343,7 @@ function display_update_page($draftid=-1)
     {
         $checkbox = "checked='checked'";
     }
-    echo "<label><input type='checkbox' name='cust_vis' id='cust_vis' {$checkbox} value='yes' /> Make this update visible to the incident reporter<label><br />"; //FIXME i18n Make this update visible to the incident reporter
+    echo "<label><input type='checkbox' name='cust_vis' id='cust_vis' {$checkbox} value='yes' /> Make this update visible in the portal<label><br />"; //FIXME i18n Make this update visible in the portal
     echo bbcode_toolbar('updatelog');
     echo "<textarea name='bodytext' id='updatelog' rows='13' cols='50'>";
     if ($draftid != -1) echo $draftobj->content;
