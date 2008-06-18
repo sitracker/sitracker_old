@@ -170,7 +170,8 @@ echo colheader('action', $strAction, FALSE, FALSE, FALSE, FALSE, 10);
 echo "</tr>";
 
 $sql = "SELECT * FROM `{$dbContacts}` ";
-$sql .= "WHERE siteid='{$_SESSION['siteid']}'";
+$sql .= "WHERE siteid='{$_SESSION['siteid']}' ";
+$sql .= "AND active = TRUE";
 
 if ($result = mysql_query($sql))
 {
