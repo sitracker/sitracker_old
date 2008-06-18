@@ -24,24 +24,27 @@ var id = <?php echo $q; ?>;
 if (!isNaN(id))
 {
     <?php
-        $q = intval($q);
-        $sql = "SELECT id FROM `{$dbIncidents}` WHERE id='$q'";
-        $result = mysql_query($sql);
-        if (mysql_num_rows($result) > 0)
+        if (is_numeric($q))
         {
-        ?>
-            window.location = 'incident_details.php?id=' + id + '&win=jump&return=<?php
-            if(!empty($_SERVER['HTTP_REFERER']))
+            $sql = "SELECT id FROM `{$dbIncidents}` WHERE id='$q'";
+            $result = mysql_query($sql);
+            if (mysql_num_rows($result) > 0)
             {
-                echo $_SERVER['HTTP_REFERER'];
+            ?>
+                window.location = 'incident_details.php?id=' + id + '&win=jump&return=<?php
+                if(!empty($_SERVER['HTTP_REFERER']))
+                {
+                    echo $_SERVER['HTTP_REFERER'];
+                }
+                else
+                {
+                    echo $_CONFIG['application_webpath'];
+                }
+                ?>';
+            <?php
             }
-            else
-            {
-                echo $_CONFIG['application_webpath'];
-            }
-            ?>';
-        <?php
-        }?>
+    }?>
+        
 }
 </script>
 <?php
