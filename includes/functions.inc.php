@@ -5985,23 +5985,20 @@ function show_notes($linkid, $refid, $delete = TRUE)
         while ($note = mysql_fetch_object($result))
         {
             $html .= "<div class='detailhead note'> <div class='detaildate'>".readable_date(mysqlts2date($note->timestamp));
-            if ($sit[2]==$note->userid)
+            if ($delete)
             {
-                if ($delete)
-                {
-                    $html .= "<a href='delete_note.php?id={$note->id}&amp;rpath=";
-                    $html .= "{$_SERVER['PHP_SELF']}?{$_SERVER['QUERY_STRING']}' ";
-                    $html .= "onclick=\"return confirm_action('{$strAreYouSureDelete}');\">";
-                    $html .= icon('delete', 16)."</a>";
-                }
-                $html .= "</div>\n";
-                $html .= icon('note', 16)." ";
-                $html .= sprintf($GLOBALS['strNoteAddedBy'], user_realname($note->userid,TRUE));
-                $html .= "</div>\n";
-                $html .= "<div class='detailentry note'>";
-                $html .= nl2br(bbcode($note->bodytext));
-                $html .= "</div>\n";
+                $html .= "<a href='delete_note.php?id={$note->id}&amp;rpath=";
+                $html .= "{$_SERVER['PHP_SELF']}?{$_SERVER['QUERY_STRING']}' ";
+                $html .= "onclick=\"return confirm_action('{$strAreYouSureDelete}');\">";
+                $html .= icon('delete', 16)."</a>";
             }
+            $html .= "</div>\n"; // /detaildate
+            $html .= icon('note', 16)." ";
+            $html .= sprintf($GLOBALS['strNoteAddedBy'], user_realname($note->userid,TRUE));
+            $html .= "</div>\n"; // detailhead
+            $html .= "<div class='detailentry note'>";
+            $html .= nl2br(bbcode($note->bodytext));
+            $html .= "</div>\n";
         }
     }
     return $html;
@@ -7567,17 +7564,19 @@ function supported_contacts($maintid)
 * Return an array of contracts which the contact is an admin contact for
 * @author Kieran Hogg
 * @param $maintid integer - ID of the contract
-* @returns array of supported contracts, NULL if none
+* @param $siteid integer - The ID of the site
+* @returns array of contract ID's for which the given contactid is an admin contact, NULL if none
 **/
 function admin_contact_contracts($contactid, $siteid)
 {
     $sql = "SELECT DISTINCT m.id ";
     $sql .= "FROM `{$GLOBALS['dbMaintenance']}` AS m,
-            `{$GLOBALS['dbContacts']}` AS c,
-            `{$GLOBALS['dbSites']}` AS s ";
-    $sql .= "WHERE m.admincontact={$contactid} ";
+            `{$GLOBALS['dbSites']}` AS s,
+            `{$GLOBALS['dbContacts']}` AS c ";
+    $sql .= "WHERE m.site";
     $sql .= "AND m.site={$siteid} ";
     $sql .= "AND c.siteid={$siteid}";
+
 
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
