@@ -2164,6 +2164,8 @@ ALTER TABLE `{$dbIncidents}` ADD FULLTEXT(title);
 ALTER TABLE `{$dbMaintenance}` ADD INDEX ( `var_incident_visible_all` );
 ALTER TABLE `{$dbMaintenance}` ADD INDEX ( `var_incident_visible_contacts` ) ;
 
+ALTER DATABASE `{$CONFIG['db_database']}` DEFAULT CHARACTER SET utf8;
+
 --  !!WARNING!! can take a while on large tables
 ALTER TABLE `{$dbUpdates}` ADD FULLTEXT ( `bodytext`) ;
 
