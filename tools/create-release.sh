@@ -8,8 +8,9 @@
 ##
 ## Authors: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 ##          Paul Heaney <paulheaney[at]users.sourceforge.net>
+##          Kieran Hogg <kieran_hogg[at]users.sourceforge.net>
 # Requirements:
-#    svn2cl
+#    svn        svn2cl     wget
 
 TMPDIR=/tmp/sit.$$/build
 PUBDIR=/tmp/sit.$$/packages
@@ -26,17 +27,38 @@ else
     SVNBRANCH=${args[0]}
 fi
 
+echo "Checking out to $TMPDIR"
+
 # We checkout rather than export so we can determine the svn revision
-svn co --non-interactive https://sitracker.svn.sourceforge.net/svnroot/sitracker/$SVNBRANCH sit
+svn co --non-interactive https://sitracker.svn.sourceforge.net/svnroot/sitracker/$SVNBRANCH sit > /dev/null
 cd sit
 
 SVNREV=`svnversion .`
 
-# Now we've got the revision we can get rid of all the ".svn" directories.
-find -name "\.svn" | xargs rm -rf
+LASTRELVER=`wget -q -O - https://sourceforge.net/export/rss2_projfiles.php?group_id=160319 | grep -m1 "<title>stable" | grep -o "[0-9]\.[0-9][0-9]"`
+if [ -z LASTRELVER ]; then
+   LASTRELVER="3.30"
+fi
+
+# Get revision number of a branch
+LASTRELREV=`svn info https://sitracker.svn.sourceforge.net/svnroot/sitracker/tags/release-$LASTRELVER 2> /dev/null | grep 'Rev:' | cut -d' ' -f4`
+echo "Last release was $LASTRELVER rev $LASTRELREV"
+
+#svn2cl -o DEBIAN/changelog
+# svn2cl --reparagraph --include-rev -o DEBIAN/changelog
+# svn2cl --group-by-day --include-rev -o DEBIAN/changelog
+# -i -r "HEAD:{`date -d '7 days ago' '+%F %T'`}" 
+#svn2cl ---revision HEAD:$LASTRELREV -group-by-day --include-rev --authors doc/AUTHORS -o DEBIAN/changelog
+
+svn2cl --revision HEAD:$LASTRELREV --group-by-day --include-rev --authors "doc/AUTHORS" -o "$TMPDIR/changelog"
 
 # Now grab the app version number
 SITVER=$(grep ^\$application_version.= includes/functions.inc.php|awk -F "'|'" '{print $2}')
+
+# Now prepend the version number to the changlog
+echo -e "sit ($SITVER) unstable; urgency=low\n\n" > "DEBIAN/changelog"
+cat "$TMPDIR/changelog" >> "DEBIAN/changelog"
+rm "$TMPDIR/changelog"
 
 # Now find out if this is a proper release
 SITREV=$(grep ^\$application_revision.= includes/functions.inc.php|awk -F "'|'" '{print $2}')
@@ -55,9 +77,9 @@ elif [ $SITREV = "beta3" ]; then
 elif [ $SITREV = "beta4" ]; then
         RELNAME="sit_$SITVER+$SITREV"
 elif [ $SITREV = "svn" ]; then
-	RELNAME="sit_$SITVER+$SITREV$SVNREV"
+        RELNAME="sit_$SITVER+$SITREV$SVNREV"
 else
-	RELNAME="sit_$SITVER+$SITREV"
+        RELNAME="sit_$SITVER+$SITREV"
 fi
 
 
@@ -71,6 +93,8 @@ if [ $ERR -ne 0 ]; then
     #exit 1;
 fi
 
+# Now we've got the revision we can get rid of all the ".svn" directories.
+find -name "\.svn" | xargs rm -rf
 
 echo "Creating release: $RELNAME"
 
@@ -85,12 +109,6 @@ mkdir -p "$PUBDIR"
 
 # Create a source tar file
 tar -czf "$RELNAME.orig.tar.gz" $SITDIR
-
-echo "sit ($SITVER) unstable; urgency=low" > "$SITDIR/DEBIAN/changelog"
-
-# TODO determine the svn rev of the previous release so we can...
-# TODO append the svn changelog *since the last release only* into the debian/changelog file
-#svn2cl -o debian/changelog
 
 # build a .deb package
 
@@ -111,6 +129,7 @@ cp -r $TMPDIR/$SITDIR/README /tmp/sit.$$/deb/usr/share/sit/
 cp -r $TMPDIR/$SITDIR/DEBIAN /tmp/sit.$$/deb/
 cp -r $TMPDIR/$SITDIR/conf/etc /tmp/sit.$$/deb/
 
+echo "SUDO is required for changing file ownership in order to make a debian package"
 sudo chown -R root:root /tmp/sit.$$/deb/usr
 sudo chown -R root:root /tmp/sit.$$/deb/etc
 chmod 755 /tmp/sit.$$/deb/DEBIAN/post*
@@ -121,3 +140,4 @@ dpkg -b /tmp/sit.$$/deb/ $PUBDIR/$SITDIR.deb
 # Make a tar.gz package
 cp $TMPDIR/$RELNAME.orig.tar.gz $PUBDIR/$RELNAME.tar.gz
 
+echo "Release created in /tmp/sit.$$/";
