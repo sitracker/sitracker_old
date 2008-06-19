@@ -230,8 +230,9 @@ if (!empty($q))
         while($row = mysql_fetch_object($incidentresult))
         {
             $url = "javascript:incident_details_window('{$row->id}', 'incident{$row->id}')";
-            echo "<tr class='{$shade}'><td><a href=\"{$url}\">{$row->id}</a></td>
-                    <td>{$row->title}</td>
+            echo "<tr class='{$shade}'>
+                    <td><a href=\"incident_details.php?id={$row->id}\">{$row->id}</a></td>
+                    <td><a href=\"{$url}\">{$row->title}</a></td>
                     <td>".search_highlight($row->bodytext, $search)."</td>
                     <td>".number_format($row->score, 2)."</td>
                     <td>".ldate($CONFIG['dateformat_datetime'], $row->timestamp)."</td></tr>";
