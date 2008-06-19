@@ -219,7 +219,7 @@ function trigger_replace_specials($triggerid, $string, $paramarray)
             //this checks if it's a multiply-defined variable
             if (is_numeric($key))
             {
-                $trigger_replaces = replace_vars(&$ttvar[$key], &$triggerid, &$identifier, &$paramarray);
+                $trigger_replaces = replace_vars($ttvar[$key], $triggerid, $identifier, $paramarray);
                 if(!empty($trigger_replaces))
                 {
                     $trigger_regex[] = $trigger_replaces['trigger_regex'];
@@ -230,7 +230,7 @@ function trigger_replace_specials($triggerid, $string, $paramarray)
         }
         if ($multiple == FALSE)
         {
-            $trigger_replaces = replace_vars(&$ttvar, &$triggerid, &$identifier, &$paramarray);
+            $trigger_replaces = replace_vars($ttvar, $triggerid, $identifier, $paramarray);
             if(!empty($trigger_replaces))
             {
                 $trigger_regex[] = $trigger_replaces['trigger_regex'];
@@ -253,7 +253,7 @@ function trigger_replace_specials($triggerid, $string, $paramarray)
     * we're not dealing with a trigger
     * @return mixed array if replacement found, NULL if not
 */
-function replace_vars($ttvar, $triggerid, $identifier, $paramarray, $required='')
+function replace_vars(&$ttvar, &$triggerid, &$identifier, &$paramarray, $required='')
 {
     global $triggerarray, $ttvararray, $CONFIG;
 
@@ -329,7 +329,7 @@ function replace_specials($string, $paramarray)
             //this checks if it's a multiply-defined variable
             if (is_numeric($key))
             {
-                $trigger_replaces = replace_vars(&$ttvar[$key], &$triggerid, &$identifier, &$paramarray, $required);
+                $trigger_replaces = replace_vars($ttvar[$key], $triggerid, $identifier, $paramarray, $required);
                 if(!empty($trigger_replaces))
                 {
                     $trigger_regex[] = $trigger_replaces['trigger_regex'];
@@ -340,7 +340,7 @@ function replace_specials($string, $paramarray)
         }
         if ($multiple == FALSE)
         {
-            $trigger_replaces = replace_vars(&$ttvar, &$triggerid, &$identifier, &$paramarray, $required);
+            $trigger_replaces = replace_vars($ttvar, $triggerid, $identifier, $paramarray, $required);
             if(!empty($trigger_replaces))
             {
                 $trigger_regex[] = $trigger_replaces['trigger_regex'];
@@ -449,7 +449,7 @@ function create_trigger_notice($userid, $noticetext='', $triggertype='',
             {
                 $noticetext = $notice->text;
             }
-            
+
             if (substr($notice->linktext, 0, 3) == 'str')
             {
                 $noticelinktext = $GLOBALS[$notice->linktext];
@@ -458,7 +458,7 @@ function create_trigger_notice($userid, $noticetext='', $triggertype='',
             {
                 $noticelinktext = $notice->linktext;
             }
-            
+
             $noticetext = mysql_escape_string(trigger_replace_specials($triggertype, $noticetext, $paramarray));
             $noticelinktext = cleanvar(trigger_replace_specials($triggertype, $noticelinktext, $paramarray));
             $noticelink = cleanvar(trigger_replace_specials($triggertype, $notice->link, $paramarray));
