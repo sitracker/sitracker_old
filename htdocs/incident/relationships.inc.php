@@ -18,7 +18,7 @@ if (realpath(__FILE__) == realpath($_SERVER['SCRIPT_FILENAME']))
 
 // External variables
 $action = $_REQUEST['action'];
-$relatedid = cleanvar($_POST['relatedid']);
+$relatedid = intval(cleanvar($_POST['relatedid']));
 $relation = cleanvar($_POST['relation']);
 $rid = cleanvar($_REQUEST['rid']);
 
@@ -28,6 +28,7 @@ switch ($action)
         // First check that the incident we're trying to relate to actually exists
         $sql = "SELECT COUNT(id) FROM `{$dbIncidents}` WHERE id = $relatedid";
         $result = mysql_query($sql);
+        if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
         list($countincidents) = mysql_fetch_row($result);
         if ($countincidents > 0)
         {
