@@ -8951,7 +8951,7 @@ function process_add_contact($mode = 'internal')
             {
                 if ($CONFIG['portal'] AND $_POST['emaildetails'] == 'on')
                 {
-                    trigger('TRIGGER_NEW_CONTACT', array('contactid' => $newid, 'prepasword' => $prepassword, 'userid' => $sit[2]));
+                    trigger('TRIGGER_NEW_CONTACT', array('contactid' => $newid, 'prepassword' => $prepassword, 'userid' => $sit[2]));
                 }
 
                 if ($mode == 'internal')
