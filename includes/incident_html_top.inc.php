@@ -54,7 +54,7 @@ if (mysql_error()) trigger_error(mysql_error(), E_USER_WARNING);
 <body onload="self.focus()">
 
 <?php
-$incidentid=$id;
+$incidentid = $id;
 // Retrieve incident
 // extract incident details
 $sql  = "SELECT *, i.id AS incidentid, ";
@@ -93,7 +93,7 @@ else
 $product_name = product_name($incident->product);
 if ($incident->softwareid > 0)
 {
-    $software_name=software_name($incident->softwareid);
+    $software_name = software_name($incident->softwareid);
 }
 
 $servicelevel_id = maintenance_servicelevel($incident->maintenanceid);
@@ -155,7 +155,7 @@ $reviewsince = incident_get_next_review($incidentid);  // time since last review
 $reviewtarget = ($servicelevel->review_days * $working_day_mins);          // how often reviews should happen in minutes
 if ($reviewtarget > 0)
 {
-    $reviewremain=($reviewtarget - $reviewsince);
+    $reviewremain = ($reviewtarget - $reviewsince);
 }
 else
 {
@@ -163,13 +163,13 @@ else
 }
 
 // Color the title bar according to the SLA and priority
-$class='';
+$class = '';
 if ($slaremain <> 0 AND $incident->status!=2)
 {
-    if (($slaremain - ($slatarget * ((100 - $CONFIG['notice_threshold']) /100))) < 0 ) $class='notice';
-    if (($slaremain - ($slatarget * ((100 - $CONFIG['urgent_threshold']) /100))) < 0 ) $class='urgent';
-    if (($slaremain - ($slatarget * ((100 - $CONFIG['critical_threshold']) /100))) < 0 ) $class='critical';
-    if ($incidents["priority"]==4) $class='critical';  // Force critical incidents to be critical always
+    if (($slaremain - ($slatarget * ((100 - $CONFIG['notice_threshold']) /100))) < 0 ) $class = 'notice';
+    if (($slaremain - ($slatarget * ((100 - $CONFIG['urgent_threshold']) /100))) < 0 ) $class = 'urgent';
+    if (($slaremain - ($slatarget * ((100 - $CONFIG['critical_threshold']) /100))) < 0 ) $class = 'critical';
+    if ($incidents["priority"] == 4) $class = 'critical';  // Force critical incidents to be critical always
 }
 
 // Print a table showing summary details of the incident
@@ -186,7 +186,7 @@ else
 echo "<div id='navmenu'>";
 if ($menu != 'hide')
 {
-    if ($_REQUEST['win']=='incomingview')
+    if ($_REQUEST['win'] == 'incomingview')
     {
         $insql = "SELECT emailfrom, contactid, updateid, ti.id, timestamp
                 FROM `{$dbTempIncoming}` AS ti, `{$dbUpdates}` AS u

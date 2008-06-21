@@ -527,7 +527,7 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
         $replytofield = cleanvar($_REQUEST['replytofield']);
         $ccfield = cleanvar($_REQUEST['ccfield']);
         $bccfield = cleanvar($_REQUEST['bccfield']);
-        $subjectfield = cleanvar($_REQUEST['subjectfield'],FALSE,TRUE);
+        $subjectfield = cleanvar($_REQUEST['subjectfield'], FALSE, TRUE, FALSE);
         $emailtype = cleanvar($_REQUEST['emailtype']);
         $newincidentstatus = cleanvar($_REQUEST['newincidentstatus']);
         $timetonextaction_none = cleanvar($_REQUEST['timetonextaction_none']);
@@ -537,8 +537,8 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
         $date = cleanvar($_REQUEST['date']);
         $timeoffset = cleanvar($_REQUEST['timeoffset']);
         /*$day = cleanvar($_REQUEST['day']);
-        $month = cleanvar($_REQUEST['month']);
-        */$year = cleanvar($_REQUEST['year']);
+        $month = cleanvar($_REQUEST['month']);*/
+        $year = cleanvar($_REQUEST['year']);
         $target = cleanvar($_REQUEST['target']);
         $chase_customer = cleanvar($_REQUEST['chase_customer']);
         $chase_manager = cleanvar($_REQUEST['chase_manager']);
@@ -558,7 +558,7 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
         if ($_FILES['attachment']['name']!='')       // Should be using this format throughout TPG 13/08/2002
         {
             if (!isset($filename)) $filename = $CONFIG['attachment_fspath'].$_FILES['attachment']['name'];
-            $mv=move_uploaded_file($_FILES['attachment']['tmp_name'], "$filename");    // Added tmp_name TPG 13/08/2002
+            $mv = move_uploaded_file($_FILES['attachment']['tmp_name'], "$filename");    // Added tmp_name TPG 13/08/2002
             if (!mv) throw_error('!Error: Problem moving attachment from temp directory:',$filename);
             $attachmenttype = $_FILES['attachment']['type'];
         }
@@ -569,8 +569,6 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
             exit;
         }
         if ($encoded=='yes')
-
-
 
         $errors = 0;
         // check to field
@@ -607,16 +605,16 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
             $extra_headers .= "\n"; // add an extra crlf to create a null line to separate headers from body
                                 // this appears to be required by some email clients - INL
 
-            $mime = new MIME_mail($fromfield, $tofield, $subjectfield, $bodytext, $extra_headers, $mailerror);
+            $mime = new MIME_mail($fromfield, $tofield, html_entity_decode($subjectfield), $bodytext, $extra_headers, $mailerror);
 
             // check for attachment
             //        if ($_FILES['attachment']['name']!='' || strlen($filename) > 3)
-            if ($filename!='' && strlen($filename) > 3)
+            if ($filename != '' && strlen($filename) > 3)
             {
                 //          if (!isset($filename)) $filename = $attachment_fspath.$_FILES['attachment']['name'];   ??? TPG 13/08/2002
                 ## bugbug move was here
                 if (!file_exists($filename)) throw_error('Error: File did not exist upon processing attachment', $filename);
-                if ($filename=='') throw_error('Error: Filename was blank upon processing attachment', $filename);
+                if ($filename == '') throw_error('Error: Filename was blank upon processing attachment', $filename);
 
                 // Check file size before sending
                 if (filesize($filename) > $CONFIG['upload_max_filesize'] || filesize($filename)==FALSE)
@@ -626,7 +624,7 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
                     // checking file sizes at the client end before the attachment is uploaded. - INL
                 }
 
-                if (preg_match("!/x\-.+!i", $attachmenttype))  $type = OCTET;
+                if (preg_match("!/x\-.+!i", $attachmenttype)) $type = OCTET;
                 else $type = str_replace("\n","",$attachmenttype);
                 $mime -> fattach($filename, "Attachment for incident $id", $type);
             }
@@ -639,33 +637,36 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
             $emailtype = mysql_fetch_object($result);
 
             // actually send the email
-            $mailok=$mime -> send_mail();
+            $mailok = $mime -> send_mail();
 
             // after mail is sent, move the attachment to the incident file attachment directory / timestamp
-            if ($filename!="" && file_exists($filename) && $mailok==TRUE)
+            if ($filename != "" && file_exists($filename) && $mailok == TRUE)
             {
                 // make incident attachment dir if it doesn't exist
-                $umask=umask(0000);
+                $umask = umask(0000);
                 if (!file_exists($CONFIG['attachment_fspath'] . "$id"))
                 {
-                    $mk=mkdir($CONFIG['attachment_fspath'] ."$id", 0770);
+                    $mk = mkdir($CONFIG['attachment_fspath'] ."$id", 0770);
                     if (!$mk) throw_error('Failed creating incident attachment directory after sending mail: ',$CONFIG['attachment_fspath'] .$id);
                 }
-                $mk=mkdir($CONFIG['attachment_fspath'] .$id . "/$now", 0770);
+                $mk = mkdir($CONFIG['attachment_fspath'] .$id . "/$now", 0770);
                 if (!$mk) throw_error('Failed creating incident attachment (timestamp) directory after sending mail: ',$CONFIG['attachment_fspath'] .$id . "/$now");
                 umask($umask);
                 // failes coz renaming file to a directory
-                $filename_parts_array=explode('/', $filename);
-                $filename_parts_count=count($filename_parts_array)-1;
-                $filename_end_part=$filename_parts_array[$filename_parts_count]; // end part of filename (actual name)
-                $rn=rename($filename, $CONFIG['attachment_fspath'] . $id . "/$now/" . $filename_end_part);
+                $filename_parts_array = explode('/', $filename);
+                $filename_parts_count = count($filename_parts_array)-1;
+                $filename_end_part = $filename_parts_array[$filename_parts_count]; // end part of filename (actual name)
+                $rn = rename($filename, $CONFIG['attachment_fspath'] . $id . "/$now/" . $filename_end_part);
                 if (!rn) throw_error('Failed moving attachment after sending mail: ',$CONFIG['attachment_fspath'] .$id . "/$now");
                 // unlink ($filename);  // used to delete the file - don't any more INL 6Nov01
             }
 
-            if ($mailok==FALSE) throw_error('Internal error sending email:','send_mail() failed');
+            if ($mailok == FALSE)
+            {
+                throw_error('Internal error sending email:','send_mail() failed');
+            }
 
-            if ($mailok==TRUE)
+            if ($mailok == TRUE)
             {
                 // update incident status if necessary
                 switch ($timetonextaction_none)
@@ -691,7 +692,7 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
                     break;
                 }
 
-                $oldtimeofnextaction=incident_timeofnextaction($id);
+                $oldtimeofnextaction = incident_timeofnextaction($id);
 
                 if ($newincidentstatus != incident_status($id))
                 {
@@ -733,16 +734,16 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
                 }
 
                 // add update
-                $bodytext=htmlentities($bodytext, ENT_COMPAT, 'UTF-8');
+                $bodytext = htmlentities($bodytext, ENT_COMPAT, 'UTF-8');
                 $updateheader .= "To: <b>$tofield</b>\nFrom: <b>$fromfield</b>\nReply-To: <b>$replytofield</b>\n";
-                if ($ccfield!="" AND $ccfield!=",") $updateheader .=   "CC: <b>$ccfield</b>\n";
-                if ($bccfield!="") $updateheader .= "BCC: <b>$bccfield</b>\n";
-                if ($filename!="") $updateheader .= "Attachment: <b>".$filename_end_part."</b>\n";
+                if ($ccfield != "" AND $ccfield != ",") $updateheader .=   "CC: <b>$ccfield</b>\n";
+                if ($bccfield != "") $updateheader .= "BCC: <b>$bccfield</b>\n";
+                if ($filename != "") $updateheader .= "Attachment: <b>".$filename_end_part."</b>\n";
                 $updateheader .= "Subject: <b>$subjectfield</b>\n";
 
                 if (!empty($updateheader)) $updateheader .= "<hr>";
                 $updatebody = $timetext . $updateheader . $bodytext;
-                $updatebody=mysql_real_escape_string($updatebody);
+                $updatebody = mysql_real_escape_string($updatebody);
 
                 $sql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, bodytext, type, timestamp, currentstatus,customervisibility) ";
                 $sql .= "VALUES ($id, $sit[2], '$updatebody', 'email', '$now', '$newincidentstatus', '{$emailtype->customervisibility}')";
@@ -782,7 +783,7 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
                     mysql_query($sql);
                     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
                 }
-                if ($target!='none')
+                if ($target != 'none')
                 {
                     // Reset the slaemail sent column, so that email reminders can be sent if the new sla target goes out
                     $sql = "UPDATE `{$dbIncidents}` SET slaemail='0', slanotice='0' WHERE id='$id' LIMIT 1";

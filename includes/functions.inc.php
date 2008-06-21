@@ -5676,14 +5676,15 @@ function file_permissions_info($perms)
 }
 
 
-function cleanvar($var,$striphtml=TRUE, $transentities=TRUE)
+function cleanvar($var, $striphtml=TRUE, $transentities=TRUE,$mysqlescape=TRUE)
 {
     if ($striphtml) $var = strip_tags($var);
     if ($transentities) $var = htmlentities($var, ENT_COMPAT, $GLOBALS['i18ncharset']);
     else $var = htmlspecialchars($var, ENT_COMPAT, $GLOBALS['i18ncharset']);
 
-    $var = mysql_real_escape_string($var);
+    if ($mysqlescape) $var = mysql_real_escape_string($var);
     $var = trim($var);
+    
     return $var;
 }
 
