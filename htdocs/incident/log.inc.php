@@ -216,16 +216,16 @@ while ($update = mysql_fetch_object($result))
     $updatestatus = $update->currentstatus;
     if ($laststatus != $updatestatus AND isset($laststatus))
     {
-        $wholeupdate .=  "<a name='update{$count}'></a>";
+        $statusupdate .=  "<a name='update{$count}'></a>";
         
-        $wholeupdate .=  "<div class='detailhead'>";
-        $wholeupdate .=  nav_icons($count, $result);
-        $wholeupdate .=  "<div class='detaildate'>{$updatetime}</div>";
-        $wholeupdate .=  icon('research', 16).' ';
+        $statusupdate .=  "<div class='detailhead'>";
+        $statusupdate .=  nav_icons($count, $result);
+        $statusupdate .=  "<div class='detaildate'>{$updatetime}</div>";
+        $statusupdate .=  icon('research', 16).' ';
         
-        $wholeupdate .=  "Set to <strong>".incidentstatus_name($updatestatus);
-        $wholeupdate .=  "</strong> {$strby} "; //FIXME terrible i18n due to string freeze
-        $wholeupdate .=  "{$updateuser}</div><br />";
+        $statusupdate .=  "Set to <strong>".incidentstatus_name($updatestatus);
+        $statusupdate .=  "</strong> {$strby} "; //FIXME terrible i18n due to string freeze
+        $statusupdate .=  "{$updateuser}</div><br />";
 //        echo "<div class='detailentryhidden'><div class='iheader'>";
 //        echo "{$strStatus}: ".incidentstatus_name($laststatus);
 //        echo " -> <strong>".incidentstatus_name($updatestatus)."</strong>\n\n";
@@ -436,11 +436,11 @@ while ($update = mysql_fetch_object($result))
 
     if ($_SESSION['update_order'] == 'asc')
     {
-        $body .= $wholeupdate;
+        $body .= $wholeupdate.$statusupdate;
     }
     else
     {
-        $body = $wholeupdate.$body;
+        $body = $statusupdate.$wholeupdate.$body;
     }
 }
 echo $body;
