@@ -150,7 +150,7 @@ if ($incidentid=='' OR $incidentid < 1)
 }
 
 $sql  = "SELECT * FROM `{$dbUpdates}` WHERE incidentid='{$incidentid}' ";
-$sql .= "ORDER BY timestamp {$_SESSION['update_order']}, id {$_SESSION['update_order']} ";
+$sql .= "ORDER BY timestamp ASC, id ASC ";
 
 if (empty($records))
 {
@@ -192,7 +192,8 @@ echo log_nav_bar();
 $count = 0;
 while ($update = mysql_fetch_object($result))
 {
-
+    $wholeupdate = '';
+    
     if (empty($firstid))
     {
     	$firstid = $update->id;
@@ -215,16 +216,16 @@ while ($update = mysql_fetch_object($result))
     $updatestatus = $update->currentstatus;
     if ($laststatus != $updatestatus AND isset($laststatus))
     {
-        echo "<a name='update{$count}'></a>";
+        $wholeupdate .=  "<a name='update{$count}'></a>";
         
-        echo "<div class='detailhead'>";
-        echo nav_icons($count, $result);
-        echo "<div class='detaildate'>{$updatetime}</div>";
-        echo icon('research', 16).' ';
+        $wholeupdate .=  "<div class='detailhead'>";
+        $wholeupdate .=  nav_icons($count, $result);
+        $wholeupdate .=  "<div class='detaildate'>{$updatetime}</div>";
+        $wholeupdate .=  icon('research', 16).' ';
         
-        echo "Set to <strong>".incidentstatus_name($updatestatus);
-        echo "</strong> {$strby} "; //FIXME terrible i18n due to string freeze
-        echo "{$updateuser}</div><br />";
+        $wholeupdate .=  "Set to <strong>".incidentstatus_name($updatestatus);
+        $wholeupdate .=  "</strong> {$strby} "; //FIXME terrible i18n due to string freeze
+        $wholeupdate .=  "{$updateuser}</div><br />";
 //        echo "<div class='detailentryhidden'><div class='iheader'>";
 //        echo "{$strStatus}: ".incidentstatus_name($laststatus);
 //        echo " -> <strong>".incidentstatus_name($updatestatus)."</strong>\n\n";
@@ -319,24 +320,24 @@ while ($update = mysql_fetch_object($result))
         	$updateheadertext = str_replace('updatesla', $slatypes[$update->sla]['text'], $updateheadertext);
         }
     
-        echo "<a name='update{$count}'></a>";
+        $wholeupdate .=  "<a name='update{$count}'></a>";
     
         // Print a header row for the update
         if ($updatebody=='' AND $update->customervisibility=='show')
         {
-        	echo "<div class='detailinfo'>";
+        	$wholeupdate .=  "<div class='detailinfo'>";
         }
         elseif ($updatebody=='' AND $update->customervisibility!='show')
         {
-        	echo "<div class='detailinfohidden'>";
+        	$wholeupdate .=  "<div class='detailinfohidden'>";
         }
         elseif ($updatebody!='' AND $update->customervisibility=='show')
         {
-        	echo "<div class='detailhead'>";
+        	$wholeupdate .=  "<div class='detailhead'>";
         }
         else
         {
-        	echo "<div class='detailheadhidden'>";
+        	$wholeupdate .=  "<div class='detailheadhidden'>";
         }
     
         if ($offset > $_SESSION['num_update_view']) 
@@ -349,10 +350,10 @@ while ($update = mysql_fetch_object($result))
         }
         $next = $offset + $_SESSION['num_update_view'];
         
-        echo nav_icons($count, $result);
+        $wholeupdate .=  nav_icons($count, $result);
     
         // Specific header
-        echo "<div class='detaildate'>{$updatetime}</div>";
+        $wholeupdate .=  "<div class='detaildate'>{$updatetime}</div>";
     
         if ($update->customervisibility == 'show')
         {
@@ -363,77 +364,86 @@ while ($update = mysql_fetch_object($result))
         	$newmode='show';
         }
     
-        echo "<a href='incident_showhide_update.php?mode={$newmode}&amp;";
-        echo "incidentid={$incidentid}&amp;updateid={$update->id}&amp;view";
-        echo "={$view}&amp;expand={$expand}' name='{$update->id}' class='info'>";
+        $wholeupdate .=  "<a href='incident_showhide_update.php?mode={$newmode}&amp;";
+        $wholeupdate .=  "incidentid={$incidentid}&amp;updateid={$update->id}&amp;view";
+        $wholeupdate .=  "={$view}&amp;expand={$expand}' name='{$update->id}' class='info'>";
         if (array_key_exists($update->type, $updatetypes))
         {
             if (!empty($update->sla) AND $update->type=='slamet')
             {
-            	echo icon($slatypes[$update->sla]['icon'], 16, $update->type);
+            	$wholeupdate .=  icon($slatypes[$update->sla]['icon'], 16, $update->type);
             }
-            echo icon($updatetypes[$update->type]['icon'], 16, $update->type);
+            $wholeupdate .=  icon($updatetypes[$update->type]['icon'], 16, $update->type);
             
             if ($update->customervisibility == 'show')
     	    {
-    	    	echo "<span>{$strHideFromCustomer}</span>";
+    	    	$wholeupdate .=  "<span>{$strHideFromCustomer}</span>";
     	    }
     	    else
     	    {
-    	    	echo "<span>{$strMakeVisibleToCustomer}</span>";
+    	    	$wholeupdate .=  "<span>{$strMakeVisibleToCustomer}</span>";
     	    }
             
-            echo "</a> {$updateheadertext}";
+            $wholeupdate .=  "</a> {$updateheadertext}";
         }
         else
         {
-            echo icon($updatetypes['research']['icon'], 16, $strResearch);
+            $wholeupdate .=  icon($updatetypes['research']['icon'], 16, $strResearch);
             if ($update->customervisibility == 'show')
     	    {
-    	    	echo "<span>{$strHideFromCustomer}</span>";
+    	    	$wholeupdate .=  "<span>{$strHideFromCustomer}</span>";
     	    }
     	    else
     	    {
-    	    	echo "<span>{$strMakeVisibleToCustomer}</span>";
+    	    	$wholeupdate .=  "<span>{$strMakeVisibleToCustomer}</span>";
     	    }        
     	    
     	    if ($update->sla != '')
             {
-            	echo icon($slatypes[$update->sla]['icon'], 16, $update->type);
+            	$wholeupdate .=  icon($slatypes[$update->sla]['icon'], 16, $update->type);
             }
-            echo sprintf($strUpdatedXbyX, "(".$update->type.")", $updateuser);
+            $wholeupdate .=  sprintf($strUpdatedXbyX, "(".$update->type.")", $updateuser);
         }
     
-        echo "</div>\n";
+        $wholeupdate .=  "</div>\n";
         if ($updatebody!='')
         {
             if ($update->customervisibility=='show')
             {
-            	echo "<div class='detailentry'>\n";
+            	$wholeupdate .=  "<div class='detailentry'>\n";
             }
             else
             {
-            	echo "<div class='detailentryhidden'>\n";
+            	$wholeupdate .=  "<div class='detailentryhidden'>\n";
             }
             
             if ($updatebodylen > 5)
             {
-            	echo nl2br($updatebody);
+            	$wholeupdate .=  nl2br($updatebody);
             }
             else
             {
-            	echo $updatebody;
+            	$wholeupdate .=  $updatebody;
             }
             if (!empty($update->nextaction))
             {
-            	echo "<div class='detailhead'>{$strNextAction}: {$update->nextaction}</div>";
+            	$wholeupdate .=  "<div class='detailhead'>{$strNextAction}: {$update->nextaction}</div>";
             }
-            echo "</div>\n";
+            $wholeupdate .=  "</div>\n";
         }
     }
     $count++;
-}
 
+    if ($_SESSION['update_order'] == 'asc')
+    {
+        $body .= $wholeupdate;
+    }
+    else
+    {
+        $body = $wholeupdate.$body;
+    }
+}
+echo $body;
 if ($_SESSION['num_update_view'] > 0)
 {
 	echo log_nav_bar();
