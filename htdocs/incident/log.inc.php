@@ -213,7 +213,7 @@ while ($update = mysql_fetch_object($result))
     $currentstatus = incident_status($update->currentstatus);
     
     $updatestatus = $update->currentstatus;
-    if ($laststatus != $updatestatus)
+    if ($laststatus != $updatestatus AND isset($laststatus))
     {
         echo "<a name='update{$count}'></a>";
         
