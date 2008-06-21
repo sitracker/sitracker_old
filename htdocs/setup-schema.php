@@ -736,6 +736,8 @@ INSERT INTO `{$dbPermissions}` VALUES (75, 'Set negative time for duration on in
 INSERT INTO `{$dbPermissions}` VALUES (76, 'View Transactions');
 INSERT INTO `{$dbPermissions}` VALUES (77, 'View Billing Information');
 INSERT INTO `{$dbPermissions}` VALUES (78, 'Post System Notices');
+INSERT INTO `{$dbPermissions}` VALUES (79 'Edit Service Balances');
+INSERT INTO `{$dbPermissions}` VALUES (80, 'Edit Service Details');
 
 
 CREATE TABLE `{$dbPriority}` (
@@ -886,6 +888,9 @@ INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES 
 INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (1, 75, 'true');
 INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (1, 76, 'true');
 INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (1, 77, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (1, 78, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (1, 79, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (1, 80, 'true');
 INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (2, 1, 'true');
 INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (2, 2, 'true');
 INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (2, 3, 'true');
@@ -2165,6 +2170,16 @@ ALTER TABLE `{$dbMaintenance}` ADD INDEX ( `var_incident_visible_all` );
 ALTER TABLE `{$dbMaintenance}` ADD INDEX ( `var_incident_visible_contacts` ) ;
 
 ALTER DATABASE `{$CONFIG['db_database']}` DEFAULT CHARACTER SET utf8;
+
+-- PH 21/06/2008
+INSERT INTO `{$dbPermissions}` VALUES (79 'Edit Service Balances');
+INSERT INTO `{$dbPermissions}` VALUES (80, 'Edit Service Details');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (1, 78, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (1, 79, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (1, 80, 'true');
+INSERT INTO `{$dbUserPermissions}` VALUES (1, 78, 'true');
+INSERT INTO `{$dbUserPermissions}` VALUES (1, 79, 'true');
+INSERT INTO `{$dbUserPermissions}` VALUES (1, 80, 'true');
 
 --  !!WARNING!! can take a while on large tables
 ALTER TABLE `{$dbUpdates}` ADD FULLTEXT ( `bodytext`) ;
