@@ -46,15 +46,17 @@ switch ($action)
                         mysql_query($sql);
                         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
+                        $status = incident_status($id);
                         // Insert an entry into the update log for this incident
-                        $sql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, timestamp, currentowner, customervisibility, sla, bodytext) ";
-                        $sql .= "VALUES ('$id', '".$sit[2]."', 'editing', '$now', '".$sit[2]."', 'hide', '','Added relationship with Incident $relatedid')";
+                        $sql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, timestamp, currentowner, currentstatus, customervisibility, sla, bodytext) ";
+                        $sql .= "VALUES ('$id', '".$sit[2]."', 'editing', '$now', '".$sit[2]."', '$status', 'hide', '','Added relationship with Incident $relatedid')"; //FIXME use $SYSLANG
                         mysql_query($sql);
                         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-
+                        
+                        $status = incident_status($relatedid);
                         // Insert an entry into the update log for the related incident
-                        $sql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, timestamp, currentowner, customervisibility, sla, bodytext) ";
-                        $sql .= "VALUES ('$relatedid', '".$sit[2]."', 'editing', '$now', '".$sit[2]."', 'hide', '','Added relationship with Incident $id')";
+                        $sql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, timestamp, currentowner, currentstatus, customervisibility, sla, bodytext) ";
+                        $sql .= "VALUES ('$relatedid', '".$sit[2]."', 'editing', '$now', '".$sit[2]."', '$status', 'hide', '','Added relationship with Incident $id')"; //FIXME use $SYSLANG
                         mysql_query($sql);
                         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
                     break;
