@@ -103,6 +103,44 @@ function log_nav_bar()
     return $nav;
 }
 
+function nav_icons($count, &$result)
+{
+    $html = "<div class='detaildate'>";
+    if ($count==0)
+    {
+        if ($offset > 0)
+        {
+            $html .= "<a href='{$_SERVER['PHP_SELF']}?id={$incidentid}&amp;";
+            $html .= "javascript=enabled&amp;offset={$previous}&amp;direction=";
+            $html .= "previous' class='info'>";
+            $html .= icon('navup', 16, $strPreviousUpdate)."</a>";
+        }
+    }
+    else
+    {
+        $html .= "<a href='#update".($count-1)."' class='info'>";
+        $html .= icon('navup', 16, $strPreviousUpdate)."</a>";
+    }
+
+    if ($count==($_SESSION['num_update_view']-1) OR $count==mysql_num_rows($result)-1)
+    {
+        if ($offset < ($count_updates - $_SESSION['num_update_view']))
+        {
+            $html .= "<a href='{$_SERVER['PHP_SELF']}?id={$incidentid}&amp;";
+            $html .= "javascript=enabled&amp;offset={$next}&amp;direction=next' ";
+            $html .= "class='info'>";
+            $html .= icon('navdown', 16, $strNextUpdate)."</a>";
+        }
+    }
+    else
+    {
+        $html .= "<a href='#update".($count+1)."' class='info'>";
+        $html .= icon('navdown', 16, $strNextUpdate)."</a>";
+    }
+    $html .= "</div>";
+    
+    return $html;
+}
 
 $records = strtolower(cleanvar($_REQUEST['records']));
 
@@ -154,6 +192,7 @@ echo log_nav_bar();
 $count = 0;
 while ($update = mysql_fetch_object($result))
 {
+
     if (empty($firstid))
     {
     	$firstid = $update->id;
@@ -161,244 +200,237 @@ while ($update = mysql_fetch_object($result))
     
     $updateid = $update->id;
     $updatebody=trim($update->bodytext);
+    
+
     $updatebodylen=strlen($updatebody);
     $updatebody = str_replace($origtag, $temptag, $updatebody);
     $updatebody = str_replace($temptag, $origtag, $updatebody);
-
-    // Insert path to attachments
-    //     $updatebody = preg_replace("/\[\[att\]\](.*?)\[\[\/att\]\]/",
-    //                                "<a href = '{$CONFIG['attachment_webpath']}updates/{$update->id}/$1'>$1</a>",
-    //                                $updatebody);
-    //if (file_exists("{$CONFIG['attachment_fspath']}{$update->incidentid}/u{$update->id}"))
-    //{
-    //    $attachment_webpath = "{$CONFIG['attachment_webpath']}{$update->incidentid}/u{$update->id}";
-    //}
-    //elseif (file_exists("{$CONFIG['attachment_fspath']}{$update->incidentid}/{$update->timestamp}"))
-    //{
-    //    $attachment_webpath = "{$CONFIG['attachment_webpath']}{$update->incidentid}/{$update->timestamp}";
-    //}
-    //else
-    //{
-    //    $attachment_webpath = "{$CONFIG['attachment_webpath']}updates/{$update->id}";
-    //}
-
-    // Put the header part (up to the <hr /> in a seperate DIV)
-    if (strpos($updatebody, '<hr>')!==FALSE)
-    {
-        $updatebody = "<div class='iheader'>".str_replace('<hr>',"</div>",$updatebody);
-    }
-    // Style quoted text
-    $quote[0]="/^(&gt;([\s][\d\w]).*)[\n\r]$/m";
-    $quote[1]="/^(&gt;&gt;([\s][\d\w]).*)[\n\r]$/m";
-    $quote[2]="/^(&gt;&gt;&gt;+([\s][\d\w]).*)[\n\r]$/m";
-    $quote[3]="/^(&gt;&gt;&gt;(&gt;)+([\s][\d\w]).*)[\n\r]$/m";
-    $quote[4]="/(-----\s?Original Message\s?-----.*-{3,})/s";
-    $quote[5]="/(-----BEGIN PGP SIGNED MESSAGE-----)/s";
-    $quote[6]="/(-----BEGIN PGP SIGNATURE-----.*-----END PGP SIGNATURE-----)/s";
-    $quote[7]="/^(&gt;)[\r]*$/m";
-    $quote[8]="/^(&gt;&gt;)[\r]*$/m";
-    $quote[9]="/^(&gt;&gt;(&gt;){1,8})[\r]*$/m";
-
-    $quotereplace[0]="<span class='quote1'>\\1</span>";
-    $quotereplace[1]="<span class='quote2'>\\1</span>";
-    $quotereplace[2]="<span class='quote3'>\\1</span>";
-    $quotereplace[3]="<span class='quote4'>\\1</span>";
-    $quotereplace[4]="<span class='quoteirrel'>\\1</span>";
-    $quotereplace[5]="<span class='quoteirrel'>\\1</span>";
-    $quotereplace[6]="<span class='quoteirrel'>\\1</span>";
-    $quotereplace[7]="<span class='quote1'>\\1</span>";
-    $quotereplace[8]="<span class='quote2'>\\1</span>";
-    $quotereplace[9]="<span class='quote3'>\\1</span>";
-
-    $updatebody = preg_replace($quote, $quotereplace, $updatebody);
-
-    // Make URL's into Hyperlinks
-    $search = array("/(?<!quot;|[=\"]|:[\\n]\/{2})\b((\w+:\/{2}|www\.).+?)"."(?=\W*([<>\s]|$))/i");
-    $replace = array("<a href=\"\\1\">\\1</a>");
-    $updatebody = preg_replace("/href=\"www/i", "href=\"http://www", preg_replace ($search, $replace, $updatebody));
-    $updatebody = bbcode($updatebody);
-    $updatebody = preg_replace("!([\n\t ]+)(http[s]?:/{2}[\w\.]{2,}[/\w\-\.\?\&\=\#\$\%|;|\[|\]~:]*)!e", "'\\1<a href=\"\\2\" title=\"\\2\">'.(strlen('\\2')>=70 ? substr('\\2',0,70).'...':'\\2').'</a>'", $updatebody);
-
-    // Make KB article references into a hyperlink
-    $updatebody = preg_replace("/\b{$CONFIG['kb_id_prefix']}([0-9]{3,4})\b/", "<a href=\"kb_view_article.php?id=$1\" title=\"View KB Article $1\">$0</a>", $updatebody);
-
+    
     // Lookup some extra data
     $updateuser = user_realname($update->userid,TRUE);
     $updatetime = readable_date($update->timestamp);
     $currentowner = user_realname($update->currentowner,TRUE);
     $currentstatus = incident_status($update->currentstatus);
-
-    $updateheadertext = $updatetypes[$update->type]['text'];
-    if ($currentowner != $updateuser)
-    {
-        $updateheadertext = str_replace('currentowner', $currentowner, $updateheadertext);
-    }
-    else
-    {
-        $updateheadertext = str_replace('currentowner', $strSelf, $updateheadertext);
-    }
     
-    $updateheadertext = str_replace('updateuser', $updateuser, $updateheadertext);
-    
-    if ($update->type == 'reviewmet' AND 
-        ($update->sla == 'opened' OR $update->userid == 0))
+    $updatestatus = $update->currentstatus;
+    if ($laststatus != $updatestatus)
     {
-    	$updateheadertext = str_replace('updatereview', $strPeriodStarted, $updateheadertext);
-    }
-    elseif ($update->type == 'reviewmet' AND $update->sla == '')
-    {
-    	$updateheadertext = str_replace('updatereview', $strCompleted, $updateheadertext);
-    }
-    
-    if ($update->type=='slamet')
-    {
-    	$updateheadertext = str_replace('updatesla', $slatypes[$update->sla]['text'], $updateheadertext);
-    }
-
-    echo "<a name='update{$count}'></a>";
-
-    // Print a header row for the update
-    if ($updatebody=='' AND $update->customervisibility=='show')
-    {
-    	echo "<div class='detailinfo'>";
-    }
-    elseif ($updatebody=='' AND $update->customervisibility!='show')
-    {
-    	echo "<div class='detailinfohidden'>";
-    }
-    elseif ($updatebody!='' AND $update->customervisibility=='show')
-    {
-    	echo "<div class='detailhead'>";
-    }
-    else
-    {
-    	echo "<div class='detailheadhidden'>";
-    }
-
-    if ($offset > $_SESSION['num_update_view']) 
-    {
-    	$previous = $offset - $_SESSION['num_update_view'];
-    }
-    else
-    {
-    	$previous=0;
-    }
-    $next = $offset + $_SESSION['num_update_view'];
-
-    echo "<div class='detaildate'>";
-    if ($count==0)
-    {
-        if ($offset > 0)
-        {
-            echo "<a href='{$_SERVER['PHP_SELF']}?id={$incidentid}&amp;";
-            echo "javascript=enabled&amp;offset={$previous}&amp;direction=";
-            echo "previous' class='info'>";
-            echo icon('navup', 16, $strPreviousUpdate)."</a>";
-        }
-    }
-    else
-    {
-        echo "<a href='#update".($count-1)."' class='info'>";
-        echo icon('navup', 16, $strPreviousUpdate)."</a>";
-    }
-
-    if ($count==($_SESSION['num_update_view']-1) OR $count==mysql_num_rows($result)-1)
-    {
-        if ($offset < ($count_updates - $_SESSION['num_update_view']))
-        {
-            echo "<a href='{$_SERVER['PHP_SELF']}?id={$incidentid}&amp;";
-            echo "javascript=enabled&amp;offset={$next}&amp;direction=next' ";
-            echo "class='info'>";
-            echo icon('navdown', 16, $strNextUpdate)."</a>";
-        }
-    }
-    else
-    {
-        echo "<a href='#update".($count+1)."' class='info'>";
-        echo icon('navdown', 16, $strNextUpdate)."</a>";
-    }
-    echo "</div>";
-
-    // Specific header
-    echo "<div class='detaildate'>{$updatetime}</div>";
-
-    if ($update->customervisibility == 'show')
-    {
-    	$newmode='hide';
-    }
-    else
-    {
-    	$newmode='show';
-    }
-
-    echo "<a href='incident_showhide_update.php?mode={$newmode}&amp;";
-    echo "incidentid={$incidentid}&amp;updateid={$update->id}&amp;view";
-    echo "={$view}&amp;expand={$expand}' name='{$update->id}' class='info'>";
-    if (array_key_exists($update->type, $updatetypes))
-    {
-        if (!empty($update->sla) AND $update->type=='slamet')
-        {
-        	echo icon($slatypes[$update->sla]['icon'], 16, $update->type);
-        }
-        echo icon($updatetypes[$update->type]['icon'], 16, $update->type);
+        echo "<a name='update{$count}'></a>";
         
-        if ($update->customervisibility == 'show')
-	    {
-	    	echo "<span>{$strHideFromCustomer}</span>";
-	    }
-	    else
-	    {
-	    	echo "<span>{$strMakeVisibleToCustomer}</span>";
-	    }
+        echo "<div class='detailhead'>";
+        echo nav_icons($count, $result);
+        echo "<div class='detaildate'>{$updatetime}</div>";
+        echo icon('research', 16).' ';
         
-        echo "</a> {$updateheadertext}";
-    }
-    else
-    {
-        echo icon($updatetypes['research']['icon'], 16, $strResearch);
-        if ($update->customervisibility == 'show')
-	    {
-	    	echo "<span>{$strHideFromCustomer}</span>";
-	    }
-	    else
-	    {
-	    	echo "<span>{$strMakeVisibleToCustomer}</span>";
-	    }        
-	    
-	    if ($update->sla != '')
+        echo "Set to <strong>".incidentstatus_name($updatestatus);
+        echo "</strong> {$strby} "; //FIXME terrible i18n due to string freeze
+        echo "{$updateuser}</div><br />";
+//        echo "<div class='detailentryhidden'><div class='iheader'>";
+//        echo "{$strStatus}: ".incidentstatus_name($laststatus);
+//        echo " -> <strong>".incidentstatus_name($updatestatus)."</strong>\n\n";
+//        echo "</div></div>";
+    } 
+    $laststatus = $updatestatus;
+    
+    
+    if ($updatebody != "<hr>")
+    {   
+        // Insert path to attachments
+        //     $updatebody = preg_replace("/\[\[att\]\](.*?)\[\[\/att\]\]/",
+        //                                "<a href = '{$CONFIG['attachment_webpath']}updates/{$update->id}/$1'>$1</a>",
+        //                                $updatebody);
+        //if (file_exists("{$CONFIG['attachment_fspath']}{$update->incidentid}/u{$update->id}"))
+        //{
+        //    $attachment_webpath = "{$CONFIG['attachment_webpath']}{$update->incidentid}/u{$update->id}";
+        //}
+        //elseif (file_exists("{$CONFIG['attachment_fspath']}{$update->incidentid}/{$update->timestamp}"))
+        //{
+        //    $attachment_webpath = "{$CONFIG['attachment_webpath']}{$update->incidentid}/{$update->timestamp}";
+        //}
+        //else
+        //{
+        //    $attachment_webpath = "{$CONFIG['attachment_webpath']}updates/{$update->id}";
+        //}
+    
+        // Put the header part (up to the <hr /> in a seperate DIV)
+        if (strpos($updatebody, '<hr>')!==FALSE)
         {
-        	echo icon($slatypes[$update->sla]['icon'], 16, $update->type);
+            $updatebody = "<div class='iheader'>".str_replace('<hr>',"</div>",$updatebody);
         }
-        echo sprintf($strUpdatedXbyX, "(".$update->type.")", $updateuser);
-    }
-
-    echo "</div>\n";
-    if ($updatebody!='')
-    {
-        if ($update->customervisibility=='show')
+        // Style quoted text
+        $quote[0]="/^(&gt;([\s][\d\w]).*)[\n\r]$/m";
+        $quote[1]="/^(&gt;&gt;([\s][\d\w]).*)[\n\r]$/m";
+        $quote[2]="/^(&gt;&gt;&gt;+([\s][\d\w]).*)[\n\r]$/m";
+        $quote[3]="/^(&gt;&gt;&gt;(&gt;)+([\s][\d\w]).*)[\n\r]$/m";
+        $quote[4]="/(-----\s?Original Message\s?-----.*-{3,})/s";
+        $quote[5]="/(-----BEGIN PGP SIGNED MESSAGE-----)/s";
+        $quote[6]="/(-----BEGIN PGP SIGNATURE-----.*-----END PGP SIGNATURE-----)/s";
+        $quote[7]="/^(&gt;)[\r]*$/m";
+        $quote[8]="/^(&gt;&gt;)[\r]*$/m";
+        $quote[9]="/^(&gt;&gt;(&gt;){1,8})[\r]*$/m";
+    
+        $quotereplace[0]="<span class='quote1'>\\1</span>";
+        $quotereplace[1]="<span class='quote2'>\\1</span>";
+        $quotereplace[2]="<span class='quote3'>\\1</span>";
+        $quotereplace[3]="<span class='quote4'>\\1</span>";
+        $quotereplace[4]="<span class='quoteirrel'>\\1</span>";
+        $quotereplace[5]="<span class='quoteirrel'>\\1</span>";
+        $quotereplace[6]="<span class='quoteirrel'>\\1</span>";
+        $quotereplace[7]="<span class='quote1'>\\1</span>";
+        $quotereplace[8]="<span class='quote2'>\\1</span>";
+        $quotereplace[9]="<span class='quote3'>\\1</span>";
+    
+        $updatebody = preg_replace($quote, $quotereplace, $updatebody);
+    
+        // Make URL's into Hyperlinks
+        $search = array("/(?<!quot;|[=\"]|:[\\n]\/{2})\b((\w+:\/{2}|www\.).+?)"."(?=\W*([<>\s]|$))/i");
+        $replace = array("<a href=\"\\1\">\\1</a>");
+        $updatebody = preg_replace("/href=\"www/i", "href=\"http://www", preg_replace ($search, $replace, $updatebody));
+        $updatebody = bbcode($updatebody);
+        $updatebody = preg_replace("!([\n\t ]+)(http[s]?:/{2}[\w\.]{2,}[/\w\-\.\?\&\=\#\$\%|;|\[|\]~:]*)!e", "'\\1<a href=\"\\2\" title=\"\\2\">'.(strlen('\\2')>=70 ? substr('\\2',0,70).'...':'\\2').'</a>'", $updatebody);
+    
+        // Make KB article references into a hyperlink
+        $updatebody = preg_replace("/\b{$CONFIG['kb_id_prefix']}([0-9]{3,4})\b/", "<a href=\"kb_view_article.php?id=$1\" title=\"View KB Article $1\">$0</a>", $updatebody);
+        
+        $updateheadertext = $updatetypes[$update->type]['text'];
+        if ($currentowner != $updateuser)
         {
-        	echo "<div class='detailentry'>\n";
+            $updateheadertext = str_replace('currentowner', $currentowner, $updateheadertext);
         }
         else
         {
-        	echo "<div class='detailentryhidden'>\n";
+            $updateheadertext = str_replace('currentowner', $strSelf, $updateheadertext);
         }
         
-        if ($updatebodylen > 5)
+        $updateheadertext = str_replace('updateuser', $updateuser, $updateheadertext);
+        
+        if ($update->type == 'reviewmet' AND 
+            ($update->sla == 'opened' OR $update->userid == 0))
         {
-        	echo nl2br($updatebody);
+        	$updateheadertext = str_replace('updatereview', $strPeriodStarted, $updateheadertext);
+        }
+        elseif ($update->type == 'reviewmet' AND $update->sla == '')
+        {
+        	$updateheadertext = str_replace('updatereview', $strCompleted, $updateheadertext);
+        }
+        
+        if ($update->type=='slamet')
+        {
+        	$updateheadertext = str_replace('updatesla', $slatypes[$update->sla]['text'], $updateheadertext);
+        }
+    
+        echo "<a name='update{$count}'></a>";
+    
+        // Print a header row for the update
+        if ($updatebody=='' AND $update->customervisibility=='show')
+        {
+        	echo "<div class='detailinfo'>";
+        }
+        elseif ($updatebody=='' AND $update->customervisibility!='show')
+        {
+        	echo "<div class='detailinfohidden'>";
+        }
+        elseif ($updatebody!='' AND $update->customervisibility=='show')
+        {
+        	echo "<div class='detailhead'>";
         }
         else
         {
-        	echo $updatebody;
+        	echo "<div class='detailheadhidden'>";
         }
-        if (!empty($update->nextaction))
+    
+        if ($offset > $_SESSION['num_update_view']) 
         {
-        	echo "<div class='detailhead'>{$strNextAction}: {$update->nextaction}</div>";
+        	$previous = $offset - $_SESSION['num_update_view'];
         }
+        else
+        {
+        	$previous=0;
+        }
+        $next = $offset + $_SESSION['num_update_view'];
+        
+        echo nav_icons($count, $result);
+    
+        // Specific header
+        echo "<div class='detaildate'>{$updatetime}</div>";
+    
+        if ($update->customervisibility == 'show')
+        {
+        	$newmode='hide';
+        }
+        else
+        {
+        	$newmode='show';
+        }
+    
+        echo "<a href='incident_showhide_update.php?mode={$newmode}&amp;";
+        echo "incidentid={$incidentid}&amp;updateid={$update->id}&amp;view";
+        echo "={$view}&amp;expand={$expand}' name='{$update->id}' class='info'>";
+        if (array_key_exists($update->type, $updatetypes))
+        {
+            if (!empty($update->sla) AND $update->type=='slamet')
+            {
+            	echo icon($slatypes[$update->sla]['icon'], 16, $update->type);
+            }
+            echo icon($updatetypes[$update->type]['icon'], 16, $update->type);
+            
+            if ($update->customervisibility == 'show')
+    	    {
+    	    	echo "<span>{$strHideFromCustomer}</span>";
+    	    }
+    	    else
+    	    {
+    	    	echo "<span>{$strMakeVisibleToCustomer}</span>";
+    	    }
+            
+            echo "</a> {$updateheadertext}";
+        }
+        else
+        {
+            echo icon($updatetypes['research']['icon'], 16, $strResearch);
+            if ($update->customervisibility == 'show')
+    	    {
+    	    	echo "<span>{$strHideFromCustomer}</span>";
+    	    }
+    	    else
+    	    {
+    	    	echo "<span>{$strMakeVisibleToCustomer}</span>";
+    	    }        
+    	    
+    	    if ($update->sla != '')
+            {
+            	echo icon($slatypes[$update->sla]['icon'], 16, $update->type);
+            }
+            echo sprintf($strUpdatedXbyX, "(".$update->type.")", $updateuser);
+        }
+    
         echo "</div>\n";
+        if ($updatebody!='')
+        {
+            if ($update->customervisibility=='show')
+            {
+            	echo "<div class='detailentry'>\n";
+            }
+            else
+            {
+            	echo "<div class='detailentryhidden'>\n";
+            }
+            
+            if ($updatebodylen > 5)
+            {
+            	echo nl2br($updatebody);
+            }
+            else
+            {
+            	echo $updatebody;
+            }
+            if (!empty($update->nextaction))
+            {
+            	echo "<div class='detailhead'>{$strNextAction}: {$update->nextaction}</div>";
+            }
+            echo "</div>\n";
+        }
     }
-
     $count++;
 }
 

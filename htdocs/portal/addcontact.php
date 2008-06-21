@@ -20,7 +20,7 @@ include 'portalheader.inc.php';
 
 if (isset($_POST['submit']))
 {
-	echo process_add_contact();
+    echo process_add_contact('external');
 }
 
 echo show_add_contact($_SESSION['siteid'], 'external');
