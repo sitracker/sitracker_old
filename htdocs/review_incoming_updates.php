@@ -33,13 +33,13 @@ function generate_row($update)
     }
     else
     {
-        $updatebodytext=$update['bodytext'];
+        $updatebodytext = $update['bodytext'];
     }
 
     $search = array( '<b>',  '</b>',  '<i>',  '</i>',  '<u>',  '</u>',  '&lt;',  '&gt;');
     $replace = '';
     $updatebodytext = htmlspecialchars(str_replace($search, $replace, $updatebodytext));
-    if ($updatebodytext=='') $updatebodytext = '&nbsp;';
+    if ($updatebodytext == '') $updatebodytext = '&nbsp;';
 
     $shade='shade1';
     if (!empty($update['fromaddr']))
@@ -54,10 +54,16 @@ function generate_row($update)
     $pluginshade = plugin_do('holdingqueue_rowshade',$update);
     $shade = $pluginshade ? $pluginshade : $shade;
     $html_row = "<tr class='$shade'>";
-    $html_row .= "<td style='text-align: center'><input type='checkbox' name='selected[]' value='".$update['id']."' /></td>";
+    $html_row .= "<td style='text-align: center'>";
+    if (($update['locked'] == $sit[2]) OR empty($update['locked']))
+    {
+        $html_row .= "<input type='checkbox' name='selected[]' value='".$update['id']."' />";
+    }
+    $html_row .= "</td>";
     $html_row .= "<td align='center' width='20%'>".date($CONFIG['dateformat_datetime'],$update['timestamp']).'</td>';
     $html_row .= "<td width='20%'>";
-    if (!empty($update['contactid']) AND strtolower($update['fromaddr'])==strtolower(contact_email($update['contactid'])))
+    if (!empty($update['contactid'])
+        AND strtolower($update['fromaddr']) == strtolower(contact_email($update['contactid'])))
     {
         $contact_realname = contact_realname($update['contactid']);
         $html_row .= $contact_realname;
@@ -65,7 +71,7 @@ function generate_row($update)
         if ($update['emailfrom'] != $contact_realname)
         {
             $html_row .= "<br />\n";
-            $html_row.= htmlentities($update['emailfrom'],ENT_QUOTES, $GLOBALS['i18ncharset']);
+            $html_row .= htmlentities($update['emailfrom'],ENT_QUOTES, $GLOBALS['i18ncharset']);
         }
     }
     else
@@ -82,7 +88,7 @@ function generate_row($update)
     $html_row .= '<span>'.parse_updatebody($updatebodytext).'</span></a></td>';
     $html_row .= "<td align='center' width='20%'>{$update['reason']}</td>";
     $html_row .= "<td align='center' width='20%'>";
-    if (($update['locked'] != $sit[2]) && ($update['locked']>0))
+    if (($update['locked'] != $sit[2]) && ($update['locked'] > 0))
     {
         $html_row .= "Locked by ".user_realname($update['locked'],TRUE);
     }
@@ -107,7 +113,7 @@ function deldir($location)
     if (substr($location,-1) <> "/")
     $location = $location."/";
     $all = opendir($location);
-    while ($file=readdir($all))
+    while ($file = readdir($all))
     {
         if (is_dir($location.$file) && $file <> ".." && $file <> ".")
         {
@@ -129,7 +135,7 @@ $refresh = $_SESSION['incident_refresh'];
 $selected = $_POST['selected'];
 include ('htmlheader.inc.php');
 
-if ($lock=$_REQUEST['lock'])
+if ($lock = $_REQUEST['lock'])
 {
     $lockeduntil = date('Y-m-d H:i:s',$now+$CONFIG['record_lock_delay']);
     $sql = "UPDATE `{$dbTempIncoming}` SET locked='{$sit[2]}', lockeduntil='{$lockeduntil}' ";
@@ -137,7 +143,7 @@ if ($lock=$_REQUEST['lock'])
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 }
-elseif ($unlock=$_REQUEST['unlock'])
+elseif ($unlock = $_REQUEST['unlock'])
 {
     $sql = "UPDATE `{$dbTempIncoming}` AS t SET locked=NULL, lockeduntil=NULL ";
     $sql .= "WHERE id='{$unlock}' AND locked = '{$sit[2]}'";
@@ -164,12 +170,12 @@ if ($spam_string == $_REQUEST['delete_all_spam'])
         $sql = "DELETE FROM `{$dbTempIncoming}` WHERE id='".$ids[1]."' AND SUBJECT LIKE '%SPAMASSASSIN%' AND updateid='".$ids[0]."' LIMIT 1";
         mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-        if (mysql_affected_rows()==1)
+        if (mysql_affected_rows() == 1)
         {
             $sql = "DELETE FROM `{$dbUpdates}` WHERE id='".$ids[0]."'";
             mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-            $path=$CONFIG['attachment_fspath'].'updates/'.$ids[0];
+            $path = $CONFIG['attachment_fspath'].'updates/'.$ids[0];
             if (file_exists($path)) deldir($path);
         }
     }
@@ -288,7 +294,7 @@ if ((mysql_num_rows($resultnew) > 0) OR ($realemails > 0))
     echo " ".sprintf($strHeldEmailsNum, $realemails)."</h2>"; // was $countresults
     if ($realemails > 0)
     {
-        echo sprintf($strHeldEmailsNum, $realemails)." ";
+        echo "<p align='center'>".sprintf($strHeldEmailsNum, $realemails)."</p>";
     }
     
     if (mysql_num_rows($resultnew) > 0)
@@ -392,7 +398,7 @@ if (mysql_num_rows($resultchase) >= 1)
 
         $obj_update = mysql_fetch_object($result_update);
 
-        if ($obj_update ->type == 'auto_chase_phone' OR $obj_update ->type == 'auto_chase_manager')
+        if ($obj_update->type == 'auto_chase_phone' OR $obj_update->type == 'auto_chase_manager')
         {
             if (empty($html_chase))
             {
@@ -419,8 +425,8 @@ if (mysql_num_rows($resultchase) >= 1)
             $html_chase .= "<td>{$chase->title}</td><td>{$chase->forenames} {$chase->surname}</td>";
             $html_chase .= "<td>{$chase->name}</td><td>{$type}</td></tr>";
 
-            if ($shade=='shade1') $shade='shade2';
-            else $shade='shade1';
+            if ($shade == 'shade1') $shade = 'shade2';
+            else $shade = 'shade1';
         }
     }
 }
@@ -451,7 +457,7 @@ if (mysql_num_rows($result) >= 1)
     {
         // $originalownerstatus=user_status($assign->originalowner);
         $useraccepting = strtolower(user_accepting($assign->originalowner));
-        if (($assign->owner == $assign->originalowner || $assign->towner == $assign->originalowner) AND $useraccepting=='no')
+        if (($assign->owner == $assign->originalowner || $assign->towner == $assign->originalowner) AND $useraccepting == 'no')
         {
             echo "<tr class='shade1'>";
             echo "<td align='center'>".ldate($CONFIG['dateformat_datetime'], $assign->lastupdated)."</td>";
@@ -473,7 +479,7 @@ if (mysql_num_rows($result) >= 1)
             echo "<a href=\"javascript:wt_winpopup('reassign_incident.php?id={$assign->id}&amp;reason={$reason}&amp;asktemp=temporary&amp;popup=yes','mini');\" title='Re-assign this incident to another engineer'>Assign to other</a> | <a href='set_user_status.php?mode=deleteassign&amp;incidentid={$assign->incidentid}&amp;originalowner={$assign->originalowner}' title='Ignore this reassignment and delete this notice'>Ignore</a></td>";
             echo "</tr>\n";
         }
-        elseif ($assign->owner != $assign->originalowner AND $useraccepting=='yes')
+        elseif ($assign->owner != $assign->originalowner AND $useraccepting =='yes')
         {
             // display a row to assign the incident back to the original owner
             echo "<tr class='shade2'>";
