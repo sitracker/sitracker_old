@@ -1223,7 +1223,7 @@ function array_drop_down($array, $name, $setting='', $enablefield='')
     * and with the given id  selected.
     * @author Ivan Lucas
 */
-function contact_drop_down($name, $id, $showsite=FALSE)
+function contact_drop_down($name, $id, $showsite = FALSE, $required = FALSE)
 {
     global $dbContacts, $dbSites;
     if ($showsite)
@@ -1244,7 +1244,12 @@ function contact_drop_down($name, $id, $showsite=FALSE)
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
-    $html = "<select name='$name' id='$name' >\n";
+    $html = "<select name='$name' id='$name'";
+    if ($required)
+    {
+        $html .= " class='required' ";
+    }
+    $html .= ">\n";
     if ($id == 0)
     {
         $html .= "<option selected='selected' value='0'></option>\n";
@@ -1344,7 +1349,7 @@ function contact_site_drop_down($name, $id, $siteid='', $exclude='')
 /*  prints the HTML for a drop down list of     */
 /* products, with the given name and with the given id        */
 /* selected.                                                  */
-function product_drop_down($name, $id)
+function product_drop_down($name, $id, $required = FALSE)
 {
     global $dbProducts;
     // extract products
@@ -1352,7 +1357,12 @@ function product_drop_down($name, $id)
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
-    $html = "<select name='{$name}' id='{$name}'>";
+    $html = "<select name='{$name}' id='{$name}'";
+    if ($required)
+    {
+        $html .= " class='required' ";
+    }
+    $html .= ">";
 
 
     if ($id == 0)
@@ -1877,14 +1887,19 @@ function incidentstatus_drop_down_all($name, $id)
     * @todo Requires database i18n
     * @returns string. HTML
 */
-function closingstatus_drop_down($name, $id)
+function closingstatus_drop_down($name, $id, $required = FALSE)
 {
     global $dbClosingStatus;
     // extract statuses
     $sql  = "SELECT id, name FROM `{$dbClosingStatus}` ORDER BY name ASC";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
-    $html = "<select name='{$name}'>";
+    $html = "<select name='{$name}'";
+    if ($required)
+    {
+        $html .= " class='required' ";
+    }
+    $html .= ">";
     if ($id == 0)
     {
         $html .= "<option selected='selected' value='0'></option>\n";
@@ -8798,7 +8813,7 @@ function show_add_contact($siteid = 0, $mode = 'internal')
 *
 * @author Kieran Hogg
 */
-function process_add_contact()
+function process_add_contact($mode = 'internal')
 {
     global $now, $CONFIG, $dbContacts;
     // Add new contact
@@ -8953,6 +8968,17 @@ function process_add_contact()
         }
         clear_form_data('add_contact');
         clear_form_errors('add_contact');
+    }
+    else
+    {
+        if ($mode == 'internal')
+        {
+            html_redirect('add_contact.php', FALSE);
+        }
+        else
+        {
+            html_redirect('addcontact.php', FALSE);
+        }
     }
 }
 
