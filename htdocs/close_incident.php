@@ -432,7 +432,7 @@ else
                         $result = mysql_query($sql);
                         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
-                        $sql = "UPDATE `{$dbIncidents}` SET status = 1, lastupdated = '{$now}' ";
+                        $sql = "UPDATE `{$dbIncidents}` SET status = 1, lastupdated = '{$now}', timeofnextaction = '0' ";
                         $sql .= "WHERE id = '{$relatedid}' ";
                         $result = mysql_query($sql);
                         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
@@ -444,7 +444,7 @@ else
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
         }
-        $bodytext = "Closing Status: <b>" . closingstatus_name($closingstatus) . "</b>\n\n" . $bodytext;
+        $bodytext = "{$SYSLANG['strClosingStatus']}: <b>" . closingstatus_name($closingstatus) . "</b>\n\n" . $bodytext;
 
         if ($addition_errors == 0)
         {   //maintenceid
