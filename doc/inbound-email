@@ -35,6 +35,8 @@ address_pipe:
   driver = pipe
   pipe_as_creator
 
+As of Exim 4.24 and the FIXED_NEVER_USERS, you'll need to change pipe_as_creator to user = ???? where ???? is not root
+
 The default on Debian works fine.
 
 2) Forward file
