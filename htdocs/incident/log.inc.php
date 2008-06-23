@@ -19,7 +19,7 @@ if (realpath(__FILE__) == realpath($_SERVER['SCRIPT_FILENAME']))
 }
 
 $offset = cleanvar($_REQUEST['offset']);
-if (empty($offset)) 
+if (empty($offset))
 {
 	$offset = 0;
 }
@@ -59,7 +59,7 @@ function log_nav_bar()
     	$previous = $offset - $_SESSION['num_update_view'];
     }
     else
-    {	
+    {
     	$previous = 0;
     }
     $next = $offset + $_SESSION['num_update_view'];
@@ -90,7 +90,7 @@ function log_nav_bar()
     }
     $nav .= "</td>";
     $nav .= "<td align='right' style='width: 33%;'>";
-    if ($offset < ($count_updates - $_SESSION['num_update_view']) AND 
+    if ($offset < ($count_updates - $_SESSION['num_update_view']) AND
         $records!='all')
     {
         $nav .= "<a href='{$_SERVER['PHP_SELF']}?id={$incidentid}&amp;";
@@ -138,7 +138,7 @@ function nav_icons($count, &$result)
         $html .= icon('navdown', 16, $strNextUpdate)."</a>";
     }
     $html .= "</div>";
-    
+
     return $html;
 }
 
@@ -193,36 +193,36 @@ $count = 0;
 while ($update = mysql_fetch_object($result))
 {
     $wholeupdate = $statusupdate = $updatebody = '';
-    
+
     if (empty($firstid))
     {
     	$firstid = $update->id;
     }
-    
+
     $updateid = $update->id;
     $updatebody=trim($update->bodytext);
-    
+
 
     $updatebodylen=strlen($updatebody);
     $updatebody = str_replace($origtag, $temptag, $updatebody);
     $updatebody = str_replace($temptag, $origtag, $updatebody);
-    
+
     // Lookup some extra data
     $updateuser = user_realname($update->userid,TRUE);
     $updatetime = readable_date($update->timestamp);
     $currentowner = user_realname($update->currentowner,TRUE);
     $currentstatus = incident_status($update->currentstatus);
-    
+
     $updatestatus = $update->currentstatus;
     if ($laststatus != $updatestatus AND !empty($laststatus))
     {
         $statusupdate .=  "<a name='update{$count}'></a>";
-        
-        $statusupdate .=  "<div class='detailhead'>";
+
+        $statusupdate .=  "<div class='detailhead statusline'>";
         $statusupdate .=  nav_icons($count, $result);
-        $statusupdate .=  "<div class='detaildate'>{$updatetime}</div>";
+        $statusupdate .=  "<div class='detaildate statusline'>{$updatetime}</div>";
         $statusupdate .=  icon('research', 16).' ';
-        
+
         $statusupdate .=  "<span class='statusline'>Status changed to <strong>";
 	$statusupdate .=  incidentstatus_name($updatestatus);
         $statusupdate .=  "</strong> {$strby} "; //FIXME i18n
@@ -231,12 +231,12 @@ while ($update = mysql_fetch_object($result))
 //        echo "{$strStatus}: ".incidentstatus_name($laststatus);
 //        echo " -> <strong>".incidentstatus_name($updatestatus)."</strong>\n\n";
 //        echo "</div></div>";
-    } 
+    }
     $laststatus = $updatestatus;
-    
-    
+
+
     if ($updatebody != "<hr>")
-    {   
+    {
         // Insert path to attachments
         //     $updatebody = preg_replace("/\[\[att\]\](.*?)\[\[\/att\]\]/",
         //                                "<a href = '{$CONFIG['attachment_webpath']}updates/{$update->id}/$1'>$1</a>",
@@ -253,7 +253,7 @@ while ($update = mysql_fetch_object($result))
         //{
         //    $attachment_webpath = "{$CONFIG['attachment_webpath']}updates/{$update->id}";
         //}
-    
+
         // Put the header part (up to the <hr /> in a seperate DIV)
         if (strpos($updatebody, '<hr>')!==FALSE)
         {
@@ -270,7 +270,7 @@ while ($update = mysql_fetch_object($result))
         $quote[7]="/^(&gt;)[\r]*$/m";
         $quote[8]="/^(&gt;&gt;)[\r]*$/m";
         $quote[9]="/^(&gt;&gt;(&gt;){1,8})[\r]*$/m";
-    
+
         $quotereplace[0]="<span class='quote1'>\\1</span>";
         $quotereplace[1]="<span class='quote2'>\\1</span>";
         $quotereplace[2]="<span class='quote3'>\\1</span>";
@@ -281,19 +281,19 @@ while ($update = mysql_fetch_object($result))
         $quotereplace[7]="<span class='quote1'>\\1</span>";
         $quotereplace[8]="<span class='quote2'>\\1</span>";
         $quotereplace[9]="<span class='quote3'>\\1</span>";
-    
+
         $updatebody = preg_replace($quote, $quotereplace, $updatebody);
-    
+
         // Make URL's into Hyperlinks
         $search = array("/(?<!quot;|[=\"]|:[\\n]\/{2})\b((\w+:\/{2}|www\.).+?)"."(?=\W*([<>\s]|$))/i");
         $replace = array("<a href=\"\\1\">\\1</a>");
         $updatebody = preg_replace("/href=\"www/i", "href=\"http://www", preg_replace ($search, $replace, $updatebody));
         $updatebody = bbcode($updatebody);
         $updatebody = preg_replace("!([\n\t ]+)(http[s]?:/{2}[\w\.]{2,}[/\w\-\.\?\&\=\#\$\%|;|\[|\]~:]*)!e", "'\\1<a href=\"\\2\" title=\"\\2\">'.(strlen('\\2')>=70 ? substr('\\2',0,70).'...':'\\2').'</a>'", $updatebody);
-    
+
         // Make KB article references into a hyperlink
         $updatebody = preg_replace("/\b{$CONFIG['kb_id_prefix']}([0-9]{3,4})\b/", "<a href=\"kb_view_article.php?id=$1\" title=\"View KB Article $1\">$0</a>", $updatebody);
-        
+
         $updateheadertext = $updatetypes[$update->type]['text'];
         if ($currentowner != $updateuser)
         {
@@ -303,10 +303,10 @@ while ($update = mysql_fetch_object($result))
         {
             $updateheadertext = str_replace('currentowner', $strSelf, $updateheadertext);
         }
-        
+
         $updateheadertext = str_replace('updateuser', $updateuser, $updateheadertext);
-        
-        if ($update->type == 'reviewmet' AND 
+
+        if ($update->type == 'reviewmet' AND
             ($update->sla == 'opened' OR $update->userid == 0))
         {
         	$updateheadertext = str_replace('updatereview', $strPeriodStarted, $updateheadertext);
@@ -315,14 +315,14 @@ while ($update = mysql_fetch_object($result))
         {
         	$updateheadertext = str_replace('updatereview', $strCompleted, $updateheadertext);
         }
-        
+
         if ($update->type=='slamet')
         {
         	$updateheadertext = str_replace('updatesla', $slatypes[$update->sla]['text'], $updateheadertext);
         }
-    
+
         $wholeupdate .=  "<a name='update{$count}'></a>";
-    
+
         // Print a header row for the update
         if ($updatebody=='' AND $update->customervisibility=='show')
         {
@@ -340,8 +340,8 @@ while ($update = mysql_fetch_object($result))
         {
         	$wholeupdate .=  "<div class='detailheadhidden'>";
         }
-    
-        if ($offset > $_SESSION['num_update_view']) 
+
+        if ($offset > $_SESSION['num_update_view'])
         {
         	$previous = $offset - $_SESSION['num_update_view'];
         }
@@ -350,12 +350,12 @@ while ($update = mysql_fetch_object($result))
         	$previous=0;
         }
         $next = $offset + $_SESSION['num_update_view'];
-        
+
         $wholeupdate .=  nav_icons($count, $result);
-    
+
         // Specific header
         $wholeupdate .=  "<div class='detaildate'>{$updatetime}</div>";
-    
+
         if ($update->customervisibility == 'show')
         {
         	$newmode='hide';
@@ -364,7 +364,7 @@ while ($update = mysql_fetch_object($result))
         {
         	$newmode='show';
         }
-    
+
         $wholeupdate .=  "<a href='incident_showhide_update.php?mode={$newmode}&amp;";
         $wholeupdate .=  "incidentid={$incidentid}&amp;updateid={$update->id}&amp;view";
         $wholeupdate .=  "={$view}&amp;expand={$expand}' name='{$update->id}' class='info'>";
@@ -375,7 +375,7 @@ while ($update = mysql_fetch_object($result))
             	$wholeupdate .=  icon($slatypes[$update->sla]['icon'], 16, $update->type);
             }
             $wholeupdate .=  icon($updatetypes[$update->type]['icon'], 16, $update->type);
-            
+
             if ($update->customervisibility == 'show')
     	    {
     	    	$wholeupdate .=  "<span>{$strHideFromCustomer}</span>";
@@ -384,7 +384,7 @@ while ($update = mysql_fetch_object($result))
     	    {
     	    	$wholeupdate .=  "<span>{$strMakeVisibleToCustomer}</span>";
     	    }
-            
+
             $wholeupdate .=  "</a> {$updateheadertext}";
         }
         else
@@ -397,15 +397,15 @@ while ($update = mysql_fetch_object($result))
     	    else
     	    {
     	    	$wholeupdate .=  "<span>{$strMakeVisibleToCustomer}</span>";
-    	    }        
-    	    
+    	    }
+
     	    if ($update->sla != '')
             {
             	$wholeupdate .=  icon($slatypes[$update->sla]['icon'], 16, $update->type);
             }
             $wholeupdate .=  sprintf($strUpdatedXbyX, "(".$update->type.")", $updateuser);
         }
-    
+
         $wholeupdate .=  "</div>\n";
         if ($updatebody!='')
         {
@@ -417,7 +417,7 @@ while ($update = mysql_fetch_object($result))
             {
             	$wholeupdate .=  "<div class='detailentryhidden'>\n";
             }
-            
+
             if ($updatebodylen > 5)
             {
             	$wholeupdate .=  nl2br($updatebody);
