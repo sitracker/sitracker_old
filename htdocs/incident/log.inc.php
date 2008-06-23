@@ -223,7 +223,7 @@ while ($update = mysql_fetch_object($result))
         $statusupdate .=  "<div class='detaildate'>{$updatetime}</div>";
         $statusupdate .=  icon('research', 16).' ';
         
-        $statusupdate .=  "<span class='statusline'>Set to <strong>";
+        $statusupdate .=  "<span class='statusline'>Status changed to <strong>";
 	$statusupdate .=  incidentstatus_name($updatestatus);
         $statusupdate .=  "</strong> {$strby} "; //FIXME i18n
         $statusupdate .=  "{$updateuser}</span></div><br />";
