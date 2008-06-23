@@ -351,6 +351,12 @@ function user_id($username, $password)
 }
 
 
+/**
+    * Return a users password
+    * @author Ivan Lucas
+    * @param id int. User ID
+    * @note this is an MD5 hash
+*/
 function user_password($id)
 {
     global $dbUsers;
@@ -419,6 +425,12 @@ function user_realname($id, $allowhtml=FALSE)
 }
 
 
+/**
+    * Return a users email address
+    * @author Ivan Lucas
+    * @param id int. User ID
+    * @note Obtained from session if possible
+*/
 function user_email($id)
 {
     global $dbUsers;
@@ -433,30 +445,56 @@ function user_email($id)
 }
 
 
+/**
+    * Return a users phone number
+    * @author Ivan Lucas
+    * @param id int. User ID
+*/
 function user_phone($id)
 {
     return db_read_column('phone', $GLOBALS['dbUsers'], $id);
 }
 
 
+/**
+    * Return a users mobile phone number
+    * @author Ivan Lucas
+    * @param id int. User ID
+*/
 function user_mobile($id)
 {
     return db_read_column('mobile', $GLOBALS['dbUsers'], $id);
 }
 
 
+/**
+    * Return a users email signature
+    * @author Ivan Lucas
+    * @param id int. User ID
+*/
 function user_signature($id)
 {
     return db_read_column('signature', $GLOBALS['dbUsers'], $id);
 }
 
 
+/**
+    * Return a users away message
+    * @author Ivan Lucas
+    * @param id int. User ID
+*/
 function user_message($id)
 {
     return db_read_column('message', $GLOBALS['dbUsers'], $id);
 }
 
 
+/**
+    * Return a users current away status
+    * @author Ivan Lucas
+    * @param id int. User ID
+    * @note 0 means user account disabled
+*/
 function user_status($id)
 {
     return db_read_column('status', $GLOBALS['dbUsers'], $id);
@@ -481,11 +519,19 @@ function user_accepting($id)
 }
 
 
+/**
+    * Count the number of active incidents for a given user
+    * @author Ivan Lucas
+    * @param $id The userid of the user to check
+    * @returns int
+*/
 function user_activeincidents($userid)
 {
     global $CONFIG, $now, $dbIncidents, $dbContacts, $dbPriority;
+    $count = 0;
+
     // This SQL must match the SQL in incidents.php
-    $sql = "SELECT i.id  ";
+    $sql = "SELECT COUNT(i.id)  ";
     $sql .= "FROM `{$dbIncidents}` AS i, `{$dbContacts}` AS c, `{$dbPriority}` AS pr WHERE contact = c.id AND i.priority = pr.id ";
     $sql .= "AND (owner='{$userid}' OR towner='{$userid}') ";
     $sql .= "AND (status!='2') ";  // not closed
@@ -497,37 +543,50 @@ function user_activeincidents($userid)
 
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+    else list($count) = mysql_fetch_row($result);
 
-    return(mysql_num_rows($result));
+    return ($count);
 }
 
 
-// counts a users open incidents
+/**
+    * Counts a users open incidents
+    * @author Ivan Lucas
+    * @param $id The userid of the user to check
+    * @returns int
+    * @note This number will never match the number shown in the active queue and is not meant to
+*/
 function user_countincidents($id)
 {
     global $dbIncidents;
-    // this number will never match the number shown in the active queue and is not meant to
+    $count = 0;
 
-    $sql = "SELECT id FROM `{$dbIncidents}` WHERE (owner='{$id}' OR towner='{$id}') AND (status!=2)";
+    $sql = "SELECT COUNT(id) FROM `{$dbIncidents}` WHERE (owner='{$id}' OR towner='{$id}') AND (status!=2)";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+    else list($count) = mysql_fetch_row($result);
 
-    return(mysql_num_rows($result));
+    return ($count);
 }
 
 
-// counts number of incidents and priorty
+/**
+    * Counts number of incidents and priorty for a given user
+    * @author Ivan Lucas
+    * @param $id The userid of the user to check
+    * @returns array
+*/
 function user_incidents($id)
 {
     global $dbIncidents;
-    $sql = "SELECT priority, count(priority) AS num FROM `{$dbIncidents}` WHERE (owner = $id OR towner = $id) AND status != 2";
-    $sql .= " GROUP BY priority";
+    $sql = "SELECT priority, count(priority) AS num FROM `{$dbIncidents}` ";
+    $sql .= "WHERE (owner = $id OR towner = $id) AND status != 2 ";
+    $sql .= "GROUP BY priority";
 
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
     $arr = array('1' => '0', '2' => '0', '3' => '0', '4' => '0');
-
 
     if (mysql_num_rows($result) > 0)
     {
@@ -648,12 +707,24 @@ function user_count_holidays($userid, $type, $date=0, $approved=array(0,1,2))
 }
 
 
+/**
+    * Return the users holiday entitlement
+    * @author Ivan Lucas
+    * @param $userid integer. User ID
+    * @returns integer. Number of days holiday a user is entitled to
+*/
 function user_holiday_entitlement($userid)
 {
     return db_read_column('holiday_entitlement', $GLOBALS['dbUsers'], $userid);
 }
 
 
+/**
+    * Find a contacts real name
+    * @author Ivan Lucas
+    * @param $id integer. Contact ID
+    * @returns string. Full name or 'Unknown'
+*/
 function contact_realname($id)
 {
     global $dbContacts;
@@ -676,10 +747,17 @@ function contact_realname($id)
 }
 
 
+/**
+    * Return a contacts site name
+    * @author Ivan Lucas
+    * @param $id integer. Contact ID
+    * @returns string. Full site name or 'Unknown'
+    * @note this returns the site _NAME_ not the siteid for the site id use contact_siteid()
+*/
 function contact_site($id)
 {
     global $dbContacts, $dbSites;
-    // note: this returns the site _NAME_ not the siteid - INL 17Apr02
+    //
     $sql = "SELECT s.name FROM `{$dbContacts}` AS c, `{$dbSites}` AS s WHERE c.siteid = s.id AND c.id = '$id'";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
@@ -699,40 +777,71 @@ function contact_site($id)
 }
 
 
+/**
+    * Return a contacts site ID
+    * @author Ivan Lucas
+    * @param $id integer. Contact ID
+    * @returns integer. Site ID
+*/
 function contact_siteid($id)
 {
     return db_read_column('siteid', $GLOBALS['dbContacts'], $id);
 }
 
 
+/**
+    * Return a contacts email address
+    * @author Ivan Lucas
+    * @param $id integer. Contact ID
+    * @returns string. Email address
+*/
 function contact_email($id)
 {
     return db_read_column('email', $GLOBALS['dbContacts'], $id);
 }
 
 
+/**
+    * Return a contacts phone number
+    * @author Ivan Lucas
+    * @param $id integer. Contact ID
+    * @returns string. Phone number
+*/
 function contact_phone($id)
 {
     return db_read_column('phone', $GLOBALS['dbContacts'], $id);
 }
 
 
+/**
+    * Return a contacts fax number
+    * @author Ivan Lucas
+    * @param $id integer. Contact ID
+    * @returns string. Fax number
+*/
 function contact_fax($id)
 {
     return db_read_column('fax', $GLOBALS['dbContacts'], $id);
 }
 
 
+/**
+    * Return the number of incidents ever logged against a contact
+    * @author Ivan Lucas
+    * @param $id integer. Contact ID
+    * @returns int.
+*/
 function contact_count_incidents($id)
 {
     global $dbIncidents;
-    $sql = "SELECT id FROM `{$dbIncidents}` WHERE contact='$id'";
+    $count = 0;
+
+    $sql = "SELECT COUNT(id) FROM `{$dbIncidents}` WHERE contact='$id'";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
-
-    $count = mysql_num_rows($result);
-
+    else list($count) = mysql_fetch_row($result);
     mysql_free_result($result);
+
     return $count;
 }
 
@@ -939,22 +1048,45 @@ function contact_vcard($id)
     return $vcard;
 }
 
+
+/**
+    * @author Ivan Lucas
+    * @param $id Incident ID
+    * @returns integer. UserID of the user that currently owns the incident
+*/
 function incident_owner($id)
 {
     return db_read_column('owner', $GLOBALS['dbIncidents'], $id);
 }
 
+
+/**
+    * @author Ivan Lucas
+    * @param $id Incident ID
+    * @returns integer. UserID of the user that currently temporarily owns the incident
+*/
 function incident_towner($id)
 {
     return db_read_column('towner', $GLOBALS['dbIncidents'], $id);
 }
 
+
+/**
+    * @author Ivan Lucas
+    * @param $id Incident ID
+    * @returns integer. ContactID of the contact this incident is logged against
+*/
 function incident_contact($id)
 {
     return db_read_column('contact', $GLOBALS['dbIncidents'], $id);
 }
 
 
+/**
+    * @author Ivan Lucas
+    * @param $id Incident ID
+    * @returns integer. Contract ID of the maintenance contract this incident is logged against
+*/
 function incident_maintid($id)
 {
     $maintid = db_read_column('maintenanceid', $GLOBALS['dbIncidents'], $id);
@@ -969,52 +1101,88 @@ function incident_maintid($id)
 }
 
 
+/**
+    * @author Ivan Lucas
+    * @param $id Incident ID
+    * @returns string. Title of the incident
+*/
 function incident_title($id)
 {
     return db_read_column('title', $GLOBALS['dbIncidents'], $id);
 }
 
 
-function incident_email($id)
-{
-    return db_read_column('email', $GLOBALS['dbIncidents'], $id);
-}
-
-
+/**
+    * @author Ivan Lucas
+    * @param $id Incident ID
+    * @returns id. Current incident status ID
+*/
 function incident_status($id)
 {
     return db_read_column('status', $GLOBALS['dbIncidents'], $id);
 }
 
 
+/**
+    * @author Ivan Lucas
+    * @param $id Incident ID
+    * @returns id. Current incident Priority ID
+*/
 function incident_priority($id)
 {
     return db_read_column('priority', $GLOBALS['dbIncidents'], $id);
 }
 
 
+/**
+    * @author Ivan Lucas
+    * @param $id Incident ID
+    * @returns id. Current incident external ID
+*/
 function incident_externalid($id)
 {
     return db_read_column('externalid', $GLOBALS['dbIncidents'], $id);
 }
 
 
+/**
+    * @author Ivan Lucas
+    * @param $id Incident ID
+    * @returns string. Current incident external engineer
+*/
 function incident_externalengineer($id)
 {
     return db_read_column('externalengineer', $GLOBALS['dbIncidents'], $id);
 }
 
 
+/**
+    * @author Ivan Lucas
+    * @param $id Incident ID
+    * @returns string. Current incident external email address
+*/
 function incident_externalemail($id)
 {
     return db_read_column('externalemail', $GLOBALS['dbIncidents'], $id);
 }
 
+
+/**
+    * @author Ivan Lucas
+    * @param $id Incident ID
+    * @returns string. Current incident CC email address
+*/
 function incident_ccemail($id)
 {
     return db_read_column('ccemail', $GLOBALS['dbIncidents'], $id);
 }
 
+
+/**
+    * @author Ivan Lucas
+    * @param $id Incident ID
+    * @returns int. UNIX Timestamp of the time of the next action for this incident
+*/
 function incident_timeofnextaction($id)
 {
     return db_read_column('timeofnextaction', $GLOBALS['dbIncidents'], $id);
@@ -1055,7 +1223,7 @@ function incident_productinfo_html($incidentid)
             }
         }
         echo $html;
-}
+    }
 }
 
 
@@ -1346,9 +1514,15 @@ function contact_site_drop_down($name, $id, $siteid='', $exclude='')
 }
 
 
-/*  prints the HTML for a drop down list of     */
-/* products, with the given name and with the given id        */
-/* selected.                                                  */
+/**
+    * HTML for a drop down list of products
+    * @author Ivan Lucas
+    * @param $name string. name/id to use for the select element
+    * @param $id int. Product ID
+    * @param $required bool.
+    * @returns string. HTML select
+    * @note With the given name and with the given id selected.
+*/
 function product_drop_down($name, $id, $required = FALSE)
 {
     global $dbProducts;
@@ -1385,6 +1559,13 @@ function product_drop_down($name, $id, $required = FALSE)
 }
 
 
+/**
+    * HTML for a drop down list of skills (was called software)
+    * @author Ivan Lucas
+    * @param $name string. name/id to use for the select element
+    * @param $id int. Software ID
+    * @returns HTML select
+*/
 function software_drop_down($name, $id)
 {
     global $now, $dbSoftware, $strEOL;
