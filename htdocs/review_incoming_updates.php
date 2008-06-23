@@ -271,7 +271,7 @@ if (mysql_num_rows($resultnew) >= 1)
         // Get Last Update
         list($update_userid, $update_type, $update_currentowner, $update_currentstatus, $update_body, $update_timestamp, $update_nextaction, $update_id) = incident_lastupdate($new->id);
         $update_body = parse_updatebody($update_body);
-        $html = "<tr class='shade1'><td />";
+        $html = "<tr class='shade1'>";
         $html .= "<td align='center'>".ldate($CONFIG['dateformat_datetime'], $new->opened)."</td>";
         $html .= "<td>".contact_realname($new->contact)."</td>";
         $html .= "<td>".product_name($new->product)." / ".software_name($new->softwareid)."<br />";
@@ -281,7 +281,7 @@ if (mysql_num_rows($resultnew) >= 1)
         $html .= "<a href= \"javascript:incident_details_window('{$new->id}','holdingview');\" title='View this incident'>View</a> | ";
         $html .= "<a href= \"javascript:wt_winpopup('reassign_incident.php?id={$new->id}&amp;reason=Initial%20assignment%20to%20engineer&amp;popup=yes','mini');\" title='Assign this incident'>Assign</a></td>";
         $html .= "</tr>";
-        $queuerows[$update_timestamp] = $html;
+        $incidentqueuerows[$update_timestamp] = $html;
     }
 }
 
@@ -289,27 +289,8 @@ $realemails = $countresults - $spamcount;
 
 if ((mysql_num_rows($resultnew) > 0) OR ($realemails > 0))
 {
-    $totalheld = $countresults + mysql_num_rows($resultnew) - $spamcount;
-    echo "<h2>".icon('email', 32, $strHeldEmails);
-    echo " ".sprintf($strHeldEmailsNum, $realemails)."</h2>"; // was $countresults
-    if ($realemails > 0)
-    {
-        echo "<p align='center'>".sprintf($strHeldEmailsNum, $realemails)."</p>";
-    }
+    echo "<h2>".icon('email', 32)." {$strIncoming} {$strEmail}</h2>"; //FIXME i18n
     
-    if (mysql_num_rows($resultnew) > 0)
-    {
-        if ($realemails > 0) echo " and "; //FIXME i18n
-        
-        if (mysql_num_rows($resultnew) == 1)
-        {
-            echo $str1IncidentsLoggedViaPortal;
-        }
-        else
-        {
-            echo sprintf($strXIncidentsLoggedViaPortal, mysql_num_rows($resultnew));
-        }
-    }
     echo "<p align='center'>{$strIncomingEmailText}</p>";
     echo "<form action='{$_SERVER['PHP_SELF']}' name='held_emails'  method='post'>";
     echo "<table align='center' style='width: 95%'>";
@@ -341,6 +322,25 @@ if ((mysql_num_rows($resultnew) > 0) OR ($realemails > 0))
     }
     echo "</table>\n";
     echo "</form>";
+    if (sizeof($incidentqueuerows) > 0)
+    {
+        echo "<h2>".icon('support', 32)." Unassigned Incidents</h2>";
+        
+        echo "<table align='center' style='width: 95%'>";
+        echo "<th>{$strDate}</th>";
+        echo "<th>{$strFrom}</th>";
+        echo "<th>{$strSubject}</th>";
+        echo "<th>{$strMessage}</th>";
+        echo "<th>{$strOperation}</th>";
+        echo "</tr>";
+        sort($incidentqueuerows);
+        foreach ($incidentqueuerows AS $row)
+        {
+            echo $row;
+        }
+        echo "</table>";
+    }
+    
 }
 else if ($spamcount == 0)
 {
