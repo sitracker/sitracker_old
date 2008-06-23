@@ -223,9 +223,10 @@ while ($update = mysql_fetch_object($result))
         $statusupdate .=  "<div class='detaildate'>{$updatetime}</div>";
         $statusupdate .=  icon('research', 16).' ';
         
-        $statusupdate .=  "Set to <strong>".incidentstatus_name($updatestatus);
-        $statusupdate .=  "</strong> {$strby} "; //FIXME terrible i18n due to string freeze
-        $statusupdate .=  "{$updateuser}</div><br />";
+        $statusupdate .=  "<span class='statusline'>Set to <strong>";
+	$statusupdate .=  incidentstatus_name($updatestatus);
+        $statusupdate .=  "</strong> {$strby} "; //FIXME i18n
+        $statusupdate .=  "{$updateuser}</span></div><br />";
 //        echo "<div class='detailentryhidden'><div class='iheader'>";
 //        echo "{$strStatus}: ".incidentstatus_name($laststatus);
 //        echo " -> <strong>".incidentstatus_name($updatestatus)."</strong>\n\n";
