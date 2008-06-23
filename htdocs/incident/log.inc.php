@@ -192,7 +192,7 @@ echo log_nav_bar();
 $count = 0;
 while ($update = mysql_fetch_object($result))
 {
-    $wholeupdate = '';
+    $wholeupdate = $statusupdate = $updatebody = '';
     
     if (empty($firstid))
     {
@@ -214,7 +214,7 @@ while ($update = mysql_fetch_object($result))
     $currentstatus = incident_status($update->currentstatus);
     
     $updatestatus = $update->currentstatus;
-    if ($laststatus != $updatestatus AND isset($laststatus))
+    if ($laststatus != $updatestatus AND !empty($laststatus))
     {
         $statusupdate .=  "<a name='update{$count}'></a>";
         
