@@ -286,8 +286,8 @@ if (mysql_num_rows($resultnew) >= 1)
 }
 
 $realemails = $countresults - $spamcount;
-
-if ((mysql_num_rows($resultnew) > 0) OR ($realemails > 0))
+//$totalheld = $countresults + mysql_num_rows($resultnew) - $spamcount;
+if (is_array($queuerows))
 {
     echo "<h2>".icon('email', 32)." {$strIncoming} {$strEmail}</h2>"; //FIXME i18n
     
@@ -322,6 +322,15 @@ if ((mysql_num_rows($resultnew) > 0) OR ($realemails > 0))
     }
     echo "</table>\n";
     echo "</form>";
+}
+else if ($spamcount == 0)
+{
+    echo "<h2>".icon('email', 32)." {$strHoldingQueue}</h2>";
+    echo "<p align='center'>{$strNoRecords}</p>";
+}
+
+if (is_array($incidentqueuerows))
+{
     if (sizeof($incidentqueuerows) > 0)
     {
         echo "<h2>".icon('support', 32)." Unassigned Incidents</h2>";
@@ -340,12 +349,6 @@ if ((mysql_num_rows($resultnew) > 0) OR ($realemails > 0))
         }
         echo "</table>";
     }
-    
-}
-else if ($spamcount == 0)
-{
-    echo "<h2>".icon('email', 32)." {$strHoldingQueue}</h2>";
-    echo "<p align='center'>{$strNoRecords}</p>";
 }
 
 if ($spamcount > 0)
