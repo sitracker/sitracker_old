@@ -443,15 +443,16 @@ $result = mysql_query($sql);
 
 if (mysql_num_rows($result) >= 1)
 {
-    echo "<br />\n";
+    $show = FALSE;
+    $rhtml = "<br />\n";
 
-    echo "<h2>".icon('reassign', 32, $strPendingReassignments);
-    echo " {$strPendingReassignments}</h2>";
-    echo "<p align='center'>{$strAutoReassignmentsThatCouldntBeMade}</p>";
-    echo "<table align='center' style='width: 95%;'>";
-    echo "<tr><th title='{$strLastUpdated}'>{$strDate}</th><th title='{$strCurrentOwner}'>{$strFrom}</th>";
-    echo "<th title='{$strIncidentTitle}'>{$strSubject}</th><th>{$strMessage}</th>";
-    echo "<th>{$strOperation}</th></tr>\n";
+    $rhtml .= "<h2>".icon('reassign', 32, $strPendingReassignments);
+    $rhtml .= " {$strPendingReassignments}</h2>";
+    $rhtml .= "<p align='center'>{$strAutoReassignmentsThatCouldntBeMade}</p>";
+    $rhtml .= "<table align='center' style='width: 95%;'>";
+    $rhtml .= "<tr><th title='{$strLastUpdated}'>{$strDate}</th><th title='{$strCurrentOwner}'>{$strFrom}</th>";
+    $rhtml .= "<th title='{$strIncidentTitle}'>{$strSubject}</th><th>{$strMessage}</th>";
+    $rhtml .= "<th>{$strOperation}</th></tr>\n";
 
     while ($assign = mysql_fetch_object($result))
     {
@@ -459,51 +460,56 @@ if (mysql_num_rows($result) >= 1)
         $useraccepting = strtolower(user_accepting($assign->originalowner));
         if (($assign->owner == $assign->originalowner || $assign->towner == $assign->originalowner) AND $useraccepting == 'no')
         {
-            echo "<tr class='shade1'>";
-            echo "<td align='center'>".ldate($CONFIG['dateformat_datetime'], $assign->lastupdated)."</td>";
-            echo "<td>".user_realname($assign->originalowner,TRUE)."</td>";
-            echo "<td>".software_name($assign->softwareid)."<br />[<a href=\"javascript:wt_winpopup('incident_details.php?id={$assign->id}&amp;popup=yes', 'mini')\">{$assign->id}</a>] ".$assign->title."</td>";
+            $show = TRUE;
+            $rhtml .= "<tr class='shade1'>";
+            $rhtml .= "<td align='center'>".ldate($CONFIG['dateformat_datetime'], $assign->lastupdated)."</td>";
+            $rhtml .= "<td>".user_realname($assign->originalowner,TRUE)."</td>";
+            $rhtml .= "<td>".software_name($assign->softwareid)."<br />[<a href=\"javascript:wt_winpopup('incident_details.php?id={$assign->id}&amp;popup=yes', 'mini')\">{$assign->id}</a>] ".$assign->title."</td>";
             $userstatus = userstatus_name($assign->userstatus);
             $usermessage = user_message($assign->originalowner);
             $username = user_realname($assign->originalowner,TRUE);
-            echo "<td>".sprintf($strOwnerXAndNotAccepting, $userstatus)."<br />{$usermessage}</td>";
+            $rhtml .= "<td>".sprintf($strOwnerXAndNotAccepting, $userstatus)."<br />{$usermessage}</td>";
             $backupid = software_backup_userid($assign->originalowner, $assign->softwareid);
             $backupname = user_realname($backupid,TRUE);
             $reason = urlencode(trim("{$strPreviousIncidentOwner} ($username) {$userstatus}  {$usermessage}"));
-            echo "<td>";
+            $rhtml .= "<td>";
             if ($backupid >= 1)
             {
-                echo "<a href=\"javascript:wt_winpopup('reassign_incident.php?id={$assign->id}&amp;reason={$reason}&amp;backupid={$backupid}&amp;asktemp=temporary&amp;popup=yes','mini');\" title='Re-assign this incident to {$backupname}'>{$strAssignToBackup}</a> | ";
+                $rhtml .= "<a href=\"javascript:wt_winpopup('reassign_incident.php?id={$assign->id}&amp;reason={$reason}&amp;backupid={$backupid}&amp;asktemp=temporary&amp;popup=yes','mini');\" title='Re-assign this incident to {$backupname}'>{$strAssignToBackup}</a> | ";
             }
 
-            echo "<a href=\"javascript:wt_winpopup('reassign_incident.php?id={$assign->id}&amp;reason={$reason}&amp;asktemp=temporary&amp;popup=yes','mini');\" title='Re-assign this incident to another engineer'>Assign to other</a> | <a href='set_user_status.php?mode=deleteassign&amp;incidentid={$assign->incidentid}&amp;originalowner={$assign->originalowner}' title='Ignore this reassignment and delete this notice'>Ignore</a></td>";
-            echo "</tr>\n";
+            $rhtml .= "<a href=\"javascript:wt_winpopup('reassign_incident.php?id={$assign->id}&amp;reason={$reason}&amp;asktemp=temporary&amp;popup=yes','mini');\" title='Re-assign this incident to another engineer'>Assign to other</a> | <a href='set_user_status.php?mode=deleteassign&amp;incidentid={$assign->incidentid}&amp;originalowner={$assign->originalowner}' title='Ignore this reassignment and delete this notice'>Ignore</a></td>";
+            $rhtml .= "</tr>\n";
         }
         elseif ($assign->owner != $assign->originalowner AND $useraccepting =='yes')
         {
+            $show = TRUE;
             // display a row to assign the incident back to the original owner
-            echo "<tr class='shade2'>";
-            echo "<td>".ldate($CONFIG['dateformat_datetime'], $assign->lastupdated)."</td>";
-            echo "<td>".user_realname($assign->owner,TRUE)."</td>";
-            echo "<td>[<a href=\"javascript:wt_winpopup('incident_details.php?id={$assign->id}&amp;popup=yes', 'mini')\">{$assign->id}</a>] {$assign->title}</td>";
+            $rhtml .= "<tr class='shade2'>";
+            $rhtml .= "<td>".ldate($CONFIG['dateformat_datetime'], $assign->lastupdated)."</td>";
+            $rhtml .= "<td>".user_realname($assign->owner,TRUE)."</td>";
+            $rhtml .= "<td>[<a href=\"javascript:wt_winpopup('incident_details.php?id={$assign->id}&amp;popup=yes', 'mini')\">{$assign->id}</a>] {$assign->title}</td>";
             $userstatus = user_status($assign->originalowner);
             $userstatusname = userstatus_name($userstatus);
             $origstatus = userstatus_name($assign->userstatus);
             $usermessage = user_message($assign->originalowner);
             $username = user_realname($assign->owner,TRUE);
-            echo "<td>".sprintf($strOwnerXAcctingAgain, $userstatusname)."<br />{$usermessage}</td>";
+            $rhtml .= "<td>".sprintf($strOwnerXAcctingAgain, $userstatusname)."<br />{$usermessage}</td>";
             $originalname = user_realname($assign->originalowner,TRUE);
             $reason = urlencode(trim("{$originalname} is now accepting incidents again. Previous status {$origstatus} and not accepting."));  // FIXME i18n
-            echo "<td>";
-            echo "<a href=\"javascript:wt_winpopup('reassign_incident.php?id={$assign->id}&amp;reason={$reason}&amp;originalid={$assign->originalowner}&amp;popup=yes','mini');\" title='Re-assign this incident to {$originalname}'>Return to original owner</a> | ";
+            $rhtml .= "<td>";
+            $rhtml .= "<a href=\"javascript:wt_winpopup('reassign_incident.php?id={$assign->id}&amp;reason={$reason}&amp;originalid={$assign->originalowner}&amp;popup=yes','mini');\" title='Re-assign this incident to {$originalname}'>Return to original owner</a> | ";
 
-            echo "<a href=\"javascript:wt_winpopup('reassign_incident.php?id={$assign->id}&amp;reason={$reason}&amp;asktemp=temporary&amp;popup=yes','mini');\" title='Re-assign this incident to another engineer'>{$strAssignToOther}</a> | <a href='set_user_status.php?mode=deleteassign&amp;incidentid={$assign->incidentid}&amp;originalowner={$assign->originalowner}' title='Ignore this reassignment and delete this notice'>{$strIgnore}</a></td>";
-            echo "</tr>\n";
+            $rhtml .= "<a href=\"javascript:wt_winpopup('reassign_incident.php?id={$assign->id}&amp;reason={$reason}&amp;asktemp=temporary&amp;popup=yes','mini');\" title='Re-assign this incident to another engineer'>{$strAssignToOther}</a> | <a href='set_user_status.php?mode=deleteassign&amp;incidentid={$assign->incidentid}&amp;originalowner={$assign->originalowner}' title='Ignore this reassignment and delete this notice'>{$strIgnore}</a></td>";
+            $rhtml .= "</tr>\n";
         }
     }
-    echo "</table>\n";
+    $rhtml .= "</table>\n";
 }
-
+if ($show)
+{
+    echo $rhtml;
+}
 
 // TODO v3.2x Merge the sections into a single queue using an array
 
