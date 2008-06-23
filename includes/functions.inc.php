@@ -5046,11 +5046,11 @@ function readable_date($date)
     // e.g. Yesterday @ 5:28pm
     if (date('dmy', $date) == date('dmy', time()))
     {
-        $datestring = "{$GLOBALS['strToday']} @ ".date('g:ia', $date);
+        $datestring = "{$GLOBALS['strToday']} @ ".ldate('g:ia', $date);
     }
-    elseif (date('dmy', $date) == date('dmy', (time()-86400)))
+    elseif (date('dmy', $date) == ldate('dmy', (time()-86400)))
     {
-        $datestring = "{$GLOBALS['strYesterday']} @ ".date('g:ia', $date);
+        $datestring = "{$GLOBALS['strYesterday']} @ ".ldate('g:ia', $date);
     }
     else
     {
@@ -5699,7 +5699,7 @@ function cleanvar($var, $striphtml=TRUE, $transentities=TRUE,$mysqlescape=TRUE)
 
     if ($mysqlescape) $var = mysql_real_escape_string($var);
     $var = trim($var);
-    
+
     return $var;
 }
 
@@ -7745,7 +7745,7 @@ function contract_software()
 function help_link($context)
 {
     global $strHelpChar;
-    $html = "<span class='helplink'>[<a href='javascript:void(0);' tabindex='-1' onmouseover=\"contexthelp(this, '$context');\">{$strHelpChar}<span></span></a>]</span>";
+    $html = "<span class='helplink'>[<a href='#' tabindex='-1' onmouseover=\"contexthelp(this, '$context');return false;\">{$strHelpChar}<span></span></a>]</span>";
 
     return $html;
 }
