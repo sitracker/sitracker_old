@@ -209,7 +209,7 @@ function authenticate($username, $password)
 
     // extract user
     $sql  = "SELECT id FROM `{$dbUsers}` ";
-    $sql .= "WHERE username='$username' AND password='$password' AND status!=0 ";
+    $sql .= "WHERE username = '$username' AND password = '$password' AND status!=0 ";
     // a status of 0 means the user account is disabled
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
@@ -240,7 +240,7 @@ function authenticate($username, $password)
 */
 function db_read_column($column, $table, $id)
 {
-    $sql = "SELECT `$column` FROM `{$table}` WHERE id='$id' LIMIT 1";
+    $sql = "SELECT `$column` FROM `{$table}` WHERE id ='$id' LIMIT 1";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
     list($column) = mysql_fetch_row($result);
@@ -371,7 +371,7 @@ function user_password($id)
     * @param $allowhtml boolean. may return HTML if TRUE, only ever returns plain text if FALSE
     * @note If $allowhtml is TRUE disabled user accounts are returned as HTML with span class 'deleted'
 */
-function user_realname($id, $allowhtml=FALSE)
+function user_realname($id, $allowhtml = FALSE)
 {
     global $update_body;
     global $incidents;
@@ -611,7 +611,7 @@ function user_incidents($id)
     * @param $length string. 'am', 'pm', 'day' or FALSE to list all
     * @returns array
 */
-function user_holiday($userid, $type=0, $year, $month, $day, $length=FALSE)
+function user_holiday($userid, $type=0, $year, $month, $day, $length = FALSE)
 {
     global $dbHolidays;
     $startdate=mktime(0,0,0,$month,$day,$year);
@@ -627,7 +627,7 @@ function user_holiday($userid, $type=0, $year, $month, $day, $length=FALSE)
         $sql .= " AND userid='$userid' ";
     }
 
-    if ($length!=FALSE)
+    if ($length != FALSE)
     {
         $sql .= "AND length='$length' ";
     }
@@ -1344,13 +1344,13 @@ function array_drop_down($array, $name, $setting='', $enablefield='')
 {
     $html = "<select name='$name' id='$name' $enablefield>\n";
 
-    if (array_key_exists($setting, $array) AND in_array((string)$setting, $array)==FALSE)
+    if (array_key_exists($setting, $array) AND in_array((string)$setting, $array) == FALSE)
     {
-        $usekey=TRUE;
+        $usekey = TRUE;
     }
     else
     {
-        $usekey=FALSE;
+        $usekey = FALSE;
     }
     foreach ($array AS $key => $value)
     {
@@ -1759,7 +1759,7 @@ function supported_product_drop_down($name, $contactid, $productid)
     * @param $exclude integer. User ID not to list
     * @param $attribs string. Extra attributes for the select control
 */
-function user_drop_down($name, $id, $accepting=TRUE, $exclude=FALSE, $attribs="", $return=FALSE)
+function user_drop_down($name, $id, $accepting = TRUE, $exclude = FALSE, $attribs="", $return = FALSE)
 {
     // INL 1Jul03 Now only shows users with status > 0 (ie current users)
     // INL 2Nov04 Optional accepting field, to hide the status 'Not Accepting'
@@ -1784,32 +1784,32 @@ function user_drop_down($name, $id, $accepting=TRUE, $exclude=FALSE, $attribs=""
 
     while ($users = mysql_fetch_array($result))
     {
-        $show=TRUE;
-        if ($exclude!=FALSE)
+        $show = TRUE;
+        if ($exclude != FALSE)
         {
             if (is_array($exclude))
             {
-                if (!in_array($users['id'], $exclude)) $show=TRUE;
-                else $show=FALSE;
+                if (!in_array($users['id'], $exclude)) $show = TRUE;
+                else $show = FALSE;
             }
             else
             {
-                if ($exclude!=$users['id']) $show=TRUE;
+                if ($exclude!=$users['id']) $show = TRUE;
                 else $show = FALSE;
             }
         }
-        if ($show==TRUE)
+        if ($show == TRUE)
         {
             $html .= "<option ";
             if ($users["id"] == $id) $html .= "selected='selected' ";
-            if ($users['accepting']=='No' AND $accepting==TRUE)
+            if ($users['accepting']=='No' AND $accepting == TRUE)
             {
                 $html .= " class='expired' ";
             }
 
             $html .= "value='{$users['id']}'>";
             $html .= "{$users['realname']}";
-            if ($users['accepting']=='No' AND $accepting==TRUE)
+            if ($users['accepting']=='No' AND $accepting == TRUE)
             {
                 $html .= ", {$GLOBALS['strNotAccepting']}";
             }
@@ -1986,7 +1986,7 @@ function interface_style($id)
 //  prints the HTML for a drop down list of
 // incident status names (EXCLUDING 'CLOSED'), with the given
 // name and with the given id selected.
-function incidentstatus_drop_down($name, $id, $disabled=FALSE)
+function incidentstatus_drop_down($name, $id, $disabled = FALSE)
 {
     global $dbIncidentStatus;
     // extract statuses
@@ -2109,7 +2109,7 @@ function closingstatus_drop_down($name, $id, $required = FALSE)
     * @param $userdisable boolean. (optional). When TRUE an additional option is given to allow disabling of accounts
     * @returns string. HTML
 */
-function userstatus_drop_down($name, $id, $userdisable=FALSE)
+function userstatus_drop_down($name, $id, $userdisable = FALSE)
 {
     global $dbUserStatus;
     // extract statuses
@@ -2241,7 +2241,7 @@ function emailtemplate_drop_down($name, $id, $type)
     * @param $disable boolean. Disable the control when TRUE.
     * @returns string. HTML
 */
-function priority_drop_down($name, $id, $max=4, $disable=FALSE)
+function priority_drop_down($name, $id, $max=4, $disable = FALSE)
 {
     global $CONFIG, $iconset;
     // INL 8Oct02 - Removed DB Query
@@ -2910,7 +2910,7 @@ function format_date_friendly($date)
     * @note The recommended way to use this function is to call it without headers/footers
     * @note already displayed.
 */
-function html_redirect($url, $success=TRUE, $message='')
+function html_redirect($url, $success = TRUE, $message='')
 {
     global $CONFIG, $headerdisplayed;
 
@@ -2923,7 +2923,7 @@ function html_redirect($url, $success=TRUE, $message='')
     {
         $refreshtime = 1;
     }
-    elseif ($sucess==FALSE)
+    elseif ($sucess == FALSE)
     {
         $refreshtime = 3;
     }
@@ -2990,7 +2990,7 @@ function calculate_time_of_next_action($days, $hours, $minutes)
 
 // Returns the HTML for a drop down list of service levels,
 // with the given name and with the given id selected.
-function servicelevel_drop_down($name, $id, $collapse=FALSE)
+function servicelevel_drop_down($name, $id, $collapse = FALSE)
 {
     global $dbServiceLevels;
 
@@ -3033,7 +3033,7 @@ function servicelevel_drop_down($name, $id, $collapse=FALSE)
 }
 
 
-function serviceleveltag_drop_down($name, $tag, $collapse=FALSE)
+function serviceleveltag_drop_down($name, $tag, $collapse = FALSE)
 {
     global $dbServiceLevels;
 
@@ -3286,7 +3286,7 @@ function sit_error_handler($errno, $errstr, $errfile, $errline, $errcontext)
         }
         echo "</p>";
         // Tips, to help diagnose errors
-        if (strpos($errstr, 'Unknown column')!==FALSE OR
+        if (strpos($errstr, 'Unknown column') !== FALSE OR
             preg_match("/Table '(.*)' doesn't exist/", $errstr))
         {
             echo "<p class='tip'>The SiT schema may need updating to fix this problem.";
@@ -3294,8 +3294,8 @@ function sit_error_handler($errno, $errstr, $errfile, $errline, $errcontext)
             echo "</p>";
         }
 
-        if (strpos($errstr, 'You have an error in your SQL syntax')!==FALSE OR
-            strpos($errstr, 'Query Error Incorrect table name')!==FALSE)
+        if (strpos($errstr, 'You have an error in your SQL syntax') !== FALSE OR
+            strpos($errstr, 'Query Error Incorrect table name') !== FALSE)
         {
             echo "<p class='tip'>You may have found a bug in SiT, please <a href=\"{$CONFIG['bugtracker_url']}\">report it</a>.</p>";
         }
@@ -3720,7 +3720,7 @@ function send_template_email($template, $incidentid, $info1='', $info2='')
     $email_storeinlog = trim(emailtype_storeinlog($templateid));
 
     // Additional information
-    if (empty($info1)==FALSE || empty($info2)==FALSE)
+    if (empty($info1) == FALSE || empty($info2) == FALSE)
     {
         $email_body = str_replace("<info1>", "$info1", $email_body);
         $email_subject = str_replace("<info1>", "$info1", $email_subject);
@@ -3844,7 +3844,7 @@ if (!function_exists('list_dir'))
         $dirname .= $delim;
 
         $handle = opendir($dirname);
-        if ($handle==FALSE) throw_error('Error in list_dir() Problem attempting to open directory',$dirname);
+        if ($handle == FALSE) throw_error('Error in list_dir() Problem attempting to open directory',$dirname);
 
         while ($file = readdir($handle))
         {
@@ -3888,7 +3888,7 @@ if (!function_exists('is_number'))
         {
             if (!(ord(substr($string,$i,1)) <= 57 && ord(substr($string,$i,1)) >= 48))
             {
-                $number=FALSE;
+                $number = FALSE;
             }
         }
         return $number;
@@ -3921,7 +3921,9 @@ function rec_copy ($from_path, $to_path)
                 }
                 if (is_file($file))
                 {
-                    if (!(substr(rtrim($file),strlen(rtrim($file))-8,4)=='mail' || substr(rtrim($file),strlen(rtrim($file))-10,5)=='part1'|| substr(rtrim($file),strlen(rtrim($file))-8,4)=='.vcf'))
+                    if (!(substr(rtrim($file),strlen(rtrim($file))-8,4) == 'mail'
+                        || substr(rtrim($file),strlen(rtrim($file))-10,5) == 'part1'
+                        || substr(rtrim($file),strlen(rtrim($file))-8,4) == '.vcf'))
                     {
                         copy($from_path.$file, $to_path.$file);
                     }
@@ -4043,7 +4045,7 @@ function getattachmenticon($filename)
     {
         $a = 0;
         $stop = FALSE;
-        while ($a < $cnt && $stop==FALSE)
+        while ($a < $cnt && $stop == FALSE)
         {
             if ($ext==$filetype[$a])
             {
@@ -5383,7 +5385,7 @@ function software_backup_userid($userid, $softwareid)
     $sql = "SELECT backupid FROM `{$dbUserSoftware}` WHERE userid = '$userid' AND softwareid = '$softwareid'";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
-    list($backupid)=mysql_fetch_row($result);
+    list($backupid) = mysql_fetch_row($result);
     $backup1=$backupid;
 
     // If that substitute is not accepting then try and find another
@@ -5393,7 +5395,7 @@ function software_backup_userid($userid, $softwareid)
         $sql .= "AND softwareid='$softwareid' AND backupid!='$backup1'";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
-        list($backupid)=mysql_fetch_row($result);
+        list($backupid) = mysql_fetch_row($result);
         $backup2=$backupid;
     }
 
@@ -5404,7 +5406,7 @@ function software_backup_userid($userid, $softwareid)
         $sql .= "AND softwareid='$softwareid' AND backupid!='$backup1' AND backupid!='$backup2'";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
-        list($backupid)=mysql_fetch_row($result);
+        list($backupid) = mysql_fetch_row($result);
     }
     return ($backupid);
 }
@@ -5613,8 +5615,8 @@ function suggest_reassign_userid($incidentid, $exceptuserid=0)
     {
         $incident = mysql_fetch_object($result);
         // If this is a critical incident the user we're assigning to must be online
-        if ($priority >= 4) $req_online=TRUE;
-        else $req_online=FALSE;
+        if ($priority >= 4) $req_online = TRUE;
+        else $req_online = FALSE;
 
         // Find the users with this skill (or all users)
         if (!empty($incident->softwareid))
@@ -5711,7 +5713,7 @@ function suggest_reassign_userid($incidentid, $exceptuserid=0)
         $rand = mt_rand(0, $numtickets);
         $userid = $ticket[$rand];
     }
-    if (empty($userid)) $userid=FALSE;
+    if (empty($userid)) $userid = FALSE;
     return $userid;
 }
 
@@ -5792,7 +5794,7 @@ function draw_tabs($tabsarray, $selected='')
     foreach ($tabsarray AS $tab => $url)
     {
         $html .= "<li><a href='$url'";
-        if (strtolower($tab)==strtolower($selected)) $html .= " class='active'";
+        if (strtolower($tab) == strtolower($selected)) $html .= " class='active'";
         $tab=str_replace('_', ' ', $tab);
         $html .= ">$tab</a></li>\n";
     }
@@ -5872,7 +5874,7 @@ function file_permissions_info($perms)
 }
 
 
-function cleanvar($var, $striphtml=TRUE, $transentities=TRUE,$mysqlescape=TRUE)
+function cleanvar($var, $striphtml = TRUE, $transentities = TRUE,$mysqlescape = TRUE)
 {
     if ($striphtml) $var = strip_tags($var);
     if ($transentities) $var = htmlentities($var, ENT_COMPAT, $GLOBALS['i18ncharset']);
@@ -6056,7 +6058,7 @@ function incident_open($incidentid)
 // Return HTML for a table column header (th and /th) with links for sorting
 // Filter parameter can be an assocative array containing fieldnames and values
 // to pass on the url for data filtering purposes
-function colheader($colname, $coltitle, $sort=FALSE, $order='', $filter='', $defaultorder='a', $width='')
+function colheader($colname, $coltitle, $sort = FALSE, $order='', $filter='', $defaultorder='a', $width='')
 {
     global $CONFIG;
     if($width!= '')
@@ -6093,7 +6095,7 @@ function colheader($colname, $coltitle, $sort=FALSE, $order='', $filter='', $def
     }
     else
     {
-        if ($sort===FALSE) $html .= "{$coltitle}";
+        if ($sort === FALSE) $html .= "{$coltitle}";
         else $html .= "<a href='{$_SERVER['PHP_SELF']}?sort=$colname&amp;order={$defaultorder}{$qsappend}'>{$coltitle}</a> ";
     }
     $html .= "</th>";
@@ -6101,7 +6103,7 @@ function colheader($colname, $coltitle, $sort=FALSE, $order='', $filter='', $def
 }
 
 
-function parse_updatebody($updatebody, $striptags=TRUE)
+function parse_updatebody($updatebody, $striptags = TRUE)
 {
     if (!empty($updatebody))
     {
@@ -6274,7 +6276,7 @@ function dashlet($dashboard, $dashletid, $icon, $title='', $link='', $content=''
     * @param $formid string. The form element ID to be submitted when using 'save' action
     * @returns string HTML
 */
-function dashlet_link($dashboard, $dashletid, $text='', $action='', $params='', $refresh=FALSE, $formid='')
+function dashlet_link($dashboard, $dashletid, $text='', $action='', $params='', $refresh = FALSE, $formid='')
 {
     if ($action == 'edit') $action = 'dashboard_edit';
     elseif ($action == 'save') $action = 'dashboard_save';
@@ -6476,8 +6478,8 @@ function draw_chart_image($type, $width, $height, $data, $legends, $title='', $u
     if (empty($height)) $height = 150;
     $fontfile="{$CONFIG['application_fspath']}FreeSans.ttf";
 
-    if (!empty($fontfile) AND file_exists($fontfile)) $use_ttf=TRUE;
-    else $use_ttf=FALSE;
+    if (!empty($fontfile) AND file_exists($fontfile)) $use_ttf = TRUE;
+    else $use_ttf = FALSE;
 
     $countdata = count($data);
     $sumdata = array_sum($data);
@@ -6816,7 +6818,7 @@ function purge_tags()
     * @author Ivan Lucas
     * @param $html boolean. Return HTML when TRUE
 */
-function list_tags($recordid, $type, $html=TRUE)
+function list_tags($recordid, $type, $html = TRUE)
 {
     global $CONFIG, $dbSetTags, $dbTags, $iconset;
 
@@ -6896,7 +6898,7 @@ function list_tag_icons($recordid, $type)
     * @author Ivan Lucas, Tom Gerrard
     * @returns string. HTML
 */
-function show_tag_cloud($orderby="name", $showcount=FALSE)
+function show_tag_cloud($orderby="name", $showcount = FALSE)
 {
     global $CONFIG, $dbTags, $dbSetTags, $iconset;
 
@@ -7059,7 +7061,7 @@ function string_find_all($haystack, $needle, $limit=0)
     $currentoffset = 0;
 
     $count = 0;
-    while (($pos = stripos($haystack, $needle, $offset)) !==false && ($count < $limit || $limit == 0))
+    while (($pos = stripos($haystack, $needle, $offset)) !== false && ($count < $limit || $limit == 0))
     {
         $positions[] = $pos;
         $offset = $pos + strlen($needle);
@@ -7243,7 +7245,7 @@ function clear_form_data($formname)
     *                    Set to FALSE for plain text only
     * @returns string. A shortned string (optionally with html)
 */
-function truncate_string($text, $maxlength=255, $html=TRUE)
+function truncate_string($text, $maxlength=255, $html = TRUE)
 {
 
     if (strlen($text) > $maxlength)
@@ -7485,7 +7487,7 @@ function schedule_actions_due()
     * @param $doneaction string. Name of scheduled action
     * @param $success bool. Was the run successful, TRUE = Yes, FALSE = No
 **/
-function schedule_action_done($doneaction, $success=TRUE)
+function schedule_action_done($doneaction, $success = TRUE)
 {
     global $now;
     global $dbScheduler;
@@ -8803,14 +8805,14 @@ function show_edit_site($site, $mode='internal')
         if ($mode == 'internal')
         {
             $html .= "<tr><th>{$GLOBALS['strSalesperson']}:</th><td>";
-            $html .= user_drop_down('owner', $siterow['owner'], $accepting=FALSE, '', '', TRUE);
+            $html .= user_drop_down('owner', $siterow['owner'], $accepting = FALSE, '', '', TRUE);
             $html .= "</td></tr>\n";
         }
         if ($mode == 'internal')
         {
             $html .= "<tr><th>{$GLOBALS['strIncidentPool']}:</th>";
             $incident_pools = explode(',', "{$GLOBALS['strNone']},{$CONFIG['incident_pools']}");
-            if (array_key_exists($siterow['freesupport'], $incident_pools)==FALSE)
+            if (array_key_exists($siterow['freesupport'], $incident_pools) == FALSE)
             {
                 array_unshift($incident_pools,$siterow['freesupport']);
             }
@@ -9595,7 +9597,7 @@ function plugin_register($context, $action)
 /**
     * @author Ivan Lucas
 */
-function plugin_do($context, $optparams=FALSE)
+function plugin_do($context, $optparams = FALSE)
 {
     global $PLUGINACTIONS;
 
@@ -9637,10 +9639,10 @@ function plugin_do($context, $optparams=FALSE)
 // These are the modules that we are dependent on, without these something
 // or everything will fail, so let's throw an error here.
 // Check that the correct modules are loaded
-if (!extension_loaded('pspell')) $CONFIG['enable_spellchecker']=FALSE; // FORCE Turn off spelling if module not found
+if (!extension_loaded('pspell')) $CONFIG['enable_spellchecker'] = FALSE; // FORCE Turn off spelling if module not found
 if (!extension_loaded('mysql')) trigger_error('SiT requires the php/mysql module', E_USER_ERROR);
 if (version_compare(PHP_VERSION, "5.0.0", "<")) trigger_error('INFO: You are running an older PHP version, some features may not work properly.', E_USER_NOTICE);
-if (@ini_get('register_globals')==1 OR strtolower(@ini_get('register_globals'))=='on')
+if (@ini_get('register_globals') == 1 OR strtolower(@ini_get('register_globals')) == 'on')
 {
     trigger_error('Error: php.ini MUST have register_globals set to off, there are potential security risks involved with leaving it as it is!', E_USER_ERROR);
 }
