@@ -516,7 +516,7 @@ else
     if (empty($bodytext) OR !preg_match('/^[a-z0-9]{4,}$/i', $bodytext))
     {
         $_SESSION['formerrors']['update'][] = "<p class='error'>{$strYouMissedARequiredField}</p>";
-        html_redirect($_SERVER['PHP_SELF'], FALSE);
+        html_redirect($_SERVER['PHP_SELF']."?id={$id}", FALSE);
         exit;
     }
 
