@@ -224,11 +224,20 @@ function display_update_page($draftid=-1)
     //-->
     </script>
     <?php
+    if (!empty($_SESSION['formerrors']['update']))
+    {
+        foreach ($_SESSION['formerrors']['update'] as $error)
+        {
+            echo $error;
+        }
+    }
+    clear_form_errors('update');
+    
     //echo "<form action='".$_SERVER['PHP_SELF']."?id={$id}&amp;draftid={$draftid}' method='post' name='updateform' id='updateform' enctype='multipart/form-data'>";
     echo "<form action='".$_SERVER['PHP_SELF']."?id={$id}' method='post' name='updateform' id='updateform' enctype='multipart/form-data'>";
     echo "<table class='vertical'>";
     echo "<tr>";
-    echo "<th align='right' valign='top' width='30%;'>{$GLOBALS['strDoesThisUpdateMeetSLA']}:";
+    echo "<th align='right' width='20%;'>{$GLOBALS['strSLATarget']}";
     echo icon('sla', 16)."</th>";
     echo "<td class='shade2'>";
     $target = incident_get_next_target($id);
@@ -285,7 +294,7 @@ function display_update_page($draftid=-1)
 
 
     echo "<select name='target' id='target' class='dropdown'>\n";
-    echo "<option value='none' {$targetNone} onclick='notarget(this.form)'>{$GLOBALS['strNo']}</option>\n";
+    echo "<option value='none' {$targetNone} onclick='notarget(this.form)'>{$GLOBALS['strNone']}</option>\n";
     switch ($target->type)
     {
         case 'initialresponse':
@@ -309,7 +318,7 @@ function display_update_page($draftid=-1)
     }
     echo "</select>\n";
     echo "</td></tr>\n";
-    echo "<tr><th align='right' valign='top'>{$GLOBALS['strUpdateType']}:</th>";
+    echo "<tr><th align='right'>{$GLOBALS['strUpdateType']}</th>";
     echo "<td class='shade1'>";
     echo "<select name='updatetype' id='updatetype' class='dropdown'>";
     /*
@@ -330,10 +339,12 @@ function display_update_page($draftid=-1)
     echo "</td>";
     echo "</tr>";
     echo "<tr>";
-    echo "<th align='right' valign='top'>Update Log:</th>";
+    echo "<th align='right'>{$GLOBALS['strUpdate']}<br />";
+    echo "<span class='required'>{$GLOBALS['strRequired']}</span></th>";
     echo "<td class='shade1'>";
-    echo "New information, relevent to the incident.  Please be as detailed as possible and include full descriptions of any work you have performed.<br />";
-    echo "<br />";
+    //FIXME i18n
+    //echo "New information, relevent to the incident.  Please be as detailed as possible and include full descriptions of any work you have performed.<br />";
+    //echo "<br />";
     $checkbox = "";
     if (!empty($metadata))
     {
@@ -356,7 +367,7 @@ function display_update_page($draftid=-1)
         $disable_priority = TRUE;
     }
     else $disable_priority = FALSE;
-    echo "<tr><th align='right' valign='top'>{$GLOBALS['strNewPriority']}:</th>";
+    echo "<tr><th align='right'>{$GLOBALS['strNewPriority']}</th>";
     echo "<td class='shade1'>";
 
 //    // FIXME fix maximum priority
@@ -376,7 +387,7 @@ function display_update_page($draftid=-1)
     echo "</td></tr>\n";
 
     echo "<tr>";
-    echo "<th align='right' valign='top'>{$GLOBALS['strNewStatus']}:</th>";
+    echo "<th align='right'>{$GLOBALS['strNewStatus']}</th>";
 
     $setStatusTo = incident_status($id);
 
@@ -394,7 +405,7 @@ function display_update_page($draftid=-1)
     echo "<td class='shade1'>".incidentstatus_drop_down("newstatus", $setStatusTo, $disabled)."</td>";
     echo "</tr>";
     echo "<tr>";
-    echo "<th align='right' valign='top'>{$GLOBALS['strNextAction']}:</th>";
+    echo "<th align='right'>{$GLOBALS['strNextAction']}</th>";
 
     $nextAction = "";
 
@@ -407,14 +418,14 @@ function display_update_page($draftid=-1)
     echo "id='nextaction' maxlength='50' size='30' value='{$nextAction}' /></td></tr>";
     echo "<tr>";
     echo "<th align='right'>";
-    echo "<strong>{$GLOBALS['strTimeToNextAction']}</strong>:</th>";
+    echo "<strong>{$GLOBALS['strTimeToNextAction']}</strong></th>";
     echo "<td class='shade2'>";
    	echo show_next_action();
     echo "</td></tr>";
     echo "<tr>";
     // calculate upload filesize
     $att_file_size = readable_file_size($CONFIG['upload_max_filesize']);
-    echo "<th align='right' valign='top'>{$GLOBALS['strAttachFile']}";
+    echo "<th align='right'>{$GLOBALS['strAttachFile']}";
     echo " (&lt;{$att_file_size}):</th>";
 
     echo "<td class='shade1'><input type='hidden' name='MAX_FILE_SIZE' value='{$CONFIG['upload_max_filesize']}' />";
@@ -501,6 +512,13 @@ else
     $timetonextaction_hours = cleanvar($_POST['timetonextaction_hours']);
     $timetonextaction_minutes = cleanvar($_POST['timetonextaction_minutes']);
     $draftid = cleanvar($_POST['draftid']);
+
+    if (empty($bodytext) OR !preg_match('/^[a-z0-9]{4,}$/i', $bodytext))
+    {
+        $_SESSION['formerrors']['update'][] = "<p class='error'>{$strYouMissedARequiredField}</p>";
+        html_redirect($_SERVER['PHP_SELF'], FALSE);
+        exit;
+    }
 
     if (empty($newpriority)) $newpriority  = incident_priority($id);
     // update incident
