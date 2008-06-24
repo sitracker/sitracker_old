@@ -392,6 +392,8 @@ function display_update_page($draftid=-1)
     $setStatusTo = incident_status($id);
 
     $disabled = FALSE;
+    
+    //we do this so if you update another user's
     if ($sit[2] != incident_owner($incidentid))
     {
         $setStatusTo = '0';
@@ -426,7 +428,7 @@ function display_update_page($draftid=-1)
     // calculate upload filesize
     $att_file_size = readable_file_size($CONFIG['upload_max_filesize']);
     echo "<th align='right'>{$GLOBALS['strAttachFile']}";
-    echo " (&lt;{$att_file_size}):</th>";
+    echo " (&lt;{$att_file_size})</th>";
 
     echo "<td class='shade1'><input type='hidden' name='MAX_FILE_SIZE' value='{$CONFIG['upload_max_filesize']}' />";
     echo "<input type='file' name='attachment' size='40' maxfilesize='{$CONFIG['upload_max_filesize']}' /></td>";
@@ -513,7 +515,9 @@ else
     $timetonextaction_minutes = cleanvar($_POST['timetonextaction_minutes']);
     $draftid = cleanvar($_POST['draftid']);
 
-    if (empty($bodytext) OR !preg_match('/^[a-z0-9]{4,}$/i', $bodytext))
+    if (empty($bodytext) OR
+        (strlen($bodytext) < 4) OR
+        !preg_match('/^[a-z0-9]+$/i', $bodytext))
     {
         //FIXME 3.40 make this two errors and i18n for 
         $_SESSION['formerrors']['update'][] = "<p class='error'>{$strYouMissedARequiredField}</p>";
