@@ -515,6 +515,7 @@ else
 
     if (empty($bodytext) OR !preg_match('/^[a-z0-9]{4,}$/i', $bodytext))
     {
+        //FIXME 3.40 make this two errors and i18n for 
         $_SESSION['formerrors']['update'][] = "<p class='error'>{$strYouMissedARequiredField}</p>";
         html_redirect($_SERVER['PHP_SELF']."?id={$id}", FALSE);
         exit;
