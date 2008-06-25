@@ -393,18 +393,17 @@ function display_update_page($draftid=-1)
 
     $disabled = FALSE;
     
-    //we do this so if you update another user's
+    //we do this so if you update another user's incident, it defaults to active
     if ($sit[2] != incident_owner($incidentid))
     {
         $setStatusTo = '0';
-        $disabled = TRUE;
     }
     elseif (!empty($metadata))
     {
         $setStatusTo = $metadata[4];
     }
 
-    echo "<td class='shade1'>".incidentstatus_drop_down("newstatus", $setStatusTo, $disabled)."</td>";
+    echo "<td class='shade1'>".incidentstatus_drop_down("newstatus", $setStatusTo)."</td>";
     echo "</tr>";
     echo "<tr>";
     echo "<th align='right'>{$GLOBALS['strNextAction']}</th>";
@@ -516,8 +515,8 @@ else
     $draftid = cleanvar($_POST['draftid']);
 
     if (empty($bodytext) OR
-        (strlen($bodytext) < 4) OR
-        !preg_match('/^[a-z0-9]+$/i', $bodytext))
+        ((strlen($bodytext) < 4) OR
+        !preg_match('/[a-z0-9]+/i', $bodytext)))
     {
         //FIXME 3.40 make this two errors and i18n for 
         $_SESSION['formerrors']['update'][] = "<p class='error'>{$strYouMissedARequiredField}</p>";
