@@ -146,31 +146,24 @@ $records = strtolower(cleanvar($_REQUEST['records']));
 
 if ($incidentid=='' OR $incidentid < 1)
 {
-    trigger_error("Incident ID cannot be zero or blank", E_USER_ERROR);
+	trigger_error("Incident ID cannot be zero or blank", E_USER_ERROR);
 }
 
 $sql  = "SELECT * FROM `{$dbUpdates}` WHERE incidentid='{$incidentid}' ";
 $sql .= "ORDER BY timestamp ASC, id ASC ";
 
-
-
-
-$result = mysql_query($sql);
-if (mysql_error()) trigger_error("MySQL Query Error $sql".mysql_error(), E_USER_ERROR);
-
 if (empty($records))
 {
     $numupdates = intval($_SESSION['num_update_view']);
-//    $sql .= "LIMIT {$offset},{$numupdates}";
+    $sql .= "LIMIT {$offset},{$numupdates}";
 }
-else
+elseif (is_numeric($records))
 {
-    $numupdates = mysql_num_rows($result) - 1;
+    $sql .= "LIMIT {$offset},{$records}";
 }
-//elseif (is_numeric($records))
-//{
-//    $sql .= "LIMIT {$offset},{$records}";
-//}
+
+$result = mysql_query($sql);
+if (mysql_error()) trigger_error("MySQL Query Error $sql".mysql_error(), E_USER_ERROR);
 
 $keeptags = array('b','i','u','hr','&lt;', '&gt;');
 foreach ($keeptags AS $keeptag)
@@ -197,23 +190,8 @@ foreach ($keeptags AS $keeptag)
 
 echo log_nav_bar();
 $count = 0;
-if ($_SESSION['update_order'] == 'asc')
+while ($update = mysql_fetch_object($result))
 {
-    $end = mysql_num_rows($result) - (mysql_num_rows($result) - $offset) + $numupdates;
-    $start = $offset;
-    $step = 1;
-}
-else
-{
-    $start = mysql_num_rows($result) - 1 - $offset;
-    $end = $start - $numupdates;
-    $step = -1;
-}
-
-while ($start != $end AND mysql_data_seek($result, $start))
-{
-    $update = mysql_fetch_object($result);
-    $start += $step;
     $wholeupdate = $statusupdate = $updatebody = '';
 
     if (empty($firstid))
@@ -459,14 +437,14 @@ while ($start != $end AND mysql_data_seek($result, $start))
 
     if ($_SESSION['update_order'] == 'asc')
     {
-        echo $wholeupdate.$statusupdate;
+        $body .= $wholeupdate.$statusupdate;
     }
     else
     {
-        echo $statusupdate.$wholeupdate;
+        $body = $statusupdate.$wholeupdate.$body;
     }
 }
-
+echo $body;
 if ($_SESSION['num_update_view'] > 0)
 {
 	echo log_nav_bar();
