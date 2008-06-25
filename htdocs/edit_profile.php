@@ -209,7 +209,8 @@ if (empty($mode))
     echo "</td></tr>\n";
 
     echo "<tr><th>{$strIncidentUpdatesPerPage}</th>";
-    echo "<td><input maxlength='5' name='updatesperpage' size='3' type='text' value=\"".$user->var_num_updates_view."\" /></td></tr>\n";
+    echo "<td><input maxlength='5' name='updatesperpage' size='3' type='text' ";
+    echo "value=\"".$user->var_num_updates_view."\" /> ({$str0MeansUnlimited})</td></tr>\n";
 
     echo "<tr><th colspan='2'>{$strNotifications}</th></tr>\n";
     echo "<tr><th></th><td>";
