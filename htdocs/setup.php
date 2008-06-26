@@ -732,7 +732,6 @@ switch ($_REQUEST['action'])
                                 {
                                     $sql = "INSERT INTO `{$dbTriggers}`(triggerid, userid, action, template, checks) ";
                                     $sql .= "VALUES('TRIGGER_INCIDENT_ASSIGNED', '$assign_user', 'ACTION_EMAIL', 'EMAIL_INCIDENT_REASSIGNED_USER_NOTIFY', '{userstatus} ==  {$assign_user}')";
-                                    echo $sql;
                                     mysql_query($sql);
                                 }
                             }

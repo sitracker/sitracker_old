@@ -20,7 +20,6 @@
 $schema = "CREATE TABLE IF NOT EXISTS `{$dbSystem}` (
   `id` int(1) NOT NULL default '0',
   `version` float(3,2) NOT NULL default '0.00',
-  `schemaversion` bigint(20) unsigned NOT NULL COMMENT 'DateTime in YYYYMMDDHHMM format',
   PRIMARY KEY  (`id`)
 ) TYPE=MyISAM;
 
@@ -1785,13 +1784,7 @@ ALTER TABLE `{$dbUsers}` ADD `var_utc_offset` INT NOT NULL DEFAULT '0' COMMENT '
 INSERT INTO `{$dbUserStatus}` (`id` ,`name`) VALUES ('0', 'Account Disabled');
 ";
 
-// This update is a pre-requisite for 3.35, there is no SiT release 3.34
-$upgrade_schema[334] = "
--- INL 19/05/08 Last update using the < 335 schema upgrade system, next we'll use the new system and store the version in this col
-ALTER TABLE `{$dbSystem}` ADD `schemaversion` BIGINT UNSIGNED NOT NULL COMMENT 'DateTime in YYYYMMDDHHMM format';
-";
-
-$upgrade_schema[335]['t200805191400'] = "
+$upgrade_schema[335] = "
 DROP TABLE IF EXISTS `{$CONFIG['db_tableprefix']}contactflags`;
 DROP TABLE IF EXISTS `{$CONFIG['db_tableprefix']}contactproducts`;
 
@@ -2065,7 +2058,7 @@ CREATE TABLE IF NOT EXISTS `{$dbNoticeTemplates}` (
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM  ;
 
-INSERT INTO `$dbNoticeTemplates` (`name`, `type`, `description`, `text`, `linktext`, `link`, `durability`, `refid`) VALUES('NOTICE_INCIDENT_CREATED', 3, 'strNoticeIncidentCreatedDesc', 'strNoticeIncidentCreated', 'strViewIncident', 'javascript:incident_details_window({incidentid})', '{incidentid}');
+INSERT INTO `$dbNoticeTemplates` (`name`, `type`, `description`, `text`, `linktext`, `link`, `durability`, `refid`) VALUES('NOTICE_INCIDENT_CREATED', 3, 'strNoticeIncidentCreatedDesc', 'strNoticeIncidentCreated', 'strViewIncident', 'javascript:incident_details_window({incidentid})', 'sticky', '{incidentid}');
 INSERT INTO `$dbNoticeTemplates` (`name`, `type`, `description`, `text`, `linktext`, `link`, `durability`, `refid`) VALUES('NOTICE_INCIDENT_ASSIGNED', 3, 'strNoticeIncidentAssignedDesc', 'strNoticeIncidentAssigned', 'strViewIncident', 'javascript:incident_details_window({incidentid})', 'sticky', '{incidentid}');
 INSERT INTO `$dbNoticeTemplates` (`name`, `type`, `description`, `text`, `linktext`, `link`, `durability`, `refid`) VALUES('NOTICE_INCIDENT_NEARING_SLA', 3, 'strNoticeIncidentNearingSLADesc', 'strNoticeIncidentNearingSLA', 'strViewIncident', 'javascript:incident_details_window({incidentid})', 'sticky','{incidentid}');
 INSERT INTO `$dbNoticeTemplates` (`name`, `type`, `description`, `text`, `linktext`, `link`, `durability`, `refid`) VALUES('NOTICE_LANGUAGE_DIFFERS', 3, 'strNoticeLanguageDiffersDesc', 'strNoticeLanguageDiffers', 'strKeepCurrentLanguage', '{applicationurl}edit_profile.php?mode=savesessionlang', 'session', '{currentlang}');
@@ -2142,11 +2135,8 @@ INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES 
 INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (2, 77, 'true');
 INSERT INTO `{$dbUserPermissions}` VALUES (1, 77, 'true');
 
-ALTER TABLE `{$dbSystem}`  CHANGE `schema` `schemaversion` BIGINT( 20 ) UNSIGNED NOT NULL COMMENT 'DateTime in YYYYMMDDHHMM format';
-
-
 ALTER TABLE `{$dbFiles}` CHANGE `filename` `filename` varchar(255) NULL default '';
-ALTER TABLE `{$dbFiles}` CHANGE `shortdesc` `shortdescription` varchar(255) NULL default '';
+ALTER TABLE `{$dbFiles}` CHANGE `shortdescription` `shortdescription` varchar(255) NULL default '';
 ALTER TABLE `{$dbFiles}` CHANGE `webcategory` `webcategory` varchar(255) NULL default '';
 ALTER TABLE `{$dbFiles}` CHANGE `path` `path` varchar(255) NULL default '';
 ALTER TABLE `{$dbFiles}` CHANGE `expiry` `expiry` DATETIME NULL;
@@ -2155,7 +2145,7 @@ ALTER TABLE `{$dbFiles}` CHANGE `fileversion` `fileversion` varchar(50) NULL def
 INSERT INTO `{$dbInterfaceStyles}` (`id` ,`name` ,`cssurl` ,`iconset` ,`headerhtml`) VALUES ('16', 'Cake', 'sit_cake.css', 'sit', '');
 INSERT INTO `{$dbPermissions}` VALUES (78, 'Post System Notices');
 
-UPDATE `{$dbPermissions}` SET `name` = 'Add Templates' WHERE id` =16;
+UPDATE `{$dbPermissions}` SET `name` = 'Add Templates' WHERE `id` =16;
 UPDATE `{$dbPermissions}` SET `name` = 'Edit Templates' WHERE `id` =17;
 
 -- KMH 18/06/08
@@ -2172,7 +2162,7 @@ ALTER TABLE `{$dbMaintenance}` ADD INDEX ( `var_incident_visible_contacts` ) ;
 ALTER DATABASE `{$CONFIG['db_database']}` DEFAULT CHARACTER SET utf8;
 
 -- PH 21/06/2008
-INSERT INTO `{$dbPermissions}` VALUES (79 'Edit Service Balances');
+INSERT INTO `{$dbPermissions}` VALUES (79, 'Edit Service Balances');
 INSERT INTO `{$dbPermissions}` VALUES (80, 'Edit Service Details');
 INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (1, 78, 'true');
 INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (1, 79, 'true');
