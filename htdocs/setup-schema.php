@@ -1996,9 +1996,8 @@ ALTER TABLE `{$dbFiles}` ADD `usertype` ENUM( 'user', 'contact' ) NOT NULL DEFAU
 
 -- PH 18/05/08
 UPDATE `{$dbLinkTypes}` SET `selectionsql` = 'CONCAT(forenames, \" \", surname)' WHERE `{$dbLinktypes}`.`id` = 2 LIMIT 1;
-";
 
-$upgrade_schema[335] = "CREATE TABLE IF NOT EXISTS `emailtemplates` (
+CREATE TABLE IF NOT EXISTS `emailtemplates` (
   `id` int(11) NOT NULL auto_increment,
   `name` varchar(50) NOT NULL,
   `type` enum('usertemplate','system','contact','site','incident','kb','user') NOT NULL default 'user' COMMENT 'usertemplate is personal template owned by a user, user is a template relating to a user',
