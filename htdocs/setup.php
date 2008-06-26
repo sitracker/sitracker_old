@@ -649,6 +649,20 @@ switch ($_REQUEST['action'])
 
                     if ($_REQUEST['action']=='upgrade')
                     {
+                        //Do pre-upgrade tasks here
+                        if ($installed_version < 3.35)
+                        {
+                            //Get anyone with var_notify_on_reassign on so we can add them a trigger later
+                            $sql = "SELECT * FROM `{$dbUsers}` WHERE var_notify_on_reassign='true'";
+                            if ($result = @mysql_query($sql))
+                            {
+                                while ($row = mysql_fetch_object($result))
+                                {
+                                    $assign_notify_users[] = $row->id;
+                                }
+                            }
+                        }
+                        
                         // Upgrade schema
                         // for ($v=(($installed_version*100)+1); $v<=($application_version*100); $v++)
                         for ($v=(($installed_version*100)); $v<=($application_version*100); $v++)
@@ -703,18 +717,25 @@ switch ($_REQUEST['action'])
                             
                             //add trigger to users, NOTE we do user 1(admin's) in the schema
                             $sql = "SELECT id FROM `{$dbUsers}` WHERE id > 1";
-                            $result = mysql_query($sql);
-                            if (mysql_error())
-                            {
-                                    trigger_error(mysql_error(),E_USER_WARNING);
-                            }
-                            else
+                            if ($result = @mysql_query($sql))
                             {
                                 while ($row = mysql_fetch_row($result))
                                 {
                                     setup_user_triggers($row->id);
                                 }
-                            }                            
+                            }
+
+                            //add the triggers for var_notify users from above
+                            if (is_array($assign_notify_users))
+                            {
+                                foreach ($assign_notify_users as $assign_user)
+                                {
+                                    $sql = "INSERT INTO `{$dbTriggers}`(triggerid, userid, action, template, checks) ";
+                                    $sql .= "VALUES('TRIGGER_INCIDENT_ASSIGNED', '$assign_user', 'ACTION_EMAIL', 'EMAIL_INCIDENT_REASSIGNED_USER_NOTIFY', '{userstatus} ==  {$assign_user}')";
+                                    echo $sql;
+                                    mysql_query($sql);
+                                }
+                            }
                         }
                         elseif ($installed_version == $application_version)
                         {
