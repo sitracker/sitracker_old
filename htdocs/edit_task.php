@@ -216,7 +216,7 @@ switch ($action)
             {
                 $updatehtml .= "[b]";
                 $updatehtml .= readable_date(mysql2date($notesarray[$i]->timestamp));
-                $updatehtml .= "[/b]\n{$notesarray[$i]->bodytext}\n\n";
+                $updatehtml .= "[/b]\n".addslashes($notesarray[$i]->bodytext)."\n\n";
             }
 
             $updatehtml .= sprintf($SYSLANG['strActivityCompleted'], $enddate, "[b]".format_seconds($duration)."[/b]");

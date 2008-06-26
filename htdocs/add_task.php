@@ -39,7 +39,7 @@ if ($incident)
 
     $taskid = mysql_insert_id();
 
-    $sql = "INSERT INTO links VALUES(4, {$taskid}, {$incident}, 'left', {$sit[2]})";
+    $sql = "INSERT INTO `{$dbLinks}` VALUES(4, {$taskid}, {$incident}, 'left', {$sit[2]})";
     mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
     html_redirect("tasks.php?incident={$incident}", TRUE, $strActivityAdded);
