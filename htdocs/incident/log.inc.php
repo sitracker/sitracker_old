@@ -211,7 +211,6 @@ while ($update = mysql_fetch_object($result))
     $updateuser = user_realname($update->userid,TRUE);
     $updatetime = readable_date($update->timestamp);
     $currentowner = user_realname($update->currentowner,TRUE);
-    $currentstatus = incident_status($update->currentstatus);
 
     $updatestatus = $update->currentstatus;
     if ($laststatus != $updatestatus AND !empty($laststatus))
@@ -224,7 +223,7 @@ while ($update = mysql_fetch_object($result))
         $statusupdate .=  icon('research', 16).' ';
 
         $statusupdate .=  "<span class='statusline'>Status changed to <strong>";
-	$statusupdate .=  incidentstatus_name($updatestatus);
+        $statusupdate .=  incidentstatus_name($updatestatus);
         $statusupdate .=  "</strong> {$strby} "; //FIXME i18n
         $statusupdate .=  "{$updateuser}</span></div><br />";
 //        echo "<div class='detailentryhidden'><div class='iheader'>";

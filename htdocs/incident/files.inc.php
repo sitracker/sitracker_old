@@ -43,9 +43,11 @@ if ($_FILES['attachment']['name'] != "")
 
         //create update
         $updatetext = "File attached [[att={$fileid}]]{$_FILES['attachment']['name']}[[/att]]";
-        $sql = "INSERT INTO `{$dbUpdates}` (incidentid, userid, `type`, ";
+        $currentowner = incident_owner($incidentid);
+        $currentstatus = incident_status($incidentid);
+        $sql = "INSERT INTO `{$dbUpdates}` (incidentid, userid, `type`, `currentowner`, `currentstatus`, ";
         $sql .= "bodytext, `timestamp`) ";
-        $sql .= "VALUES ('{$incidentid}', '{$sit[2]}', 'research', ";
+        $sql .= "VALUES ('{$incidentid}', '{$sit[2]}', 'research', '{$currentowner}', '{$currentstatus}', ";
         $sql .= "'{$updatetext}', '$now')";
         mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
@@ -213,7 +215,7 @@ function draw_file_row($file, $fsdelim, $incidentid, $path)
     $fileid = $fileobj->id;
 
     // FIXME url
-    
+
     $url = "download.php?id=$fileid";
 
     $html = "<tr>";
