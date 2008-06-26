@@ -8,6 +8,9 @@
 // of the GNU General Public License, incorporated herein by reference.
 //
 
+//create array of strings in the system's language for updates etc
+$SYSLANG = $_SESSION['syslang'];
+
 // Hierarchical Menus
 /* Arrays containing menu options for the top menu, each menu has an associated permission number and this is used */
 /* to decide which menu to display.  In addition each menu item has an associated permission   */
