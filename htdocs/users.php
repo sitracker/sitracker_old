@@ -25,16 +25,7 @@ require ('auth.inc.php');
 $sort = cleanvar($_REQUEST['sort']);
 $order = cleanvar($_REQUEST['order']);
 $groupid = cleanvar($_REQUEST['gid']);
-$changeuser = cleanvar($_REQUEST['user']);
-$newstatus = cleanvar($_REQUEST['status']);
-
-//TODO: maybe put this in another file?
-if ($changeuser AND $newstatus)
-{
-    $sql = "UPDATE `{$dbUsers}` SET accepting='{$newstatus}' WHERE id={$changeuser}";
-    @mysql_query($sql);
-}
-
+$onlineonly = cleanvar($_REQUEST['onlineonly']);
 
 // By default show users in home group
 if ($groupid=='all') $filtergroup = 'all';
@@ -53,13 +44,18 @@ if ($numgroups >= 1 AND $filtergroup == '0')
 {
     $sql .= "AND (groupid='0' OR groupid='' OR groupid IS NULL) ";
 }
-elseif ($numgroups < 1 OR $filtergroup=='all')
+elseif ($numgroups < 1 OR $filtergroup=='all' OR OR $filtergroup=='allonline')
 {
     $sql .= "AND 1=1 ";
 }
 else
 {
-    $sql .= "AND groupid='{$filtergroup}'";
+    $sql .= "AND groupid='{$filtergroup}' ";
+}
+
+if ($onlineonly == 'true' OR $filtergroup == 'allonline')
+{
+    $sql .= "AND lastseen > NOW() - (60 * 30) ";
 }
 
 // Sorting
@@ -120,37 +116,37 @@ while ($users = mysql_fetch_array($result))
     echo "type=support' class='info'>";
     if (!empty($users['message']))
     {
-    	echo icon('messageflag', 16, $strMessage, $users['message']);
+        echo icon('messageflag', 16, $strMessage, $users['message']);
     }
     echo " {$users['realname']}";
     echo "<span>";
     if (!empty($users['title']))
     {
-    	echo "<strong>{$users['title']}</strong><br />";
+        echo "<strong>{$users['title']}</strong><br />";
     }
-    if ($users['groupid'] > 0) 
+    if ($users['groupid'] > 0)
     {
-    	echo "{$strGroup}: {$grouparr[$users['groupid']]}<br />";
+        echo "{$strGroup}: {$grouparr[$users['groupid']]}<br />";
     }
     if (strlen($users['aim']) > 3)
     {
-    	echo icon('aim', 16, $users['aim']);
-    	echo " <strong>AIM</strong>: {$users['aim']}<br />";
+        echo icon('aim', 16, $users['aim']);
+        echo " <strong>AIM</strong>: {$users['aim']}<br />";
     }
     if (strlen($users['icq']) > 3)
     {
-    	echo icon('icq', 16, $users['icq']);
-    	echo " <strong>ICQ</strong>: {$users['icq']}<br />";
+        echo icon('icq', 16, $users['icq']);
+        echo " <strong>ICQ</strong>: {$users['icq']}<br />";
     }
     if (strlen($users['msn']) > 3)
     {
-    	echo icon('msn', 16, $users['msn']);
-    	echo " <strong>MSN</strong>: {$users['msn']}<br />";
+        echo icon('msn', 16, $users['msn']);
+        echo " <strong>MSN</strong>: {$users['msn']}<br />";
     }
     if (!empty($users['message']))
     {
-    	echo "<br />".icon('messageflag', 16);
-    	echo " <strong>{$strMessage}</strong>: {$users['message']}";
+        echo "<br />".icon('messageflag', 16);
+        echo " <strong>{$strMessage}</strong>: {$users['message']}";
     }
     echo "</span>";
     echo "</a>";
@@ -161,11 +157,11 @@ while ($users = mysql_fetch_array($result))
     $countincidents = ($incpriority['1']+$incpriority['2']+$incpriority['3']+$incpriority['4']);
     if ($countincidents >= 1)
     {
-    	$countactive = user_activeincidents($users['id']);
+        $countactive = user_activeincidents($users['id']);
     }
     else
     {
-    	$countactive = 0;
+        $countactive = 0;
     }
 
     $countdiff = $countincidents-$countactive;
@@ -180,11 +176,11 @@ while ($users = mysql_fetch_array($result))
     echo "<td align='center'>";
     if ($users["phone"] == "")
     {
-    	echo $strNone;
+        echo $strNone;
     }
     else
     {
-    	echo $users["phone"];
+        echo $users["phone"];
     }
 
     echo "</td>";
@@ -192,11 +188,11 @@ while ($users = mysql_fetch_array($result))
 
     if ($users["mobile"] == "")
     {
-    	echo $strNone;
+        echo $strNone;
     }
     else
     {
-    	echo $users["mobile"];
+        echo $users["mobile"];
     }
     echo "</td>";
     echo "<td align='left'>";
@@ -206,11 +202,11 @@ while ($users = mysql_fetch_array($result))
     echo "</td><td align='center'>";
     if ($users["accepting"] == 'Yes')
     {
-    	echo $strYes;
+        echo $strYes;
     }
     else
     {
-    	echo "<span class='error'>{$strNo}</span>";
+        echo "<span class='error'>{$strNo}</span>";
     }
     echo "</td><td>";
     echo "<a href='holidays.php?user={$users['id']}' title='{$strHolidays}'>";
@@ -223,9 +219,9 @@ while ($users = mysql_fetch_array($result))
     list($ownedsites) = mysql_fetch_row($siteresult);
     if ($ownedsites > 0)
     {
-    	echo "<a href='browse_sites.php?owner={$users['id']}'";
-    	echo " title='{$strSites}'>";
-    	echo icon('site', 16, $strSite)."</a> ";
+        echo "<a href='browse_sites.php?owner={$users['id']}'";
+        echo " title='{$strSites}'>";
+        echo icon('site', 16, $strSite)."</a> ";
     }
     echo "</td>";
     echo "</tr>";

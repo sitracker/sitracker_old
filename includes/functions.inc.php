@@ -1898,6 +1898,9 @@ function group_selector($selected, $urlargs='')
         echo "<option value='{$_SERVER['PHP_SELF']}?{$urlargs}&amp;gid=all'";
         if ($selected == 'all') echo " selected='selected'";
         echo ">{$GLOBALS['strAll']}</option>\n";
+        echo "<option value='{$_SERVER['PHP_SELF']}?{$urlargs}&amp;gid=allonline'";
+        if ($selected == 'allonline') echo " selected='selected'";
+        echo ">{$GLOBALS['strAll']} Online</option>\n"; // FIXME i18n
         foreach ($grouparr AS $groupid => $groupname)
         {
             echo "<option value='{$_SERVER['PHP_SELF']}?{$urlargs}&amp;gid={$groupid}'";
