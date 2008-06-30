@@ -261,7 +261,10 @@ function user_permission($userid,$permission)
     // Default is no access
     $accessgranted = FALSE;
 
-    if (!is_array($permission)) { $permission = array($permission); }
+    if (!is_array($permission))
+    {
+        $permission = array($permission);
+    }
 
     foreach ($permission AS $perm)
     {
