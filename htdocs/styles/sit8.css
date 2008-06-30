@@ -247,7 +247,7 @@ input.error, textarea.error, select.error { border: 2px solid red; }
 .shade1 { background-color: #CCCCFF; } /* medium blue - alt shade1 */
 .shade2 { background-color: #DDDDFF; } /* light blue - alt shade 2 */
 .urgent { background-color: #f08080; color: black; } /* #E8B7DD; */
-.notice { background-color: #FFFFB0; color: black; } /* yellow -- was #ffbbaa; mild red */
+.notice { background-image: url('../images/top_yellow.png'); color: black; } /* yellow -- was #ffbbaa; mild red */
 .critical { background-color: #ff4500; } /* fire-engine red */
 h1.critical { background-image: url('../images/top_red.png'); }
 .expired { background-color: #D6D6D6; } /* grey */
