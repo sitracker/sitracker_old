@@ -617,8 +617,8 @@ function user_incidents($id)
 function user_holiday($userid, $type=0, $year, $month, $day, $length = FALSE)
 {
     global $dbHolidays;
-    $startdate=mktime(0,0,0,$month,$day,$year);
-    $enddate=mktime(23,59,59,$month,$day,$year);
+    $startdate = mktime(0,0,0,$month,$day,$year);
+    $enddate = mktime(23,59,59,$month,$day,$year);
     $sql = "SELECT * FROM `{$dbHolidays}` WHERE startdate >= '$startdate' AND startdate < '$enddate' ";
     if ($type!=0)
     {
@@ -4289,10 +4289,11 @@ function holidaytype_drop_down($name, $id)
     return $html;
 }
 
+
 /**
-* @author Paul Heaney
-* @param $userid - userid to find group for
-* @return A int of the groupid
+  * @author Paul Heaney
+  * @param $userid - userid to find group for
+  * @return A int of the groupid
 */
 function user_group_id($userid)
 {
@@ -4305,33 +4306,40 @@ function user_group_id($userid)
     return $groupid;
 }
 
-// check to see if any fellow group members have holiday
-// on the date specified
+
+/**
+  * check to see if any fellow group members have holiday on the date specified
+  * @author Ivan Lucas
+  * @param $userid int - user ID
+  * @param $date int - UNIX Timestamp
+  * @param $length string - 'day', 'pm' or 'am'
+  * @return HTML space seperated list of users that are away on the date specified
+*/
 function check_group_holiday($userid, $date, $length='day')
 {
     global $dbUsers, $dbHolidays;
 
+    $namelist = '';
     $groupid = user_group_id($userid);
     if(!empty($groupid))
     {
         // list group members
-        $msql = "SELECT id AS userid FROM `{$dbUsers}` WHERE groupid='{$group->groupid}' AND id!='$userid' ";
+        $msql = "SELECT id AS userid FROM `{$dbUsers}` ";
+        $msql .= "WHERE groupid='{$groupid}' AND id != '$userid' ";
         $mresult = mysql_query($msql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
         while ($member = mysql_fetch_object($mresult))
         {
             // check to see if this group member has holiday
-            $hsql = "SELECT * FROM `{$dbHolidays}` WHERE userid='{$member->userid}' AND startdate='{$date}' ";
-            if ($length=='am' || $length=='pm')
+            $hsql = "SELECT id FROM `{$dbHolidays}` WHERE userid='{$member->userid}' AND startdate='{$date}' ";
+            if ($length == 'am' || $length == 'pm')
             {
-                $hsql .= "AND length = '$length' || length = 'day' ";
+                $hsql .= "AND (length = '$length' OR length = 'day') ";
             }
-
             $hresult = mysql_query($hsql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
             if (mysql_num_rows($hresult) >= 1)
             {
-                // FIXME: need to deal with am / pm etc
                 $namelist .= user_realname($member->userid)." ($length)";
                 $namelist .= "&nbsp;&nbsp;";
             }
@@ -4340,13 +4348,23 @@ function check_group_holiday($userid, $date, $length='day')
     return $namelist;
 }
 
-// TODO i18n country list (How do we do this?)
+
+/**
+  * Print a listbox of countries
+  * @author Ivan Lucas
+  * @param $name string - HTML select 'name' attribute
+  * @param $country string - Country to pre-select (default to config file setting)
+  * @param $extraattributes string - Extra attributes to put on the select tag
+  * @return HTML
+  * @note if the $country given is not in the list, an editable input box is given instead of a select box
+  * @todo TODO i18n country list (How do we do this?)
+*/
 function country_drop_down($name, $country, $extraattributes='')
 {
     global $CONFIG;
-    if ($country=='') $country=$CONFIG['home_country'];
+    if ($country == '') $country = $CONFIG['home_country'];
 
-    if ($country=='UK') $country='UNITED KINGDOM';
+    if ($country=='UK') $country = 'UNITED KINGDOM';
     $countrylist[]='ALBANIA';
     $countrylist[]='ALGERIA';
     $countrylist[]='AMERICAN SAMOA';

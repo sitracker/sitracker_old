@@ -13,7 +13,7 @@
 $permission = 27; /* View your calendar */
 require ('db_connect.inc.php');
 require ('functions.inc.php');
-$title = "Holiday Request";
+$title = $strHolidayRequests;
 
 // This page requires authentication
 require ('auth.inc.php');
@@ -31,7 +31,7 @@ include ('htmlheader.inc.php');
 
 function display_holiday_table($result)
 {
-    global $user, $approver, $mode;
+    global $CONFIG, $user, $approver, $mode;
 
     echo "<table align='center'>";
     echo "<tr>";
@@ -59,7 +59,7 @@ function display_holiday_table($result)
             echo user_realname($holiday->userid,TRUE);
             echo "</a></td>";
         }
-        echo "<td>".ldate('l j F Y', $holiday->startdate)."</td>";
+        echo "<td>".ldate($CONFIG['dateformat_longdate'], $holiday->startdate)."</td>";
         echo "<td>";
         if ($holiday->length=='am') echo $GLOBALS['strMorning'];
         if ($holiday->length=='pm') echo $GLOBALS['strAfternoon'];
@@ -103,9 +103,9 @@ function display_holiday_table($result)
                 echo "</td>";
             }
         }
-        echo "</tr>";
+        echo "</tr>\n";
     }
-    echo "</table>";
+    echo "</table>\n";
 }
 
 if (empty($user)) $user=$sit[2];
