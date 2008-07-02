@@ -104,7 +104,7 @@ Spaces appear between operators, e.g.:
 
 Blank Lines
 -----------
-Blank lines should appear between if statements:
+A single blank line should appear between if statements:
 
     if (foo)
     {
@@ -119,6 +119,20 @@ Blank lines should appear between if statements:
     {
         ....
     }
+
+Two blank lines should appear between function definitions:
+
+function foo()
+{
+    ...
+}
+
+
+function bar()
+{
+    ...
+}
+
 
 Braces
 ------
