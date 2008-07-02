@@ -33,7 +33,9 @@ if ($application_revision == 'svn')
 }
 
 // Clean PHP_SELF server variable to avoid potential XSS security issue
-$_SERVER['PHP_SELF'] = substr($_SERVER['PHP_SELF'], 0, (strlen($_SERVER['PHP_SELF']) - @strlen($_SERVER['PATH_INFO'])));
+$_SERVER['PHP_SELF'] = substr($_SERVER['PHP_SELF'], 0,
+                              (strlen($_SERVER['PHP_SELF'])
+                              - @strlen($_SERVER['PATH_INFO'])));
 
 $oldeh = set_error_handler("sit_error_handler");
 
@@ -109,8 +111,15 @@ define("STATUS_UNASSIGNED",10);
 
 // Decide which language to use and setup internationalisation
 require('i18n/en-GB.inc.php');
-if ($CONFIG['default_i18n'] != 'en-GB') @include("i18n/{$CONFIG['default_i18n']}.inc.php");
-if(!empty($_SESSION['lang']) AND $_SESSION['lang'] != $CONFIG['default_i18n']) include("i18n/{$_SESSION['lang']}.inc.php");
+if ($CONFIG['default_i18n'] != 'en-GB')
+{
+    @include("i18n/{$CONFIG['default_i18n']}.inc.php");
+}
+if (!empty($_SESSION['lang'])
+    AND $_SESSION['lang'] != $CONFIG['default_i18n'])
+{
+    include("i18n/{$_SESSION['lang']}.inc.php");
+}
 ini_set('default_charset', $i18ncharset);
 
 
@@ -209,7 +218,7 @@ function authenticate($username, $password)
 
     // extract user
     $sql  = "SELECT id FROM `{$dbUsers}` ";
-    $sql .= "WHERE username = '$username' AND password = '$password' AND status!=0 ";
+    $sql .= "WHERE username = '$username' AND password = '$password' AND status!= 0 ";
     // a status of 0 means the user account is disabled
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
@@ -301,7 +310,6 @@ function software_name($softwareid)
 {
     global $now, $dbSoftware, $strEOL, $strEndOfLife;
 
-
     $sql = "SELECT * FROM `{$dbSoftware}` WHERE id = '{$softwareid}'";
     $result = mysql_query($sql);
     if (mysql_num_rows($result) >= 1)
@@ -345,7 +353,7 @@ function user_id($username, $password)
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     if (mysql_num_rows($result) == 0)
     {
-        $userid=0;
+        $userid= 0;
     }
     else
     {
@@ -616,13 +624,13 @@ function user_incidents($id)
     * @param $length string. 'am', 'pm', 'day' or FALSE to list all
     * @returns array
 */
-function user_holiday($userid, $type=0, $year, $month, $day, $length = FALSE)
+function user_holiday($userid, $type= 0, $year, $month, $day, $length = FALSE)
 {
     global $dbHolidays;
     $startdate = mktime(0,0,0,$month,$day,$year);
     $enddate = mktime(23,59,59,$month,$day,$year);
     $sql = "SELECT * FROM `{$dbHolidays}` WHERE startdate >= '$startdate' AND startdate < '$enddate' ";
-    if ($type!=0)
+    if ($type !=0 )
     {
         $sql .= "AND (type='$type' OR type='10' OR type='5') ";
         $sql .= "AND IF(type!=10, userid='$userid', 1=1) ";
@@ -646,7 +654,7 @@ function user_holiday($userid, $type=0, $year, $month, $day, $length = FALSE)
     }
     else
     {
-        $totallength=0;
+        $totallength = 0;
         while ($holiday = mysql_fetch_object($result))
         {
             $type = $holiday->type;
@@ -654,11 +662,11 @@ function user_holiday($userid, $type=0, $year, $month, $day, $length = FALSE)
             $approved = $holiday->approved;
             $approvedby = $holiday->approvedby;
             // hmm... not sure these next lines are required.
-            if ($length=='am' && $totallength==0) $totallength='am';
-            if ($length=='pm' && $totallength==0) $totallength='pm';
-            if ($length=='am' && $totallength=='pm') $totallength='day';
-            if ($length=='pm' && $totallength=='am') $totallength='day';
-            if ($length=='day') $totallength='day';
+            if ($length=='am' && $totallength == 0) $totallength = 'am';
+            if ($length=='pm' && $totallength == 0) $totallength = 'pm';
+            if ($length=='am' && $totallength == 'pm') $totallength = 'day';
+            if ($length=='pm' && $totallength == 'am') $totallength = 'day';
+            if ($length=='day') $totallength = 'day';
         }
         return array($type, $totallength, $approved, $approvedby);
     }
@@ -740,7 +748,7 @@ function contact_realname($id)
     if (mysql_num_rows($result) == 0)
     {
         mysql_free_result($result);
-        return($GLOBALS['strUnknown']);
+        return ($GLOBALS['strUnknown']);
     }
     else
     {
@@ -894,18 +902,18 @@ function contact_productsupport($contactid, $productid)
 
     if (mysql_num_rows($result) == 0)
     {
-        return("no");
+        return ("no");
     }
     else
     {
         $product = mysql_fetch_array($result);
         if ($product["expirydate"] <= $now)
         {
-            return("expired");
+            return ("expired");
         }
         else if ($product["expirydate"] > $now)
         {
-            return("yes");
+            return ("yes");
         }
     }
 }
@@ -956,13 +964,13 @@ function contact_productsupport_expirymonth($contactid, $productid)
 
     if (mysql_num_rows($result) == 0)
     {
-        return(0);
+        return (0);
     }
     else
     {
         $productsupport = mysql_fetch_array($result);
         $date_array = getdate($productsupport["expirydate"]);
-        return($date_array["mon"]);
+        return ($date_array["mon"]);
     }
 }
 
@@ -984,13 +992,13 @@ function contact_productsupport_expiryyear($contactid, $productid)
 
     if (mysql_num_rows($result) == 0)
     {
-        return(0);
+        return (0);
     }
     else
     {
         $productsupport = mysql_fetch_array($result);
         $date_array = getdate($productsupport["expirydate"]);
-        return($date_array["year"]);
+        return ($date_array["year"]);
     }
 }
 
@@ -1101,7 +1109,7 @@ function incident_maintid($id)
     }
     else
     {
-        return($maintid);
+        return ($maintid);
     }
 }
 
@@ -1213,7 +1221,7 @@ function incident_productinfo_html($incidentid)
 
     if (mysql_num_rows($result) == 0)
     {
-        return('<tr><td>{$strNoProductInfo}</td><td>{$strNoProductInfo}</td></tr>');
+        return ('<tr><td>{$strNoProductInfo}</td><td>{$strNoProductInfo}</td></tr>');
     }
     else
     {
@@ -1483,7 +1491,7 @@ function contact_site_drop_down($name, $id, $siteid='', $exclude='')
     {
         if (is_array($exclude))
         {
-            foreach($exclude AS $contactid)
+            foreach ($exclude AS $contactid)
             {
                 $sql .= "AND c.id != $contactid ";
             }
@@ -1611,11 +1619,19 @@ function software_drop_down($name, $id)
 }
 
 
+
+/**
+    *
+    * @author Kieran Hogg
+    * @param $name string. name/id to use for the select element
+    * @returns HTML select
+*/
 function softwareproduct_drop_down($name, $id, $productid, $visibility='internal')
 {
     global $dbSoftware, $dbSoftwareProducts;
     // extract software
-    $sql  = "SELECT id, name FROM `{$dbSoftware}` AS s, `{$dbSoftwareProducts}` AS sp WHERE s.id = sp.softwareid ";
+    $sql  = "SELECT id, name FROM `{$dbSoftware}` AS s, ";
+    $sql .= "`{$dbSoftwareProducts}` AS sp WHERE s.id = sp.softwareid ";
     $sql .= "AND productid = '$productid' ";
     $sql .= "ORDER BY name ASC";
     $result = mysql_query($sql);
@@ -1654,6 +1670,13 @@ function softwareproduct_drop_down($name, $id, $productid, $visibility='internal
 }
 
 
+/**
+    * A HTML Select listbox for vendors
+    * @author Ivan Lucas
+    * @param $name string. name/id to use for the select element
+    * @param $id int. Vendor ID to preselect
+    * @returns HTML select
+*/
 function vendor_drop_down($name, $id)
 {
     global $dbVendors;
@@ -1681,7 +1704,14 @@ function vendor_drop_down($name, $id)
 }
 
 
-
+/**
+    * A HTML Select listbox for Site Types
+    * @author Ivan Lucas
+    * @param $name string. name/id to use for the select element
+    * @param $id int. Site Type ID to preselect
+    * @todo TODO i18n needed
+    * @returns HTML select
+*/
 function sitetype_drop_down($name, $id)
 {
     global $dbSiteTypes;
@@ -1834,6 +1864,13 @@ function user_drop_down($name, $id, $accepting = TRUE, $exclude = FALSE, $attrib
 }
 
 
+/**
+    * A HTML Select listbox for user roles
+    * @author Ivan Lucas
+    * @param $name string. name to use for the select element
+    * @param $id int. Role ID to preselect
+    * @returns HTML select
+*/
 function role_drop_down($name, $id)
 {
 
@@ -1863,6 +1900,13 @@ function role_drop_down($name, $id)
 }
 
 
+/**
+    * A HTML Select listbox for user groups
+    * @author Ivan Lucas
+    * @param $name string. name attribute to use for the select element
+    * @param $selected int. Group ID to preselect
+    * @returns HTML select
+*/
 function group_drop_down($name, $selected)
 {
     global $grouparr, $numgroups;
@@ -1885,6 +1929,12 @@ function group_drop_down($name, $selected)
 }
 
 
+/**
+    * A HTML Form and Select listbox for user groups, with javascript to reload page
+    * @param $selected int. Group ID to preselect
+    * @param $urlargs string. (Optional) text to pass after the '?' in the url (parameters)
+    * @returns HTML select
+*/
 function group_selector($selected, $urlargs='')
 {
     $gsql = "SELECT * FROM `{$GLOBALS['dbGroups']}` ORDER BY name";
@@ -1987,13 +2037,20 @@ function interface_style($id)
         $style = (array($CONFIG['default_css_url'],''));  // default style
     }
 
-    return($style);
+    return ($style);
 }
 
 
-//  prints the HTML for a drop down list of
-// incident status names (EXCLUDING 'CLOSED'), with the given
-// name and with the given id selected.
+/**
+    * prints the HTML for a drop down list of incident status names (EXCLUDING 'CLOSED'),
+    * with the given name and with the given id selected.
+    * @author Ivan Lucas
+    * @param $name string. Text to use for the HTML select name and id attributes
+    * @param $id Integer. Status ID to preselect
+    * @param $disabled Bool. Disable the select box when TRUE
+    * @returns string. HTML.
+*/
+
 function incidentstatus_drop_down($name, $id, $disabled = FALSE)
 {
     global $dbIncidentStatus;
@@ -2009,7 +2066,7 @@ function incidentstatus_drop_down($name, $id, $disabled = FALSE)
     $html = "<select id='{$name}' name='{$name}'";
     if ($disabled)
     {
-        $html .= " disabled='true' ";
+        $html .= " disabled='disabled' ";
     }
     $html .= ">";
     // if ($id == 0) $html .= "<option selected='selected' value='0'></option>\n";
@@ -2030,12 +2087,11 @@ function incidentstatus_drop_down($name, $id, $disabled = FALSE)
 
 
 /**
+    * prints the HTML for a drop down list of incident status names, with the given name and with the
+    * given id selected. Also prints an 'All' option with value 'all' for viewing all incidents.
     * @author Ivan Lucas
+    * @deprecated DEPRECATED remove after 3.35
 */
-/*  prints the HTML for a drop down list of     */
-/* incident status names, with the given name and with the    */
-/* given id selected. Also prints an 'All' option with value  */
-/* 'all' for viewing all incidents.                           */
 function incidentstatus_drop_down_all($name, $id)
 {
     global $dbIncidentStatus;
@@ -2060,7 +2116,7 @@ function incidentstatus_drop_down_all($name, $id)
         {
             echo "selected='selected'";
         }
-        echo " value='{$statuses["id"]}'>{$statuses["name"]}";
+        echo " value='{$statuses["id"]}'>{$GLOBALS[$statuses['name']]}";
         echo "</option>";
         echo "\n";
 }
@@ -2536,7 +2592,7 @@ function incidentstatus_name($id, $type='internal')
 {
     global $dbIncidentStatus;
 
-    if($type == 'external')
+    if ($type == 'external')
     {
         $type = 'ext_name';
     }
@@ -2992,7 +3048,7 @@ function calculate_time_of_next_action($days, $hours, $minutes)
 {
     $now = time();
     $return_value = $now + ($days * 86400) + ($hours * 3600) + ($minutes * 60);
-    return($return_value);
+    return ($return_value);
 }
 
 
@@ -3423,7 +3479,7 @@ function site_name($id)
         $sitename = $GLOBALS['strUnknown'];
     }
 
-    return($sitename);
+    return ($sitename);
 }
 
 
@@ -4233,7 +4289,7 @@ function holiday_type ($id)
         case 10: $holidaytype = $GLOBALS['strPublicHoliday']; break;
         default: $holidaytype = $GLOBALS['strUnknown']; break;
     }
-    return($holidaytype);
+    return ($holidaytype);
 }
 
 function holiday_approval_status($approvedid, $approvedby=-1)
@@ -4323,7 +4379,7 @@ function check_group_holiday($userid, $date, $length='day')
 
     $namelist = '';
     $groupid = user_group_id($userid);
-    if(!empty($groupid))
+    if (!empty($groupid))
     {
         // list group members
         $msql = "SELECT id AS userid FROM `{$dbUsers}` ";
@@ -4971,15 +5027,15 @@ if ( $at2['hours']<$swd) {
 }
 
 
-$t1=mktime($at1['hours'],$at1['minutes'],0,1,$at1['yday']+1,$at1['year']);
-$t2=mktime($at2['hours'],$at2['minutes'],0,1,$at2['yday']+1,$at2['year']);
+$t1 = mktime($at1['hours'], $at1['minutes'],0,1,$at1['yday']+1,$at1['year']);
+$t2 = mktime($at2['hours'], $at2['minutes'],0,1,$at2['yday']+1,$at2['year']);
 
-$weeks=floor(($t2-$t1)/(60*60*24*7));
-$t1+=$weeks*60*60*24*7;
+$weeks = floor(($t2-$t1)/(60*60*24*7));
+$t1 += $weeks * 60 * 60 * 24 * 7;
 
 while ( date('z',$t2) != date('z',$t1) ) {
     if (in_array(date('w',$t1),$CONFIG['working_days'])) $days++;
-    $t1+=(60*60*24);
+    $t1 += (60 * 60 * 24);
 }
 
 // this could be negative and that's not ok
@@ -5245,7 +5301,7 @@ function leading_zero($length,$number)
     {
         $number = "0" . $number;
     }
-    return($number);
+    return ($number);
 }
 
 
@@ -5395,7 +5451,7 @@ function software_backup_dropdown($name, $userid, $softwareid, $backupid)
     {
         $html .= "<input type='hidden' name='$name' value='0' />{$GLOBALS['strNoneAvailable']}";
     }
-    return($html);
+    return ($html);
 }
 
 
@@ -5722,10 +5778,10 @@ function suggest_reassign_userid($incidentid, $exceptuserid=0)
                 if ($queued_size <=5) $ticket[] = $user->userid;
 
                 // Get up to three tickets, one less ticket for each critical incident in queue
-                for($c=1;$c < (3 - $queued_critical);$c++) $ticket[] = $user->userid;
+                for ($c=1;$c < (3 - $queued_critical);$c++) $ticket[] = $user->userid;
 
                 // Get up to three tickets, one less ticket for each high priority incident in queue
-                for($c=1;$c < (3 - $queued_high);$c++) $ticket[] = $user->userid;
+                for ($c=1;$c < (3 - $queued_high);$c++) $ticket[] = $user->userid;
             }
             else
             {
@@ -5915,15 +5971,17 @@ function cleanvar($var, $striphtml = TRUE, $transentities = TRUE,$mysqlescape = 
 
 function external_escalation($escalated, $incid)
 {
-
-foreach ($escalated as $i => $id){
-    if ($id == $incid){
-    return "yes";
+    foreach ($escalated as $i => $id)
+    {
+        if ($id == $incid)
+        {
+            return "yes";
+        }
     }
+
+    return "no";
 }
 
-return "no";
-}
 
 function user_notification_on_reassign($user)
 {
@@ -6087,7 +6145,7 @@ function incident_open($incidentid)
 function colheader($colname, $coltitle, $sort = FALSE, $order='', $filter='', $defaultorder='a', $width='')
 {
     global $CONFIG;
-    if($width!= '')
+    if ($width!= '')
         $html = "<th width='".intval($width)."%'>";
     else
         $html = "<th>";
@@ -6581,7 +6639,7 @@ function draw_chart_image($type, $width, $height, $data, $legends, $title='', $u
             }
 
             //convert to angles.
-            for($i=0;$i<=$countdata;$i++)
+            for ($i=0;$i<=$countdata;$i++)
             {
                 $angle[$i] = (($data[$i] / $sumdata) * 360);
                 $angle_sum[$i] = array_sum($angle);
@@ -6590,7 +6648,7 @@ function draw_chart_image($type, $width, $height, $data, $legends, $title='', $u
             $background = imagecolorallocate($img, 255, 255, 255);
             //Random colors.
 
-            for($i=0;$i<=$countdata;$i++)
+            for ($i=0;$i<=$countdata;$i++)
             {
                 $rgbcolors = explode(',',$rgb[$i]);
                 $colors[$i] = imagecolorallocate($img,$rgbcolors[0],$rgbcolors[1],$rgbcolors[2]);
@@ -6602,7 +6660,7 @@ function draw_chart_image($type, $width, $height, $data, $legends, $title='', $u
             if ($legendY < 10) $legendY = 10;
             for ($z=1; $z <= $sz; $z++)
             {
-                for($i=0;$i<$countdata;$i++)
+                for ($i=0;$i<$countdata;$i++)
                 {
                     imagefilledarc($img,$cx,($cy+$sz)-$z,$sx,$sy,$angle_sum[$i-1],$angle_sum[$i],$colord[$i],IMG_ARC_PIE);
                 }
@@ -7124,9 +7182,9 @@ function time_dropdown($name, $time='')
 
     $html = "<select name='$name'>\n";
     $html .= "<option></option>";
-    for($hours = 0; $hours < 24; $hours++)
+    for ($hours = 0; $hours < 24; $hours++)
     {
-        for($mins = 0; $mins < 60; $mins+=15)
+        for ($mins = 0; $mins < 60; $mins+=15)
         {
             $hours = str_pad($hours, 2, "0", STR_PAD_LEFT);
             $mins = str_pad($mins, 2, "0", STR_PAD_RIGHT);
@@ -7462,7 +7520,7 @@ function open_activities_for_site($siteid)
 function mark_task_completed($taskid, $incident)
 {
     global $dbNotes, $dbTasks;
-    if(!$incident)
+    if (!$incident)
     {
         // Insert note to say what happened
         $bodytext="Task marked 100% complete by {$_SESSION['realname']}:\n\n".$bodytext;
@@ -7591,11 +7649,11 @@ function group_billing_periods(&$count, $countType, $activity, $period)
             $saved = "false";
             foreach ($count[$countType] AS $ind)
             {
-                if($ind <= $activity['starttime'] AND $ind <= ($activity['starttime'] + $period))
+                if ($ind <= $activity['starttime'] AND $ind <= ($activity['starttime'] + $period))
                 {
                     //echo "IND:{$ind}:START:{$act['starttime']}<br />";
                     // already have something which starts in this period just need to check it fits in the period
-                    if($ind + $period > $activity['starttime'] + $duration)
+                    if ($ind + $period > $activity['starttime'] + $duration)
                     {
                         $remainderInPeriod = ($ind + $period) - $activity['starttime'];
                         $duration -= $remainderInPeriod;
@@ -8173,7 +8231,7 @@ function contract_details($id, $mode='internal')
 
                 $html .= "<table align='center'>";
                 $supportcount = 1;
-                foreach($supportedcontacts AS $contact)
+                foreach ($supportedcontacts AS $contact)
                 {
                     $html .= "<tr><th>{$GLOBALS[strContact]} #{$supportcount}:</th>";
                     $html .= "<td>".icon('contact', 16)." ";
@@ -8862,6 +8920,7 @@ function show_edit_site($site, $mode='internal')
     return $html;
 }
 
+
 /**
 * Output the html for an add contact form
 *
@@ -9016,6 +9075,7 @@ function show_add_contact($siteid = 0, $mode = 'internal')
 
     return $html;
 }
+
 
 /**
 * Procceses a new contact

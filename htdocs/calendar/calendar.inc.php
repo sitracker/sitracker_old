@@ -371,6 +371,7 @@ function draw_chart($mode, $year, $month='', $day='', $groupid='', $userid='')
                 $cday = date('j',$pubhol->startdate);
                 $pubholdays[$cday] = $pubhol->length;
             }
+
             if ($prevgroupid != $user->groupid)
             {
                 if ($user->groupid=='') $user->groupid=0;
