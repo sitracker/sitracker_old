@@ -29,7 +29,8 @@ if (empty($action) OR $action == 'showform' OR $action == 'list')
     // Show select email type form
     include ('htmlheader.inc.php');
 
-    echo "<h2>{$strTemplates}</h2>";
+    echo "<h2>".icon('templates', 32)." ";
+    echo "{$strTemplates}</h2>";
     echo "<p align='center'><a href='triggers.php'>{$strTriggers}</a> | <a href='add_emailtype.php?action=showform'>{$strAddEmailTemplate}</a></p>";
 
     $sql = "SELECT * FROM `{$dbEmailTemplates}` ORDER BY id";
