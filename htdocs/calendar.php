@@ -34,9 +34,8 @@ foreach (array(
 }
 if (empty($length)) $length='day';
 $title = $strCalendar;
+$pagecss = array('calendar/planner.css.php');
 include('htmlheader.inc.php');
-// FIXME stylesheet REALLY shouldn't go here, breaks validation
-echo "<link rel='stylesheet' href='{$CONFIG['application_webpath']}calendar/planner.css.php' />\n";
 
 if (empty($user) || $user=='current') $user = $sit[2];
 elseif ($user == 'all') $user = '';

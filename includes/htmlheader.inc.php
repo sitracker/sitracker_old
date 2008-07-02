@@ -52,6 +52,15 @@ list($cssurl, $iconset) = mysql_fetch_row($cssresult);
 if (empty($iconset)) $iconset = 'sit';
 unset($styleid);
 echo "<link rel='stylesheet' href='{$CONFIG['application_webpath']}styles/{$cssurl}' />\n";
+// To include a CSS file for a single page, add the filename to the $pagecss variable before including htmlheader.inc.php
+if (is_array($pagecss))
+{
+    foreach ($pagecss AS $pcss)
+    {
+        echo "<link rel='stylesheet' href='{$CONFIG['application_webpath']}{$pcss}' />\n";
+    }
+    unset($pagecss, $pcss);
+}
 
 if (isset($refresh) && $refresh != 0)
 {
