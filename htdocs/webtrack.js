@@ -333,10 +333,10 @@ function findPos(obj) {
 
 function contexthelp(elem, context)
 {
+    var loadmsg = "Loading...";
     if (isIE==false)
     {
         elem.firstDescendant().style.display = 'block';
-        var loadmsg = "Loading...";
         elem.firstDescendant().innerHTML = loadmsg;
         var epos = findPos(elem.firstDescendant());
     }
