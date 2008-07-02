@@ -191,8 +191,8 @@ function setup_configure()
             $html .= "<p>For security we won't show your existing settings here unless the configuration file is writable.</p>";
         }
     }
-    else $html .= "<h2>Configuration</h2><p>Please complete this form to create a new configuration file for SiT!</p>";
-    $html .= "<form action='setup.php' method='post'>\n";
+    else $html .= "<h2>New Configuration</h2><p>Please complete this form to create a new configuration file for SiT!</p>";
+    $html .= "\n<form action='setup.php' method='post'>\n";
 
     if ($_REQUEST['config']=='advanced')
     {
@@ -212,7 +212,7 @@ function setup_configure()
         $html .= "<h4>{$title}</h4>";
         if ($CFGVAR[$setupvar]['help']!='') $html .= "<p class='helptip'>{$CFGVAR[$setupvar]['help']}</p>\n";
 
-        $html .= "\$CONFIG['$setupvar'] = <input type='text' name='$setupvar' size='60' value='";
+        $html .= "<var>\$CONFIG['$setupvar']</var> = <input type='text' name='$setupvar' size='60' value='";
         if (!$cfg_file_exists OR ($cfg_file_exists AND $cfg_file_writable))
         {
             $value = $CONFIG[$setupvar];
@@ -235,7 +235,7 @@ function setup_configure()
         if ($c==1) $c==2; else $c=1;
     }
     $html .= "<input type='hidden' name='action' value='save_config' />";
-    $html .= "<br /><input type='submit' name='submit' Value='Save Configuration' />";
+    $html .= "<br /><input type='submit' name='submit' value='Save Configuration' />";
     $html .= "</form>\n";
     return $html;
 }
@@ -282,12 +282,12 @@ function setup_exec_sql($sqlquerylist)
                     else
                     {
                         // Update the system schema version
-                        $vsql = "REPLACE INTO `{$dbSystem}` ( `id`, `version`, `schemaversion`) VALUES (0, $application_version, $schemaversion)";
-                        mysql_query($vsql);
-                        if (mysql_error())
-                        {
-                            $html .= "<p class='error'>Could not store new schema version number '$schemaversion'. ".mysql_error()."</p>";
-                        }
+//                         $vsql = "REPLACE INTO `{$dbSystem}` ( `id`, `version`, `schemaversion`) VALUES (0, $application_version, $schemaversion)";
+//                         mysql_query($vsql);
+//                         if (mysql_error())
+//                         {
+//                             $html .= "<p class='error'>Could not store new schema version number '$schemaversion'. ".mysql_error()."</p>";
+//                         }
                     }
                 }
             }
@@ -318,8 +318,8 @@ echo "<meta http-equiv=\"Content-Type\" content=\"text/html;charset=UTF-8\" />\n
 echo "<style type=\"text/css\">\n";
 echo "body { background-color: #FFF; font-family: Tahoma, Helvetica, sans-serif; font-size: 10pt;}\n";
 echo "h1,h2,h3,h4,h5 { background-color: #203894; padding: 0.1em; border: 1px solid #203894; color: #FFF; }\n";
-echo "h4 {background-color: #E4F9FF; color: #000; border: 1px solid #3165CD; }\n";
-echo "div.configvar1 {background-color: #F7FAFF; border: 1px solid black; margin-bottom: 10px; padding: 0px 5px 5px;} ";
+echo "h4 {background-color: transparent; color: #000; border: 0px; margin: 2px 0px 3px 0px; }\n";
+echo "div.configvar1 {background-color: #F7FAFF; border: 1px solid black; margin-bottom: 10px; padding: 0px 5px 10px 5px;} ";
 echo "div.configvar2 {background-color: green; border: 1px solid black; margin-bottom: 10px;} ";
 echo ".error {background-position: 3px 2px;
   background-repeat: no-repeat;
@@ -368,9 +368,13 @@ a.button:active
   border-left: 1px solid black;
 }
 
+var { font-family: Andale Mono, monospace; font-style: normal; }
+
+}
+
 ";
 echo ".help {background: #F7FAFF; border: 1px solid #3165CD; color: #203894; padding: 2px;}\n";
-echo ".helptip { color: #203894;}\n";
+echo ".helptip { color: #203894; }\n";
 echo ".warning {background: #FFFFE6; border: 2px solid #FFFF31; color: red; padding: 2px;}\n";
 echo "pre {background:#FFF; border:#999; padding: 1em;}\n";
 echo "a.button { border: 1px outset #000; padding: 2px; background-color: #EFEFEF;} ";
@@ -383,7 +387,12 @@ echo "</head>\n<body>\n";
 
 echo "<h1>Support Incident Tracker - Installation &amp; Setup</h1>";
 $include_path = ini_get('include_path');
-// Check that includes worked
+
+//
+// Pre-flight Checks
+//
+
+// Check that includes worked and that we have some config variables set, these two should always be set
 if ($CONFIG['application_name']=='' AND $CONFIG['application_shortname']=='')
 {
     echo "<p class='error'>We couldn't find configuration defaults, this probably means your include_path is wrong. ";
@@ -400,6 +409,16 @@ if ($CONFIG['application_name']=='' AND $CONFIG['application_shortname']=='')
     echo "</p>";
 }
 
+// Check we have the mysql extension
+if (!extension_loaded('mysql'))
+{
+    echo "<p class='error'>Error: Could not find the mysql extension, SiT! requires MySQL to be able to run, you should install and enable the MySQL PHP Extension then run setup again.</p>";
+}
+
+if (version_compare(PHP_VERSION, "5.0.0", "<"))
+{
+    echo "<p class='error'>You are running an older PHP version (< PHP 5), SiT v3.35 and later require PHP 5.0.0 or newer, some features may not work properly.</p>";
+}
 
 switch ($_REQUEST['action'])
 {
@@ -423,40 +442,48 @@ switch ($_REQUEST['action'])
             if ($_POST[$setupvar]=='FALSE') $_POST[$setupvar] = FALSE;
             $CONFIG[$setupvar]=$_POST[$setupvar];
         }
+
         // Extract the differences between the defaults and the newly configured items
         $CFGDIFF = array_diff_assoc($CONFIG, $DEFAULTS);
 
-        foreach($CFGDIFF AS $setupvar => $setupval)
+        if (count($CFGDIFF) > 0)
         {
-            if ($CFGVAR[$setupvar]['title'] != '')
+            foreach($CFGDIFF AS $setupvar => $setupval)
             {
-                $newcfgfile .= "# {$CFGVAR[$setupvar]['title']}\n";
-            }
+                if ($CFGVAR[$setupvar]['title'] != '')
+                {
+                    $newcfgfile .= "# {$CFGVAR[$setupvar]['title']}\n";
+                }
 
-            if ($CFGVAR[$setupvar]['help']!='')
-            {
-                $newcfgfile .= "# {$CFGVAR[$setupvar]['help']}\n";
-            }
+                if ($CFGVAR[$setupvar]['help']!='')
+                {
+                    $newcfgfile .= "# {$CFGVAR[$setupvar]['help']}\n";
+                }
 
-            $newcfgfile .= "\$CONFIG['$setupvar'] = ";
+                $newcfgfile .= "\$CONFIG['$setupvar'] = ";
 
-            if (is_numeric($setupval))
-            {
-                $newcfgfile .= "{$setupval}";
+                if (is_numeric($setupval))
+                {
+                    $newcfgfile .= "{$setupval}";
+                }
+                elseif (is_bool($setupval))
+                {
+                    $newcfgfile .= $setupval == TRUE ? "TRUE" : "FALSE";
+                }
+                elseif (substr($setupval, 0, 6)=='array(')
+                {
+                    $newcfgfile .= stripslashes("{$setupval}");
+                }
+                else
+                {
+                    $newcfgfile .= "'{$setupval}'";
+                }
+                $newcfgfile .= ";\n\n";
             }
-            elseif (is_bool($setupval))
-            {
-                $newcfgfile .= $setupval == TRUE ? "TRUE" : "FALSE";
-            }
-            elseif (substr($setupval, 0, 6)=='array(')
-            {
-                $newcfgfile .= stripslashes("{$setupval}");
-            }
-            else
-            {
-                $newcfgfile .= "'{$setupval}'";
-            }
-            $newcfgfile .= ";\n\n";
+        }
+        else
+        {
+            $newcfgfile .= "# Nothing configured. This will mean the defaults are used.\n\n";
         }
         $newcfgfile .= "?";
         $newcfgfile .= ">";
@@ -468,10 +495,10 @@ switch ($_REQUEST['action'])
             echo "<p class='help'>Copy this text and paste it into a <var>config.inc.php</var> file in the includes directory or <var>sit.conf</var> in the <var>/etc</var> directory<br />";
             echo "Or change the permissions on the file so that it is writable and refresh this page to try again (if you do this remember to make it ";
             echo "read-only again afterwards)</p>";
-            echo "<div style='margin-left: 5%; margin-right: 5%; background-color: white; padding: 1em;'>";
+            echo "<div style='margin-left: 5%; margin-right: 5%; background-color: white; padding: 1em; border: 1px dashed #ccc; '>";
             highlight_string($newcfgfile);
             echo "</div>";
-            echo "<h2>After creating your <var>{$config_filename}</var> file</h2>";
+            echo "<p>After creating your <var>{$config_filename}</var> file click the 'Next' button below.</p>";
         }
         else
         {
@@ -495,11 +522,6 @@ switch ($_REQUEST['action'])
 
 
     default:
-        // Check we have the mysql extension
-        if (!extension_loaded('mysql'))
-        {
-            echo "<p class='error'>Error: Could not find the mysql extension, SiT! requires MySQL to be able to run, you should install and enable the MySQL PHP Extension then run setup again.</p>";
-        }
         require('tablenames.inc.php');
         // Connect to Database server
         $db = @mysql_connect($CONFIG['db_hostname'], $CONFIG['db_username'], $CONFIG['db_password']);
@@ -533,7 +555,6 @@ switch ($_REQUEST['action'])
                     if ($result)
                     {
                         echo "<p><strong>OK</strong> Database '{$CONFIG['db_database']}' created.</p>";
-                        echo setup_configure();
                         echo "<p><a href='setup.php' class='button'>Next</a></p>";
                     }
                     else
@@ -552,7 +573,7 @@ switch ($_REQUEST['action'])
                 //echo "<p>After creating the database run <a href='setup.php' class='button'>setup</a> again to create the database schema</p>";
                 if (empty($CONFIG['db_database']) OR empty($CONFIG['db_username']))
                 {
-                    echo "<p>You make need to make configuration changes in order for SiT to be able access MySQL.</p>";
+                    echo "<p>You may need to make configuration changes in order for SiT to be able access MySQL.</p>";
                     echo setup_configure();
                 }
             }
@@ -577,8 +598,8 @@ switch ($_REQUEST['action'])
                 {
                     echo "<h2>Creating new database schema...</h2>";
                     // No users table or empty users table, proceed to install
-                    $installed_schema = 0;
-                    $installed_schema = substr(end(array_keys($upgrade_schema[$application_version*100])),1);
+//                     $installed_schema = 0;
+//                     $installed_schema = substr(end(array_keys($upgrade_schema[$application_version*100])),1);
                     $errors = setup_exec_sql($schema);
                     if(empty($errors))
                     {
@@ -589,7 +610,7 @@ switch ($_REQUEST['action'])
                         echo $errors;
                     }
                     // Set the system version number
-                    $sql = "REPLACE INTO `{$dbSystem}` ( id, version, `schemaversion`) VALUES (0, $application_version, $installed_schema)";
+                    $sql = "REPLACE INTO `{$dbSystem}` ( id, version) VALUES (0, $application_version)";
                     mysql_query($sql);
                     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
                     $installed_version = $application_version;
@@ -619,7 +640,7 @@ switch ($_REQUEST['action'])
                         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
                         list($installed_version) = mysql_fetch_row($result);
 
-                        if ($installed_version >= 3.35)
+/*                        if ($installed_version >= 3.35)
                         {
                             $sql = "SELECT `schemaversion` FROM `{$dbSystem}` WHERE id = 0";
                             $result = mysql_query($sql);
@@ -637,7 +658,7 @@ switch ($_REQUEST['action'])
                                 $result = mysql_query($sql);
                                 if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
                             }
-                        }
+                        }*/
                     }
 
                     if (empty($installed_version))
@@ -662,7 +683,7 @@ switch ($_REQUEST['action'])
                                 }
                             }
                         }
-                        
+
                         // Upgrade schema
                         // for ($v=(($installed_version*100)+1); $v<=($application_version*100); $v++)
                         for ($v=(($installed_version*100)); $v<=($application_version*100); $v++)
@@ -714,7 +735,7 @@ switch ($_REQUEST['action'])
                                 }
                                 else echo "<p><strong>OK:</strong> $sql</p>";
                             }
-                            
+
                             //add trigger to users, NOTE we do user 1(admin's) in the schema
                             $sql = "SELECT id FROM `{$dbUsers}` WHERE id > 1";
                             if ($result = @mysql_query($sql))
@@ -813,10 +834,11 @@ switch ($_REQUEST['action'])
                     }
                     else
                     {
-                        $latest_schema = substr(end(array_keys($upgrade_schema[$application_version*100])),1);
-                        echo "<p>Your database schema is v".number_format($installed_version,2) . "-{$installed_schema}";
+//                         $latest_schema = substr(end(array_keys($upgrade_schema[$application_version*100])),1);
+                        echo "<p>Your database schema is v".number_format($installed_version,2);
+//                          . "-{$installed_schema}";
                         //if ($installed_schema < $latest_schema)
-                        echo ", the latest available schema is v".number_format($installed_version,2) . "-{$latest_schema}";
+//                         echo ", the latest available schema is v".number_format($installed_version,2) . "-{$latest_schema}";
                         if ($installed_version < $application_version) echo ", after making a backup you should upgrade your schema to v{$application_version}";
                         echo "</p>";
 

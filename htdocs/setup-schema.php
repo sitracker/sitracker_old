@@ -735,7 +735,7 @@ INSERT INTO `{$dbPermissions}` VALUES (75, 'Set negative time for duration on in
 INSERT INTO `{$dbPermissions}` VALUES (76, 'View Transactions');
 INSERT INTO `{$dbPermissions}` VALUES (77, 'View Billing Information');
 INSERT INTO `{$dbPermissions}` VALUES (78, 'Post System Notices');
-INSERT INTO `{$dbPermissions}` VALUES (79 'Edit Service Balances');
+INSERT INTO `{$dbPermissions}` VALUES (79, 'Edit Service Balances');
 INSERT INTO `{$dbPermissions}` VALUES (80, 'Edit Service Details');
 
 
