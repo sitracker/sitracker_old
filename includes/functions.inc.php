@@ -8941,7 +8941,7 @@ function show_add_contact($siteid = 0, $mode = 'internal')
         $html .= "<h5 class='warning'>{$GLOBALS['strAvoidDupes']}</h5>";
     }
     $html .= "<form name='contactform' action='{$_SERVER['PHP_SELF']}' ";
-    $html .= "method='post' onsubmit=\"return confirm_action('{$GLOBALS['strAreYouSureAdd']})\">";
+    $html .= "method='post' onsubmit=\"return confirm_action('{$GLOBALS['strAreYouSureAdd']}')\">";
     $html .= "<table align='center' class='vertical'>";
     $html .= "<tr><th>{$GLOBALS['strName']}</th>\n";
 
