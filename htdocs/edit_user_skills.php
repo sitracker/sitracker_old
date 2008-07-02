@@ -49,25 +49,29 @@ if (empty($submit))
     $result = mysql_query($sql);
     if (mysql_num_rows($result) >= 1)
     {
-        echo "<select name='noskills[]' multiple='multiple' size='20' style='width: 100%; min-width: 200px;'>";
+        echo "\n<select name='noskills[]' multiple='multiple' size='20' style='width: 100%; min-width: 200px;'>";
         while ($software = mysql_fetch_object($result))
         {
-            if (is_array($expertise)) { if (!in_array($software->id,$expertise))
+            if (is_array($expertise))
             {
-                echo "<option value='{$software->id}'>$software->name</option>\n";  }
+                if (!in_array($software->id,$expertise))
+                {
+                    echo "<option value='{$software->id}'>{$software->name}</option>\n";
+                }
             }
             else
             {
-                echo "<option value='{$software->id}'>$software->name</option>\n";
+                echo "<option value='{$software->id}'>{$software->name}</option>\n";
             }
         }
-        echo "</select>";
+        echo "<option value=''></option>"; // Always have at least one option
+        echo "</select>\n";
     }
     else
     {
         echo "<p class='error'>{$strNoSkillsDefined}</p>";
     }
-        
+
     echo "</td>";
     echo "<td class='shade2'>";
     echo "<input type='button' value='&gt;' title='Add Selected' onclick=\"copySelected(this.form.elements['noskills[]'],this.form.elements['expertise[]'])\" /><br />";
@@ -83,7 +87,7 @@ if (empty($submit))
     {
         echo "<option value='{$software->id}'>$software->name</option>\n";
     }
-    // echo "<option value='0'>---</option>\n";
+    echo "<option value=''></option>"; // Always have at least one option
     echo "</select>";
     echo "<input type='hidden' name='userid' value='{$user}' />";
     echo "</td></tr>\n";
