@@ -54,6 +54,14 @@ now fires the 'Incident Created' trigger which in turn sends an
 email based upon the INCIDENT_LOGGED template.
 This action can be removed if you prefer.
 
+From this version new incidents will be automatically assigned
+to engineers based on the workload (queue size) of each engineer,
+the skills required and the online status of the engineers.
+This can be turned off and the old (pre 3.35 behaviour) where a
+list of engineers is presented and the user is given the choice
+of who to assign to by setting the config variable
+$CONFIG['auto_assign_incidents'] to TRUE.
+
 
 Upgrading to 3.32
 -----------------
