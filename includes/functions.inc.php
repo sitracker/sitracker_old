@@ -358,7 +358,7 @@ function user_id($username, $password)
     else
     {
         $user = mysql_fetch_array($result);
-        $userid=$user["id"];
+        $userid=$user['id'];
     }
     return $userid;
 }
@@ -907,11 +907,11 @@ function contact_productsupport($contactid, $productid)
     else
     {
         $product = mysql_fetch_array($result);
-        if ($product["expirydate"] <= $now)
+        if ($product['expirydate'] <= $now)
         {
             return ("expired");
         }
-        else if ($product["expirydate"] > $now)
+        else if ($product['expirydate'] > $now)
         {
             return ("yes");
         }
