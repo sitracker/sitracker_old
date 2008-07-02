@@ -11,12 +11,7 @@
 
 var popwin;
 dashletrefresh = new Array();
-
-function isIE()
-{
-    return /msie/i.test(navigator.userAgent) && !/opera/i.test(navigator.userAgent);
-}
-
+var isIE = /*@cc_on!@*/false;
 
 function incident_details_window(incidentid,win,rtn)
 {
@@ -338,7 +333,7 @@ function findPos(obj) {
 
 function contexthelp(elem, context)
 {
-    if (isIE()==false)
+    if (isIE==false)
     {
         elem.firstDescendant().style.display = 'block';
         var loadmsg = "Loading...";
