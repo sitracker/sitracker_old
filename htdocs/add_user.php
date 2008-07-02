@@ -84,7 +84,7 @@ if (empty($submit))
     }
     else
     {
-        echo "<td>".role_drop_down('roleid', 1)."</td>";
+        echo "<td>".role_drop_down('roleid', $CONFIG['default_roleid'])."</td>";
     }
     echo "</tr>";
 

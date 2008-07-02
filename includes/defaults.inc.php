@@ -246,4 +246,7 @@ $CONFIG['portal_interface_style'] = 16;
 // are less busy, assumes everyone set to accepting is an engineer and willing to take incidents
 $CONFIG['auto_assign_incidents'] = TRUE;
 
+// Default role for new users, where 1 is admin, 2 is manager and 3 is user
+$CONFIG['default_roleid'] = 3;
+
 ?>
