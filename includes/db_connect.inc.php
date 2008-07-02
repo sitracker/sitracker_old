@@ -46,6 +46,8 @@ if (mysql_error())
 // mysql_query("SET CHARACTER SET utf8");
 mysql_query("SET NAMES utf8");
 
+// mysql_query("SET time_zone = {$CONFIG['timezone']}");
+
 // Select database
 mysql_select_db($CONFIG['db_database'], $db);
 if (mysql_error())

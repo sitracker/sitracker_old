@@ -312,7 +312,7 @@ function draw_chart($mode, $year, $month='', $day='', $groupid='', $userid='')
     $gsql = "SELECT * FROM `{$GLOBALS['dbGroups']}` ORDER BY name";
     $gresult = mysql_query($gsql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
-    $grouparr[0] = 'None';
+    $grouparr[0] = $GLOBALS['strNone'];
     while ($group = mysql_fetch_object($gresult))
     {
         $grouparr[$group->id] = $group->name;
@@ -320,8 +320,12 @@ function draw_chart($mode, $year, $month='', $day='', $groupid='', $userid='')
     $numgroups = count($grouparr);
 
     $html .= "<table align='center' border='1' cellpadding='0' cellspacing='0' style='border-collapse:collapse; border-color: #AAA; width: 99%;'>";
-    $usql  = "SELECT * FROM `{$GLOBALS['dbUsers']}` WHERE status != 0 "; // status=0 means left company
-    if (!empty($groupid))
+    $usql  = "SELECT * FROM `{$GLOBALS['dbUsers']}` WHERE status != 0 "; // status=0 means account disabled
+    if ($groupid == 'allonline')
+    {
+        $usql .= "AND lastseen > NOW() - (60 * 30) ";
+    }
+    if (is_numeric($groupid))
     {
         $usql .= "AND groupid = {$groupid} ";
     }

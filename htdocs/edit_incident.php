@@ -92,7 +92,7 @@ if (empty($submit))
         echo "<input name='oldproductservicepacks' type='hidden' value=\"{$incident['productservicepacks']}\" />";
         echo "<input name='oldsoftware' type='hidden' value=\"{$incident['softwareid']}\" />";
 
-        echo "<input name='submit' type='submit' value='{$strSave}' /></p>";
+        echo "<input name='submit' type='reset' value='{$strReset}' /> <input name='submit' type='submit' value='{$strSave}' /></p>";
         echo "</form>\n";
     }
     include ('incident_html_bottom.inc.php');

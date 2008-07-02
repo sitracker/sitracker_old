@@ -12,6 +12,11 @@
 var popwin;
 dashletrefresh = new Array();
 
+function isIE()
+{
+    return /msie/i.test(navigator.userAgent) && !/opera/i.test(navigator.userAgent);
+}
+
 
 function incident_details_window(incidentid,win,rtn)
 {
@@ -333,10 +338,13 @@ function findPos(obj) {
 
 function contexthelp(elem, context)
 {
-    elem.firstDescendant().style.display = 'block';
-    var loadmsg = "Loading...";
-    elem.firstDescendant().innerHTML = loadmsg;
-    var epos = findPos(elem.firstDescendant());
+    if (isIE()==false)
+    {
+        elem.firstDescendant().style.display = 'block';
+        var loadmsg = "Loading...";
+        elem.firstDescendant().innerHTML = loadmsg;
+        var epos = findPos(elem.firstDescendant());
+    }
     var vwidth = document.viewport.getWidth();
     var vheight = document.viewport.getHeight();
     if (epos[0] + 135 > vwidth)

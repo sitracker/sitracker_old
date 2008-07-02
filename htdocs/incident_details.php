@@ -82,6 +82,7 @@ elseif ($_REQUEST['win'] == 'holdingview')
     $title = $strIncoming;
     $incidentid='';
     include('incident_html_top.inc.php');
+
     include('incident/details.inc.php');
 
     include('incident/log.inc.php');

@@ -39,7 +39,6 @@ $filter = array('start' => $start, 'view' => $view);
 $sql = "SELECT k.*, s.name FROM `{$dbKBArticles}` AS k,
                                 `{$dbKBSoftware}` as kbs,
                                 `{$dbSoftware}` as s
-
         WHERE k.docid = kbs.docid AND kbs.softwareid = s.id AND k.distribution = 'public' ";
 
 // $sql = "SELECT DISTINCT k.*, s.name FROM `{$dbKBArticles}` AS k, `{$dbSoftware}` as s ";

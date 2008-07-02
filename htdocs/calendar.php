@@ -57,7 +57,12 @@ else $month = $_REQUEST['month'];
 if (empty($_REQUEST['day'])) $day = date('d');
 else $day = $_REQUEST['day'];
 
-$calendarTypes = array('list','year','month','week','day','timesheet');
+$calendarTypes = array('list','year','month','week','day');
+
+if ($CONFIG['timesheets_enabled'])
+{
+    $calendarTypes[] = 'timesheet';
+}
 
 // Prevent people from including any old file - this also handles any cases
 // where $display == 'chart'
