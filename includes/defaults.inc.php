@@ -8,7 +8,7 @@
 // of the GNU General Public License, incorporated herein by reference.
 //
 //  Author: Ivan Lucas
-//  Notes: These variables are overwritten by config.inc.php and/or webtrack.conf or sit.conf
+//  Notes: These variables are overwridden by config.inc.php and/or webtrack.conf or sit.conf
 
 ###########################################################
 ####                                                   ####
@@ -31,6 +31,7 @@ $CONFIG['application_shortname'] = 'SiT!';
 $CONFIG['application_fspath'] = '';
 $CONFIG['application_webpath'] = '/';
 
+// The URI prefix to use when referring to this application (in emails etc.)
 $CONFIG['application_uriprefix'] = "http://{$_SERVER['HTTP_HOST']}";
 
 $CONFIG['db_hostname'] = 'localhost';
