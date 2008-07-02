@@ -28,7 +28,8 @@ echo "background-repeat: no-repeat; background-position: 1% bottom;'>";
 echo "<h2>{$CONFIG['application_name']}</h2>";
 echo "<p align='center'>";
 echo "{$strVersion}: {$application_version} {$application_revision}<br />";
-echo "{$strSchemaVersion}: ".database_schema_version()."</p><br />";
+// Reenable when we have schema versions once again
+// echo "{$strSchemaVersion}: ".database_schema_version()."</p><br />";
 echo "</td></tr>\n";
 echo "<tr><td class='shade1' colspan='2'>{$strCredits}:</td></tr>\n";
 $fp = fopen($CONFIG['creditsfile'], "r");
