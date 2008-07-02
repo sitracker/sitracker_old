@@ -108,7 +108,7 @@ switch ($action)
             if ($enddate > 0) $enddate = date('Y-m-d',$enddate);
             else $enddate='';
             if ($startdate < 1 AND $completion > 0) $startdate = date('Y-m-d H:i:s');
-            $sql = "UPDATE `{$dbTasks}`` ";
+            $sql = "UPDATE `{$dbTasks}` ";
             $sql .= "SET name='$name', description='$description', priority='$priority', ";
             $sql .= "duedate='$duedate', startdate='$startdate', ";
             $sql .= "completion='$completion', enddate='$enddate', value='$value', ";
