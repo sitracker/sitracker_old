@@ -283,7 +283,9 @@ function user_permission($userid,$permission)
 function permission_name($permissionid)
 {
     global $dbPermissions;
-    return db_read_column('name', $dbPermissions, $permissionid);
+    $name = db_read_column('name', $dbPermissions, $permissionid);
+    if (empty($name)) $name = $GLOBALS['strUnknown'];
+    return $name;
 }
 
 
