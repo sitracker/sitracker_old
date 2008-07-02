@@ -320,7 +320,7 @@ if ($sit[0] != '')
             if (!empty($notice->link))
             {
                 echo " - <a href='{$notice->link}'>";
-                if (substr($notice->linktext, 0, 3)=='str')
+                if (substr($notice->linktext, 0, 3) == 'str')
                 {
                     echo $GLOBALS[$notice->linktext];
                 }
@@ -331,9 +331,9 @@ if ($sit[0] != '')
                 echo "</a>";
             }
 
-        echo "<small>";
-        echo "<em> (".format_date_friendly(strtotime($notice->timestamp)).")</em>";
-        echo "</small></p></div>\n";
+            echo "<small>";
+            echo "<em> (".format_date_friendly(strtotime($notice->timestamp)).")</em>";
+            echo "</small></p></div>\n";
         }
 
         if (mysql_num_rows($noticeresult) > 1)
