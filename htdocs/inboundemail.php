@@ -159,8 +159,8 @@ else
 
 $attachment = array();
 
-if ($decoded_email->contenttype=='multipart/mixed' OR
-    $decoded_email->contenttype=='multipart/alternative')
+if ($decoded_email->contenttype == 'multipart/mixed' OR
+    $decoded_email->contenttype == 'multipart/alternative')
 {
     // This is a MIME message
     foreach ($decoded_email->mime_block AS $block)
@@ -181,7 +181,7 @@ if ($decoded_email->contenttype=='multipart/mixed' OR
                 // Do no decoding
         }
         // Extract any inline text into the incident log (if it's HTML strip the tags first)
-        if ($block->mime_contentdisposition=='inline' OR $block->mime_contentdisposition=='')
+        if ($block->mime_contentdisposition == 'inline' OR $block->mime_contentdisposition == '')
         {
             switch ($block->mime_contenttype)
             {
