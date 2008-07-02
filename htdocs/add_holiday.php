@@ -108,7 +108,7 @@ else
 
 if ($return=='list')
 {
-    header("Location: holiday_calendar.php?display=list&type=$type&user=$user");
+    header("Location: calendar.php?display=list&type=$type&user=$user");
     exit;
 }
 else

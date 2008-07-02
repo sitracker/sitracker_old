@@ -100,7 +100,7 @@ if (!empty($selectedday))
         if ($length!='0')
         {
             echo "Or you can <a href='add_holiday.php?type=$type&amp;user=$user&amp;year=$selectedyear&amp;month=$selectedmonth&amp;day=$selectedday&amp;length=0'>deselect</a> it. ";
-            echo "<a href='holiday_calendar.php?type=$type&amp;user=$user' title='Clear this message'>Okay</a>.";
+            echo "<a href='calendar.php?type=$type&amp;user=$user' title='Clear this message'>Okay</a>.";
         }
     }
     elseif ($approved==1)
