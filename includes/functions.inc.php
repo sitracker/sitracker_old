@@ -8598,7 +8598,7 @@ function icon($filename, $size='', $alt='', $title='', $id='')
 *
 * @param int $id ID of the KB article
 * @param string $mode whether this is internal or external facing, defaults to internal
-* @return string $html kb article html
+* @returns string $html kb article html
 * @author Kieran Hogg
 */
 function kb_article($id, $mode='internal')
@@ -8691,7 +8691,7 @@ function kb_article($id, $mode='internal')
         $kbcontent->content = preg_replace("/href=\"www/i", "href=\"http://www", preg_replace ($search, $replace, $kbcontent->content));
         $html .= bbcode($kbcontent->content);
         $author[]=$kbcontent->ownerid;
-        $html .= "</div>";
+        $html .= "</div>\n";
 
     }
 
@@ -8753,7 +8753,7 @@ function kb_article($id, $mode='internal')
     }
 
     //$html .= "<h3>{$GLOBALS['strDisclaimer']}</h3>";
-    $html .= "<hr />";
+    $html .= "</p><hr />";
     $html .= $CONFIG['kb_disclaimer_html'];
     $html .= "</div>";
 
