@@ -5730,7 +5730,7 @@ function suggest_reassign_userid($incidentid, $exceptuserid=0)
             $ticket[] = $user->userid;
 
             // Get a ticket for being seen in the past 30 minutes
-            if (mysqlts2date($user->lastseen) > $now - 1800) $ticket[] = $user->userid;
+            if (mysql2date($user->lastseen) > $now - 1800) $ticket[] = $user->userid;
 
             // Get two tickets for being marked in-office or working at home
             if ($user->status == 1 OR $user->status == 6)

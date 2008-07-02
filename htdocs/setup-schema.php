@@ -1400,7 +1400,7 @@ CREATE TABLE `{$dbUsers}` (
   `holiday_entitlement` float NOT NULL default '0',
   `qualifications` tinytext,
   `dashboard` varchar(255) NOT NULL default '0-3,1-1,1-2,2-4',
-  `lastseen` TIMESTAMP NOT NULL,
+  `lastseen` DATETIME NOT NULL,
   PRIMARY KEY  (`id`),
   KEY `username` (`username`),
   KEY `accepting` (`accepting`),
@@ -2173,7 +2173,8 @@ INSERT INTO `{$dbUserPermissions}` VALUES (1, 80, 'true');
 --  !!WARNING!! can take a while on large tables
 ALTER TABLE `{$dbUpdates}` ADD FULLTEXT ( `bodytext`) ;
 
-
+-- INL 2008-07-02
+ ALTER TABLE `users` CHANGE `lastseen` `lastseen` DATETIME NOT NULL
 ";
 
 // Important: When making changes to the schema you must add SQL to make the alterations

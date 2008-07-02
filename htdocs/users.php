@@ -53,7 +53,7 @@ else
     $sql .= "AND groupid='{$filtergroup}' ";
 }
 
-if ($onlineonly == 'true' OR $filtergroup == 'allonline')
+if ($onlineonly === 'true' OR $filtergroup === 'allonline' )
 {
     $sql .= "AND lastseen > NOW() - (60 * 30) ";
 }
@@ -74,9 +74,8 @@ if (!empty($sort))
     else $sql .= "DESC";
 }
 else $sql .= "ORDER BY realname ASC ";
-
 $result = mysql_query($sql);
-if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
 
 echo "<table align='center' style='width: 95%;'>";
 echo "<tr>";
