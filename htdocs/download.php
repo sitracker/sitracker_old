@@ -73,7 +73,6 @@ elseif ($access == TRUE)
     $file_size = filesize($file_fspath);
     $fp = fopen($file_fspath, 'r');
     $file_ext = substr($file_fspath, (strrpos('.', $file_fspath)*-1));
-    die($file_ext);
     if ($fp && ($file_size !=-1))
     {
         header("Content-Type: application/octet-stream\r\n");
