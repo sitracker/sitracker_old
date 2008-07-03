@@ -119,10 +119,13 @@ $CFGVAR['creditsfile']['title']='Path to the Credits file';
 $CFGVAR['session_name']['title']='The session name for use in cookies and URLs, Must contain alphanumeric characters only';
 $CFGVAR['notice_threshold']['title']='Flag items as notice when they are this percentage complete.';
 $CFGVAR['notice_threshold']['help']='Enter a number between 0 and 100.';
+$CFGVAR['notice_threshold']['type']='percent';
 $CFGVAR['urgent_threshold']['title']='Flag items as urgent when they are this percentage complete.';
 $CFGVAR['urgent_threshold']['help']='Enter a number between 0 and 100.';
+$CFGVAR['urgent_threshold']['type']='percent';
 $CFGVAR['critical_threshold']['title']='flag items as critical when they are this percentage complete.';
 $CFGVAR['critical_threshold']['help']='Enter a number between 0 and 100.';
+$CFGVAR['critical_threshold']['type']='percent';
 $CFGVAR['demo']['title']='Demo Mode';
 $CFGVAR['demo']['help']='Set to TRUE to run in demo mode, some features are disabled or replaced with mock-ups';
 $CFGVAR['demo']['type'] = 'select';
@@ -334,6 +337,17 @@ function setup_configure()
                     $html .= "<option value=\"{$option}\"";
                     if ($option == $value) $html .= " selected='selected'";
                     $html .= ">{$option}</option>";
+                }
+                $html .= "</select>";
+            break;
+
+            case 'percent':
+                $html .= "<select name='$setupvar'>";
+                for($i = 0; $i <= 100; $i++)
+                {
+                    $html .= "<option value=\"{$i}\"";
+                    if ($i == $value) $html .= " selected='selected'";
+                    $html .= ">{$i}</option>";
                 }
                 $html .= "</select>";
             break;
