@@ -152,9 +152,9 @@ $CFGVAR['error_notavailable_url']['title']="The URL to redirect too for pages th
 $CFGVAR['tag_icons']['title'] = "An array of tags and associated icons";
 $CFGVAR['tag_icons']['help'] = "Set up an array to use an icon for specified tags, format: array('tag' => 'icon', 'tag2' => 'icon2')";
 $CFGVAR['no_feedback_contracts']['title'] = "An array of contracts to not request feedback for";
-$CFGVAR['no_feedback_contracts']['help'] = "eg. array(1 => 123, 2 => 765) would withhold feedback requests for contract 123 and 765";
+$CFGVAR['no_feedback_contracts']['help'] = "eg. array(123, 765) would withhold feedback requests for contract 123 and 765";
 $CFGVAR['preferred_maintenance']['title'] = "An array of SLA's to indicate order of preference when logging incidents against them";
-$CFGVAR['preferred_maintenance']['help'] = "e.g. array(1 => 'standard', 2 => 'high')";
+$CFGVAR['preferred_maintenance']['help'] = "e.g. array('standard', 'high')";
 $CFGVAR['default_i18n']['title'] = "Default Language";
 $CFGVAR['default_i18n']['help'] = "The system language, or the language that will be used when no other language is selected by the user, see <a href='http://sitracker.sourceforge.net/Translation'>http://sitracker.sourceforge.net/Translation</a> for a list of supported languages. ";
 $CFGVAR['timezone']['title'] = "System Time Zone";
@@ -336,7 +336,7 @@ function setup_configure()
                 {
                     $html .= "<option value=\"{$option}\"";
                     if ($option == $value) $html .= " selected='selected'";
-                    $html .= ">{$option}</option>";
+                    $html .= ">{$option}</option>\n";
                 }
                 $html .= "</select>";
             break;
@@ -347,7 +347,7 @@ function setup_configure()
                 {
                     $html .= "<option value=\"{$i}\"";
                     if ($i == $value) $html .= " selected='selected'";
-                    $html .= ">{$i}</option>";
+                    $html .= ">{$i}</option>\n";
                 }
                 $html .= "</select>";
             break;
@@ -571,8 +571,8 @@ switch ($_REQUEST['action'])
         // Keep the posted setup
         foreach($SETUP AS $setupvar)
         {
-            if ($_POST[$setupvar]=='TRUE') $_POST[$setupvar] = TRUE;
-            if ($_POST[$setupvar]=='FALSE') $_POST[$setupvar] = FALSE;
+            if ($_POST[$setupvar]==='TRUE') $_POST[$setupvar] = TRUE;
+            if ($_POST[$setupvar]==='FALSE') $_POST[$setupvar] = FALSE;
             $CONFIG[$setupvar]=$_POST[$setupvar];
         }
 
@@ -749,7 +749,7 @@ switch ($_REQUEST['action'])
                     $installed_version = $application_version;
                     echo "<h2>Database schema created</h2>";
                     echo "<p>If no errors were reported above you should continue and check the installation.</p>";
-                    echo "<p>If there are errors, please log a bug <a href='https://sourceforge.net/tracker/?group_id=160319&atid=815372'>here</a>";
+                    echo "<p>If there are errors, please log a bug <a href='https://sourceforge.net/tracker/?group_id=160319&amp;atid=815372'>here</a>";
                     echo ", with the full error message.</p>";
                     echo "<p><a href='setup.php?action=checkinstallcomplete' class='button'>Next</a></p>";
                 }

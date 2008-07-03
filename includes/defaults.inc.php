@@ -204,7 +204,7 @@ $CONFIG['ext_esc_partners'] = array('novell' => array('name' => 'Novell',
                                             'ext_url_title' => 'Microsoft Help and Support',
                                             'email_domain' => 'microsoft.com'));
 
-$CONFIG['no_feedback_contracts'] = array(1 => 1);
+$CONFIG['no_feedback_contracts'] = array();
 
 $CONFIG['preferred_maintenance'] = array();
 
