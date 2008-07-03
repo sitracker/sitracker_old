@@ -307,10 +307,17 @@ function update_ttna() {
 
 
 function hidecontexthelp(event) {
-  var element = event.element();
-   element.firstDescendant().style.display = 'none';
-  //element.addClassName('active');
-//   alert(element);
+    var element = event.element();
+    if (element.up(1).hasClassName('helplink'))
+    {
+        element.style.display = 'none';
+    }
+    else
+    {
+        element.firstDescendant().style.display = 'none';
+    }
+    //element.addClassName('active');
+    //   alert(element);
     element.stopObserving('blur', hidecontexthelp);
     element.stopObserving('click', hidecontexthelp);
 }
@@ -330,28 +337,32 @@ function findPos(obj) {
     return [curleft,curtop];
 }
 
-
 function contexthelp(elem, context)
 {
-    var loadmsg = "Loading...";
+    var epos = findPos(elem);
     if (isIE==false)
     {
-        elem.firstDescendant().style.display = 'block';
-        elem.firstDescendant().innerHTML = loadmsg;
-        var epos = findPos(elem.firstDescendant());
+        span = elem.firstDescendant();
     }
+    else
+    {
+        span = elem;
+    }
+    span.style.display = 'block';
+
     var vwidth = document.viewport.getWidth();
     var vheight = document.viewport.getHeight();
+
     if (epos[0] + 135 > vwidth)
     {
-        elem.firstDescendant().style.left = '-125px';
+        span.style.left = '-125px';
     }
     if (epos[1] + 200 > vheight)
     {
-        elem.firstDescendant().style.top = '-200px';
-        elem.firstDescendant().style.left = '5px';
+        span.style.top = '-200px';
+        span.style.left = '5px';
     }
-    if (elem.firstDescendant().innerHTML == '' || elem.firstDescendant().innerHTML == loadmsg)
+    if (span.innerHTML == '')
     {
         new Ajax.Request(application_webpath + 'ajaxdata.php?action=contexthelp&context=' + context + '&rand=' + get_random(),
         //new Ajax.Request('ajaxdata.php?action=contexthelp&context=' + context + '&rand=' + get_random(),
@@ -362,13 +373,16 @@ function contexthelp(elem, context)
                         var response = transport.responseText || "no response text";
                         if (transport.responseText)
                         {
-                            elem.firstDescendant().innerHTML = transport.responseText;
+                            span.innerHTML = transport.responseText;
                         }
                     },
                     onFailure: function(){ alert('Context Help Error\nSorry, we could not retrieve the help tip') }
             });
     }
+    span.observe('mouseout', hidecontexthelp);
+    span.observe('click', hidecontexthelp);
     elem.observe('mouseout', hidecontexthelp);
+    elem.observe('click', hidecontexthelp);
 }
 
 
