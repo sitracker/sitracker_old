@@ -674,7 +674,10 @@ switch ($_REQUEST['action'])
 
                     if ($_REQUEST['action']=='upgrade')
                     {
-                        //Do pre-upgrade tasks here
+                        /*****************************
+                         * Do pre-upgrade tasks here *
+                         *****************************/
+                        
                         if ($installed_version < 3.35)
                         {
                             //Get anyone with var_notify_on_reassign on so we can add them a trigger later
@@ -684,6 +687,23 @@ switch ($_REQUEST['action'])
                                 while ($row = mysql_fetch_object($result))
                                 {
                                     $assign_notify_users[] = $row->id;
+                                }
+                            }
+                            
+                            //any kbarticles with private content, change whole type
+                            $sql = "SELECT docid, distribution FROM `{$dbKBContent} WHERE distribution!='public'";
+                            if ($result = @mysql_query($sql))
+                            {
+                                while ($row = @mysql_fetch_object($result))
+                                {
+                                    if ($row->distribution == 'private')
+                                    {
+                                        $kbprivate[] = $row->docid;
+                                    }
+                                    elseif (!in_array($row->docid, $kbprivate))
+                                    {
+                                        $kbrestricted[] = $row->docid;
+                                    }
                                 }
                             }
                         }
@@ -744,6 +764,7 @@ switch ($_REQUEST['action'])
                             $sql = "SELECT id FROM `{$dbUsers}` WHERE id > 1";
                             if ($result = @mysql_query($sql))
                             {
+                                echo '<p>Adding default triggers to existing users.</p>';
                                 while ($row = mysql_fetch_row($result))
                                 {
                                     setup_user_triggers($row->id);
@@ -753,11 +774,36 @@ switch ($_REQUEST['action'])
                             //add the triggers for var_notify users from above
                             if (is_array($assign_notify_users))
                             {
+                                echo '<p>Replacing "Notify on reassign" option with triggers</p>';
                                 foreach ($assign_notify_users as $assign_user)
                                 {
                                     $sql = "INSERT INTO `{$dbTriggers}`(triggerid, userid, action, template, checks) ";
                                     $sql .= "VALUES('TRIGGER_INCIDENT_ASSIGNED', '$assign_user', 'ACTION_EMAIL', 'EMAIL_INCIDENT_REASSIGNED_USER_NOTIFY', '{userstatus} ==  {$assign_user}')";
                                     mysql_query($sql);
+                                    if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+                                }
+                            }
+                            
+                            //fix the visibility for KB articles
+                            if (is_array($kbprivate))
+                            {
+                                foreach ($kbprivate as $article)
+                                {
+                                    $articleID = intval($article);
+                                    $sql = "UPDATE `{$dbKBArticles}` SET visibility='private' WHERE id='{$articleID}'";
+                                    mysql_query($sql);
+                                    if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+                                }
+                            }
+                            
+                            if (is_array($kbrestricted))
+                            {
+                                foreach ($kbrestricted as $article)
+                                {
+                                    $articleID = intval($article);
+                                    $sql = "UPDATE `{$dbKBArticles}` SET visibility='restricted' WHERE id='{$articleID}'";
+                                    mysql_query($sql);
+                                    if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
                                 }
                             }
                         }
