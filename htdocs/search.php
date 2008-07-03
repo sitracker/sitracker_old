@@ -9,7 +9,7 @@
 //
 
 // Author: Kieran Hogg <kieran_hogg[at]users.sourceforge.net>
-
+// TODO eventually this needs refactorising, just couldn't do it well enough for this release
 @include ('set_include_path.inc.php');
 require ('db_connect.inc.php');
 require ('functions.inc.php');
@@ -123,9 +123,9 @@ if (!empty($q))
 
     //INCIDENT RESULTS
     $incidentsql = "SELECT *,incidentid AS id, i.title, ";
-    $incidentsql .= "MATCH (bodytext) AGAINST ('{$search}' IN BOOLEAN MODE) AS score ";
+    $incidentsql .= "MATCH (bodytext, title) AGAINST ('{$search}' IN BOOLEAN MODE) AS score ";
     $incidentsql .= "FROM `{$dbUpdates}` as u, `{$dbIncidents}` as i ";
-    $incidentsql .= "WHERE (MATCH (bodytext) AGAINST ('{$search}' IN BOOLEAN MODE)) ";
+    $incidentsql .= "WHERE (MATCH (bodytext, title) AGAINST ('{$search}' IN BOOLEAN MODE)) ";
     $incidentsql .= "AND u.incidentid=i.id ";
     $incidentsql .= "GROUP BY u.incidentid ";
 
@@ -232,7 +232,8 @@ if (!empty($q))
             $url = "javascript:incident_details_window('{$row->id}', 'incident{$row->id}')";
             echo "<tr class='{$shade}'>
                     <td><a href=\"incident_details.php?id={$row->id}\">{$row->id}</a></td>
-                    <td><a href=\"{$url}\">{$row->title}</a></td>
+                    <td><a href=\"{$url}\">".search_highlight($row->title,
+                    $search)."</a></td>
                     <td>".search_highlight($row->bodytext, $search)."</td>
                     <td>".number_format($row->score, 2)."</td>
                     <td>".ldate($CONFIG['dateformat_datetime'], $row->timestamp)."</td></tr>";
