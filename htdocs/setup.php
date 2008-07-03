@@ -84,9 +84,13 @@ $CFGVAR['ftp_hostname']['title'] = 'The ftp hostname or IP address';
 $CFGVAR['ftp_username']['title'] = 'Ftp username';
 $CFGVAR['ftp_password']['title'] = 'Ftp password';
 $CFGVAR['ftp_pasv']['title'] = 'Set to TRUE to enable ftp PASSV mode or FALSE to disable';
+$CFGVAR['ftp_pasv']['type'] = 'select';
+$CFGVAR['ftp_pasv']['options'] = 'TRUE|FALSE';
 $CFGVAR['ftp_path']['title'] = 'The path to the directory where we store files on the ftp server';
 $CFGVAR['ftp_path']['help'] = '(e.g. /pub/support/) the trailing slash is important';
 $CFGVAR['enable_spellchecker']['title'] = 'Set to TRUE to enable spellchecking or FALSE to disable';
+$CFGVAR['enable_spellchecker']['type'] = 'select';
+$CFGVAR['enable_spellchecker']['options'] = 'TRUE|FALSE';
 $CFGVAR['main_dictionary_file']['title'] = 'Spell check main dictionary file';
 $CFGVAR['custom_dictionary_file']['title'] = 'Spell check custom words dictionary file';
 $CFGVAR['default_css_url']['title'] = 'The CSS file to use when no other is configured';
@@ -102,6 +106,8 @@ $CFGVAR['incident_pools']['title'] = 'Comma seperated list specifying the number
 $CFGVAR['feedback_form']['title'] = 'Incident feedback form (the id number of the feedback form to use or empty to disable sending feedback forms out)';
 $CFGVAR['trusted_server']['title'] = 'Enable trusted server mode';
 $CFGVAR['trusted_server']['help'] = 'If you set this to TRUE, passwords will no longer be used or required, this assumes that you are using another mechanism for authentication';
+$CFGVAR['trusted_server']['type'] = 'select';
+$CFGVAR['trusted_server']['options'] = 'TRUE|FALSE';
 $CFGVAR['record_lock_delay']['title'] = 'Lock records for (number of seconds)';
 $CFGVAR['max_incoming_email_perday']['title']='maximum no. of incoming emails per incident before a mail-loop is detected';
 $CFGVAR['spam_email_subject']['title']='String to look for in email message subject to determine a message is spam';
@@ -119,9 +125,15 @@ $CFGVAR['critical_threshold']['title']='flag items as critical when they are thi
 $CFGVAR['critical_threshold']['help']='Enter a number between 0 and 100.';
 $CFGVAR['demo']['title']='Demo Mode';
 $CFGVAR['demo']['help']='Set to TRUE to run in demo mode, some features are disabled or replaced with mock-ups';
+$CFGVAR['demo']['type'] = 'select';
+$CFGVAR['demo']['options'] = 'TRUE|FALSE';
 $CFGVAR['debug']['title'] = 'Debug Mode';
 $CFGVAR['debug']['help'] = 'Set to TRUE to output extra debug information, some as HTML comments and some in the page footer, FALSE to disable';
+$CFGVAR['debug']['type'] = 'select';
+$CFGVAR['debug']['options'] = 'TRUE|FALSE';
 $CFGVAR['portal']['title'] = 'Enable user portal';
+$CFGVAR['portal']['type'] = 'select';
+$CFGVAR['portal']['options'] = 'TRUE|FALSE';
 $CFGVAR['journal_loglevel']['title'] = 'Journal Logging Level';
 $CFGVAR['journal_loglevel']['help'] = '0 = none, 1 = minimal, 2 = normal, 3 = full, 4 = maximum/debug';
 $CFGVAR['journal_purge_after']['title'] = 'How long should we keep journal entries (in seconds), entries older than this will be purged (deleted)';
@@ -146,23 +158,43 @@ $CFGVAR['timezone']['title'] = "System Time Zone";
 $CFGVAR['timezone']['help'] = "See <a href='http://www.php.net/timezones'>http://www.php.net/timezones</a> for a list of supported Timezones";
 $CFGVAR['kb_enabled']['title'] = "Knowledge base Enabled/Disabled";
 $CFGVAR['kb_enabled']['help'] = "TRUE for enabled, FALSE for disabled";
+$CFGVAR['kb_enabled']['type'] = 'select';
+$CFGVAR['kb_enabled']['options'] = 'TRUE|FALSE';
 $CFGVAR['portal_kb_enabled']['title'] = "Portal Knowledge base Enabled/Disabled";
 $CFGVAR['portal_kb_enabled']['help'] = "TRUE for enabled, FALSE for disabled";
+$CFGVAR['portal_kb_enabled']['type'] = 'select';
+$CFGVAR['portal_kb_enabled']['options'] = 'TRUE|FALSE';
 $CFGVAR['tasks_enabled']['title'] = "Tasks Enabled/Disabled";
 $CFGVAR['tasks_enabled']['help'] = "TRUE for enabled, FALSE for disabled";
+$CFGVAR['tasks_enabled']['type'] = 'select';
+$CFGVAR['tasks_enabled']['options'] = 'TRUE|FALSE';
 $CFGVAR['calendar_enabled']['title'] = "Calendar Enabled/Disabled";
 $CFGVAR['calendar_enabled']['help'] = "TRUE for enabled, FALSE for disabled";
+$CFGVAR['calendar_enabled']['type'] = 'select';
+$CFGVAR['calendar_enabled']['options'] = 'TRUE|FALSE';
 $CFGVAR['holidays_enabled']['title'] = "Holidays Enabled/Disabled";
 $CFGVAR['holidays_enabled']['help'] = "TRUE for enabled, FALSE for disabled";
+$CFGVAR['holidays_enabled']['type'] = 'select';
+$CFGVAR['holidays_enabled']['options'] = 'TRUE|FALSE';
 $CFGVAR['feedback_enabled']['title'] = "Feedback Enabled/Disabled";
 $CFGVAR['feedback_enabled']['help'] = "TRUE for enabled, FALSE for disabled";
+$CFGVAR['feedback_enabled']['type'] = 'select';
+$CFGVAR['feedback_enabled']['options'] = 'TRUE|FALSE';
 $CFGVAR['timesheets_enabled']['title'] = "Timesheets Enabled/Disabled";
 $CFGVAR['timesheets_enabled']['help'] = "TRUE for enabled, FALSE for disabled";
+$CFGVAR['timesheets_enabled']['type'] = 'select';
+$CFGVAR['timesheets_enabled']['options'] = 'TRUE|FALSE';
 $CFGVAR['portal_site_incidents']['title'] = "Show site incidents in portal";
 $CFGVAR['portal_site_incidents']['help'] = "Users in the portal can view site incidents based on the contract options";
+$CFGVAR['portal_site_incidents']['type'] = 'select';
+$CFGVAR['portal_site_incidents']['options'] = 'TRUE|FALSE';
 $CFGVAR['portal_usernames_can_be_changed']['title'] = "Allow portal users to change usernames";
+$CFGVAR['portal_usernames_can_be_changed']['type'] = 'select';
+$CFGVAR['portal_usernames_can_be_changed']['options'] = 'TRUE|FALSE';
 $CFGVAR['portal_interface_style']['title'] = "Portal interface style";
 $CFGVAR['auto_assign_incidents']['title'] = "Auto-assign incidents";
+$CFGVAR['auto_assign_incidents']['type'] = 'select';
+$CFGVAR['auto_assign_incidents']['options'] = 'TRUE|FALSE';
 $CFGVAR['auto_assign_incidents']['help'] = "incidents are automatically assigned based on a lottery weighted towards who are less busy, assumes everyone set to accepting is an engineer and willing to take incidents";
 $CFGVAR['default_roleid']['title'] = "Default role id";
 $CFGVAR['default_roleid']['help'] = "Role given to new users by default";
@@ -268,14 +300,8 @@ function setup_configure()
         if ($CFGVAR[$setupvar]['help']!='') $html .= "<p class='helptip'>{$CFGVAR[$setupvar]['help']}</p>\n";
 
         $html .= "<var>\$CONFIG['$setupvar']</var> = ";
-        if (strlen($CONFIG[$setupvar]) < 65)
-        {
-            $html .= "<input type='text' name='$setupvar' size='60' value='";
-        }
-        else
-        {
-            $html .= "<textarea name='$setupvar' cols='60' rows='10'>";
-        }
+
+        $value = '';
         if (!$cfg_file_exists OR ($cfg_file_exists AND $cfg_file_writable))
         {
             $value = $CONFIG[$setupvar];
@@ -296,10 +322,33 @@ function setup_configure()
                 }
             }
             if ($setupvar=='db_password' AND $_REQUEST['action']!='reconfigure') $value='';
-            $html .= $value;
         }
-        if (strlen($CONFIG[$setupvar]) < 65) $html .= "' />";
-        else $html .= "</textarea>";
+        switch ($CFGVAR[$setupvar]['type'])
+        {
+            case 'select':
+                $html .= "<select name='$setupvar'>";
+                if (empty($CFGVAR[$setupvar]['options'])) $CFGVAR[$setupvar]['options'] = "TRUE|FALSE";
+                $options = explode('|', $CFGVAR[$setupvar]['options']);
+                foreach ($options AS $option)
+                {
+                    $html .= "<option value=\"{$option}\"";
+                    if ($option == $value) $html .= " selected='selected'";
+                    $html .= ">{$option}</option>";
+                }
+                $html .= "</select>";
+            break;
+
+            case 'text':
+            default:
+                if (strlen($CONFIG[$setupvar]) < 65)
+                {
+                    $html .= "<input type='text' name='$setupvar' size='60' value=\"{$value}\" />";
+                }
+                else
+                {
+                    $html .= "<textarea name='$setupvar' cols='60' rows='10'>{$value}</textarea>";
+                }
+        }
         $html .= "</div>";
         $html .= "<br />\n";
         if ($c==1) $c==2; else $c=1;
