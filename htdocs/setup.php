@@ -72,7 +72,9 @@ $CFGVAR['dateformat_longdate']['title'] = 'Long date format';
 $CFGVAR['dateformat_longdate']['help'] = 'Including the day of the week';
 $CFGVAR['working_days']['title'] = 'Array containing working days (0=Sun, 1=Mon ... 6=Sat)';
 $CFGVAR['start_working_day']['title'] = 'Time of the start of the working day (in seconds)';
+$CFGVAR['start_working_day']['help'] = 'Seconds since midnight';
 $CFGVAR['end_working_day']['title'] = 'Time of the end of the working day (in seconds)';
+$CFGVAR['end_working_day']['help'] = 'Seconds since midnight';
 $CFGVAR['attachment_fspath']['title'] = "The full absolute file system path to the attachments directory (with a trailing slash)";
 $CFGVAR['attachment_fspath']['help'] = "This directory should be writable";
 $CFGVAR['attachment_webpath']['title'] = "The path to the attachments directory from the browsers perspective";
@@ -91,7 +93,8 @@ $CFGVAR['default_css_url']['title'] = 'The CSS file to use when no other is conf
 $CFGVAR['default_interface_style']['title'] = 'The interface style that new users should use (user default style)';
 $CFGVAR['kb_id_prefix']['title'] = 'Knowledgebase ID prefix';
 $CFGVAR['kb_id_prefix']['help'] = 'inserted before the ID to give it uniqueness';
-$CFGVAR['kb_disclaimer_html']['title']  = 'Knowledgebase disclaimer, displayed at the bottom of every article';
+$CFGVAR['kb_disclaimer_html']['title'] = 'Knowledgebase disclaimer, displayed at the bottom of every article';
+$CFGVAR['kb_disclaimer_html']['help']  = 'Simple HTML is allowed';
 $CFGVAR['default_service_level']['title'] = 'The service level to use in case the contact does not specify (text not the tag)';
 $CFGVAR['regular_contact_days']['title'] = 'The number of days to elapse before we are prompted to contact the customer (usually overridden by SLA)';
 $CFGVAR['free_support_limit']['title'] = 'Number of free (site) support incidents that can be logged to a site';
@@ -112,15 +115,18 @@ $CFGVAR['notice_threshold']['title']='Flag items as notice when they are this pe
 $CFGVAR['notice_threshold']['help']='Enter a number between 0 and 100.';
 $CFGVAR['urgent_threshold']['title']='Flag items as urgent when they are this percentage complete.';
 $CFGVAR['urgent_threshold']['help']='Enter a number between 0 and 100.';
-$CFGVAR['critical_threshold']['title']='flag items as notice when they are this percentage complete.';
+$CFGVAR['critical_threshold']['title']='flag items as critical when they are this percentage complete.';
 $CFGVAR['critical_threshold']['help']='Enter a number between 0 and 100.';
-$CFGVAR['demo']['title']='Run in demo mode, some features are disabled or replaced with mock-ups';
-$CFGVAR['debug']['title'] = 'Set to TRUE to output extra debug information, some as HTML comments and some in the page footer, FALSE to disable';
+$CFGVAR['demo']['title']='Demo Mode';
+$CFGVAR['demo']['help']='Set to TRUE to run in demo mode, some features are disabled or replaced with mock-ups';
+$CFGVAR['debug']['title'] = 'Debug Mode';
+$CFGVAR['debug']['help'] = 'Set to TRUE to output extra debug information, some as HTML comments and some in the page footer, FALSE to disable';
 $CFGVAR['portal']['title'] = 'Enable user portal';
 $CFGVAR['journal_loglevel']['title'] = 'Journal Logging Level';
 $CFGVAR['journal_loglevel']['help'] = '0 = none, 1 = minimal, 2 = normal, 3 = full, 4 = maximum/debug';
 $CFGVAR['journal_purge_after']['title'] = 'How long should we keep journal entries (in seconds), entries older than this will be purged (deleted)';
 $CFGVAR['logout_url']['title'] = "The URL to redirect the user too after he/she logs out";
+$CFGVAR['logout_url']['help'] = "When left blank this defaults to \$CONFIG['application_webpath'], setting that here will take the value of the default";
 $CFGVAR['error_logfile']['title'] = "Path to a file to log error messages";
 $CFGVAR['error_logfile']['help'] = "This file must be writable of course";
 $CFGVAR['access_logfile']['title'] = 'Filename to log authentication failures';
@@ -130,6 +136,37 @@ $CFGVAR['plugins']['help'] = "e.g. 'array('magic_plugin', 'lookup_plugin')'";
 $CFGVAR['error_notavailable_url']['title']="The URL to redirect too for pages that do not exist yet.";
 $CFGVAR['tag_icons']['title'] = "An array of tags and associated icons";
 $CFGVAR['tag_icons']['help'] = "Set up an array to use an icon for specified tags, format: array('tag' => 'icon', 'tag2' => 'icon2')";
+$CFGVAR['no_feedback_contracts']['title'] = "An array of contracts to not request feedback for";
+$CFGVAR['no_feedback_contracts']['help'] = "eg. array(1 => 123, 2 => 765) would withhold feedback requests for contract 123 and 765";
+$CFGVAR['preferred_maintenance']['title'] = "An array of SLA's to indicate order of preference when logging incidents against them";
+$CFGVAR['preferred_maintenance']['help'] = "e.g. array(1 => 'standard', 2 => 'high')";
+$CFGVAR['default_i18n']['title'] = "Default Language";
+$CFGVAR['default_i18n']['help'] = "The system language, or the language that will be used when no other language is selected by the user, see <a href='http://sitracker.sourceforge.net/Translation'>http://sitracker.sourceforge.net/Translation</a> for a list of supported languages. ";
+$CFGVAR['timezone']['title'] = "System Time Zone";
+$CFGVAR['timezone']['help'] = "See <a href='http://www.php.net/timezones'>http://www.php.net/timezones</a> for a list of supported Timezones";
+$CFGVAR['kb_enabled']['title'] = "Knowledge base Enabled/Disabled";
+$CFGVAR['kb_enabled']['help'] = "TRUE for enabled, FALSE for disabled";
+$CFGVAR['portal_kb_enabled']['title'] = "Portal Knowledge base Enabled/Disabled";
+$CFGVAR['portal_kb_enabled']['help'] = "TRUE for enabled, FALSE for disabled";
+$CFGVAR['tasks_enabled']['title'] = "Tasks Enabled/Disabled";
+$CFGVAR['tasks_enabled']['help'] = "TRUE for enabled, FALSE for disabled";
+$CFGVAR['calendar_enabled']['title'] = "Calendar Enabled/Disabled";
+$CFGVAR['calendar_enabled']['help'] = "TRUE for enabled, FALSE for disabled";
+$CFGVAR['holidays_enabled']['title'] = "Holidays Enabled/Disabled";
+$CFGVAR['holidays_enabled']['help'] = "TRUE for enabled, FALSE for disabled";
+$CFGVAR['feedback_enabled']['title'] = "Feedback Enabled/Disabled";
+$CFGVAR['feedback_enabled']['help'] = "TRUE for enabled, FALSE for disabled";
+$CFGVAR['timesheets_enabled']['title'] = "Timesheets Enabled/Disabled";
+$CFGVAR['timesheets_enabled']['help'] = "TRUE for enabled, FALSE for disabled";
+$CFGVAR['portal_site_incidents']['title'] = "Show site incidents in portal";
+$CFGVAR['portal_site_incidents']['help'] = "Users in the portal can view site incidents based on the contract options";
+$CFGVAR['portal_usernames_can_be_changed']['title'] = "Allow portal users to change usernames";
+$CFGVAR['portal_interface_style']['title'] = "Portal interface style";
+$CFGVAR['auto_assign_incidents']['title'] = "Auto-assign incidents";
+$CFGVAR['auto_assign_incidents']['help'] = "incidents are automatically assigned based on a lottery weighted towards who are less busy, assumes everyone set to accepting is an engineer and willing to take incidents";
+$CFGVAR['default_roleid']['title'] = "Default role id";
+$CFGVAR['default_roleid']['help'] = "Role given to new users by default";
+
 
 $upgradeok = FALSE;
 $config_filename='../includes/config.inc.php';
@@ -158,6 +195,20 @@ foreach ($configfiles AS $conf_filename)
 {
     if (file_exists($conf_filename)) $cfg_file_exists = TRUE;
     if (is_writable($conf_filename)) $cfg_file_writable = TRUE;
+}
+
+
+// Detect whether an array is associative
+// From http://uk.php.net/manual/en/function.is-array.php#77744
+function is_assoc($array)
+{
+    return is_array($array) && count($array) !== array_reduce(array_keys($array), 'is_assoc_callback', 0);
+}
+
+
+function is_assoc_callback($a, $b)
+{
+    return $a === $b ? $a + 1 : 0;
 }
 
 function setup_configure()
@@ -216,7 +267,15 @@ function setup_configure()
         $html .= "<h4>{$title}</h4>";
         if ($CFGVAR[$setupvar]['help']!='') $html .= "<p class='helptip'>{$CFGVAR[$setupvar]['help']}</p>\n";
 
-        $html .= "<var>\$CONFIG['$setupvar']</var> = <input type='text' name='$setupvar' size='60' value='";
+        $html .= "<var>\$CONFIG['$setupvar']</var> = ";
+        if (strlen($CONFIG[$setupvar]) < 65)
+        {
+            $html .= "<input type='text' name='$setupvar' size='60' value='";
+        }
+        else
+        {
+            $html .= "<textarea name='$setupvar' cols='60' rows='10'>";
+        }
         if (!$cfg_file_exists OR ($cfg_file_exists AND $cfg_file_writable))
         {
             $value = $CONFIG[$setupvar];
@@ -227,13 +286,20 @@ function setup_configure()
             }
             elseif (is_array($value))
             {
-                $value="array(".implode_assoc('=>',',',$value).")";
-                // $value="array(".implode(',',$value).")";
+                if (is_assoc($value))
+                {
+                    $value = "array(".implode_assoc('=>',',',$value).")";
+                }
+                else
+                {
+                    $value="array(".implode(',',$value).")";
+                }
             }
             if ($setupvar=='db_password' AND $_REQUEST['action']!='reconfigure') $value='';
             $html .= $value;
         }
-        $html .= "' />";
+        if (strlen($CONFIG[$setupvar]) < 65) $html .= "' />";
+        else $html .= "</textarea>";
         $html .= "</div>";
         $html .= "<br />\n";
         if ($c==1) $c==2; else $c=1;
@@ -677,7 +743,7 @@ switch ($_REQUEST['action'])
                         /*****************************
                          * Do pre-upgrade tasks here *
                          *****************************/
-                        
+
                         if ($installed_version < 3.35)
                         {
                             //Get anyone with var_notify_on_reassign on so we can add them a trigger later
@@ -689,7 +755,7 @@ switch ($_REQUEST['action'])
                                     $assign_notify_users[] = $row->id;
                                 }
                             }
-                            
+
                             //any kbarticles with private content, change whole type
                             $sql = "SELECT docid, distribution FROM `{$dbKBContent} WHERE distribution!='public'";
                             if ($result = @mysql_query($sql))
@@ -783,7 +849,7 @@ switch ($_REQUEST['action'])
                                     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
                                 }
                             }
-                            
+
                             //fix the visibility for KB articles
                             if (is_array($kbprivate))
                             {
@@ -795,7 +861,7 @@ switch ($_REQUEST['action'])
                                     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
                                 }
                             }
-                            
+
                             if (is_array($kbrestricted))
                             {
                                 foreach ($kbrestricted as $article)

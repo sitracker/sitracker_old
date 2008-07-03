@@ -40,6 +40,7 @@ array('name' => 'Journal',
       'description' => $strLogTriggerInJournal
       );
 
+
 /**
     * Master trigger function, creates a new trigger
     * @author Kieran Hogg
@@ -305,6 +306,7 @@ function replace_vars(&$ttvar, &$triggerid, &$identifier, &$paramarray, $require
                      'trigger_regex' => $trigger_regex);
     }
 }
+
 
 /**
     * Replaces template variables with their values

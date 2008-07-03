@@ -30,7 +30,7 @@ switch ($offset)
         break;
 }
 
-echo "<h2>".sprintf($strStatsFromDayStatistics, $dateString); 
+echo "<h2>".sprintf($strStatsFromDayStatistics, $dateString);
 
 echo "<table align='center'>";
 echo "<tr><th>{$strPeriod}</th><th>{$strOpened}</th><th>{$strUpdated}</th><th>{$strClosed}</th><th>{$strHandled}</th>";

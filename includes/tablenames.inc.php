@@ -9,7 +9,7 @@
 //
 //  Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
-// Table Names
+// Database Table Names
 $dbBillingPeriods = "{$CONFIG['db_tableprefix']}billing_periods";
 $dbClosingStatus = "{$CONFIG['db_tableprefix']}closingstatus";
 $dbContacts = "{$CONFIG['db_tableprefix']}contacts";

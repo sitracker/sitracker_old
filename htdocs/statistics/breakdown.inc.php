@@ -19,7 +19,7 @@ if (realpath(__FILE__) == realpath($_SERVER['SCRIPT_FILENAME']))
 }
 
 $sql = get_sql_statement($startdate,$enddate,$query,false);
-$result= mysql_query($sql);
+$result = mysql_query($sql);
 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
 $start_str = date("Y-m-d",$startdate);
@@ -66,18 +66,18 @@ if (mysql_num_rows($result) > 0)
         $sql .= "FROM `{$dbContacts}` AS c, `{$dbSites}` AS s ";
         $sql .= "WHERE s.id = c.siteid AND c.id = {$row['contact']}";
         $contactResult = mysql_query($sql);
-        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
         $contact = mysql_fetch_array($contactResult);
         echo "<td>{$contact['forenames']} {$contact['surname']}</td>";
         echo "<td>{$contact['name']}</td>";
-        echo "</tr>";
+        echo "</tr>\n";
     }
 
-    echo "</table>";
+    echo "</table>\n";
 }
 else
 {
-    echo "<p class='error'>$strNoRecords</p>";
+    echo "<p class='error'>{$strNoRecords}</p>";
 }
 
 ?>

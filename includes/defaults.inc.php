@@ -129,14 +129,14 @@ $CONFIG['trusted_server'] = FALSE;
 $CONFIG['record_lock_delay'] = 1800;  // 30 minutes
 
 // maximum no. of incoming emails per incident before a mail-loop is detected
-$CONFIG['max_incoming_email_perday']=15;
+$CONFIG['max_incoming_email_perday'] = 15;
 
 $CONFIG['spam_forward']='';
 
 // String to look for in email message subject to determine a message is spam
 $CONFIG['spam_email_subject']='SPAMASSASSIN';
 
-$CONFIG['feedback_max_score']=9;
+$CONFIG['feedback_max_score'] = 9;
 
 // Paths to various required files
 $CONFIG['licensefile']= '../doc/LICENSE';
@@ -204,9 +204,9 @@ $CONFIG['ext_esc_partners'] = array('novell' => array('name' => 'Novell',
                                             'ext_url_title' => 'Microsoft Help and Support',
                                             'email_domain' => 'microsoft.com'));
 
-$CONFIG['no_feedback_contracts'] = array(1 => 2);
+$CONFIG['no_feedback_contracts'] = array(1 => 1);
 
-$CONFIG['preferred_maintenance'] = array(1 => "Dedicated");
+$CONFIG['preferred_maintenance'] = array();
 
 // Use an icon for specified tags, format: array('tag' => 'icon', 'tag2' => 'icon2')";
 $CONFIG['tag_icons'] = array ('redflag' => 'redflag', 'yellowflag' => 'yellowflag', 'blueflag' => 'blueflag', 'cyanflag' => 'cyanflag', 'greenflag' => 'greenflag', 'whiteflag' => 'whiteflag', 'blackflag' => 'blackflag');
