@@ -26,7 +26,7 @@ $mode = cleanvar($_REQUEST['mode']);
 function get_sql_statement($startdate,$enddate,$statementnumber,$count=TRUE)
 {
     global $dbIncidents, $dbUpdates;
-    
+
     if ($count) $count = "count(*)";
     else $count = "*";
     $sql[0] = "SELECT {$count} FROM `{$dbIncidents}` WHERE opened BETWEEN '{$startdate}' AND '{$enddate}'";
@@ -196,9 +196,9 @@ function stats_period_row($desc, $start, $end)
     if ($activity < 0) $activity = 0;
 
     $html = "<tr class='{$shade}'><td>{$desc}</td>";
-    $html .= "<td><a href='{$_SERVER['PHP_SELF']}?mode=breakdown&query=0&start={$start}&end={$end}'>{$count['opened']}</a></td>";
-    $html .= "<td><a href='{$_SERVER['PHP_SELF']}?mode=breakdown&query=2&start={$start}&end={$end}'>{$count['updated']}</a></td>";
-    $html .= "<td><a href='{$_SERVER['PHP_SELF']}?mode=breakdown&query=1&start={$start}&end={$end}'>{$count['closed']}</a></td>";
+    $html .= "<td><a href='{$_SERVER['PHP_SELF']}?mode=breakdown&query=0&amp;start={$start}&amp;end={$end}'>{$count['opened']}</a></td>";
+    $html .= "<td><a href='{$_SERVER['PHP_SELF']}?mode=breakdown&query=2&amp;start={$start}&amp;end={$end}'>{$count['updated']}</a></td>";
+    $html .= "<td><a href='{$_SERVER['PHP_SELF']}?mode=breakdown&query=1&amp;start={$start}&amp;end={$end}'>{$count['closed']}</a></td>";
     $html .= "<td>{$count['handled']}</td>";
     $html .= "<td>{$count['updates']}</td>";
     $html .= "<td>{$updatesperincident}</td>";
@@ -228,10 +228,10 @@ function give_overview()
     echo "<tr><th>{$GLOBALS['strPeriod']}</th>";
     echo "<th>{$GLOBALS['strOpened']}</th><th>{$GLOBALS['strUpdated']}</th>";
     echo "<th>{$GLOBALS['strClosed']}</th><th>{$GLOBALS['strHandled']}</th>";
-    echo "<th>{$GLOBALS['strUpdates']}</th><th>Per Incident</th><th>{$GLOBALS['strSkills']}</th>";
+    echo "<th>{$GLOBALS['strUpdates']}</th><th>{$GLOBALS['strPerIncident']}</th><th>{$GLOBALS['strSkills']}</th>";
     echo "<th>{$GLOBALS['strOwners']}</th><th>{$GLOBALS['strUsers']}</th>";
-    echo "<th>Per User</th><th>Incidents Per Owner</th><th>Email Rx</th>";
-    echo "<th>Email Tx</th><th>{$GLOBALS['strHigherPriority']}</th>";
+    echo "<th>Per User</th><th>Incidents Per Owner</th><th>{$GLOBALS['strEmailReceivedAbbrev']}</th>";
+    echo "<th>{$GLOBALS['strEmailTransmittedAbbrev']}</th><th>{$GLOBALS['strHigherPriority']}</th>";
     echo "<th>{$GLOBALS['strActivity']}</th></tr>\n";
 
     echo stats_period_row("<a href='{$_SERVER['PHP_SELF']}?mode=daybreakdown&offset=0'>{$GLOBALS['strToday']}</a>", mktime(0,0,0,date('m'),date('d'),date('Y')),mktime(23,59,59,date('m'),date('d'),date('Y')));
@@ -283,7 +283,7 @@ function give_overview()
             $sqlGroups .= "WHERE i.status = istatus.id AND closed = 0 AND i.owner = u.id ";
             $sqlGroups .= "AND u.groupid = {$groups['groupid']} ";
             $sqlGroups .= "GROUP BY i.status";
-            
+
 	    $resultGroups = mysql_query($sqlGroups);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
@@ -363,7 +363,7 @@ function give_overview()
                         $openCallsVendor += $rowVendor['COUNT(i.id)'];
                     }
                 }
-                echo "<tr><th>Total Open</th>";
+                echo "<tr><th>{$GLOBALS['strTotalOpen']}</th>";
                 echo "<td class='shade2' align='left'><strong>{$GLOBALS['openCallsVendor']}</strong></td></tr></table></td>";
             }
         }
