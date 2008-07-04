@@ -529,7 +529,7 @@ elseif ($action=='incidentform')
     if (empty($updateid))
     {
         echo "<tr><th>{$strVisibleToCustomer}".help_link('VisibleToCustomer')."</th>\n";
-        echo "<td><input name='cust_vis' type='checkbox' checked='checked' />";
+        echo "<td><label><input name='cust_vis' type='checkbox' checked='checked' /> {$strVisibleToCustomer}</label>";
         echo "</td></tr>\n";
     }
     echo "<tr><th>{$strPriority}</th><td>".priority_drop_down("priority", 1, 4, FALSE)." </td></tr>";

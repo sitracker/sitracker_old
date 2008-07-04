@@ -340,14 +340,10 @@ function findPos(obj) {
 function contexthelp(elem, context)
 {
     var epos = findPos(elem);
-    if (isIE==false)
-    {
-        span = elem.firstDescendant();
-    }
-    else
-    {
-        span = elem;
-    }
+    span = elem.getElementsByTagName('span');
+    span = span[0];
+    $(span);
+    $(elem);
     span.style.display = 'block';
 
     var vwidth = document.viewport.getWidth();
@@ -357,10 +353,16 @@ function contexthelp(elem, context)
     {
         span.style.left = '-125px';
     }
-    if (epos[1] + 200 > vheight)
+    else if (epos[1] + 150 > vheight)
     {
-        span.style.top = '-200px';
+        span.style.top = '-20px';
         span.style.left = '5px';
+        span.style.width = '250px';
+    }
+    else
+    {
+        $(span).style.top = '1em';
+        $(span).style.left = '1em';
     }
     if (span.innerHTML == '')
     {
