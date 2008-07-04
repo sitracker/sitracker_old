@@ -1868,22 +1868,22 @@ UPDATE `{$dbIncidentStatus}` SET `ext_name` = 'strUnsupported' WHERE `id` =9 LIM
 UPDATE `{$dbIncidentStatus}` SET `ext_name` = 'strActive' WHERE `id` =10 LIMIT 1 ;
 
 -- KMH 03/04/08
-UPDATE `{$dbInterfacestyles}` SET `cssurl` = 'sit1.css' WHERE `id` = 1 LIMIT 1;
-UPDATE `{$dbInterfacestyles}` SET `cssurl` = 'sit2.css' WHERE `id` = 2 LIMIT 1;
-UPDATE `{$dbInterfacestyles}` SET `cssurl` = 'sit3.css' WHERE `id` = 3 LIMIT 1;
-UPDATE `{$dbInterfacestyles}` SET `cssurl` = 'sit4.css' WHERE `id` = 4 LIMIT 1;
-UPDATE `{$dbInterfacestyles}` SET `cssurl` = 'sit5.css' WHERE `id` = 5 LIMIT 1;
-UPDATE `{$dbInterfacestyles}` SET `cssurl` = 'sit_ph2.css' WHERE `id` = 6 LIMIT 1;
-UPDATE `{$dbInterfacestyles}` SET `cssurl` = 'sit7.css' WHERE `id` = 7 LIMIT 1;
-UPDATE `{$dbInterfacestyles}` SET `cssurl` = 'sit8.css' WHERE `id` = 8 LIMIT 1;
-UPDATE `{$dbInterfacestyles}` SET `cssurl` = 'sit9.css' WHERE `id` = 9 LIMIT 1;
-UPDATE `{$dbInterfacestyles}` SET `cssurl` = 'sit_ph.css' WHERE `id` = 10 LIMIT 1;
-UPDATE `{$dbInterfacestyles}` SET `cssurl` = 'sit10.css' WHERE `id` = 11 LIMIT 1;
-UPDATE `{$dbInterfacestyles}` SET `cssurl` = 'sit11.css' WHERE `id` = 12 LIMIT 1;
-UPDATE `{$dbInterfacestyles}` SET `cssurl` = 'sit12.css' WHERE `id` = 13 LIMIT 1;
-UPDATE `{$dbInterfacestyles}` SET `cssurl` = 'sit13.css' WHERE `id` = 14 LIMIT 1;
-UPDATE `{$dbInterfacestyles}` SET `cssurl` = 'sit14.css' WHERE `id` = 15 LIMIT 1;
-UPDATE `{$dbInterfacestyles}` SET `iconset` = 'oxygen' WHERE `id` =8 LIMIT 1 ;
+UPDATE `{$dbInterfaceStyles}` SET `cssurl` = 'sit1.css' WHERE `id` = 1 LIMIT 1;
+UPDATE `{$dbInterfaceStyles}` SET `cssurl` = 'sit2.css' WHERE `id` = 2 LIMIT 1;
+UPDATE `{$dbInterfaceStyles}` SET `cssurl` = 'sit3.css' WHERE `id` = 3 LIMIT 1;
+UPDATE `{$dbInterfaceStyles}` SET `cssurl` = 'sit4.css' WHERE `id` = 4 LIMIT 1;
+UPDATE `{$dbInterfaceStyles}` SET `cssurl` = 'sit5.css' WHERE `id` = 5 LIMIT 1;
+UPDATE `{$dbInterfaceStyles}` SET `cssurl` = 'sit_ph2.css' WHERE `id` = 6 LIMIT 1;
+UPDATE `{$dbInterfaceStyles}` SET `cssurl` = 'sit7.css' WHERE `id` = 7 LIMIT 1;
+UPDATE `{$dbInterfaceStyles}` SET `cssurl` = 'sit8.css' WHERE `id` = 8 LIMIT 1;
+UPDATE `{$dbInterfaceStyles}` SET `cssurl` = 'sit9.css' WHERE `id` = 9 LIMIT 1;
+UPDATE `{$dbInterfaceStyles}` SET `cssurl` = 'sit_ph.css' WHERE `id` = 10 LIMIT 1;
+UPDATE `{$dbInterfaceStyles}` SET `cssurl` = 'sit10.css' WHERE `id` = 11 LIMIT 1;
+UPDATE `{$dbInterfaceStyles}` SET `cssurl` = 'sit11.css' WHERE `id` = 12 LIMIT 1;
+UPDATE `{$dbInterfaceStyles}` SET `cssurl` = 'sit12.css' WHERE `id` = 13 LIMIT 1;
+UPDATE `{$dbInterfaceStyles}` SET `cssurl` = 'sit13.css' WHERE `id` = 14 LIMIT 1;
+UPDATE `{$dbInterfaceStyles}` SET `cssurl` = 'sit14.css' WHERE `id` = 15 LIMIT 1;
+UPDATE `{$dbInterfaceStyles}` SET `iconset` = 'oxygen' WHERE `id` =8 LIMIT 1 ;
 
 ALTER TABLE `{$dbMaintenance}`
 ADD `var_incident_visible_contacts` ENUM( 'yes', 'no' ) NOT NULL DEFAULT 'no',
