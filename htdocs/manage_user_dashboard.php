@@ -78,14 +78,29 @@ else
     switch ($action)
     {
         case 'add':
-            $dashboardstr = $dashboardstr.",0-".$dashboardid;
+            // Find the emptiest column and add the dashlet there
+            $col = array(0 => 0,1 => 0, 2 => 0);
+            $dashlets = explode(',', $dashboardstr);
+            foreach($dashlets as $key => $value)
+            {
+                if($value == '') unset($dashlets[$key]);
+            }
+            $dashlets = array_values($dashlets);
+            foreach ($dashlets AS $dashlet)
+            {
+                $dp = explode('-', $dashlet);
+                $col[$dp[0]]++;
+            }
+            asort($col, SORT_NUMERIC);
+            reset($col);
+            $newposition= key($col);
+            $dashboardstr = $dashboardstr.",".$newposition."-".$dashboardid;
             break;
         case 'remove':
             $regex = "/[012]-".$dashboardid."[,]?/";
             $dashboardstr = preg_replace($regex,"",$dashboardstr);
             break;
     }
-
     $sql = "UPDATE `{$dbUsers}` SET dashboard = '$dashboardstr' WHERE id = '".$_SESSION['userid']."'";
     $contactresult = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
