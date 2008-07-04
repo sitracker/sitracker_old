@@ -2174,7 +2174,26 @@ INSERT INTO `{$dbUserPermissions}` VALUES (1, 80, 'true');
 ALTER TABLE `{$dbUpdates}` ADD FULLTEXT ( `bodytext`) ;
 
 -- INL 2008-07-02
- ALTER TABLE `users` CHANGE `lastseen` `lastseen` DATETIME NOT NULL
+ ALTER TABLE `users` CHANGE `lastseen` `lastseen` DATETIME NOT NULL;
+ 
+-- KMH 04/07/08 Fix for 3.33 bug
+DROP TABLE userstatus;
+CREATE TABLE `{$dbUserStatus}` (
+  `id` int(11) NOT NULL,
+  `name` varchar(50) default NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM;
+INSERT INTO `{$dbUserStatus}` VALUES (0, 'strAccountDisabled');
+INSERT INTO `{$dbUserStatus}` VALUES (1, 'strInOffice');
+INSERT INTO `{$dbUserStatus}` VALUES (2, 'strNotInOffice');
+INSERT INTO `{$dbUserStatus}` VALUES (3, 'strInMeeting');
+INSERT INTO `{$dbUserStatus}` VALUES (4, 'strAtLunch');
+INSERT INTO `{$dbUserStatus}` VALUES (5, 'strOnHoliday');
+INSERT INTO `{$dbUserStatus}` VALUES (6, 'strWorkingFromHome');
+INSERT INTO `{$dbUserStatus}` VALUES (7, 'strOnTrainingCourse');
+INSERT INTO `{$dbUserStatus}` VALUES (8, 'strAbsentSick');
+INSERT INTO `{$dbUserStatus}` VALUES (9, 'strWorkingAway');
+
 ";
 
 // Important: When making changes to the schema you must add SQL to make the alterations
