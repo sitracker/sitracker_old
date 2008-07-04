@@ -53,6 +53,7 @@ switch ($action)
         if ($temporary != 'yes' AND $incident->towner > 0 AND $sit[2]==$incident->owner)
         {
             $sql .= "owner='{$sit[2]}', towner=0, "; // make current user = owner
+            $triggeruserid = $sit[2];
         }
         elseif ($temporary != 'yes' AND $sit[2]==$incident->towner)
         {
