@@ -330,6 +330,5 @@ release in the near future, if you think you can help us with this, your help wo
     <li><a href="help.php?id=39">Add Contract</a></li>
     <li><a href="help.php?id=27">View Your Calendar</a></li>
     <li><a href="help.php?id=35">Set your status</a></li>
-    <li><a href="help.php?id=54">View Knowledge Base Articles</a></li>
     <li><a href="help.php?id=55">Delete a contact</a></li>
 </ul>
