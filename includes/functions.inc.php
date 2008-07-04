@@ -9283,7 +9283,6 @@ function application_url()
 {
     global $CONFIG;
     $url = parse_url($_SERVER['HTTP_REFERER']);
-    print_r($_SERVER['HTTPS']);
     if ($_SERVER['HTTPS'] == 'off' OR empty($_SERVER['HTTPS']))
     {
         $baseurl = "http://";

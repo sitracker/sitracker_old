@@ -396,7 +396,7 @@ function jumpto()
 
 function clearjumpto()
 {
-    document.jumptoincident.incident.value = "";
+    $('searchfield').value = "";
 }
 
 // Unfinished - INL 14May08

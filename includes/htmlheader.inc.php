@@ -223,7 +223,8 @@ if ($sit[0] != '')
     echo "<div id='topsearch'>";
     echo "<form name='jumptoincident' action='search.php' method='get'>";
     echo "<input type='text' name='q' id='searchfield' size='30' value='{$strIncidentNumOrSearchTerm}'
-    onblur=\"if(this.value == '') { this.style.color='#888;'; this.value='{$strIncidentNumOrSearchTerm}';}\" onfocus=\"if(this.value == '{$strIncidentNumOrSearchTerm}') { this.style.color='#000;'; this.value=''; }\"
+    onblur=\"if ($('searchfield').value == '') { if (!isIE) { $('searchfield').style.color='#888;'; } $('searchfield').value='{$strIncidentNumOrSearchTerm}';}\"
+    onfocus=\"if ($('searchfield').value == '{$strIncidentNumOrSearchTerm}') { if (!isIE) { $('searchfield').style.color='#000;'; } $('searchfield').value=''; }\"
     onclick='clearjumpto()'/> ";
     // echo "<input type='image' src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/find.png' alt='{$strGo}' onclick='jumpto()' />";
     echo "</form>";
