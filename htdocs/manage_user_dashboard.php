@@ -83,17 +83,17 @@ else
             $dashlets = explode(',', $dashboardstr);
             foreach($dashlets as $key => $value)
             {
-                if($value == '') unset($dashlets[$key]);
+                if ($value == '') unset($dashlets[$key]);
             }
             $dashlets = array_values($dashlets);
             foreach ($dashlets AS $dashlet)
             {
                 $dp = explode('-', $dashlet);
-                $col[$dp[0]]++;
+                $col[$dp[0]] ++;
             }
             asort($col, SORT_NUMERIC);
             reset($col);
-            $newposition= key($col);
+            $newposition = key($col);
             $dashboardstr = $dashboardstr.",".$newposition."-".$dashboardid;
             break;
         case 'remove':
