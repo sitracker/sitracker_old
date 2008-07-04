@@ -95,6 +95,8 @@ echo "<a href=\"javascript:save_layout();\" id='savelayout' title='Save Dashboar
     }
 
     function init(){
+        // Disable drag/drop for IE because it breaks - INL 4July08
+        if (isIE == true) return;
 
         //var cols = [1,3,1];
         var cols = [<?php echo $colstr; ?>];
@@ -111,8 +113,8 @@ echo "<a href=\"javascript:save_layout();\" id='savelayout' title='Save Dashboar
         });
 
         dojo.event.connect(dt1, "onDrop", function(e) {
-        $('savelayout').style.display='inline';
-            resetborder();
+            $('savelayout').style.display='inline';
+             resetborder();
             //      window.alert(e.dragObject.domNode.id + ' was dropped on ' + e.target.id);
             save_layout();
         });
