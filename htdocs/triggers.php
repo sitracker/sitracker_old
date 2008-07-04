@@ -232,7 +232,7 @@ switch ($_REQUEST['mode'])
         }
         else
         {
-            echo "Rules are not definable for this trigger action";
+            echo "Rules are not definable for this trigger action"; // FIXME i18n
         }
         echo "</div>";
         echo "<input type='hidden' name='mode' value='save' />";

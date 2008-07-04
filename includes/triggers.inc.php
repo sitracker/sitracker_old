@@ -527,12 +527,13 @@ function notice_templates($name, $selected = '')
 {
     global $dbNoticeTemplates;
     $html .= "<select id='{$name}' name='{$name}'>";
-    $sql = "SELECT id, name FROM `{$dbNoticeTemplates}` ORDER BY name ASC";
+    $sql = "SELECT id, name, description FROM `{$dbNoticeTemplates}` ORDER BY name ASC";
     $query = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
     while ($template = mysql_fetch_object($query))
     {
         $html .= "<option value='{$template->name}'>{$template->name}</option>\n";
+        $html .= "<option disabled='disabled' style='color: #333; text-indent: 10px;' value='{$template->name}'>".$GLOBALS[$template->description]."</option>\n";
     }
     $html .= "</select>\n";
     return $html;
