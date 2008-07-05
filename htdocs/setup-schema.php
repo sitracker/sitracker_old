@@ -25,6 +25,46 @@ $schema = "CREATE TABLE IF NOT EXISTS `{$dbSystem}` (
 
 -- NOTE system must be the first table created.
 
+CREATE TABLE IF NOT EXISTS `{$dbBillingMatrix}` (
+  `id` int(11) NOT NULL,
+  `hour` smallint(6) NOT NULL,
+  `mon` float NOT NULL,
+  `tue` float NOT NULL,
+  `wed` float NOT NULL,
+  `thu` float NOT NULL,
+  `fri` float NOT NULL,
+  `sat` float NOT NULL,
+  `sun` float NOT NULL,
+  `holiday` float NOT NULL,
+  PRIMARY KEY  (`id`,`hour`)
+) ENGINE=MyISAM;
+
+INSERT INTO `{$dbBillingMatrix}` (`id`, `hour`, `mon`, `tue`, `wed`, `thu`, `fri`, `sat`, `sun`, `holiday`) VALUES
+(1, 0, 2, 2, 2, 2, 2, 2, 2, 2),
+(1, 1, 2, 2, 2, 2, 2, 2, 2, 2),
+(1, 2, 2, 2, 2, 2, 2, 2, 2, 2),
+(1, 6, 2, 2, 2, 2, 2, 2, 2, 2),
+(1, 3, 2, 2, 2, 2, 2, 2, 2, 2),
+(1, 4, 2, 2, 2, 2, 2, 2, 2, 2),
+(1, 5, 2, 2, 2, 2, 2, 2, 2, 2),
+(1, 7, 2, 2, 2, 2, 2, 2, 2, 2),
+(1, 8, 1, 1, 1, 1, 1, 1.5, 2, 2),
+(1, 9, 1, 1, 1, 1, 1, 1.5, 2, 2),
+(1, 10, 1, 1, 1, 1, 1, 1.5, 2, 2),
+(1, 11, 1, 1, 1, 1, 1, 1.5, 2, 2),
+(1, 12, 1, 1, 1, 1, 1, 1.5, 2, 2),
+(1, 13, 1, 1, 1, 1, 1, 1.5, 2, 2),
+(1, 14, 1, 1, 1, 1, 1, 1.5, 2, 2),
+(1, 15, 1, 1, 1, 1, 1, 1.5, 2, 2),
+(1, 16, 1, 1, 1, 1, 1, 1.5, 2, 2),
+(1, 17, 1, 1, 1, 1, 1, 1.5, 2, 2),
+(1, 18, 1.5, 1.5, 1.5, 1.5, 1.5, 2, 2, 2),
+(1, 19, 1.5, 1.5, 1.5, 1.5, 1.5, 2, 2, 2),
+(1, 20, 1.5, 1.5, 1.5, 1.5, 1.5, 2, 2, 2),
+(1, 21, 1.5, 1.5, 1.5, 1.5, 1.5, 2, 2, 2),
+(1, 22, 2, 2, 2, 2, 2, 2, 2, 2),
+(1, 23, 2, 2, 2, 2, 2, 2, 2, 2);
+
 
 CREATE TABLE `{$dbBillingPeriods}` (
 `servicelevelid` INT( 5 ) NOT NULL ,
@@ -563,7 +603,8 @@ VALUES (1,'Task','Subtask','Parent Task','tasks','id','tasks','id','name','','vi
 (2,'Contact','Contact','Contact Task','tasks','id','contacts','id','CONCAT(forenames, \" \", surname)','','contact_details.php?id=%id%'),
 (3,'Site','Site','Site Task','tasks','id','sites','id','name','','site_details.php?id=%id%'),
 (4,'Incident','Incident','Task','tasks','id','incidents','id','title','','incident_details.php?id=%id%'),
-(5,'Attachments', 'Update', 'File', 'updates', 'id', 'files', 'id', 'filename', '', 'incident_details.php?updateid=%id%&tab=files');
+(5,'Attachments', 'Update', 'File', 'updates', 'id', 'files', 'id', 'filename', '', 'incident_details.php?updateid=%id%&tab=files'),
+(6, 'Incident', 'Transaction', 'Incidents', 'transactions', 'transactionid', 'incidents', 'id', '', '', '');;
 
 CREATE TABLE `{$dbMaintenance}` (
   `id` int(11) NOT NULL auto_increment,
@@ -1014,6 +1055,24 @@ INSERT INTO `{$dbScheduler}` (`id`, `action`, `params`, `paramslabel`, `descript
 INSERT INTO `{$dbScheduler}` (`id`, `action`, `params`, `paramslabel`, `description`, `status`, `start`, `end`, `interval`, `lastran`, `success`) VALUES (6, 'CheckWaitingEmail', '', NULL, 'Checks the holding queue for emails and fires the TRIGGER_WAITING_HELD_EMAIL trigger when it finds some.', 'enabled', '2008-01-01 00:00:00', '0000-00-00 00:00:00', 60, '0000-00-00 00:00:00', 1);
 INSERT INTO `{$dbScheduler}` (`id`, `action`, `params`, `paramslabel`, `description`, `status`, `start`, `end`, `interval`, `lastran`, `success`) VALUES (7, 'PurgeExpiredFTPItems', '', NULL, 'purges files which have expired from the FTP site when run.', 'enabled', '2008-01-01 00:00:00', '0000-00-00 00:00:00', 216000, '0000-00-00 00:00:00', 1);
 
+CREATE TABLE IF NOT EXISTS `{$dbService}` (
+  `serviceid` int(11) NOT NULL auto_increment,
+  `contractid` int(11) NOT NULL,
+  `startdate` date NOT NULL,
+  `enddate` date NOT NULL,
+  `lastbilled` datetime NOT NULL,
+  `creditamount` float NOT NULL default '0',
+  `balance` float NOT NULL default '0',
+  `unitrate` float NOT NULL default '0',
+  `incidentrate` float NOT NULL default '0',
+  `dailyrate` float NOT NULL default '0',
+  `billingmatrix` int(11) NOT NULL default '1',
+  `priority` smallint(6) NOT NULL default '0',
+  `limit` float NOT NULL default '0',
+  `notes` TEXT NOT NULL,
+  PRIMARY KEY  (`serviceid`)
+) ENGINE=MyISAM;
+
 
 CREATE TABLE `{$dbServiceLevels}` (
   `id` int(5) NOT NULL default '0',
@@ -1026,15 +1085,16 @@ CREATE TABLE `{$dbServiceLevels}` (
   `contact_days` int(11) NOT NULL default '0',
   `review_days` int(11) NOT NULL default '365',
   `timed` enum('yes','no') NOT NULL default 'no',
+  `allow_reopen` ENUM( 'yes', 'no' ) NOT NULL DEFAULT 'yes' COMMENT 'Allow incidents to be reopened?',
   PRIMARY KEY  (`tag`,`priority`),
   KEY `id` (`id`),
   KEY `review_days` (`review_days`)
 ) ENGINE=MyISAM;
 
-INSERT INTO `{$dbServiceLevels}` VALUES (0, 'standard', 1, 320, 380, 960, 14.00, 28, 90, 0);
-INSERT INTO `{$dbServiceLevels}` VALUES (0, 'standard', 2, 240, 320, 960, 10.00, 20, 90, 0);
-INSERT INTO `{$dbServiceLevels}` VALUES (0, 'standard', 3, 120, 180, 480, 7.00, 14, 90, 0);
-INSERT INTO `{$dbServiceLevels}` VALUES (0, 'standard', 4, 60, 120, 240, 3.00, 6, 90, 0);
+INSERT INTO `{$dbServiceLevels}` VALUES (0, 'standard', 1, 320, 380, 960, 14.00, 28, 90, 'no', 'yes');
+INSERT INTO `{$dbServiceLevels}` VALUES (0, 'standard', 2, 240, 320, 960, 10.00, 20, 90, 'no', 'yes');
+INSERT INTO `{$dbServiceLevels}` VALUES (0, 'standard', 3, 120, 180, 480, 7.00, 14, 90, 'no', 'yes');
+INSERT INTO `{$dbServiceLevels}` VALUES (0, 'standard', 4, 60, 120, 240, 3.00, 6, 90, 'no', 'yes');
 
 
 CREATE TABLE `{$dbSetTags}` (
@@ -1205,6 +1265,16 @@ CREATE TABLE `{$dbTempIncoming}` (
   PRIMARY KEY  (`id`),
   KEY `updateid` (`updateid`)
 ) ENGINE=MyISAM COMMENT='Temporary store for incoming attachment paths' ;
+
+ CREATE TABLE `{$dbTransactions}` (
+`transactionid` INT NOT NULL AUTO_INCREMENT ,
+`serviceid` INT NOT NULL ,
+`amount` FLOAT NOT NULL ,
+`description` VARCHAR( 255 ) NOT NULL ,
+`userid` TINYINT NOT NULL ,
+`date` DATETIME NOT NULL ,
+PRIMARY KEY ( `transactionid` )
+) ENGINE = MYISAM;
 
 CREATE TABLE IF NOT EXISTS `{$dbTriggers}` (
   `id` int(11) NOT NULL auto_increment,
@@ -2193,6 +2263,89 @@ INSERT INTO `{$dbUserStatus}` VALUES (6, 'strWorkingFromHome');
 INSERT INTO `{$dbUserStatus}` VALUES (7, 'strOnTrainingCourse');
 INSERT INTO `{$dbUserStatus}` VALUES (8, 'strAbsentSick');
 INSERT INTO `{$dbUserStatus}` VALUES (9, 'strWorkingAway');
+
+";
+
+$upgrade_schema[340] = "
+CREATE TABLE IF NOT EXISTS `{$dbBillingMatrix}` (
+  `id` int(11) NOT NULL,
+  `hour` smallint(6) NOT NULL,
+  `mon` float NOT NULL,
+  `tue` float NOT NULL,
+  `wed` float NOT NULL,
+  `thu` float NOT NULL,
+  `fri` float NOT NULL,
+  `sat` float NOT NULL,
+  `sun` float NOT NULL,
+  `holiday` float NOT NULL,
+  PRIMARY KEY  (`id`,`hour`)
+) ENGINE=MyISAM;
+
+INSERT INTO `{$dbBillingMatrix}` (`id`, `hour`, `mon`, `tue`, `wed`, `thu`, `fri`, `sat`, `sun`, `holiday`) VALUES
+(1, 0, 2, 2, 2, 2, 2, 2, 2, 2),
+(1, 1, 2, 2, 2, 2, 2, 2, 2, 2),
+(1, 2, 2, 2, 2, 2, 2, 2, 2, 2),
+(1, 6, 2, 2, 2, 2, 2, 2, 2, 2),
+(1, 3, 2, 2, 2, 2, 2, 2, 2, 2),
+(1, 4, 2, 2, 2, 2, 2, 2, 2, 2),
+(1, 5, 2, 2, 2, 2, 2, 2, 2, 2),
+(1, 7, 2, 2, 2, 2, 2, 2, 2, 2),
+(1, 8, 1, 1, 1, 1, 1, 1.5, 2, 2),
+(1, 9, 1, 1, 1, 1, 1, 1.5, 2, 2),
+(1, 10, 1, 1, 1, 1, 1, 1.5, 2, 2),
+(1, 11, 1, 1, 1, 1, 1, 1.5, 2, 2),
+(1, 12, 1, 1, 1, 1, 1, 1.5, 2, 2),
+(1, 13, 1, 1, 1, 1, 1, 1.5, 2, 2),
+(1, 14, 1, 1, 1, 1, 1, 1.5, 2, 2),
+(1, 15, 1, 1, 1, 1, 1, 1.5, 2, 2),
+(1, 16, 1, 1, 1, 1, 1, 1.5, 2, 2),
+(1, 17, 1, 1, 1, 1, 1, 1.5, 2, 2),
+(1, 18, 1.5, 1.5, 1.5, 1.5, 1.5, 2, 2, 2),
+(1, 19, 1.5, 1.5, 1.5, 1.5, 1.5, 2, 2, 2),
+(1, 20, 1.5, 1.5, 1.5, 1.5, 1.5, 2, 2, 2),
+(1, 21, 1.5, 1.5, 1.5, 1.5, 1.5, 2, 2, 2),
+(1, 22, 2, 2, 2, 2, 2, 2, 2, 2),
+(1, 23, 2, 2, 2, 2, 2, 2, 2, 2);
+
+ CREATE TABLE `{$dbTransactions}` (
+`transactionid` INT NOT NULL AUTO_INCREMENT ,
+`serviceid` INT NOT NULL ,
+`amount` FLOAT NOT NULL ,
+`description` VARCHAR( 255 ) NOT NULL ,
+`userid` TINYINT NOT NULL ,
+`date` DATETIME NOT NULL ,
+PRIMARY KEY ( `transactionid` )
+) ENGINE = MYISAM;
+
+
+
+CREATE TABLE IF NOT EXISTS `{$dbService}` (
+  `serviceid` int(11) NOT NULL auto_increment,
+  `contractid` int(11) NOT NULL,
+  `startdate` date NOT NULL,
+  `enddate` date NOT NULL,
+  `lastbilled` datetime NOT NULL,
+  `creditamount` float NOT NULL default '0',
+  `balance` float NOT NULL default '0',
+  `unitrate` float NOT NULL default '0',
+  `incidentrate` float NOT NULL default '0',
+  `dailyrate` float NOT NULL default '0',
+  `billingmatrix` int(11) NOT NULL default '1',
+  `priority` smallint(6) NOT NULL default '0',
+  `limit` float NOT NULL default '0',
+  `notes` TEXT NOT NULL,
+  PRIMARY KEY  (`serviceid`)
+) ENGINE=MyISAM;
+
+
+ALTER TABLE `{$dbServiceLevels}` ADD `allow_reopen` ENUM( 'yes', 'no' ) NOT NULL DEFAULT 'yes' COMMENT 'Allow incidents to be reopened?';
+
+INSERT INTO `{$dbLinkTypes}` (`id`, `name`, `lrname`, `rlname`, `origtab`, `origcol`, `linktab`, `linkcol`, `selectionsql`, `filtersql`, `viewurl`) VALUES
+(6, 'Incident', 'Transaction', 'Incidents', 'transactions', 'transactionid', 'incidents', 'id', '', '', '');
+
+INSERT INTO `{$dbPermissions}` (`id` ,`name`) VALUES (79 , 'Edit service balances'), (80 , 'Edit service details');
+
+INSERT INTO `{$dbRolePermissions}` (`roleid` ,`permissionid` ,`granted`) VALUES ('1', '79', 'true'), ('1', '80', 'true');
 
 ";
 
