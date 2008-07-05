@@ -2347,7 +2347,6 @@ INSERT INTO `{$dbLinkTypes}` (`id`, `name`, `lrname`, `rlname`, `origtab`, `orig
 INSERT INTO `{$dbPermissions}` (`id` ,`name`) VALUES (79 , 'Edit service balances'), (80 , 'Edit service details');
 
 INSERT INTO `{$dbRolePermissions}` (`roleid` ,`permissionid` ,`granted`) VALUES ('1', '79', 'true'), ('1', '80', 'true');
-
 ";
 
 // Important: When making changes to the schema you must add SQL to make the alterations

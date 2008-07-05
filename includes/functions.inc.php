@@ -393,7 +393,7 @@ function user_realname($id, $allowhtml = FALSE)
     global $update_body;
     global $incidents;
     global $CONFIG;
-    global $dbUsers;
+    global $dbUsers, $dbEscalationPaths;
     if ($id >= 1)
     {
         if ($id == $_SESSION['userid'])
@@ -427,11 +427,14 @@ function user_realname($id, $allowhtml = FALSE)
 
             if ($frommail == $customerdomain) return $GLOBALS['strCustomer'];
 
-            foreach ($CONFIG['ext_esc_partners'] AS $partner)
+            $sql = "SELECT name, email_domain FROM `{$dbEscalationPaths}`";
+            $result = mysql_query($sql);
+            if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+            while ($escpath = mysql_fetch_object($result))
             {
-                if (strstr(strtolower($frommail), strtolower($partner['email_domain'])))
+                if (strstr(strtolower($frommail), strtolower($escpath->email_domain)))
                 {
-                    return $partner['name'];
+                    return $escpath->name;
                 }
             }
         }
@@ -5814,9 +5817,17 @@ function suggest_reassign_userid($incidentid, $exceptuserid=0)
 }
 
 
+/**
+    * Format an external ID (From an escalation partner) as HTML
+    * @author Ivan Lucas
+    * @param $externalid integer. An external ID to format
+    * @param $escalationpath integer. Escalation path ID
+    * @returns HTML
+*/
 function format_external_id($externalid, $escalationpath='')
 {
     global $CONFIG, $dbEscalationPaths;
+
     if (!empty($escalationpath))
     {
         // Extract escalation path
@@ -5848,19 +5859,6 @@ function format_external_id($externalid, $escalationpath='')
     else
     {
         $html = $externalid;
-        foreach ($CONFIG['ext_esc_partners'] AS $partner)
-        {
-            if (!empty($partner['ext_callid_regexp']))
-            {
-                if (preg_match($partner['ext_callid_regexp'], $externalid))
-                {
-                    if (!empty($partner['ext_url']))
-                    {
-                        $html = "<a href='".str_replace("%externalid", $externalid, $partner['ext_url'])."' title = '".$partner['ext_url_title']."'>{$externalid}</a>";
-                    }
-                }
-            }
-        }
     }
     return $html;
 }
