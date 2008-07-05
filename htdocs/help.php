@@ -26,11 +26,17 @@ echo "<h2>".icon('help', 32, $strHelp)." ";
 if ($id > 0) echo permission_name($id).' ';
 echo "{$strHelp}</h2>";
 echo "<div id='help'>";
-if ($id < 0 OR $id > 200 OR $id == '' OR strlen($id) > 3)
+
+$helpfile = "{$CONFIG['application_fspath']}htdocs/help/{$_SESSION['lang']}/help.html";
+if (!file_exists($helpfile)) $helpfile = "{$CONFIG['application_fspath']}htdocs/help/en-GB/help.html";
+if (file_exists($helpfile))
 {
-    $id = 0;
+    $helptext = file_get_contents($helpfile);
 }
-include ("help/help-$id.inc.php");
+else echo "<p class='error'>Error: Missing helpfile 'help.html'</p>";
+
+echo $helptext;
+
 echo "</div>";
 
 include ('htmlfooter.inc.php');
