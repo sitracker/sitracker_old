@@ -108,6 +108,10 @@ define("STATUS_CUSTOMER",8);
 define("STATUS_UNSUPPORTED",9);
 define("STATUS_UNASSIGNED",10);
 
+// BILLING
+define('NO_BILLABLE_CONTRACT', 0);
+define('CONTACT_HAS_BILLABLE_CONTRACT', 1);
+define('SITE_HAS_BILLABLE_CONTRACT', 2);
 
 // Decide which language to use and setup internationalisation
 require('i18n/en-GB.inc.php');
