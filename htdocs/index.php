@@ -13,7 +13,8 @@
 
 if (!@include('db_connect.inc.php'))
 {
-    header("Location: setup.php#include_failed");
+    $msg = urlencode(base64_encode("Could not find database connection information (db_connect.inc.php), the php include path is probably wrong"));
+    header("Location: {$CONFIG['application_webpath']}setup.php?msg={$msg}");
     exit;
 }
 

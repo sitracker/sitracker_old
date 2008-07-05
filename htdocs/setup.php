@@ -471,6 +471,26 @@ echo ".error {background-position: 3px 2px;
   background-color: #FFECD7;
 }
 
+.info {
+ background-position: 3px 2px;
+  background-repeat: no-repeat;
+  padding: 3px 3px 3px 22px;
+  min-height: 16px;
+  -moz-border-radius: 5px;
+  /* display: inline; */
+  border: 1px solid #000;
+  margin-left: 2em;
+  margin-right: 2em;
+  width: auto;
+  text-align: left;
+}
+p.info {
+  background-image: url('images/icons/sit/16x16/info.png');
+  color: #17446B;
+  border: 1px solid #17446B;
+  background-color: #F4F6FF;
+}
+
 a.button:link, a.button:visited
 {
   float: left;
@@ -524,6 +544,16 @@ $include_path = ini_get('include_path');
 //
 // Pre-flight Checks
 //
+
+if (!empty($_REQUEST['msg']))
+{
+    $msg = strip_tags(base64_decode(urldecode($_REQUEST['msg'])));
+    echo "<p class='error'><strong>Configuration Problem</strong>: {$msg}</p>";
+    echo "<p class='info'>You have been redirected to this setup page because a serious configuration problem has prevented SiT from running. ";
+    echo "Correct the issue reported and try running SiT again.</p>";
+}
+
+
 
 // Check that includes worked and that we have some config variables set, these two should always be set
 if ($CONFIG['application_name']=='' AND $CONFIG['application_shortname']=='')

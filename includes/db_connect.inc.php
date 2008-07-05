@@ -32,7 +32,8 @@ if ($CONFIG['debug'] > 0)
 
 if ($CONFIG['db_username'] == '' OR $CONFIG['db_database'] == '')
 {
-    header("Location: {$CONFIG['application_webpath']}setup.php");
+    $msg = urlencode(base64_encode("Could not connect to the database because the database configuration is missing. Have you congfigured database settings?  Can your config file be read?"));
+    header("Location: {$CONFIG['application_webpath']}setup.php?msg={$msg}");
     exit;
 }
 
@@ -40,7 +41,8 @@ if ($CONFIG['db_username'] == '' OR $CONFIG['db_database'] == '')
 $db = @mysql_connect($CONFIG['db_hostname'], $CONFIG['db_username'], $CONFIG['db_password']);
 if (mysql_error())
 {
-    header("Location: {$CONFIG['application_webpath']}setup.php");
+    $msg = urlencode(base64_encode("Could not connect to database server '{$CONFIG['db_hostname']}'"));
+    header("Location: {$CONFIG['application_webpath']}setup.php?msg={$msg}");
     exit;
 }
 // mysql_query("SET CHARACTER SET utf8");
@@ -55,7 +57,8 @@ if (mysql_error())
     // TODO add some detection for missing database
     if (strpos(mysql_error(), 'Unknown database')!==FALSE)
     {
-        header("Location: {$CONFIG['application_webpath']}setup.php");
+        $msg = urlencode(base64_encode("Unknown Database '{$CONFIG['db_database']}'"));
+        header("Location: {$CONFIG['application_webpath']}setup.php?msg={$msg}");
         exit;
     }
     // Attempt socket connection to database to check if server is alive
@@ -65,7 +68,8 @@ if (mysql_error())
     }
     else
     {
-        header("Location: {$CONFIG['application_webpath']}setup.php");
+        $msg = urlencode(base64_encode("Unknown Database '{$CONFIG['db_database']}' / Failed to connect"));
+        header("Location: {$CONFIG['application_webpath']}setup.php?msg={$msg}");
         exit;
     }
 }
