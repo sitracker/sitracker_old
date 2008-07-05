@@ -20,9 +20,9 @@
 include ('classes.inc.php');
 
 // Version number of the application, (numbers only)
-$application_version = '3.35';
+$application_version = '3.40';
 // Revision string, e.g. 'beta2' or 'svn' or ''
-$application_revision = '';
+$application_revision = 'svn';
 
 // Append SVN data for svn versions
 if ($application_revision == 'svn')
