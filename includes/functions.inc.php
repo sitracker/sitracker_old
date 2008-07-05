@@ -9886,7 +9886,7 @@ function is_billable_incident_approved($incidentid)
 
     $sql = "SELECT DISTINCT origcolref, linkcolref ";
     $sql .= "FROM `{$dbLinks}` AS l, `{$dbLinkTypes}` AS lt ";
-    $sql .= "WHERE l.linktype = 5 ";
+    $sql .= "WHERE l.linktype = 6 ";
     $sql .= "AND linkcolref = {$incidentid} ";
     $sql .= "AND direction = 'left'";
     $result = mysql_query($sql);
@@ -10059,7 +10059,7 @@ function approve_incident($incidentid)
         if ($rtn != FALSE)
         {
 
-            $sql = "INSERT INTO `{$dbLinks}` VALUES (5, {$rtn}, {$incidentid}, 'left', {$sit[2]})";
+            $sql = "INSERT INTO `{$dbLinks}` VALUES (6, {$rtn}, {$incidentid}, 'left', {$sit[2]})";
             mysql_query($sql);
             if (mysql_error())
             {

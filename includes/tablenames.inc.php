@@ -10,6 +10,7 @@
 //  Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
 // Database Table Names
+$dbBillingMatrix = "{$CONFIG['db_tableprefix']}billingmatrix";
 $dbBillingPeriods = "{$CONFIG['db_tableprefix']}billing_periods";
 $dbClosingStatus = "{$CONFIG['db_tableprefix']}closingstatus";
 $dbContacts = "{$CONFIG['db_tableprefix']}contacts";
@@ -53,6 +54,7 @@ $dbResellers = "{$CONFIG['db_tableprefix']}resellers";
 $dbRolePermissions = "{$CONFIG['db_tableprefix']}rolepermissions";
 $dbRoles = "{$CONFIG['db_tableprefix']}roles";
 $dbScheduler = "{$CONFIG['db_tableprefix']}scheduler";
+$dbService = "{$CONFIG['db_tableprefix']}service";
 $dbServiceLevels = "{$CONFIG['db_tableprefix']}servicelevels";
 $dbSetTags = "{$CONFIG['db_tableprefix']}set_tags";
 $dbSiteContacts = "{$CONFIG['db_tableprefix']}sitecontacts";
@@ -67,6 +69,7 @@ $dbTags = "{$CONFIG['db_tableprefix']}tags";
 $dbTasks = "{$CONFIG['db_tableprefix']}tasks";
 $dbTempAssigns = "{$CONFIG['db_tableprefix']}tempassigns";
 $dbTempIncoming = "{$CONFIG['db_tableprefix']}tempincoming";
+$dbTransactions = "{$CONFIG['db_tableprefix']}transactions";
 $dbTriggers = "{$CONFIG['db_tableprefix']}triggers";
 $dbUpdates = "{$CONFIG['db_tableprefix']}updates";
 $dbUserGroups = "{$CONFIG['db_tableprefix']}usergroups";
