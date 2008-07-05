@@ -75,6 +75,7 @@ CREATE TABLE `{$dbBillingPeriods}` (
 `createdby` INT NULL ,
 `modified` DATETIME NULL ,
 `modifiedby` INT NULL ,
+`limit` float NOT NULL default 0,
 PRIMARY KEY ( `servicelevelid`,`priority` )
 ) ENGINE = MYISAM ;
 
@@ -1068,7 +1069,6 @@ CREATE TABLE IF NOT EXISTS `{$dbService}` (
   `dailyrate` float NOT NULL default '0',
   `billingmatrix` int(11) NOT NULL default '1',
   `priority` smallint(6) NOT NULL default '0',
-  `limit` float NOT NULL default '0',
   `notes` TEXT NOT NULL,
   PRIMARY KEY  (`serviceid`)
 ) ENGINE=MyISAM;
@@ -2332,10 +2332,11 @@ CREATE TABLE IF NOT EXISTS `{$dbService}` (
   `dailyrate` float NOT NULL default '0',
   `billingmatrix` int(11) NOT NULL default '1',
   `priority` smallint(6) NOT NULL default '0',
-  `limit` float NOT NULL default '0',
   `notes` TEXT NOT NULL,
   PRIMARY KEY  (`serviceid`)
 ) ENGINE=MyISAM;
+
+ALTER TABLE `{$dbBillingPeriods}` ADD `limit` FLOAT NOT NULL DEFAULT '0';
 
 
 ALTER TABLE `{$dbServiceLevels}` ADD `allow_reopen` ENUM( 'yes', 'no' ) NOT NULL DEFAULT 'yes' COMMENT 'Allow incidents to be reopened?';
