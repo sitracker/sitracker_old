@@ -9718,6 +9718,545 @@ function plugin_do($context, $optparams = FALSE)
     return $rtnvalue;
 }
 
+
+/**
+  * @author Paul Heaney
+  * @param dayofweek string.    'mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun' or 'holiday'
+ */
+function get_billable_multiplier($dayofweek, $hour, $billingmatrix = 1)
+{
+    $sql = "SELECT `{$dayofweek}` AS rate FROM {$GLOBALS['dbBillingMatrix']} WHERE hour = {$hour} AND id = {$billingmatrix}";
+
+    $result = mysql_query($sql);
+    if (mysql_error())
+    {
+        trigger_error(mysql_error(),E_USER_ERROR);
+        return FALSE;
+    }
+
+    $rate = 1;
+
+    if (mysql_num_rows($result) > 0)
+    {
+        $obj = mysql_fetch_object($result);
+        $rate = $obj->rate;
+    }
+
+    return $rate;
+}
+
+
+/**
+  * @author Paul Heaney
+  * @param $contractid  The Contract ID
+  * @param $date  UNIX timestamp. The function will look for service that is current as of this timestamp
+  * @returns mixed.     Service ID, or -1 if not found, or FALSE on error
+ */
+function get_serviceid($contractid, $date = '')
+{
+    global $now;
+    if (empty($date)) $date = $now;
+
+    $sql = "SELECT serviceid FROM `{$GLOBALS['dbService']}` AS p ";
+    $sql .= "WHERE contractid = {$contractid} AND UNIX_TIMESTAMP(startdate) <= {$date} ";
+    $sql .= "AND UNIX_TIMESTAMP(enddate) > {$date} AND balance > 0 ORDER BY priority DESC, enddate ASC LIMIT 1";
+
+    $result = mysql_query($sql);
+    if (mysql_error())
+    {
+        trigger_error(mysql_error(),E_USER_ERROR);
+        return FALSE;
+    }
+
+    $serviceid = -1;
+
+    if (mysql_num_rows($result) > 0)
+    {
+        list($serviceid) = mysql_fetch_row($result);
+    }
+
+    return $serviceid;
+}
+
+
+/**
+  * @author Paul Heaney
+ */
+function get_unit_rate($contractid, $date='')
+{
+    $serviceid = get_serviceid($contractid, $date);
+
+    $sql = "SELECT unitrate FROM `{$GLOBALS['dbService']}` AS p WHERE serviceid = {$serviceid}";
+
+    $result = mysql_query($sql);
+    if (mysql_error())
+    {
+        trigger_error(mysql_error(),E_USER_ERROR);
+        return FALSE;
+    }
+
+    $unitrate = 0;
+
+    if (mysql_num_rows($result) > 0)
+    {
+        $obj = mysql_fetch_object($result);
+        $unitrate = $obj->unitrate;
+    }
+
+    return $unitrate;
+}
+
+
+/**
+ * Function passed a day, month and year to identify if this day is defined as a public holiday
+ * @author Paul Heaney
+ * FIXME this is horribily inefficient, we should load a table ONCE with all the public holidays
+         and then just check that with this function
+ */
+function is_day_bank_holiday($day, $month, $year)
+{
+    $date = mktime(0, 0, 0, $month, $year, $year);
+    $sql = "SELECT * FROM holidays WHERE type = 10 AND startdate = {$date}";
+
+    $result = mysql_query($sql);
+    if (mysql_error())
+    {
+        trigger_error(mysql_error(),E_USER_ERROR);
+        return FALSE;
+    }
+
+    if (mysql_num_rows($result) > 0) return TRUE;
+    else return FALSE;
+}
+
+
+
+/**
+ * Function to get an array of all billing multipliers for a billing matrix
+ * @author Paul Heaney
+ */
+function get_all_available_multipliers($matrixid=1)
+{
+    $days = array('mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun', 'holiday');
+
+    foreach ($days AS $d)
+    {
+        $sql = "SELECT DISTINCT({$d}) AS day FROM `{$GLOBALS['dbBillingMatrix']}` WHERE id = {$matrixid}";
+        $result = mysql_query($sql);
+        if (mysql_error())
+        {
+            trigger_error(mysql_error(),E_USER_ERROR);
+            return FALSE;
+        }
+
+        while ($obj = mysql_fetch_object($result))
+        {
+            $a[$obj->day] = $obj->day;
+        }
+    }
+
+    ksort($a);
+
+    return $a;
+}
+
+
+/**
+ * Function to identofy if incident has been approved for billing
+ * @returns TRUE for approved, FALSE otherwise
+ * @author Paul Heaney
+ */
+function is_billable_incident_approved($incidentid)
+{
+    global $dbLinks, $dbLinkTypes;
+
+    $sql = "SELECT DISTINCT origcolref, linkcolref ";
+    $sql .= "FROM `{$dbLinks}` AS l, `{$dbLinkTypes}` AS lt ";
+    $sql .= "WHERE l.linktype = 5 ";
+    $sql .= "AND linkcolref = {$incidentid} ";
+    $sql .= "AND direction = 'left'";
+    $result = mysql_query($sql);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+
+    if (mysql_num_rows($result) > 0) return TRUE;
+    else return FALSE;
+}
+
+
+// TODO document (PH)
+function total_awaiting_approval($contractid)
+{
+    $sqlcontract = "SELECT i.* FROM `{$GLOBALS['dbIncidents']}` AS i, `{$GLOBALS['dbServiceLevels']}` AS sl ";
+    $sqlcontract .= "WHERE sl.tag = i.servicelevel AND sl.priority = i.priority AND sl.timed = 'yes' ";
+    $sqlcontract .= "AND i.status = 2 AND i.maintenanceid = {$contractid}";
+
+    $resultcontract = mysql_query($sqlcontract);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+
+    $cost = 0;
+
+    if (mysql_num_rows($resultcontract) > 0)
+    {
+        $multipliers = get_all_available_multipliers();
+
+        while($obj = mysql_fetch_object($resultcontract))
+        {
+            $billableunitsincident = 0;
+
+            $unitrate = get_unit_rate(incident_maintid($obj->id));
+
+            if (!is_billable_incident_approved($obj->id))
+            {
+                $a = make_incident_billing_array($obj->id);
+
+                if ($a[-1]['totalcustomerperiods'] > 0)
+                {
+                    $bills = get_incident_billable_breakdown_array($obj->id);
+
+                    foreach ($bills AS $bill)
+                    {
+                        foreach ($multipliers AS $m)
+                        {
+                            if (!empty($bill[$m]))
+                            {
+                                $billableunitsincident += $m * $bill[$m]['count'];
+                            }
+                        }
+                    }
+
+                    $cost += (($billableunitsincident + $a[-1]['refunds']) * $unitrate);
+                }
+            }
+        }
+    }
+    return $cost;
+}
+
+/**
+    * Update contract balance by an amount and log a transaction to record the change
+    * @author Ivan Lucas
+    * @param $contractid int. Contract ID of the contract to credit
+    * @param $description string. A useful description of the transaction
+    * @param $amount. float. The amount to credit or debit to the contract balance
+                      positive for credit and negative for debit
+    * @param $serviceid    int.    optional serviceid to use. This is calculated if ommitted.
+    * @return boolean - status of the balance update
+    * @note The actual service to credit will be calculated automatically if not specified
+*/
+function update_contract_balance($contractid, $description, $amount, $serviceid='')
+{
+    global $now, $dbService, $dbTransactions;
+    $rtnvalue = TRUE;
+
+    if ($serviceid == '')
+    {
+        // Find the correct service record to update
+        $serviceid = get_serviceid($contractid);
+        if ($serviceid < 1) trigger_error("Invalid service ID",E_USER_ERROR);
+    }
+
+    if (trim($amount) == '') $amount = 0;
+    $date = date('Y-m-d H:i:s', $now);
+
+    // Update the balance
+    $sql = "UPDATE `{$dbService}` SET balance = (balance + {$amount}) WHERE serviceid = '{$serviceid}' LIMIT 1";
+    mysql_query($sql);
+    if (mysql_error())
+    {
+        trigger_error(mysql_error(),E_USER_ERROR);
+        $rtnvalue = FALSE;
+    }
+
+    if (mysql_affected_rows() < 1 AND $amount != 0)
+    {
+        trigger_error("Contract balance update failed",E_USER_ERROR);
+        $rtnvalue = FALSE;
+    }
+
+    if ($rtnvalue != FALSE)
+    {
+        // Log the transaction
+        $sql = "INSERT INTO `{$dbTransactions}` (serviceid, amount, description, userid, date) ";
+        $sql .= "VALUES ('{$serviceid}', '{$amount}', '{$description}', '{$_SESSION['userid']}', '{$date}')";
+        $result = mysql_query($sql);
+
+        $rtnvalue = mysql_insert_id();
+
+        if (mysql_error())
+        {
+            trigger_error(mysql_error(),E_USER_ERROR);
+            $rtnvalue = FALSE;
+        }
+        if (mysql_affected_rows() < 1)
+        {
+            trigger_error("Transaction insert failed",E_USER_ERROR);
+            $rtnvalue = FALSE;
+        }
+    }
+
+    return $rtnvalue;
+}
+
+
+
+/**
+ * Function to approve an incident, this adds a transaction and confirms the 'bill' is correct.
+ * @author Paul Heaney
+ * @param incidentid ID of the incident to approve
+ */
+function approve_incident($incidentid)
+{
+    global $dbLinks, $sit, $CONFIG, $strUnits;
+
+    $rtnvalue = TRUE;
+
+    if (!is_billable_incident_approved($incidentid))
+    {
+        $bills = get_incident_billable_breakdown_array($incidentid);
+
+        $multipliers = get_all_available_multipliers();
+
+        $numberofunits = 0;
+
+        foreach ($bills AS $bill)
+        {
+            foreach ($multipliers AS $m)
+            {
+                $a[$m] += $bill[$m]['count'];
+            }
+        }
+
+        foreach ($multipliers AS $m)
+        {
+            $s .= "{$a[$m]} {$strUnits} @ {$m}&#215;, "; // FIXME i18n
+            $numberofunits += ($m * $a[$m]);
+        }
+
+        $unitrate = get_unit_rate(incident_maintid($incidentid));
+
+        $numberofunits += $bills['refunds'];
+
+        $cost = ($numberofunits * $unitrate) * -1;
+
+        $desc = trim("{$numberofunits} {$strUnits} @ {$CONFIG['currency_symbol']}{$unitrate} for incident {$incidentid}. {$s}"); //FIXME i18n
+
+        $rtn = update_contract_balance(incident_maintid($incidentid), $desc, $cost);
+
+        if ($rtn != FALSE)
+        {
+
+            $sql = "INSERT INTO `{$dbLinks}` VALUES (5, {$rtn}, {$incidentid}, 'left', {$sit[2]})";
+            mysql_query($sql);
+            if (mysql_error())
+            {
+                trigger_error(mysql_error(),E_USER_ERROR);
+                $rtnvalue = FALSE;
+            }
+            if (mysql_affected_rows() < 1)
+            {
+                trigger_error("Approval failed",E_USER_ERROR);
+                $rtnvalue = FALSE;
+            }
+        }
+    }
+    else
+    {
+        $rtnvalue = FALSE;
+    }
+
+    return $rtnvalue;
+}
+
+
+
+function update_last_billed_time($serviceid, $date)
+{
+    global $dbService;
+
+    $rtnvalue = FALSE;
+
+    if (!empty($serviceid) AND !empty($date))
+    {
+        $rtnvalue = TRUE;
+        $sql .= "UPDATE `{$dbService}` SET lastbilled = '{$date}' WHERE serviceid = {$serviceid}";
+        mysql_query($sql);
+        if (mysql_error())
+        {
+            trigger_error(mysql_error(),E_USER_ERROR);
+            $rtnvalue = FALSE;
+        }
+
+        if (mysql_affected_rows() < 1)
+        {
+            trigger_error("Approval failed",E_USER_ERROR);
+            $rtnvalue = FALSE;
+        }
+    }
+
+    return $rtnvalue;
+}
+
+/**
+    * HTML table showing a summary of current contract service periods
+    * @author Ivan Lucas
+    * @param $contractid int. Contract ID of the contract to show service for
+    * @returns string. HTML table
+*/
+function contract_service_table($contractid)
+{
+    global $CONFIG, $dbService;
+
+    $sql = "SELECT * FROM `{$dbService}` WHERE contractid = {$contractid} ORDER BY enddate DESC";
+    $result = mysql_query($sql);
+    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+    if (mysql_num_rows($result) > 0)
+    {
+        $shade = '';
+        $html = "\n<table align='center'>";
+        $html .= "<tr><th>{$GLOBALS['strStartDate']}</th><th>{$GLOBALS['strEndDate']}</th><th>{$GLOBALS['strBalance']}</th><th></th>";
+        $html .= "</tr>\n";
+        while ($service = mysql_fetch_object($result))
+        {
+            $service->startdate = mysql2date($service->startdate);
+            $service->enddate = mysql2date($service->enddate);
+            $service->lastbilled = mysql2date($service->lastbilled);
+            $html .= "<tr class='$shade'>";
+            $html .= "<td><a href='transactions.php?serviceid={$service->serviceid}' class='info'>".ldate($CONFIG['dateformat_date'],$service->startdate);
+
+            $span = "";
+            if (!empty($service->notes)) $span .= "<strong>{$GLOBALS['strNotes']}</strong>: {$service->notes}<br />";
+            // FIXME i18n
+            if ($service->creditamount != 0) $span .= "<strong>{$GLOBALS['strAmount']}</strong>: {$CONFIG['currency_symbol']}".number_format($service->creditamount, 2)."<br />";
+            if ($service->unitrate != 0) $span .= "<strong>{$GLOBALS['strUnitRate']}</strong>: {$CONFIG['currency_symbol']}{$service->unitrate}<br />";
+            if ($service->lastbilled > 0) $span .= "<strong>Last Billed</strong>: ".ldate($CONFIG['dateformat_date'], $service->lastbilled);
+
+            if (!empty($span))
+            {
+                    $html .= "<span>{$span}</span>";
+            }
+
+            $html .= "</a></td>";
+            $html .= "<td>";
+            $html .= ldate($CONFIG['dateformat_date'], $service->enddate)."</td>";
+
+            $html .= "<td>{$CONFIG['currency_symbol']}".number_format($service->balance, 2)."</td>";
+            $html .= "<td><a href='billing/edit_service.php?mode=editservice&amp;serviceid={$service->serviceid}&amp;contractid={$contractid}'>Edit Service</a> | ";
+            $html .= "<a href='billing/edit_service.php?mode=showform&amp;sourceservice={$service->serviceid}&amp;contractid={$contractid}'>Edit Balance</a></td>";
+            $html .= "</tr>\n";
+        }
+        $html .= "</table>\n";
+        if ($shade == 'shade1') $shade = 'shade2';
+        else $shade = 'shade1';
+    }
+    return $html;
+}
+
+
+/**
+    * @author Ivan Lucas
+    * @param $contractid int. Contract ID of the contract to show a balance for
+    * @returns int. Number of available units according to the service balances and unit rates
+    * @todo Use the includenonapproved variable and calc non approved incidents
+**/
+function contract_unit_balance($contractid, $includenonapproved=FALSE)
+{
+    global $now, $dbService;
+
+    $unitbalance = 0;
+
+    $sql = "SELECT * FROM `{$dbService}` WHERE contractid = {$contractid} ORDER BY enddate DESC";
+    $result = mysql_query($sql);
+    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+
+    if (mysql_num_rows($result) > 0)
+    {
+        while ($service = mysql_fetch_object($result))
+        {
+            $multiplier = get_billable_multiplier(strtolower(date('D', $now)), date('G', $now));
+            $unitamount = $service->unitrate * $multiplier;
+            if ($unitamount > 0) $unitbalance += round($service->balance / $unitamount);
+        }
+    }
+
+    return $unitbalance;
+}
+
+
+/**
+ * Returns if the contact has a timed contract or if the site does in the case of the contact not.
+ * @author Paul Heaney
+ * @return either NO_BILLABLE_CONTRACT, CONTACT_HAS_BILLABLE_CONTRACT or SITE_HAS_BILLABLE_CONTRACT the latter is if the site has a billable contract by the contact isn't a named contact
+ */
+function does_contact_have_billable_contract($contactid)
+{
+    global $now;
+    $return = NO_BILLABLE_CONTRACT;
+
+    $siteid = contact_siteid($contactid);
+    $sql = "SELECT DISTINCT m.id FROM `{$GLOBALS['dbMaintenance']}` AS m, `{$GLOBALS['dbServiceLevels']}` AS sl ";
+    $sql .= "WHERE m.servicelevelid = sl.id AND sl.timed = 'yes' AND m.site = {$siteid} ";
+    $sql .= "AND m.expirydate > {$now} AND m.term != 'yes'";
+    $result = mysql_query($sql);
+
+    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+
+    if (mysql_num_rows($result) > 0)
+    {
+        // We have some billable/timed contracts
+        $return = SITE_HAS_BILLABLE_CONTRACT;
+
+        // check if the contact is listed on one of these
+
+        while ($obj = mysql_fetch_object($result))
+        {
+            $sqlcontact = "SELECT * FROM `{$GLOBALS['dbSupportContacts']}` ";
+            $sqlcontact .= "WHERE maintenanceid = {$obj->id} AND contactid = {$contactid}";
+
+            $resultcontact = mysql_query($sqlcontact);
+            if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+
+            if (mysql_num_rows($resultcontact) > 0)
+            {
+                $return = CONTACT_HAS_BILLABLE_CONTRACT;
+                break;
+            }
+        }
+    }
+
+    return $return;
+}
+
+
+/**
+ * Gets the billable contract ID for a contact, if multiple exist then the first one is choosen
+ * @author Paul Heaney
+ * @param int $contactid - The contact ID you want to find the contract for
+ * @return int the ID of the contract, -1 if not found
+ */
+function get_billable_contract_id($contactid)
+{
+    global $now;
+
+    $return = -1;
+
+    $siteid = contact_siteid($contactid);
+    $sql = "SELECT DISTINCT m.id FROM `{$GLOBALS['dbMaintenance']}` AS m, `{$GLOBALS['dbServiceLevels']}` AS sl ";
+    $sql .= "WHERE m.servicelevelid = sl.id AND sl.timed = 'yes' AND m.site = {$siteid} ";
+    $sql .= "AND m.expirydate > {$now} AND m.term != 'yes'";
+
+    $result = mysql_query($sql);
+
+    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+
+    if (mysql_num_rows($result) > 0)
+    {
+        $return = mysql_fetch_object($result)->id;
+    }
+
+    return $return;
+}
+
+
 // ** Place no more function defs below this **
 
 
