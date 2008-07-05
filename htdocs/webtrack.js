@@ -305,6 +305,50 @@ function update_ttna() {
     }
 }
 
+// Check whether a service level is timed when adding a contract
+function addcontract_sltimed(servicelevel)
+{
+    new Ajax.Request('ajaxdata.php?action=servicelevel_timed&servicelevel=' + servicelevel + '&rand=' + get_random(),
+        {
+            method:'get',
+                onSuccess: function(transport)
+                {
+                    var response = transport.responseText || "no response text";
+                    if (transport.responseText)
+                    {
+                        if (response == 'TRUE')
+                        {
+                            $('hiddentimed').show();
+                            $('timed').value = 'yes';
+                        }
+                        else
+                        {
+                             $('hiddentimed').hide();
+                             $('timed').value = 'no';
+                        }
+                    }
+                },
+                onFailure: function(){ alert('Something went wrong...') }
+        });
+}
+
+
+function addservice_showbilling()
+{
+    if ($('billperunit').checked == true || $('billperincident').checked == true)
+    {
+        $('billingsection').show();
+        if ($('billperunit').checked == true) $('unitratesection').show();
+        else $('unitratesection').hide();
+        if ($('billperincident').checked == true) $('incidentratesection').show();
+        else $('incidentratesection').hide();
+    }
+    else
+    {
+        $('billingsection').hide();
+    }
+}
+
 
 function hidecontexthelp(event) {
     var element = event.element();
