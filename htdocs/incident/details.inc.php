@@ -94,7 +94,18 @@ elseif ($incident->maintenanceid > 0)
 else echo "<strong>{$strSiteSupport}</strong>";
 echo " / ";
 
-echo "{$servicelevel_tag}<br />\n";
+echo "{$servicelevel_tag}<br />\n ";
+
+switch(does_contact_have_billable_contract($incident->contactid))
+{
+    case CONTACT_HAS_BILLABLE_CONTRACT:
+        echo "{$strContactHasBillableContract} (&cong;".contract_unit_balance(get_billable_contract_id($incident->contactid))." units)<br />";
+        break;
+    case SITE_HAS_BILLABLE_CONTRACT:
+        echo "{$strSiteHasBillableContract} (&cong;".contract_unit_balance(get_billable_contract_id($incident->contactid))." units)<br />";
+        break;
+}
+
 if (open_activities_for_incident($incidentid) > 0)
 {
     echo "<a href='tasks.php?incident={$incidentid}' class='info'>";
