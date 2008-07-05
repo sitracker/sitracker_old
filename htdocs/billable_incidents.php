@@ -88,16 +88,15 @@ if (empty($mode))
     echo "<table align='center'>";
 
     echo "<tr><th>{$strType}:</th><td>";
-    echo "<input type='radio' name='mode' value='summarypage' id='summarypage' onclick=\"setDivState('startdatesection', 'false'); setDivState('enddatesection','false'); setDivState('sitebreakdownsection','false'); setDivState('displaysection','true'); setDivState('showapprovedsection', 'false');\" checked='checked' />{$strSummary} ";
+    echo "<input type='radio' name='mode' value='summarypage' id='summarypage' onclick=\"$('startdatesection').hide(); $('enddatesection').hide(); $('sitebreakdownsection').hide(); $('displaysection').show(); $('showapprovedsection').hide();\" checked='checked' />{$strSummary} ";
     if (user_permission($sit[2], 73) == TRUE)
     {
-        echo "<input type='radio' name='mode' value='approvealpage' id='approvealpage' onclick=\"setDivState('startdatesection', 'true'); setDivState('enddatesection','true'); setDivState('sitebreakdownsection','false'); setDivState('displaysection','false'); setDivState('showapprovedsection', 'true');\" />{$strApprove} ";
+        echo "<input type='radio' name='mode' value='approvealpage' id='approvealpage' onclick=\"$('startdatesection').show(); $('enddatesection').show(); $('sitebreakdownsection').hide(); $('displaysection').hide(); $('showapprovedsection').show();\" />{$strApprove} ";
     }
     
-    //echo "<input type='radio' name='mode' value='invoicepage' id='invoicepage' onclick=\"setDivState('startdate', 'false'); setDivState('enddate','true'); setDivState('sitebreakdown','false');\" />Invoice ";
     if (user_permission($sit[2], 76) == TRUE)
     {
-        echo "<input type='radio' name='mode' value='transactions' id='transactions' onclick=\"setDivState('startdatesection', 'true'); setDivState('enddatesection','true'); setDivState('sitebreakdownsection','true'); setDivState('displaysection','true'); setDivState('showapprovedsection', 'false');\" />{$strTransactions} ";
+        echo "<input type='radio' name='mode' value='transactions' id='transactions' onclick=\"$('startdatesection').show(); $('enddatesection').show(); $('sitebreakdownsection').show(); $('displaysection').show(); $('showapprovedsection').hide();\" />{$strTransactions} ";
     }
     echo "</td></tr>\n";
 
