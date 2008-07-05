@@ -129,18 +129,26 @@ switch ($_REQUEST['action'])
             }
             else
             {
-                // run the post install compoents
+                $installed = TRUE;
+                // run the post install components
                 foreach ($dashboardcomponents AS $comp)
                 {
                     include ("{$CONFIG['application_fspath']}dashboard/dashboard_{$comp}.php");
                     $func = "dashboard_".$comp."_install";
-                    if (function_exists($func)) $func();
+                    if (function_exists($func)) $installed = $func();
+                    if ($installed !== TRUE)
+                    {
+                        // Dashboard component install failed, roll back
+                        $dsql = "DELETE FROM `{$dbDashboard}` WHERE `name` = '{$comp}'";
+                        mysql_query($dsql);
+                        if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+                    }
                 }
-
-                html_redirect("manage_dashboard.php");
+                html_redirect("manage_dashboard.php", $installed);
             }
         }
         break;
+
     case 'upgradecomponent':
         $id = $_REQUEST['id'];
         $sql = "SELECT * FROM `{$dbDashboard}` WHERE id = {$id}";
@@ -194,6 +202,7 @@ switch ($_REQUEST['action'])
         }
 
         break;
+
     case 'enable':
         $id = $_REQUEST['id'];
         $enable = $_REQUEST['enable'];
@@ -210,6 +219,7 @@ switch ($_REQUEST['action'])
             html_redirect("manage_dashboard.php");
         }
         break;
+
     default:
         include ('htmlheader.inc.php');
 

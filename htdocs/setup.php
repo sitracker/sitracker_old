@@ -363,6 +363,7 @@ function setup_configure()
                     $html .= "<textarea name='$setupvar' cols='60' rows='10'>{$value}</textarea>";
                 }
         }
+        if ($setupvar=='db_password' AND $_REQUEST['action']!='reconfigure' AND $value != '') $html .= "<p class='info'>The current password setting is not shown</p>";
         $html .= "</div>";
         $html .= "<br />\n";
         if ($c==1) $c==2; else $c=1;

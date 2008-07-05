@@ -30,17 +30,20 @@ function dashboard_rss_install()
     `enabled` enum('true','false') NOT NULL,
     KEY `owner` (`owner`,`url`)
     ) ENGINE = MYISAM ;
-
-    INSERT INTO `{$CONFIG['db_tableprefix']}dashboard_rss` (`owner`, `url`, `items`, `enabled`) VALUES(1, 'http://sourceforge.net/export/rss2_projfiles.php?group_id=160319', 3, 'true');
     ";
-
     $result = mysql_query($schema);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     if (mysql_error())
     {
         echo "<p>Dashboard RSS failed to install, please run the following SQL statement on the SiT database to create the required schema.</p>";
         echo "<pre>{$schema}</pre>";
         $res=FALSE;
-    } else $res=TRUE;
+    }
+    else $res=TRUE;
+
+    $datasql = "INSERT INTO `{$CONFIG['db_tableprefix']}dashboard_rss` (`owner`, `url`, `items`, `enabled`) VALUES (1, 'http://sourceforge.net/export/rss2_projfiles.php?group_id=160319', 3, 'true');";
+    $result = mysql_query($datasql);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
     return $res;
 }
@@ -134,8 +137,6 @@ function dashboard_rss_display($dashletid)
     {
         echo "<p align='center'>{$GLOBALS['strNoRecords']}</p>";
     }
-
-
 }
 
 
@@ -321,8 +322,6 @@ function dashboard_rss_get_version()
     global $dashboard_rss_version;
     return $dashboard_rss_version;
 }
-
-
 
 
 ?>
