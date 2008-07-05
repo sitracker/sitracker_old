@@ -38,11 +38,16 @@ if (empty($action) OR $action == "showform")
         {
             $('engineerBillingPeriod').show();
             $('customerBillingPeriod').show();
+            $('limit').show();
+            $('allow_reopen').checked=false;
+            $('allow_reopen').disable();
         }
         else
         {
             $('engineerBillingPeriod').hide();
             $('customerBillingPeriod').hide();
+            $('allow_reopen').enable();
+            $('limit').hide();
         }
     }
     --></script>
@@ -68,8 +73,9 @@ if (empty($action) OR $action == "showform")
     echo "<td><input type='text' size='5' name='resolution_days' maxlength='3' value='{$sla->resolution_days}' /> {$strDays}</td></tr>";
     echo "<tr><th>{$strReview} ".icon('review', 16)."</th>";
     echo "<td><input type='text' size='5' name='review_days' maxlength='3' value='{$sla->review_days}' /> {$strDays}</td></tr>";
-    echo "<tr><th>{$strTimed} ".icon('timer', 16)."</th><td>";
-    if ($sla->timed == 'yes')
+    echo "<tr><th>{$strAllowIncidentReopen}</th><td>".html_checkbox('allow_reopen', $sla->allow_reopen, TRUE)."</td></tr>\n";
+    echo "<tr><th>{$strTimed} <img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/timer.png' width='16' height='16' alt='' /></th><td>";
+    if($sla->timed == 'yes')
     {
         echo "<input type='checkbox' name='timed' id='timed' onchange='enableBillingPeriod();' checked='checked' />";
         $billingSQL = "SELECT * FROM `{$dbBillingPeriods}` WHERE servicelevelid = {$sla->id} AND priority = {$priority} AND tag = '{$tag}'";
@@ -79,6 +85,7 @@ if (empty($action) OR $action == "showform")
 
         $customerPeriod = $billing->customerperiod;
         $engineerPeriod = $billing->engineerperiod;
+        $limit = $billing->limit;
     }
     else
     {
@@ -91,6 +98,7 @@ if (empty($action) OR $action == "showform")
     echo "</td></tr>";
     echo "<tr id='engineerBillingPeriod'><th>{$strBillingEngineerPeriod}</th><td><input type='text' size='5' name='engineerPeriod' maxlength='5' value='{$engineerPeriod}' /> {$strMinutes}</td></tr>";
     echo "<tr id='customerBillingPeriod'><th>{$strBillingCustomerPeriod}</th><td><input type='text' size='5' name='customerPeriod' maxlength='5' value='{$customerPeriod}' /> {$strMinutes}</td></tr>";
+    echo "<tr id='limit'><th>{$strLimit}</th><td>{$CONFIG['currency_symbol']} <input type='text' size='5' name='limit' maxlength='5' value='{$limit}' /></td></tr>";
     echo "</table>";
     echo "<script type='text/javascript'>enableBillingPeriod();</script>";
     echo "<input type='hidden' name='action' value='edit' />";
@@ -112,7 +120,16 @@ elseif ($action == "edit")
     $review_days = cleanvar($_POST['review_days']);
     $engineerPeriod = cleanvar($_POST['engineerPeriod']);
     $customerPeriod = cleanvar($_POST['customerPeriod']);
-    if ($_POST['timed'] != 'on') $timed = 0;
+    $allow_reopen = cleanvar($_POST['allow_reopen']);
+    if ($allow_reopen != 'yes') $allow_reopen = 'no';
+    $limit = cleanvar($_POST['limit']);
+    if ($limit == '') $limit = 0;
+    if ($_POST['timed'] != 'on')
+    {
+        $timed = 0;
+        // Force allow_reopen=no for timed incidents, since reopening will break billing
+        $allow_reopen = 'no';
+    }
     else $timed = 1;
 
     $sql = "UPDATE `{$dbServiceLevels}` SET initial_response_mins='$initial_response_mins', ";
@@ -120,7 +137,8 @@ elseif ($action == "edit")
     $sql .= "action_plan_mins='$action_plan_mins', ";
     $sql .= "resolution_days='$resolution_days', ";
     $sql .= "review_days='$review_days', ";
-    $sql .= "timed='$timed' ";
+    $sql .= "timed='$timed', ";
+    $sql .= "allow_reopen='$allow_reopen' ";
     $sql .= "WHERE tag='$tag' AND priority='$priority'";
     mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
@@ -135,14 +153,16 @@ elseif ($action == "edit")
         if (!empty($billing))
         {
             //update
-            $sql = "UPDATE `{$dbBillingPeriods}` SET customerperiod = '{$customerPeriod}', engineerperiod = '{$engineerPeriod}' WHERE servicelevelid = '{$id}' AND priority = {$priority} AND tag = '{$tag}'";
+            $sql = "UPDATE `{$dbBillingPeriods}` SET customerperiod = '{$customerPeriod}', engineerperiod = '{$engineerPeriod}', `limit` = '{$limit}' ";
+            $sql .= "WHERE servicelevelid = '{$id}' AND priority = {$priority} AND tag = '{$tag}'";
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
         }
         else
         {
             //insert
-            $sql = "INSERT INTO `{$dbBillingPeriods}` (servicelevelid, priority, tag, customerperiod, engineerperiod) VALUES ('{$id}', '{$priority}', '{$tag}', '{$customerPeriod}', '{$engineerPeriod}')";
+            $sql = "INSERT INTO `{$dbBillingPeriods}` (servicelevelid, priority, tag, customerperiod, engineerperiod, `limit`) ";
+            $sql .= "VALUES ('{$id}', '{$priority}', '{$tag}', '{$customerPeriod}', '{$engineerPeriod}', '{$limit}')";
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
         }

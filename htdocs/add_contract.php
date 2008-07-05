@@ -63,21 +63,51 @@ if ($action == "showform" OR $action=='')
     echo "<input type='radio' value='all' name='contacts' />";
     echo "{$strAllSiteContactsSupported}";
     echo "</td></tr>";
-    echo "<tr><th>{$strProduct}</th><td>";
-    if ($_SESSION['formdata']['add_contract']['product'] != "")
+    echo "<tr><th>{$strProduct} <sup class='red'>*</sup></th><td>";
+    if($_SESSION['formdata']['add_contract']['product'] != "")
     {
-        echo product_drop_down("product", $_SESSION['formdata']['add_contract']['product'], TRUE);
+        echo product_drop_down("product", $_SESSION['formdata']['add_contract']['product'])."</td></tr>\n";
     }
     else
     {
-        echo product_drop_down("product", 0, TRUE);
+        echo product_drop_down("product", 0)."</td></tr>\n";
     }
-    echo " <span class='required'>{$strRequired}</span></td></tr>\n";
+
+    // TODO if service level is timed, we need to ask for unit rate (and daily rate?)
+    // servicelevel_timed($sltag)
+    echo "<tr><th>{$strServiceLevel}</th><td>";
+    if ($_SESSION['formdata']['add_contract']['servicelevelid'] != "")
+    {
+        $slid = $_SESSION['formdata']['add_contract']['servicelevelid'];
+    }
+    else
+    {
+        $slid = 0;  // Default to first service level
+    }
+    echo servicelevel_drop_down('servicelevelid', $slid, TRUE, "onchange=\"addcontract_sltimed(\$F('servicelevelid'));\"")."</td></tr>\n";
+    // check the initially selected service level to decide whether to show the extra hiddentimed section
+    $sltag = servicelevel_id2tag($slid);
+    $timed = servicelevel_timed($sltag);
+
+    echo "<tbody id='hiddentimed'";
+    if (!$timed) echo " style='display:none'";
+    echo ">"; //FIXME not XHTML
+    echo "<tr><th>{$strUnitRate}<sup class='red'>*</sup></th><td>{$CONFIG['currency_symbol']}";
+    echo "<input name='unitrate' size='5' /></td></tr>";
+    echo "</tbody>";
+
+    echo "<tr><th colspan='2' style='text-align: left;'><br />Service Period</th></tr>";
+    echo "<tr><th>{$strStartDate}</th>";
+    echo "<td><input type='text' name='startdate' id='startdate' size='10' value='".date('Y-m-d', $now)."' /> ";
+    echo date_picker('addcontract.startdate');
+    echo "</td></tr>";
 
     echo "<tr><th>{$strExpiryDate}</th>";
     echo "<td><input class='required' name='expiry' size='10' ";
     if ($_SESSION['formdata']['add_contract']['expiry'] != "")
+    {
         echo "value='{$_SESSION['formdata']['add_contract']['expiry']}'";
+    }
     echo "/> ".date_picker('addcontract.expiry');
     echo "<input type='checkbox' name='noexpiry' ";
     if ($_SESSION['formdata']['add_contract']['noexpiry'] == "on")
@@ -86,16 +116,6 @@ if ($action == "showform" OR $action=='')
     }
     echo "onclick=\"this.form.expiry.value=''\" /> {$strUnlimited}";
     echo " <span class='required'>{$strRequired}</span></td></tr>\n";
-
-    echo "<tr><th>{$strServiceLevel}</th><td>";
-    if ($_SESSION['formdata']['add_contract']['servicelevelid'] != "")
-    {
-        echo servicelevel_drop_down('servicelevelid', $_SESSION['formdata']['add_contract']['servicelevelid'], TRUE)."</td></tr>\n";
-    }
-    else
-    {
-        echo servicelevel_drop_down('servicelevelid', 1, TRUE)."</td></tr>\n";
-    }
 
     echo "<tr><th>{$strAdminContact}</th>";
     echo "<td>".contact_drop_down("admincontact", 0, TRUE, TRUE);
@@ -117,6 +137,10 @@ if ($action == "showform" OR $action=='')
     licence_type_drop_down("licence_type", 0);
     echo "</td></tr>\n";
 
+    echo "<tr><th>{$strAmount}</th><td>{$CONFIG['currency_symbol']}";
+    echo "<input value='0' maxlength='7' name='amount' size='5' /></td></tr>\n";
+
+
     echo "<tr><th>{$strIncidentPool}</th>";
     $incident_pools = explode(',', "Unlimited,{$CONFIG['incident_pools']}");
     echo "<td>".array_drop_down($incident_pools,'incident_poolid',$maint['incident_quantity'])."</td></tr>";
@@ -124,6 +148,9 @@ if ($action == "showform" OR $action=='')
     echo "<tr><th>{$strProductOnly}</th><td><input name='productonly' type='checkbox' value='yes' /></td></tr></tbody>\n"; //FIXME XHTML
 
     echo "</table>\n";
+    if ($timed) $timed = 'yes';
+    else $timed = 'no';
+    echo "<input type='hidden' id='timed' name='timed' value='no' />";
     echo "<p align='center'><input name='submit' type='submit' value=\"{$strAddContract}\" /></p>";
     echo "</form>";
     include ('htmlfooter.inc.php');
@@ -147,7 +174,18 @@ elseif ($action == "add")
     $productonly = cleanvar($_REQUEST['productonly']);
     $term = cleanvar($_REQUEST['term']);
     $contacts = cleanvar($_REQUEST['contacts']);
+    $timed = cleanvar($_REQUEST['timed']);
+    $startdate = strtotime($_REQUEST['startdate']);
+    if ($startdate > 0) $startdate = date('Y-m-d',$startdate);
+    else $startdate = date('Y-m-d',$now);
+    $enddate = strtotime($_REQUEST['expiry']);
+    if ($enddate > 0) $enddate = date('Y-m-d',$enddate);
+    else $enddate = date('Y-m-d',$now);
     if ($_REQUEST['noexpiry'] == 'on') $expirydate = '-1';
+    $amount =  cleanvar($_POST['amount']);
+    if ($amount == '') $amount = 0;
+    $unitrate =  cleanvar($_POST['unitrate']);
+    if ($unitrate == '') $unitrate = 0;
 
     $allcontacts = 'no';
     if ($contacts == 'amount') $amount = cleanvar($_REQUEST['amount']);
@@ -189,6 +227,13 @@ elseif ($action == "add")
         $errors++;
         $_SESSION['formerrors']['add_contract']['expirydate2'] = "Expiry date cannot be in the past\n";
     }
+    // check timed sla data and store it
+    if ($timed == 'yes' AND trim($unitrate) == '')
+    {
+        $errors++;
+        $_SESSION['formerrors']['add_contract']['unitrate'] = "Unit rate must not be blank\n";
+    }
+
     // add maintenance if no errors
     if ($errors == 0)
     {
@@ -230,7 +275,7 @@ elseif ($action == "add")
         $sql  = "INSERT INTO `{$dbMaintenance}` (site, product, reseller, expirydate, licence_quantity, licence_type, notes, ";
         $sql .= "admincontact, servicelevelid, incidentpoolid, incident_quantity, productonly, term, supportedcontacts, allcontactssupported) ";
         $sql .= "VALUES ('$site', '$product', $reseller, '$expirydate', '$licence_quantity', $licence_type, '$notes', ";
-        $sql .= "'$admincontact', '$servicelevelid', '$incidentpoolid', '$incident_quantity', '$productonly', '$term', '$amount', '$allcontacts')";
+        $sql .= "'$admincontact', '$servicelevelid', '$incidentpoolid', '$incident_quantity', '$productonly', '$term', '$numcontacts', '$allcontacts')";
 
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
@@ -242,7 +287,17 @@ elseif ($action == "add")
             $addition_errors_string .= "<p class='error'>Addition of contract failed</p>\n";
         }
 
-        clear_form_data('add_contract');
+        // Add service
+        $sql = "INSERT INTO `{$dbService}` (contractid, startdate, enddate, creditamount, unitrate) ";
+        $sql .= "VALUES ('{$maintid}', '{$startdate}', '{$enddate}', '{$amount}', '{$unitrate}')";
+        mysql_query($sql);
+        if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+        if (mysql_affected_rows() < 1) trigger_error("Insert failed",E_USER_ERROR);
+
+        $serviceid = mysql_insert_id();
+        update_contract_balance($maintid, "New contract", $amount, $serviceid);
+
+
 
         if ($addition_errors == 1)
         {
@@ -257,6 +312,7 @@ elseif ($action == "add")
             trigger('TRIGGER_NEW_CONTRACT', array('contractid' => $maintid, 'userid' => $sit[2]));
             html_redirect("contract_details.php?id=$maintid");
         }
+        clear_form_data('add_contract');
     }
     else
     {

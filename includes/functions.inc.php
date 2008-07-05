@@ -3169,6 +3169,28 @@ function servicelevel_name($id)
 
 
 /**
+    * Find whether a given servicelevel is timed
+    * @author Ivan Lucas
+    * @param $slid Integer. Service level tag
+    * @returns. Bool. TRUE if any part of the service level is timed, otherwise returns FALSE
+*/
+function servicelevel_timed($sltag)
+{
+    global $dbServiceLevels;
+    $timed = FALSE;
+
+    $sql = "SELECT COUNT(tag) FROM `{$dbServiceLevels}` WHERE tag = '{$sltag}' AND timed = 'yes'";
+    $result = mysql_query($sql);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+
+    list($count) = mysql_fetch_row($result);
+    if ($count > 0) $timed = TRUE;
+
+    return $timed;
+}
+
+
+/**
     * Retrieves the service level ID of a given maintenance contract
     * @author Ivan Lucas
     * @param $maintid Integer. Contract ID
@@ -3734,11 +3756,11 @@ function html_checkbox($name, $state, $return = FALSE)
 {
     if ($state==1 || $state=='Yes' || $state=='yes' || $state=='true' || $state=='TRUE')
     {
-        $html = "<input type='checkbox' checked='checked' name='{$name}' value='{$state}' />" ;
+        $html = "<input type='checkbox' checked='checked' name='{$name}' id='{$name}' value='{$state}' />" ;
     }
     else
     {
-        $html = "<input type='checkbox' name='{$name}' value='{$state}' />" ;
+        $html = "<input type='checkbox' name='{$name}' id='{$name}' value='{$state}' />" ;
     }
 
     if ($return)
