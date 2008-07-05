@@ -397,31 +397,34 @@ function setup_exec_sql($sqlquerylist)
                 foreach($sqlqueries AS $sql)
                 {
                     //$html .= "<p style='border: 1px solid red;'>&bull; <code>".nl2br($sql)."</code></p>\n"; // FIXME
-                    mysql_query($sql);
-                    if (mysql_error())
+                    if (!empty($sql))
                     {
-                        $html .= "<p><strong>FAILED:</strong> <code>".htmlspecialchars($sql)."</code> <span style='color: red;'>({$schemaversion})</span></p>";
-                        $html .= "<p class='error'>".mysql_error()."<br />A MySQL error occurred, this could be because the MySQL user '{$CONFIG['db_username']}' does not have appropriate permission to modify the database schema.<br />";
-                        //echo "The SQL command was:<br /><code>$sql</code><br />";
-                        if (strpos($errstr, 'does not have appropriate permission')!==FALSE)
+                        mysql_query($sql);
+                        if (mysql_error())
                         {
-                            $html .= "<strong>Check your MySQL permissions allow the schema to be modified</strong>.<br />";
+                            $html .= "<p><strong>FAILED:</strong> <code>".htmlspecialchars($sql)."</code> <span style='color: red;'>({$schemaversion})</span></p>";
+                            $html .= "<p class='error'>".mysql_error()."<br />A MySQL error occurred, this could be because the MySQL user '{$CONFIG['db_username']}' does not have appropriate permission to modify the database schema.<br />";
+                            //echo "The SQL command was:<br /><code>$sql</code><br />";
+                            if (strpos($errstr, 'does not have appropriate permission')!==FALSE)
+                            {
+                                $html .= "<strong>Check your MySQL permissions allow the schema to be modified</strong>.<br />";
+                            }
+                            else
+                            {
+                                $html .= "An error might also be caused by an attempt to upgrade a version that is not supported by this script.<br />";
+                            }
+                            $html .= "Alternatively, you may have found a bug, if you think this is the case please report it.</p>";
                         }
                         else
                         {
-                            $html .= "An error might also be caused by an attempt to upgrade a version that is not supported by this script.<br />";
+                            // Update the system schema version
+    //                         $vsql = "REPLACE INTO `{$dbSystem}` ( `id`, `version`, `schemaversion`) VALUES (0, $application_version, $schemaversion)";
+    //                         mysql_query($vsql);
+    //                         if (mysql_error())
+    //                         {
+    //                             $html .= "<p class='error'>Could not store new schema version number '$schemaversion'. ".mysql_error()."</p>";
+    //                         }
                         }
-                        $html .= "Alternatively, you may have found a bug, if you think this is the case please report it.</p>";
-                    }
-                    else
-                    {
-                        // Update the system schema version
-//                         $vsql = "REPLACE INTO `{$dbSystem}` ( `id`, `version`, `schemaversion`) VALUES (0, $application_version, $schemaversion)";
-//                         mysql_query($vsql);
-//                         if (mysql_error())
-//                         {
-//                             $html .= "<p class='error'>Could not store new schema version number '$schemaversion'. ".mysql_error()."</p>";
-//                         }
                     }
                 }
             }
