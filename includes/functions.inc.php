@@ -4931,131 +4931,141 @@ function is_public_holiday($time, $publicholidays)
 /**
     * Calculate the working time between two timestamps
     * @author Tom Gerrard, Ivan Lucas, Paul Heaney
-    * @param $t1 integer. The start timestamp
-    * @param $t2 integer. The ending timetamp
+    * @param $t1 integer. The start timestamp (earliest date/time)
+    * @param $t2 integer. The ending timetamp (latest date/time)
     * @returns integer. the number of working minutes (minutes in the working day)
 */
-function calculate_working_time($t1, $t2, $publicholidays) {
+function calculate_working_time($t1, $t2, $publicholidays)
+{
+    // PH 16/12/07 Old function commented out, rewritten to support public holidays. Old code to be removed once we're happy this is stable
+    // KH 13/07/08 Use old function again for 3.35 beta
+    // Note that this won't work if we have something
+    // more complicated than a weekend
 
+    global $CONFIG;
+    $swd = $CONFIG['start_working_day'] / 3600;
+    $ewd = $CONFIG['end_working_day'] / 3600;
 
-// PH 16/12/07 Old function commented out, rewritten to support public holidays. Old code to be removed once we're happy this is stable
-// KH 13/07/08 Use old function again for 3.35 beta
-
-// Note that this won't work if we have something
-// more complicated than a weekend
-
-global $CONFIG;
-$swd=$CONFIG['start_working_day']/3600;
-$ewd=$CONFIG['end_working_day']/3600;
-
-// Just in case they are the wrong way around ...
-
-if ( $t1>$t2 ) {
-    $t3=$t2;
-    $t2=$t1;
-    $t1=$t3;
-}
-
-// We don't need all the elements here.  hours, days and year are used
-// later on to calculate the difference.  wday is just used in this
-// section
-
-$at1=getdate($t1);
-$at2=getdate($t2);
-
-// Make sure that the start time is on a valid day and within normal hours
-// if it isn't then move it forward to the next work minute
-
-if ($at1['hours']>$ewd) {
-    do {
-    $at1['yday']++;
-    $at1['wday']++;
-    $at1['wday']%=7;
-    if ($at1['yday']>365) {
-        $at1['year']++;
-        $at1['yday']=0;
+    // Just in case the time params are the wrong way around ...
+    if ( $t1 > $t2 )
+    {
+        $t3 = $t2;
+        $t2 = $t1;
+        $t1 = $t3;
     }
-    } while (!in_array($at1['wday'],$CONFIG['working_days']));
 
-    $at1['hours']=$swd;
-    $at1['minutes']=0;
+    // We don't need all the elements here.  hours, days and year are used
+    // later on to calculate the difference.  wday is just used in this
+    // section
+    $at1 = getdate($t1);
+    $at2 = getdate($t2);
 
-} else {
-    if (($at1['hours']<$swd) || (!in_array($at1['wday'],$CONFIG['working_days']))) {
-    while (!in_array($at1['wday'],$CONFIG['working_days'])) {
-        $at1['yday']++;
-        $at1['wday']++;
-        $at1['wday']%=7;
-        if ($at1['days']>365) {
-        $at1['year']++;
-        $at1['yday']=0;
+    // Make sure that the start time is on a valid day and within normal hours
+    // if it isn't then move it forward to the next work minute
+    if ($at1['hours'] > $ewd)
+    {
+        do
+        {
+            $at1['yday'] ++;
+            $at1['wday'] ++;
+            $at1['wday'] %= 7;
+            if ($at1['yday'] > 365)
+            {
+                $at1['year'] ++;
+                $at1['yday'] = 0;
+            }
+        } while (!in_array($at1['wday'],$CONFIG['working_days']));
+
+        $at1['hours']=$swd;
+        $at1['minutes']=0;
+
+    }
+    else
+    {
+        if (($at1['hours']<$swd) || (!in_array($at1['wday'],$CONFIG['working_days'])))
+        {
+            while (!in_array($at1['wday'], $CONFIG['working_days']))
+            {
+                $at1['yday'] ++;
+                $at1['wday'] ++;
+                $at1['wday'] %= 7;
+                if ($at1['days']>365)
+                {
+                    $at1['year'] ++;
+                    $at1['yday'] = 0;
+                }
+            }
+            $at1['hours'] = $swd;
+            $at1['minutes'] = 0;
         }
     }
 
-    $at1['hours']=$swd;
-    $at1['minutes']=0;
+    // Same again but for the end time
+    // if it isn't then move it backward to the previous work minute
+    if ( $at2['hours']<$swd)
+    {
+        do
+        {
+            $at2['yday'] --;
+            $at2['wday'] --;
+            if ($at2['wday'] < 0) $at2['wday'] = 6;
+            if ($at2['yday']<0)
+            {
+                $at2['yday'] = 365;
+                $at2['year'] --;
+            }
+        } while (!in_array($at2['wday'], $CONFIG['working_days']));
+
+        $at2['hours'] = $ewd;
+        $at2['minutes'] = 0;
     }
-}
-
-// Same again but for the end time
-// if it isn't then move it backward to the previous work minute
-
-if ( $at2['hours']<$swd) {
-    do {
-    $at2['yday']--;
-    $at2['wday']--;
-    if ($at2['wday']<0) $at2['wday']=6;
-    if ($at2['yday']<0) {
-        $at2['yday']=365;
-        $at2['year']--;
-    }
-    } while (!in_array($at2['wday'],$CONFIG['working_days']));
-
-    $at2['hours']=$ewd;
-    $at2['minutes']=0;
-
-} else {
-    if (($at2['hours']>$ewd) || (!in_array($at2['wday'],$CONFIG['working_days']))) {
-    while (!in_array($at2['wday'],$CONFIG['working_days'])) {
-        $at2['yday']--;
-        $at2['wday']--;
-        if ($at2['wday']<0) $at2['wday']=6;
-        if ($at2['yday']<0) {
-        $at2['yday']=365;
-        $at2['year']--;
+    else
+    {
+        if (($at2['hours']>$ewd) || (!in_array($at2['wday'],$CONFIG['working_days'])))
+        {
+            while (!in_array($at2['wday'],$CONFIG['working_days']))
+            {
+                $at2['yday'] --;
+                $at2['wday'] --;
+                if ($at2['wday'] < 0) $at2['wday'] = 6;
+                if ($at2['yday']<0)
+                {
+                    $at2['yday'] = 365;
+                    $at2['year'] --;
+                }
+            }
+            $at2['hours'] = $ewd;
+            $at2['minutes'] = 0;
         }
     }
-    $at2['hours']=$ewd;
-    $at2['minutes']=0;
+
+    $t1 = mktime($at1['hours'], $at1['minutes'], 0, 1, $at1['yday'] + 1, $at1['year']);
+    $t2 = mktime($at2['hours'], $at2['minutes'], 0, 1, $at2['yday'] + 1, $at2['year']);
+
+    $weeks = floor(($t2 - $t1) / (60 * 60 * 24 * 7));
+    $t1 += $weeks * 60 * 60 * 24 * 7;
+
+    while ( date('z',$t2) != date('z',$t1) )
+    {
+        if (in_array(date('w',$t1),$CONFIG['working_days'])) $days++;
+        $t1 += (60 * 60 * 24);
     }
-}
 
+    // this could be negative and that's not ok
+    $coefficient = 1;
+    if ($t2 < $t1)
+    {
+        $t3 = $t2;
+        $t2 = $t1;
+        $t1 = $t3;
+        $coefficient =- 1;
+    }
 
-$t1 = mktime($at1['hours'], $at1['minutes'],0,1,$at1['yday']+1,$at1['year']);
-$t2 = mktime($at2['hours'], $at2['minutes'],0,1,$at2['yday']+1,$at2['year']);
+    $min = floor( ($t2 - $t1) / 60 ) * $coefficient;
 
-$weeks = floor(($t2-$t1)/(60*60*24*7));
-$t1 += $weeks * 60 * 60 * 24 * 7;
+    $minutes= $min + ($weeks * count($CONFIG['working_days']) + $days ) * ($ewd-$swd) * 60;
 
-while ( date('z',$t2) != date('z',$t1) ) {
-    if (in_array(date('w',$t1),$CONFIG['working_days'])) $days++;
-    $t1 += (60 * 60 * 24);
-}
-
-// this could be negative and that's not ok
-
-$coefficient=1;
-if ($t2<$t1) {
-    $t3=$t2;
-    $t2=$t1;
-    $t1=$t3;
-    $coefficient=-1;
-}
-
-$min=floor( ($t2-$t1)/60 )*$coefficient;
-
-$minutes= $min + ($weeks * count($CONFIG['working_days']) + $days ) * ($ewd-$swd) * 60;
-return $minutes;
+    return $minutes;
 
 //new version below
 /*
