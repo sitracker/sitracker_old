@@ -781,6 +781,7 @@ $strNoEmailSet = 'You have no email address set, you must set one now';
 $strNoFeedbackFormsDefined = 'No Feedback Forms Defined';
 $strNoFeedBackFormToCompleteHere = 'There is no feedback form waiting to be completed at this address, this could be because you have already provided feedback.  Please check that the URL you entered is correct.';
 $strNoFeedsCurrentlyPresent = 'No feeds currently present';
+$strNoHolidayEntitlement = 'No holiday entitlement remaining for this year';
 $strNoIncidents = 'No Incidents';
 $strNoIncidentsBeingWatchOfType = 'No watches set up for this type';
 $strNoLicense = 'No Licence';

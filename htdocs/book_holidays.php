@@ -113,7 +113,7 @@ elseif ($step == '1')
         $holidaystaken = user_count_holidays($user, 1);
         if (($entitlement - $holidaystaken) <= 0 )
         {
-            echo "<p class='error'>No holiday entitlement remaining for this year</p>";// FIXME i18n
+            echo "<p class='error'>{$strNoHolidayEntitlement}</p>";
         }
     }
 
