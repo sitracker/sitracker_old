@@ -72,8 +72,8 @@ else
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
-    $countArray[0]=0;
-    $softwareNames[0]='Name';
+    $countArray[0] = 0;
+    $softwareNames[0] = 'Name';
     $softwareID[0] = 0;
     $c = 0;
     $count = 0;
@@ -81,9 +81,9 @@ else
     {
         $countArray[$c] = $row['softwarecount'];
         $count += $countArray[$c];
-        $softwareNames[$c]  = $row['name'];
+        $softwareNames[$c] = $row['name'];
         $softwareID[$c] = $row['id'];
-        $c++;
+        $c ++;
     }
 
     include ('htmlheader.inc.php');

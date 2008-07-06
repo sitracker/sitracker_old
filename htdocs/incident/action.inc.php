@@ -90,9 +90,9 @@ if (isset($_REQUEST['oldaction']))
 
     if ($bm & 1)
     {
-        $save_vars[]='fromfield';
-        $save_vars[]='tofield';
-        $save_vars[]='ccfield';
+        $save_vars[] = 'fromfield';
+        $save_vars[] = 'tofield';
+        $save_vars[] = 'ccfield';
     }
 
     if ($bm & 4)

@@ -34,9 +34,9 @@ switch ($action)
         // Input validation
         // Validate input
         $error=array();
-        if (empty($link)) $error[]='Link must not be zero or blank';
-        if (empty($refid)) $error[]='Refid must not be zero or blank';
-        if (empty($bodytext)) $error[]='Note must not be blank';
+        if (empty($link)) $error[] = 'Link must not be zero or blank';
+        if (empty($refid)) $error[] = 'Refid must not be zero or blank';
+        if (empty($bodytext)) $error[] = 'Note must not be blank';
         if (count($error) >= 1)
         {
             include ('htmlheader.inc.php');

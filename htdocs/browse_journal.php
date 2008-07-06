@@ -58,16 +58,16 @@ $sql .= " LIMIT $offset, $perpage ";
 $result = mysql_query($sql);
 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
-$journaltype[1]='Logon/Logoff';
-$journaltype[2]='Support Incidents';
-$journaltype[3]='Sales Incidents';  // Obsolete
-$journaltype[4]='Sites';
-$journaltype[5]='Contacts';
-$journaltype[6]='Admin';
-$journaltype[7]='User Management';
-$journaltype[8]='Maintenance';
-$journaltype[9]='Products';
-$journaltype[10]='Tasks';
+$journaltype[1] = 'Logon/Logoff';
+$journaltype[2] = 'Support Incidents';
+$journaltype[3] = 'Sales Incidents';  // Obsolete
+$journaltype[4] = 'Sites';
+$journaltype[5] = 'Contacts';
+$journaltype[6] = 'Admin';
+$journaltype[7] = 'User Management';
+$journaltype[8] = 'Maintenance';
+$journaltype[9] = 'Products';
+$journaltype[10] = 'Tasks';
 
 $journal_count = mysql_num_rows($result);
 if ($journal_count >= 1)

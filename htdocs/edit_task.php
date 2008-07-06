@@ -83,9 +83,9 @@ switch ($action)
         else $tags='';
 
         // Validate input
-        $error=array();
-        if ($name=='') $error[]='Task name must not be blank';
-        if ($startdate > $duedate AND $duedate != '' AND $duedate > 0 ) $startdate=$duedate;
+        $error = array();
+        if ($name == '') $error[] = 'Task name must not be blank';
+        if ($startdate > $duedate AND $duedate != '' AND $duedate > 0 ) $startdate = $duedate;
         if (count($error) >= 1)
         {
             include ('htmlheader.inc.php');

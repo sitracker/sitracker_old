@@ -57,7 +57,7 @@ else
             $stats[date('Y-m-d', $incident->opened)][$incident->id]['opened']['owner'] = $incident->owner;
             $stats[date('Y-m-d', $incident->opened)][$incident->id]['opened']['title'] = $incident->title;
             $stats[date('Y-m-d', $incident->opened)][$incident->id]['opened']['date'] = $incident->opened;
-            $stats[date('Y-m-d', $incident->opened)][$incident->id]['opened']['type']='opened';
+            $stats[date('Y-m-d', $incident->opened)][$incident->id]['opened']['type'] = 'opened';
         }
 
         // opened
