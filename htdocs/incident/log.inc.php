@@ -462,7 +462,7 @@ while ($update = mysql_fetch_object($result))
         		if ($update->duration != 0)
         		{
         		    $inminutes = ceil($update->duration/60); // Always round up 
-        		    echo  "{$strDuration}: {$inminutes} {$strMinutes}";
+        		    echo  "{$strDuration}: {$inminutes} {$strMinutes}</div>";
         		}
             }
         }
