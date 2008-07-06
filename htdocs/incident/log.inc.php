@@ -452,19 +452,18 @@ while ($update = mysql_fetch_object($result))
         {
     		echo "<div class='detailhead'>";
 
-            if (!empty($update->nextaction) OR $update->duration != 0)
+            if ($update->duration != 0)
             {
-        		if (!empty($update->nextaction))
-        		{
-                	echo "<div class='detailhead'>{$strNextAction}: {$update->nextaction}</div>";
-                }
-        
-        		if ($update->duration != 0)
-        		{
-        		    $inminutes = ceil($update->duration/60); // Always round up 
-        		    echo  "{$strDuration}: {$inminutes} {$strMinutes}</div>";
-        		}
+                $inminutes = ceil($update->duration/60); // Always round up 
+                echo  "{$strDuration}: {$inminutes} {$strMinutes}<br />";
             }
+            
+    		if (!empty($update->nextaction))
+    		{
+            	echo "{$strNextAction}: {$update->nextaction}";
+            }
+    
+    		echo "</div>";
         }
 
     }
