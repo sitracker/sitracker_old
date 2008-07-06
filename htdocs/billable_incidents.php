@@ -114,7 +114,7 @@ if (empty($mode))
     echo "<td><input type='checkbox' name='sitebreakdown' id='sitebreakdown' size='10' /> ";
     echo "</td></tr></tbody>\n";
 
-    echo "<tbody style='display:none' id='showapprovedsection' ><tr><th>Show only approved:</th>";
+    echo "<tbody style='display:none' id='showapprovedsection' ><tr><th>Show only awaiting approved:</th>";
     echo "<td><input type='checkbox' name='showonlyapproved' value='true' checked='checked' />";
     echo "</td></tr></tbody>\n";
 
