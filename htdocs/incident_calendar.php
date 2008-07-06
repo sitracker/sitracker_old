@@ -92,15 +92,15 @@ function draw_calendar($nmonth, $nyear)
          $prevmonth=12;
          $prevyear=$nyear-1;
        }
-       if ($nmonth<12)
+       if ($nmonth < 12)
        {
          // $nextmonth=nmonth+1;
          $nextyear=$nyear;
        }
-       if ($nmonth==12)
+       if ($nmonth == 12)
        {
-         $nextmonth=1;
-         $nextyear=$nyear+1;
+         $nextmonth = 1;
+         $nextyear = $nyear + 1;
        }
        echo "<caption valign=\"center\">";
        /* Print Current Month */

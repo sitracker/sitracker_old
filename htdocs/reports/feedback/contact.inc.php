@@ -283,9 +283,10 @@ if (mysql_num_rows($mresult) >= 1)
       echo dechex(floor($i*1.5));
       echo "0; color: #FFF; float:left; width: ".($min + ($weighted * $adjust))."px;'>&nbsp;</div>&nbsp; ";
       echo ($i*10);
-      if ($i<10) {
-        echo " - ";
-        echo ($i*10) + 9;
+      if ($i < 10)
+      {
+            echo " - ";
+            echo ($i*10) + 9;
       }
       echo "% ({$weighted}%)<br />";
     }

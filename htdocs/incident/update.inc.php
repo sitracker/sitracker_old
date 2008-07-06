@@ -232,7 +232,7 @@ function display_update_page($draftid=-1)
         }
     }
     clear_form_errors('update');
-    
+
     //echo "<form action='".$_SERVER['PHP_SELF']."?id={$id}&amp;draftid={$draftid}' method='post' name='updateform' id='updateform' enctype='multipart/form-data'>";
     echo "<form action='".$_SERVER['PHP_SELF']."?id={$id}' method='post' name='updateform' id='updateform' enctype='multipart/form-data'>";
     echo "<table class='vertical'>";
@@ -392,7 +392,7 @@ function display_update_page($draftid=-1)
     $setStatusTo = incident_status($id);
 
     $disabled = FALSE;
-    
+
     //we do this so if you update another user's incident, it defaults to active
     if ($sit[2] != incident_owner($incidentid))
     {
@@ -518,7 +518,7 @@ else
         ((strlen($bodytext) < 4) OR
         !preg_match('/[a-z0-9]+/i', $bodytext)))
     {
-        //FIXME 3.40 make this two errors and i18n for 
+        //FIXME 3.40 make this two errors and i18n for
         $_SESSION['formerrors']['update'][] = "<p class='error'>{$strYouMissedARequiredField}</p>";
         html_redirect($_SERVER['PHP_SELF']."?id={$id}", FALSE);
         exit;
@@ -572,7 +572,7 @@ else
         if (($oldtimeofnextaction - $now) < 1) $timetext .= "None";
         else $timetext .= date("D jS M Y @ g:i A", $oldtimeofnextaction);
         $timetext .= " -&gt; <b>";
-        if ($timeofnextaction<1) $timetext .= "None";
+        if ($timeofnextaction < 1) $timetext .= "None";
         else $timetext .= date("D jS M Y @ g:i A", $timeofnextaction);
         $timetext .= "</b>\n\n";
         $bodytext = $timetext.$bodytext;

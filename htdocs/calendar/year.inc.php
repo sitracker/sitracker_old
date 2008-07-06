@@ -122,8 +122,8 @@ echo "</p>\n";
 
 
 echo "<h2>{$strYear} View</h2>"; // FIXME i18n Year View
-$pdate=mktime(0,0,0,$month,$day,$year-1);
-$ndate=mktime(0,0,0,$month,$day,$year+1);
+$pdate = mktime(0,0,0,$month,$day,$year-1);
+$ndate = mktime(0,0,0,$month,$day,$year+1);
 echo "<p align='center'>";
 echo "<a href='{$_SERVER['PHP_SELF']}?display=year&amp;year=".date('Y',$pdate)."&amp;month=".date('m',$pdate)."&amp;day=".date('d',$pdate)."&amp;type={$type}'>&lt;</a> ";
 echo date('Y',mktime(0,0,0,$month,$day,$year));
@@ -132,12 +132,12 @@ echo "</p>";
 
 
 echo "<table align='center' border='1' cellpadding='0' cellspacing='0' style='border-collapse:collapse; border-color: #AAA; width: 80%;'>";
-$displaymonth=1;
-$displayyear=$year;
-for ($r==1;$r<3;$r++)
+$displaymonth = 1;
+$displayyear = $year;
+for ($r = 1;$r < 3;$r ++)
 {
     echo "<tr>";
-    for ($c=1;$c<=4;$c++)
+    for ($c = 1;$c <= 4;$c++)
     {
         echo "<td valign='top' align='center' class='shade1'>";
         draw_calendar($displaymonth,$displayyear);

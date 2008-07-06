@@ -5035,7 +5035,7 @@ function calculate_working_time($t1, $t2, $publicholidays)
             $at2['yday'] --;
             $at2['wday'] --;
             if ($at2['wday'] < 0) $at2['wday'] = 6;
-            if ($at2['yday']<0)
+            if ($at2['yday'] < 0)
             {
                 $at2['yday'] = 365;
                 $at2['year'] --;
@@ -5054,7 +5054,7 @@ function calculate_working_time($t1, $t2, $publicholidays)
                 $at2['yday'] --;
                 $at2['wday'] --;
                 if ($at2['wday'] < 0) $at2['wday'] = 6;
-                if ($at2['yday']<0)
+                if ($at2['yday'] < 0)
                 {
                     $at2['yday'] = 365;
                     $at2['year'] --;
@@ -8259,7 +8259,7 @@ function contract_details($id, $mode='internal')
         $html .= "<a href=\"edit_contract.php?action=edit&amp;maintid=$id\">{$GLOBALS[strEditContract]}</a></p>";
     }
     $html .= "<h3>{$GLOBALS['strContacts']}</h3>";
-    if (mysql_num_rows($maintresult)<1)
+    if (mysql_num_rows($maintresult) < 1)
     {
         throw_error("{$GLOBALS[strNoContractsFound]}: ",$id);
     }

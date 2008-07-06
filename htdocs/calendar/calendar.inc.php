@@ -67,18 +67,18 @@ function draw_calendar($nmonth, $nyear)
     echo "\n<table summary='{$monthName} {$nyear}'>";
 
     /* Make navigation control for months */
-    if ($nmonth>=1)
+    if ($nmonth >=1)
     {
-        $prevmonth=$nmonth-1;
-        $prevyear=$nyear;
-        $nextmonth=$nmonth+1;
+        $prevmonth = $nmonth-1;
+        $prevyear = $nyear;
+        $nextmonth = $nmonth+1;
     }
-    if ($nmonth==1)
+    if ($nmonth == 1)
     {
-        $prevmonth=12;
-        $prevyear=$nyear-1;
+        $prevmonth = 12;
+        $prevyear = $nyear-1;
     }
-    if ($nmonth<12)
+    if ($nmonth < 12)
     {
         // $nextmonth=nmonth+1;
         $nextyear=$nyear;

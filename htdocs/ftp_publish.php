@@ -109,7 +109,7 @@ else
     echo "<h2>FTP Publish</h2>";
     // set up basic connection
     $conn_id = create_ftp_connection();
-    
+
     $destination_filepath = $CONFIG['ftp_path'] . $temp_directory . '/' . $destination_file;
 
     // make the temporary directory
@@ -141,7 +141,7 @@ else
         {
             case 'none': $expirydate = 0; break;
             case 'time':
-                if ($expiry_days<1 && $expiry_hours<1 && $expiry_minutes<1) $expirydate = 0;
+                if ($expiry_days < 1 && $expiry_hours < 1 && $expiry_minutes < 1) $expirydate = 0;
                 else
                 {
                     // uses calculate_time_of_next_action() because the function suits our purpose
@@ -151,9 +151,9 @@ else
 
             case 'date':
                 // $now + ($days * 86400) + ($hours * 3600) + ($minutes * 60);
-                $unixdate=mktime(9,0,0,$month,$day,$year);
+                $unixdate = mktime(9,0,0,$month,$day,$year);
                 $expirydate = $unixdate;
-                if ($expirydate<0) $expirydate=0;
+                if ($expirydate < 0) $expirydate = 0;
             break;
 
             default:

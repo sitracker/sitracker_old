@@ -249,13 +249,13 @@ switch ($_REQUEST['action'])
             $fieldname="Q{$question->id}";
 
             // Check required fields are filled
-            if ($question->required=='true' AND (strlen($_POST[$fieldname])<1 OR
+            if ($question->required == 'true' AND (strlen($_POST[$fieldname]) < 1 OR
                     isset($_POST[$fieldname])==false)) $errorfields[]="{$question->id}";
 
             // Store text responses in the appropriate field
             if ($question->type=='text')
             {
-                if (strlen($_POST[$fieldname]) < 255 AND $option_list[1]<2)
+                if (strlen($_POST[$fieldname]) < 255 AND $option_list[1] < 2)
                 {
                     // If we've got just one row and less than 255 characters store it in the result field
                     $qresult = $_POST[$fieldname];
@@ -375,9 +375,9 @@ body { font:10pt Arial, Helvetica, sans-serif; }
         $waitingforms = mysql_num_rows($rresult);
         $waitingform = mysql_fetch_object($rresult);
 
-        if ($waitingforms<1)
+        if ($waitingforms < 1)
         {
-            echo "<h2>Error</h2>";
+            echo "<h2>{$strError}</h2>";
             echo "<p>{$strNoFeedBackFormToCompleteHere}</p>";
             echo "\n\n<!-- f: $formid r:$respondent rr:$responseref dh:$decodehash  hc:$hashcode -->\n\n";
         }

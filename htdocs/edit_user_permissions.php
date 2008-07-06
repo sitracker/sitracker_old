@@ -200,7 +200,7 @@ elseif ($action == "update")
                     // flush();
                     $uresult = mysql_query($sql);
                     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
-                    if (mysql_affected_rows()<1 || $uresult==FALSE)
+                    if (mysql_affected_rows() < 1 || $uresult==FALSE)
                     {
                         // Update failed, this could be because of a missing userpemissions record so try and create one
                         // echo "Update of permission ".$x[1]."failed, no problem, will try insert instead.<br />";
@@ -208,7 +208,7 @@ elseif ($action == "update")
                         $isql .= "VALUES ('{$rolerow->id}', '".$x[1]."', 'true')";
                         $iresult = mysql_query($isql);
                         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
-                        if (mysql_affected_rows()<1) echo "<p class='error'>Update of user permission ".$x[1]." failed on pass 2\n";
+                        if (mysql_affected_rows() < 1) echo "<p class='error'>Update of user permission ".$x[1]." failed on pass 2\n";
                     }
                 }
             }
@@ -239,7 +239,7 @@ elseif ($action == "update")
                 # flush();
                 $result = mysql_query($sql);
                 if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
-                if (mysql_affected_rows()<1 || $result==FALSE)
+                if (mysql_affected_rows() < 1 || $result == FALSE)
                 {
                     // Update failed, this could be because of a missing userpemissions record so try and create one
                     // echo "Update of permission ".$x[1]."failed, no problem, will try insert instead.<br />";
@@ -283,7 +283,7 @@ elseif ($action == "update")
                 #flush();
                 $result = mysql_query($sql);
                 if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
-                if (mysql_affected_rows()<1 || $result==FALSE)
+                if (mysql_affected_rows() < 1 || $result == FALSE)
                 {
                     // Update failed, this could be because of a missing userpemissions record so try and create one
                     // echo "Update of permission ".$x[1]."failed, no problem, will try insert instead.<br />";
@@ -291,7 +291,7 @@ elseif ($action == "update")
                     $isql .= "VALUES ('$role', '".$x[1]."', 'true')";
                     $iresult = mysql_query($isql);
                     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
-                    if (mysql_affected_0rows()<1) echo "<p class='error'>Update of user permission ".$x[1]." failed on pass 2\n";
+                    if (mysql_affected_rows() < 1) echo "<p class='error'>Update of user permission ".$x[1]." failed on pass 2\n";
                 }
             }
         }

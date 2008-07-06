@@ -133,7 +133,7 @@ elseif ($action=='findcontact')
 
     $search_string=mysql_real_escape_string(urldecode($_REQUEST['search_string']));
     // check for blank or very short search field - otherwise this would find too many results
-    if (empty($contactid) && strlen($search_string)<2)
+    if (empty($contactid) && strlen($search_string) < 2)
     {
         header("Location: {$_SERVER['PHP_SELF']}");
         exit;
@@ -618,7 +618,7 @@ elseif ($action == 'assign')
                     $unixdate=mktime(9,0,0,$month,$day,$year);
                     $now = time();
                     $timeofnextaction = $unixdate;
-                    if ($timeofnextaction<0) $timeofnextaction=0;
+                    if ($timeofnextaction < 0) $timeofnextaction = 0;
                 break;
 
                 default: $timeofnextaction = 0; break;

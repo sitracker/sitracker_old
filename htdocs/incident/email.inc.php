@@ -684,7 +684,7 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
                         $date=explode("-", $date);
                         $timeofnextaction=mktime(8 + $timeoffset,0,0,$date[1],$date[2],$date[0]);
                         $now = time();
-                        if ($timeofnextaction<0) $timeofnextaction=0;
+                        if ($timeofnextaction < 0) $timeofnextaction = 0;
                     break;
 
                     default:
@@ -712,7 +712,7 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
                 if ($timeofnextaction != 0)
                 {
                     $timetext = "Next Action Time: ";
-                    if (($oldtimeofnextaction-$now)<1)
+                    if (($oldtimeofnextaction-$now) < 1)
                     {
                         $timetext .= "None";
                     }
@@ -721,7 +721,7 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
                         $timetext .= date("D jS M Y @ g:i A", $oldtimeofnextaction);
                     }
                     $timetext .= " -&gt; <b>";
-                    if ($timeofnextaction<1)
+                    if ($timeofnextaction < 1)
                     {
                         $timetext .= "None";
                     }
