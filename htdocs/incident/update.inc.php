@@ -463,7 +463,7 @@ if (empty($action))
     {
         echo "<h2>{$title}</h2>";
 
-        display_drafts('update', $result);
+        echo display_drafts('update', $result);
 
         echo "<p align='center'><a href='".$_SERVER['PHP_SELF']."?action=newupdate&amp;id={$id}'>{$strUpdateNewUpdate}</a></p>";
     }

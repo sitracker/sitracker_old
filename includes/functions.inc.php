@@ -6136,7 +6136,7 @@ function date_picker($formelement)
 
 function percent_bar($percent)
 {
-    if ($percent=='') $percent=0;
+    if ($percent == '') $percent = 0;
     // #B4D6B4;
     $html = "<div style='width: 100px; border: 1px solid #ccc; background-color: white; height: 12px;'>";
     $html .= "<div style='text-align: center; height: 12px; font-size: 90%; width: {$percent}%; background: #AFAFAF;'>  {$percent}&#037;";
@@ -6149,7 +6149,7 @@ function incident_open($incidentid)
 {
     global $dbIncidents;
     $sql = "SELECT id FROM `{$dbIncidents}` WHERE id='$incidentid' AND status!=2";
-    $result=mysql_query($sql);
+    $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     if (mysql_num_rows($result) > 0)
     {
@@ -6158,7 +6158,7 @@ function incident_open($incidentid)
     else
     {
         $sql = "SELECT id FROM `{$dbIncidents}` WHERE id = '$incidentid'";
-        $result=mysql_query($sql);
+        $result = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
         if (mysql_num_rows($result) > 0)
         {
@@ -6179,10 +6179,14 @@ function incident_open($incidentid)
 function colheader($colname, $coltitle, $sort = FALSE, $order='', $filter='', $defaultorder='a', $width='')
 {
     global $CONFIG;
-    if ($width!= '')
+    if ($width !=  '')
+    {
         $html = "<th width='".intval($width)."%'>";
+    }
     else
+    {
         $html = "<th>";
+    }
 
     $qsappend='';
     if (!empty($filter) AND is_array($filter))
@@ -6225,19 +6229,19 @@ function parse_updatebody($updatebody, $striptags = TRUE)
 {
     if (!empty($updatebody))
     {
-        $updatebody=str_replace("&lt;hr&gt;", "[hr]\n", $updatebody);
+        $updatebody = str_replace("&lt;hr&gt;", "[hr]\n", $updatebody);
         if ($striptags)
         {
-            $updatebody=strip_tags($updatebody);
+            $updatebody = strip_tags($updatebody);
         }
         else
         {
             $updatebody = str_replace("<hr>", "", $updatebody);
         }
-        $updatebody=nl2br($updatebody);
-        $updatebody=str_replace("&amp;quot;", "&quot;", $updatebody);
-        $updatebody=str_replace("&amp;gt;", "&gt;", $updatebody);
-        $updatebody=str_replace("&amp;lt;", "&lt;", $updatebody);
+        $updatebody = nl2br($updatebody);
+        $updatebody = str_replace("&amp;quot;", "&quot;", $updatebody);
+        $updatebody = str_replace("&amp;gt;", "&gt;", $updatebody);
+        $updatebody = str_replace("&amp;lt;", "&lt;", $updatebody);
         // Insert path to attachments
         //new style
         $updatebody = preg_replace("/\[\[att\=(.*?)\]\](.*?)\[\[\/att\]\]/","$2", $updatebody);
@@ -6247,7 +6251,7 @@ function parse_updatebody($updatebody, $striptags = TRUE)
         $updatebody = strip_bbcode_tooltip($updatebody);
         //then show compatable BBCode
         $updatebody = bbcode($updatebody);
-        if (strlen($updatebody)>490) $updatebody .= '...';
+        if (strlen($updatebody) > 490) $updatebody .= '...';
     }
 
     return $updatebody;
@@ -6985,7 +6989,8 @@ function list_tags($recordid, $type, $html = TRUE)
 function list_tag_icons($recordid, $type)
 {
     global $CONFIG, $dbSetTags, $dbTags;
-    $sql = "SELECT t.name, t.tagid FROM `{$dbSetTags}` AS st, `{$dbTags}` AS t WHERE st.tagid = t.tagid AND ";
+    $sql = "SELECT t.name, t.tagid ";
+    $sql .= "FROM `{$dbSetTags}` AS st, `{$dbTags}` AS t WHERE st.tagid = t.tagid AND ";
     $sql .= "st.type = '$type' AND st.id = '$recordid' AND (";
     $counticons = count($CONFIG['tag_icons']);
     $count = 1;
@@ -7044,13 +7049,14 @@ function show_tag_cloud($orderby="name", $showcount = FALSE)
         $html .= "<p align='center'>{$GLOBALS['strSort']}: <a href='view_tags.php?orderby=name'>{$GLOBALS['strAlphabetically']}</a> | ";
         $html .= "<a href='view_tags.php?orderby=occurrences'>{$GLOBALS['strPopularity']}</a></p>";
     }
+    
     if (mysql_num_rows($result) > 0)
     {
         $html .= "<table align='center'><tr><td class='tagcloud'>";
         while ($obj = mysql_fetch_object($result))
         {
             $size = round(log($obj->occurrences * 100) * 32);
-            if ($size==0) $size=100;
+            if ($size == 0) $size = 100;
             if ($size > 0 AND $size <= 100) $taglevel = 'taglevel1';
             if ($size > 100 AND $size <= 150) $taglevel = 'taglevel2';
             if ($size > 150 AND $size <= 200) $taglevel = 'taglevel3';
@@ -7083,7 +7089,6 @@ function show_tag_cloud($orderby="name", $showcount = FALSE)
 
 /**
     * @author Paul Heaney
-    * @todo TODO Return a value rather than echo directly
 */
 function display_drafts($type, $result)
 {
@@ -7104,19 +7109,23 @@ function display_drafts($type, $result)
 
     echo "<p align='center'>{$GLOBALS['strDraftChoose']}</p>";
 
+    $html = "";
+
     while ($obj = mysql_fetch_object($result))
     {
-        echo "<div class='detailhead'>";
-        echo "<div class='detaildate'>".date($CONFIG['dateformat_datetime'], $obj->lastupdate);
-        echo "</div>";
-        echo "<a href='{$page}?action=editdraft&amp;draftid={$obj->id}&amp;id={$id}{$editurlspecific}' class='info'>";
-        echo icon('edit', 16, $GLOBALS['strDraftEdit'])."</a>";
-        echo "<a href='{$page}?action=deletedraft&amp;draftid={$obj->id}&amp;id={$id}' class='info'>";
-        echo icon('delete', 16, $GLOBALS['strDraftDelete'])."</a>";
-        echo "</div>";
-        echo "<div class='detailentry'>";
-        echo nl2br($obj->content)."</div>";
+        $html .= "<div class='detailhead'>";
+        $html .= "<div class='detaildate'>".date($CONFIG['dateformat_datetime'], $obj->lastupdate);
+        $html .= "</div>";
+        $html .= "<a href='{$page}?action=editdraft&amp;draftid={$obj->id}&amp;id={$id}{$editurlspecific}' class='info'>";
+        $html .= icon('edit', 16, $GLOBALS['strDraftEdit'])."</a>";
+        $html .= "<a href='{$page}?action=deletedraft&amp;draftid={$obj->id}&amp;id={$id}' class='info'>";
+        $html .= icon('delete', 16, $GLOBALS['strDraftDelete'])."</a>";
+        $html .= "</div>";
+        $html .= "<div class='detailentry'>";
+        $html .= nl2br($obj->content)."</div>";
     }
+    
+    return $html;
 }
 
 
@@ -7231,7 +7240,7 @@ function time_dropdown($name, $time='')
             {
                 if ($time AND $time[0] == $hours AND $time[1] < $mins AND $time[1] > ($mins - 15))
                 {
-                    $html .= "<option selected='selected'           value='$time[0]:$time[1]'>$time[0]:$time[1]</option>\n";
+                    $html .= "<option selected='selected' value='$time[0]:$time[1]'>$time[0]:$time[1]</option>\n";
                 }
                 else
                 {
@@ -7924,6 +7933,7 @@ function contact_contracts($contactid, $siteid, $checkvisible = TRUE)
     {
         $sql .= "AND m.var_incident_visible_contacts = 'yes'";
     }
+    
     if ($result = mysql_query($sql))
     {
         while ($row = mysql_fetch_object($result))
@@ -7946,8 +7956,8 @@ function all_contact_contracts($contactid, $siteid)
     $sql = "SELECT DISTINCT m.id AS id
             FROM `{$GLOBALS['dbMaintenance']}` AS m,
             WHERE m.site={$siteid}
-            AND m.var_incident_visible_all = 'yes'
-            ";
+            AND m.var_incident_visible_all = 'yes'";
+            
     if ($result = mysql_query($sql))
     {
         while ($row = mysql_fetch_object($result))

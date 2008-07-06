@@ -44,7 +44,7 @@ if (empty($step))
 
         echo "<h2>{$title}</h2>";
 
-        display_drafts('email', $result);
+        echo display_drafts('email', $result);
 
         echo "<p align='center'><a href='".$_SERVER['PHP_SELF']."?step=1&amp;id={$id}'>{$strNewEmail}</a></p>";
 
