@@ -691,6 +691,7 @@ $strManagerChaseUpdate = 'Was this a manager chase?';
 $strManageUsers = 'Manage Users';
 $strManageYourDashboard = 'Manage your Dashboard';
 $strMandatoryMarked = 'Mandatory fields are marked %s';
+$strManyThanks = 'Many thanks to everybody that has offered comments, ideas, suggestions, bug reports and helped with testing or has contributed code. In particular thanks go to: (in random order)';
 # Short for March
 $strMarAbbr = 'Mar';
 $strMarch = 'March';

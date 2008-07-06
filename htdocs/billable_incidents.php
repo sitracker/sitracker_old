@@ -32,8 +32,9 @@ $showonlyapproved = cleanvar($_REQUEST['showonlyapproved']);
 
 if (empty($enddate)) $enddate = $now;
 
-$sitelistsql = "SELECT DISTINCT m.site, s.name FROM `{$dbMaintenance}` AS m, `{$dbServiceLevels}` AS sl, `{$dbSites}` AS s WHERE ";
-$sitelistsql .= "m.servicelevelid = sl.id AND sl.timed = 'yes' AND m.site = s.id ";
+$sitelistsql = "SELECT DISTINCT m.site, s.name ";
+$sitelistsql .= "FROM `{$dbMaintenance}` AS m, `{$dbServiceLevels}` AS sl, `{$dbSites}` AS s ";
+$sitelistsql .= "WHERE  m.servicelevelid = sl.id AND sl.timed = 'yes' AND m.site = s.id ";
 
 $sitestr = "";
 
@@ -65,7 +66,7 @@ if (empty($mode))
     function processForm()
     {
         // confirm_action('Are you sure you wish to update the last billed time to {$enddateorig}');
-        var approval = $('approvealpage');
+        var approval = $('approvalpage');
         var invoice = $('invoicepage');
 
         var enddate = $('enddate').value;
@@ -91,9 +92,9 @@ if (empty($mode))
     echo "<input type='radio' name='mode' value='summarypage' id='summarypage' onclick=\"$('startdatesection').hide(); $('enddatesection').hide(); $('sitebreakdownsection').hide(); $('displaysection').show(); $('showapprovedsection').hide();\" checked='checked' />{$strSummary} ";
     if (user_permission($sit[2], 73) == TRUE)
     {
-        echo "<input type='radio' name='mode' value='approvealpage' id='approvealpage' onclick=\"$('startdatesection').show(); $('enddatesection').show(); $('sitebreakdownsection').hide(); $('displaysection').hide(); $('showapprovedsection').show();\" />{$strApprove} ";
+        echo "<input type='radio' name='mode' value='approvalpage' id='approvalpage' onclick=\"$('startdatesection').show(); $('enddatesection').show(); $('sitebreakdownsection').hide(); $('displaysection').hide(); $('showapprovedsection').show();\" />{$strApprove} ";
     }
-    
+
     if (user_permission($sit[2], 76) == TRUE)
     {
         echo "<input type='radio' name='mode' value='transactions' id='transactions' onclick=\"$('startdatesection').show(); $('enddatesection').show(); $('sitebreakdownsection').show(); $('displaysection').show(); $('showapprovedsection').hide();\" />{$strTransactions} ";
@@ -116,7 +117,7 @@ if (empty($mode))
     echo "<tbody style='display:none' id='showapprovedsection' ><tr><th>Show only approved:</th>";
     echo "<td><input type='checkbox' name='showonlyapproved' value='true' checked='checked' />";
     echo "</td></tr></tbody>\n";
-    
+
     echo "<tbody id='displaysection' ><tr><th>{$strOutput}:</th>";
     echo "<td><input type='radio' name='display' value='html' checked='checked' /> {$strScreen}";
     echo "<input type='radio' name='display' value='csv' /> $strCSVfile ";
@@ -146,7 +147,7 @@ if (empty($mode))
 
     include ('htmlfooter.inc.php');
 }
-elseif ($mode == 'approvealpage')
+elseif ($mode == 'approvalpage')
 {
     if (user_permission($sit[2], 73) == FALSE)
     {
@@ -225,7 +226,7 @@ elseif ($mode == 'approvealpage')
             $sitetotals = 0;
             $sitetotalsbillable = 0;
             $sitetotalrefunds = 0;
-            
+
             $sitetotalawaitingapproval = 0;
             $sitetotalsawaitingapproval = 0;
             $sitetotalsbillableawaitingapproval = 0;
@@ -302,7 +303,7 @@ elseif ($mode == 'approvealpage')
                         $unitrate = get_unit_rate(incident_maintid($obj->id));
 
                         $line = "<tr class='{$shade}'><td style='text-align: center'>";
-                        
+
                         if (!$isapproved)
                         {
                             $line .= "<input type='checkbox' name='selected[]' value='{$obj->id}' />";
@@ -323,7 +324,7 @@ elseif ($mode == 'approvealpage')
                                 {
                                     $billtotalssite[$m] += $bill[$m]['count'];
                                     $billtotalsincident[$m] += $bill[$m]['count'];
-                                    
+
                                     if (!$isapproved)
                                     {
                                         $billtotalssiteunapproved[$m] += $bill[$m]['count'];
@@ -340,7 +341,7 @@ elseif ($mode == 'approvealpage')
                                 $line .= $billtotalsincident[$m];
 
                                 $billableunitsincident += $m * $billtotalsincident[$m];
-                                
+
                                 if (!$isapproved)
                                 {
                                     $billableunitsincidentunapproved += $m * $billtotalssiteunapproved[$m];
@@ -394,7 +395,7 @@ elseif ($mode == 'approvealpage')
                         else $shade = "shade1";
 
                         $used = true;
-                        
+
                         if (($showonlyapproved AND !$isapproved) OR !$showonlyapproved)
                         {
                             $str .= $line;
@@ -426,7 +427,7 @@ elseif ($mode == 'approvealpage')
             $str .= "</tr>\n";
 
             $str .= "<tr><td align='right' colspan='7'>{$strAwaitingApproval}</td>";
-            
+
             foreach ($multipliers AS $m)
             {
                 $str .= "<td>";
@@ -440,12 +441,12 @@ elseif ($mode == 'approvealpage')
                 }
                 $str .= "</td>";
             }
-            
+
             $str .= "<td>{$sitetotalsawaitingapproval}</td>";
             $str .= "<td>{$billableunitsincidentunapproved}</td>";
             $str .= "<td>{$refundedunapproved}</td>";
 
-            
+
             $str .= "<td>{$CONFIG['currency_symbol']}".number_format($sitetotalawaitingapproval, 2)."</td><td></td></tr>";
 
             $str .= "</table></form>";
@@ -553,7 +554,7 @@ elseif ($mode == 'transactions')
         header("Location: {$CONFIG['application_webpath']}noaccess.php?id=76");
         exit;
     }
-    
+
     include ('transactions.php');
 }
 elseif ($mode == 'approve')
@@ -563,7 +564,7 @@ elseif ($mode == 'approve')
         header("Location: {$CONFIG['application_webpath']}noaccess.php?id=73");
         exit;
     }
-    
+
     $incidentid = cleanvar($_REQUEST['incidentid']);
     $selected = $_POST['selected'];
 
@@ -584,11 +585,11 @@ elseif ($mode == 'approve')
 
     if ($status)
     {
-        html_redirect("{$_SERVER['PHP_SELF']}?mode=approvealpage&amp;startdate={$startdateorig}&amp;enddate={$enddateorig}");
+        html_redirect("{$_SERVER['PHP_SELF']}?mode=approvalpage&amp;startdate={$startdateorig}&amp;enddate={$enddateorig}");
     }
     else
     {
-        html_redirect("{$_SERVER['PHP_SELF']}?mode=approvealpage&amp;startdate={$startdateorig}&amp;enddate={$enddateorig}", FALSE, "Error approving incident"); // FIXME i18n
+        html_redirect("{$_SERVER['PHP_SELF']}?mode=approvalpage&amp;startdate={$startdateorig}&amp;enddate={$enddateorig}", FALSE, "Error approving incident"); // FIXME i18n
     }
 }
 

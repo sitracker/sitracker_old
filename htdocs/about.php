@@ -45,9 +45,7 @@ $creditcount = count($credits);
 shuffle($credits);
 $count = 1;
 // TODO would be nice to scroll these credits using Javascript (degrading nicely)
-// FIXME i18n
-echo "<tr><td class='shade2' colspan='2'><p align='center'>Many thanks to everybody that has offered comments, ideas, ";
-echo "suggestions, bug reports and helped with testing or has contributed code. In particular thanks go to: (in random order)</p><h4>";
+echo "<tr><td class='shade2' colspan='2'><p align='center'>{$strManyThanks}</p><h4>";
 foreach ($credits AS $credit)
 {
     $creditpart = explode('--',$credit);

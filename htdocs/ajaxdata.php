@@ -58,9 +58,9 @@ switch($action)
             $fp = fopen($helpfile, 'r', TRUE);
             $helptext = fread($fp, 1024);
             fclose($fp);
+            echo nl2br($helptext);
         }
         else echo "Error: Missing helpfile '{$context}.txt'";
-        echo nl2br($helptext);
     break;
 
     case 'dismiss_notice':
