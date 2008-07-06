@@ -51,7 +51,7 @@ if (isset($changepos) && $changepos>0)
 {
     ## echo "Change position $changepos to word: $replacement<br />";
     $texttospell=replace_word(urldecode($bodytext), $changepos, $replacement);
-    $sql =  "UPDATE spellcheck SET bodytext='".mysql_real_escape_string($texttospell)."' WHERE id='$spellid'";
+    $sql =  "UPDATE `{$dbSpellCheck}` SET bodytext='".mysql_real_escape_string($texttospell)."' WHERE id='$spellid'";
     $result=mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     if (!$result) throw_error("Problem updating spellcheck temp data", '');

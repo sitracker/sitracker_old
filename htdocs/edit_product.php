@@ -35,7 +35,7 @@ if ($action == 'save')
     replace_tags(TAG_PRODUCT, $productid, $tags);
 
     // update database
-    $sql = "UPDATE products SET vendorid='$vendor', name='$name', description='$description' WHERE id='$productid' LIMIT 1 ";
+    $sql = "UPDATE `{$dbProducts}` SET vendorid='$vendor', name='$name', description='$description' WHERE id='$productid' LIMIT 1 ";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 

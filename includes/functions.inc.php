@@ -8632,6 +8632,7 @@ function group_user_selector($title, $level="engineer", $groupid)
     global $dbUsers, $dbGroups;
     $str .= "<tr><th>{$title}</th>";
     $str .= "<td align='center'>";
+
     $sql = "SELECT DISTINCT(g.name), g.id FROM `{$dbUsers}` AS u, `{$dbGroups}` AS g ";
     $sql .= "WHERE u.status > 0 AND u.groupid = g.id ORDER BY g.name";
     $result = mysql_query($sql);

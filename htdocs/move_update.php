@@ -157,7 +157,7 @@ else
         $bodytext = $body . $bodytext;
         $bodytext = mysql_real_escape_string($bodytext);
         // move the update.
-        $sql = "UPDATE updates SET incidentid='$incidentid', userid='$sit[2]', bodytext='$bodytext', timestamp='$now' WHERE id='$updateid'";
+        $sql = "UPDATE `{$dbUpdates}` SET incidentid='$incidentid', userid='$sit[2]', bodytext='$bodytext', timestamp='$now' WHERE id='$updateid'";
         mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
         $new_update_id = mysql_insert_id();

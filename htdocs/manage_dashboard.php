@@ -181,7 +181,7 @@ switch ($_REQUEST['action'])
                         setup_exec_sql($schema[$i]);
                     }
 
-                    $sql = "UPDATE dashboard SET version = '{$version}' WHERE id = {$obj->id}";
+                    $sql = "UPDATE `{$dbDashboard}` SET version = '{$version}' WHERE id = {$obj->id}";
                     mysql_query($sql);
                     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
                     html_redirect($_SERVER['PHP_SELF']);

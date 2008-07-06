@@ -36,7 +36,7 @@ switch ($action)
 
         if ($errors == 0)
         {
-            $sql = "UPDATE vendors SET name = '{$vendorname}' WHERE id = '{$vendorid}'";
+            $sql = "UPDATE `{$dbVendors}` SET name = '{$vendorname}' WHERE id = '{$vendorid}'";
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
             html_redirect("main.php");

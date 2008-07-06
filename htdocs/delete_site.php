@@ -99,7 +99,7 @@ else
     {
         // Records need moving before we delete
         // Move contacts
-        $sql = "UPDATE contacts SET siteid='$destinationid' WHERE siteid='$id'";
+        $sql = "UPDATE `{$dbContacts}` SET siteid='$destinationid' WHERE siteid='$id'";
         mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
