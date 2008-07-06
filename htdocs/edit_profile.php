@@ -421,18 +421,6 @@ elseif ($mode=='save')
 
             // password was not changed
             if (!isset($confirm_message)) html_redirect($redirecturl);
-            // password was changed
-            else
-            {
-                //if this was the admin changing his password for the first time
-                if ($sit[2] == '1')
-                {
-                    $sql = "UPDATE usernotices SET dimissed=1 WHERE userid={$sit[2]} and updateid=1";
-                    @mysql_query($sql);
-                }
-                journal(CFG_LOGGING_NORMAL, 'User Profile Edited', "User Profile {$sit[2]} Edited", CFG_JOURNAL_USER, $sit[2]);
-                html_redirect($redirecturl, TRUE, $confirm_message);
-            }
         }
     }
     else
