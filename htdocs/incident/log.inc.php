@@ -425,9 +425,22 @@ while ($update = mysql_fetch_object($result))
             {
             	$wholeupdate .=  $updatebody;
             }
-            if (!empty($update->nextaction))
+	    
+            if (!empty($update->nextaction) OR $update->duration != 0)
             {
-            	$wholeupdate .=  "<div class='detailhead'>{$strNextAction}: {$update->nextaction}</div>";
+		$wholeupdate .= "<div class='detailhead'>";
+		if (!empty($update->nextaction))
+		{
+		    $wholeupdate .= "{$strNextAction}: {$update->nextaction}  ";
+		}
+		
+		if ($update->duration != 0)
+		{
+		    $inminutes = ceil($update->duration/60); // Always round up 
+		    $wholeupdate .= "{$strDuration}: {$inminutes} {$strMinutes}";
+		}
+		
+		$wholeupdate .= "</div>";
             }
             $wholeupdate .=  "</div>\n";
         }
