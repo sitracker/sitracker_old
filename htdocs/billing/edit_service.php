@@ -12,7 +12,7 @@
 // Author:  Paul Heaney Paul Heaney <paulheaney[at]users.sourceforge.net>
 
 @include('set_include_path.inc.php');
-$permission =  37; // Need reporting permissions to get onto the page, need more granular permissions further down
+$permission =  80;
 
 require_once('db_connect.inc.php');
 require_once('functions.inc.php');

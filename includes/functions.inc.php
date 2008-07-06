@@ -8145,7 +8145,7 @@ function contract_details($id, $mode='internal')
         $html .= $GLOBALS[strActive];
     }
 
-    if ($maintrow['expirydate']<$now AND $maintrow['expirydate'] != '-1')
+    if ($maintrow['expirydate'] < $now AND $maintrow['expirydate'] != '-1')
     {
         $html .= "<span class='expired'>, {$GLOBALS[strExpired]}</span>";
     }
@@ -8225,7 +8225,18 @@ function contract_details($id, $mode='internal')
     }
 
     $html .= "</td></tr>";
-    if ($maintrow['maintnotes'] != '' AND $mode=='internal')
+    
+    $html .= "<tr><th>{$GLOBALS['strService']}</th><td>";
+    $html .= contract_service_table($id);
+    $html .= "</td></tr>\n";
+    
+    // FIXME not sure if this should be here
+    $html .= "<tr><th>{$GLOBALS['strBalance']}</th><td>{$CONFIG['currency_symbol']}".number_format(get_contract_balance($id), 2);
+    $multiplier = get_billable_multiplier(strtolower(date('D', $now)), date('G', $now));
+    $html .= " (&cong;".contract_unit_balance($id)." units)";
+    $html .= "</td></tr>";
+    
+    if ($maintrow['maintnotes'] != '' AND $mode == 'internal')
     {
         $html .= "<tr><th>{$GLOBALS[strNotes]}:</th><td>".$maintrow['maintnotes']."</td></tr>";
     }
@@ -9914,6 +9925,38 @@ function is_billable_incident_approved($incidentid)
 
     if (mysql_num_rows($result) > 0) return TRUE;
     else return FALSE;
+}
+
+
+/**
+    * Get the current contract balance
+    * @author Ivan Lucas
+    * @param $contractid int. Contract ID of the contract to credit
+    * @param $includenonapproved boolean. Include incidents which have not been approved
+    * @note The balance is a sum of all the current service that have remaining balance
+    * @todo FIXME add a param that makes this optionally show the incident pool balance
+      in the case of non-timed type contracts
+*/
+function get_contract_balance($contractid, $includenonapproved=FALSE)
+{
+    global $dbService, $now;
+    $balance = 0.00;
+
+    $sql = "SELECT SUM(balance) FROM `{$dbService}` ";
+    $sql .= "WHERE contractid = $contractid AND UNIX_TIMESTAMP(startdate) <= $now ";
+    $sql .= "AND UNIX_TIMESTAMP(enddate) >= $now  ";
+    $result = mysql_query($sql);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+    list($balance) = mysql_fetch_row($result);
+
+    if ($includenonapproved)
+    {
+        // Need to get sum of non approved incidents for this contract and deduct
+
+        $balance -= total_awaiting_approval($contractid);
+    }
+
+    return $balance;
 }
 
 
