@@ -41,11 +41,11 @@ if (empty($step))
 
     if ($user == $sit[2])
     {
-        echo "<h2>".icon('holiday', 32)." Book Holidays</h2>"; // FIXME i18n
+        echo "<h2>".icon('holiday', 32)." {$strBookHoliday}</h2>";
     }
     else
     {
-        echo "<h2>".icon('holiday', 32)." Book Holidays for ".user_realname($user)."</h2>"; // FIXME i18n
+        echo "<h2>".icon('holiday', 32)." {$strBookHoliday}: ".user_realname($user)."</h2>";
     }
 
     echo "<form name='date' action='{$_SERVER['PHP_SELF']}' method='post'>\n";
@@ -273,7 +273,7 @@ elseif ($step == '1')
 
     echo "<br />";
 
-    echo "<p align='center'><a href='book_holidays.php?user={$user}'>Abandon this booking and try again</a></p>";// FIXME i18n
+    echo "<p align='center'><a href='book_holidays.php?user={$user}'>{$strReturnWithoutSaving}</a></p>";
     include ('htmlfooter.inc.php');
 }
 else

@@ -83,7 +83,7 @@ else
     echo "<p align='center'><input type='submit' value='{$strSave}' /></p>";
     echo "</form>";
 
-    echo "<p align='center'><a href='products.php'>Return to products list without saving</a></p>"; // FIXME i18n
+    echo "<p align='center'><a href='products.php'>{$strReturnWithoutSaving}</a></p>";
     mysql_free_result($result);
 
     include ('htmlfooter.inc.php');

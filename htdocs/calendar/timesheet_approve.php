@@ -13,7 +13,7 @@
 $permission = 50; /* Approve holidays */
 require ('db_connect.inc.php');
 require ('functions.inc.php');
-$title = "Approve Timesheets";  // FIXME i18n Approve Timesheets
+$title = $strApproveTimesheets;
 
 // This page requires authentication
 require ('auth.inc.php');

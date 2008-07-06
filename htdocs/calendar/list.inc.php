@@ -19,7 +19,7 @@ if (realpath(__FILE__) == realpath($_SERVER['SCRIPT_FILENAME']))
 echo "<h2>{$strHolidayList}</h2>";
 if (empty($type)) $type = 1;
 echo appointment_type_dropdown($type, 'list');
-echo "<h3>Descending date order</h3>"; // FIXME i18n decending date
+echo "<h3>{$strDescendingDateOrder}</h3>";
 
 $sql = "SELECT *, h.id AS holidayid FROM `{$dbHolidays}` AS h, `{$dbUsers}` AS u ";
 $sql .= "WHERE h.userid = u.id AND h.type=$type ";
@@ -41,7 +41,7 @@ if (mysql_num_rows($result))
         if ($dates['length']=='pm') echo " {$strAfternoon}";
         echo "</td>";
         echo "<td>";
-        if (empty($dates['approvedby'])) echo " <em>not requested yet</em>"; // FIXME i18n not requested yet
+        if (empty($dates['approvedby'])) echo " <em>{$strNotRequested}</em>";
         else echo "<strong>".holiday_approval_status($dates['approved'])."</strong>";
         if ($dates['approvedby'] > 0 AND $dates['approved'] >= 1) echo " by ".user_realname($dates['approvedby']);
         elseif ($dates['approvedby'] > 0 AND empty($dates['approved'])) echo " of ".user_realname($dates['approvedby']);

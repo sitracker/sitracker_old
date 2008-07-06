@@ -109,6 +109,7 @@ $strAnswer = 'Answer';
 $strApprovalStatusUnknown = 'Approval Status Unknown';
 $strApprove = 'Approve';
 $strApproveAll = 'Approve All';
+$strApproveTimesheets = 'Approve Timesheets';
 $strApproved = 'Approved';
 $strApprovedFree = 'Approved Free';
 $strApproveHolidays = 'Approve Holidays';
