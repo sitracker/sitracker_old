@@ -7645,10 +7645,9 @@ function schedule_action_done($doneaction, $success = TRUE)
 function get_incident_billing_details($incidentid)
 {
     global $dbUpdates;
-    if (empty($incidentid)) trigger_error('Empty incident ID', E_USER_ERROR);
     /*
-    $array[owner][] = array(owner, starttime, duration)
-    */
+     $array[owner][] = array(owner, starttime, duration)
+     */
     $sql = "SELECT * FROM `{$dbUpdates}` WHERE incidentid = {$incidentid} AND duration IS NOT NULL";
     $result = mysql_query($sql);
     if (mysql_error())
@@ -7661,10 +7660,18 @@ function get_incident_billing_details($incidentid)
     {
         while($obj = mysql_fetch_object($result))
         {
-            $temparray['owner'] = $obj->userid;
-            $temparray['starttime'] = ($obj->timestamp-$obj->duration);
-            $temparray['duration'] = $obj->duration;
-            $billing[$obj->userid][] = $temparray;
+            if ($obj->duration > 0)
+            {
+                $temparray['owner'] = $obj->userid;
+                $temparray['starttime'] = ($obj->timestamp-$obj->duration);
+                $temparray['duration'] = $obj->duration;
+                $billing[$obj->userid][] = $temparray;
+            }
+            else
+            {
+                if (empty($billing['refunds'])) $billing['refunds'] = 0;
+                $billing['refunds'] += $obj->duration;
+            }
         }
     }
 
@@ -7693,11 +7700,18 @@ function group_billing_periods(&$count, $countType, $activity, $period)
             $saved = "false";
             foreach ($count[$countType] AS $ind)
             {
-                if ($ind <= $activity['starttime'] AND $ind <= ($activity['starttime'] + $period))
+                /*
+                echo "<pre>";
+                print_r($ind);
+                echo "</pre>";
+                */
+                //echo "IN:{$ind}:START:{$act['starttime']}:ENG:{$engineerPeriod}<br />";
+
+                if($ind <= $activity['starttime'] AND $ind <= ($activity['starttime'] + $period))
                 {
                     //echo "IND:{$ind}:START:{$act['starttime']}<br />";
                     // already have something which starts in this period just need to check it fits in the period
-                    if ($ind + $period > $activity['starttime'] + $duration)
+                    if($ind + $period > $activity['starttime'] + $duration)
                     {
                         $remainderInPeriod = ($ind + $period) - $activity['starttime'];
                         $duration -= $remainderInPeriod;
@@ -7706,8 +7720,10 @@ function group_billing_periods(&$count, $countType, $activity, $period)
                     }
                 }
             }
+            //echo "Saved: {$saved}<br />";
             if ($saved == "false" AND $activity['duration'] > 0)
             {
+                //echo "BB:".$activity['starttime'].":SAVED:{$saved}:DUR:{$activity['duration']}<br />";
                 // need to add a new block
                 $count[$countType][$startTime] = $startTime;
 
@@ -7731,9 +7747,17 @@ function group_billing_periods(&$count, $countType, $activity, $period)
     }
 }
 
-function make_incident_billing_array($incidentid)
+/**
+  * @author Paul Heaney
+  * @note  based on periods
+ */
+function make_incident_billing_array($incidentid, $totals=TRUE)
 {
     $billing = get_incident_billing_details($incidentid);
+
+//echo "<pre>";
+//print_r($billing);
+//echo "</pre><hr />";
 
     $sql = "SELECT servicelevel, priority FROM `{$GLOBALS['dbIncidents']}` WHERE id = {$incidentid}";
     $result = mysql_query($sql);
@@ -7751,6 +7775,18 @@ function make_incident_billing_array($incidentid)
     {
         $billingSQL = "SELECT * FROM `{$GLOBALS['dbBillingPeriods']}` WHERE tag='{$servicelevel_tag}' AND priority='{$priority}'";
 
+        /*
+        echo "<pre>";
+        print_r($billing);
+        echo "</pre>";
+
+        echo "<pre>";
+        print_r(make_billing_array($incidentid));
+        echo "</pre>";
+        */
+
+        //echo $billingSQL;
+
         $billingresult = mysql_query($billingSQL);
         // echo $billingSQL;
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
@@ -7764,56 +7800,151 @@ function make_incident_billing_array($incidentid)
         if (empty($engineerPeriod) OR $engineerPeriod == 0) $engineerPeriod = 3600;
         if (empty($customerPeriod) OR $customerPeriod == 0) $customerPeriod = 3600;
 
+        /*
+        echo "<pre>";
+        print_r($billing);
+        echo "</pre>";
+        */
+
         foreach ($billing AS $engineer)
         {
-            $owner = '';
-            $duration = 0;
+            /*
+                [eng][starttime]
+            */
 
-            unset($count);
-
-            $count['engineer'];
-            $count['customer'];
-
-            foreach ($engineer AS $activity)
+            if (is_array($engineer))
             {
-                $owner = user_realname($activity['owner']);
-                $duration += $activity['duration'];
-
-                group_billing_periods($count, 'engineer', $activity, $engineerPeriod);
-
-                // Optimisation no need to compute again if we already have the details
-                if ($engineerPeriod != $customerPeriod)
+                $owner = "";
+                $duration = 0;
+    
+                unset($count);
+    
+                $count['engineer'];
+                $count['customer'];
+    
+                foreach ($engineer AS $activity)
                 {
-                    group_billing_periods($count, 'customer', $activity, $customerPeriod);
+                    $owner = user_realname($activity['owner']);
+                    $duration += $activity['duration'];
+    
+                    /*
+                    echo "<pre>";
+                    print_r($count);
+                    echo "</pre>";
+                    */
+    
+                    group_billing_periods($count, 'engineer', $activity, $engineerPeriod);
+    
+                    // Optimisation no need to compute again if we already have the details
+                    if ($engineerPeriod != $customerPeriod)
+                    {
+                        group_billing_periods($count, 'customer', $activity, $customerPeriod);
+                    }
+                    else
+                    {
+                        $count['customer'] = $count['engineer'];
+                    }
                 }
-                else
-                {
-                    $count['customer'] = $count['engineer'];
-                }
+    
+                $tduration += $duration;
+                $totalengineerperiods += sizeof($count['engineer']);
+                $totalcustomerperiods += sizeof($count['customer']);
+                /*
+                echo "<pre>";
+                print_r($count);
+                echo "</pre>";
+                */
+    
+                $billing_a[$activity['owner']]['owner'] = $owner;
+                $billing_a[$activity['owner']]['duration'] = $duration;
+                $billing_a[$activity['owner']]['engineerperiods'] = $count['engineer'];
+                $billing_a[$activity['owner']]['customerperiods'] = $count['customer'];
+            }
+            
+            if ($totals == TRUE)
+            {
+                if (empty($totalengineerperiods)) $totalengineerperiods = 0;
+                if (empty($totalcustomerperiods)) $totalcustomerperiods = 0;
+                if (empty($tduration)) $tduration = 0;
+    
+                $billing_a[-1]['totalduration'] = $tduration;
+                $billing_a[-1]['totalengineerperiods'] = $totalengineerperiods;
+                $billing_a[-1]['totalcustomerperiods'] = $totalcustomerperiods;
+                $billing_a[-1]['customerperiod'] = $customerPeriod;
+                $billing_a[-1]['engineerperiod'] = $engineerPeriod;
             }
 
-            $tduration += $duration;
-            $totalengineerperiods += sizeof($count['engineer']);
-            $totalcustomerperiods += sizeof($count['customer']);
+            if (!empty($billing['refunds'])) $billing_a[-1]['refunds'] = $billing['refunds']/$customerPeriod; // return refunds as a number of units
 
-            $billing_a[$activity['owner']]['owner'] = $owner;
-            $billing_a[$activity['owner']]['duration'] = $duration;
-            $billing_a[$activity['owner']]['engineerperiods'] = $count['engineer'];
-            $billing_a[$activity['owner']]['customerperiods'] = $count['customer'];
         }
 
-        if (empty($totalengineerperiods)) $totalengineerperiods = 0;
-        if (empty($totalcustomerperiods)) $totalcustomerperiods = 0;
-        if (empty($tduration)) $tduration = 0;
-
-        $billing_a[-1]['totalduration'] = $tduration;
-        $billing_a[-1]['totalengineerperiods'] = $totalengineerperiods;
-        $billing_a[-1]['totalcustomerperiods'] = $totalcustomerperiods;
-        $billing_a[-1]['customerperiod'] = $customerPeriod;
-        $billing_a[-1]['engineerperiod'] = $engineerPeriod;
     }
 
+//echo "<pre>";
+//print_r($billing_a);
+//echo "</pre>";
+
     return $billing_a;
+}
+
+/**
+ *Function to make an array with the number of units at each billable multiplier, broken down by engineer
+ * @author Paul Heaney
+ *
+ */
+function get_incident_billable_breakdown_array($incidentid)
+{
+    $billable = make_incident_billing_array($incidentid, FALSE);
+
+    //echo "<pre>";
+    //print_r($billable);
+    //echo "</pre>";
+
+    if (!empty($billable))
+    {
+
+        foreach ($billable AS $engineer)
+        {
+            if (is_array($engineer) AND empty($engineer['refunds']))
+            {
+                $engineerName = $engineer['owner'];
+                foreach ($engineer['customerperiods'] AS $period)
+                {
+                    // $period is the start time
+                    $day = date('D', $period);
+                    $hour = date('H', $period);
+        
+                    $dayNumber = date('d', $period);
+                    $month = date('n', $period);
+                    $year = date('Y', $period);
+                    // echo "DAY {$day} HOUR {$hour}";
+        
+                    $dayofweek = strtolower($day);
+        
+                    if (is_day_bank_holiday($dayNumber, $month, $year))
+                    {
+                        $dayofweek = "holiday";
+                    }
+        
+                    $multiplier = get_billable_multiplier($dayofweek, $hour, 1); //FIXME make this not hard coded
+        
+                    $billing[$engineerName]['owner'] = $engineerName;
+                    $billing[$engineerName][$multiplier]['multiplier'] = $multiplier;
+                    if (empty($billing[$engineerName][$multiplier]['count']))
+                    {
+                        $billing[$engineerName][$multiplier]['count'] = 0;
+                    }
+        
+                    $billing[$engineerName][$multiplier]['count']++;
+                }
+            }
+        }
+  
+        if (!empty($billable[-1]['refunds'])) $billing['refunds'] = $billable[-1]['refunds'];
+
+    }
+
+    return $billing;
 }
 
 /**
@@ -9521,6 +9652,7 @@ function database_schema_version()
         trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
         $return = FALSE;
     }
+    
     if (mysql_num_rows($result) > 0)
     {
         list($return) = mysql_fetch_row($result);
