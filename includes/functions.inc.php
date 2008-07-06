@@ -3628,6 +3628,7 @@ function licence_type_drop_down($name, $id)
     {
         echo "<option selected='selected' value='0'></option>\n";
     }
+    
     while ($licencetypes = mysql_fetch_array($result))
     {
         echo "<option ";
@@ -3660,8 +3661,8 @@ function countdayincidents($day, $month, $year)
 {
     // Counts the number of incidents opened on a specified day
     global $dbIncidents;
-    $unixstartdate=mktime(0,0,0,$month,$day,$year);
-    $unixenddate=mktime(23,59,59,$month,$day,$year);
+    $unixstartdate = mktime(0,0,0,$month,$day,$year);
+    $unixenddate = mktime(23,59,59,$month,$day,$year);
     $sql = "SELECT count(id) FROM `{$dbIncidents}` ";
     $sql .= "WHERE opened BETWEEN '$unixstartdate' AND '$unixenddate' ";
     $result = mysql_query($sql);
@@ -3678,8 +3679,8 @@ function countdayclosedincidents($day, $month, $year)
 {
     // Counts the number of incidents closed on a specified day
     global $dbIncidents;
-    $unixstartdate=mktime(0,0,0,$month,$day,$year);
-    $unixenddate=mktime(23,59,59,$month,$day,$year);
+    $unixstartdate = mktime(0,0,0,$month,$day,$year);
+    $unixenddate = mktime(23,59,59,$month,$day,$year);
     $sql = "SELECT COUNT(id) FROM `{$dbIncidents}` ";
     $sql .= "WHERE closed BETWEEN '$unixstartdate' AND '$unixenddate' ";
     $result = mysql_query($sql);
@@ -3696,8 +3697,8 @@ function countdaycurrentincidents($day, $month, $year)
 {
     global $dbIncidents;
     // Counts the number of incidents currently open on a specified day
-    $unixstartdate=mktime(0,0,0,$month,$day,$year);
-    $unixenddate=mktime(23,59,59,$month,$day,$year);
+    $unixstartdate = mktime(0,0,0,$month,$day,$year);
+    $unixenddate = mktime(23,59,59,$month,$day,$year);
     $sql = "SELECT COUNT(id) FROM `{$dbIncidents}` ";
     $sql .= "WHERE opened <= '$unixenddate' AND closed >= '$unixstartdate' ";
     $result = mysql_query($sql);
@@ -3734,7 +3735,7 @@ function journal($loglevel, $event, $bodytext, $journaltype, $refid)
     // 4 = Max Debug Logging
 
     $bodytext = mysql_real_escape_string($bodytext);
-    if ($loglevel<=$CONFIG['journal_loglevel'])
+    if ($loglevel <= $CONFIG['journal_loglevel'])
     {
         $sql  = "INSERT INTO `{$dbJournal}` ";
         $sql .= "(userid, event, bodytext, journaltype, refid) ";
@@ -3754,7 +3755,7 @@ function journal($loglevel, $event, $bodytext, $journaltype, $refid)
 // prints the HTML for a checkbox, the 'state' value should be a 1, yes, true or 0, no, false */
 function html_checkbox($name, $state, $return = FALSE)
 {
-    if ($state==1 || $state=='Yes' || $state=='yes' || $state=='true' || $state=='TRUE')
+    if ($state == 1 || $state == 'Yes' || $state == 'yes' || $state == 'true' || $state == 'TRUE')
     {
         $html = "<input type='checkbox' checked='checked' name='{$name}' id='{$name}' value='{$state}' />" ;
     }
@@ -3912,16 +3913,16 @@ function send_email($to, $from, $subject, $body, $replyto='', $cc='', $bcc='')
 */
 function generate_password($length=8)
 {
-$possible = '0123456789'.'abcdefghijkmnpqrstuvwxyz'.'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.'-';
-// $possible = '23456789'.'abcdefghjkmnpqrstuvwxyz'.'ABCDEFGHJKLMNPQRSTUVWXYZ'.'-';
-            // not using 1's 0's etc. to save confusion
-            // '-=!&';
-$str ="";
-while (strlen($str) < $length)
-{
+    $possible = '0123456789'.'abcdefghijkmnpqrstuvwxyz'.'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.'-';
+    // $possible = '23456789'.'abcdefghjkmnpqrstuvwxyz'.'ABCDEFGHJKLMNPQRSTUVWXYZ'.'-';
+                // not using 1's 0's etc. to save confusion
+                // '-=!&';
+    $str ="";
+    while (strlen($str) < $length)
+    {
         $str .= substr($possible, (rand() % strlen($possible)),1);
-}
-return $str;
+    }
+    return $str;
 }
 
 
@@ -4451,224 +4452,224 @@ function country_drop_down($name, $country, $extraattributes='')
     global $CONFIG;
     if ($country == '') $country = $CONFIG['home_country'];
 
-    if ($country=='UK') $country = 'UNITED KINGDOM';
-    $countrylist[]='ALBANIA';
-    $countrylist[]='ALGERIA';
-    $countrylist[]='AMERICAN SAMOA';
-    $countrylist[]='ANDORRA';
-    $countrylist[]='ANGOLA';
-    $countrylist[]='ANGUILLA';
-    $countrylist[]='ANTIGUA';
-    $countrylist[]='ARGENTINA';
-    $countrylist[]='ARMENIA';
-    $countrylist[]='ARUBA';
-    $countrylist[]='AUSTRALIA';
-    $countrylist[]='AUSTRIA';
-    $countrylist[]='AZERBAIJAN';
-    $countrylist[]='BAHAMAS';
-    $countrylist[]='BAHRAIN';
-    $countrylist[]='BANGLADESH';
-    $countrylist[]='BARBADOS';
-    $countrylist[]='BELARUS';
-    $countrylist[]='BELGIUM';
-    $countrylist[]='BELIZE';
-    $countrylist[]='BENIN';
-    $countrylist[]='BERMUDA';
-    $countrylist[]='BHUTAN';
-    $countrylist[]='BOLIVIA';
-    $countrylist[]='BONAIRE';
-    $countrylist[]='BOSNIA HERZEGOVINA';
-    $countrylist[]='BOTSWANA';
-    $countrylist[]='BRAZIL';
-    $countrylist[]='BRUNEI';
-    $countrylist[]='BULGARIA';
-    $countrylist[]='BURKINA FASO';
-    $countrylist[]='BURUNDI';
-    $countrylist[]='CAMBODIA';
-    $countrylist[]='CAMEROON';
-    $countrylist[]='CANADA';
-    $countrylist[]='CANARY ISLANDS';
-    $countrylist[]='CAPE VERDE ISLANDS';
-    $countrylist[]='CAYMAN ISLANDS';
-    $countrylist[]='CENTRAL AFRICAN REPUBLIC';
-    $countrylist[]='CHAD';
-    $countrylist[]='CHANNEL ISLANDS';
-    $countrylist[]='CHILE';
-    $countrylist[]='CHINA';
-    $countrylist[]='COLOMBIA';
-    $countrylist[]='COMOROS ISLANDS';
-    $countrylist[]='CONGO';
-    $countrylist[]='COOK ISLANDS';
-    $countrylist[]='COSTA RICA';
-    $countrylist[]='CROATIA';
-    $countrylist[]='CUBA';
-    $countrylist[]='CURACAO';
-    $countrylist[]='CYPRUS';
-    $countrylist[]='CZECH REPUBLIC';
-    $countrylist[]='DENMARK';
-    $countrylist[]='DJIBOUTI';
-    $countrylist[]='DOMINICA';
-    $countrylist[]='DOMINICAN REPUBLIC';
-    $countrylist[]='ECUADOR';
-    $countrylist[]='EGYPT';
-    $countrylist[]='EL SALVADOR';
-    $countrylist[]='EQUATORIAL GUINEA';
-    $countrylist[]='ERITREA';
-    $countrylist[]='ESTONIA';
-    $countrylist[]='ETHIOPIA';
-    $countrylist[]='FAROE ISLANDS';
-    $countrylist[]='FIJI ISLANDS';
-    $countrylist[]='FINLAND';
-    $countrylist[]='FRANCE';
-    $countrylist[]='FRENCH GUINEA';
-    $countrylist[]='GABON';
-    $countrylist[]='GAMBIA';
-    $countrylist[]='GEORGIA';
-    $countrylist[]='GERMANY';
-    $countrylist[]='GHANA';
-    $countrylist[]='GIBRALTAR';
-    $countrylist[]='GREECE';
-    $countrylist[]='GREENLAND';
-    $countrylist[]='GRENADA';
-    $countrylist[]='GUADELOUPE';
-    $countrylist[]='GUAM';
-    $countrylist[]='GUATEMALA';
-    $countrylist[]='GUINEA REPUBLIC';
-    $countrylist[]='GUINEA-BISSAU';
-    $countrylist[]='GUYANA';
-    $countrylist[]='HAITI';
-    $countrylist[]='HONDURAS REPUBLIC';
-    $countrylist[]='HONG KONG';
-    $countrylist[]='HUNGARY';
-    $countrylist[]='ICELAND';
-    $countrylist[]='INDIA';
-    $countrylist[]='INDONESIA';
-    $countrylist[]='IRAN';
-    $countrylist[]='IRELAND, REPUBLIC';
-    $countrylist[]='ISRAEL';
-    $countrylist[]='ITALY';
-    $countrylist[]='IVORY COAST';
-    $countrylist[]='JAMAICA';
-    $countrylist[]='JAPAN';
-    $countrylist[]='JORDAN';
-    $countrylist[]='KAZAKHSTAN';
-    $countrylist[]='KENYA';
-    $countrylist[]='KIRIBATI, REP OF';
-    $countrylist[]='KOREA, SOUTH';
-    $countrylist[]='KUWAIT';
-    $countrylist[]='KYRGYZSTAN';
-    $countrylist[]='LAOS';
-    $countrylist[]='LATVIA';
-    $countrylist[]='LEBANON';
-    $countrylist[]='LESOTHO';
-    $countrylist[]='LIBERIA';
-    $countrylist[]='LIBYA';
-    $countrylist[]='LIECHTENSTEIN';
-    $countrylist[]='LITHUANIA';
-    $countrylist[]='LUXEMBOURG';
-    $countrylist[]='MACAU';
-    $countrylist[]='MACEDONIA';
-    $countrylist[]='MADAGASCAR';
-    $countrylist[]='MALAWI';
-    $countrylist[]='MALAYSIA';
-    $countrylist[]='MALDIVES';
-    $countrylist[]='MALI';
-    $countrylist[]='MALTA';
-    $countrylist[]='MARSHALL ISLANDS';
-    $countrylist[]='MARTINIQUE';
-    $countrylist[]='MAURITANIA';
-    $countrylist[]='MAURITIUS';
-    $countrylist[]='MEXICO';
-    $countrylist[]='MOLDOVA, REP OF';
-    $countrylist[]='MONACO';
-    $countrylist[]='MONGOLIA';
-    $countrylist[]='MONTSERRAT';
-    $countrylist[]='MOROCCO';
-    $countrylist[]='MOZAMBIQUE';
-    $countrylist[]='MYANMAR';
-    $countrylist[]='NAMIBIA';
-    $countrylist[]='NAURU, REP OF';
-    $countrylist[]='NEPAL';
-    $countrylist[]='NETHERLANDS';
-    $countrylist[]='NEVIS';
-    $countrylist[]='NEW CALEDONIA';
-    $countrylist[]='NEW ZEALAND';
-    $countrylist[]='NICARAGUA';
-    $countrylist[]='NIGER';
-    $countrylist[]='NIGERIA';
-    $countrylist[]='NIUE';
-    $countrylist[]='NORWAY';
-    $countrylist[]='OMAN';
-    $countrylist[]='PAKISTAN';
-    $countrylist[]='PANAMA';
-    $countrylist[]='PAPUA NEW GUINEA';
-    $countrylist[]='PARAGUAY';
-    $countrylist[]='PERU';
-    $countrylist[]='PHILLIPINES';
-    $countrylist[]='POLAND';
-    $countrylist[]='PORTUGAL';
-    $countrylist[]='PUERTO RICO';
-    $countrylist[]='QATAR';
-    $countrylist[]='REUNION ISLAND';
-    $countrylist[]='ROMANIA';
-    $countrylist[]='RUSSIAN FEDERATION';
-    $countrylist[]='RWANDA';
-    $countrylist[]='SAIPAN';
-    $countrylist[]='SAO TOME & PRINCIPE';
-    $countrylist[]='SAUDI ARABIA';
-    $countrylist[]='SENEGAL';
-    $countrylist[]='SEYCHELLES';
-    $countrylist[]='SIERRA LEONE';
-    $countrylist[]='SINGAPORE';
-    $countrylist[]='SLOVAKIA';
-    $countrylist[]='SLOVENIA';
-    $countrylist[]='SOLOMON ISLANDS';
-    $countrylist[]='SOUTH AFRICA';
-    $countrylist[]='SPAIN';
-    $countrylist[]='SRI LANKA';
-    $countrylist[]='ST BARTHELEMY';
-    $countrylist[]='ST EUSTATIUS';
-    $countrylist[]='ST KITTS';
-    $countrylist[]='ST LUCIA';
-    $countrylist[]='ST MAARTEN';
-    $countrylist[]='ST VINCENT';
-    $countrylist[]='SUDAN';
-    $countrylist[]='SURINAME';
-    $countrylist[]='SWAZILAND';
-    $countrylist[]='SWEDEN';
-    $countrylist[]='SWITZERLAND';
-    $countrylist[]='SYRIA';
-    $countrylist[]='TAHITI';
-    $countrylist[]='TAIWAN';
-    $countrylist[]='TAJIKISTAN';
-    $countrylist[]='TANZANIA';
-    $countrylist[]='THAILAND';
-    $countrylist[]='TOGO';
-    $countrylist[]='TONGA';
-    $countrylist[]='TRINIDAD & TOBAGO';
-    $countrylist[]='TURKEY';
-    $countrylist[]='TURKMENISTAN';
-    $countrylist[]='TURKS & CAICOS ISLANDS';
-    $countrylist[]='TUVALU';
-    $countrylist[]='UGANDA';
-    // $countrylist[]='UK';
-    $countrylist[]='UKRAINE';
-    $countrylist[]='UNITED KINGDOM';
-    $countrylist[]='UNITED STATES';
-    $countrylist[]='URUGUAY';
-    $countrylist[]='UTD ARAB EMIRATES';
-    $countrylist[]='UZBEKISTAN';
-    $countrylist[]='VANUATU';
-    $countrylist[]='VENEZUELA';
-    $countrylist[]='VIETNAM';
-    $countrylist[]='VIRGIN ISLANDS';
-    $countrylist[]='VIRGIN ISLANDS (UK)';
-    $countrylist[]='WESTERN SAMOA';
-    $countrylist[]='YEMAN, REP OF';
-    $countrylist[]='YUGOSLAVIA';
-    $countrylist[]='ZAIRE';
-    $countrylist[]='ZAMBIA';
-    $countrylist[]='ZIMBABWE';
+    if ($country == 'UK') $country = 'UNITED KINGDOM';
+    $countrylist[] = 'ALBANIA';
+    $countrylist[] = 'ALGERIA';
+    $countrylist[] = 'AMERICAN SAMOA';
+    $countrylist[] = 'ANDORRA';
+    $countrylist[] = 'ANGOLA';
+    $countrylist[] = 'ANGUILLA';
+    $countrylist[] = 'ANTIGUA';
+    $countrylist[] = 'ARGENTINA';
+    $countrylist[] = 'ARMENIA';
+    $countrylist[] = 'ARUBA';
+    $countrylist[] = 'AUSTRALIA';
+    $countrylist[] = 'AUSTRIA';
+    $countrylist[] = 'AZERBAIJAN';
+    $countrylist[] = 'BAHAMAS';
+    $countrylist[] = 'BAHRAIN';
+    $countrylist[] = 'BANGLADESH';
+    $countrylist[] = 'BARBADOS';
+    $countrylist[] = 'BELARUS';
+    $countrylist[] = 'BELGIUM';
+    $countrylist[] = 'BELIZE';
+    $countrylist[] = 'BENIN';
+    $countrylist[] = 'BERMUDA';
+    $countrylist[] = 'BHUTAN';
+    $countrylist[] = 'BOLIVIA';
+    $countrylist[] = 'BONAIRE';
+    $countrylist[] = 'BOSNIA HERZEGOVINA';
+    $countrylist[] = 'BOTSWANA';
+    $countrylist[] = 'BRAZIL';
+    $countrylist[] = 'BRUNEI';
+    $countrylist[] = 'BULGARIA';
+    $countrylist[] = 'BURKINA FASO';
+    $countrylist[] = 'BURUNDI';
+    $countrylist[] = 'CAMBODIA';
+    $countrylist[] = 'CAMEROON';
+    $countrylist[] = 'CANADA';
+    $countrylist[] = 'CANARY ISLANDS';
+    $countrylist[] = 'CAPE VERDE ISLANDS';
+    $countrylist[] = 'CAYMAN ISLANDS';
+    $countrylist[] = 'CENTRAL AFRICAN REPUBLIC';
+    $countrylist[] = 'CHAD';
+    $countrylist[] = 'CHANNEL ISLANDS';
+    $countrylist[] = 'CHILE';
+    $countrylist[] = 'CHINA';
+    $countrylist[] = 'COLOMBIA';
+    $countrylist[] = 'COMOROS ISLANDS';
+    $countrylist[] = 'CONGO';
+    $countrylist[] = 'COOK ISLANDS';
+    $countrylist[] = 'COSTA RICA';
+    $countrylist[] = 'CROATIA';
+    $countrylist[] = 'CUBA';
+    $countrylist[] = 'CURACAO';
+    $countrylist[] = 'CYPRUS';
+    $countrylist[] = 'CZECH REPUBLIC';
+    $countrylist[] = 'DENMARK';
+    $countrylist[] = 'DJIBOUTI';
+    $countrylist[] = 'DOMINICA';
+    $countrylist[] = 'DOMINICAN REPUBLIC';
+    $countrylist[] = 'ECUADOR';
+    $countrylist[] = 'EGYPT';
+    $countrylist[] = 'EL SALVADOR';
+    $countrylist[] = 'EQUATORIAL GUINEA';
+    $countrylist[] = 'ERITREA';
+    $countrylist[] = 'ESTONIA';
+    $countrylist[] = 'ETHIOPIA';
+    $countrylist[] = 'FAROE ISLANDS';
+    $countrylist[] = 'FIJI ISLANDS';
+    $countrylist[] = 'FINLAND';
+    $countrylist[] = 'FRANCE';
+    $countrylist[] = 'FRENCH GUINEA';
+    $countrylist[] = 'GABON';
+    $countrylist[] = 'GAMBIA';
+    $countrylist[] = 'GEORGIA';
+    $countrylist[] = 'GERMANY';
+    $countrylist[] = 'GHANA';
+    $countrylist[] = 'GIBRALTAR';
+    $countrylist[] = 'GREECE';
+    $countrylist[] = 'GREENLAND';
+    $countrylist[] = 'GRENADA';
+    $countrylist[] = 'GUADELOUPE';
+    $countrylist[] = 'GUAM';
+    $countrylist[] = 'GUATEMALA';
+    $countrylist[] = 'GUINEA REPUBLIC';
+    $countrylist[] = 'GUINEA-BISSAU';
+    $countrylist[] = 'GUYANA';
+    $countrylist[] = 'HAITI';
+    $countrylist[] = 'HONDURAS REPUBLIC';
+    $countrylist[] = 'HONG KONG';
+    $countrylist[] = 'HUNGARY';
+    $countrylist[] = 'ICELAND';
+    $countrylist[] = 'INDIA';
+    $countrylist[] = 'INDONESIA';
+    $countrylist[] = 'IRAN';
+    $countrylist[] = 'IRELAND, REPUBLIC';
+    $countrylist[] = 'ISRAEL';
+    $countrylist[] = 'ITALY';
+    $countrylist[] = 'IVORY COAST';
+    $countrylist[] = 'JAMAICA';
+    $countrylist[] = 'JAPAN';
+    $countrylist[] = 'JORDAN';
+    $countrylist[] = 'KAZAKHSTAN';
+    $countrylist[] = 'KENYA';
+    $countrylist[] = 'KIRIBATI, REP OF';
+    $countrylist[] = 'KOREA, SOUTH';
+    $countrylist[] = 'KUWAIT';
+    $countrylist[] = 'KYRGYZSTAN';
+    $countrylist[] = 'LAOS';
+    $countrylist[] = 'LATVIA';
+    $countrylist[] = 'LEBANON';
+    $countrylist[] = 'LESOTHO';
+    $countrylist[] = 'LIBERIA';
+    $countrylist[] = 'LIBYA';
+    $countrylist[] = 'LIECHTENSTEIN';
+    $countrylist[] = 'LITHUANIA';
+    $countrylist[] = 'LUXEMBOURG';
+    $countrylist[] = 'MACAU';
+    $countrylist[] = 'MACEDONIA';
+    $countrylist[] = 'MADAGASCAR';
+    $countrylist[] = 'MALAWI';
+    $countrylist[] = 'MALAYSIA';
+    $countrylist[] = 'MALDIVES';
+    $countrylist[] = 'MALI';
+    $countrylist[] = 'MALTA';
+    $countrylist[] = 'MARSHALL ISLANDS';
+    $countrylist[] = 'MARTINIQUE';
+    $countrylist[] = 'MAURITANIA';
+    $countrylist[] = 'MAURITIUS';
+    $countrylist[] = 'MEXICO';
+    $countrylist[] = 'MOLDOVA, REP OF';
+    $countrylist[] = 'MONACO';
+    $countrylist[] = 'MONGOLIA';
+    $countrylist[] = 'MONTSERRAT';
+    $countrylist[] = 'MOROCCO';
+    $countrylist[] = 'MOZAMBIQUE';
+    $countrylist[] = 'MYANMAR';
+    $countrylist[] = 'NAMIBIA';
+    $countrylist[] = 'NAURU, REP OF';
+    $countrylist[] = 'NEPAL';
+    $countrylist[] = 'NETHERLANDS';
+    $countrylist[] = 'NEVIS';
+    $countrylist[] = 'NEW CALEDONIA';
+    $countrylist[] = 'NEW ZEALAND';
+    $countrylist[] = 'NICARAGUA';
+    $countrylist[] = 'NIGER';
+    $countrylist[] = 'NIGERIA';
+    $countrylist[] = 'NIUE';
+    $countrylist[] = 'NORWAY';
+    $countrylist[] = 'OMAN';
+    $countrylist[] = 'PAKISTAN';
+    $countrylist[] = 'PANAMA';
+    $countrylist[] = 'PAPUA NEW GUINEA';
+    $countrylist[] = 'PARAGUAY';
+    $countrylist[] = 'PERU';
+    $countrylist[] = 'PHILLIPINES';
+    $countrylist[] = 'POLAND';
+    $countrylist[] = 'PORTUGAL';
+    $countrylist[] = 'PUERTO RICO';
+    $countrylist[] = 'QATAR';
+    $countrylist[] = 'REUNION ISLAND';
+    $countrylist[] = 'ROMANIA';
+    $countrylist[] = 'RUSSIAN FEDERATION';
+    $countrylist[] = 'RWANDA';
+    $countrylist[] = 'SAIPAN';
+    $countrylist[] = 'SAO TOME & PRINCIPE';
+    $countrylist[] = 'SAUDI ARABIA';
+    $countrylist[] = 'SENEGAL';
+    $countrylist[] = 'SEYCHELLES';
+    $countrylist[] = 'SIERRA LEONE';
+    $countrylist[] = 'SINGAPORE';
+    $countrylist[] = 'SLOVAKIA';
+    $countrylist[] = 'SLOVENIA';
+    $countrylist[] = 'SOLOMON ISLANDS';
+    $countrylist[] = 'SOUTH AFRICA';
+    $countrylist[] = 'SPAIN';
+    $countrylist[] = 'SRI LANKA';
+    $countrylist[] = 'ST BARTHELEMY';
+    $countrylist[] = 'ST EUSTATIUS';
+    $countrylist[] = 'ST KITTS';
+    $countrylist[] = 'ST LUCIA';
+    $countrylist[] = 'ST MAARTEN';
+    $countrylist[] = 'ST VINCENT';
+    $countrylist[] = 'SUDAN';
+    $countrylist[] = 'SURINAME';
+    $countrylist[] = 'SWAZILAND';
+    $countrylist[] = 'SWEDEN';
+    $countrylist[] = 'SWITZERLAND';
+    $countrylist[] = 'SYRIA';
+    $countrylist[] = 'TAHITI';
+    $countrylist[] = 'TAIWAN';
+    $countrylist[] = 'TAJIKISTAN';
+    $countrylist[] = 'TANZANIA';
+    $countrylist[] = 'THAILAND';
+    $countrylist[] = 'TOGO';
+    $countrylist[] = 'TONGA';
+    $countrylist[] = 'TRINIDAD & TOBAGO';
+    $countrylist[] = 'TURKEY';
+    $countrylist[] = 'TURKMENISTAN';
+    $countrylist[] = 'TURKS & CAICOS ISLANDS';
+    $countrylist[] = 'TUVALU';
+    $countrylist[] = 'UGANDA';
+    // $countrylist[] = 'UK';
+    $countrylist[] = 'UKRAINE';
+    $countrylist[] = 'UNITED KINGDOM';
+    $countrylist[] = 'UNITED STATES';
+    $countrylist[] = 'URUGUAY';
+    $countrylist[] = 'UTD ARAB EMIRATES';
+    $countrylist[] = 'UZBEKISTAN';
+    $countrylist[] = 'VANUATU';
+    $countrylist[] = 'VENEZUELA';
+    $countrylist[] = 'VIETNAM';
+    $countrylist[] = 'VIRGIN ISLANDS';
+    $countrylist[] = 'VIRGIN ISLANDS (UK)';
+    $countrylist[] = 'WESTERN SAMOA';
+    $countrylist[] = 'YEMAN, REP OF';
+    $countrylist[] = 'YUGOSLAVIA';
+    $countrylist[] = 'ZAIRE';
+    $countrylist[] = 'ZAMBIA';
+    $countrylist[] = 'ZIMBABWE';
 
     if (in_array(strtoupper($country), $countrylist))
     {
@@ -4678,7 +4679,7 @@ function country_drop_down($name, $country, $extraattributes='')
         {
             $value = htmlspecialchars($value);
             $html .= "<option value='$value'";
-            if ($value==strtoupper($country))
+            if ($value == strtoupper($country))
             {
                 $html .= " selected='selected'";
             }
@@ -4733,13 +4734,13 @@ function incident_get_next_target($incidentid)
 
         switch ($upd->sla)
         {
-            case 'opened': $target->type='initialresponse'; break;
-            case 'initialresponse': $target->type='probdef'; break;
-            case 'probdef': $target->type='actionplan'; break;
-            case 'actionplan': $target->type='solution'; break;
+            case 'opened': $target->type = 'initialresponse'; break;
+            case 'initialresponse': $target->type = 'probdef'; break;
+            case 'probdef': $target->type = 'actionplan'; break;
+            case 'actionplan': $target->type = 'solution'; break;
             // case 'solution': $target->type='closed'; break;
-            case 'solution': $target->type='probdef'; break;
-            case 'closed': $target->type='opened'; break;
+            case 'solution': $target->type = 'probdef'; break;
+            case 'closed': $target->type = 'opened'; break;
         }
 
         $target->since = calculate_incident_working_time($incidentid,$upd->timestamp,$now);
@@ -4860,7 +4861,7 @@ function mysql2date($mysqldate)
         return 0;
     }
 
-    if ($mysqldate=='0000-00-00 00:00:00' OR $mysqldate=='0000-00-00')
+    if ($mysqldate == '0000-00-00 00:00:00' OR $mysqldate == '0000-00-00')
     {
         return 0;
     }
@@ -4923,11 +4924,11 @@ function mysqlts2date($mysqldate)
 
 function iso_8601_date($timestamp)
 {
-$date_mod = date('Y-m-d\TH:i:s', $timestamp);
-$pre_timezone = date('O', $timestamp);
-$time_zone = substr($pre_timezone, 0, 3).":".substr($pre_timezone, 3, 2);
-$date_mod .= $time_zone;
-return $date_mod;
+    $date_mod = date('Y-m-d\TH:i:s', $timestamp);
+    $pre_timezone = date('O', $timestamp);
+    $time_zone = substr($pre_timezone, 0, 3).":".substr($pre_timezone, 3, 2);
+    $date_mod .= $time_zone;
+    return $date_mod;
 }
 
 /**
@@ -5471,7 +5472,7 @@ function software_backup_dropdown($name, $userid, $softwareid, $backupid)
     $sql .= " ORDER BY realname";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
-    $countsw=mysql_num_rows($result);
+    $countsw = mysql_num_rows($result);
     if ($countsw >= 1)
     {
         $html = "<select name='$name'>\n";
@@ -5481,7 +5482,7 @@ function software_backup_dropdown($name, $userid, $softwareid, $backupid)
         while ($user = mysql_fetch_object($result))
         {
             $html .= "<option value='{$user->userid}'";
-            if ($user->userid==$backupid) $html .= " selected='selected'";
+            if ($user->userid == $backupid) $html .= " selected='selected'";
             $html .= ">{$user->realname}</option>\n";
         }
         $html .= "</select>\n";
@@ -5501,16 +5502,16 @@ function software_backup_dropdown($name, $userid, $softwareid, $backupid)
 function software_backup_userid($userid, $softwareid)
 {
     global $dbUserSoftware;
-    $backupid=0; // default
+    $backupid = 0; // default
     // Find out who is the substitute for this user/skill
     $sql = "SELECT backupid FROM `{$dbUserSoftware}` WHERE userid = '$userid' AND softwareid = '$softwareid'";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     list($backupid) = mysql_fetch_row($result);
-    $backup1=$backupid;
+    $backup1 = $backupid;
 
     // If that substitute is not accepting then try and find another
-    if (empty($backupid) OR user_accepting($backupid)!='Yes')
+    if (empty($backupid) OR user_accepting($backupid) != 'Yes')
     {
         $sql = "SELECT backupid FROM `{$dbUserSoftware}` WHERE userid='$backupid' AND userid!='$userid' ";
         $sql .= "AND softwareid='$softwareid' AND backupid!='$backup1'";
@@ -5597,8 +5598,8 @@ function incident_backup_switchover($userid, $accepting)
                 $userstatus = $user['statusname'];
                 //$usermessage=user_message($userid);
                 $usermessage = $user['message'];
-                $bodytext="Previous Incident Owner ({$username}) {$userstatus}  {$usermessage}";
-                $assigntype='tempassigning';
+                $bodytext = "Previous Incident Owner ({$username}) {$userstatus}  {$usermessage}";
+                $assigntype = 'tempassigning';
                 $risql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, bodytext, type, timestamp, currentowner, currentstatus) ";
                 $risql .= "VALUES ('{$incident->id}', '0', '$bodytext', '$assigntype', '$now', ";
                 $risql .= "'{$backupid}', ";
@@ -5640,7 +5641,7 @@ function incident_backup_switchover($userid, $accepting)
         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
         while ($assign = mysql_fetch_object($result))
         {
-            if ($assign->assigned=='yes')
+            if ($assign->assigned == 'yes')
             {
                 // Incident has actually been reassigned, so have a look if we can grab it back.
                 $lsql = "SELECT id,status FROM `{$dbIncidents}` WHERE id='{$assign->incidentid}' AND owner='{$assign->originalowner}' AND towner!=''";
@@ -5669,13 +5670,13 @@ function incident_backup_switchover($userid, $accepting)
                         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
                         // add update
-                        $username=user_realname($userid);
+                        $username = user_realname($userid);
                         //$userstatus = userstatus_name(user_status($userid));
                         $userstatus = $user['statusname'];
                         //$usermessage=user_message($userid);
                         $usermessage = $user['message'];
-                        $bodytext="Reassigning to original owner {$username} ({$userstatus})";
-                        $assigntype='reassigning';
+                        $bodytext = "Reassigning to original owner {$username} ({$userstatus})";
+                        $assigntype = 'reassigning';
                         $risql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, bodytext, type, timestamp, currentowner, currentstatus) ";
                         $risql .= "VALUES ('{$incident->id}', '0', '$bodytext', '$assigntype', '$now', ";
                         $risql .= "'{$backupid}', ";
