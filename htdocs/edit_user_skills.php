@@ -128,6 +128,7 @@ else
         {
             $checksql = "SELECT userid FROM `{$dbUserSoftware}` WHERE userid='{$_POST['userid']}' AND softwareid='$value' LIMIT 1";
             $checkresult=mysql_query($checksql);
+            if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
             if (mysql_num_rows($checkresult)< 1)
             {
                 $sql = "INSERT DELAYED INTO `{$dbUserSoftware}` (userid, softwareid) VALUES ('{$_POST['userid']}', '$value')";
@@ -162,7 +163,7 @@ else
     // Have a look to see if any of the software we support is lacking a backup/substitute engineer
     $sql = "SELECT userid FROM `{$dbUserSoftware}` WHERE userid='{$_POST['userid']}' AND backupid='0' LIMIT 1";
     $result=mysql_query($sql);
-    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
     $lacking=mysql_num_rows($result);
     if ($lacking >= 1)
     {

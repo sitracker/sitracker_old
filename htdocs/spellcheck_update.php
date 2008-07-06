@@ -39,7 +39,7 @@ if (!isset($spellid))
     if (!isset($updateid)) throw_error('!Error no updateid or spellid', '');
     $sql = "SELECT bodytext FROM `{$dbUpdates}` WHERE id='$updateid'";
     $result=mysql_query($sql);
-    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
     list($bodytext) = mysql_fetch_row($result);
     $isql = "INSERT INTO `{$dbSpellCheck}` (updateid, bodytext) VALUES ('$updateid', '".mysql_real_escape_string($bodytext)."')";
     $result=mysql_query($isql);
@@ -52,7 +52,7 @@ else
     $sql = "SELECT updateid, bodytext FROM `{$dbSpellCheck}` WHERE id='$spellid'";
     $result=mysql_query($sql);
     list($updateid, $bodytext) = mysql_fetch_row($result);
-    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
 }
 
 if (isset($changepos) && $changepos>0)

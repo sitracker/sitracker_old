@@ -126,7 +126,7 @@ function saction_TimeCalc()
             $sql = "SELECT tag FROM `{$dbServiceLevels}` s, `{$dbMaintenance}` m ";
             $sql .= "WHERE m.id = '{$incident['maintenanceid']}' AND s.id = m.servicelevelid";
             $result = mysql_query($sql);
-            if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+            if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
             $t = mysql_fetch_row($sql);
             $tag = $t[0];
             mysql_free_result($result);
@@ -548,11 +548,11 @@ function saction_PurgeExpiredFTPItems()
     if (mysql_numrows($result) > 0)
     {
         $connection = create_ftp_connection();
-    
+
         while ($obj = mysql_fetch_object($result))
         {
             $success &= ftp_delete($connection, $obj->path."/".$obj->filename);
-            
+
             $sqlDel = "DELETE FROM `{$dbFiles}` WHERE id = {$obj->id}";
             $resultdel = mysql_query($sqlDel);
             if (mysql_error())
@@ -561,7 +561,7 @@ function saction_PurgeExpiredFTPItems()
                 $success = FALSE;
             }
         }
-        
+
         ftp_close($connection);
     }
     return $success;

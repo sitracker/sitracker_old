@@ -51,7 +51,7 @@ if (empty($_REQUEST['mode']))
     echo "<tr><td align='center' colspan='2'>";
     $sql = "SELECT * FROM `{$dbUsers}` WHERE status > 0 ORDER BY username";
     $result = mysql_query($sql);
-    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
     echo "<select name='inc[]' multiple='multiple' size='20'>";
     while ($row = mysql_fetch_object($result))
     {
@@ -134,7 +134,7 @@ elseif ($_REQUEST['statistics'] == 'on')
     //echo $sql;
 
     $result = mysql_query($sql);
-    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
     $numrows = mysql_num_rows($result);
 
     $totalOpened = 0;
@@ -167,7 +167,7 @@ elseif ($_REQUEST['statistics'] == 'on')
     //echo $sql;
 
     $result = mysql_query($sql);
-    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
     $numrows = mysql_num_rows($result);
 
     $totalClosed = 0;
@@ -209,7 +209,7 @@ elseif ($_REQUEST['statistics'] == 'on')
     $sql .= " GROUP BY u.id ";
 
     $result = mysql_query($sql);
-    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
     $numrows = mysql_num_rows($result);
 
     $totalEscalated = 0;
@@ -379,7 +379,7 @@ elseif ($_REQUEST['mode'] == 'report')
     $sql .= " ORDER BY realname, i.id ASC ";
 
     $result = mysql_query($sql);
-    if (mysql_error()) trigger_error("MySQL Query Error: $sql ".mysql_error(), E_USER_ERROR);
+    if (mysql_error()) trigger_error("MySQL Query Error: $sql ".mysql_error(), E_USER_WARNING);
     $numrows = mysql_num_rows($result);
 
     // FIXME this SQL use the incident body to determine whether it's been escalated

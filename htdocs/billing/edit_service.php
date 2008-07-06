@@ -40,10 +40,10 @@ switch ($mode)
         {
             $sql = "SELECT * FROM `{$dbService}` WHERE serviceid = {$serviceid}";
             $result = mysql_query($sql);
-            if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
-            
+            if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+
             include ('htmlheader.inc.php');
-            
+
             if (mysql_numrows($result) != 1)
             {
                 echo "<h2>No service with ID {$servicid} found</h2>";
@@ -51,17 +51,17 @@ switch ($mode)
             else
             {
                 $obj = mysql_fetch_object($result);
-                
+
                 echo "<h5>".sprintf($strMandatoryMarked, "<sup class='red'>*</sup>")."</h5>";
                 echo "<form name='serviceform' action='{$_SERVER['PHP_SELF']}' method='post' onsubmit='return confirm_submit(\"{$strAreYouSureMakeTheseChanges}\");'>";
                 echo "<table align='center' class='vertical'>";
-            
+
                 echo "<tr><th>{$strStartDate}</th>";
                 echo "<td><input type='text' name='startdate' id='startdate' size='10'";
                 echo "value='{$obj->startdate}' />";
                 echo date_picker('serviceform.startdate');
                 echo "</td></tr>";
-            
+
                 echo "<tr><th>{$strEndDate}<sup class='red'>*</sup></th>";
                 echo "<td><input type='text' name='enddate' id='enddate' size='10'";
                 echo "value='{$obj->enddate}' />";
@@ -72,10 +72,10 @@ switch ($mode)
                     echo "checked='checked' ";
                 }
                 echo "onclick=\"$('enddate').value='';\" /> {$strUnlimited}</td></tr>\n";
-            
+
                 echo "<tr><th>{$strNotes}</th><td>";
                 echo "<textarea rows='5' cols='20' name='notes'>{$obj->notes}</textarea></td></tr>";
-            
+
                 if ($obj->balance == $obj->creditamount)
                 {
                     echo "<input type='hidden' name='editbilling' id='editbilling' value='true' />";
@@ -89,21 +89,21 @@ switch ($mode)
                     echo "<input type='checkbox' id='billperincident' name='billperincident' value='yes' onchange=\"addservice_showbilling();\" /> ";
                     echo "{$strPerIncident}</label>";
                     echo "</td></tr>\n";
-                
+
                     echo "<tbody id='billingsection' style='display:none'>"; //FIXME not XHTML
-                
+
                     echo "<tr><th>{$strCreditAmount}</th>";
                     echo "<td>{$CONFIG['currency_symbol']} <input type='text' name='amount' size='5' value='{$obj->creditamount}' />";
                     echo "</td></tr>";
-                
+
                     echo "<tr id='unitratesection' style='display:none'><th>{$strUnitRate}</th>";
                     echo "<td>{$CONFIG['currency_symbol']} <input type='text' name='unitrate' size='5' value='{$obj->unitrate}' />";
                     echo "</td></tr>";
-                
+
                     echo "<tr id='incidentratesection' style='display:none'><th>{$strIncidentRate}</th>";
                     echo "<td>{$CONFIG['currency_symbol']} <input type='text' name='incidentrate' size='5' value='{$obj->incidentrate}' />";
                     echo "</td></tr>";
-                
+
                     echo "</tbody>"; //FIXME not XHTML
                 }
                 else
@@ -115,19 +115,19 @@ switch ($mode)
             //     echo "<tr><th>{$strDailyRate}</th>";
             //     echo "<td>{$CONFIG['currency_symbol']} <input type='text' name='dailyrate' size='5' />";
             //     echo "</td></tr>";
-            
+
                 echo "</table>\n\n";
                 echo "<input type='hidden' name='contractid' value='{$contractid}' />";
                 echo "<p><input name='submit' type='submit' value=\"{$strUpdate}\" /></p>";
                 echo "<input type='hidden' name='serviceid' id='serviceid' value='{$serviceid}' />";
                 echo "<input type='hidden' name='mode' id='mode' value='doupdate' />";
                 echo "</form>\n";
-            
+
                 echo "<p align='center'><a href='../contract_details.php?id={$contractid}'>{$strReturnWithoutSaving}</a></p>";
             }
             include ('htmlfooter.inc.php');
         }
-        
+
         break;
     case 'doupdate':
         $sucess = true;
@@ -139,7 +139,7 @@ switch ($mode)
         else
         {
             $originalcredit = cleanvar($_REQUEST['originalcredit']);
-            
+
             $startdate = strtotime($_REQUEST['startdate']);
             if ($startdate > 0) $startdate = date('Y-m-d',$startdate);
             else $startdate = date('Y-m-d',$now);
@@ -150,7 +150,7 @@ switch ($mode)
             $notes = cleanvar($_REQUEST['notes']);
 
             $editbilling = cleanvar($_REQUEST['editbilling']);
-            
+
             if ($editbilling == "true")
             {
                 $amount =  cleanvar($_POST['amount']);
@@ -159,39 +159,39 @@ switch ($mode)
                 if ($unitrate == '') $unitrate = 0;
                 $incidentrate =  cleanvar($_POST['incidentrate']);
                 if ($incidentrate == '') $incidentrate = 0;
-                
+
                 $updateBillingSQL = ", creditamount = '{$amount}', balance = '{$amount}', unitrate = '{$unitrate}', incidentrate = '{$incidentrate}' ";
             }
-        
+
             if ($amount != $originalcredit)
             {
                 $adjust = $amount - $originalcredit;
-                
+
                 update_contract_balance($contractid, "Credit adjusted to", $adjust, $serviceid);
             }
 
             $sql = "UPDATE `{$dbService}` SET startdate = '{$startdate}', enddate = '{$enddate}' {$updateBillingSQL}";
             $sql .= ", notes = '{$notes}' WHERE serviceid = {$serviceid}";
             echo $sql;
-            
+
             mysql_query($sql);
             if (mysql_error())
             {
                 trigger_error(mysql_error(),E_USER_ERROR);
                 $sucess = false;
             }
-            
+
             if (mysql_affected_rows() < 1)
             {
                 trigger_error("Insert failed",E_USER_ERROR);
                 $sucess = false;
             }
-        
+
             $sql = "SELECT expirydate FROM `{$dbMaintenance}` WHERE id = {$contractid}";
 
             $result = mysql_query($sql);
-            if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
-            
+            if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+
             if (mysql_num_rows($result) > 0)
             {
                 $obj = mysql_fetch_object($result);
@@ -206,7 +206,7 @@ switch ($mode)
                         trigger_error(mysql_error(),E_USER_ERROR);
                         $sucess = false;
                     }
-                    
+
                     if (mysql_affected_rows() < 1)
                     {
                         trigger_error("Expiry of contract update failed",E_USER_ERROR);
@@ -214,7 +214,7 @@ switch ($mode)
                     }
                 }
             }
-            
+
             if ($sucess)
             {
                 html_redirect("{$CONFIG['application_webpath']}contract_details.php?id={$contractid}", TRUE, 'Sucessfully udpated');
@@ -224,7 +224,7 @@ switch ($mode)
                 html_redirect("{$CONFIG['application_webpath']}contract_details.php?id={$contractid}", FALSE, 'NOT udpated');
             }
 
-            
+
         }
         break;
     case 'showform':
@@ -238,9 +238,9 @@ switch ($mode)
         {
             include ('htmlheader.inc.php');
             echo "<h2>One time balance editor</h2>";
-            
+
             echo "<form name='serviceform' action='{$_SERVER['PHP_SELF']}' method='post' onsubmit='return confirm_submit(\"{$strAreYouSureMakeTheseChanges}\");'>";
-    
+
             echo "<table align='center' class='vertical'>";
             echo "<tr><th>{$strEdit}</th><td>{$sourceservice}</td></tr>";
             echo "<tr><th></th><td>";
@@ -249,36 +249,36 @@ switch ($mode)
             echo "</td></tr>";
             echo "<tbody  style='display:none' id='transfersection' ><tr><th>Destination Account:</th>";
             echo "<td>";
-            
-            
+
+
             // Only allow transfers on the same contractid
             $sql = "SELECT * FROM `{$dbService}` WHERE contractid = '{$contractid}'";
             $result = mysql_query($sql);
-            if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
-            
+            if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+
             if (mysql_numrows($result) > 0)
             {
                 echo "<select name='destinationservice'>\n";
-                
+
                 while ($obj = mysql_fetch_object($result))
                 {
                     echo "<option value='{$obj->serviceid}'>{$obj->serviceid} - {$obj->enddate} {$CONFIG['currency_symbol']}{$obj->balance}</option>\n";
                 }
-                
+
                 echo "</select>\n";
             }
-            
+
             echo "</td></tr></tbody>\n";
-            
+
             echo "<tr><th>{$strAmount}</th><td><input type='textbox' name='amount' id='amount' /></td></tr>";
             echo "<tr><th>{$strReason}</th><td><input type='textbox' name='reason' id='reason' /></td></tr>";
-            
+
             echo "</table>";
             echo "<p align='center'><input type='submit' name='runreport' value='Do' /></p>";
-        
+
             echo "<input type='hidden' name='sourceservice' value='{$sourceservice}' />";
             echo "<input type='hidden' name='contractid' value='{$contractid}' />";
-        
+
             echo "</form>";
         }
         include ('htmlfooter.inc.php');
@@ -318,10 +318,10 @@ switch ($mode)
                 if ($status) html_redirect("{$CONFIG['application_webpath']}contract_details.php?id={$contractid}", TRUE, 'Transfer sucessful');
                 else html_redirect("{$CONFIG['application_webpath']}contract_details.php?id={$contractid}", FALSE, 'Transfer failed');
             }
-            html_redirect('main.php', FALSE, 'Transfer failed');            
+            html_redirect('main.php', FALSE, 'Transfer failed');
         }
         break;
-    
+
 }
 
 ?>

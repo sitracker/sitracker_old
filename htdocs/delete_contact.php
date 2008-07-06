@@ -45,7 +45,7 @@ if (empty($process))
         echo "<h2>Delete Contact</h2>\n";
         $sql="SELECT * FROM `{$dbContacts}` WHERE id='$id' ";
         $contactresult = mysql_query($sql);
-        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
         while ($contactrow=mysql_fetch_array($contactresult))
         {
             ?>
@@ -70,7 +70,7 @@ if (empty($process))
         $sql .= "FROM `{$dbSupportContacts}` AS sc, `{$dbMaintenance}` AS m, `{$dbProducts}` AS p ";
         $sql .= "WHERE sc.maintenanceid = m.id AND m.product = p.id AND sc.contactid = '$id' ";
         $result=mysql_query($sql);
-        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
         $totalcontracts=mysql_num_rows($result);
         if ($totalcontracts>0)
         {

@@ -111,7 +111,7 @@ switch ($_REQUEST['action'])
 
         $sql = "SELECT * FROM `{$dbFeedbackForms}` WHERE id = '$formid'";
         $result = mysql_query($sql);
-        if (mysql_error()) trigger_error ("MySQL Error: ".mysql_error(), E_USER_ERROR);
+        if (mysql_error()) trigger_error ("MySQL Error: ".mysql_error(), E_USER_WARNING);
         if (mysql_num_rows($result) >= 1)
         {
             while ($form = mysql_fetch_object($result))

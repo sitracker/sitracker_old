@@ -86,7 +86,7 @@ echo "<table align='center' width='450'>\n";
 echo "<tr><th colspan='4' class='subhead'>{$strHolidayList}</th></tr>\n";
 $sql = "SELECT * FROM `{$dbHolidays}` WHERE userid='{$user}' AND approved=0 ORDER BY startdate ASC";
 $result = mysql_query($sql);
-if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
 $numwaiting = mysql_num_rows($result);
 if ($numwaiting > 0)
 {
@@ -143,10 +143,11 @@ $totaltaken = 0;
 
 foreach ($holidaytype AS $htypeid => $htype)
 {
-    $sql = "SELECT *, from_unixtime(startdate) AS start FROM `{$dbHolidays}` WHERE userid='{$user}' AND type={$htypeid} ";
+    $sql = "SELECT *, from_unixtime(startdate) AS start FROM `{$dbHolidays}` ";
+    $sql .= "WHERE userid='{$user}' AND type={$htypeid} ";
     $sql.= "AND (approved=1 OR (approved=11 AND startdate >= $now)) ORDER BY startdate ASC ";
     $result = mysql_query($sql);
-    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
     $numtaken = mysql_num_rows($result);
     $totaltaken += $numtaken;
     if ($numtaken > 0)
@@ -181,7 +182,7 @@ if ($user==$sit[2])
     // Only show when viewing your own holiday page
     $sql  = "SELECT * FROM `{$dbUsers}` WHERE status!=0 AND status!=1 ";  // status=0 means left company
     $result = mysql_query($sql);
-    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
     echo "<table align='center' width='450'>";
     echo "<tr><th align='right'>{$strWhosAwayToday}</th></tr>\n";
     if (mysql_num_rows($result) >=1)

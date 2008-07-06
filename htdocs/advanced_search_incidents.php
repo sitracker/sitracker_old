@@ -158,7 +158,7 @@ else
 
         $sql .= "LIMIT {$maxresults}";
         $result = mysql_query($sql);
-        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
 
         $countresults=  mysql_num_rows($result);
         if ($countresults == 0)

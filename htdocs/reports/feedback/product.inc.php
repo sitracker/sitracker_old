@@ -8,7 +8,7 @@ echo "incidents logged by the user(s) shown:</p>";
 
 $qsql = "SELECT * FROM `{$dbFeedbackQuestions}` WHERE formid='{$formid}' AND type='rating' ORDER BY taborder";
 $qresult = mysql_query($qsql);
-if (mysql_error()) trigger_error(mysql_error(), E_USER_ERROR);
+if (mysql_error()) trigger_error(mysql_error(), E_USER_WARNING);
 while ($qrow = mysql_fetch_object($qresult))
 {
     $q[$qrow->taborder] = $qrow;
@@ -33,7 +33,7 @@ if (!empty($startdate))
     {
         $msql .= "AND i.closed >= '{$startdate}' ";
     }
-    
+
     //echo "DATES {$dates}";
 }
 
@@ -53,7 +53,7 @@ if (!empty($enddate))
 $msql .= "ORDER BY p.name, i.id ASC \n";
 
 $mresult = mysql_query($msql);
-if (mysql_error()) trigger_error(mysql_error(), E_USER_ERROR);
+if (mysql_error()) trigger_error(mysql_error(), E_USER_WARNING);
 
 if (mysql_num_rows($mresult) >= 1)
 {
@@ -149,7 +149,7 @@ if (mysql_num_rows($mresult) >= 1)
     $qresult = mysql_query($qsql);
     ## echo "$qsql";
 
-    if (mysql_error()) trigger_error(mysql_error(), E_USER_ERROR);
+    if (mysql_error()) trigger_error(mysql_error(), E_USER_WARNING);
     while ($qrow = mysql_fetch_object($qresult))
     {
         $numquestions++;
@@ -160,7 +160,7 @@ if (mysql_num_rows($mresult) >= 1)
         $sql .= "AND fr.id = r.respondentid ";
         $sql .= "AND r.questionid = '$qrow->id' ";
         $sql .= "AND fr.id = '$mrow->reportid' ";
-        
+
         if (!empty($startdate))
         {
             if ($dates == 'feedbackin')
@@ -171,10 +171,10 @@ if (mysql_num_rows($mresult) >= 1)
             {
                 $sql .= "AND i.closed >= '{$startdate}' ";
             }
-            
+
             //echo "DATES {$dates}";
         }
-        
+
         if (!empty($enddate))
         {
             if ($dates == 'feedbackin')
@@ -186,12 +186,12 @@ if (mysql_num_rows($mresult) >= 1)
                 $sql .= "AND i.closed <= '{$enddate}' ";
             }
         }
-        
+
         $sql .= "ORDER BY i.contact, i.id";
         // echo "==== $sql ====";
         $result = mysql_query($sql);
 
-        if (mysql_error()) trigger_error(mysql_error(), E_USER_ERROR);
+        if (mysql_error()) trigger_error(mysql_error(), E_USER_WARNING);
         $numresults=0;
         $cumul=0;
         $percent=0;

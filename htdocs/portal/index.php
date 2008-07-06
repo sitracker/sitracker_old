@@ -24,7 +24,7 @@ function portal_incident_table($sql)
 {
     global $CONFIG;
     $result = mysql_query($sql);
-    if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     $numincidents = mysql_num_rows($result);
 
     if ($numincidents >= 1)

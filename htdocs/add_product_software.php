@@ -52,7 +52,7 @@ if (empty($action) OR $action == "showform")
     {
         $sql = "SELECT name FROM `{$dbProducts}` WHERE id='$productid' ";
         $result = mysql_query($sql);
-        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
 
         list($product) = mysql_fetch_row($result);
         echo "<h3>{$strProduct}: $product</h3>";
@@ -95,7 +95,7 @@ elseif ($action == "add")
         // First have a look if we already have this link
         $sql = "SELECT productid FROM `{$dbSoftwareProducts}` WHERE productid='$productid' AND softwareid='$softwareid'";
         $result = mysql_query($sql);
-        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
         if (mysql_num_rows($result) >= 1)
         {
             html_redirect("add_product_software.php?productid={$productid}&return=$return", FALSE, $strAvoidDupes);

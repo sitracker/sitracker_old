@@ -52,7 +52,7 @@ else
     $usersql = "SELECT forenames, surname FROM `{$dbContacts}` WHERE id={$_SESSION['contactid']}";
     $result = mysql_query($usersql);
     $user = mysql_fetch_object($result);
-    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
 
     $forenames = cleanvar($user->forenames);
     $surname = $user->surname;

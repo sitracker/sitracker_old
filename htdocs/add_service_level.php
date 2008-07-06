@@ -113,7 +113,7 @@ elseif ($action == "edit")
     // Find highest ID number used, and set the new ID to be one more
     $sql = "SELECT id FROM `{$dbServiceLevels}` ORDER BY id DESC LIMIT 1";
     $result = mysql_query($sql);
-    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
     list($newslid) = mysql_fetch_row($result);
     $newslid++;
 

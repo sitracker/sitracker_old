@@ -60,7 +60,7 @@ $sql .= " AND u.currentstatus = is.id ";
 $sql .= " ORDER BY timestamp ASC";
 
 $result = mysql_query($sql);
-if (mysql_error()) trigger_error(mysql_error(), E_USER_ERROR);
+if (mysql_error()) trigger_error(mysql_error(), E_USER_WARNING);
 
 if (mysql_num_rows($result) > 0)
 {

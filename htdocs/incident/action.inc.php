@@ -152,7 +152,7 @@ if (!isset($_SESSION[$incidentid.'cs']))
     $sql .= "WHERE (m.id='{$incident->maintenanceid}' AND m.product = p.id) ";
 
     $result = mysql_query($sql);
-    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
     $vendor = mysql_fetch_object($result) ;
 
     if ($vendor->vendorid == 2)

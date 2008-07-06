@@ -20,6 +20,7 @@ function get_globalsignature($sig_id)
 {
     $sql = "SELECT signature FROM `{$dbEmailsig}` WHERE id = $sig_id";
     $result=mysql_query($sql);
+    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
     list($signature)=mysql_fetch_row($result);
     mysql_free_result($result);
     return $signature;

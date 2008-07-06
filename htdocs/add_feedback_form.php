@@ -37,7 +37,7 @@ switch ($action)
         $sql .= "'{$thanks}') ";
         mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-        $formid=mysql_insert_id();
+        $formid = mysql_insert_id();
         header("Location: add_feedback_question.php?fid=1&id=1&maxq={$numquestions}");
         exit;
     break;

@@ -23,7 +23,7 @@ if ($mode != 'incident') echo "<div style='width: 90%; margin-left: auto; margin
 
 $sql = "SELECT * FROM `{$dbTasks}` WHERE id='{$taskid}'";
 $result = mysql_query($sql);
-if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 if (mysql_num_rows($result) >= 1)
 {
     $task = mysql_fetch_object($result);

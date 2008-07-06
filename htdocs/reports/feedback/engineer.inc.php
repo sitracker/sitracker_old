@@ -24,7 +24,7 @@ $usql = "SELECT * FROM `{$dbUsers}` WHERE status > 0 ";
 if ($_REQUEST['userid'] > 0) $usql .= "AND id='".mysql_real_escape_string($_REQUEST['userid'])."' ";
 else $usql .= "ORDER BY username";
 $uresult = mysql_query($usql);
-if (mysql_error()) trigger_error(mysql_error(), E_USER_ERROR);
+if (mysql_error()) trigger_error(mysql_error(), E_USER_WARNING);
 if (mysql_num_rows($uresult) >= 1)
 {
     while ($user = mysql_fetch_object($uresult))
@@ -34,7 +34,7 @@ if (mysql_num_rows($uresult) >= 1)
         $html = "<h2>".ucfirst($user->realname)."</h2>";
         $qsql = "SELECT * FROM `{$dbFeedbackQuestions}` WHERE formid='{$formid}' AND type='rating' ORDER BY taborder";
         $qresult = mysql_query($qsql);
-        if (mysql_error()) trigger_error(mysql_error(), E_USER_ERROR);
+        if (mysql_error()) trigger_error(mysql_error(), E_USER_WARNING);
 
         if (mysql_num_rows($qresult) >= 1)
         {
@@ -49,7 +49,7 @@ if (mysql_num_rows($uresult) >= 1)
                 $sql .= "AND r.questionid = '$qrow->id' ";
                 $sql .= "AND u.id = '$user->id' ";
                 $sql .= "AND fr.completed = 'yes' \n"; ///////////////////////
-                
+
                 if (!empty($startdate))
                 {
                     if ($dates == 'feedbackin')
@@ -60,10 +60,10 @@ if (mysql_num_rows($uresult) >= 1)
                     {
                         $sql .= "AND i.closed >= '{$startdate}' ";
                     }
-                    
+
                     //echo "DATES {$dates}";
                 }
-                
+
                 if (!empty($enddate))
                 {
                     if ($dates == 'feedbackin')
@@ -75,10 +75,10 @@ if (mysql_num_rows($uresult) >= 1)
                         $sql .= "AND i.closed <= '{$enddate}' ";
                     }
                 }
-                
+
                 $sql .= "ORDER BY i.owner, i.id";
                 $result = mysql_query($sql);
-                if (mysql_error()) trigger_error(mysql_error(), E_USER_ERROR);
+                if (mysql_error()) trigger_error(mysql_error(), E_USER_WARNING);
                 $numresults = 0;
                 $cumul = 0;
                 $percent = 0;
@@ -97,13 +97,13 @@ if (mysql_num_rows($uresult) >= 1)
                 {
                     $average = number_format(($cumul/$numresults), 2);
                 }
-                
+
                 $percent = number_format((($average -1) * (100 / ($CONFIG['feedback_max_score'] -1))), 0);
                 if ($percent < 0)
                 {
                     $percent = 0;
                 }
-                
+
                 $totalresult += $average;
                 $html .= "{$average} <strong>({$percent}%)</strong><br />";
             }

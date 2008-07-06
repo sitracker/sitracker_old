@@ -68,7 +68,7 @@ switch ($action)
         echo "<h2>{$strEditVendor}</h2>";
         $sql = "SELECT * FROM `{$dbVendors}`";
         $result = mysql_query($sql);
-        if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+        if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
         if (mysql_num_rows($result) > 0)
         {
             echo "<table class='vertical' align='center'>";

@@ -29,17 +29,20 @@ if (!empty($productid))
     // Check there are no contracts with this product
     $sql = "SELECT id FROM `{$dbMaintenance}` WHERE product=$productid LIMIT 1";
     $result = mysql_query($sql);
-    if (mysql_num_rows($result)>=1) $errors++;
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+    if (mysql_num_rows($result) >= 1) $errors++;
 
     // check there are no incidents with this product
     $sql = "SELECT id FROM `{$dbIncidents}` WHERE product=$productid LIMIT 1";
     $result = mysql_query($sql);
-    if (mysql_num_rows($result)>=1) $errors++;
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+    if (mysql_num_rows($result) >= 1) $errors++;
 
     // Check there is no software linked to this product
     $sql = "SELECT productid FROM `{$dbSoftwareProducts}` WHERE productid=$productid LIMIT 1";
     $result = mysql_query($sql);
-    if (mysql_num_rows($result)>=1) $errors++;
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+    if (mysql_num_rows($result) >= 1) $errors++;
 
     if ($errors==0)
     {

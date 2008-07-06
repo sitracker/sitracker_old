@@ -29,7 +29,7 @@ if (empty($submit))
     // Show add user form
     $gsql = "SELECT * FROM `{$dbGroups}` ORDER BY name";
     $gresult = mysql_query($gsql);
-    if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     while ($group = mysql_fetch_object($gresult))
     {
         $grouparr[$group->id]=$group->name;
@@ -198,7 +198,7 @@ else
     // Check email address is unique (discount disabled accounts)
     $sql = "SELECT COUNT(id) FROM `{$dbUsers}` WHERE status > 0 AND email='$email'";
     $result = mysql_query($sql);
-    if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     list($countexisting) = mysql_fetch_row($result);
     if ($countexisting >= 1)
     {
@@ -219,7 +219,7 @@ else
         // Create permissions (set to none)
         $sql = "SELECT * FROM `{$dbPermissions}`";
         $result = mysql_query($sql);
-        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
         while ($perm = mysql_fetch_object($result))
         {
             $psql = "INSERT INTO `{$dbUserPermissions}` (userid, permissionid, granted) ";

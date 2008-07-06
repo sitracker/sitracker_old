@@ -61,7 +61,7 @@ else
     if (!empty($software)) $sql .= "AND s.id ='{$software}' ";
     $sql .= "GROUP BY s.id ORDER BY softwarecount DESC";
     $result = mysql_query($sql);
-    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
 
     $countArray[0] = 0;
     $softwareNames[0] = 'Name';
@@ -85,7 +85,7 @@ else
     {
         $sqlSLA = "SELECT DISTINCT(tag) FROM `{$dbServiceLevels}`";
         $resultSLA = mysql_query($sqlSLA);
-        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
 
         if ($startdate > 1) echo "<p align='center'>since ".ldate($CONFIG['dateformat_date'], $startdate)."</p>"; // FIXME i18n since
         echo "<table class='vertical' align='center'>";
@@ -118,7 +118,7 @@ else
             $sqlN .= " AND opened > '{$startdate}' ORDER BY opened";
 
             $resultN = mysql_query($sqlN);
-            if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+            if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
             $numrows = mysql_num_rows($resultN);
 
             foreach ($slas AS $slaReset)
@@ -139,7 +139,7 @@ else
                     $sqlL = "SELECT count(id) FROM `{$dbUpdates}` AS u ";
                     $sqlL .= "WHERE u.bodytext LIKE \"External ID%\" AND incidentid = '".$obj->id."'";
                     $resultL = mysql_query($sqlL);
-                    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+                    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
                     list($numrowsL) = mysql_fetch_row($resultL);
 
                     if ($numrowsL > 0) $slas[$obj->servicelevel]['escalated']++;
@@ -333,7 +333,7 @@ else
                 echo "<td>";
                 echo $monthtotals[$m]['value'];
                 echo "</td>";
-                
+
                 $grandsum += $monthtotals[$m]['value'];
             }
 

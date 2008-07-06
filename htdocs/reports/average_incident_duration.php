@@ -44,7 +44,7 @@ function count_incident_stats($incidentid)
     global $dbUpdates;
     $sql = "SELECT count(DISTINCT currentowner),count(id) FROM `{$dbUpdates}` WHERE incidentid='$incidentid' AND userid!=0 GROUP BY userid";
     $result = mysql_query($sql);
-    if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     list($unique_users,$num_updates) = mysql_fetch_row($result);
     return array($unique_users,$num_updates);;
 }
@@ -66,7 +66,7 @@ function average_incident_duration($start,$end,$states)
     if ($end > 0) $sql .= "AND opened <= $end ";
 
     $result = mysql_query($sql);
-    if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
     $totalduration=0;
     $totalworkingduration=0;
@@ -97,7 +97,7 @@ function average_incident_duration($start,$end,$states)
 // get the first date
 $sql = "SELECT opened FROM `{$dbIncidents}` ORDER BY id ASC LIMIT 1";
 $result = mysql_query($sql);
-if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 list($firstdate)=mysql_fetch_row($result);
 
 $current_time=$firstdate;

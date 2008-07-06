@@ -35,14 +35,14 @@ if (empty($action) OR $action == 'showform' OR $action == 'list')
 
     $sql = "SELECT * FROM `{$dbEmailTemplates}` ORDER BY id";
     $result = mysql_query($sql);
-    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
     while ($email = mysql_fetch_object($result))
     {
         $templates[$email->id] = array('id' => $email->id, 'template' => 'email', 'name'=> $email->name,'type' => $email->type, 'desc' => $email->description);
     }
     $sql = "SELECT * FROM `{$dbNoticeTemplates}` ORDER BY id";
     $result = mysql_query($sql);
-    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
     while ($notice = mysql_fetch_object($result))
     {
         $templates[$notice->name] = array('id' => $notice->id, 'template' => 'notice', 'name'=> $notice->name, 'type' => $notice->type, 'desc' => $notice->description);
@@ -172,7 +172,7 @@ elseif ($action == "edit")
     }
     $result = mysql_query($sql);
     $template = mysql_fetch_object($result);
-    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
 
     include ('htmlheader.inc.php');
 
@@ -186,7 +186,7 @@ elseif ($action == "edit")
 
         $tsql = "SELECT * FROM `{$dbTriggers}` WHERE action = '{$templateaction}' AND template = '$id' LIMIT 1";
         $tresult = mysql_query($tsql);
-        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
         if (mysql_num_rows($tresult) >= 1)
         {
             $trigaction = mysql_fetch_object($tresult);

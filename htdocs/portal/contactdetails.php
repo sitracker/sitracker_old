@@ -74,7 +74,7 @@ if (cleanvar($_REQUEST['action']) == 'update')
             $_SESSION['formerrors']['portalcontactdetails'] .= "<p class='error'>{$strInvalidUsername}</p>\n";
         }
     }
-    
+
     if (!empty($newpass) AND empty($newpass2))
     {
         $errors++;
@@ -85,7 +85,7 @@ if (cleanvar($_REQUEST['action']) == 'update')
         $errors++;
         $_SESSION['formerrors']['portalcontactdetails'] .= "<p class='error'>{$strPasswordsDoNotMatch}</p>";
     }
-    
+
     if ($surname == '')
     {
         $errors++;
@@ -115,22 +115,22 @@ if (cleanvar($_REQUEST['action']) == 'update')
     {
         html_redirect($_SERVER['PHP_SELF'], FALSE);
     }
-    
-    
+
+
 }
 elseif (isset($_POST['add']))
 {
     print_r($_POST);
     $maintid = intval($_POST['maintid']);
     $contactid = intval($_GET['id']);
-    
+
     if ($maintid == 0 OR $contactid == 0)
     {
         trigger_error("Maintid or contactid blank", E_USER_ERROR);
     }
     else
     {
-        $sql = "INSERT into `{$dbSupportContacts}`(`maintenanceid`, `contactid`) ";
+        $sql = "INSERT INTO `{$dbSupportContacts}`(`maintenanceid`, `contactid`) ";
         $sql .= "VALUES('{$maintid}', '{$contactid}') ";
         mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
@@ -144,7 +144,7 @@ else
     $sql .= "WHERE c.siteid = s.id ";
     $sql .= "AND c.id={$id}";
     $query = mysql_query($sql);
-    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
     $user = mysql_fetch_object($query);
 
     if ($user->siteid != $_SESSION['siteid'])
@@ -155,7 +155,7 @@ else
     }
     echo "<h2>".icon('contact', 32)." {$user->forenames} {$user->surname}</h2>";
 
-    
+
     echo "<form action='$_SERVER[PHP_SELF]?action=update' method='post'>";
     echo "<table align='center' class='vertical'>";
 
@@ -164,7 +164,7 @@ else
         echo "<tr><th>{$strUsername}: </th><td><input class='required' name='username' value='{$user->username}' />";
         echo "<span class='required'><span>{$strRequired}</span></td></tr>";
         echo "<input name='oldusername' value='{$user->username}' type='hidden' />";
-    
+
     }
     echo "<tr><th>{$strForenames}: </th><td><input class='required' name='forenames' value='{$user->forenames}' />";
         echo "<span class='required'><span>{$strRequired}</span></td></tr>";
@@ -186,7 +186,7 @@ else
     echo "<tr><th>{$strRepeat}: </th><td><input name='newpassword2' value='' type='password' /></td></tr>";
     echo "</table>";
     echo "<p align='center'><input type='submit' value='{$strUpdate}' /></p></form>";
-    
+
     echo "<br />".user_contracts_table($id, 'external');
     echo "<h4>{$strAssociateContactWithContract}</h4>";
     echo "<form method='post' action='{$_SERVER['PHP_SELF']}?id={$id}'>";

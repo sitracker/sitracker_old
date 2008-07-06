@@ -30,7 +30,7 @@ $sql  = "SELECT * FROM `{$dbUsers}` WHERE status!=0";  // status=0 means account
 if (empty($sort) || $sort == "realname")  $sql .= " ORDER BY realname ASC";
 
 $result = mysql_query($sql);
-if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
 
 echo "<h2>".icon('user', 32)." {$strListSkills} ";
 echo icon('skill', 32)."</h2>";

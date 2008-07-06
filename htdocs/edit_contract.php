@@ -49,7 +49,7 @@ if ($action == "edit")
     {
         $sql = "SELECT * FROM `{$dbMaintenance}` WHERE id='$maintid'";
         $result = mysql_query($sql);
-        if (mysql_error()) trigger_error("MySQL Error", E_USER_ERROR);
+        if (mysql_error()) trigger_error("MySQL Error", E_USER_WARNING);
         $maint = mysql_fetch_array($result);
         ?>
         <script type='text/javascript'>

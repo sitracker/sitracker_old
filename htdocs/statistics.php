@@ -77,28 +77,28 @@ function count_incidents($startdate, $enddate)
     // 4
     $sql = get_sql_statement($startdate, $enddate, 4);
     $result = mysql_query($sql);
-    if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     list($count['updates'], $count['users']) = mysql_fetch_row($result);
     mysql_free_result($result);
 
     // 5
     $sql = get_sql_statement($startdate, $enddate, 5);
     $result = mysql_query($sql);
-    if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     list($count['skills'], $count['owners']) = mysql_fetch_row($result);
     mysql_free_result($result);
 
     // 6
     $sql = get_sql_statement($startdate, $enddate, 6);
     $result = mysql_query($sql);
-    if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     list($count['emailtx']) = mysql_fetch_row($result);
     mysql_free_result($result);
 
     // 7
     $sql = get_sql_statement($startdate, $enddate, 7);
     $result = mysql_query($sql);
-    if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     list($count['emailrx']) = mysql_fetch_row($result);
     mysql_free_result($result);
 
@@ -271,7 +271,7 @@ function give_overview()
     //$sql .= "WHERE (incidents.status != 2 AND incidents.status != 7) AND incidents.owner = users.id AND users.groupid = groups.id ORDER BY groups.id";
 
     $result = mysql_query($sql);
-    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
 
     if (mysql_num_rows($result) > 1)
     {
@@ -285,7 +285,7 @@ function give_overview()
             $sqlGroups .= "GROUP BY i.status";
 
 	    $resultGroups = mysql_query($sqlGroups);
-            if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+            if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
 
             if (mysql_num_rows($resultGroups) > 0)
             {
@@ -325,7 +325,7 @@ function give_overview()
     $sql .= "WHERE (status != 2 AND status != 7) AND i.softwareid = s.id AND v.id = s.vendorid ORDER BY vendorid";
 
     $result = mysql_query($sql);
-    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
 
     if (mysql_num_rows($result) > 1)
     {
@@ -346,7 +346,7 @@ function give_overview()
             $sqlVendor .= "GROUP BY i.status";
 
             $resultVendor = mysql_query($sqlVendor);
-            if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+            if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
 
             if (mysql_num_rows($resultVendor) > 0)
             {
@@ -374,7 +374,7 @@ function give_overview()
     // Count incidents logged today
     $sql = "SELECT id FROM `{$GLOBALS['dbIncidents']}` WHERE opened > '{$todayrecent}'";
     $result = mysql_query($sql);
-    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
     $todaysincidents = mysql_num_rows($result);
     mysql_free_result($result);
 
@@ -385,7 +385,7 @@ function give_overview()
         $sql = "SELECT COUNT(i.id), realname, u.id AS owner FROM `{$GLOBALS['dbIncidents']}` AS i, `{$GLOBALS['dbUsers']}` AS u WHERE opened > '{$todayrecent}' AND i.owner = u.id GROUP BY owner DESC";
 
         $result = mysql_query($sql);
-        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
         while ($row = mysql_fetch_array($result))
         {
             $sql = "SELECT id, title FROM `{$GLOBALS['dbIncidents']}` WHERE opened > '{$todayrecent}' AND owner = '{$row['owner']}'";
@@ -395,7 +395,7 @@ function give_overview()
             $string .= "<a href='incidents.php?user={$row['owner']}&amp;queue=1&amp;type=support'>{$row['realname']}</a> ";
 
             $iresult = mysql_query($sql);
-            if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+            if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
 
             while ($irow = mysql_fetch_array($iresult))
             {
@@ -421,7 +421,7 @@ function give_overview()
         $sql .= "LEFT JOIN `{$GLOBALS['users']}` AS u ON i.owner = u.id WHERE closed > '{$todayrecent}' ";
         $sql .= "GROUP BY owner";
         $result = mysql_query($sql);
-        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
 
         $string .= "<table align='center' width='50%'>";
         $string .= "<tr><th>ID</th><th>Title</th>";
@@ -438,7 +438,7 @@ function give_overview()
             $sql .= "ORDER BY closed";
 
             $iresult = mysql_query($sql);
-            if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+            if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
             while ($irow = mysql_fetch_array($iresult))
             {
                 $string .= "<tr><th><a href=\"javascript:incident_details_window('{$irow['id']}', 'incident{$irow['id']}')\" title='[{$irow['id']}] - {$irow['title']}'>{$irow['id']}</a></th>";
@@ -457,7 +457,7 @@ function give_overview()
     $numquestions=0;
     $qsql = "SELECT * FROM `{$GLOBALS['dbFeedbackQuestions']}` WHERE formid='1' AND type='rating' ORDER BY taborder";
     $qresult = mysql_query($qsql);
-    if (mysql_error()) trigger_error(mysql_error(), E_USER_ERROR);
+    if (mysql_error()) trigger_error(mysql_error(), E_USER_WARNING);
 
     if (mysql_num_rows($qresult) >= 1)
     {
@@ -474,7 +474,7 @@ function give_overview()
             $sql .= "AND fr.completed = 'yes' \n";
             $sql .= "ORDER BY i.owner, i.id";
             $result = mysql_query($sql);
-            if (mysql_error()) trigger_error(mysql_error(), E_USER_ERROR);
+            if (mysql_error()) trigger_error(mysql_error(), E_USER_WARNING);
             $numsurveys = mysql_num_rows($result);
             $numresults = 0;
             $cumul = 0;

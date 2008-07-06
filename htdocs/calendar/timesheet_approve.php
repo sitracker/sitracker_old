@@ -29,13 +29,13 @@ if ($user == '')
     echo "</h2>";
     $usql = "SELECT groupid FROM `{$dbUsers}` WHERE id = {$sit[2]}";
     $uresult = mysql_query($usql);
-    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
     $mygroup = mysql_fetch_array($uresult);
     $sql = "SELECT DISTINCT owner FROM `{$dbTasks}` AS t, `{$dbUsers}` AS u, `{$dbGroups}` AS g ";
     $sql .= "WHERE completion = 1 AND distribution='event' AND u.groupid = {$mygroup['groupid']} AND ";
     $sql .= "u.id = t.owner ORDER BY owner";
     $result = mysql_query($sql);
-    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
     if (mysql_num_rows($result) > 0)
     {
         echo "<table align='center'>";
@@ -51,7 +51,7 @@ if ($user == '')
             echo "</td>";
             $ssql = "SELECT startdate FROM `{$dbTasks}` WHERE completion = 1 AND distribution = 'event' AND owner = {$owner->owner} ORDER BY startdate LIMIT 1";
             $sresult = mysql_query($ssql);
-            if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+            if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
             $startdate = mysql_fetch_object($sresult);
             $sd = strtotime($startdate->startdate);
             if (date('w', $sd) != 1)

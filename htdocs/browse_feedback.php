@@ -50,7 +50,7 @@ switch ($mode)
         $numquestions=0;
         $qsql = "SELECT * FROM `{$dbFeedbackQuestions}` WHERE formid='{$response->formid}' AND type='rating' ORDER BY taborder";
         $qresult = mysql_query($qsql);
-        if (mysql_error()) trigger_error(mysql_error(), E_USER_ERROR);
+        if (mysql_error()) trigger_error(mysql_error(), E_USER_WARNING);
 
         if (mysql_num_rows($qresult) >= 1)
         {
@@ -68,7 +68,7 @@ switch ($mode)
                 $sql .= "AND f.completed = 'yes' \n";
                 $sql .= "ORDER BY i.owner, i.id";
                 $result = mysql_query($sql);
-                if (mysql_error()) trigger_error(mysql_error(), E_USER_ERROR);
+                if (mysql_error()) trigger_error(mysql_error(), E_USER_WARNING);
                 $numresults = 0;
                 $cumul = 0;
                 $percent = 0;
@@ -93,7 +93,7 @@ switch ($mode)
 
             $qsql = "SELECT * FROM `{$dbFeedbackQuestions}` WHERE formid='{$response->formid}' AND type='text' ORDER BY taborder";
             $qresult = mysql_query($qsql);
-            if (mysql_error()) trigger_error(mysql_error(), E_USER_ERROR);
+            if (mysql_error()) trigger_error(mysql_error(), E_USER_WARNING);
 
             if (mysql_num_rows($qresult) >= 1)
             {
@@ -109,7 +109,7 @@ switch ($mode)
                     $sql .= "AND f.completed = 'yes' \n";
                     $sql .= "ORDER BY i.owner, i.id";
                     $result = mysql_query($sql);
-                    if (mysql_error()) trigger_error(mysql_error(), E_USER_ERROR);
+                    if (mysql_error()) trigger_error(mysql_error(), E_USER_WARNING);
                     while ($row = mysql_fetch_object($result))
                     {
                         $html .= "<p align='center'><strong>Q{$qrow->taborder}: {$qrow->question}</strong></p>";

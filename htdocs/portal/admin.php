@@ -96,8 +96,7 @@ if ($CONFIG['portal_site_incidents'])
         $sql .= "AND m.product=p.id ";
 
         $result = mysql_query($sql);
-
-        if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+        if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
         $shade = 'shade1';
         if ($row = mysql_fetch_object($result))
@@ -180,7 +179,7 @@ if ($result = mysql_query($sql))
     {
         echo "<tr class='{$shade}'><td>{$row->forenames} {$row->surname}</td>";
         echo "<td><a href='contactdetails.php?id={$row->id}'>{$strView}</a> </td></tr>";
-        
+
         if ($shade == 'shade1')
         {
             $shade == 'shade2';

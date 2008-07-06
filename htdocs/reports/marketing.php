@@ -44,7 +44,7 @@ if (empty($_REQUEST['mode']))
     echo "<td>";
     $sql   = "SELECT * FROM `{$dbProducts}` ORDER BY name";
     $result = mysql_query($sql);
-    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
     echo "<select name='inc[]' multiple='multiple' size='6'>";
     while ($product = mysql_fetch_object($result))
     {
@@ -150,7 +150,7 @@ elseif ($_REQUEST['mode'] == 'report')
     $sql .= " ORDER BY c.email ASC ";
 
     $result = mysql_query($sql);
-    if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     $numrows = mysql_num_rows($result);
 
     // FIXME i18n
@@ -211,7 +211,7 @@ elseif ($_REQUEST['mode'] == 'report')
             else $csv .= ',';
 
             $presult = mysql_query($psql);
-            if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+            if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
             $numproducts=mysql_num_rows($presult);
             $productcount=1;
 

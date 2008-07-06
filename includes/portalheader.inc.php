@@ -145,6 +145,7 @@ else
 }
 $sql = "SELECT docid FROM `{$dbKBArticles}`";
 $result = mysql_query($sql);
+if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 if ($CONFIG['kb_enabled'] AND $CONFIG['portal_kb_enabled'] AND mysql_num_rows($result) > 0)
 {
     echo "<li><a href='kb.php'>{$strKnowledgeBase}</a></li>";

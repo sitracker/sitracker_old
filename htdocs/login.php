@@ -55,7 +55,7 @@ elseif (authenticate($username, $password) == 1)
     // Retrieve users profile
     $sql = "SELECT * FROM `{$dbUsers}` WHERE username='$username' AND password='$password' LIMIT 1";
     $result = mysql_query($sql);
-    if (mysql_error()) trigger_error(mysql_error(), E_USER_ERROR);
+    if (mysql_error()) trigger_error(mysql_error(), E_USER_WARNING);
     if (mysql_num_rows($result) < 1)
     {
         $_SESSION['auth'] = FALSE;
@@ -148,7 +148,7 @@ elseif ($CONFIG['portal'] == TRUE)
     //we need plaintext and md5 as contacts created pre 3.35 will be in plaintext
     $sql = "SELECT * FROM `{$dbContacts}` WHERE username='{$username}' AND (password='{$portalpassword}' OR password=MD5('{$portalpassword}')) LIMIT 1";
     $result = mysql_query($sql);
-    if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     if (mysql_num_rows($result) >= 1)
     {
         $contact = mysql_fetch_object($result);
@@ -189,7 +189,7 @@ elseif ($CONFIG['portal'] == TRUE)
         }
 
         $_SESSION['contracts'] = array_merge((array)$admincontracts, (array)$contactcontracts, (array)$allcontracts);
-        
+
         //get entitlement
         $sql = "SELECT DISTINCT m.*, p.name, ";
         $sql .= "(m.incident_quantity - m.incidents_used) AS availableincidents ";
@@ -200,7 +200,7 @@ elseif ($CONFIG['portal'] == TRUE)
         $sql .= "AND (expirydate > (UNIX_TIMESTAMP(NOW()) - 15778463) OR expirydate = -1) ";
         $sql .= "ORDER BY expirydate DESC";
         $contractresult = mysql_query($sql);
-        if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+        if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
         while ($contract = mysql_fetch_object($contractresult))
         {
             $_SESSION['entitlement'][] = $contract;

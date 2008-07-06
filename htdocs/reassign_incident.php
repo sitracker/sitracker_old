@@ -42,7 +42,7 @@ switch ($action)
         // Retrieve current incident details
         $sql = "SELECT * FROM `{$dbIncidents}` WHERE id='$id' LIMIT 1";
         $result = mysql_query($sql);
-        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
         $incident = mysql_fetch_object($result);
 
         if ($newstatus != $incident->status)
@@ -151,7 +151,7 @@ switch ($action)
 
         $sql = "SELECT * FROM `{$dbIncidents}` WHERE id='$id' LIMIT 1";
         $result = mysql_query($sql);
-        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
         $incident = mysql_fetch_object($result);
 
         if ($incident->towner >0 AND $incident->owner == $sit[2]) $suggested = suggest_reassign_userid($id);
@@ -165,7 +165,7 @@ switch ($action)
         if (!$forcepermission) $sql .= "AND accepting='Yes' ";
         $sql .= "ORDER BY realname";
         $result = mysql_query($sql);
-        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
 
         echo "<p>{$strOwner}: <strong>";
         if ($sit[2]==$incident->owner) echo "{$strYou} (".user_realname($incident->owner,TRUE).")";
@@ -206,14 +206,14 @@ switch ($action)
             // Suggested user is shown as the first row
             $sugsql = "SELECT * FROM `{$dbUsers}` WHERE id='$suggested' LIMIT 1";
             $sugresult = mysql_query($sugsql);
-            if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+            if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
             $suguser = mysql_fetch_object($sugresult);
             echo "<tr class='idle'>";
             echo "<td><label><input type='radio' name='userid' checked='checked' value='{$suguser->id}' /> ";
             // Have a look if this user has skills with this software
             $ssql = "SELECT softwareid FROM `{$dbUserSoftware}` WHERE userid={$suguser->id} AND softwareid={$incident->softwareid} ";
             $sresult = mysql_query($ssql);
-            if (mysql_error()) trigger_error("MySQL Query Error".mysql_error(), E_USER_ERROR);
+            if (mysql_error()) trigger_error("MySQL Query Error".mysql_error(), E_USER_WARNING);
             if (mysql_num_rows($sresult) >=1 )
             {
                 echo "<strong>{$suguser->realname}</strong>";
@@ -262,7 +262,7 @@ switch ($action)
                 // Have a look if this user has skills with this software
                 $ssql = "SELECT softwareid FROM `{$dbUserSoftware}` WHERE userid={$users->id} AND softwareid={$incident->softwareid} ";
                 $sresult = mysql_query($ssql);
-                if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+                if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
                 if (mysql_num_rows($sresult) >=1 ) echo "<strong>{$users->realname}</strong>";
                 else echo $users->realname;
                 echo "</label></td>";

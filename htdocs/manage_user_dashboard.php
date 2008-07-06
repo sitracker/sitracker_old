@@ -43,7 +43,7 @@ if (empty($dashboardid))
 
     $sql = "SELECT * FROM `{$dbDashboard}` WHERE enabled = 'true'";
     $result = mysql_query($sql);
-    if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
     echo "<h2>".icon('dashboard', 32)." {$strDashboard}: ";
     echo user_realname($sit[2])."</h2>\n";

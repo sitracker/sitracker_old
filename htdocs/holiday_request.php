@@ -142,7 +142,7 @@ if (!$sent)
     if ($approver == TRUE && $mode == 'approval') $sql .= "AND approvedby={$sit[2]} ";
     $sql .= "ORDER BY startdate, length";
     $result = mysql_query($sql);
-    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
     if (mysql_num_rows($result) > 0)
     {
 
@@ -163,7 +163,7 @@ if (!$sent)
             $sql .= "rp.permissionid = 50 AND rp.granted = 'true') ";
             $sql .= "AND u.id != {$sit[2]} AND u.status > 0 ORDER BY realname ASC";
             $result = mysql_query($sql);
-            if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+            if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
             $numapprovers = mysql_num_rows($result);
             if ($numapprovers > 0)
             {
@@ -260,7 +260,7 @@ else
         // Mark the userid of the person who will approve the request so that they can see them
         $sql = "UPDATE `{$dbHolidays}` SET approvedby='{$approvaluser}' WHERE userid='{$user}' AND approved=0";
         mysql_query($sql);
-        if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+        if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
         $rtnvalue = trigger('TRIGGER_HOLIDAY_REQUESTED', array('userid' => $user, 'approvaluseremail' => user_email($approvaluser), 'listofholidays' => $holidaylist));
 

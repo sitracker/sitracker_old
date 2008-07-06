@@ -63,7 +63,7 @@ elseif ($_REQUEST['mode'] == 'report')
     $sql = "SELECT * FROM `{$dbSites}` WHERE typeid='$type' ORDER BY name";
 
     $result = mysql_query($sql);
-    if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     $numrows = mysql_num_rows($result);
 
     // FIXME i18n
@@ -93,7 +93,7 @@ elseif ($_REQUEST['mode'] == 'report')
         $psql .= "AND m.site = '{$row->id}' ";
         $psql .= "ORDER BY p.name ASC";
         $presult = mysql_query($psql);
-        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
         while ($prod = mysql_fetch_object($presult))
         {
             $product.= "{$prod->product}\n";

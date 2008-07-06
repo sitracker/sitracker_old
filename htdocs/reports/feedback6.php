@@ -39,7 +39,7 @@ $msql .= "AND i.softwareid = s.id ";
 $msql .= "AND fr.incidentid > 0 \n";
 $msql .= "ORDER BY s.name, i.id ASC \n";
 $mresult = mysql_query($msql);
-if (mysql_error()) trigger_error(mysql_error(), E_USER_ERROR);
+if (mysql_error()) trigger_error(mysql_error(), E_USER_WARNING);
 while ($mrow = mysql_fetch_object($mresult))
 {
     $totalresult=0;
@@ -47,7 +47,7 @@ while ($mrow = mysql_fetch_object($mresult))
     $html = "<h3><a href='#?id={$mrow->softwareid}' title='Jump to software'>{$mrow->softwarename}</a></h3>";
     $qsql = "SELECT * FROM `{$dbFeedbackQuestions}` WHERE formid='{$formid}' AND type='rating' ORDER BY taborder";
     $qresult = mysql_query($qsql);
-    if (mysql_error()) trigger_error(mysql_error(), E_USER_ERROR);
+    if (mysql_error()) trigger_error(mysql_error(), E_USER_WARNING);
     while ($qrow = mysql_fetch_object($qresult))
     {
         $numquestions++;
@@ -60,7 +60,7 @@ while ($mrow = mysql_fetch_object($mresult))
         $sql .= "AND fr.id = '$mrow->reportid' ";
         $sql .= "ORDER BY i.owner, i.id";
         $result = mysql_query($sql);
-        if (mysql_error()) trigger_error(mysql_error(), E_USER_ERROR);
+        if (mysql_error()) trigger_error(mysql_error(), E_USER_WARNING);
         $numresults=0;
         $cumul=0;
         $percent=0;

@@ -30,7 +30,7 @@ if ($_REQUEST['action'] == "updatereason")
 $action = cleanvar($_REQUEST['action']);
 $sql = "SELECT * FROM `{$dbTempIncoming}` WHERE id='{$incomingid}' LIMIT 1";
 $result = mysql_query($sql);
-if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 if (mysql_num_rows($result) > 0)
 {
     $incoming = @mysql_fetch_object($result);
@@ -49,7 +49,7 @@ if (mysql_num_rows($result) > 0)
         $lockedby = $incoming->locked;
         $lockedbysql = "SELECT realname FROM `{$dbUsers}` WHERE id={$lockedby}";
         $lockedbyresult = mysql_query($lockedbysql);
-        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
         while ($row = mysql_fetch_object($lockedbyresult))
             $lockedbyname = $row->realname;
     }

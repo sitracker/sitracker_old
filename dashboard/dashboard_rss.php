@@ -69,7 +69,7 @@ function dashboard_rss_display($dashletid)
 
     $sql = "SELECT url, items FROM `{$CONFIG['db_tableprefix']}dashboard_rss` WHERE owner = {$sit[2]} AND enabled = 'true'";
     $result = mysql_query($sql);
-    if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
     define ('MAGPIE_CACHE_ON',TRUE);
     define ('MAGPIE_CACHE_DIR', $CONFIG['attachment_fspath'].'feeds');
@@ -166,7 +166,7 @@ function dashboard_rss_edit($dashletid)
             $items = cleanvar($_REQUEST['items']);
             $sql = "INSERT INTO `{$CONFIG['db_tableprefix']}dashboard_rss` (owner, url, items, enabled) VALUES ({$sit[2]},'{$url}','{$items}','true')"; //SET enabled = '{$enable}' WHERE url = '{$url}' AND owner = {$sit[2]}";
             $result = mysql_query($sql);
-            if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+            if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
             if (!$result) html_redirect("edit_rss_feeds.php", FALSE);
             else
@@ -179,7 +179,7 @@ function dashboard_rss_edit($dashletid)
             $sql = "SELECT * FROM `{$CONFIG['db_tableprefix']}dashboard_rss` WHERE owner = {$sit[2]} AND url = '{$url}' LIMIT 1 ";
             if ($CONFIG['debug']) $dbg .= print_r($sql,true);
             $result = mysql_query($sql);
-            if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+            if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
             if (mysql_num_rows($result) > 0)
             {
                 $feed = mysql_fetch_object($result);
@@ -247,7 +247,7 @@ function dashboard_rss_edit($dashletid)
 
             $sql = "SELECT * FROM `{$CONFIG['db_tableprefix']}dashboard_rss` WHERE owner = {$sit[2]}";
             $result = mysql_query($sql);
-            if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+            if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
             if (mysql_num_rows($result) > 0)
             {

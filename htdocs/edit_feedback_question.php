@@ -83,7 +83,7 @@ switch ($action)
 
         $sql = "SELECT * FROM `{$dbFeedbackQuestions}` WHERE id = '$qid'";
         $result = mysql_query($sql);
-        if (mysql_error()) trigger_error ("MySQL Error: ".mysql_error(), E_USER_ERROR);
+        if (mysql_error()) trigger_error ("MySQL Error: ".mysql_error(), E_USER_WARNING);
 
         while ($question = mysql_fetch_object($result))
         {

@@ -44,7 +44,7 @@ elseif ($action == "edit" && isset($contact))
     // Show edit contact form
     $sql="SELECT * FROM `{$dbContacts}` WHERE id='$contact' ";
     $contactresult = mysql_query($sql);
-    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
     while ($contactrow=mysql_fetch_array($contactresult))
     {
         // User does not have access

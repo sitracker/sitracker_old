@@ -77,7 +77,7 @@ function dashboard_user_incidents_display($dashletid)
     }
     $sql = $selectsql.$sql;
     $result = mysql_query($sql);
-    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
     $rowcount = mysql_num_rows($result);
     // Toggle Sorting Order
     if ($sortorder=='ASC')

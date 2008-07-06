@@ -311,7 +311,7 @@ function draw_chart($mode, $year, $month='', $day='', $groupid='', $userid='')
     // Get list of user groups
     $gsql = "SELECT * FROM `{$GLOBALS['dbGroups']}` ORDER BY name";
     $gresult = mysql_query($gsql);
-    if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     $grouparr[0] = $GLOBALS['strNone'];
     while ($group = mysql_fetch_object($gresult))
     {
@@ -341,7 +341,7 @@ function draw_chart($mode, $year, $month='', $day='', $groupid='', $userid='')
 
     $usql .= "ORDER BY groupid, realname";
     $uresult = mysql_query($usql);
-    if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
     $numusers = mysql_num_rows($uresult);
     $prevgroupid = '000';
@@ -354,7 +354,7 @@ function draw_chart($mode, $year, $month='', $day='', $groupid='', $userid='')
             $hsql = "SELECT * FROM `{$GLOBALS['dbHolidays']}` WHERE userid={$user->id} AND startdate >= $startdate AND startdate <= $enddate ";
             $hsql .= "AND type != 10";
             $hresult = mysql_query($hsql);
-            if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+            if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
             while ($holiday = mysql_fetch_object($hresult))
             {
                 $cday = date('j',$holiday->startdate);
@@ -365,7 +365,7 @@ function draw_chart($mode, $year, $month='', $day='', $groupid='', $userid='')
             // Public holidays
             $phsql = "SELECT * FROM `{$GLOBALS['dbHolidays']}` WHERE type=10 AND startdate >= $startdate AND startdate <= $enddate ";
             $phresult = mysql_query($phsql);
-            if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+            if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
             while ($pubhol = mysql_fetch_object($phresult))
             {
                 $cday = date('j',$pubhol->startdate);

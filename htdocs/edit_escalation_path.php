@@ -26,7 +26,7 @@ if (empty($_REQUEST['mode']))
     $id = $_REQUEST['id'];
     $sql = "SELECT * FROM `{$dbEscalationPaths}` WHERE id = {$id}";
     $result = mysql_query($sql);
-    if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
     include ('htmlheader.inc.php');
 

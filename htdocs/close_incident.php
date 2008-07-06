@@ -27,7 +27,7 @@ if (empty($_REQUEST['process']))
 {
     $sql = "SELECT owner FROM `{$dbIncidents}` WHERE id = '{$incidentid}'";
     $result = mysql_query($sql);
-    if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     list($owner) = mysql_fetch_row($result);
 
     if ($owner == 0)
@@ -198,7 +198,7 @@ if (empty($_REQUEST['process']))
     //  style="display: none;"
     $sql = "SELECT * FROM `{$dbUpdates}` WHERE incidentid='$id' AND type='probdef' ORDER BY timestamp ASC";
     $result = mysql_query($sql);
-    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
     while ($row = mysql_fetch_object($result))
     {
         $bodytext = str_replace("<hr>", "", $row->bodytext);
@@ -227,7 +227,7 @@ if (empty($_REQUEST['process']))
     echo "<td><textarea id='solution' name='solution' cols='40' rows='8' onfocus=\"if (this.enabled) { this.value = saveValue; setTimeout('document.articleform.solution.blur()',1); } else saveValue=this.value;\">";
     $sql = "SELECT * FROM `{$dbUpdates}` WHERE incidentid='$id' AND type='solution' ORDER BY timestamp ASC";
     $result = mysql_query($sql);
-    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
     while ($row = mysql_fetch_object($result))
     {
         $bodytext = str_replace("<hr>", "", $row->bodytext);
@@ -400,7 +400,7 @@ else
             $sql = "SELECT distinct (relatedid) FROM `{$dbRelatedIncidents}` AS r, `{$dbIncidents}` AS i WHERE incidentid = '$id' ";
             $sql .= "AND i.id = r.relatedid AND i.status != 2";
             $result = mysql_query($sql);
-            if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+            if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
 
             $relatedincidents;
 
@@ -412,7 +412,7 @@ else
             $sql = "SELECT distinct (incidentid) FROM `{$dbRelatedIncidents}` AS r, `{$dbIncidents}` AS i WHERE relatedid = '$id' ";
             $sql .= "AND i.id = r.incidentid AND i.status != 2";
             $result = mysql_query($sql);
-            if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+            if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
 
             while ($a = mysql_fetch_array($result))
             {

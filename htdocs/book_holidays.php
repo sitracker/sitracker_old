@@ -150,7 +150,7 @@ elseif ($step == '1')
         {
             $sql = "SELECT * FROM `{$dbHolidays}` WHERE startdate = '$day' AND userid='{$user}'";
             $result = mysql_query($sql);
-            if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+            if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
 
             // need to do something different when there are more than one row
             if (mysql_num_rows($result) > 0)
@@ -230,7 +230,7 @@ elseif ($step == '1')
             {
                 $sql = "SELECT * FROM `{$dbHolidays}` WHERE startdate = '{$day}' AND type='10' ";
                 $result = mysql_query($sql);
-                if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+                if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
                 if (mysql_num_rows($result) > 0)
                 {
                     echo "<tr><td class='shade1' align='right'>".ldate('l jS M y',$day)."</td><td colspan='4'>{$strPublicHoliday}</td></tr>";

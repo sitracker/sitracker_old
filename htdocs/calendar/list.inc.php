@@ -26,7 +26,7 @@ $sql .= "WHERE h.userid = u.id AND h.type=$type ";
 if (!empty($user) AND $user!='all') $sql .= "AND u.id='{$user}' ";
 $sql .= "ORDER BY startdate DESC";
 $result = mysql_query($sql);
-if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
 if (mysql_num_rows($result))
 {
     echo "<table align='center'>";

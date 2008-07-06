@@ -70,7 +70,7 @@ else
     if (!empty($software)) $sql .= "AND s.name LIKE '%{$software}%' ";
     $sql .= "GROUP BY s.id ORDER BY softwarecount DESC";
     $result = mysql_query($sql);
-    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
 
     $countArray[0] = 0;
     $softwareNames[0] = 'Name';
@@ -91,7 +91,7 @@ else
 
     $sqlSLA = "SELECT DISTINCT(tag) FROM `{$dbServiceLevels}`";
     $resultSLA = mysql_query($sqlSLA);
-    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
 
     echo "<h2>Number of incidents by software";
     if ($startdate > 1) echo " between ".ldate($CONFIG['dateformat_date'], $startdate);
@@ -148,7 +148,7 @@ else
                 // FIXME this sql uses the body to find out which incidents have been escalated
                 $sqlL = "SELECT count(id) FROM `{$dbUpdates}` AS u WHERE u.bodytext LIKE \"External ID%\" AND incidentid = '".$obj->id."'";
                 $resultL = mysql_query($sqlL);
-                if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+                if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
                 list($numrowsL) = mysql_fetch_row($resultL);
 
                 if ($numrowsL > 0) $slas[$obj->servicelevel]['escalated']++;

@@ -56,7 +56,7 @@ if (!empty($sort))
 } else $sql .= " ORDER BY timestamp DESC";
 $sql .= " LIMIT $offset, $perpage ";
 $result = mysql_query($sql);
-if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
 
 $journaltype[1] = 'Logon/Logoff';
 $journaltype[2] = 'Support Incidents';

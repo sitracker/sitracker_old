@@ -18,9 +18,9 @@ if (realpath(__FILE__) == realpath($_SERVER['SCRIPT_FILENAME']))
     exit;
 }
 
-$sql = get_sql_statement($startdate,$enddate,$query,false);
+$sql = get_sql_statement($startdate,$enddate,$query,FALSE);
 $result = mysql_query($sql);
-if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
 
 $start_str = date("Y-m-d",$startdate);
 $end_str = date("Y-m-d",$enddate);
@@ -28,13 +28,13 @@ $end_str = date("Y-m-d",$enddate);
 switch ($query)
 {
     case 0:
-        $type='opened';
+        $type = 'opened';
         break;
     case 1:
-        $type='closed';
+        $type = 'closed';
         break;
     case 2:
-        $type='updated';
+        $type = 'updated';
         break;
 }
 

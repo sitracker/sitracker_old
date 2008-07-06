@@ -412,7 +412,7 @@ else
     }
 
     $result = mysql_query($sql);
-    if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 }
 
 //common code
@@ -650,7 +650,7 @@ if (mysql_num_rows($result) >=1 )
         {
             echo "<td>".user_realname($task->owner)."</td>";
         }
-        
+
         if ($mode == 'incident' AND $enddate == '0')
         {
             echo "<td><a href='view_task.php?id={$task->id}&amp;mode=incident&amp;incident={$id}' class='info'>";
@@ -660,7 +660,7 @@ if (mysql_num_rows($result) >=1 )
         {
             echo "<td></td>";
         }
-          
+
         echo "</tr>\n";
         if ($shade == 'shade1') $shade = 'shade2';
         else $shade = 'shade1';
@@ -683,7 +683,7 @@ if (mysql_num_rows($result) >=1 )
         echo "<td colspan='7'><a href=\"javascript: submitform()\">{$strMarkComplete}</a></td>";
         echo "</tr>";
     }
-    
+
     echo "</table>\n";
     echo "</form>";
 
@@ -768,7 +768,7 @@ else
     echo "<br /><p align='center'>";
     echo "<strong>{$strNoRecords}</strong>";
     echo "</p>";
-    
+
     if ($mode == 'incident')
     {
         echo "<p align='center'>";

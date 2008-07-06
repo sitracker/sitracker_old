@@ -41,7 +41,7 @@ if (empty($action) OR $action == "showform")
 {
     $sql = "SELECT * FROM `{$dbRoles}` ORDER BY id ASC";
     $result= mysql_query($sql);
-    if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
     if (mysql_num_rows($result) >= 1)
     {
@@ -132,7 +132,7 @@ elseif ($action == "edit" && (!empty($user) OR !empty($role)))
         $sql.= "AND rp.roleid='$role' ";
     }
     $permission_result = mysql_query($sql);
-    if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     while ($row = mysql_fetch_array($permission_result))
     {
         $permission_array[$row['id']] = $row;
@@ -179,7 +179,7 @@ elseif ($action == "update")
     {
         $sql = "SELECT * FROM `{$dbRoles}` ORDER BY id ASC";
         $result= mysql_query($sql);
-        if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+        if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
         while ($rolerow = mysql_fetch_object($result))
         {
             // First pass, set all access to false

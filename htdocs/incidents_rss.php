@@ -25,7 +25,7 @@ $sql = "SELECT * FROM `{$dbIncidents}` WHERE (owner='$userid' OR towner='$userid
 $sql .= "AND (status!='2') LIMIT 5";  // not closed
 
 $result = mysql_query($sql);
-if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
 $xml = '<rss version="2.0">';
 $xml .= '<channel><title>SiT Incidents</title>';

@@ -116,7 +116,7 @@ while ($incidents = mysql_fetch_array($result))
 
     $slsql = "SELECT * FROM `{$dbServiceLevels}` WHERE tag='{$tag}' AND priority='{$incidents['priority']}' ";
     $slresult = mysql_query($slsql);
-    if (mysql_error()) trigger_error("mysql query error ".mysql_error(), E_USER_ERROR);
+    if (mysql_error()) trigger_error("mysql query error ".mysql_error(), E_USER_WARNING);
     $servicelevel = mysql_fetch_object($slresult);
     if (mysql_num_rows($slresult) < 1) trigger_error("could not retrieve service level ($slsql)", E_USER_WARNING);
 
@@ -145,8 +145,8 @@ while ($incidents = mysql_fetch_array($result))
             $slaremain = 0;
             $slatarget = 0;
     }
-    
-    
+
+
     if ($slatarget > 0) $slaremain = ($slatarget - $target->since);
     else $slaremain = 0;
 

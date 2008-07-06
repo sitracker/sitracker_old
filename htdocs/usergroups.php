@@ -28,7 +28,7 @@ switch ($action)
     case 'savemembers':
         $sql = "SELECT * FROM `{$dbUsers}` ORDER BY realname";
         $result = mysql_query($sql);
-        if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+        if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
         while ($user = mysql_fetch_object($result))
         {
             $usql = "UPDATE `{$dbUsers}` SET groupid = '".cleanvar($_POST["group{$user->id}"])."' WHERE id='{$user->id}'";
@@ -72,7 +72,7 @@ switch ($action)
 
         $gsql = "SELECT * FROM `{$dbGroups}` ORDER BY name";
         $gresult = mysql_query($gsql);
-        if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+        if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
         while ($group = mysql_fetch_object($gresult))
         {
             $grouparr[$group->id]=$group->name;
@@ -102,7 +102,7 @@ switch ($action)
 
             $sql = "SELECT * FROM `{$dbUsers}` WHERE status !=0 ORDER BY realname";  // status=0 means left company
             $result = mysql_query($sql);
-            if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+            if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
             echo "<form action='{$_SERVER['PHP_SELF']}' method='post'>";
             echo "<table summary='{$strGroupMembership}' align='center'>";

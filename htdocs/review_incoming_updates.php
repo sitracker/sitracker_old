@@ -195,7 +195,7 @@ if (!empty($selected))
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
         $path = $CONFIG['attachment_fspath'].'updates/'.$updateid;
 
-        deldir($path);        
+        deldir($path);
 
         journal(CFG_LOGGING_NORMAL, 'Incident Log Entry Deleted', "Incident Log Entry $updateid was deleted", CFG_JOURNAL_INCIDENTS, $updateid);
     }
@@ -241,7 +241,7 @@ $sql .= "FROM `{$dbUpdates}` AS u, `{$dbTempIncoming}` AS ti ";
 $sql .= "WHERE u.incidentid = 0 AND ti.updateid = u.id ";
 $sql .= "ORDER BY timestamp ASC, id ASC";
 $result = mysql_query($sql);
-if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
 $countresults = mysql_num_rows($result);
 
 $spamcount = 0;
@@ -290,7 +290,7 @@ $realemails = $countresults - $spamcount;
 if (is_array($queuerows))
 {
     echo "<h2>".icon('email', 32)." {$strIncoming} {$strEmail}</h2>"; //FIXME i18n
-    
+
     echo "<p align='center'>{$strIncomingEmailText}</p>";
     echo "<form action='{$_SERVER['PHP_SELF']}' name='held_emails'  method='post'>";
     echo "<table align='center' style='width: 95%'>";
@@ -334,7 +334,7 @@ if (is_array($incidentqueuerows))
     if (sizeof($incidentqueuerows) > 0)
     {
         echo "<h2>".icon('support', 32)." Unassigned Incidents</h2>";
-        
+
         echo "<table align='center' style='width: 95%'>";
         echo "<th>{$strDate}</th>";
         echo "<th>{$strFrom}</th>";
@@ -395,9 +395,9 @@ if (mysql_num_rows($resultchase) >= 1)
     $shade = 'shade1';
     while ($chase = mysql_fetch_object($resultchase))
     {
-        $sql_update = "SELECT * FROM `{$dbUpdates}` WHERE incidentid = {$chase	->id} ORDER BY timestamp DESC LIMIT 1";
+        $sql_update = "SELECT * FROM `{$dbUpdates}` WHERE incidentid = {$chase->id} ORDER BY timestamp DESC LIMIT 1";
         $result_update = mysql_query($sql_update);
-        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
 
         $obj_update = mysql_fetch_object($result_update);
 

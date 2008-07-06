@@ -45,7 +45,7 @@ else
         $sql="SELECT * FROM `{$dbSites}` WHERE id='$id' LIMIT 1";
         $siteresult = mysql_query($sql);
         $site=mysql_fetch_object($siteresult);
-        if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+        if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
         echo "<table align='center' class='vertical'>";
         echo "<tr><th>{$strSite}:</th><td><h3>".$site->name."</h3></td></tr>";
         echo "<tr><th>{$strDepartment}:</th><td>".$site->department."</td></tr>";
@@ -55,7 +55,7 @@ else
         // Look for associated contacts
         $sql = "SELECT COUNT(id) FROM `{$dbContacts}` WHERE siteid='$id'";
         $result = mysql_query($sql);
-        if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+        if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
         list($numcontacts) = mysql_fetch_row($result);
         if ($numcontacts>0)
         {
@@ -65,7 +65,7 @@ else
         // Look for associated maintenance contracts
         $sql = "SELECT COUNT(id) FROM `{$dbMaintenance}` WHERE site='$id'";
         $result = mysql_query($sql);
-        if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+        if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
         list($numcontracts) = mysql_fetch_row($result);
         if ($numcontracts>0)
         {

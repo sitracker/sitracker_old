@@ -36,7 +36,7 @@ if (empty($action) OR $action == "showform")
     echo "<div style='margin-left: auto; margin-right: auto; width: 70%;'>";
     $sql = "SELECT * FROM `{$dbNoticeTemplates}` ORDER BY name,id";
     $result = mysql_query($sql);
-    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
     while ($notice = mysql_fetch_object($result))
     {
         echo "<dl>\n";
@@ -58,7 +58,7 @@ elseif ($action == "edit")
         // extract notice type details
         $sql = "SELECT * FROM `{$dbNoticeTemplates}` WHERE id='$id'";
         $result = mysql_query($sql);
-        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
         $noticetype = mysql_fetch_array($result);
         echo "<h2>{$strEdit} Notice Template</h2>";
         echo "<h5>".sprintf($strMandatoryMarked,"<sup class='red'>*</sup>")."</h5>";

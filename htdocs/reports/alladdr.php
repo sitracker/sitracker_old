@@ -34,7 +34,7 @@ $sql .= "FROM `{$dbContacts}` AS c LEFT JOIN `{$dbContactProducts}` ON c.id = `{
 //$sql.="ORDER BY email ASC ";
 //$sql.="LIMIT 100";
 $result = mysql_query($sql);
-if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
 $count = mysql_num_rows($result);
 echo "<strong>Found $count records</strong><br /><br />";
 

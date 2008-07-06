@@ -112,7 +112,7 @@ elseif ($action == "update")
         // licenserx='$licenserx'
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
- 		else
+        else
         {
             plugin_do('edit_site_save');
             journal(CFG_LOGGING_NORMAL, $strSiteEdited, sprintf($strSiteXEdited,$site) , CFG_JOURNAL_SITES, $site);

@@ -60,7 +60,7 @@ if (!$_REQUEST['action'])
 
     $sql = "SELECT * FROM `{$dbProductInfo}` WHERE productid='$productid'";
     $result = mysql_query($sql);
-    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
     if (mysql_num_rows($result)  > 0)
     {
         while ($productinforow = mysql_fetch_array($result))
@@ -126,7 +126,7 @@ else //submit
         $_SESSION['formerrors']['portaladdincident'] .= "<p class='error'>{$strYouMustEnterAProblemDescription}</p>";
         $errors = 1;
     }
-    
+
     foreach ($_POST AS $key => $value)
     {
         if (substr($key, 0, 5) == 'pinfo' AND empty($value))
@@ -137,13 +137,13 @@ else //submit
             $result = mysql_query($sql);
             $fieldobj = mysql_fetch_object($result);
             $field = $fieldobj->information;
-            
-            $_SESSION['formerrors']['portaladdincident'] .= 
+
+            $_SESSION['formerrors']['portaladdincident'] .=
             "<p class='error'>{$strYouMissedARequiredField}: {$field}</p>";
             $errors = 1;
         }
     }
-    
+
     if ($errors == 0)
     {
         $updatetext = sprintf($SYSLANG['strOpenedViaThePortalByX'], "[b]".contact_realname($contactid)."[/b]");
@@ -168,7 +168,7 @@ else //submit
         // Save productinfo if there is some
         $sql = "SELECT * FROM `{$dbProductInfo}` WHERE productid='{$productid}'";
         $result = mysql_query($sql);
-        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
         if (mysql_num_rows($result) > 0)
         {
             while ($productinforow = mysql_fetch_object($result))
@@ -204,7 +204,7 @@ else //submit
         }
 
         $result = mysql_query($sql);
-        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
         $level = mysql_fetch_object($result);
 
         $targetval = $level->initial_response_mins * 60;

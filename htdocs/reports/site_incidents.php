@@ -60,7 +60,7 @@ else
     $sql .= "FROM `{$dbSites}` AS s, `{$dbMaintenance}` AS m, `{$dbResellers}` AS r ";
     $sql.= "WHERE s.id = m.site AND r.id = m.reseller AND m.term <> 'yes' ORDER BY s.name";
     $result = mysql_query($sql);
-    if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     if (mysql_num_rows($result) > 0)
     {
         $csv.="START:,{$startdate}";
@@ -73,7 +73,7 @@ else
             $sql.= "GROUP BY site";
             //echo $sql;
             $sresult = mysql_query($sql);
-            if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+            if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
             $details=mysql_fetch_object($sresult);
             $count=1*($details->incidentz);
             if (!empty($zerologged))

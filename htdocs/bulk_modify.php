@@ -30,8 +30,8 @@ $action = cleanvar($_REQUEST['action']);
             $sql .= "FROM `{$dbIncidents}` WHERE closed = '0' AND externalemail!=''";
 
             $result = mysql_query($sql);
-            if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
-            
+            if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+
             if (mysql_num_rows($result) >= 1)
             {
                 echo "<form action='{$_SERVER['PHP_SELF']}?action=change_external_esc' method='post'>";
@@ -75,7 +75,7 @@ External email:  -&gt; <b>foo@pheaney.co.uk</b>
 
             $sql = "SELECT id FROM `{$dbIncidents}` WHERE closed = '0' AND externalemail = '".$old_email_address."'";
             $result = mysql_query($sql);
-            if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+            if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
             while ($row = mysql_fetch_array($result))
             {

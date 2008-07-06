@@ -157,7 +157,7 @@ if (!empty($sort))
 }
 $dbg .= "<p>$sql</p>";
 $result = mysql_query($sql);
-if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
 
 if (mysql_num_rows($result) == 0)
 {

@@ -40,7 +40,7 @@ $sql = "SELECT *, s.name AS sitename FROM `{$dbSites}` AS s ";
 if (!empty($_REQUEST['siteid'])) $sql .= "WHERE id='{$siteid}'";
 else $sql .= "ORDER BY s.name";
 $result = mysql_query($sql);
-if (mysql_error()) trigger_error(mysql_error(), E_USER_ERROR);
+if (mysql_error()) trigger_error(mysql_error(), E_USER_WARNING);
 while ($site = mysql_fetch_object($result))
 {
     $msql  = "SELECT m.id AS maintid, m.term AS term, p.name AS product, r.name AS reseller, ";
@@ -74,7 +74,7 @@ while ($site = mysql_fetch_object($result))
                     $csql .= "ORDER BY contactid LIMIT 4";
                     ## echo "<!-- ($csql) -->";
                     $cresult = mysql_query($csql);
-                    if (mysql_error()) trigger_error(mysql_error(), E_USER_ERROR);
+                    if (mysql_error()) trigger_error(mysql_error(), E_USER_WARNING);
                     while ($contact = mysql_fetch_object($cresult))
                     {
                         echo contact_realname($contact->contactid).",";
@@ -103,7 +103,7 @@ while ($site = mysql_fetch_object($result))
                     $csql .= "ORDER BY contactid LIMIT 4";
                     ## echo "<!-- ($csql) -->";
                     $cresult = mysql_query($csql);
-                    if (mysql_error()) trigger_error(mysql_error(), E_USER_ERROR);
+                    if (mysql_error()) trigger_error(mysql_error(), E_USER_WARNING);
                     while ($contact = mysql_fetch_object($cresult))
                     {
                         echo "<td>".contact_realname($contact->contactid)."</td>";

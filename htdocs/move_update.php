@@ -43,7 +43,7 @@ if ($incidentid=='')
 
     $sql  = "SELECT * FROM `{$dbUpdates}` WHERE id='$updateid' ";
     $result = mysql_query($sql);
-    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
 
     while ($updates = mysql_fetch_array($result))
     {
@@ -146,7 +146,7 @@ else
         // retrieve the update body so that we can insert time headers
         $sql = "SELECT incidentid, bodytext, timestamp FROM `{$dbUpdates}` WHERE id='$updateid'";
         $uresult=mysql_query($sql);
-        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
         list($oldincidentid, $bodytext, $timestamp)=mysql_fetch_row($uresult);
         if ($oldincidentid==0) $oldincidentid='Inbox';
         $prettydate = ldate('r', $timestamp);
@@ -161,13 +161,13 @@ else
         mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
         $new_update_id = mysql_insert_id();
-        
+
         // update the incident record, change the incident status to active
         $sql = "UPDATE `{$dbIncidents}` SET status='1', lastupdated='$now', timeofnextaction='0' WHERE id='$incidentid'";
         mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-        
-        
+
+
         //move attachments from updates to incident
         if (!file_exists($CONFIG['attachment_fspath'] ."$incidentid"))
         {
@@ -176,7 +176,7 @@ else
             umask($umask);
             //     if (!$mk) throw_error('Failed creating incident directory: ',$incident_attachment_fspath ."$incidentid");
         }
-        
+
         $new_path = $CONFIG['attachment_fspath'] ."$incidentid".$fsdelim."u$new_update_id";
         $update_path = $CONFIG['attachment_fspath'].'updates'.$fsdelim.$updateid;
         echo $new_path." ".$update_path;

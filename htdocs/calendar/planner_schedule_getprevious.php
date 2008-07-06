@@ -29,7 +29,7 @@ $startperiod = date("Y-m-d H:i:s", strtotime($endperiod . "-1 MONTH"));
 $sql = "SELECT DISTINCT name, description FROM `{$dbTasks}` WHERE startdate >= '$startperiod' AND ";
 $sql .= "enddate < '$endperiod' AND distribution = 'event' AND owner = '$user'";
 $res = mysql_query($sql);
-if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 while($inf = mysql_fetch_array($res))
 {
     $items[] = array ('id' => $inf['name'],

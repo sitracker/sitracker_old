@@ -173,7 +173,7 @@ elseif ($action=='findcontact')
 
     $altresult = mysql_query($altsql);
     $result=mysql_query($sql);
-    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
     if (mysql_num_rows($result)>0)
     {
         include ('htmlheader.inc.php');
@@ -248,7 +248,7 @@ elseif ($action=='findcontact')
 
         $sql .= "ORDER by c.surname, c.forenames ";
         $result = mysql_query($sql);
-        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
 
         if (mysql_num_rows($result) > 0)
         {
@@ -360,7 +360,7 @@ elseif ($action=='findcontact')
         else $sql .= "AND c.id = '$contactid' ";
         $sql .= "ORDER by c.surname, c.forenames ";
         $result=mysql_query($sql);
-        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
 
         if (mysql_num_rows($result)>0)
         {
@@ -478,7 +478,7 @@ elseif ($action=='incidentform')
         // These 'productinfo' questions don't have a GUI as of 27Oct05
         $sql = "SELECT * FROM `{$dbProductInfo}` WHERE productid='$productid'";
         $result = mysql_query($sql);
-        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
         while ($productinforow = mysql_fetch_array($result))
         {
             echo "<tr><th>{$productinforow['information']}";
@@ -502,13 +502,13 @@ elseif ($action=='incidentform')
     {
         $sql = "SELECT bodytext FROM `{$dbUpdates}` WHERE id=$updateid";
         $result=mysql_query($sql);
-        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
         $updaterow=mysql_fetch_array($result);
         $mailed_body_text = $updaterow['bodytext'];
 
         $sql="SELECT subject FROM `{$dbTempIncoming}` WHERE updateid=$updateid";
         $result=mysql_query($sql);
-        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
         $updaterow=mysql_fetch_array($result);
         $mailed_subject=$updaterow['subject'];
 
@@ -639,7 +639,7 @@ elseif ($action == 'assign')
             // Check the service level priorities, look for the highest possible and reduce the chosen priority if needed
             $sql = "SELECT priority FROM `{$dbServiceLevels}` WHERE tag='$servicelevel' ORDER BY priority DESC LIMIT 1";
             $result = mysql_query($sql);
-            if (mysql_error()) trigger_error(mysql_error(). "--$sql--",E_USER_ERROR);
+            if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
             list($highestpriority) = mysql_fetch_row($result);
             if ($priority > $highestpriority)
             {
@@ -660,7 +660,7 @@ elseif ($action == 'assign')
             // Save productinfo if there is some
             $sql = "SELECT * FROM `{$dbProductInfo}` WHERE productid='{$productid}'";
             $result = mysql_query($sql);
-            if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+            if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
             if (mysql_num_rows($result) > 0)
             {
                 while ($productinforow = mysql_fetch_object($result))
@@ -689,11 +689,11 @@ elseif ($action == 'assign')
             if (!empty($updateid))
             {
                 // Assign existing update to new incident if we have one
-                $sql="UPDATE updates SET incidentid='$incidentid', userid='".$sit[2]."' WHERE id='$updateid'";
-                $result=mysql_query($sql);
+                $sql="UPDATE `{$dbUpdates}` SET incidentid='$incidentid', userid='".$sit[2]."' WHERE id='$updateid'";
+                $result = mysql_query($sql);
                 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
                 // + move any attachments we may have received
-                $update_path=$CONFIG['attachment_fspath'] .'updates/'.$updateid;
+                $update_path = $CONFIG['attachment_fspath'] .'updates/'.$updateid;
                 if (file_exists($update_path))
                 {
                     if (!file_exists($CONFIG['attachment_fspath'] ."$incidentid"))
@@ -728,7 +728,7 @@ elseif ($action == 'assign')
             else $sql = "SELECT * FROM `{$dbServiceLevels}` WHERE tag='$servicelevel' AND priority='$priority' ";
 
             $result = mysql_query($sql);
-            if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+            if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
             $level = mysql_fetch_object($result);
 
             $targetval = $level->initial_response_mins * 60;
@@ -783,7 +783,7 @@ elseif ($action == 'assign')
             // Status zero means account disabled
             $sql = "SELECT * FROM `{$dbUsers}` WHERE status!=0 ORDER BY realname";
             $result = mysql_query($sql);
-            if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+            if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
             echo "<h3>{$strUsers}</h3>
             <table align='center'>
             <tr>

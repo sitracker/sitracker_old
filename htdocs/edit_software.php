@@ -32,7 +32,7 @@ if (empty($action) OR $action=='edit')
     echo "{$title}</h2>";
     $sql = "SELECT * FROM `{$dbSoftware}` WHERE id='$id' LIMIT 1";
     $result = mysql_query($sql);
-    if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     while ($software = mysql_fetch_object($result))
     {
         echo "<h5>".sprintf($strMandatoryMarked,"<sup class='red'>*</sup>")."</h5>";
@@ -74,7 +74,7 @@ elseif ($action=='delete')
     // First check there are no incidents using this software
     $sql = "SELECT count(id) FROM `{$dbIncidents}` WHERE softwareid='$id'";
     $result = mysql_query($sql);
-    if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     list($countincidents) = mysql_fetch_row($result);
     if ($countincidents >=1)
     {
@@ -127,7 +127,7 @@ else
     {
         replace_tags(TAG_SKILL, $id, $tags);
 
-        $sql = "UPDATE software SET ";
+        $sql = "UPDATE `{$dbSoftware}` SET ";
         $sql .= "name='$name', vendorid='{$vendor}', lifetime_start='$lifetime_start', lifetime_end='$lifetime_end' ";
         $sql .= "WHERE id = '$id'";
         mysql_query($sql);

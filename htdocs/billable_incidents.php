@@ -126,7 +126,7 @@ if (empty($mode))
     $sitelistsql .= " ORDER BY s.name";
 
     $result = mysql_query($sitelistsql);
-    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
 
     if (mysql_num_rows($result) > 0)
     {
@@ -213,7 +213,7 @@ elseif ($mode == 'approvalpage')
     }
 
     $resultsite = mysql_query($sitelistsql);
-    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
 
     $multipliers = get_all_available_multipliers();
 
@@ -278,7 +278,7 @@ elseif ($mode == 'approvalpage')
             $result = mysql_query($sql);
             if (mysql_error())
             {
-                trigger_error(mysql_error(),E_USER_ERROR);
+                trigger_error(mysql_error(),E_USER_WARNING);
                 return FALSE;
             }
 
@@ -475,7 +475,7 @@ elseif ($mode == 'invoicepage')
         $str .= "<h2>{$strBillableIncidents} - INVOICE</h2>";
 
         $resultsite = mysql_query($sitelistsql);
-        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
 
         $multipliers = get_all_available_multipliers();
 
@@ -497,7 +497,7 @@ elseif ($mode == 'invoicepage')
                 $result = mysql_query($sql);
                 if (mysql_error())
                 {
-                    trigger_error(mysql_error(),E_USER_ERROR);
+                    trigger_error(mysql_error(),E_USER_WARNING);
                     return FALSE;
                 }
 

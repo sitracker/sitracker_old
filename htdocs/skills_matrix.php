@@ -36,7 +36,7 @@ else echo "<p align='center'><a href='{$_SERVER['PHP_SELF']}?gid={$groupid}'>Hid
 
 $gsql = "SELECT * FROM `{$dbGroups}` ORDER BY name";
 $gresult = mysql_query($gsql);
-if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 while ($group = mysql_fetch_object($gresult))
 {
     $grouparr[$group->id]=$group->name;

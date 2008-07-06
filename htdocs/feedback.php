@@ -218,9 +218,10 @@ switch ($_REQUEST['action'])
         // Have a look to see if this respondant has already responded to this form
         // Get respondentid
         //print_r($_REQUEST);
-        $sql = "SELECT id AS respondentid FROM feedbackrespondents WHERE contactid='$contactid' AND formid='$formid' AND incidentid='$incidentid'";
+        $sql = "SELECT id AS respondentid FROM `{$dbFeedbackRespondents}` ";
+        $sql .= "WHERE contactid='$contactid' AND formid='$formid' AND incidentid='$incidentid'";
         $result = mysql_query($sql);
-        if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+        if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
         if (mysql_num_rows($result) < 1)
         {
             // FIXME: Proper error here
@@ -233,9 +234,9 @@ switch ($_REQUEST['action'])
         // Store this respondent and references
 
         // Loop through the questions in this form and store the results
-        $sql = "SELECT * FROM feedbackquestions WHERE formid='{$formid}'";
+        $sql = "SELECT * FROM `{$dbFeedbackQuestions}` WHERE formid='{$formid}'";
         $result = mysql_query($sql);
-        if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+        if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
         while ($question = mysql_fetch_object($result))
         {
             $qid = $question->id;
@@ -285,7 +286,7 @@ switch ($_REQUEST['action'])
             $debugtext .= "_POST[$fieldname]={$_POST[$fieldname]}\n";
 
             // Put the SQL to be executed into an array to execute later
-            $rsql[] = "INSERT INTO feedbackresults (respondentid, questionid, result, resulttext) VALUES ('$respondentid', '$qid','$qresult', '$qresulttext')";
+            $rsql[] = "INSERT INTO `{$dbFeedbackResults}` (respondentid, questionid, result, resulttext) VALUES ('$respondentid', '$qid','$qresult', '$qresulttext')";
             // Store the field in an array
             $fieldarray[$question->id]=$_POST[$fieldname];
         }
@@ -324,7 +325,7 @@ body { font:10pt Arial, Helvetica, sans-serif; }
             exit;
         }
 
-        if (empty($_REQUEST['rr'])) $rsql[] = "UPDATE feedbackrespondents SET completed='yes' WHERE formid='{$formid}' AND contactid='$contactid' AND incidentid='$incidentid'";
+        if (empty($_REQUEST['rr'])) $rsql[] = "UPDATE `{$dbFeedbackRespondents}` SET completed='yes' WHERE formid='{$formid}' AND contactid='$contactid' AND incidentid='$incidentid'";
 
         // Loop through array and execute the array to insert the form data
         foreach ($rsql AS $sql)
@@ -363,14 +364,14 @@ body { font:10pt Arial, Helvetica, sans-serif; }
         $fielddata = unserialize(base64_decode($errorfields[0])); // unserialize(
 
         // Have a look to see if this person has a form waiting to be filled
-        $rsql = "SELECT id FROM feedbackrespondents WHERE contactid='$contactid' AND incidentid='$incidentid' AND formid='$formid' ";
+        $rsql = "SELECT id FROM `{$dbFeedbackRespondents}` WHERE contactid='$contactid' AND incidentid='$incidentid' AND formid='$formid' ";
         if ($_REQUEST['rr'])
         {
             $rsql .= "AND completed='yes' ";
         }
 
         $rresult = mysql_query($rsql);
-        if (mysql_error()) trigger_error(mysql_error(), E_USER_ERROR);
+        if (mysql_error()) trigger_error(mysql_error(), E_USER_WARNING);
 
         $waitingforms = mysql_num_rows($rresult);
         $waitingform = mysql_fetch_object($rresult);
@@ -383,9 +384,9 @@ body { font:10pt Arial, Helvetica, sans-serif; }
         }
         else
         {
-            $sql = "SELECT * FROM feedbackforms WHERE id='{$formid}'";
+            $sql = "SELECT * FROM `{$dbFeedbackForms}` WHERE id='{$formid}'";
             $result = mysql_query($sql);
-            if (mysql_error()) trigger_error(mysql_error(), E_USER_ERROR);
+            if (mysql_error()) trigger_error(mysql_error(), E_USER_WARNING);
 
             $reqd=0;
             while ($form = mysql_fetch_object($result))
@@ -402,11 +403,11 @@ body { font:10pt Arial, Helvetica, sans-serif; }
                 }
                 echo nl2br($form->introduction);
 
-                $qsql  = "SELECT * FROM feedbackquestions ";
-                $qsql .= "WHERE feedbackquestions.formid='{$form->id}' ";
+                $qsql  = "SELECT * FROM `{$dbFeedbackQuestions}` ";
+                $qsql .= "WHERE formid='{$form->id}' ";
                 $qsql .= "ORDER BY taborder ASC";
                 $qresult=mysql_query($qsql);
-                if (mysql_error()) trigger_error(mysql_error(), E_USER_ERROR);
+                if (mysql_error()) trigger_error(mysql_error(), E_USER_WARNING);
                 while ($question = mysql_fetch_object($qresult))
                 {
                     if (strlen(trim($question->sectiontext)) > 3)

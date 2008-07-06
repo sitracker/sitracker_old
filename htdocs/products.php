@@ -30,7 +30,7 @@ if (empty($productid) AND $display!='skills')
 {
     $sql = "SELECT * FROM `{$dbVendors}` ORDER BY name";
     $result = mysql_query($sql);
-    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
 
     if (mysql_num_rows($result) >= 1)
     {
@@ -39,7 +39,7 @@ if (empty($productid) AND $display!='skills')
             echo "<h2>".icon('product', 32)." {$vendor->name}</h2>";
             $psql = "SELECT * FROM `{$dbProducts}` WHERE vendorid='{$vendor->id}' ORDER BY name";
             $presult = mysql_query($psql);
-            if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+            if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
             if (mysql_num_rows($presult) >= 1)
             {
                 echo "<table summary='List of products' align='center' width='95%'>";
@@ -51,13 +51,13 @@ if (empty($productid) AND $display!='skills')
                     // Count linked skills
                     $ssql = "SELECT COUNT(softwareid) FROM `{$dbSoftwareProducts}` WHERE productid={$product->id}";
                     $sresult = mysql_query($ssql);
-                    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+                    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
                     list($countlinked) = mysql_fetch_row($sresult);
 
                     // Count contracts
                     $ssql = "SELECT COUNT(id) FROM `{$dbMaintenance}` WHERE product='{$product->id}' AND term!='yes' AND expirydate > '{$now}'";
                     $sresult = mysql_query($ssql);
-                    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+                    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
                     list($countcontracts) = mysql_fetch_row($sresult);
 
                     if ($countlinked < 1) $shade='urgent';
@@ -96,7 +96,7 @@ if (empty($productid) AND $display!='skills')
 
     $sql = "SELECT s.* FROM `{$dbSoftware}` AS s LEFT JOIN `{$dbSoftwareProducts}` AS sp ON s.id = sp.softwareid WHERE sp.softwareid IS NULL";
     $result = mysql_query($sql);
-    if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     if (mysql_num_rows($result) >= 1)
     {
         echo "<h2>".icon('skill', 32)." Skills not linked</h2>";
@@ -108,12 +108,12 @@ if (empty($productid) AND $display!='skills')
         {
             $ssql = "SELECT COUNT(userid) FROM `{$dbUserSoftware}` AS us, `{$dbUsers}` AS u WHERE us.userid = u.id AND u.status!=0 AND us.softwareid = '{$software['id']}'";
             $sresult = mysql_query($ssql);
-            if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+            if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
             list($countengineers) = mysql_fetch_row($sresult);
 
             $ssql = "SELECT COUNT(id) FROM `{$dbIncidents}` WHERE softwareid='{$software['id']}'";
             $sresult = mysql_query($ssql);
-            if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+            if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
             list($countincidents) = mysql_fetch_row($sresult);
 
             echo "<tr class='$shade'><td>".icon('skill', 16)." ";
@@ -156,7 +156,7 @@ elseif (empty($productid) AND ($display=='skills' OR $display=='software'))
     echo "<h2>".icon('skill', 32)." {$strSkills}</h2>";
     $sql = "SELECT s.*, v.name AS vendorname FROM `{$dbSoftware}` AS s LEFT JOIN `{$dbVendors}` AS v ON s.vendorid = v.id ORDER BY name";
     $result = mysql_query($sql);
-    if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     if (mysql_num_rows($result) >= 1)
     {
         echo "<table align='center'>";
@@ -168,18 +168,18 @@ elseif (empty($productid) AND ($display=='skills' OR $display=='software'))
         {
             $ssql = "SELECT COUNT(userid) FROM `{$dbUserSoftware}` AS us, `{$dbUsers}` AS u WHERE us.userid = u.id AND u.status!=0 AND us.softwareid='{$software->id}'";
             $sresult = mysql_query($ssql);
-            if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+            if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
             list($countengineers) = mysql_fetch_row($sresult);
 
             // Count linked products
             $ssql = "SELECT COUNT(productid) FROM `{$dbSoftwareProducts}` WHERE softwareid={$software->id}";
             $sresult = mysql_query($ssql);
-            if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+            if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
             list($countlinked)=mysql_fetch_row($sresult);
 
             $ssql = "SELECT COUNT(id) FROM `{$dbIncidents}` WHERE softwareid='{$software->id}'";
             $sresult = mysql_query($ssql);
-            if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+            if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
             list($countincidents) = mysql_fetch_row($sresult);
 
             $lifetime_start = mysql2date($software->lifetime_start);
@@ -235,7 +235,7 @@ else
 {
     $psql = "SELECT * FROM `{$dbProducts}` WHERE id='{$productid}' LIMIT 1";
     $presult = mysql_query($psql);
-    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
     if (mysql_num_rows($presult) >= 1)
     {
         while ($product = mysql_fetch_object($presult))
@@ -253,7 +253,7 @@ else
             $swsql = "SELECT * FROM `{$dbSoftwareProducts}` AS sp, `{$dbSoftware}` AS s ";
             $swsql .= "WHERE sp.softwareid=s.id AND productid='{$product->id}' ORDER BY name";
             $swresult=mysql_query($swsql);
-            if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+            if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
 
             if (mysql_num_rows($swresult) > 0)
             {
@@ -265,12 +265,12 @@ else
                 {
                     $ssql = "SELECT COUNT(userid) FROM `{$dbUserSoftware}` AS us, `{$dbUsers}` AS u WHERE us.userid = u.id AND u.status!=0 AND us.softwareid='{$software['id']}'";
                     $sresult = mysql_query($ssql);
-                    if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+                    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
                     list($countengineers) = mysql_fetch_row($sresult);
 
                     $ssql = "SELECT COUNT(id) FROM `{$dbIncidents}` WHERE softwareid='{$software['id']}'";
                     $sresult = mysql_query($ssql);
-                    if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+                    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
                     list($countincidents) = mysql_fetch_row($sresult);
 
                     echo "<tr class='$shade'><td>".icon('skill', 16)." ";
@@ -314,7 +314,7 @@ else
 
             $sql = "SELECT * FROM `{$dbProductInfo}` WHERE productid='{$product->id}'";
             $result = mysql_query($sql);
-            if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+            if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
             if (mysql_num_rows($result) > 0)
             {
                 echo "<h3>{$strProductQuestions}</h3>";
@@ -334,7 +334,7 @@ else
 
             $sql = "SELECT * FROM `{$dbMaintenance}` WHERE product='{$product->id}' ORDER BY id DESC";
             $result = mysql_query($sql);
-            if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+            if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
             if (mysql_num_rows($result) >= 1)
             {
                 echo "<h3>{$strRelatedContracts}</h3>";
@@ -361,7 +361,7 @@ else
 
             $sql = "SELECT * FROM `{$dbIncidents}` WHERE product={$product->id} ORDER BY id DESC";
             $result = mysql_query($sql);
-            if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+            if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
             if (mysql_num_rows($result) >= 1)
             {
                 echo "<h3>{$strRelatedIncidents}</h3>";

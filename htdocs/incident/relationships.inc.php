@@ -28,7 +28,7 @@ switch ($action)
         // First check that the incident we're trying to relate to actually exists
         $sql = "SELECT COUNT(id) FROM `{$dbIncidents}` WHERE id = $relatedid";
         $result = mysql_query($sql);
-        if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+        if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
         list($countincidents) = mysql_fetch_row($result);
         if ($countincidents > 0)
         {
@@ -52,7 +52,7 @@ switch ($action)
                         $sql .= "VALUES ('$id', '".$sit[2]."', 'editing', '$now', '".$sit[2]."', '$status', 'hide', '','Added relationship with Incident $relatedid')"; //FIXME use $SYSLANG
                         mysql_query($sql);
                         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-                        
+
                         $status = incident_status($relatedid);
                         // Insert an entry into the update log for the related incident
                         $sql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, timestamp, currentowner, currentstatus, customervisibility, sla, bodytext) ";
@@ -75,10 +75,10 @@ switch ($action)
     break;
 
     case 'delete':
-        // Retreive details of the relationship
+        // Retrieve details of the relationship
         $sql = "SELECT * FROM `{$dbRelatedIncidents}` WHERE id='$rid'";
         $result = mysql_query($sql);
-        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
         $relation = mysql_fetch_object($result);
 
         $sql = "DELETE FROM `{$dbRelatedIncidents}` WHERE id='$rid'";

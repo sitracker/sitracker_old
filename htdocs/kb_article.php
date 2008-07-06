@@ -173,7 +173,7 @@ else
     }
     $listsql = "SELECT * FROM `{$dbSoftware}` ORDER BY name";
     $listresult = mysql_query($listsql);
-    if (mysql_error()) trigger_error("MySQL Error: ".mysql_error(),E_USER_ERROR);
+    if (mysql_error()) trigger_error("MySQL Error: ".mysql_error(),E_USER_WARNING);
     if (mysql_num_rows($listresult) > 0)
     {
         echo "<select name='expertise[]' multiple='multiple' size='5' style='width: 100%;'>";

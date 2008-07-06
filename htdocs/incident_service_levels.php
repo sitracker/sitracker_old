@@ -32,7 +32,7 @@ $sql .= "FROM `{$dbIncidents}` AS i, `{$dbContacts}` AS c ";
 $sql .= "WHERE (i.id='{$incidentid}' AND i.contact = c.id) ";
 $sql .= " OR i.contact=NULL ";
 $result = mysql_query($sql);
-if (mysql_error()) trigger_error(mysql_error(), E_USER_ERROR);
+if (mysql_error()) trigger_error(mysql_error(), E_USER_WARNING);
 $incident = mysql_fetch_object($result);
 $site_name = site_name($incident->siteid);
 $product_name = product_name($incident->product);

@@ -95,7 +95,7 @@ switch ($orderby)
 }
 
 $result = mysql_query($sql);
-if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
 
 if (mysql_numrows($result) > 0)
 {

@@ -24,7 +24,7 @@ switch ($action)
     case 'tags':
         $sql = "SELECT DISTINCT t.name FROM `{$dbSetTags}` AS st, `{$dbTags}` AS t WHERE st.tagid = t.tagid GROUP BY t.name";
         $result = mysql_query($sql);
-        if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+        if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
         if (mysql_num_rows($result) > 0)
         {
             while ($obj = mysql_fetch_object($result))
@@ -36,7 +36,7 @@ switch ($action)
     case 'contact' :
         $sql = "SELECT DISTINCT forenames, surname FROM `{$dbContacts}` WHERE active='true'";
         $result = mysql_query($sql);
-        if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+        if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
         if (mysql_num_rows($result) > 0)
         {
             while ($obj = mysql_fetch_object($result))
@@ -49,7 +49,7 @@ switch ($action)
     case 'sites':
         $sql = "SELECT DISTINCT name FROM `{$dbSites}` WHERE active='true'";
         $result = mysql_query($sql);
-        if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+        if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
         if (mysql_num_rows($result) > 0)
         {
             while ($obj = mysql_fetch_object($result))

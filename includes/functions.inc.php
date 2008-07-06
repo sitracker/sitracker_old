@@ -225,7 +225,7 @@ function authenticate($username, $password)
     $sql .= "WHERE username = '$username' AND password = '$password' AND status!= 0 ";
     // a status of 0 means the user account is disabled
     $result = mysql_query($sql);
-    if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
     // return appropriate value
     if (mysql_num_rows($result) == 0)
@@ -1260,19 +1260,19 @@ function incident_sla_history($incidentid)
     // Not the most efficient but..
     $sql = "SELECT * FROM `{$dbIncidents}` WHERE id='{$incidentid}'";
     $result = mysql_query($sql);
-    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
     $incident = mysql_fetch_object($result);
 
     // Get service levels
     $sql = "SELECT * FROM `{$dbServiceLevels}` WHERE tag='{$incident->servicelevel}' AND priority='{$incident->priority}' ";
     $result = mysql_query($sql);
-    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
     $level = mysql_fetch_object($result);
 
     // Loop through the updates in ascending order looking for service level events
     $sql = "SELECT * FROM `{$dbUpdates}` WHERE type='slamet' AND incidentid='{$incidentid}' ORDER BY id ASC, timestamp ASC";
     $result = mysql_query($sql);
-    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
     $prevtime = 0;
     $idx = 0;
     while ($history = mysql_fetch_object($result))
@@ -1946,7 +1946,7 @@ function group_selector($selected, $urlargs='')
 {
     $gsql = "SELECT * FROM `{$GLOBALS['dbGroups']}` ORDER BY name";
     $gresult = mysql_query($gsql);
-    if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     while ($group = mysql_fetch_object($gresult))
     {
         $grouparr[$group->id] = $group->name;
@@ -5211,7 +5211,7 @@ function get_public_holidays($startdate, $enddate)
     $sql .= "WHERE type = 10 AND (startdate >= '{$startdate}' AND startdate <= '{$enddate}')";
 
     $result = mysql_query($sql);
-    if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
     $publicholidays;
 
@@ -5471,7 +5471,7 @@ function software_backup_dropdown($name, $userid, $softwareid, $backupid)
     $sql .= "AND us.userid = u.id ";
     $sql .= " ORDER BY realname";
     $result = mysql_query($sql);
-    if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     $countsw = mysql_num_rows($result);
     if ($countsw >= 1)
     {
@@ -5727,7 +5727,7 @@ function suggest_reassign_userid($incidentid, $exceptuserid=0)
     global $now, $dbUsers, $dbIncidents, $dbUserSoftware;
     $sql = "SELECT product, softwareid, priority, contact, owner FROM `{$dbIncidents}` WHERE id={$incidentid} LIMIT 1";
     $result = mysql_query($sql);
-    if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
     if (!$result)
     {
@@ -5753,14 +5753,14 @@ function suggest_reassign_userid($incidentid, $exceptuserid=0)
             $sql = "SELECT id AS userid, status, lastseen FROM `{$dbUsers}` WHERE status > 0 AND users.accepting='Yes'";
         }
         $result = mysql_query($sql);
-        if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+        if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
         // Fallback to all users if we have no results from above
         if (mysql_num_rows($result) < 1)
         {
             $sql = "SELECT id AS userid, status, lastseen FROM `{$dbUsers}` WHERE status > 0 ";
             $result = mysql_query($sql);
-            if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+            if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
         }
 
         while ($user = mysql_fetch_object($result))
@@ -5789,7 +5789,7 @@ function suggest_reassign_userid($incidentid, $exceptuserid=0)
             // Have a look at the users incident queue (owned)
             $qsql = "SELECT id, priority, lastupdated, status, softwareid FROM `{$dbIncidents}` WHERE owner={$user->userid}";
             $qresult = mysql_query($qsql);
-            if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+            if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
             $queue_size = mysql_num_rows($qresult);
             if ($queue_size > 0)
             {
@@ -5857,7 +5857,7 @@ function format_external_id($externalid, $escalationpath='')
         $epsql = "SELECT id, name, track_url, home_url, url_title FROM `{$dbEscalationPaths}` ";
         if (!empty($escalationpath)) $epsql .= "WHERE id='$escalationpath' ";
         $epresult = mysql_query($epsql);
-        if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+        if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
         if (mysql_num_rows($epresult) >= 1)
         {
             while ($escalationpath = mysql_fetch_object($epresult))
@@ -6151,7 +6151,7 @@ function incident_open($incidentid)
     global $dbIncidents;
     $sql = "SELECT id FROM `{$dbIncidents}` WHERE id='$incidentid' AND status!=2";
     $result = mysql_query($sql);
-    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
     if (mysql_num_rows($result) > 0)
     {
         return $GLOBALS['strYes'];
@@ -6160,7 +6160,7 @@ function incident_open($incidentid)
     {
         $sql = "SELECT id FROM `{$dbIncidents}` WHERE id = '$incidentid'";
         $result = mysql_query($sql);
-        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
         if (mysql_num_rows($result) > 0)
         {
             //closed
@@ -6300,7 +6300,7 @@ function show_notes($linkid, $refid, $delete = TRUE)
     global $sit, $iconset, $dbNotes;
     $sql = "SELECT * FROM `{$dbNotes}` WHERE link='{$linkid}' AND refid='{$refid}' ORDER BY timestamp DESC, id DESC";
     $result = mysql_query($sql);
-    if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     $countnotes = mysql_num_rows($result);
     if ($countnotes >= 1)
     {
@@ -6455,7 +6455,7 @@ function show_dashboard_component($row, $dashboardid)
     global $dbDashboard;
     $sql = "SELECT name FROM `{$dbDashboard}` WHERE enabled = 'true' AND id = '$dashboardid'";
     $result = mysql_query($sql);
-    if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
     if (mysql_num_rows($result) == 1)
     {
@@ -6926,7 +6926,7 @@ function purge_tags()
     global $dbTags;
     $sql = "SELECT tagid FROM `{$dbTags}`";
     $result = mysql_query($sql);
-    if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     if (mysql_num_rows($result) > 0)
     {
         while ($tag = mysql_fetch_object($result))
@@ -6935,6 +6935,7 @@ function purge_tags()
         }
     }
 }
+
 
 /**
     * Produce a list of tags
@@ -6948,7 +6949,7 @@ function list_tags($recordid, $type, $html = TRUE)
     $sql = "SELECT t.name, t.tagid FROM `{$dbSetTags}` AS s, `{$dbTags}` AS t WHERE s.tagid = t.tagid AND ";
     $sql .= "s.type = '$type' AND s.id = '$recordid'";
     $result = mysql_query($sql);
-    if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     $numtags = mysql_num_rows($result);
 
     if ($html AND $numtags > 0)
@@ -7003,7 +7004,7 @@ function list_tag_icons($recordid, $type)
     }
     $sql .= ")";
     $result = mysql_query($sql);
-    if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     $numtags = mysql_num_rows($result);
     if ($numtags > 0)
     {
@@ -7031,16 +7032,16 @@ function show_tag_cloud($orderby="name", $showcount = FALSE)
     $sql = "SELECT COUNT(name) AS occurrences, name, t.tagid FROM `{$dbTags}` AS t, `{$dbSetTags}` AS st WHERE t.tagid = st.tagid GROUP BY name ORDER BY $orderby";
     if ($orderby == "occurrences") $sql .= " DESC";
     $result = mysql_query($sql);
-    if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
     $countsql = "SELECT COUNT(id) AS counted FROM `{$dbSetTags}` GROUP BY tagid ORDER BY counted DESC LIMIT 1";
     $countresult = mysql_query($countsql);
-    if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     list($max) = mysql_fetch_row($countresult);
 
     $countsql = "SELECT COUNT(id) AS counted FROM `{$dbSetTags}` GROUP BY tagid ORDER BY counted ASC LIMIT 1";
     $countresult = mysql_query($countsql);
-    if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     list($min) = mysql_fetch_row($countresult);
     unset($countsql, $countresult);
 
@@ -7652,7 +7653,7 @@ function get_incident_billing_details($incidentid)
     $result = mysql_query($sql);
     if (mysql_error())
     {
-        trigger_error(mysql_error(),E_USER_ERROR);
+        trigger_error(mysql_error(),E_USER_WARNING);
         return FALSE;
     }
 
@@ -7763,7 +7764,7 @@ function make_incident_billing_array($incidentid, $totals=TRUE)
     $result = mysql_query($sql);
     if (mysql_error())
     {
-        trigger_error(mysql_error(),E_USER_ERROR);
+        trigger_error(mysql_error(),E_USER_WARNING);
         return FALSE;
     }
 
@@ -7789,7 +7790,7 @@ function make_incident_billing_array($incidentid, $totals=TRUE)
 
         $billingresult = mysql_query($billingSQL);
         // echo $billingSQL;
-        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
         $billingObj = mysql_fetch_object($billingresult);
 
         unset($billingresult);
@@ -7816,25 +7817,25 @@ function make_incident_billing_array($incidentid, $totals=TRUE)
             {
                 $owner = "";
                 $duration = 0;
-    
+
                 unset($count);
-    
+
                 $count['engineer'];
                 $count['customer'];
-    
+
                 foreach ($engineer AS $activity)
                 {
                     $owner = user_realname($activity['owner']);
                     $duration += $activity['duration'];
-    
+
                     /*
                     echo "<pre>";
                     print_r($count);
                     echo "</pre>";
                     */
-    
+
                     group_billing_periods($count, 'engineer', $activity, $engineerPeriod);
-    
+
                     // Optimisation no need to compute again if we already have the details
                     if ($engineerPeriod != $customerPeriod)
                     {
@@ -7845,7 +7846,7 @@ function make_incident_billing_array($incidentid, $totals=TRUE)
                         $count['customer'] = $count['engineer'];
                     }
                 }
-    
+
                 $tduration += $duration;
                 $totalengineerperiods += sizeof($count['engineer']);
                 $totalcustomerperiods += sizeof($count['customer']);
@@ -7854,19 +7855,19 @@ function make_incident_billing_array($incidentid, $totals=TRUE)
                 print_r($count);
                 echo "</pre>";
                 */
-    
+
                 $billing_a[$activity['owner']]['owner'] = $owner;
                 $billing_a[$activity['owner']]['duration'] = $duration;
                 $billing_a[$activity['owner']]['engineerperiods'] = $count['engineer'];
                 $billing_a[$activity['owner']]['customerperiods'] = $count['customer'];
             }
-            
+
             if ($totals == TRUE)
             {
                 if (empty($totalengineerperiods)) $totalengineerperiods = 0;
                 if (empty($totalcustomerperiods)) $totalcustomerperiods = 0;
                 if (empty($tduration)) $tduration = 0;
-    
+
                 $billing_a[-1]['totalduration'] = $tduration;
                 $billing_a[-1]['totalengineerperiods'] = $totalengineerperiods;
                 $billing_a[-1]['totalcustomerperiods'] = $totalcustomerperiods;
@@ -7913,33 +7914,33 @@ function get_incident_billable_breakdown_array($incidentid)
                     // $period is the start time
                     $day = date('D', $period);
                     $hour = date('H', $period);
-        
+
                     $dayNumber = date('d', $period);
                     $month = date('n', $period);
                     $year = date('Y', $period);
                     // echo "DAY {$day} HOUR {$hour}";
-        
+
                     $dayofweek = strtolower($day);
-        
+
                     if (is_day_bank_holiday($dayNumber, $month, $year))
                     {
                         $dayofweek = "holiday";
                     }
-        
+
                     $multiplier = get_billable_multiplier($dayofweek, $hour, 1); //FIXME make this not hard coded
-        
+
                     $billing[$engineerName]['owner'] = $engineerName;
                     $billing[$engineerName][$multiplier]['multiplier'] = $multiplier;
                     if (empty($billing[$engineerName][$multiplier]['count']))
                     {
                         $billing[$engineerName][$multiplier]['count'] = 0;
                     }
-        
+
                     $billing[$engineerName][$multiplier]['count']++;
                 }
             }
         }
-  
+
         if (!empty($billable[-1]['refunds'])) $billing['refunds'] = $billable[-1]['refunds'];
 
     }
@@ -7973,7 +7974,7 @@ function billable_units_site($siteid, $startdate=0, $enddate=0)
     $result = mysql_query($sql);
     if (mysql_error())
     {
-        trigger_error(mysql_error(),E_USER_ERROR);
+        trigger_error(mysql_error(),E_USER_WARNING);
         return FALSE;
     }
 
@@ -8269,7 +8270,7 @@ function contract_details($id, $mode='internal')
     $sql .= "AND (m.licence_type IS NULL OR m.licence_type = lt.id)";
 
     $maintresult = mysql_query($sql);
-    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
 
     $maintrow = mysql_fetch_array($maintresult);
 
@@ -8488,8 +8489,8 @@ function contract_details($id, $mode='internal')
     // supported software
     $sql = "SELECT * FROM `{$GLOBALS[dbSoftwareProducts]}` AS sp, `{$GLOBALS[dbSoftware]}` AS s ";
     $sql .= "WHERE sp.softwareid = s.id AND productid='{$maintrow['product']}' ";
-    $result=mysql_query($sql);
-    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+    $result = mysql_query($sql);
+    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
 
     if (mysql_num_rows($result)>0)
     {
@@ -8577,7 +8578,7 @@ function upload_file($file, $incidentid, $updateid, $type='public')
                 $usertype = 'contact';
                 $userid = $_SESSION['contactid'];
             }
-            $sql = "INSERT into files
+            $sql = "INSERT INFO `{$GLOBALS['dbFiles']}`
                     (category, filename, size, userid, usertype, path, filedate, refid)
                     VALUES
                     ('{$type}', '{$file['name']}', '{$file['size']}', '{$userid}', '{$usertype}', '{$filepath}', '{$now}', '{$id}')";
@@ -8623,16 +8624,18 @@ function create_ftp_connection()
 * @param $title - text to go in the first column
 * @param $level either management or engineer, management is able to (de)select users
 * @param $groupid  Defalt group to select
-* @return table of format <>tr><th /><td /></tr>
+* @return table of format <tr><th /><td /></tr>
 * @author Paul Heaney
 */
 function group_user_selector($title, $level="engineer", $groupid)
 {
+    global $dbUsers, $dbGroups;
     $str .= "<tr><th>{$title}</th>";
     $str .= "<td align='center'>";
-    $sql = "SELECT DISTINCT(groups.name), groups.id FROM users, groups WHERE users.status > 0 AND users.groupid = groups.id ORDER BY groups.name";
+    $sql = "SELECT DISTINCT(g.name), g.id FROM `{$dbUsers}` AS u, `{$dbGroups}` AS g ";
+    $sql .= "WHERE u.status > 0 AND u.groupid = g.id ORDER BY g.name";
     $result = mysql_query($sql);
-    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
 
     while ($row = mysql_fetch_object($result))
     {
@@ -8650,7 +8653,8 @@ function group_user_selector($title, $level="engineer", $groupid)
     $str .="<br />";
 
 
-    $sql = "SELECT users.id, users.realname, groups.name FROM users, groups WHERE users.status > 0 AND users.groupid = groups.id ORDER BY username";
+    $sql = "SELECT u.id, u.realname, g.name FROM `{$dbUsers}` AS u, `{$dbGroups}` AS g ";
+    $sql .= "WHERE u.status > 0 AND u.groupid = g.id ORDER BY username";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
@@ -8859,7 +8863,7 @@ function kb_article($id, $mode='internal')
 
     $sql = "SELECT * FROM `{$GLOBALS['dbKBArticles']}` WHERE docid='{$id}' LIMIT 1";
     $result = mysql_query($sql);
-    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
     $kbarticle = mysql_fetch_object($result);
 
     if (empty($kbarticle->title))
@@ -8882,7 +8886,7 @@ function kb_article($id, $mode='internal')
     $ssql .= "WHERE kbs.softwareid = s.id AND kbs.docid = '{$id}' ";
     $ssql .= "ORDER BY s.name";
     $sresult = mysql_query($ssql);
-    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
     if (mysql_num_rows($sresult) >= 1)
     {
         $html .= "<h3>{$GLOBALS['strEnvironment']}</h3>";
@@ -8897,7 +8901,7 @@ function kb_article($id, $mode='internal')
 
     $csql = "SELECT * FROM `{$GLOBALS['dbKBContent']}` WHERE docid='{$id}' ";
     $cresult = mysql_query($csql);
-    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
     $restrictedcontent = 0;
     while ($kbcontent = mysql_fetch_object($cresult))
     {
@@ -9023,7 +9027,7 @@ function show_edit_site($site, $mode='internal')
 {
     $sql = "SELECT * FROM `{$GLOBALS['dbSites']}` WHERE id='$site' ";
     $siteresult = mysql_query($sql);
-    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
     while ($siterow = mysql_fetch_array($siteresult))
     {
         if ($mode == 'internal')
@@ -9402,7 +9406,7 @@ function process_add_contact($mode = 'internal')
         {
             $sql = "SELECT username, password FROM `{$dbContacts}` WHERE id=$newid";
             $result = mysql_query($sql);
-            if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+            if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
             else
             {
                 if ($CONFIG['portal'] AND $_POST['emaildetails'] == 'on')
@@ -9451,7 +9455,7 @@ function kb_name($kbid)
     $kbid = intval($kbid);
     $sql = "SELECT title FROM `{$GLOBALS['dbKBArticles']}` WHERE docid='{$kbid}'";
     $result = mysql_query($sql);
-    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
     else
     {
         $row = mysql_fetch_object($result);
@@ -9649,10 +9653,10 @@ function database_schema_version()
     $result = mysql_query($sql);
     if (mysql_error())
     {
-        trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+        trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
         $return = FALSE;
     }
-    
+
     if (mysql_num_rows($result) > 0)
     {
         list($return) = mysql_fetch_row($result);
@@ -9770,7 +9774,7 @@ function user_contracts_table($userid, $mode = 'internal')
         $sql .= "OR m.allcontactssupported = 'yes') ";
         $sql .= "AND m.product=p.id  ";
         $result = mysql_query($sql);
-        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
         if (mysql_num_rows($result)>0)
         {
             $html .= "<table align='center' class='vertical'>";
@@ -9918,7 +9922,7 @@ function get_billable_multiplier($dayofweek, $hour, $billingmatrix = 1)
     $result = mysql_query($sql);
     if (mysql_error())
     {
-        trigger_error(mysql_error(),E_USER_ERROR);
+        trigger_error(mysql_error(),E_USER_WARNING);
         return FALSE;
     }
 
@@ -9952,7 +9956,7 @@ function get_serviceid($contractid, $date = '')
     $result = mysql_query($sql);
     if (mysql_error())
     {
-        trigger_error(mysql_error(),E_USER_ERROR);
+        trigger_error(mysql_error(),E_USER_WARNING);
         return FALSE;
     }
 
@@ -9979,7 +9983,7 @@ function get_unit_rate($contractid, $date='')
     $result = mysql_query($sql);
     if (mysql_error())
     {
-        trigger_error(mysql_error(),E_USER_ERROR);
+        trigger_error(mysql_error(),E_USER_WARNING);
         return FALSE;
     }
 
@@ -10003,8 +10007,10 @@ function get_unit_rate($contractid, $date='')
  */
 function is_day_bank_holiday($day, $month, $year)
 {
+    global $dbHolidays;
+
     $date = mktime(0, 0, 0, $month, $year, $year);
-    $sql = "SELECT * FROM holidays WHERE type = 10 AND startdate = {$date}";
+    $sql = "SELECT * FROM `{$dbHolidays}` WHERE type = 10 AND startdate = {$date}";
 
     $result = mysql_query($sql);
     if (mysql_error())
@@ -10033,7 +10039,7 @@ function get_all_available_multipliers($matrixid=1)
         $result = mysql_query($sql);
         if (mysql_error())
         {
-            trigger_error(mysql_error(),E_USER_ERROR);
+            trigger_error(mysql_error(),E_USER_WARNING);
             return FALSE;
         }
 
@@ -10328,7 +10334,7 @@ function contract_service_table($contractid)
 
     $sql = "SELECT * FROM `{$dbService}` WHERE contractid = {$contractid} ORDER BY enddate DESC";
     $result = mysql_query($sql);
-    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
     if (mysql_num_rows($result) > 0)
     {
         $shade = '';
@@ -10385,7 +10391,7 @@ function contract_unit_balance($contractid, $includenonapproved = FALSE)
 
     $sql = "SELECT * FROM `{$dbService}` WHERE contractid = {$contractid} ORDER BY enddate DESC";
     $result = mysql_query($sql);
-    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
 
     if (mysql_num_rows($result) > 0)
     {
@@ -10417,7 +10423,7 @@ function does_contact_have_billable_contract($contactid)
     $sql .= "AND m.expirydate > {$now} AND m.term != 'yes'";
     $result = mysql_query($sql);
 
-    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
 
     if (mysql_num_rows($result) > 0)
     {
@@ -10465,7 +10471,7 @@ function get_billable_contract_id($contactid)
 
     $result = mysql_query($sql);
 
-    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
 
     if (mysql_num_rows($result) > 0)
     {

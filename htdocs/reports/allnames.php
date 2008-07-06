@@ -31,7 +31,7 @@ $sql.="FROM `{$dbContacts}` ";
 $sql.="ORDER BY surname, forenames ASC ";
 //$sql.="LIMIT 100";
 $result = mysql_query($sql);
-if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
 
 $count = mysql_num_rows($result);
 echo "<strong>Report showing all $count contact records</strong> - ".ldate(r)."<br /><br />";

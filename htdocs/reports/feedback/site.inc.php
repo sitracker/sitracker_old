@@ -8,7 +8,7 @@ echo "incidents logged by the user(s) shown:</p>";
 
 $qsql = "SELECT * FROM `{$dbFeedbackQuestions}` WHERE formid='{$formid}' AND type='rating' ORDER BY taborder";
 $qresult = mysql_query($qsql);
-if (mysql_error()) trigger_error(mysql_error(), E_USER_ERROR);
+if (mysql_error()) trigger_error(mysql_error(), E_USER_WARNING);
 while ($qrow = mysql_fetch_object($qresult))
 {
     $q[$qrow->taborder]=$qrow;
@@ -34,7 +34,7 @@ if (!empty($startdate))
     {
         $msql .= "AND i.closed >= '{$startdate}' ";
     }
-    
+
     //echo "DATES {$dates}";
 }
 
@@ -53,7 +53,7 @@ if (!empty($enddate))
 $msql .= "ORDER BY s.name, s.department, i.id ASC \n";
 
 $mresult = mysql_query($msql);
-if (mysql_error()) trigger_error(mysql_error(), E_USER_ERROR);
+if (mysql_error()) trigger_error(mysql_error(), E_USER_WARNING);
 
 if (mysql_num_rows($mresult) >=1)
 {
@@ -145,11 +145,11 @@ if (mysql_num_rows($mresult) >=1)
     //$html .= "<p><strong>{$mrow->title}</strong>, opened ".date("l jS F Y @ g:i a", $mrow->opened)." for ".format_seconds($mrow->duration)." and {$mrow->closingstatusname} on ".date("l jS F Y @ g:i a", $mrow->closed)."</p>";
     // $html = "<h2><a href='/contact_details.php?id={$mrow->contactid}' title='Jump to Contact'>{$mrow->forenames} {$mrow->surname}</a>, {$mrow->department} &nbsp; <a href='#' title='Jump to site'>{$mrow->sitename}</a></h2>";
     $html = "<h2>{$mrow->department}&nbsp; <a href='site_details.php?id={$mrow->siteid}' title='Jump to site'>{$mrow->sitename}</a></h2>";
-    $qsql = "SELECT * FROM `{$dbFeedbackQuestions}` WHERE formid='{$formid}' AND type='rating' ORDER BY taborder";    
+    $qsql = "SELECT * FROM `{$dbFeedbackQuestions}` WHERE formid='{$formid}' AND type='rating' ORDER BY taborder";
     $qresult = mysql_query($qsql);
     // echo "$qsql";
 
-    if (mysql_error()) trigger_error(mysql_error(), E_USER_ERROR);
+    if (mysql_error()) trigger_error(mysql_error(), E_USER_WARNING);
     while ($qrow = mysql_fetch_object($qresult))
     {
         $numquestions++;
@@ -160,7 +160,7 @@ if (mysql_num_rows($mresult) >=1)
         $sql .= "AND fr.id = r.respondentid ";
         $sql .= "AND r.questionid = '$qrow->id' ";
         $sql .= "AND fr.id = '$mrow->reportid' ";
-        
+
         if (!empty($startdate))
         {
             if ($dates == 'feedbackin')
@@ -171,10 +171,10 @@ if (mysql_num_rows($mresult) >=1)
             {
                 $sql .= "AND i.closed >= '{$startdate}' ";
             }
-            
+
             //echo "DATES {$dates}";
         }
-        
+
         if (!empty($enddate))
         {
             if ($dates == 'feedbackin')
@@ -186,13 +186,13 @@ if (mysql_num_rows($mresult) >=1)
                 $sql .= "AND i.closed <= '{$enddate}' ";
             }
         }
-        
+
         $sql .= "ORDER BY i.contact, i.id";
         // echo "==== $sql ====";
         $result = mysql_query($sql);
 
 
-        if (mysql_error()) trigger_error(mysql_error(), E_USER_ERROR);
+        if (mysql_error()) trigger_error(mysql_error(), E_USER_WARNING);
         $numresults=0;
         $cumul=0;
         $percent=0;

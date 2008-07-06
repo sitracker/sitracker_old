@@ -21,7 +21,7 @@ include 'portalheader.inc.php';
 $incidentid = cleanvar($_REQUEST['id']);
 $sql = "SELECT title, contact, status, opened, maintenanceid FROM `{$dbIncidents}` WHERE id={$incidentid}";
 $result = mysql_query($sql);
-if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
 $user = mysql_fetch_object($result);
 
 // FIXME check if this user owns the incident
@@ -60,7 +60,7 @@ if ($offset > 0)
     }
 }
 $result = mysql_query($sql);
-if (mysql_error()) trigger_error("MySQL Query Error $sql".mysql_error(), E_USER_ERROR);
+if (mysql_error()) trigger_error("MySQL Query Error $sql".mysql_error(), E_USER_WARNING);
 
 $keeptags = array('b','i','u','hr','&lt;', '&gt;');
 foreach ($keeptags AS $keeptag)
@@ -120,7 +120,7 @@ $filesql = "SELECT *, f.id AS fileid, u.id AS updateid, f.userid AS userid
             ORDER BY f.filedate DESC";
 
 $fileresult = mysql_query($filesql);
-if (mysql_error()) trigger_error("MySQL Query Error $sql".mysql_error(), E_USER_ERROR);
+if (mysql_error()) trigger_error("MySQL Query Error $sql".mysql_error(), E_USER_WARNING);
 $delim = $fsdelim;
 
 while ($filerow = mysql_fetch_object($fileresult))

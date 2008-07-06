@@ -19,7 +19,7 @@ function dashboard_holidays($dashletid)
     echo "<div class='window'>";
     $sql  = "SELECT * FROM `{$dbUsers}` WHERE status!=0 AND status!=1 ";  // status=0 means left company
     $result = mysql_query($sql);
-    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
     if (mysql_num_rows($result) >=1)
     {
         while ($users = mysql_fetch_array($result))

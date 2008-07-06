@@ -53,7 +53,7 @@ function statusform_submit(user)
 // Extract escalation paths
 $epsql = "SELECT id, name, track_url, home_url, url_title FROM `{$dbEscalationPaths}`";
 $epresult = mysql_query($epsql);
-if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 if (mysql_num_rows($epresult) >= 1)
 {
     while ($escalationpath = mysql_fetch_object($epresult))
@@ -96,7 +96,7 @@ switch ($type)
         if (!empty($maintexclude)) $sql .= "AND i.maintenanceid != '{$maintexclude}' ";
 
         echo "<h2>".icon('support', 32, $strSupport)." ";
-        
+
         if ($user != 'all')
         {
             echo sprintf($strUserIncidents, user_realname($user,TRUE)).": ";
@@ -164,7 +164,7 @@ switch ($type)
 
         }
         $result = mysql_query($sql);
-        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
         $rowcount = mysql_num_rows($result);
 
         // Toggle Sorting Order
@@ -234,7 +234,7 @@ switch ($type)
         if ($user == 'current') $user = $sit[2];
         $softsql = "SELECT * FROM `{$dbUserSoftware}` WHERE userid='$user' ";
         $softresult = mysql_query($softsql);
-        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
 
         $softcount = mysql_num_rows($softresult);
 
@@ -317,7 +317,7 @@ switch ($type)
                 default:   $sql .= " ORDER BY priority DESC, lastupdated ASC"; break;
             }
             $result = mysql_query($sql);
-            if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+            if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
             $rowcount = mysql_num_rows($result);
 
             // expertise incident listing goes here

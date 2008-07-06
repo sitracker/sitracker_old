@@ -33,7 +33,7 @@ function count_updates($incidentid)
     $count_updates = 0;
     $sql = "SELECT COUNT(id) FROM `{$dbUpdates}` WHERE incidentid='{$incidentid}'";
     $result = mysql_query($sql);
-    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
     list ($count_updates) = mysql_fetch_row($result);
 
     return $count_updates;
@@ -163,7 +163,7 @@ elseif (is_numeric($records))
 }
 
 $result = mysql_query($sql);
-if (mysql_error()) trigger_error("MySQL Query Error $sql".mysql_error(), E_USER_ERROR);
+if (mysql_error()) trigger_error("MySQL Query Error $sql".mysql_error(), E_USER_WARNING);
 
 $keeptags = array('b','i','u','hr','&lt;', '&gt;');
 foreach ($keeptags AS $keeptag)
@@ -436,7 +436,7 @@ while ($update = mysql_fetch_object($result))
 
 		if ($update->duration != 0)
 		{
-		    $inminutes = ceil($update->duration/60); // Always round up 
+		    $inminutes = ceil($update->duration/60); // Always round up
 		    $wholeupdate .= "{$strDuration}: {$inminutes} {$strMinutes}";
 		}
 

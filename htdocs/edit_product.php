@@ -59,7 +59,7 @@ else
 
     $sql = "SELECT * FROM `{$dbProducts}` WHERE id='$id' ";
     $result = mysql_query($sql);
-    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
 
     $row = mysql_fetch_object($result);
 

@@ -29,7 +29,7 @@ if (empty($action) || $action == "showform")
 {
     include ('htmlheader.inc.php');
     echo "<h2>{$strAssociateContactWithContract}</h2>";
-    
+
     echo "<form action='{$_SERVER['PHP_SELF']}?action=add' method='post'>";
     echo "<input type='hidden' name='context' value='{$context}' />";
     echo "<table align='center' class='vertical'>";
@@ -46,7 +46,7 @@ if (empty($action) || $action == "showform")
         $sql = "SELECT s.name, p.name FROM `{$dbMaintenance}` m, `{$dbSites}` s, `{$dbProducts}` p WHERE m.site=s.id ";
         $sql .= "AND m.product=p.id AND m.id='$maintid'";
         $result=mysql_query($sql);
-        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
         list($sitename, $product)=mysql_fetch_row($result);
 
         echo "<tr><th>{$strContract} ".icon('contract', 16)."</th><td>$maintid - $sitename, $product</td></tr>";
@@ -89,7 +89,7 @@ else if ($action == "add")
 
     $sql = "SELECT * FROM `{$dbSupportContacts}` WHERE maintenanceid = '{$maintid}' AND contactid = '{$contactid}'";
     $result = mysql_query($sql);
-    if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
     if (mysql_num_rows($result) > 0)
     {

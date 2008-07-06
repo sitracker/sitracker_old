@@ -58,7 +58,7 @@ switch ($_REQUEST['action'])
 
         $sql = "SELECT name FROM `{$dbDashboard}`";
         $result = mysql_query($sql);
-        if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+        if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
         echo "<h2>".icon('dashboard', 32)." ";
         echo $strInstallDashboardComponents."</h2>";
@@ -153,7 +153,7 @@ switch ($_REQUEST['action'])
         $id = $_REQUEST['id'];
         $sql = "SELECT * FROM `{$dbDashboard}` WHERE id = {$id}";
         $result = mysql_query($sql);
-        if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+        if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
         if (mysql_num_rows($result) > 0)
         {
@@ -225,7 +225,7 @@ switch ($_REQUEST['action'])
 
         $sql = "SELECT * FROM `{$dbDashboard}`";
         $result = mysql_query($sql);
-        if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+        if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
         echo "<h2>".icon('dashboard', 32)." ";
         echo "{$strManageDashboardComponents}</h2>";

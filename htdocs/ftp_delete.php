@@ -24,7 +24,7 @@ $id = cleanvar($_REQUEST['id']);
 
 $sql = "SELECT * FROM `{$dbFiles}` WHERE id='$id'";
 $result = mysql_query($sql);
-if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
 $frow = mysql_fetch_array($result);
 
 // set up basic connection

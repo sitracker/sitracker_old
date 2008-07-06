@@ -52,13 +52,13 @@ if (isset($_POST['submit']))
         $errors = 1;
         $errors_string .= "<p class='error'>{$strMustEnterName}</p>\n";
     }
-    
+
     if ($email == '')
     {
     	$errors = 1;
     	$errors_string .= "<p class='error'>{$strMustEnterEmail}</p>\n";
     }
-    
+
     if ($telephone == '')
     {
         $errors = 1;
@@ -96,7 +96,7 @@ if (isset($_POST['submit']))
         // licenserx='$licenserx'
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
- 		else
+        else
         {
             plugin_do('edit_site_save');
             journal(CFG_LOGGING_NORMAL, $strSiteEdited, sprintf($strSiteXEdited,$site) , CFG_JOURNAL_SITES, $site);

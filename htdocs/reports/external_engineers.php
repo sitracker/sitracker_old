@@ -152,7 +152,7 @@ while ($escalations = mysql_fetch_object($escs))
         $sql .= "ORDER BY externalengineer";
 
         $result = mysql_query($sql);
-        if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+        if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
         $i = 0;
         while ($obj = mysql_fetch_object($result))

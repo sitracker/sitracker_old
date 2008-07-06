@@ -87,7 +87,7 @@ if (strlen($search_string) > 4)
     // Find Software
     $sql = "SELECT * FROM `{$dbSoftware}` WHERE name LIKE '%{$search_string}%' LIMIT 20";
     $result = mysql_query($sql);
-    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
     echo "<p align='center'><strong>Matching Skills</strong>: ";
     $softcount=mysql_num_rows($result);
     $count=1;
@@ -130,7 +130,7 @@ if (strtolower($mode)=='recent') $sql .= "ORDER BY docid DESC LIMIT 20";
 if (strtolower($mode)=='today') $sql .= " WHERE published > '".date('Y-m-d')."' ORDER BY published DESC";
 
 $result = mysql_query($sql);
-if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
 
 if (mysql_num_rows($result) >= 1)
 {
@@ -156,7 +156,7 @@ if (mysql_num_rows($result) >= 1)
         $ssql = "SELECT * FROM `{$dbKBSoftware}` AS kbs, `{$dbSoftware}` AS s WHERE kbs.softwareid = s.id ";
         $ssql .= "AND kbs.docid = '{$kbarticle->docid}' ORDER BY s.name";
         $sresult = mysql_query($ssql);
-        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
         $rowcount = mysql_num_rows($sresult);
         if ($rowcount >= 1 AND $rowcount < 3)
         {
@@ -175,7 +175,7 @@ if (mysql_num_rows($result) >= 1)
         echo "<br /><a href='kb_view_article.php?id={$kbarticle->docid}' class='info'>{$kbarticle->title}";
         $asql = "SELECT LEFT(content,400) FROM `{$dbKBContent}` WHERE docid='{$kbarticle->docid}' ORDER BY id ASC LIMIT 1";
         $aresult = mysql_query($asql);
-        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
         list($content)=mysql_fetch_row($aresult);
         $content=strip_tags(remove_slashes($content));
         echo "<span>{$content}</span>";

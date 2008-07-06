@@ -16,6 +16,7 @@ require ('functions.inc.php');
 // This page requires authentication
 require ('auth.inc.php');
 
+// TODO merge storedashboard.php this with ajaxdata.php
 
 $id = $_REQUEST['id'];
 $val = $_REQUEST['val'];

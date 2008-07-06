@@ -152,7 +152,7 @@ switch ($action)
             //get current incident status
             $sql = "SELECT status FROM `{$dbIncidents}` WHERE id='{$incident}'";
             $result = mysql_query($sql);
-            if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+            if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
             $status = mysql_fetch_object($result);
             $status = $status->status;
 
@@ -166,7 +166,7 @@ switch ($action)
             $sql = "SELECT * FROM `{$dbTasks}` WHERE id='{$id}'";
 
             $result = mysql_query($sql);
-            if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+            if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
             if (mysql_num_rows($result) >= 1)
             {
                 $task = mysql_fetch_object($result);
@@ -185,7 +185,7 @@ switch ($action)
             $numnotes = 0;
             $sql = "SELECT * FROM `{$dbNotes}` WHERE link='10' AND refid='{$id}'";
             $result = mysql_query($sql);
-            if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+            if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
             if (mysql_num_rows($result) >= 1)
             {
                 while ($notes = mysql_fetch_object($result))
@@ -269,7 +269,7 @@ switch ($action)
         echo "$title</h2>";
         $sql = "SELECT * FROM `{$dbTasks}` WHERE id='$id'";
         $result = mysql_query($sql);
-        if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+        if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
         if (mysql_num_rows($result) >= 1)
         {
             while ($task = mysql_fetch_object($result))

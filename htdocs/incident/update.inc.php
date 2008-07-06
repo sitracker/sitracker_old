@@ -36,7 +36,7 @@ function display_update_page($draftid=-1)
     {
         $draftsql = "SELECT * FROM `{$dbDrafts}` WHERE id = {$draftid}";
         $draftresult = mysql_query($draftsql);
-        if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+        if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
         $draftobj = mysql_fetch_object($draftresult);
 
         $metadata = explode("|",$draftobj->meta);
@@ -455,7 +455,7 @@ if (empty($action))
 {
     $sql = "SELECT * FROM `{$dbDrafts}` WHERE type = 'update' AND userid = '{$sit[2]}' AND incidentid = '{$id}'";
     $result = mysql_query($sql);
-    if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
     include ('incident_html_top.inc.php');
 

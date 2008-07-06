@@ -34,7 +34,7 @@ if (empty($_REQUEST['mode']))
     echo "<tr><td align='center' colspan='2'>";
     $sql = "SELECT * FROM `{$dbSites}` ORDER BY name";
     $result = mysql_query($sql);
-    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
     echo "<select name='inc[]' multiple='multiple' size='20'>";
     while ($site = mysql_fetch_object($result))
     {
@@ -102,7 +102,7 @@ elseif ($_REQUEST['mode'] == 'report')
     $sql .= " ORDER BY site, incid ASC ";
 
     $result = mysql_query($sql);
-    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
     $numrows = mysql_num_rows($result);
 
     // FIXME i18n
@@ -147,7 +147,7 @@ elseif ($_REQUEST['mode'] == 'report')
     {
         $externalpercent = number_format(($externalincidents / $numrows * 100),1);
     }
-    
+
     if ($showtotals)
     {
         $html .= "<tfoot><tr><td colspan='0'>Total Number of incidents logged: {$numrows}, Logged externally: {$externalincidents} ({$externalpercent}%)</td></tr></tfoot>\n"; // FIXME i18n

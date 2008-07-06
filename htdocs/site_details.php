@@ -106,7 +106,7 @@ echo "<h3>{$strContacts}</h3>";
 
 $sql="SELECT * FROM `{$dbContacts}` WHERE siteid='{$id}' ORDER BY surname, forenames";
 $contactresult = mysql_query($sql);
-if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
 
 $countcontacts = mysql_num_rows($contactresult);
 if ($countcontacts > 0)
@@ -205,7 +205,7 @@ if (user_permission($sit[2],19)) // View contracts
 
     // connect to database and execute query
     $result = mysql_query($sql);
-    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
     $countcontracts = mysql_num_rows($result);
     if ($countcontracts > 0)
     {
@@ -243,7 +243,7 @@ if (user_permission($sit[2],19)) // View contracts
             // define class for table row shading
             if ($shade) $class = "shade1";
             else $class = "shade2";
-            if ($results['term'] == 'yes' OR 
+            if ($results['term'] == 'yes' OR
                 ($results['expirydate'] < $now AND
                 $results['expirydate'] != -1))
             {

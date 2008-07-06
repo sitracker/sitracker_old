@@ -36,9 +36,9 @@ if (empty($mode))
 
     $sql = "SELECT * FROM `{$dbUsers}` WHERE id='{$edituserid}' LIMIT 1";
     $result = mysql_query($sql);
-    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
 
-    if (mysql_num_rows($result) < 1) trigger_error("No such user ".strip_tags($edituserid),E_USER_ERROR);
+    if (mysql_num_rows($result) < 1) trigger_error("No such user ".strip_tags($edituserid),E_USER_WARNING);
     $user = mysql_fetch_object($result);
 
     // FIXME This form should use one SQL query really, not call all these functions to lookup each field
@@ -113,7 +113,7 @@ if (empty($mode))
     {
         $sql = "SELECT name FROM `{$dbGroups}` WHERE id='{$user->groupid}' ";
         $result = mysql_query($sql);
-        if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+        if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
         $group = mysql_fetch_object($result);
         echo $group->name;
     }
@@ -288,7 +288,7 @@ elseif ($mode=='save')
     // Update user profile
     $errors = 0;
     $result = mysql_query($sql);
-    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
     $userdetails = mysql_fetch_row($result);
 
     // check for change of password
@@ -338,7 +338,7 @@ elseif ($mode=='save')
     // Check email address is unique (discount disabled accounts)
     $sql = "SELECT COUNT(id) FROM `{$dbUsers}` WHERE status > 0 AND email='$email'";
     $result = mysql_query($sql);
-    if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     list($countexisting) = mysql_fetch_row($result);
     if ($countexisting > 1)
     {

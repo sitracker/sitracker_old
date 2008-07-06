@@ -160,7 +160,7 @@ elseif ($_REQUEST['mode'] == 'report')
     if ($_POST['limit']>=1) $sql .= "LIMIT {$_POST['limit']} ";
 
     $result = mysql_query($sql);
-    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
     $html .= "<p align='center'><code>$sql</code></p>\n";
     $html .= "<table width='100%'>";
     $html .= $htmlfieldheaders;
