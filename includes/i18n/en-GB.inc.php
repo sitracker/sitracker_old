@@ -96,6 +96,7 @@ $strAListOfAvailableTicket = 'A list of available triggers and the actions that 
 $strAll = 'All';
 $strAllClosed = 'All Closed';
 $strAllDay = 'all day';
+$strAllOnline = 'All Online';
 $strAllOpen = 'All Open';
 $strAllowIncidentReopen = 'Allow Incident Reopening';
 $strAllSiteContactsSupported = 'All of this sites\' contacts are supported';
@@ -212,6 +213,7 @@ $strCallToCustomer = 'Phone call to customer';
 $strCallMustBeAssignedBeforeClosure = 'Call must be assigned before closure';
 # Data Protection message, happy to receive phone calls
 $strCallsOK = 'Calls OK';
+$strCannotDeleteSkill = 'Sorry, this skill cannot be deleted because it has been associated with one or more incidents';
 $strCannotResetThisPassword = 'You cannot reset this users password';
 $strCannotResetPasswordInDemoMode = 'You cannot reset passwords while in DEMO MODE';
 $strCause = 'Cause';
@@ -642,6 +644,8 @@ $strKnowledgeBaseArticle = 'Knowledge Base Article';
 $strKnowledgeBaseArticles = 'Knowledge Base Articles';
 
 $strLanguage = 'Language';
+# Last date a bill was generated
+$strLastBilled = 'Last Billed';
 $strLastMonth = 'Last month';
 # Last time an action was executed
 $strLastRan = 'Last Ran';

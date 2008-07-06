@@ -399,7 +399,6 @@ function send_trigger_email($userid, $triggerid, $template, $paramarray)
 
 
     $mailok = send_email($toemail, $from, $subject, $body, $replytoemail, $ccemail, $bccemail);
-    $dbg .= "send_email($toemail, $from, $subject, $body, $replytoemail, $ccemail, $bccemail)"; // FIXME BUGBUG remove this debugging
     if ($mailok==FALSE)
     {
         trigger_error('Internal error sending email: '. $mailerror.' send_mail() failed', E_USER_ERROR);

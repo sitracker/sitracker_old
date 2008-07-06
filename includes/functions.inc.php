@@ -1962,7 +1962,7 @@ function group_selector($selected, $urlargs='')
         echo ">{$GLOBALS['strAll']}</option>\n";
         echo "<option value='{$_SERVER['PHP_SELF']}?{$urlargs}&amp;gid=allonline'";
         if ($selected == 'allonline') echo " selected='selected'";
-        echo ">{$GLOBALS['strAll']} Online</option>\n"; // FIXME i18n
+        echo ">{$GLOBALS['strAllOnline']}</option>\n";
         foreach ($grouparr AS $groupid => $groupname)
         {
             echo "<option value='{$_SERVER['PHP_SELF']}?{$urlargs}&amp;gid={$groupid}'";
@@ -3628,7 +3628,7 @@ function licence_type_drop_down($name, $id)
     {
         echo "<option selected='selected' value='0'></option>\n";
     }
-    
+
     while ($licencetypes = mysql_fetch_array($result))
     {
         echo "<option ";
@@ -7050,7 +7050,7 @@ function show_tag_cloud($orderby="name", $showcount = FALSE)
         $html .= "<p align='center'>{$GLOBALS['strSort']}: <a href='view_tags.php?orderby=name'>{$GLOBALS['strAlphabetically']}</a> | ";
         $html .= "<a href='view_tags.php?orderby=occurrences'>{$GLOBALS['strPopularity']}</a></p>";
     }
-    
+
     if (mysql_num_rows($result) > 0)
     {
         $html .= "<table align='center'><tr><td class='tagcloud'>";
@@ -7125,7 +7125,7 @@ function display_drafts($type, $result)
         $html .= "<div class='detailentry'>";
         $html .= nl2br($obj->content)."</div>";
     }
-    
+
     return $html;
 }
 
@@ -7934,7 +7934,7 @@ function contact_contracts($contactid, $siteid, $checkvisible = TRUE)
     {
         $sql .= "AND m.var_incident_visible_contacts = 'yes'";
     }
-    
+
     if ($result = mysql_query($sql))
     {
         while ($row = mysql_fetch_object($result))
@@ -7958,7 +7958,7 @@ function all_contact_contracts($contactid, $siteid)
             FROM `{$GLOBALS['dbMaintenance']}` AS m,
             WHERE m.site={$siteid}
             AND m.var_incident_visible_all = 'yes'";
-            
+
     if ($result = mysql_query($sql))
     {
         while ($row = mysql_fetch_object($result))
@@ -8236,17 +8236,17 @@ function contract_details($id, $mode='internal')
     }
 
     $html .= "</td></tr>";
-    
+
     $html .= "<tr><th>{$GLOBALS['strService']}</th><td>";
     $html .= contract_service_table($id);
     $html .= "</td></tr>\n";
-    
+
     // FIXME not sure if this should be here
     $html .= "<tr><th>{$GLOBALS['strBalance']}</th><td>{$CONFIG['currency_symbol']}".number_format(get_contract_balance($id), 2);
     $multiplier = get_billable_multiplier(strtolower(date('D', $now)), date('G', $now));
     $html .= " (&cong;".contract_unit_balance($id)." units)";
     $html .= "</td></tr>";
-    
+
     if ($maintrow['maintnotes'] != '' AND $mode == 'internal')
     {
         $html .= "<tr><th>{$GLOBALS[strNotes]}:</th><td>".$maintrow['maintnotes']."</td></tr>";
@@ -10116,7 +10116,7 @@ function approve_incident($incidentid)
 
         foreach ($multipliers AS $m)
         {
-            $s .= "{$a[$m]} {$strUnits} @ {$m}&#215;, "; // FIXME i18n
+            $s .= "{$a[$m]} {$strUnits} @ {$m}&#215;, "; // FIXME i18n multiplication symbol
             $numberofunits += ($m * $a[$m]);
         }
 
@@ -10213,10 +10213,9 @@ function contract_service_table($contractid)
 
             $span = "";
             if (!empty($service->notes)) $span .= "<strong>{$GLOBALS['strNotes']}</strong>: {$service->notes}<br />";
-            // FIXME i18n
             if ($service->creditamount != 0) $span .= "<strong>{$GLOBALS['strAmount']}</strong>: {$CONFIG['currency_symbol']}".number_format($service->creditamount, 2)."<br />";
             if ($service->unitrate != 0) $span .= "<strong>{$GLOBALS['strUnitRate']}</strong>: {$CONFIG['currency_symbol']}{$service->unitrate}<br />";
-            if ($service->lastbilled > 0) $span .= "<strong>Last Billed</strong>: ".ldate($CONFIG['dateformat_date'], $service->lastbilled);
+            if ($service->lastbilled > 0) $span .= "<strong>{$strLastBilled}</strong>: ".ldate($CONFIG['dateformat_date'], $service->lastbilled);
 
             if (!empty($span))
             {

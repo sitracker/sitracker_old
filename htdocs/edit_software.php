@@ -79,7 +79,7 @@ elseif ($action=='delete')
     if ($countincidents >=1)
     {
         include ('htmlheader.inc.php');
-        echo "<p class='error'>Sorry, this skill cannot be deleted because it has been associated with one or more incidents</p>"; // FIXME i18n
+        echo "<p class='error'>{$strCannotDeleteSkill}</p>";
         echo "<p align='center'><a href='products.php?display=skills'>{$strReturnToProductList}</a></p>";
         include ('htmlfooter.inc.php');
     }
