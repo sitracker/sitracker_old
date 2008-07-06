@@ -32,6 +32,3 @@ echo "<script type='text/javascript'>
 ";
 
 ?>
-
-
-

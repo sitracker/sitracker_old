@@ -42,9 +42,9 @@ else
     echo "<script type='text/javascript'>\n
         /* <![CDATA[ */\n
         var activitycount = 0;
-        dojo.require('dojo.dnd.*');
-        dojo.require('dojo.event.*');
-        dojo.require('dojo.lang');
+        dojo.require ('dojo.dnd.*');
+        dojo.require ('dojo.event.*');
+        dojo.require ('dojo.lang');
         dojo.declare('salford.dnd.DestDropTarget', dojo.dnd.HtmlDropTarget, {
             onDrop: function(e)
             {
@@ -166,7 +166,7 @@ else
     echo "<div id='rightdiv' style='float: right; padding: 23px 5px 0 0;'>";
     echo "<table class='timesheet'>";
     echo "<tr>";
-    echo "<th>Legend</th>";
+    echo "<th>Legend</th>"; // FIXME i18n
     echo "<th>Controls</th>";
     echo "</tr>";
     echo "<tr>";
@@ -215,8 +215,8 @@ else
     echo "<div id='weekScheduler_hours'>\n";
 
 
-    $startHourOfWeekPlanner = 0;	// Start hour of week planner
-    $endHourOfWeekPlanner = 23;	// End hour of weekplanner.
+    $startHourOfWeekPlanner = 0;    // Start hour of week planner
+    $endHourOfWeekPlanner = 23; // End hour of weekplanner.
 
     $date = mktime($startHourOfWeekPlanner, 0, 0, 5, 5, 2006);
     for ($no = $startHourOfWeekPlanner; $no <= $endHourOfWeekPlanner; $no ++)

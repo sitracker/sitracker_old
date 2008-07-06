@@ -9,10 +9,10 @@
 //
 // Author: Tom Gerrard <tom.gerrard[at]salfordsoftware.co.uk>
 
-$permission=27; // View your calendar FIXME
-require('db_connect.inc.php');
-require('functions.inc.php');
-require('auth.inc.php');
+$permission = 27; // View your calendar FIXME
+require ('db_connect.inc.php');
+require ('functions.inc.php');
+require ('auth.inc.php');
 include ('calendar.inc.php');
 
 foreach (array('user') as $var)

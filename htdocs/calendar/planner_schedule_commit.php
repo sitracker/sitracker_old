@@ -10,9 +10,9 @@
 // Author: Tom Gerrard <tom.gerrard[at]salfordsoftware.co.uk>
 
 $permission = 27; // View your calendar
-require('db_connect.inc.php');
-require('functions.inc.php');
-require('auth.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
+require ('auth.inc.php');
 
 header('Content-Type: text/plain');
 

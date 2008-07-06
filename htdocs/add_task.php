@@ -14,11 +14,11 @@
 @include ('set_include_path.inc.php');
 $permission=70;
 
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 if (!$CONFIG['tasks_enabled'])
 {
     header("Location: main.php");

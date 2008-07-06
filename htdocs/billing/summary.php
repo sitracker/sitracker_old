@@ -23,7 +23,8 @@ $display = cleanvar($_REQUEST['display']);
 
 if (empty($display)) $display = 'html';
 
-$sql = "SELECT DISTINCT(CONCAT(m.id,sl.id)), m.site, m.product, s.* FROM `{$dbMaintenance}` AS m, `{$dbServiceLevels}` AS sl, `{$dbService}` AS s, `{$dbSites}` AS site ";
+$sql = "SELECT DISTINCT(CONCAT(m.id,sl.id)), m.site, m.product, s.* ";
+$sql .= "FROM `{$dbMaintenance}` AS m, `{$dbServiceLevels}` AS sl, `{$dbService}` AS s, `{$dbSites}` AS site ";
 $sql .= "WHERE m.servicelevelid = sl.id AND sl.timed = 'yes' AND m.id = s.contractid AND m.site = site.id ";
 
 $sitestr = '';
@@ -42,7 +43,7 @@ if (!empty($sites))
 $sql .= "ORDER BY site.name, s.enddate";
 
 $result = mysql_query($sql);
-if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
 if (mysql_numrows($result) > 0)
 {

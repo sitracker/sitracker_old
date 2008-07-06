@@ -11,10 +11,10 @@
 @include ('../set_include_path.inc.php');
 $permission = 21; // FIXME need a permission for add service
 
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 // External variables
 $contractid = mysql_real_escape_string($_REQUEST['contractid']);
@@ -165,7 +165,7 @@ else
     $sql = "SELECT expirydate FROM `{$dbMaintenance}` WHERE id = {$contractid}";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
-    
+
     if (mysql_num_rows($result) > 0)
     {
         $obj = mysql_fetch_object($result);

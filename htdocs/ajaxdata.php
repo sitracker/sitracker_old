@@ -13,11 +13,11 @@
 
 @include ('set_include_path.inc.php');
 $permission = 0; // not required
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 
 // This page requires authentication
-// require('auth.inc.php');
+// require ('auth.inc.php');
 
 $action = $_REQUEST['action'];
 
@@ -64,7 +64,7 @@ switch ($action)
     break;
 
     case 'dismiss_notice':
-        require('auth.inc.php');
+        require ('auth.inc.php');
         $noticeid = cleanvar($_REQUEST['noticeid']);
         $userid = cleanvar($_REQUEST['userid']);
         if (is_numeric($noticeid))
@@ -84,7 +84,7 @@ switch ($action)
     break;
 
     case 'dashboard_display':
-        require('auth.inc.php');
+        require ('auth.inc.php');
         $dashboard = cleanvar($_REQUEST['dashboard']);
         $dashletid = 'win'.cleanvar($_REQUEST['did']);
         // FIXME need some sanitation here
@@ -95,7 +95,7 @@ switch ($action)
 
     case 'dashboard_save':
     case 'dashboard_edit':
-        require('auth.inc.php');
+        require ('auth.inc.php');
 
         $dashboard = cleanvar($_REQUEST['dashboard']);
         $dashletid = 'win'.cleanvar($_REQUEST['did']);

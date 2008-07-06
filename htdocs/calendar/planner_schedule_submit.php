@@ -24,7 +24,7 @@ array_pop($parts);
 foreach ($parts as $part)
 {
     // TODO remove debugging
-    print_r(explode('~', $part));
+    $dbg .= print_r(explode('~', $part), TRUE);
     list($id, $schedule, $weekstart, $comments) = explode('~', $part);
     echo "id is $id, schedule is $schedule, weekstart = $weekstart, comments is $comments";
     $name = trim(implode(' ',explode('|',  $id)));
@@ -76,7 +76,7 @@ mysql_query($sql);
 if (mysql_error())
 {
     trigger_error(mysql_error(),E_USER_ERROR);
-    $dbg = $sql;
+    $dbg .= $sql;
 }
 
 ?>

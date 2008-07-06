@@ -16,11 +16,11 @@
 $permission=44; // Publish Files to FTP site
 
 $title='Edit FTP File Details and Publish';
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 // External Vars
 $id = cleanvar($_REQUEST['id']);

@@ -11,8 +11,8 @@
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>, June 2004
 
 @include ('set_include_path.inc.php');
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 
 // External variables
 $hashcode=$_REQUEST['ax'];

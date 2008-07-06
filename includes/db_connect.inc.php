@@ -75,5 +75,5 @@ if (mysql_error())
 }
 
 // Soft table names
-require('tablenames.inc.php');
+require ('tablenames.inc.php');
 ?>

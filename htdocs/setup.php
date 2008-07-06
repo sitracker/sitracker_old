@@ -28,8 +28,8 @@ if ($_REQUEST['action'] == 'reconfigure')
 {
     $permission = 22;
     $_REQUEST['config'] = 'advanced'; // set advanced mode
-    require('functions.inc.php');
-    require('auth.inc.php');
+    require ('functions.inc.php');
+    require ('auth.inc.php');
 }
 
 // These are the required variables we want to configure during installation
@@ -689,7 +689,7 @@ switch ($_REQUEST['action'])
 
 
     default:
-        require('tablenames.inc.php');
+        require ('tablenames.inc.php');
         // Connect to Database server
         $db = @mysql_connect($CONFIG['db_hostname'], $CONFIG['db_username'], $CONFIG['db_password']);
         if (mysql_error())
@@ -746,10 +746,10 @@ switch ($_REQUEST['action'])
             }
             else
             {
-                require('functions.inc.php');
+                require ('functions.inc.php');
 
                 // Load the empty schema
-                require('setup-schema.php');
+                require ('setup-schema.php');
 
                 // Connected to database and db selected
                 echo "<p>Connected to database - ok</p>";

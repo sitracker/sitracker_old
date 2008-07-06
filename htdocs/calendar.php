@@ -13,11 +13,11 @@
 
 @include ('set_include_path.inc.php');
 $permission = 27; // View your calendar
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 include ('calendar/calendar.inc.php');
 
 $groupid = cleanvar($_REQUEST['gid']);

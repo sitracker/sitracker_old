@@ -12,10 +12,10 @@
 @include ('set_include_path.inc.php');
 $permission=11; // View sites
 
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 include ('htmlheader.inc.php');
 

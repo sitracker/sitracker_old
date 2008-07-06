@@ -30,7 +30,7 @@ if (empty($submit) OR !empty($_SESSION['formerrors']['add_contact']))
     ?>
     <script type='text/javascript'>
     //<![CDATA[
-        dojo.require("dojo.widget.ComboBox");
+        dojo.require ("dojo.widget.ComboBox");
     //]]>
     </script>
     <?php

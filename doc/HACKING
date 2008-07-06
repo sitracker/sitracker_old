@@ -173,3 +173,17 @@ should be written in upper case with columns and expressions in lower case.
 Where clarity will be improved by it use backtick (`) to quote identifiers.
 
 SELECT *, ROUND(age) AS approxage FROM `names` WHERE `names`.id > 100;
+
+
+
+SiT Style Conventions
+=====================
+
+Database Queries
+----------------
+After a database query always check for errors, use trigger_error and throw
+E_USER_WARNING when reading data and E_USER_ERROR when writing data.
+
+
+
+

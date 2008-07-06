@@ -114,7 +114,7 @@ define ('CONTACT_HAS_BILLABLE_CONTRACT', 1);
 define ('SITE_HAS_BILLABLE_CONTRACT', 2);
 
 // Decide which language to use and setup internationalisation
-require('i18n/en-GB.inc.php');
+require ('i18n/en-GB.inc.php');
 if ($CONFIG['default_i18n'] != 'en-GB')
 {
     @include ("i18n/{$CONFIG['default_i18n']}.inc.php");
