@@ -57,7 +57,7 @@ if (empty($_REQUEST['mode']))
     echo "</form>";
     include ('htmlfooter.inc.php');
 }
-elseif ($_REQUEST['mode']=='selectfields')
+elseif ($_REQUEST['mode'] == 'selectfields')
 {
     $table1 = cleanvar($_REQUEST['table1']);
     include ('htmlheader.inc.php');
@@ -133,7 +133,7 @@ elseif ($_REQUEST['mode']=='selectfields')
     echo "</form>";
     include ('htmlfooter.inc.php');
 }
-elseif ($_REQUEST['mode']=='report')
+elseif ($_REQUEST['mode'] == 'report')
 {
     // External variables
     $columns=count($_POST[fields]);
@@ -181,13 +181,13 @@ elseif ($_REQUEST['mode']=='report')
         $csv.="\r\n";
     }
     $html .= "</table>";
-    if ($_POST['output']=='screen')
+    if ($_POST['output'] == 'screen')
     {
         include ('htmlheader.inc.php');
         echo $html;
         include ('htmlfooter.inc.php');
     }
-    elseif ($_POST['output']=='csv')
+    elseif ($_POST['output'] == 'csv')
     {
         // --- CSV File HTTP Header
         header("Content-type: text/csv\r\n");

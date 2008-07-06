@@ -93,7 +93,7 @@ function setClosedDuration(closed)
 
 function formatSeconds(secondsOpen)
 {
-    var str = "";
+    var str = '';
     if (secondsOpen >= 86400)
     {   //days
         var days = Math.floor(secondsOpen/86400);

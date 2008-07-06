@@ -12,7 +12,7 @@
 
 // This Page Is Valid XHTML 1.0 Transitional!   4Nov05
 
-@include('set_include_path.inc.php');
+@include ('set_include_path.inc.php');
 $permission=44; // Publish Files to FTP site
 
 $title='Edit FTP File Details and Publish';
@@ -31,7 +31,7 @@ switch ($mode)
 {
     case 'form':
         // display file details
-        include('htmlheader.inc.php');
+        include ('htmlheader.inc.php');
         $sql = "SELECT * FROM `{$dbFiles}` WHERE id='{$id}'";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
@@ -50,7 +50,7 @@ switch ($mode)
         echo "<tr><th>File:</th><td>";
         echo "<img src='".getattachmenticon($frow['filename'])."' alt='{$frow['filename']} ({$pretty_file_size})' border='0' />";
         echo "<strong>{$frow['filename']}</strong> ({$pretty_file_size})</td></tr>";
-        if ($frow['path']=='') $ftp_path=$CONFIG['ftp_path']; else $ftp_path=$CONFIG['ftp_path'].substr($frow['path'],1).'/';
+        if ($frow['path'] == '') $ftp_path=$CONFIG['ftp_path']; else $ftp_path=$CONFIG['ftp_path'].substr($frow['path'],1).'/';
 
         echo "<tr><th>Location:</th><td><a href=\"ftp://{$CONFIG['ftp_hostname']}{$ftp_path}{$frow['filename']}\"><code>";
         echo "ftp://{$CONFIG['ftp_hostname']}{$ftp_path}{$frow['filename']}</code></a></td></tr>\n";
@@ -75,7 +75,7 @@ switch ($mode)
         echo "<input type='hidden' name='mode' value='save' />";
         echo "<p align='center'><input type='submit' value='Save &amp; Publish' /></p>";
         echo "</form>";
-        include('htmlfooter.inc.php');
+        include ('htmlfooter.inc.php');
     break;
 
     case 'save':

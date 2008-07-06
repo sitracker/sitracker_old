@@ -11,7 +11,7 @@
 
 // TODO Merge autocomplete.php into here?
 
-@include('set_include_path.inc.php');
+@include ('set_include_path.inc.php');
 $permission = 0; // not required
 require('db_connect.inc.php');
 require('functions.inc.php');

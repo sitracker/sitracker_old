@@ -83,15 +83,15 @@ function search_highlight($x,$var)
     $x = str_replace("\n", '', $x);
     // Trim the string to a reasonable length
     $pos1=stripos($x,$var);
-    if ($pos1===FALSE) $pos1=0;
-    if ($pos1>30) $pos1-=25;
-    $pos2=strlen($var)+70;
-    $x = substr($x,$pos1,$pos2);
+    if ($pos1 === FALSE) $pos1 = 0;
+    if ($pos1 > 30) $pos1 -= 25;
+    $pos2 = strlen($var) + 70;
+    $x = substr($x, $pos1, $pos2);
 
-    if ($var != "")
+    if ($var != '')
     {
-        $xtemp = "";
-        $i=0;
+        $xtemp = '';
+        $i = 0;
 
         while ($i < strlen($x))
         {

@@ -45,11 +45,11 @@ else
 
     // build the extra headers string for email
     $extra_headers = "From: $fromfield\nReply-To: $replytofield\nErrors-To: {$CONFIG['support_email']}\n";
-    if ($ccfield != "")
+    if ($ccfield != '')
 
     $extra_headers .= "CC: $ccfield\n";
 
-    if ($bccfield != "")
+    if ($bccfield != '')
 
     $extra_headers .= "BCC: $bccfield\n";
     $extra_headers .= "X-Originating-IP: {$_SERVER['REMOTE_ADDR']}\n";

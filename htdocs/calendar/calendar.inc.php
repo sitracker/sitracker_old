@@ -116,8 +116,8 @@ function draw_calendar($nmonth, $nyear)
     {
         if (($dayRow % 7) == 0 AND $dayRow >0) echo "</tr>\n<tr>\n";
         $adjusted_day = $day+1;
-        $bold="";
-        $notbold="";
+        $bold= '';
+        $notbold= '';
         // Colour Today in Red
         if ($adjusted_day==date('d') && $nmonth==date('m') && $nyear==date('Y'))
         {
@@ -158,7 +158,7 @@ function draw_calendar($nmonth, $nyear)
             {
                 /////////////////////////////////
                 // colors and shading
-                $halfday="";
+                $halfday= '';
                 $style='';
 
                 // Get the holiday information for a single day
@@ -416,12 +416,12 @@ function draw_chart($mode, $year, $month='', $day='', $groupid='', $userid='')
             $html .= "<td style='width: 2%'>{$GLOBALS['strAM']}</td>";
             for($cday = $day; $cday <= $lastday; $cday++)
             {
-                $shade='shade1';
+                $shade = 'shade1';
                 if ((date('D',mktime(0,0,0,$month,$cday,$year))=='Sat' OR date('D',mktime(0,0,0,$month,$cday,$year))=='Sun'))
                 {
                     // Add  day on for a weekend
-                    if ($weekend==FALSE) $displaydays+=1;
-                    $weekend=TRUE;
+                    if ($weekend == FALSE) $displaydays+=1;
+                    $weekend = TRUE;
                 }
                 if (date('D',mktime(0,0,0,$month,$cday,$year))=='Sat')
                 {
@@ -433,8 +433,8 @@ function draw_chart($mode, $year, $month='', $day='', $groupid='', $userid='')
                 }
                 else
                 {
-                    $weekend=FALSE;
-                    if ($hdays[$cday]=='am' OR $hdays[$cday]=='day')
+                    $weekend = FALSE;
+                    if ($hdays[$cday] == 'am' OR $hdays[$cday] == 'day')
                     {
                         if ($happroved[$cday] == 0
                             OR $happroved[$cday]==10
@@ -537,8 +537,8 @@ function draw_chart($mode, $year, $month='', $day='', $groupid='', $userid='')
                 }
                 else
                 {
-                    $weekend=FALSE;  $hello='';
-                    if ($hdays[$cday]=='pm' OR $hdays[$cday]=='day')
+                    $weekend = FALSE;  $hello='';
+                    if ($hdays[$cday] == 'pm' OR $hdays[$cday] == 'day')
                     {
                         if ($happroved[$cday] == 0
                             OR $happroved[$cday] == 10
@@ -594,7 +594,7 @@ function draw_chart($mode, $year, $month='', $day='', $groupid='', $userid='')
                     }
                     else
                     {
-                        if ($pubholdays[$cday]=='pm' OR $pubholdays[$cday]=='day') $html .= "<td class='expired'>PH</td>";
+                        if ($pubholdays[$cday] == 'pm' OR $pubholdays[$cday] == 'day') $html .= "<td class='expired'>PH</td>";
                         else
                         {
                             $html .= "<td class='shade2'>";

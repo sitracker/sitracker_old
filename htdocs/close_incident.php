@@ -42,7 +42,7 @@ if (empty($_REQUEST['process']))
         exit;
     }
 
-    include('incident_html_top.inc.php');
+    include ('incident_html_top.inc.php');
 
     ?>
     <script type="text/javascript">
@@ -307,7 +307,7 @@ else
         $error_string = "<p class='error'>{$strMustSelectClosingStatus}</p>\n";
     }
 
-    if ($_REQUEST['summary']=='' && $_REQUEST['solution']=='')
+    if ($_REQUEST['summary'] == '' && $_REQUEST['solution'] == '')
     {
         $errors = 1;
         $error_string = "<p class='error'>{$strMustEnterTextInBothSummaryAndSolution}</P>\n";
@@ -487,7 +487,7 @@ else
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
             // Check for knowledge base stuff, prior to confirming:
-            if ($_REQUEST['kbarticle']=='yes')
+            if ($_REQUEST['kbarticle'] == 'yes')
             {
                 $sql = "INSERT INTO `{$dbKBArticles}` (doctype, title, distribution, author, published, keywords) VALUES ";
                 $sql .= "('1', ";

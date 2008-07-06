@@ -47,19 +47,19 @@ if (isset($_POST['submit']))
     // Edit site, update the database
     $errors = 0;
 
-    if ($name == "")
+    if ($name == '')
     {
         $errors = 1;
         $errors_string .= "<p class='error'>{$strMustEnterName}</p>\n";
     }
     
-    if ($email == "")
+    if ($email == '')
     {
     	$errors = 1;
     	$errors_string .= "<p class='error'>{$strMustEnterEmail}</p>\n";
     }
     
-    if ($telephone == "")
+    if ($telephone == '')
     {
         $errors = 1;
     	$errors_string .= "<p class='error'>{$strMustEnterPhoneNum}</p>\n";

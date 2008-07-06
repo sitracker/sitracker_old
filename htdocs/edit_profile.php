@@ -20,7 +20,7 @@ require ('auth.inc.php');
 // External variables
 $mode = $_REQUEST['mode'];
 $edituserpermission = user_permission($sit[2],23); // edit user
-if (empty($_REQUEST['userid']) OR $_REQUEST['userid']=='current' OR $edituserpermission==FALSE)
+if (empty($_REQUEST['userid']) OR $_REQUEST['userid'] == 'current' OR $edituserpermission == FALSE)
 {
     $edituserid = mysql_real_escape_string($sit[2]);
 }
@@ -218,7 +218,7 @@ if (empty($mode))
 
     plugin_do('edit_profile_form');
 
-    if ($CONFIG['trusted_server']==FALSE AND $edituserid==$sit[2])
+    if ($CONFIG['trusted_server'] == FALSE AND $edituserid == $sit[2])
     {
         echo "<tr class='password'><th colspan='2'>{$strChangePassword}</th></tr>";
         echo "<tr class='password'><th>&nbsp;</th><td>{$strToChangePassword}</td></tr>";
@@ -275,7 +275,7 @@ elseif ($mode=='save')
 
     // Some extra checking here so that users can't edit other peoples profiles
     $edituserpermission = user_permission($sit[2],23); // edit user
-    if ($edituserid != $sit[2] AND $edituserpermission==FALSE)
+    if ($edituserid != $sit[2] AND $edituserpermission == FALSE)
     {
         trigger_error('Error: No permission to edit this users profile', E_USER_ERROR);
         exit;
@@ -292,7 +292,7 @@ elseif ($mode=='save')
     $userdetails = mysql_fetch_row($result);
 
     // check for change of password
-    if ($password != "" && $newpassword1 != "" && $newpassword2 != "")
+    if ($password != '' && $newpassword1 != '' && $newpassword2 != '')
     {
         // verify password fields
         if ($newpassword1 == $newpassword2 && strtoupper(md5($password)) == strtoupper(user_password($edituserid)))
@@ -317,13 +317,13 @@ elseif ($mode=='save')
         }
     }
     // check for blank real name
-    if ($realname == "")
+    if ($realname == '')
     {
         $errors = 1;
         $error_string .= "<h5 class='error'>{$strMustEnterName}</h5>\n";
     }
     // check for blank email address
-    if ($email == "")
+    if ($email == '')
     {
         $errors = 1;
         $error_string .= "<h5 class='error'>{$strMustEnterEmail}</h5>\n";

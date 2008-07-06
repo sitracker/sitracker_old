@@ -135,28 +135,28 @@ else
     // check form input
     $errors = 0;
     // check for blank name
-    if ($name == "")
+    if ($name == '')
     {
         $errors++;
         echo "<p class='error'>You must enter a name for the email type</p>\n";
     }
     // check for blank tofield
-    if ($tofield == "")
+    if ($tofield == '')
     {
         $errors++;
         echo "<p class='error'>You must enter a 'To' field</p>\n";
     }
     // check for blank name
-    if ($fromfield == "")
+    if ($fromfield == '')
     {
         $errors++;
         echo "<p class='error'>You must enter a 'From' field</p>\n";
     }
     if ($errors == 0)
     {
-        if ($_REQUEST['cust_vis']=='yes') $cust_vis='show';
+        if ($_REQUEST['cust_vis'] == 'yes') $cust_vis='show';
         else $cust_vis='hide';
-        if ($_REQUEST['storeinlog']=='yes') $storeinlog='Yes';
+        if ($_REQUEST['storeinlog'] == 'yes') $storeinlog='Yes';
         else $storeinlog='No';
 
         $sql  = "INSERT INTO `{$dbEmailTemplates}` (name, description, tofield, fromfield, replytofield, ccfield, bccfield, subjectfield, body, customervisibility, storeinlog) ";

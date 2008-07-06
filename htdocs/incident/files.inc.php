@@ -24,7 +24,7 @@ $incident_attachment_fspath = $CONFIG['attachment_fspath'] . $incidentid;
 $att_max_filesize = return_bytes($CONFIG['upload_max_filesize']);
 
 // Have a look to see if we've uploaded a file and process it if we have
-if ($_FILES['attachment']['name'] != "")
+if ($_FILES['attachment']['name'] != '')
 {
     // Check if we had an error whilst uploading
     if ($_FILES['attachment']['error'] != '' AND $_FILES['attachment']['error'] != UPLOAD_ERR_OK)

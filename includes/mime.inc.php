@@ -9,21 +9,21 @@
    used in scripts using MIME_mail class
  ----------------------------------------------------------- */
 
-    define('BASE64', 'base64');
-    define('BIT7', '7bit');
-    define('QP', 'quoted_printable');
-    define('NOSUBJECT', '(No Subject)');
-    define('WARNING', 'This is a MIME encoded message');
-    define('OCTET', 'application/octet-stream');
-    define('TEXT', 'text/plain');
-    define('HTML', 'text/html');
-    define('JPEG', 'image/jpg');
-    define('GIF', 'image/gif');
-    define('CRLF', "\n");   // was \r\n
-    define('CHARSET', 'us-ascii');
-    define('INLINE', 'inline');
-    define('ATTACH', 'attachment');
-    define('BODY', CRLF.'BODY'.CRLF);
+    define ('BASE64', 'base64');
+    define ('BIT7', '7bit');
+    define ('QP', 'quoted_printable');
+    define ('NOSUBJECT', '(No Subject)');
+    define ('WARNING', 'This is a MIME encoded message');
+    define ('OCTET', 'application/octet-stream');
+    define ('TEXT', 'text/plain');
+    define ('HTML', 'text/html');
+    define ('JPEG', 'image/jpg');
+    define ('GIF', 'image/gif');
+    define ('CRLF', "\n");   // was \r\n
+    define ('CHARSET', 'us-ascii');
+    define ('INLINE', 'inline');
+    define ('ATTACH', 'attachment');
+    define ('BODY', CRLF.'BODY'.CRLF);
 
 
 // --- From MIME.class
@@ -41,8 +41,8 @@
   var $from;
   var $subject;
   var $body;
-  var $headers = "";
-  var $errstr="";
+  var $headers = '';
+  var $errstr= '';
 
   // these are the names of the encoding functions, user
   // provide the names of user-defined functions
@@ -56,13 +56,13 @@
   // specific to itself.  If you are using MIME_mail object's to, from, etc.
   // remember to send parameters a literal strings referring 'this' object!!!!
   // If in doubt, you are probably better off subclassing this class...
-  var $mailer = ""; # Set this to the name of a valid mail object
+  var $mailer = ''; # Set this to the name of a valid mail object
 
  //private:
   var $mimeparts = array();
 
  // Constructor.
- function MIME_mail($from="", $to="", $subject="", $body="", $headers = "") {
+ function MIME_mail($from= '', $to= '', $subject= '', $body= '', $headers = '') {
     $this->to = $to;
     $this->from = $from;
     $this->subject = $subject;
@@ -77,8 +77,8 @@
     $headers = preg_replace("!(from:\ ?.+?[\r\n]?\b)!i", '', $headers);
     }
     $this->headers = chop($headers);
-    $this->mimeparts[] = "" ;   //Bump up location 0;
-    $this->errstr = "";
+    $this->mimeparts[] = '' ;   //Bump up location 0;
+    $this->errstr = '';
     return;
  }
 
@@ -88,8 +88,8 @@
   This function returns a success/failure code/key of current
   attachment in array (+1). Read attach() below.
  --------------------------------------------------------- */
- function fattach($path, $description = "", $contenttype = OCTET, $encoding = BASE64, $disp = '') {
-    $this->errstr = "";
+ function fattach($path, $description = '', $contenttype = OCTET, $encoding = BASE64, $disp = '') {
+    $this->errstr = '';
     if (!file_exists($path)) {
         $this->errstr = "File does not exist";
         return 0;
@@ -116,8 +116,8 @@
   data is attached. IT IS CURRENT KEY VALUE + 1!!
   Construct the body with MIME parts
  --------------------------------------------------------- */
- function attach($data, $description = "", $contenttype = OCTET, $encoding = BASE64, $disp = '') {
-    $this->errstr = "";
+ function attach($data, $description = '', $contenttype = OCTET, $encoding = BASE64, $disp = '') {
+    $this->errstr = '';
     if (empty($data)) {
         $this->errstr = "No data to be attached";
         return 0;
@@ -158,8 +158,8 @@
  function build_message() {
 
 
-    $this->errstr = "";
-    $msg = "";
+    $this->errstr = '';
+    $msg = '';
     $boundary = 'PM'.chr(rand(65, 91)).'------'.md5(uniqid(rand()));    # Boundary marker
     $nparts = sizeof($this->mimeparts);
 
@@ -196,9 +196,9 @@
  --------------------------------------------------------- */
  function gen_email($force=false) {
 
-    $this->errstr = "";
+    $this->errstr = '';
     if (!empty($this->email) && !$force) return $this->email ;  // saves processing
-    $email = "";
+    $email = '';
     if (empty($this->subject)) $this->subject = NOSUBJECT;
     if (!empty($this->from)) $email .= 'From: '.$this->from.CRLF;
     if (!empty($this->headers)) $email .= $this->headers.CRLF;
@@ -212,7 +212,7 @@
   Printable form
  --------------------------------------------------------- */
  function print_mail($force=false) {
-    $this->errstr = "";
+    $this->errstr = '';
     $email =  $this->gen_email($force);
     if (!empty($this->to)) $email = 'To: '.$this->to.CRLF.$email;
     if (!empty($this->subject)) $email = 'Subject: '.$this->subject.CRLF.$email;
@@ -224,7 +224,7 @@
   Send mail via local mailer
  --------------------------------------------------------- */
  function send_mail($force=false) {
-    $this->errstr = "";
+    $this->errstr = '';
     $email = $this->gen_email($force);
     if (empty($this->to)) {
         $this->errstr = "To Address not specified";

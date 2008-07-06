@@ -51,7 +51,7 @@ else
     $errors = 0;
 
     // check for blank name
-    if ($name == "")
+    if ($name == '')
     {
         $errors++;
         $_SESSION['formerrors']['name'] = $strMustEnterName;

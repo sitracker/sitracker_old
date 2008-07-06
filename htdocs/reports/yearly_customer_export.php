@@ -61,18 +61,18 @@ if (empty($_REQUEST['mode']))
     echo "</form>";
     include ('htmlfooter.inc.php');
 }
-elseif ($_REQUEST['mode']=='report')
+elseif ($_REQUEST['mode'] == 'report')
 {
     if (is_array($_POST['exc']) && is_array($_POST['exc'])) $_POST['inc']=array_values(array_diff($_POST['inc'],$_POST['exc']));  // don't include anything excluded
 
     $includecount=count($_POST['inc']);
-    if ($_POST['showsitetotals']=='yes') $showsitetotals = TRUE;
+    if ($_POST['showsitetotals'] == 'yes') $showsitetotals = TRUE;
     else $showsitetotals = FALSE;
 
-    if ($_POST['showtotals']=='yes') $showtotals = TRUE;
+    if ($_POST['showtotals'] == 'yes') $showtotals = TRUE;
     else $showtotals = FALSE;
 
-    if ($_POST['showgrandtotals']=='yes') $showgrandtotals = TRUE;
+    if ($_POST['showgrandtotals'] == 'yes') $showgrandtotals = TRUE;
     else $showgrandtotals = FALSE;
 
     if ($includecount >= 1)
@@ -157,13 +157,13 @@ elseif ($_REQUEST['mode']=='report')
 
     // $html .= "<p align='center'>SQL Query used to produce this report:<br /><code>$sql</code></p>\n";
 
-    if ($_POST['output']=='screen')
+    if ($_POST['output'] == 'screen')
     {
         include ('htmlheader.inc.php');
         echo $html;
         include ('htmlfooter.inc.php');
     }
-    elseif ($_POST['output']=='csv')
+    elseif ($_POST['output'] == 'csv')
     {
         // --- CSV File HTTP Header
         header("Content-type: text/csv\r\n");

@@ -52,7 +52,7 @@ else
     include ('htmlheader.inc.php');
 
     // check input
-    if ($search_string == "" AND $user=="")
+    if ($search_string == '' AND $user== '')
     {
         $errors = 1;
         echo "<p class='error'>You must enter a search string</p>\n";

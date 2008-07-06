@@ -37,8 +37,8 @@ if (mysql_num_rows($result))
         echo "<tr class='$shade'><td>".holiday_type($dates['type'])."</td>";
         echo "<td>{$dates['realname']}</td>";
         echo "<td>".date('l jS F Y', $dates['startdate']);
-        if ($dates['length']=='am') echo " {$strMorning}";
-        if ($dates['length']=='pm') echo " {$strAfternoon}";
+        if ($dates['length'] == 'am') echo " {$strMorning}";
+        if ($dates['length'] == 'pm') echo " {$strAfternoon}";
         echo "</td>";
         echo "<td>";
         if (empty($dates['approvedby'])) echo " <em>{$strNotRequested}</em>";

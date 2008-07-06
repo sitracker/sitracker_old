@@ -28,7 +28,7 @@ switch ($action)
         $vendorid = cleanvar($_REQUEST['vendorid']);
 
         // check for blank name
-        if ($vendorname == "")
+        if ($vendorname == '')
         {
             $errors = 1;
             $errors_string .= "<p class='error'>You must enter a name</p>\n";

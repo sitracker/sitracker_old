@@ -122,7 +122,7 @@ if (mysql_num_rows($mresult) >= 1)
                 if ($surveys<>1) $html.='s';
                 $html .= "</p><br /><br />";
             }
-            else $html = "";
+            else $html = '';
 
             if ($total_average>0)
             {
@@ -190,7 +190,7 @@ if (mysql_num_rows($mresult) >= 1)
 
         while ($crow = mysql_fetch_object($cresult))
         {
-            if ($crow->result != "")
+            if ($crow->result != '')
             {
                 $html.= "<p>{$crow->result}<br /><em><a href=\"javascript:incident_details_window(\'{$crow->incidentid}\',\'incident35393\')\">{$crow->incidentid}</a> {$crow->title}</em></p>";
             }

@@ -98,7 +98,7 @@ if (empty($_REQUEST['mode']))
     echo "</td></tr></table>";
     include ('htmlfooter.inc.php');
 }
-elseif ($_REQUEST['mode']=='report')
+elseif ($_REQUEST['mode'] == 'report')
 {
     // don't include anything excluded
     if (is_array($_POST['inc']) && is_array($_POST['exc'])) $_POST['inc']=array_values(array_diff($_POST['inc'],$_POST['exc']));
@@ -137,14 +137,14 @@ elseif ($_REQUEST['mode']=='report')
     $sql .= "LEFT JOIN `{$dbContacts}` AS c ON sc.contactid = cs.id ";
     $sql .= "LEFT JOIN `{$dbSites}` AS s ON c.siteid = s.id ";
 
-    if (empty($incsql)==FALSE OR empty($excsql)==FALSE OR $_REQUEST['activeonly']=='yes') $sql .= "WHERE ";
-    if ($_REQUEST['activeonly']=='yes')
+    if (empty($incsql) == FALSE OR empty($excsql) == FALSE OR $_REQUEST['activeonly'] == 'yes') $sql .= "WHERE ";
+    if ($_REQUEST['activeonly'] == 'yes')
     {
         $sql .= "m.term!='yes' AND m.expirydate > '$now' ";
-        if (empty($incsql)==FALSE OR empty($excsql)==FALSE) $sql .= "AND ";
+        if (empty($incsql) == FALSE OR empty($excsql) == FALSE) $sql .= "AND ";
     }
     if (!empty($incsql)) $sql .= "$incsql";
-    if (empty($incsql)==FALSE AND empty($excsql)==FALSE) $sql .= " AND ";
+    if (empty($incsql) == FALSE AND empty($excsql) == FALSE) $sql .= " AND ";
     if (!empty($excsql)) $sql .= "$excsql";
 
     $sql .= " ORDER BY c.email ASC ";
@@ -156,7 +156,7 @@ elseif ($_REQUEST['mode']=='report')
     // FIXME i18n
     // FIXME strip slashes from output
     $html .= "<p align='center'>This report is a list of contact details for all customers ";
-    if ($_REQUEST['activeonly']=='yes') $html .= "with <strong>current</strong> ";
+    if ($_REQUEST['activeonly'] == 'yes') $html .= "with <strong>current</strong> ";
     else $html .= "that have currently got (or at some time in the past had) ";
     $html .= "contracts for the products you selected - if you selected to exclude any products then customers who have contracts for those products are not shown.</p>";
     $html .= "<table width='99%' align='center'>";
@@ -234,13 +234,13 @@ elseif ($_REQUEST['mode']=='report')
     $html .= "<p align='center'>$rowcount Records displayed from a total of $numrows query results</p>";
     $html .= "<p align='center'>SQL Query used to produce this report:<br /><code>$sql</code></p>\n";
 
-    if ($_POST['output']=='screen')
+    if ($_POST['output'] == 'screen')
     {
         include ('htmlheader.inc.php');
         echo $html;
         include ('htmlfooter.inc.php');
     }
-    elseif ($_POST['output']=='csv')
+    elseif ($_POST['output'] == 'csv')
     {
         // --- CSV File HTTP Header
         header("Content-type: text/csv\r\n");

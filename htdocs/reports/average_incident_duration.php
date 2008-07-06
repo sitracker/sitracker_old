@@ -150,7 +150,7 @@ while ($current_time<time()) {
 $html .= "</table>";
 $html .= "<p align='center'><a href='{$_SERVER['PHP_SELF']}?mode={$mode}&amp;output=csv'>Save this report in CSV format</a></p>";
 
-if ($_REQUEST['output']=='csv')
+if ($_REQUEST['output'] == 'csv')
 {
     // --- CSV File HTTP Header
     header("Content-type: text/csv\r\n");

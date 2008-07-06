@@ -92,7 +92,7 @@ if (cleanvar($_REQUEST['action']) == 'update')
         $_SESSION['formerrors']['portalcontactdetails'] .= "<p class='error'>".sprintf($strYouMustEnter, $strSurname)."</p>\n";
     }
 
-    if ($email == "" OR $email=='none' OR $email=='n/a')
+    if ($email == '' OR $email=='none' OR $email=='n/a')
     {
         $errors++;
         $_SESSION['formerrors']['portalcontactdetails'] .= "<p class='error'>{$strMustEnterEmail}</p>\n";

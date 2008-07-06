@@ -190,7 +190,7 @@ else
                 else $class = "shade2";
                 ?>
                 <tr class='<?php echo $class; ?>'>
-                <td align='center'  width='100'><?php echo $results["id"] ?> (<?php if ($results["externalid"] == "") echo $strNone; else echo $results["externalid"] ?>)</td>
+                <td align='center'  width='100'><?php echo $results["id"] ?> (<?php if ($results["externalid"] == '') echo $strNone; else echo $results["externalid"] ?>)</td>
                 <td width='150'><a href="javascript:incident_details_window('<?php echo $results["id"] ?>')"><?php echo $results["title"] ?></a></td>
                 <td align='center' width='100'><?php echo $results['forenames'].' '.$results['surname']; ?></td>
                 <td align='center' width='100'><?php echo site_name($results['siteid']) ?></td>

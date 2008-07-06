@@ -173,7 +173,7 @@ while ($users = mysql_fetch_array($result))
     echo "<td align='center'>".$incpriority['2']."</td>";
     echo "<td align='center'>".$incpriority['1']."</td>";
     echo "<td align='center'>";
-    if ($users["phone"] == "")
+    if ($users["phone"] == '')
     {
         echo $strNone;
     }
@@ -185,7 +185,7 @@ while ($users = mysql_fetch_array($result))
     echo "</td>";
     echo "<td align='center'>";
 
-    if ($users["mobile"] == "")
+    if ($users["mobile"] == '')
     {
         echo $strNone;
     }

@@ -10,21 +10,21 @@
 
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
-@include('set_include_path.inc.php');
+@include ('set_include_path.inc.php');
 // Load config defaults
-@include("defaults.inc.php");
+@include ("defaults.inc.php");
 // Keep the defaults as a seperate array
 $DEFAULTS = $CONFIG;
 
 // Load config file with customisations
-// @include("config.inc-dist.php");
-@include("config.inc.php");
+// @include ("config.inc-dist.php");
+@include ("config.inc.php");
 // Server Configuration
-@include('/etc/webtrack.conf'); // for legacy systems
-@include('/etc/sit.conf');
+@include ('/etc/webtrack.conf'); // for legacy systems
+@include ('/etc/sit.conf');
 
 // Some actions require authentication
-if ($_REQUEST['action']=='reconfigure')
+if ($_REQUEST['action'] == 'reconfigure')
 {
     $permission = 22;
     $_REQUEST['config'] = 'advanced'; // set advanced mode
@@ -284,7 +284,7 @@ function setup_configure()
     else $html .= "<h2>New Configuration</h2><p>Please complete this form to create a new configuration file for SiT!</p>";
     $html .= "\n<form action='setup.php' method='post'>\n";
 
-    if ($_REQUEST['config']=='advanced')
+    if ($_REQUEST['config'] == 'advanced')
     {
         $html .= "<input type='hidden' name='config' value='advanced' />\n";
         foreach ($CFGVAR AS $setupvar => $setupval)
@@ -405,7 +405,7 @@ function setup_exec_sql($sqlquerylist)
                             $html .= "<p><strong>FAILED:</strong> <code>".htmlspecialchars($sql)."</code> <span style='color: red;'>({$schemaversion})</span></p>";
                             $html .= "<p class='error'>".mysql_error()."<br />A MySQL error occurred, this could be because the MySQL user '{$CONFIG['db_username']}' does not have appropriate permission to modify the database schema.<br />";
                             //echo "The SQL command was:<br /><code>$sql</code><br />";
-                            if (strpos($errstr, 'does not have appropriate permission')!==FALSE)
+                            if (strpos($errstr, 'does not have appropriate permission') !== FALSE)
                             {
                                 $html .= "<strong>Check your MySQL permissions allow the schema to be modified</strong>.<br />";
                             }
@@ -560,7 +560,7 @@ if (!empty($_REQUEST['msg']))
 
 
 // Check that includes worked and that we have some config variables set, these two should always be set
-if ($CONFIG['application_name']=='' AND $CONFIG['application_shortname']=='')
+if ($CONFIG['application_name'] == '' AND $CONFIG['application_shortname'] == '')
 {
     echo "<p class='error'>We couldn't find configuration defaults, this probably means your include_path is wrong. ";
     echo "Your current include path is <code>{$include_path}</code><br />";
@@ -594,7 +594,7 @@ switch ($_REQUEST['action'])
         $newcfgfile .= "?php\n";
         $newcfgfile .= "# config.inc.php - SiT! Config file generated automatically by setup.php on ".date('r')."\n\n";
 
-        if ($_REQUEST['config']=='advanced')
+        if ($_REQUEST['config'] == 'advanced')
         {
             foreach ($CFGVAR AS $setupvar => $setupval)
             {
@@ -715,7 +715,7 @@ switch ($_REQUEST['action'])
                 }
                 echo "</p>";
                 $sql = "CREATE DATABASE `{$CONFIG['db_database']}` DEFAULT CHARSET utf8";
-                if ($_REQUEST['action']=='createdatabase')
+                if ($_REQUEST['action'] == 'createdatabase')
                 {
                     echo "<h2>Creating database...</h2>";
                     $result = mysql_query($sql);
@@ -835,7 +835,7 @@ switch ($_REQUEST['action'])
 
                     echo "<h2>Installed OK</h2>";
 
-                    if ($_REQUEST['action']=='upgrade')
+                    if ($_REQUEST['action'] == 'upgrade')
                     {
                         /*****************************
                          * Do pre-upgrade tasks here *
@@ -992,7 +992,7 @@ switch ($_REQUEST['action'])
                             while ($dashboardnames = mysql_fetch_object($result))
                             {
                                 $version = 1;
-                                include("{$CONFIG['application_fspath']}dashboard/dashboard_{$dashboardnames->name}.php");
+                                include ("{$CONFIG['application_fspath']}dashboard/dashboard_{$dashboardnames->name}.php");
                                 $func = "dashboard_{$dashboardnames->name}_get_version";
 
                                 if (function_exists($func))
@@ -1070,7 +1070,7 @@ switch ($_REQUEST['action'])
                         }
                     }
 
-                    if ($_REQUEST['action'] == 'createadminuser' AND setup_check_adminuser()==FALSE)
+                    if ($_REQUEST['action'] == 'createadminuser' AND setup_check_adminuser() == FALSE)
                     {
                         $password = mysql_real_escape_string($_POST['newpassword']);
                         $passwordagain = mysql_real_escape_string($_POST['passwordagain']);

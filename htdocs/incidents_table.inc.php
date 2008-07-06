@@ -239,7 +239,7 @@ while ($incidents = mysql_fetch_array($result))
     }
 
     echo "<a href='incident_details.php?id={$incidents['id']}' class='direct'>{$incidents['id']}</a>";
-    if ($externalid != "") echo "<br />{$externalid}";
+    if ($externalid != '') echo "<br />{$externalid}";
     echo "</td>";
     echo "<td>";
     if (!empty($incidents['softwareid'])) echo software_name($incidents['softwareid'])."<br />";

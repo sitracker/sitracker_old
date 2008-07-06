@@ -98,7 +98,7 @@ else
     }
 
     //upload file, here because we need updateid
-    if ($_FILES['attachment']['name'] != "")
+    if ($_FILES['attachment']['name'] != '')
     {
         // try to figure out what delimeter is being used (for windows or unix)...
         //.... // $delim = (strstr($filesarray[$c],"/")) ? "/" : "\\";

@@ -137,7 +137,7 @@ else
         $error_string .= "<p class='error'>You must select a contact</p>\n";
     }
     // check for blank title
-    if ($title == "")
+    if ($title == '')
     {
         $errors += 1;
         $error_string .= "<p class='error'>You must enter a title</p>\n";
@@ -187,7 +187,7 @@ else
             if ($oldexternalid != $externalid)
             {
                 $header .= "External ID: ";
-                if ($oldexternalid != "")
+                if ($oldexternalid != '')
                 {
                     $header .= $oldexternalid;
                 }
@@ -197,7 +197,7 @@ else
                 }
 
                 $header .= " -&gt; <b>";
-                if ($externalid != "")
+                if ($externalid != '')
                 {
                     $header .= $externalid;
                 }

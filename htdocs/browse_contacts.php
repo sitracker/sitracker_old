@@ -216,14 +216,14 @@ else
                 // define class for table row shading
                 if ($shade) $class = "shade1";
                 else $class = "shade2";
-                if ($results['active']=='false') $class='expired';
+                if ($results['active'] == 'false') $class='expired';
                 ?>
                 <tr class='<?php echo $class ?>'>
                     <td><a href="contact_details.php?id=<?php echo $results["id"] ?>" ><?php echo $results['surname'].', '.$results['forenames']; ?></a></td>
                     <td><a href="site_details.php?id=<?php echo $results['siteid'] ?>"><?php echo site_name($results['siteid']) ?></a></td>
                     <td><?php echo $results["email"]; ?></td>
-                    <td><?php if ($results["phone"] == "") { echo "<em>{$strNone}</em>"; } else { echo $results["phone"]; } ?></td>
-                    <td><?php if ($results["fax"] == "") { echo "<em>{$strNone}</em>"; } else { echo $results["fax"]; } ?></td>
+                    <td><?php if ($results["phone"] == '') { echo "<em>{$strNone}</em>"; } else { echo $results["phone"]; } ?></td>
+                    <td><?php if ($results["fax"] == '') { echo "<em>{$strNone}</em>"; } else { echo $results["fax"]; } ?></td>
                     <?php echo "<td><a href='add_incident.php?action=findcontact&amp;contactid={$results['id']}'>{$strAddIncident}</a></td>"; ?>
                 </tr>
                 <?php

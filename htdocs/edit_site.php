@@ -76,7 +76,7 @@ elseif ($action == "update")
     // Edit site, update the database
     $errors = 0;
     // check for blank name
-    if ($name == "")
+    if ($name == '')
     {
         $errors = 1;
         $errors_string .= "<p class='error'>{$strMustEnterName}</p>\n";

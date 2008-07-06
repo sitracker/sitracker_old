@@ -196,7 +196,7 @@ else if ($action == "update")
         $errors_string .= "<p class='error'>You must select a reseller</p>\n";
     }
     // check for blank licence quantity
-    if ($licence_quantity == "")
+    if ($licence_quantity == '')
     {
         $errors = 1;
         $errors_string .= "<p class='error'>You must enter a licence quantity</p>\n";

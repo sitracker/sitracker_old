@@ -38,7 +38,7 @@ if ($action == "showform" OR $action=='')
     echo "<table align='center' class='vertical'>";
 
     echo "<tr><th>{$strSite}</th><td>";
-    if ($_SESSION['formdata']['add_contract']['site'] != "")
+    if ($_SESSION['formdata']['add_contract']['site'] != '')
     {
         echo site_drop_down("site", $_SESSION['formdata']['add_contract']['site'], TRUE);
     }
@@ -51,7 +51,7 @@ if ($action == "showform" OR $action=='')
     echo "<input value='amount' type='radio' name='contacts' checked='checked' />";
 
     echo "{$strLimitTo} <input size='2' name='amount' ";
-    if ($_SESSION['formdata']['add_contract']['contacts'] != "")
+    if ($_SESSION['formdata']['add_contract']['contacts'] != '')
     {
         echo "value='{$_SESSION['formdata']['add_contract']['amount']}'";
     }
@@ -64,7 +64,7 @@ if ($action == "showform" OR $action=='')
     echo "{$strAllSiteContactsSupported}";
     echo "</td></tr>";
     echo "<tr><th>{$strProduct} <sup class='red'>*</sup></th><td>";
-    if ($_SESSION['formdata']['add_contract']['product'] != "")
+    if ($_SESSION['formdata']['add_contract']['product'] != '')
     {
         echo product_drop_down("product", $_SESSION['formdata']['add_contract']['product'])."</td></tr>\n";
     }
@@ -76,7 +76,7 @@ if ($action == "showform" OR $action=='')
     // TODO if service level is timed, we need to ask for unit rate (and daily rate?)
     // servicelevel_timed($sltag)
     echo "<tr><th>{$strServiceLevel}</th><td>";
-    if ($_SESSION['formdata']['add_contract']['servicelevelid'] != "")
+    if ($_SESSION['formdata']['add_contract']['servicelevelid'] != '')
     {
         $slid = $_SESSION['formdata']['add_contract']['servicelevelid'];
     }
@@ -104,7 +104,7 @@ if ($action == "showform" OR $action=='')
 
     echo "<tr><th>{$strExpiryDate}</th>";
     echo "<td><input class='required' name='expiry' size='10' ";
-    if ($_SESSION['formdata']['add_contract']['expiry'] != "")
+    if ($_SESSION['formdata']['add_contract']['expiry'] != '')
     {
         echo "value='{$_SESSION['formdata']['add_contract']['expiry']}'";
     }

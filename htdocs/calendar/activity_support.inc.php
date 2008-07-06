@@ -19,9 +19,9 @@ include_once ('auth.inc.php');
 foreach (array('level', 'data', 'ws' ) as $var)
     eval("\$$var=cleanvar(\$_REQUEST['$var']);");
 
-if ($level == "")
+if ($level == '')
 {
-    $activity_types['Support'] = "";
+    $activity_types['Support'] = '';
     echo "<script type='text/javascript'>\n
 /* <![CDATA[ */\n
         function activitySupport(level)

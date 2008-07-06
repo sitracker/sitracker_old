@@ -70,7 +70,7 @@ while ($contactrow = mysql_fetch_array($contactresult))
 
     echo "<table align='center' class='vertical'>";
     echo "<tr><th colspan='2'><h3>".icon('contact', 32)." {$contactrow['forenames']} {$contactrow['surname']}</h3></th></tr>\n";
-    if ($contactrow['active']=='false')
+    if ($contactrow['active'] == 'false')
     {
         echo "<tr><th>{$strStatus}:</th><td><span class='expired'>{$strInactive}</span></td></tr>\n";
     }

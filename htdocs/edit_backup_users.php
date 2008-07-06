@@ -17,7 +17,7 @@ require ('db_connect.inc.php');
 require ('functions.inc.php');
 
 if (empty($_REQUEST['user'])
-    OR $_REQUEST['user']=='current'
+    OR $_REQUEST['user'] == 'current'
     OR $_REQUEST['user']==$_SESSION['userid']
     OR $_REQUEST['userid']==$_SESSION['userid'])
 {
@@ -38,7 +38,7 @@ $save = $_REQUEST['save'];
 if (empty($save))
 {
     // External variables
-    if (empty($_REQUEST['user']) OR $_REQUEST['user']=='current')
+    if (empty($_REQUEST['user']) OR $_REQUEST['user'] == 'current')
     {
         $user = mysql_real_escape_string($sit[2]);
     }

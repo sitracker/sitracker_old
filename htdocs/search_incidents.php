@@ -55,7 +55,7 @@ else
     // perform search
 
     // check input
-    if ($search_string == "")
+    if ($search_string == '')
     {
         $errors = 1;
         echo "<p class='error'>You must enter a search string</p>\n";
@@ -142,7 +142,7 @@ else
                 if ($results['status']==2) $class="expired";
                 ?>
                 <tr>
-                <td align='center' class='<?php echo $class; ?>' width='100'><?php echo $results["id"] ?> (<?php if ($results["externalid"] == "") echo "None"; else echo $results["externalid"] ?>)</td>
+                <td align='center' class='<?php echo $class; ?>' width='100'><?php echo $results["id"] ?> (<?php if ($results["externalid"] == '') echo "None"; else echo $results["externalid"] ?>)</td>
                 <td class='<?php echo $class; ?>' width='150'><a href="javascript:incident_details_window('<?php echo $results["id"] ?>')"><?php echo $results["title"] ?></a></td>
                 <td align='center' class='<?php echo $class; ?>' width='100'><?php echo $results['forenames'].' '.$results['surname']; ?></td>
                 <td align='center' class='<?php echo $class; ?>' width='100'><?php echo site_name($results["siteid"]) ?></td>

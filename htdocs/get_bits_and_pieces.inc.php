@@ -10,7 +10,7 @@
 // Author: Paul Heaney <paulheaney[at]users.sourceforge.net>
 
 
-@include('set_include_path.inc.php');
+@include ('set_include_path.inc.php');
 $permission=0; // not required
 require('db_connect.inc.php');
 require('functions.inc.php');
@@ -31,7 +31,7 @@ if (!empty($toget))
             if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
             while ($obj = mysql_fetch_object($result))
             {
-                $strIsSelected = "";
+                $strIsSelected = '';
                 if ($obj->tag == $selected)
                 {
                     $strIsSelected = "selected='selected'";
@@ -45,7 +45,7 @@ if (!empty($toget))
             if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
             while ($obj = mysql_fetch_object($result))
             {
-                $strIsSelected = "";
+                $strIsSelected = '';
                 if ($obj->id == $selected)
                 {
                     $strIsSelected = "selected='selected'";
@@ -59,7 +59,7 @@ if (!empty($toget))
             if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
             while ($obj = mysql_fetch_object($result))
             {
-                $strIsSelected = "";
+                $strIsSelected = '';
                 if ($obj->id == $selected)
                 {
                     $strIsSelected = "selected='selected'";

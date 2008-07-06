@@ -90,7 +90,7 @@ if (empty($_REQUEST['mode']))
     echo "</td></tr></table>";
     include ('htmlfooter.inc.php');
 }
-elseif ($_REQUEST['mode']=='report')
+elseif ($_REQUEST['mode'] == 'report')
 {
     if (is_array($_POST['exc']) && is_array($_POST['exc'])) $_POST['inc']=array_values(array_diff($_POST['inc'],$_POST['exc']));  // don't include anything excluded
     $includecount=count($_POST['inc']);
@@ -124,9 +124,9 @@ elseif ($_REQUEST['mode']=='report')
     $sql = "SELECT *, c.id AS contactid, s.name AS site, c.email AS cemail FROM `{$dbContacts}` ";
     $sql .= "LEFT JOIN `{$dbSites}` AS s ON c.siteid = s.id ";
 
-    if (empty($incsql)==FALSE OR empty($excsql)==FALSE) $sql .= "WHERE ";
+    if (empty($incsql) == FALSE OR empty($excsql) == FALSE) $sql .= "WHERE ";
     if (!empty($incsql)) $sql .= "$incsql";
-    if (empty($incsql)==FALSE AND empty($excsql)==FALSE) $sql .= " AND ";
+    if (empty($incsql) == FALSE AND empty($excsql) == FALSE) $sql .= " AND ";
     if (!empty($excsql)) $sql .= "$excsql";
 
     $sql .= " ORDER BY c.email ASC ";
@@ -208,13 +208,13 @@ elseif ($_REQUEST['mode']=='report')
     $html .= "<p align='center'>$rowcount Records</p>";
     $html .= "<p align='center'>SQL Query used to produce this report:<br /><code>$sql</code></p>\n";
 
-    if ($_POST['output']=='screen')
+    if ($_POST['output'] == 'screen')
     {
         include ('htmlheader.inc.php');
         echo $html;
         include ('htmlfooter.inc.php');
     }
-    elseif ($_POST['output']=='csv')
+    elseif ($_POST['output'] == 'csv')
     {
         // --- CSV File HTTP Header
         header("Content-type: text/csv\r\n");

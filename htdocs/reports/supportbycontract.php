@@ -24,7 +24,7 @@ require ('auth.inc.php');
 
 $siteid = cleanvar($_REQUEST['siteid']);
 
-if ($_REQUEST['mode']=='csv')
+if ($_REQUEST['mode'] == 'csv')
 {
     // --- CSV File HTTP Header
     header("Content-type: text/csv\r\n");
@@ -58,7 +58,7 @@ while ($site = mysql_fetch_object($result))
     $mresult = mysql_query($msql);
     if (mysql_num_rows($mresult)>=1)
     {
-        if ($_REQUEST['mode']=='csv')
+        if ($_REQUEST['mode'] == 'csv')
         {
             echo "{$site->sitename}\n";
             echo "Product,Licence,Expiry Date,Engineer 1, Engineer 2, Engineer 3, Engineer 4\n";

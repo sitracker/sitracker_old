@@ -209,7 +209,7 @@ class mime_email
 			// if there is a blank line, we know that the header ended and
 			// now the body begins, but we dont need the body right now,
 			// so we break out of the loop
-			if (trim($line) == "") {$this->bodystart = $hc; break;}
+			if (trim($line) == '') {$this->bodystart = $hc; break;}
 
     		if ( (!$from) and (eregi ("^From:(.*)", $line, $match)) ) {
       			$this->from = trim ( $match[1] );
@@ -302,7 +302,7 @@ class mime_email
     	if (strtolower($this->contenttype) == "multipart/alternative") $this->isHTMLmail = true;
     	if (strtolower($this->contenttype) == "text/plain") {$this->isHTMLmail = false;$this->isATTACHMENTmail = false;}
     	$ctypecontinue = false;
-    	$ctypelinehold = "";
+    	$ctypelinehold = '';
 
     	// if htmlentities flag is on, convert all normally visible attributes according to htmlentities
     	if ($varhtmlentities) {
@@ -326,7 +326,7 @@ class mime_email
 
 	function parseBody($rawemail)
 	{
-		if ($this->contenttype == "text/plain" or $this->contenttype=="") {
+		if ($this->contenttype == "text/plain" or $this->contenttype== '') {
 			//
 			// just a text/plain email, thats easy
 			//
@@ -396,7 +396,7 @@ class mime_email
 						$my_mime_block->setMimeContentTypeCharset($myhash[charset]);
 						$my_mime_block->setMimeContentTypeName($myhash[name]);
 
-						if ($my_mime_block->getMimeContentTypeBoundary()!="")
+						if ($my_mime_block->getMimeContentTypeBoundary()!= '')
 							$newboundary = $myhash[boundary];
 					}
 
@@ -478,7 +478,7 @@ class mime_email
 					 $bodycontent .= $line . "\n";
 				}
 
-				if ($line =="") $body = true;
+				if ($line == '') $body = true;
 			}
 
 			if ($line == "--" . $boundary OR $line == "--" . $boundary . "--") {
@@ -501,7 +501,7 @@ class mime_email
 				}
 
 				// clear bodycontent var
-				$bodycontent = "";
+				$bodycontent = '';
 
 				// if boundary ends....leave the loop, because of performance gains with large attachment
 				if ($line == "--" . $boundary . "--") break;
@@ -513,7 +513,7 @@ class mime_email
 		//$time = $time_end - $time_start;
 		//echo "<h3>echo *LOOP Start: $time_start   End: $time_end    Diff: $time</h3>";
 
-		if ($newboundary != "" and $newboundary != "ThisIsAUniqueLineFromMarcLogemann") $this->parseBoundary($newboundary, $rawemail);
+		if ($newboundary != '' and $newboundary != "ThisIsAUniqueLineFromMarcLogemann") $this->parseBoundary($newboundary, $rawemail);
 	}
 
 

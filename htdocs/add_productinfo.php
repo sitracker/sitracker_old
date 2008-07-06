@@ -56,7 +56,7 @@ else
         echo "<p class='error'>{$strMustEnterProduct}</p>\n";
     }
     // check for blank information
-    if ($information == "")
+    if ($information == '')
     {
         $errors = 1;
         echo "<p class='error'>{$strMustEnterProductInformation}</p>\n";

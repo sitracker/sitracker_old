@@ -183,7 +183,7 @@ if (!$sent)
                 echo "</p>";
 
                 // Force resend if there are no new additions to be requested
-                if ($waiting==FALSE AND $action!='resend') $action='resend';
+                if ($waiting == FALSE AND $action!='resend') $action='resend';
                 echo "<input type='hidden' name='action' value='{$action}' />";
                 echo "<p align='center'>{$strRequestSendComments}<br />";
                 echo "<textarea name='memo' rows='3' cols='40'></textarea>";
@@ -235,8 +235,8 @@ else
     else
     {
         $sql = "SELECT * FROM `{$dbHolidays}` WHERE approved=0 ";
-        if ($action!='resend') $sql .= "AND approvedby=0 ";
-        if ($user!='all' || $approver==FALSE) $sql .= "AND userid='{$user}' ";
+        if ($action != 'resend') $sql .= "AND approvedby=0 ";
+        if ($user != 'all' || $approver == FALSE) $sql .= "AND userid='{$user}' ";
         $sql .= "ORDER BY startdate, length";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
@@ -245,13 +245,13 @@ else
             while ($holiday=mysql_fetch_object($result))
             {
                 $holidaylist .= ldate('l j F Y', $holiday->startdate).", ";
-                if ($holiday->length=='am') $holidaylist .= $strMorning;
-                if ($holiday->length=='pm') $holidaylist .= $strAfternoon;
-                if ($holiday->length=='day') $holidaylist .= $strFullDaye;
+                if ($holiday->length == 'am') $holidaylist .= $strMorning;
+                if ($holiday->length == 'pm') $holidaylist .= $strAfternoon;
+                if ($holiday->length == 'day') $holidaylist .= $strFullDaye;
                 $holidaylist .= ", ";
                 $holidaylist .= holiday_type($holiday->type)."\n";
             }
-            if (strlen($memo)>3)
+            if (strlen($memo) > 3)
             {
                 $holidaylist .= "{$SYSLANG['strCommentsSentWithRequest']}:\n\n";
                 $holidaylist .= "---\n{$memo}\n---\n\n";

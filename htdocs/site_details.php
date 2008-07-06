@@ -41,7 +41,7 @@ while ($siterow = mysql_fetch_array($siteresult))
     echo "<tr><th>{$strSite}:</th><td>";
     echo "<h3>".icon('site', 32)." ".$siterow['name']."</h3>";
     echo "</td></tr>";
-    if ($siterow['active']=='false')
+    if ($siterow['active'] == 'false')
     {
         echo "<tr><th>{$strStatus}:</th><td><span class='expired'>{$strInactive}</span></td></tr>";
     }
@@ -243,7 +243,7 @@ if (user_permission($sit[2],19)) // View contracts
             // define class for table row shading
             if ($shade) $class = "shade1";
             else $class = "shade2";
-            if ($results['term']=='yes' OR 
+            if ($results['term'] == 'yes' OR 
                 ($results['expirydate'] < $now AND
                 $results['expirydate'] != -1))
             {

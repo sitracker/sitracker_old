@@ -55,7 +55,7 @@ mysql_select_db($CONFIG['db_database'], $db);
 if (mysql_error())
 {
     // TODO add some detection for missing database
-    if (strpos(mysql_error(), 'Unknown database')!==FALSE)
+    if (strpos(mysql_error(), 'Unknown database') !== FALSE)
     {
         $msg = urlencode(base64_encode("Unknown Database '{$CONFIG['db_database']}'"));
         header("Location: {$CONFIG['application_webpath']}setup.php?msg={$msg}");

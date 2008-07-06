@@ -85,7 +85,7 @@ elseif (authenticate($username, $password) == 1)
         $t = trigger('TRIGGER_LANGUAGE_DIFFERS', array('profilelang' => $user->var_i18n, 'currentlang' => $_SESSION['lang']));
     }
 
-    if ($user->var_i18n != $CONFIG['default_i18n'] AND $_SESSION['lang']=='')
+    if ($user->var_i18n != $CONFIG['default_i18n'] AND $_SESSION['lang'] == '')
     {
         $_SESSION['lang'] = is_null($user->var_i18n) ? '' : $user->var_i18n;
     }

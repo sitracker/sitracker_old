@@ -252,7 +252,7 @@ else
             $csv .= "\n{$skill['name']},";
             $sum = 0;
             $counter = 0;
-            $coords = "";
+            $coords = '';
             foreach ($months AS $m)
             {
                 $val = $skill[$m]['numberofincidents'];

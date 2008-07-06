@@ -45,7 +45,7 @@ foreach ($parts as $part)
 
     $bodytext .= ".  $comments";
 
-    if (($schedule == -1) || ($comments != ""))
+    if (($schedule == -1) || ($comments != ''))
     {
         //trigger('TRIGGER_TIMESHEET_CREATED_STATUS',
         //    "status=" . str_replace(array(',', '='), '', $bodytext));
@@ -56,7 +56,7 @@ foreach ($parts as $part)
         //trigger('TRIGGER_TIMESHEET_CREATED', array('notifyemail=tom@salfordsoftware.co.uk'));
     }
 
-    if (($schedule != 0) || ($comments != ""))
+    if (($schedule != 0) || ($comments != ''))
     {
 
         $sql = "INSERT INTO `{$dbNotes}` (userid, bodytext, link, refid) VALUES ('";

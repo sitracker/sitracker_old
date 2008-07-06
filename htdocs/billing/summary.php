@@ -11,7 +11,7 @@
 
 // Author:  Paul Heaney Paul Heaney <paulheaney[at]users.sourceforge.net>
 
-@include('set_include_path.inc.php');
+@include ('set_include_path.inc.php');
 $permission =  37; // Run Reports  // FIXME might need its own
 
 require_once('db_connect.inc.php');
@@ -26,7 +26,7 @@ if (empty($display)) $display = 'html';
 $sql = "SELECT DISTINCT(CONCAT(m.id,sl.id)), m.site, m.product, s.* FROM `{$dbMaintenance}` AS m, `{$dbServiceLevels}` AS sl, `{$dbService}` AS s, `{$dbSites}` AS site ";
 $sql .= "WHERE m.servicelevelid = sl.id AND sl.timed = 'yes' AND m.id = s.contractid AND m.site = site.id ";
 
-$sitestr = "";
+$sitestr = '';
 
 if (!empty($sites))
 {
@@ -58,8 +58,8 @@ if (mysql_numrows($result) > 0)
         $str .= "{$strSiteName},{$strProduct},{$strStartDate},{$strEndDate},{$strCreditAmount},{$strBalance},{$strUnitRate},Units remaining @1 x\n";
     }
 
-    $lastsite = "";
-    $lastproduct = "";
+    $lastsite = '';
+    $lastproduct = '';
 
     $shade = 'shade1';
     while ($obj = mysql_fetch_object($result))

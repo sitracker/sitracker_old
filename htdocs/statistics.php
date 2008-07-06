@@ -9,7 +9,7 @@
 //
 // Author: Paul Heaney <paulheaney[at]users.sourceforge.net>
 
-@include('set_include_path.inc.php');
+@include ('set_include_path.inc.php');
 require('db_connect.inc.php');
 require('functions.inc.php');
 
@@ -506,7 +506,7 @@ function give_overview()
     return $string;
 }
 
-include('htmlheader.inc.php');
+include ('htmlheader.inc.php');
 
 switch ($mode)
 {
@@ -514,11 +514,11 @@ switch ($mode)
         $query = $_REQUEST['query'];
         $startdate = $_REQUEST['start'];
         $enddate = $_REQUEST['end'];
-        include('statistics/breakdown.inc.php');
+        include ('statistics/breakdown.inc.php');
         break;
     case 'daybreakdown':
         $offset = $_REQUEST['offset'];
-        include('statistics/daybreakdown.inc.php');
+        include ('statistics/daybreakdown.inc.php');
         break;
     case 'overview': //this is the default so just fall though
     default:
@@ -527,5 +527,5 @@ switch ($mode)
         break;
 }
 
-include('htmlfooter.inc.php');
+include ('htmlfooter.inc.php');
 ?>

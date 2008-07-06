@@ -11,7 +11,7 @@
 // Author: Paul Heaney <paulheaney[at]users.sourceforge.net>
 // This Page Is *NOT* Valid XHTML 1.0 Transitional!
 
-@include('set_include_path.inc.php');
+@include ('set_include_path.inc.php');
 
 $permission=0; // not required
 require('db_connect.inc.php');
@@ -34,7 +34,7 @@ while ($dashboard = mysql_fetch_object($result))
 
 // Valid user
 $pagescripts = array('dojo/dojo.js');
-include('htmlheader.inc.php');
+include ('htmlheader.inc.php');
 
 $sql = "SELECT dashboard FROM `{$dbUsers}` WHERE id = '".$_SESSION['userid']."'";
 $result = mysql_query($sql);
@@ -51,9 +51,9 @@ $col0 = 0;
 $col1 = 0;
 $col2 = 0;
 
-$cols0 = "";
-$cols1 = "";
-$cols2 = "";
+$cols0 = '';
+$cols1 = '';
+$cols2 = '';
 
 foreach ($dashboardcomponents AS $db)
 {
@@ -192,12 +192,12 @@ echo "<a href=\"javascript:save_layout();\" id='savelayout' title='Save Dashboar
             }
         }
 
-        var toPass = "";
+        var toPass = '';
         for (var i = 0; i < 3; i++)
         {
             colid = 'col' + i;
             var col = $(colid).childNodes;
-            var s = "";
+            var s = '';
 //             alert(colid + '=' + col.length);
             for (var x = 0; x < col.length; x++){
                 // s = s+col.item(x).id.substr(5)+"-";
@@ -214,7 +214,7 @@ echo "<a href=\"javascript:save_layout();\" id='savelayout' title='Save Dashboar
         xmlhttp.onreadystatechange=function() {
             //remove this in the future after testing
             if (xmlhttp.readyState==4) {
-                if (xmlhttp.responseText != ""){
+                if (xmlhttp.responseText != ''){
                     //alert(xmlhttp.responseText);
                 }
             }
@@ -291,5 +291,5 @@ if (isset($sit[2]))
 }
 echo "</form>\n";
 echo "</div>\n";
-include('htmlfooter.inc.php');
+include ('htmlfooter.inc.php');
 ?>

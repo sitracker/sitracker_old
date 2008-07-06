@@ -254,32 +254,32 @@ while ($update = mysql_fetch_object($result))
         //}
 
         // Put the header part (up to the <hr /> in a seperate DIV)
-        if (strpos($updatebody, '<hr>')!==FALSE)
+        if (strpos($updatebody, '<hr>') !== FALSE)
         {
             $updatebody = "<div class='iheader'>".str_replace('<hr>',"</div>",$updatebody);
         }
         // Style quoted text
-        $quote[0]="/^(&gt;([\s][\d\w]).*)[\n\r]$/m";
-        $quote[1]="/^(&gt;&gt;([\s][\d\w]).*)[\n\r]$/m";
-        $quote[2]="/^(&gt;&gt;&gt;+([\s][\d\w]).*)[\n\r]$/m";
-        $quote[3]="/^(&gt;&gt;&gt;(&gt;)+([\s][\d\w]).*)[\n\r]$/m";
-        $quote[4]="/(-----\s?Original Message\s?-----.*-{3,})/s";
-        $quote[5]="/(-----BEGIN PGP SIGNED MESSAGE-----)/s";
-        $quote[6]="/(-----BEGIN PGP SIGNATURE-----.*-----END PGP SIGNATURE-----)/s";
-        $quote[7]="/^(&gt;)[\r]*$/m";
-        $quote[8]="/^(&gt;&gt;)[\r]*$/m";
-        $quote[9]="/^(&gt;&gt;(&gt;){1,8})[\r]*$/m";
+        $quote[0] = "/^(&gt;([\s][\d\w]).*)[\n\r]$/m";
+        $quote[1] = "/^(&gt;&gt;([\s][\d\w]).*)[\n\r]$/m";
+        $quote[2] = "/^(&gt;&gt;&gt;+([\s][\d\w]).*)[\n\r]$/m";
+        $quote[3] = "/^(&gt;&gt;&gt;(&gt;)+([\s][\d\w]).*)[\n\r]$/m";
+        $quote[4] = "/(-----\s?Original Message\s?-----.*-{3,})/s";
+        $quote[5] = "/(-----BEGIN PGP SIGNED MESSAGE-----)/s";
+        $quote[6] = "/(-----BEGIN PGP SIGNATURE-----.*-----END PGP SIGNATURE-----)/s";
+        $quote[7] = "/^(&gt;)[\r]*$/m";
+        $quote[8] = "/^(&gt;&gt;)[\r]*$/m";
+        $quote[9] = "/^(&gt;&gt;(&gt;){1,8})[\r]*$/m";
 
-        $quotereplace[0]="<span class='quote1'>\\1</span>";
-        $quotereplace[1]="<span class='quote2'>\\1</span>";
-        $quotereplace[2]="<span class='quote3'>\\1</span>";
-        $quotereplace[3]="<span class='quote4'>\\1</span>";
-        $quotereplace[4]="<span class='quoteirrel'>\\1</span>";
-        $quotereplace[5]="<span class='quoteirrel'>\\1</span>";
-        $quotereplace[6]="<span class='quoteirrel'>\\1</span>";
-        $quotereplace[7]="<span class='quote1'>\\1</span>";
-        $quotereplace[8]="<span class='quote2'>\\1</span>";
-        $quotereplace[9]="<span class='quote3'>\\1</span>";
+        $quotereplace[0] = "<span class='quote1'>\\1</span>";
+        $quotereplace[1] = "<span class='quote2'>\\1</span>";
+        $quotereplace[2] = "<span class='quote3'>\\1</span>";
+        $quotereplace[3] = "<span class='quote4'>\\1</span>";
+        $quotereplace[4] = "<span class='quoteirrel'>\\1</span>";
+        $quotereplace[5] = "<span class='quoteirrel'>\\1</span>";
+        $quotereplace[6] = "<span class='quoteirrel'>\\1</span>";
+        $quotereplace[7] = "<span class='quote1'>\\1</span>";
+        $quotereplace[8] = "<span class='quote2'>\\1</span>";
+        $quotereplace[9] = "<span class='quote3'>\\1</span>";
 
         $updatebody = preg_replace($quote, $quotereplace, $updatebody);
 

@@ -59,7 +59,7 @@ else
     // perform search
     include ('htmlheader.inc.php');
     // check input
-    if ($search_string == "")
+    if ($search_string == '')
     {
         $errors = 1;
         echo "<p class='error'>You must enter a search string</p>\n";
@@ -203,7 +203,7 @@ else
                 echo "{$results["licence_type"]}</td>";
                 echo "<td>";
                 echo ldate($CONFIG['dateformat_date'], $results["expirydate"]);
-                if ($results["term"]=='yes')
+                if ($results["term"] == 'yes')
                 {
                 	echo "<br />Terminated";
                 }
@@ -213,7 +213,7 @@ else
                 echo "{$results['admincontactforenames']} ";
                 echo "{$results['admincontactsurnname']}</a></td>";
                 echo "<td align='center' width='150'>";
-                if ($results["notes"] == ""){
+                if ($results["notes"] == ''){
                 	echo "&nbsp;"; 
                 }
                 else

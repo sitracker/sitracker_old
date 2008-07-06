@@ -151,7 +151,7 @@ elseif ($action == "edit" && (!empty($user) OR !empty($role)))
             echo "<input name=\"perm[]\" type=\"checkbox\" value=\"".$permissions['id']."\"";
 
 
-            if ($permission_array[$permissions['id']]['granted']=='true') echo " checked='checked'";
+            if ($permission_array[$permissions['id']]['granted'] == 'true') echo " checked='checked'";
             echo " /> ".$permissions['name'];
 
             echo "</td></tr>\n";
@@ -200,14 +200,14 @@ elseif ($action == "update")
                     // flush();
                     $uresult = mysql_query($sql);
                     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
-                    if (mysql_affected_rows() < 1 || $uresult==FALSE)
+                    if (mysql_affected_rows() < 1 || $uresult == FALSE)
                     {
                         // Update failed, this could be because of a missing userpemissions record so try and create one
                         // echo "Update of permission ".$x[1]."failed, no problem, will try insert instead.<br />";
                         $isql = "INSERT INTO `{$dbRolePermissions}` (roleid, permissionid, granted) ";
                         $isql .= "VALUES ('{$rolerow->id}', '".$x[1]."', 'true')";
                         $iresult = mysql_query($isql);
-                        if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+                        if (mysql_error()) trigger_error(mysql_error(), E_USER_ERROR);
                         if (mysql_affected_rows() < 1) echo "<p class='error'>Update of user permission ".$x[1]." failed on pass 2\n";
                     }
                 }

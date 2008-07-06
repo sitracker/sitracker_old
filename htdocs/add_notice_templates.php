@@ -79,7 +79,7 @@ if (empty($submit))
     <?php
     echo "<tr><th>{$strNoticeTemplate}: <sup class='red'>*</sup></th><td>";
     echo "<input maxlength='50' name='name' size='35' value='{$noticetype['name']}' ";
-    // if ($noticetype['type']=='system') echo "readonly='readonly' ";
+    // if ($noticetype['type'] == 'system') echo "readonly='readonly' ";
     echo "/>";
     echo "</td></tr>\n";
     echo "<tr><th>{$strDescription}: <sup class='red'>*</sup></th><td><input name='description' size='50' value=\"{$noticetype["description"]}\" /></td></tr>\n";

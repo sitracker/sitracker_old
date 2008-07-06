@@ -114,18 +114,18 @@ while ($users = mysql_fetch_array($result))
 
 
     echo "</td><td>";
-    if ($users["phone"] == "") echo $strNone;
+    if ($users["phone"] == '') echo $strNone;
     else echo $users["phone"];
     echo "</td><td>";
-    if ($users["mobile"] == "") echo $strNone;
+    if ($users["mobile"] == '') echo $strNone;
     else echo $users["mobile"];
     echo "</td><td>";
-    if ($users["fax"] == "") echo $strNone;
+    if ($users["fax"] == '') echo $strNone;
     else echo $users["fax"];
     echo "</td><td>";
     echo userstatus_name($users["status"]);
     echo "</td><td>";
-    if ($users["accepting"]=='Yes') echo $strYes;
+    if ($users["accepting"] == 'Yes') echo $strYes;
     else echo "<span class='error'>{$strNo}</span>";
     echo "</td></tr>";
     // invert shade

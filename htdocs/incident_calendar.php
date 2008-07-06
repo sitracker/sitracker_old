@@ -141,8 +141,8 @@ function draw_calendar($nmonth, $nyear)
            print("</tr>\n<tr>\n");
          }
          $adjusted_day = $day+1;
-         $bold="";
-         $notbold="";
+         $bold= '';
+         $notbold= '';
          // Colour Today in Red
          if ($adjusted_day==date('d') && $nmonth==date('m'))
          {

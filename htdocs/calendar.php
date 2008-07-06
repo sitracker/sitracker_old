@@ -11,14 +11,14 @@
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 //         Tom Gerrard <tom.gerrard[at]salfordsoftware.co.uk>
 
-@include('set_include_path.inc.php');
+@include ('set_include_path.inc.php');
 $permission = 27; // View your calendar
 require('db_connect.inc.php');
 require('functions.inc.php');
 
 // This page requires authentication
 require('auth.inc.php');
-include('calendar/calendar.inc.php');
+include ('calendar/calendar.inc.php');
 
 $groupid = cleanvar($_REQUEST['gid']);
 if (empty($groupid)) $groupid = $_SESSION['groupid'];
@@ -35,7 +35,7 @@ foreach (array(
 if (empty($length)) $length='day';
 $title = $strCalendar;
 $pagecss = array('calendar/planner.css.php');
-include('htmlheader.inc.php');
+include ('htmlheader.inc.php');
 
 if (empty($user) || $user=='current') $user = $sit[2];
 elseif ($user == 'all') $user = '';
@@ -82,7 +82,7 @@ foreach ($calendarTypes as $navType)
 echo implode(' | ', $navHtml);
 echo "</p>";
 
-include("calendar/{$display}.inc.php");
+include ("calendar/{$display}.inc.php");
 
-include('htmlfooter.inc.php');
+include ('htmlfooter.inc.php');
 ?>

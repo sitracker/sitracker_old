@@ -12,7 +12,7 @@
 
 @include ('set_include_path.inc.php');
 if (empty($_REQUEST['user'])
-    OR $_REQUEST['user']=='current'
+    OR $_REQUEST['user'] == 'current'
     OR $_REQUEST['userid']==$_SESSION['userid']) $permission=58; // Edit your software skills
 else $permission=59; // Manage users software skills
 
@@ -23,7 +23,7 @@ require ('auth.inc.php');
 
 // External Variables
 $submit=$_REQUEST['submit'];
-if (empty($_REQUEST['user']) || $_REQUEST['user']=='current') $user=$sit[2];
+if (empty($_REQUEST['user']) || $_REQUEST['user'] == 'current') $user=$sit[2];
 else $user = cleanvar($_REQUEST['user']);
 
 if (empty($submit))

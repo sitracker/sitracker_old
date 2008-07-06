@@ -242,7 +242,7 @@ else
                 echo "<tr class='{$shade}'><td>{$skill['name']}</td>";
                 $sum = 0;
                 $counter = 0;
-                $coords = "";
+                $coords = '';
                 foreach ($months AS $m)
                 {
                     $val = $skill[$m]['numberofincidents'];

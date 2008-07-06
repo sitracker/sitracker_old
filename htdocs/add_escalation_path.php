@@ -36,35 +36,35 @@ if (empty($submit))
     echo "<table class='vertical'>";
 
     echo "<tr><th>{$strName}<sup class='red'>*</sup></th><td><input name='name'";
-    if ($_SESSION['formdata']['add_escalation_path']['name'] != "")
+    if ($_SESSION['formdata']['add_escalation_path']['name'] != '')
     {
         echo "value='{$_SESSION['formdata']['add_escalation_path']['name']}'";
     }
     echo "/></td></tr>";
 
     echo "<tr><th>{$strTrackURL}<br /></th><td><input name='trackurl'";
-    if ($_SESSION['formdata']['add_escalation_path']['trackurl'] != "")
+    if ($_SESSION['formdata']['add_escalation_path']['trackurl'] != '')
     {
         echo "value='{$_SESSION['formdata']['add_escalation_path']['trackurl']}'";
     }
     echo "/><br />{$strNoteInsertExternalID}</td></tr>";
 
     echo "<tr><th>{$strHomeURL}</th><td><input name='homeurl'";
-    if ($_SESSION['formdata']['add_escalation_path']['homeurl'] != "")
+    if ($_SESSION['formdata']['add_escalation_path']['homeurl'] != '')
     {
         echo "value='{$_SESSION['formdata']['add_escalation_path']['homeurl']}'";
     }
     echo "/></td></tr>";
 
     echo "<tr><th>{$strTitle}</th><td><input name='title'";
-    if ($_SESSION['formdata']['add_escalation_path']['title'] != "")
+    if ($_SESSION['formdata']['add_escalation_path']['title'] != '')
     {
         echo "value='{$_SESSION['formdata']['add_escalation_path']['title']}'";
     }
     echo "/></td></tr>";
 
     echo "<tr><th>{$strEmailDomain}</th><td><input name='emaildomain'";
-    if ($_SESSION['formdata']['add_escalation_path']['emaildomain'] != "")
+    if ($_SESSION['formdata']['add_escalation_path']['emaildomain'] != '')
     {
         echo "value='{$_SESSION['formdata']['add_escalation_path']['emaildomain']}'";
     }

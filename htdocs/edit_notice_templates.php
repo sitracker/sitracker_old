@@ -70,7 +70,7 @@ elseif ($action == "edit")
         <?php
         echo "<tr><th>{$strName} <sup class='red'>*</sup></th><td>";
         echo "<input maxlength='50' name='name' size='35' value='{$noticetype['name']}' ";
-        // if ($noticetype['type']=='system') echo "readonly='readonly' ";
+        // if ($noticetype['type'] == 'system') echo "readonly='readonly' ";
         echo "/>";
         echo "</td></tr>\n";
         echo "<tr><th>{$strDescription} <sup class='red'>*</sup></th><td><input name='description' size='50' value=\"{$noticetype["description"]}\" /></td></tr>\n";
@@ -87,7 +87,7 @@ elseif ($action == "edit")
         echo "<input name='id' type='hidden' value='{$id}' />";
         echo "<input name='submit' type='submit' value=\"{$strSave}\" />";
         echo "</p>\n";
-        if ($noticetype['type']=='user') echo "<p align='center'><a href='{$_SERVER['PHP_SELF']}?action=delete&amp;id={$id}'>{$strDelete}</a></p>";
+        if ($noticetype['type'] == 'user') echo "<p align='center'><a href='{$_SERVER['PHP_SELF']}?action=delete&amp;id={$id}'>{$strDelete}</a></p>";
         // FIXME i18n email templates
         ?>
         <p align='center'>The following special identifiers can be used in these fields:</p>
@@ -148,7 +148,7 @@ elseif ($action == "edit")
 }
 elseif ($action == "delete")
 {
-    if (empty($id) OR is_numeric($id)==FALSE)
+    if (empty($id) OR is_numeric($id) == FALSE)
     {
         // id must be filled and be a number
         header("Location: {$_SERVER['PHP_SELF']}?action=showform");
@@ -184,31 +184,31 @@ elseif ($action == "update")
     // check form input
     $errors = 0;
     // check for blank name
-    if ($name == "")
+    if ($name == '')
     {
         $errors = 1;
         echo "<p class='error'>You must enter a name for the email type</p>\n";
     }
     // check for blank to field
-    if ($tofield == "")
+    if ($tofield == '')
     {
         $errors = 1;
         echo "<p class='error'>You must enter a 'To' field</p>\n";
     }
     // check for blank from field
-    if ($fromfield == "")
+    if ($fromfield == '')
     {
         $errors = 1;
         echo "<p class='error'>You must enter a 'From' field</p>\n";
     }
     // check for blank reply to field
-    if ($replytofield == "")
+    if ($replytofield == '')
     {
         $errors = 1;
         echo "<p class='error'>You must enter a 'Reply To' field</p>\n";
     }
     // check for blank type
-    if ($type == "")
+    if ($type == '')
     {
         $errors = 1;
         trigger_error("Invalid input, blank type",E_USER_ERROR);

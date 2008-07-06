@@ -30,7 +30,7 @@ switch ($_REQUEST['action'])
         while ($users = mysql_fetch_object($result))
         {
             $fieldname="user{$users->id}";
-            if ($_REQUEST[$fieldname]=='yes')
+            if ($_REQUEST[$fieldname] == 'yes')
             {
                 $orig_entitlement = user_holiday_entitlement($users->id);
                 $used_holidays = user_count_holidays($users->id, 1, $archivedate);

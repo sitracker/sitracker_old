@@ -52,7 +52,7 @@ echo "</script>";
 
 echo "<h2>{$strExternalEngineerCallDistribution}</h2>";
 
-$filterSQL = "";
+$filterSQL = '';
 
 if (!empty($filterby))
 {

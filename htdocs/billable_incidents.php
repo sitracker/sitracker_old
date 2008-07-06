@@ -36,7 +36,7 @@ $sitelistsql = "SELECT DISTINCT m.site, s.name ";
 $sitelistsql .= "FROM `{$dbMaintenance}` AS m, `{$dbServiceLevels}` AS sl, `{$dbSites}` AS s ";
 $sitelistsql .= "WHERE  m.servicelevelid = sl.id AND sl.timed = 'yes' AND m.site = s.id ";
 
-$sitestr = "";
+$sitestr = '';
 
 if (!empty($sites))
 {
@@ -485,7 +485,7 @@ elseif ($mode == 'invoicepage')
             {
                 unset($servicesapproved);
 
-                $servicestr = "";
+                $servicestr = '';
 
                 $str .= "<table width='80%' align='center'><tr><th colspan='3'>{$objsite->name}</th></tr>\n";
                 $str .= "<tr><th>{$strDate}</th><th>{$strDescription}</th><th>{$strAmount}</th></tr>\n";

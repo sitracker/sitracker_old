@@ -85,7 +85,7 @@ elseif ($action == "edit" && isset($contact))
         echo "<tr><th>{$strFax}:</th><td>";
         echo "<input maxlength='50' name='fax' size='40' value='{$contactrow['fax']}' /></td></tr>\n";
         echo "<tr><th>{$strActive}:</th><td><input type='checkbox' name='active' ";
-        if ($contactrow['active']=='true') echo "checked='checked'";
+        if ($contactrow['active'] == 'true') echo "checked='checked'";
         echo " value='true' /></td></tr> <tr><th></th><td>";
         echo "<input type='checkbox' name='usesiteaddress' value='yes' onclick='togglecontactaddress();' ";
         if ($contactrow['address1'] !='')
@@ -175,19 +175,19 @@ else if ($action == "update")
         echo "<p class='error'>{$strMustEnterSurname}</p>\n";
     }
     // check for blank site
-    if ($siteid == "")
+    if ($siteid == '')
     {
         $errors = 1;
         echo "<p class='error'>{$strMustEnterSiteName}</p>\n";
     }
     // check for blank name
-    if ($email == "" OR $email=='none' OR $email=='n/a')
+    if ($email == '' OR $email=='none' OR $email=='n/a')
     {
         $errors = 1;
         echo "<p class='error'>{$strMustEnterEmail}</p>\n";
     }
     // check for blank contact id
-    if ($contact == "")
+    if ($contact == '')
     {
         $errors = 1;
         echo "<p class='error'>Something weird has happened, better call technical support</p>\n";

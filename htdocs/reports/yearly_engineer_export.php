@@ -124,9 +124,9 @@ elseif ($_REQUEST['statistics'] == 'on')
         $sql .= " OR (incidents.closed >= {$startdate} AND incidents.closed <= {$enddate})) ";
     }*/
 
-    if (empty($incsql)==FALSE OR empty($excsql)==FALSE) $sql .= " AND ";
+    if (empty($incsql) == FALSE OR empty($excsql) == FALSE) $sql .= " AND ";
     if (!empty($incsql)) $sql .= "$incsql";
-    if (empty($incsql)==FALSE AND empty($excsql)==FALSE) $sql .= " AND ";
+    if (empty($incsql) == FALSE AND empty($excsql) == FALSE) $sql .= " AND ";
     if (!empty($excsql)) $sql .= "$excsql";
 
     $sql .= " GROUP BY u.id ";
@@ -157,9 +157,9 @@ elseif ($_REQUEST['statistics'] == 'on')
     $sql .= "WHERE u.id=i.owner"; //AND incidents.closed > ($now-60*60*24*365.25) ";
     $sql .= " AND i.closed >= {$startdate} AND i.closed <= {$enddate} ";
 
-    if (empty($incsql)==FALSE OR empty($excsql)==FALSE) $sql .= " AND ";
+    if (empty($incsql) == FALSE OR empty($excsql) == FALSE) $sql .= " AND ";
     if (!empty($incsql)) $sql .= "$incsql";
-    if (empty($incsql)==FALSE AND empty($excsql)==FALSE) $sql .= " AND ";
+    if (empty($incsql) == FALSE AND empty($excsql) == FALSE) $sql .= " AND ";
     if (!empty($excsql)) $sql .= "$excsql";
 
     $sql .= " GROUP BY u.id ";
@@ -201,9 +201,9 @@ elseif ($_REQUEST['statistics'] == 'on')
         $sql .= " AND ((i.opened >= {$startdate} AND i.opened <= {$enddate}) ";
         $sql .= " OR (i.closed >= {$startdate} AND i.closed <= {$enddate})) ";
     }
-    if (empty($incsql)==FALSE OR empty($excsql)==FALSE) $sql .= " AND ";
+    if (empty($incsql) == FALSE OR empty($excsql) == FALSE) $sql .= " AND ";
     if (!empty($incsql)) $sql .= "$incsql";
-    if (empty($incsql)==FALSE AND empty($excsql)==FALSE) $sql .= " AND ";
+    if (empty($incsql) == FALSE AND empty($excsql) == FALSE) $sql .= " AND ";
     if (!empty($excsql)) $sql .= "$excsql";
 
     $sql .= " GROUP BY u.id ";
@@ -444,13 +444,13 @@ elseif ($_REQUEST['mode'] == 'report')
 
     //  $html .= "<p align='center'>SQL Query used to produce this report:<br /><code>$sql</code></p>\n";
 
-    if ($_POST['output']=='screen')
+    if ($_POST['output'] == 'screen')
     {
         include ('htmlheader.inc.php');
         echo $html;
         include ('htmlfooter.inc.php');
     }
-    elseif ($_POST['output']=='csv')
+    elseif ($_POST['output'] == 'csv')
     {
         // --- CSV File HTTP Header
         header("Content-type: text/csv\r\n");

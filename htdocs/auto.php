@@ -121,7 +121,7 @@ function saction_TimeCalc()
     {
         // Get the service level timings for this class of incident, we may have one
         // from the incident itself, otherwise look at contract type
-        if ($incident['servicelevel']=="")
+        if ($incident['servicelevel']== '')
         {
             $sql = "SELECT tag FROM `{$dbServiceLevels}` s, `{$dbMaintenance}` m ";
             $sql .= "WHERE m.id = '{$incident['maintenanceid']}' AND s.id = m.servicelevelid";

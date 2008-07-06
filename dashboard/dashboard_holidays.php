@@ -26,7 +26,7 @@ function dashboard_holidays($dashletid)
         {
             $title = userstatus_name($users['status']);
             $title.=" - ";
-            if ($users['accepting']=='Yes') $title .= "{$GLOBALS['strAcceptingIncidents']}";
+            if ($users['accepting'] == 'Yes') $title .= "{$GLOBALS['strAcceptingIncidents']}";
             else $title .= "{$GLOBALS['strNotAcceptingIncidents']}";
             if (!empty($users['message'])) $title.= "\n(".$users['message'].")";
 

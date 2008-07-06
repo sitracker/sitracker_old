@@ -198,11 +198,11 @@ else
     while ($results = mysql_fetch_array($result))
     {
         // define class for table row shading
-        if (($results['expirydate']<$now AND $results['expirydate'] != '-1') || ( $results['term']=='yes' AND $results['productonly']=='no'))
+        if (($results['expirydate']<$now AND $results['expirydate'] != '-1') || ( $results['term'] == 'yes' AND $results['productonly'] == 'no'))
         {
             $class = 'expired';
         }
-        elseif ($results['productonly']=='yes')
+        elseif ($results['productonly'] == 'yes')
         {
             $class = 'notice';
         }
@@ -261,7 +261,7 @@ else
         echo "</td>";
 
         echo "<td>";
-        if ($results["notes"] == "")
+        if ($results["notes"] == '')
         {
             echo "&nbsp;";
         }

@@ -342,13 +342,13 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
             meta = meta+urlencode($('subjectfield').value)+"|"+urlencode($('bodytext').value)+"|"
             meta = meta+$('date').value+"|"+$('timeoffset').value;
 
-            if (toPass != "")
+            if (toPass != '')
             {
                 xmlhttp.open("GET", "auto_save.php?userid="+<?php echo $_SESSION['userid']; ?>+"&type=email&incidentid="+<?php echo $id; ?>+"&draftid="+draftid+"&meta="+meta+"&content="+escape(toPass), true);
 
                 xmlhttp.onreadystatechange=function() {
                     if (xmlhttp.readyState==4) {
-                        if (xmlhttp.responseText != ""){
+                        if (xmlhttp.responseText != ''){
                             if (draftid == -1)
                             {
                                 draftid = xmlhttp.responseText;
@@ -455,7 +455,7 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
             echo "<table align='center' class='vertical' width='95%'>";
             echo "<tr><th width='30%'>{$strFrom}:</th><td><input maxlength='100' name='fromfield' id='fromfield' size='40' value=\"{$from}\" /></td></tr>\n";
             echo "<tr><th>{$strReplyTo}:</th><td><input maxlength='100' name='replytofield' id='replytofield' size='40' value=\"{$replyto}\" /></td></tr>\n";
-            if (trim($ccemail) == ",") $ccemail = "";
+            if (trim($ccemail) == ",") $ccemail = '';
             if (substr($ccemail, 0, 1) == ",") $ccfield = substr($ccemail, 1, strlen($ccemail));
             echo "<tr><th>CC:</th><td><input maxlength='100' name='ccfield' id='ccfield' size='40' value=\"{$ccemail}\" /></td></tr>\n";
             echo "<tr><th>BCC:</th><td><input maxlength='100' name='bccfield' id='bccfield' size='40' value=\"{$bccemail}\" /></td></tr>\n";
@@ -578,13 +578,13 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
             $error_string .= "<p class='error'>You must enter a recipient in the 'To' field</p>\n";
         }
         // check from field
-        if ($fromfield == "")
+        if ($fromfield == '')
         {
             $errors = 1;
             $error_string .= "<p class='error'>You must complete the 'From' field</p>\n";
         }
         // check reply to field
-        if ($replytofield == "")
+        if ($replytofield == '')
         {
             $errors = 1;
             $error_string .= "<p class='error'>You must complete the 'Reply To' field</p>\n";
@@ -640,7 +640,7 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
             $mailok = $mime -> send_mail();
 
             // after mail is sent, move the attachment to the incident file attachment directory / timestamp
-            if ($filename != "" && file_exists($filename) && $mailok == TRUE)
+            if ($filename != '' && file_exists($filename) && $mailok == TRUE)
             {
                 // make incident attachment dir if it doesn't exist
                 $umask = umask(0000);
@@ -707,7 +707,7 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
                     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
                 }
 
-                $timetext = "";
+                $timetext = '';
 
                 if ($timeofnextaction != 0)
                 {
@@ -736,9 +736,9 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
                 // add update
                 $bodytext = htmlentities($bodytext, ENT_COMPAT, 'UTF-8');
                 $updateheader .= "To: <b>$tofield</b>\nFrom: <b>$fromfield</b>\nReply-To: <b>$replytofield</b>\n";
-                if ($ccfield != "" AND $ccfield != ",") $updateheader .=   "CC: <b>$ccfield</b>\n";
-                if ($bccfield != "") $updateheader .= "BCC: <b>$bccfield</b>\n";
-                if ($filename != "") $updateheader .= "Attachment: <b>".$filename_end_part."</b>\n";
+                if ($ccfield != '' AND $ccfield != ",") $updateheader .=   "CC: <b>$ccfield</b>\n";
+                if ($bccfield != '') $updateheader .= "BCC: <b>$bccfield</b>\n";
+                if ($filename != '') $updateheader .= "Attachment: <b>".$filename_end_part."</b>\n";
                 $updateheader .= "Subject: <b>$subjectfield</b>\n";
 
                 if (!empty($updateheader)) $updateheader .= "<hr>";

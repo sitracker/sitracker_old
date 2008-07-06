@@ -53,76 +53,76 @@ $fsdelim = (strstr($_SERVER['SCRIPT_FILENAME'],"/")) ? "/" : "\\";
 // 2 = Normal Logging
 // 3 = Full Logging
 // 4 = Maximum/Debug Logging
-define('CFG_LOGGING_OFF',0);
-define('CFG_LOGGING_MIN',1);
-define('CFG_LOGGING_NORMAL',2);
-define('CFG_LOGGING_FULL',3);
-define('CFG_LOGGING_MAX',4);
+define ('CFG_LOGGING_OFF',0);
+define ('CFG_LOGGING_MIN',1);
+define ('CFG_LOGGING_NORMAL',2);
+define ('CFG_LOGGING_FULL',3);
+define ('CFG_LOGGING_MAX',4);
 
-define('CFG_JOURNAL_DEBUG', 0);     // 0 = for internal debugging use
-define('CFG_JOURNAL_LOGIN', 1);     // 1 = Logon/Logoff
-define('CFG_JOURNAL_SUPPORT', 2);   // 2 = Support Incidents
-define('CFG_JOURNAL_SALES', 3);     // 3 = Sales Incidents
-define('CFG_JOURNAL_SITES', 4);     // 4 = Sites
-define('CFG_JOURNAL_CONTACTS', 5);  // 5 = Contacts
-define('CFG_JOURNAL_ADMIN', 6);     // 6 = Admin
-define('CFG_JOURNAL_USER', 7);       // 7 = User Management
-define('CFG_JOURNAL_MAINTENANCE', 8);  // 8 = Maintenance Contracts
-define('CFG_JOURNAL_PRODUCTS', 9);
-define('CFG_JOURNAL_OTHER', 10);
-define('CFG_JOURNAL_KB', 11);    // Knowledge Base
+define ('CFG_JOURNAL_DEBUG', 0);     // 0 = for internal debugging use
+define ('CFG_JOURNAL_LOGIN', 1);     // 1 = Logon/Logoff
+define ('CFG_JOURNAL_SUPPORT', 2);   // 2 = Support Incidents
+define ('CFG_JOURNAL_SALES', 3);     // 3 = Sales Incidents
+define ('CFG_JOURNAL_SITES', 4);     // 4 = Sites
+define ('CFG_JOURNAL_CONTACTS', 5);  // 5 = Contacts
+define ('CFG_JOURNAL_ADMIN', 6);     // 6 = Admin
+define ('CFG_JOURNAL_USER', 7);       // 7 = User Management
+define ('CFG_JOURNAL_MAINTENANCE', 8);  // 8 = Maintenance Contracts
+define ('CFG_JOURNAL_PRODUCTS', 9);
+define ('CFG_JOURNAL_OTHER', 10);
+define ('CFG_JOURNAL_KB', 11);    // Knowledge Base
 
-define('TAG_CONTACT', 1);
-define('TAG_INCIDENT', 2);
-define('TAG_SITE', 3);
-define('TAG_TASK', 4);
-define('TAG_PRODUCT', 5);
-define('TAG_SKILL', 6);
-define('TAG_KB_ARTICLE', 7);
-define('TAG_REPORT', 8);
+define ('TAG_CONTACT', 1);
+define ('TAG_INCIDENT', 2);
+define ('TAG_SITE', 3);
+define ('TAG_TASK', 4);
+define ('TAG_PRODUCT', 5);
+define ('TAG_SKILL', 6);
+define ('TAG_KB_ARTICLE', 7);
+define ('TAG_REPORT', 8);
 
-define('NOTE_TASK', 10);
+define ('NOTE_TASK', 10);
 
-define('HOL_HOLIDAY', 1); // Holiday/Leave
-define('HOL_SICKNESS', 2);
-define('HOL_WORKING_AWAY', 3);
-define('HOL_TRAINING', 4);
-define('HOL_FREE', 5); // Compassionate/Maternity/Paterity/etc/free
-define('HOL_PUBLIC', 10);  // Public Holiday (eg. Bank Holiday)
+define ('HOL_HOLIDAY', 1); // Holiday/Leave
+define ('HOL_SICKNESS', 2);
+define ('HOL_WORKING_AWAY', 3);
+define ('HOL_TRAINING', 4);
+define ('HOL_FREE', 5); // Compassionate/Maternity/Paterity/etc/free
+define ('HOL_PUBLIC', 10);  // Public Holiday (eg. Bank Holiday)
 
 //default notice types
-define('NORMAL_NOTICE_TYPE', 0);
-define('WARNING_NOTICE_TYPE', 1);
-define('CRITICAL_NOTICE_TYPE', 2);
-define('TRIGGER_NOTICE_TYPE', 3);
+define ('NORMAL_NOTICE_TYPE', 0);
+define ('WARNING_NOTICE_TYPE', 1);
+define ('CRITICAL_NOTICE_TYPE', 2);
+define ('TRIGGER_NOTICE_TYPE', 3);
 
 // Incident statuses
-define("STATUS_ACTIVE",1);
-define("STATUS_CLOSED",2);
-define("STATUS_RESEARCH",3);
-define("STATUS_LEFTMESSAGE",4);
-define("STATUS_COLLEAGUE",5);
-define("STATUS_SUPPORT",6);
-define("STATUS_CLOSING",7);
-define("STATUS_CUSTOMER",8);
-define("STATUS_UNSUPPORTED",9);
-define("STATUS_UNASSIGNED",10);
+define ("STATUS_ACTIVE",1);
+define ("STATUS_CLOSED",2);
+define ("STATUS_RESEARCH",3);
+define ("STATUS_LEFTMESSAGE",4);
+define ("STATUS_COLLEAGUE",5);
+define ("STATUS_SUPPORT",6);
+define ("STATUS_CLOSING",7);
+define ("STATUS_CUSTOMER",8);
+define ("STATUS_UNSUPPORTED",9);
+define ("STATUS_UNASSIGNED",10);
 
 // BILLING
-define('NO_BILLABLE_CONTRACT', 0);
-define('CONTACT_HAS_BILLABLE_CONTRACT', 1);
-define('SITE_HAS_BILLABLE_CONTRACT', 2);
+define ('NO_BILLABLE_CONTRACT', 0);
+define ('CONTACT_HAS_BILLABLE_CONTRACT', 1);
+define ('SITE_HAS_BILLABLE_CONTRACT', 2);
 
 // Decide which language to use and setup internationalisation
 require('i18n/en-GB.inc.php');
 if ($CONFIG['default_i18n'] != 'en-GB')
 {
-    @include("i18n/{$CONFIG['default_i18n']}.inc.php");
+    @include ("i18n/{$CONFIG['default_i18n']}.inc.php");
 }
 if (!empty($_SESSION['lang'])
     AND $_SESSION['lang'] != $CONFIG['default_i18n'])
 {
-    include("i18n/{$_SESSION['lang']}.inc.php");
+    include ("i18n/{$_SESSION['lang']}.inc.php");
 }
 ini_set('default_charset', $i18ncharset);
 
@@ -1801,7 +1801,7 @@ function supported_product_drop_down($name, $contactid, $productid)
     * @param $exclude integer. User ID not to list
     * @param $attribs string. Extra attributes for the select control
 */
-function user_drop_down($name, $id, $accepting = TRUE, $exclude = FALSE, $attribs="", $return = FALSE)
+function user_drop_down($name, $id, $accepting = TRUE, $exclude = FALSE, $attribs= '', $return = FALSE)
 {
     // INL 1Jul03 Now only shows users with status > 0 (ie current users)
     // INL 2Nov04 Optional accepting field, to hide the status 'Not Accepting'
@@ -1844,14 +1844,14 @@ function user_drop_down($name, $id, $accepting = TRUE, $exclude = FALSE, $attrib
         {
             $html .= "<option ";
             if ($users["id"] == $id) $html .= "selected='selected' ";
-            if ($users['accepting']=='No' AND $accepting == TRUE)
+            if ($users['accepting'] == 'No' AND $accepting == TRUE)
             {
                 $html .= " class='expired' ";
             }
 
             $html .= "value='{$users['id']}'>";
             $html .= "{$users['realname']}";
-            if ($users['accepting']=='No' AND $accepting == TRUE)
+            if ($users['accepting'] == 'No' AND $accepting == TRUE)
             {
                 $html .= ", {$GLOBALS['strNotAccepting']}";
             }
@@ -3832,7 +3832,7 @@ function send_template_email($template, $incidentid, $info1='', $info2='')
     {
         $extra_headers .= "CC: $email_cc\r\n";
     }
-    if ($email_bcc != "")
+    if ($email_bcc != '')
     {
         $extra_headers .= "BCC: $email_bcc\r\n";
     }
@@ -3917,7 +3917,7 @@ function generate_password($length=8)
     // $possible = '23456789'.'abcdefghjkmnpqrstuvwxyz'.'ABCDEFGHJKLMNPQRSTUVWXYZ'.'-';
                 // not using 1's 0's etc. to save confusion
                 // '-=!&';
-    $str ="";
+    $str = '';
     while (strlen($str) < $length)
     {
         $str .= substr($possible, (rand() % strlen($possible)),1);
@@ -6444,7 +6444,7 @@ function dashboard_do($context, $row=0, $dashboardid=0)
     global $DASHBOARDCOMP;
     $dashletid = "{$row}-{$dashboardid}";
     $action = $DASHBOARDCOMP[$context];
-    if ($action != NULL || $action != "")
+    if ($action != NULL || $action != '')
     {
         if (function_exists($action)) $action($dashletid);
     }
@@ -7100,7 +7100,7 @@ function display_drafts($type, $result)
     if ($type == 'update')
     {
         $page = "update_incident.php";
-        $editurlspecific = "";
+        $editurlspecific = '';
     }
     else if ($type == 'email')
     {
@@ -7110,7 +7110,7 @@ function display_drafts($type, $result)
 
     echo "<p align='center'>{$GLOBALS['strDraftChoose']}</p>";
 
-    $html = "";
+    $html = '';
 
     while ($obj = mysql_fetch_object($result))
     {
@@ -7766,7 +7766,7 @@ function make_incident_billing_array($incidentid)
 
         foreach ($billing AS $engineer)
         {
-            $owner = "";
+            $owner = '';
             $duration = 0;
 
             unset($count);
@@ -8399,7 +8399,7 @@ function upload_file($file, $incidentid, $updateid, $type='public')
     global $CONFIG, $now;
     $att_max_filesize = return_bytes($CONFIG['upload_max_filesize']);
     $incident_attachment_fspath = $CONFIG['attachment_fspath'] . $id;
-    if ($file['name'] != "")
+    if ($file['name'] != '')
     {
         // try to figure out what delimeter is being used (for windows or unix)...
         //.... // $delim = (strstr($filesarray[$c],"/")) ? "/" : "\\";
@@ -8798,7 +8798,7 @@ function kb_article($id, $mode='internal')
                 $html .= "<div><h3>{$kbcontent->header}</h3>";
         }
         //$html .= "<{$kbcontent->headerstyle}>{$kbcontent->header}</{$kbcontent->headerstyle}>\n";
-        $html .= "";
+        $html .= '';
         $kbcontent->content=nl2br($kbcontent->content);
         $search = array("/(?<!quot;|[=\"]|:\/{2})\b((\w+:\/{2}|www\.).+?)"."(?=\W*([<>\s]|$))/i", "/(([\w\.]+))(@)([\w\.]+)\b/i");
         $replace = array("<a href=\"$1\">$1</a>", "<a href=\"mailto:$0\">$0</a>");
@@ -9169,7 +9169,7 @@ function process_add_contact($mode = 'internal')
 
     $errors = 0;
     // check for blank name
-    if ($surname == "")
+    if ($surname == '')
     {
         $errors++;
         $_SESSION['formerrors']['add_contact']['surname'] = $GLOBALS['strMustEnterSurname'];
@@ -9181,7 +9181,7 @@ function process_add_contact($mode = 'internal')
         $_SESSION['formerrors']['add_contact']['siteid'] = $GLOBALS['strMustSelectCustomerSite'];
     }
     // check for blank email
-    if ($email == "" OR $email=='none' OR $email=='n/a')
+    if ($email == '' OR $email=='none' OR $email=='n/a')
     {
         $errors++;
         $_SESSION['formerrors']['add_contact']['email'] = $GLOBALS['strMustEnterEmail'];
@@ -9513,7 +9513,7 @@ function application_version_string()
  */
 function database_schema_version()
 {
-    $return = "";
+    $return = '';
     $sql = "SELECT `schemaversion` FROM `{$GLOBALS['dbSystem']}` WHERE id = 0";
     $result = mysql_query($sql);
     if (mysql_error())
@@ -9661,7 +9661,7 @@ function user_contracts_table($userid, $mode = 'internal')
                 }
 
                 $html .= "<tr><td class='$shade'>";
-                $html .= "".icon('contract', 16)." ";
+                $html .= ''.icon('contract', 16)." ";
                 if ($mode == 'internal')
                 {
                     $html .= "<a href='contract_details.php?id=";
@@ -9720,7 +9720,7 @@ if (is_array($CONFIG['plugins']))
         $plugin = str_replace('/','',$plugin);
         if ($plugin!='')
         {
-            include("{$CONFIG['application_fspath']}plugins/{$plugin}.php");
+            include ("{$CONFIG['application_fspath']}plugins/{$plugin}.php");
         }
     }
 }
@@ -9948,7 +9948,7 @@ function is_billable_incident_approved($incidentid)
     * @todo FIXME add a param that makes this optionally show the incident pool balance
       in the case of non-timed type contracts
 */
-function get_contract_balance($contractid, $includenonapproved=FALSE)
+function get_contract_balance($contractid, $includenonapproved = FALSE)
 {
     global $dbService, $now;
     $balance = 0.00;
@@ -10211,7 +10211,7 @@ function contract_service_table($contractid)
             $html .= "<tr class='$shade'>";
             $html .= "<td><a href='transactions.php?serviceid={$service->serviceid}' class='info'>".ldate($CONFIG['dateformat_date'],$service->startdate);
 
-            $span = "";
+            $span = '';
             if (!empty($service->notes)) $span .= "<strong>{$GLOBALS['strNotes']}</strong>: {$service->notes}<br />";
             if ($service->creditamount != 0) $span .= "<strong>{$GLOBALS['strAmount']}</strong>: {$CONFIG['currency_symbol']}".number_format($service->creditamount, 2)."<br />";
             if ($service->unitrate != 0) $span .= "<strong>{$GLOBALS['strUnitRate']}</strong>: {$CONFIG['currency_symbol']}{$service->unitrate}<br />";
@@ -10245,7 +10245,7 @@ function contract_service_table($contractid)
     * @returns int. Number of available units according to the service balances and unit rates
     * @todo Use the includenonapproved variable and calc non approved incidents
 **/
-function contract_unit_balance($contractid, $includenonapproved=FALSE)
+function contract_unit_balance($contractid, $includenonapproved = FALSE)
 {
     global $now, $dbService;
 

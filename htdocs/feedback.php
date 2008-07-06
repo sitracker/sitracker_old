@@ -10,7 +10,7 @@
 
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>, June 2004
 
-@include('set_include_path.inc.php');
+@include ('set_include_path.inc.php');
 require('db_connect.inc.php');
 require('functions.inc.php');
 
@@ -41,7 +41,7 @@ function feedback_html_rating($name, $required, $options, $answer='')
     $colwidth = round(100/$score_max);
 
     $html .= "<table class='feedback'>\n";
-    if (empty($promptleft)==FALSE OR empty($promptright)==FALSE)
+    if (empty($promptleft) == FALSE OR empty($promptright) == FALSE)
     {
         $html .= "<tr>";
         /*  for($c=1;$c<=$score_max;$c++)
@@ -250,7 +250,7 @@ switch ($_REQUEST['action'])
 
             // Check required fields are filled
             if ($question->required == 'true' AND (strlen($_POST[$fieldname]) < 1 OR
-                    isset($_POST[$fieldname])==false)) $errorfields[]="{$question->id}";
+                    isset($_POST[$fieldname]) == FALSE)) $errorfields[] = "{$question->id}";
 
             // Store text responses in the appropriate field
             if ($question->type=='text')
@@ -357,7 +357,7 @@ body { font:10pt Arial, Helvetica, sans-serif; }
     break;
 
     default:
-        if ($_REQUEST['mode']!='bare') include('htmlheader.inc.php');
+        if ($_REQUEST['mode']!='bare') include ('htmlheader.inc.php');
         else echo "<html>\n<head>\n<title>Feedback Form</title>\n</head>\n<body>\n<div id='pagecontent'>\n\n";
         $errorfields = explode(",",urldecode($_REQUEST['error']));
         $fielddata = unserialize(base64_decode($errorfields[0])); // unserialize(
@@ -457,7 +457,7 @@ body { font:10pt Arial, Helvetica, sans-serif; }
         }
         if ($_REQUEST['mode']!='bare')
         {
-            include('htmlfooter.inc.php');
+            include ('htmlfooter.inc.php');
         }
         else echo "\n</div>\n</body>\n</html>\n";
     break;

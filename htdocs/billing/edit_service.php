@@ -11,7 +11,7 @@
 
 // Author:  Paul Heaney Paul Heaney <paulheaney[at]users.sourceforge.net>
 
-@include('set_include_path.inc.php');
+@include ('set_include_path.inc.php');
 $permission =  80;
 
 require_once('db_connect.inc.php');
@@ -42,7 +42,7 @@ switch ($mode)
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
             
-            include('htmlheader.inc.php');
+            include ('htmlheader.inc.php');
             
             if (mysql_numrows($result) != 1)
             {
@@ -125,7 +125,7 @@ switch ($mode)
             
                 echo "<p align='center'><a href='../contract_details.php?id={$contractid}'>{$strReturnWithoutSaving}</a></p>";
             }
-            include('htmlfooter.inc.php');
+            include ('htmlfooter.inc.php');
         }
         
         break;
@@ -236,7 +236,7 @@ switch ($mode)
         }
         else
         {
-            include('htmlheader.inc.php');
+            include ('htmlheader.inc.php');
             echo "<h2>One time balance editor</h2>";
             
             echo "<form name='serviceform' action='{$_SERVER['PHP_SELF']}' method='post' onsubmit='return confirm_submit(\"{$strAreYouSureMakeTheseChanges}\");'>";
@@ -281,7 +281,7 @@ switch ($mode)
         
             echo "</form>";
         }
-        include('htmlfooter.inc.php');
+        include ('htmlfooter.inc.php');
         break;
     case 'edit':
         if (user_permission($sit[2], 79) == FALSE)

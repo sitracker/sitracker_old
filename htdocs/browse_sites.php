@@ -167,7 +167,7 @@ if ($ownedsites > 0) echo " | <a href='browse_sites.php?owner={$sit[2]}' title='
 </script>
 <?php
 // check input
-if ($search_string == "")
+if ($search_string == '')
 {
         $errors = 1;
         echo "<p class='error'>You must enter a search string</p>\n";
@@ -260,7 +260,7 @@ if ($errors == 0)
             // define class for table row shading
             if ($shade) $class = "shade1";
             else $class = "shade2";
-            if ($results['active']=='false') $class='expired';
+            if ($results['active'] == 'false') $class='expired';
             echo "<tr class='{$class}'>";
             echo "<td align='center'>{$results['id']}</td>";
             echo "<td><a href='site_details.php?id={$results['id']}&amp;action=show'>{$results['name']}</a></td>";

@@ -168,7 +168,7 @@ elseif ($_REQUEST['mode'] == "show")
     $shade = 'shade1';
     foreach (array_keys($englishvalues) as $key)
     {
-        if ($_REQUEST['lang']=='zz') $foreignvalues[$key] = $key;
+        if ($_REQUEST['lang'] == 'zz') $foreignvalues[$key] = $key;
         echo "<tr class='$shade'><td><label for=\"{$key}\"><code>{$key}</code></td><td><input name='english_{$key}' value=\"".htmlentities($englishvalues[$key], ENT_QUOTES, 'UTF-8')."\" size=\"45\" readonly='readonly' /></td>";
         echo "<td><input id=\"{$key}\" name=\"{$key}\" value=\"".htmlentities($foreignvalues[$key], ENT_QUOTES, 'UTF-8')."\" size=\"45\" /></td></tr>\n";
         if ($shade=='shade1') $shade='shade2';

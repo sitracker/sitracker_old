@@ -185,14 +185,14 @@ function display_update_page($draftid=-1)
         var meta = $('target').value+"|"+$('updatetype').value+"|"+$('cust_vis').checked+"|";
         meta += $('priority').value+"|"+$('newstatus').value+"|"+$('nextaction').value+"|";
 
-        if (toPass != "")
+        if (toPass != '')
         {
             xmlhttp.open("GET", "auto_save.php?userid="+<?php echo $_SESSION['userid']; ?>+"&type=update&incidentid="+<?php echo $id; ?>+"&draftid="+draftid+"&meta="+meta+"&content="+escape(toPass), true);
 
             xmlhttp.onreadystatechange=function() {
                 //remove this in the future after testing
                 if (xmlhttp.readyState==4) {
-                    if (xmlhttp.responseText != ""){
+                    if (xmlhttp.responseText != ''){
                         //alert(xmlhttp.responseText);
                         if (draftid == -1)
                         {
@@ -242,19 +242,19 @@ function display_update_page($draftid=-1)
     echo "<td class='shade2'>";
     $target = incident_get_next_target($id);
 
-    $targetNone = "";
-    $targetInitialresponse = "";
-    $targetProbdef = "";
-    $targetActionplan = "";
-    $targetSolution = "";
+    $targetNone = '';
+    $targetInitialresponse = '';
+    $targetProbdef = '';
+    $targetActionplan = '';
+    $targetSolution = '';
 
-    $typeResearch = "";
-    $typeEmailin = "";
-    $typeEmailout = "";
-    $typePhonecallin = "";
-    $typePhonecallout = "";
-    $typeExternalinfo = "";
-    $typeReviewmet = "";
+    $typeResearch = '';
+    $typeEmailin = '';
+    $typeEmailout = '';
+    $typePhonecallin = '';
+    $typePhonecallout = '';
+    $typeExternalinfo = '';
+    $typeReviewmet = '';
 
 
     if (!empty($metadata))
@@ -345,7 +345,7 @@ function display_update_page($draftid=-1)
     //FIXME i18n
     //echo "New information, relevent to the incident.  Please be as detailed as possible and include full descriptions of any work you have performed.<br />";
     //echo "<br />";
-    $checkbox = "";
+    $checkbox = '';
     if (!empty($metadata))
     {
         if ($metadata[2] == "true") $checkbox = "checked='checked'";
@@ -408,7 +408,7 @@ function display_update_page($draftid=-1)
     echo "<tr>";
     echo "<th align='right'>{$GLOBALS['strNextAction']}</th>";
 
-    $nextAction = "";
+    $nextAction = '';
 
     if (!empty($metadata))
     {
@@ -437,7 +437,7 @@ function display_update_page($draftid=-1)
     echo "<input type='hidden' name='action' value='update' />";
     if ($draftid == -1)
     {
-        $localdraft = "";
+        $localdraft = '';
     }
     else
     {
@@ -581,7 +581,7 @@ else
     // attach file - have to do it here to get fileid
     // TODO user file_upload
     $att_max_filesize = return_bytes($CONFIG['upload_max_filesize']);
-    if ($_FILES['attachment']['name'] != "")
+    if ($_FILES['attachment']['name'] != '')
     {
         $filename = cleanvar($_FILES['attachment']['name']);
         if ($cust_vis == 'yes')
@@ -646,7 +646,7 @@ else
     $updateid = mysql_insert_id();
 
     //upload file, here because we need updateid
-    if ($_FILES['attachment']['name'] != "")
+    if ($_FILES['attachment']['name'] != '')
     {
         // try to figure out what delimeter is being used (for windows or unix)...
         //.... // $delim = (strstr($filesarray[$c],"/")) ? "/" : "\\";

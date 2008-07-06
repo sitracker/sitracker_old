@@ -57,7 +57,7 @@ if (empty($_REQUEST['mode']))
     echo "</td></tr></table>";
     include ('htmlfooter.inc.php');
 }
-elseif ($_REQUEST['mode']=='report')
+elseif ($_REQUEST['mode'] == 'report')
 {
     $type = cleanvar($_REQUEST['type']);
     $sql = "SELECT * FROM `{$dbSites}` WHERE typeid='$type' ORDER BY name";
@@ -78,7 +78,7 @@ elseif ($_REQUEST['mode']=='report')
     while ($row = mysql_fetch_object($result))
     {
         // FIXME strip slashes
-        $product="";
+        $product= '';
         $nicedate = ldate('d/m/Y',$row->opened);
         $html .= "<tr class='shade2'><td>{$row->name}</td>";
         $html .= "<td>{$row->address1}</td><td>{$row->address2}</td>";
@@ -101,20 +101,20 @@ elseif ($_REQUEST['mode']=='report')
         $html .= nl2br($product)."</td>";
         $html .= "</tr>";
         $csv .="'{$row->name}', '{$row->address1}','{$row->address2}','{$row->city}','{$row->county}','{$row->country}','{$row->postcode}',";
-        $csv .= "".str_replace("\n", ",", $product)."\n";
+        $csv .= ''.str_replace("\n", ",", $product)."\n";
         // flush();
     }
     $html .= "</table>";
 
     //  $html .= "<p align='center'>SQL Query used to produce this report:<br /><code>$sql</code></p>\n";
 
-    if ($_POST['output']=='screen')
+    if ($_POST['output'] == 'screen')
     {
         include ('htmlheader.inc.php');
         echo $html;
         include ('htmlfooter.inc.php');
     }
-    elseif ($_POST['output']=='csv')
+    elseif ($_POST['output'] == 'csv')
     {
         // --- CSV File HTTP Header
         header("Content-type: text/csv\r\n");

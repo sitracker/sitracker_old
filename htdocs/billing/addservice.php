@@ -8,7 +8,7 @@
 // of the GNU General Public License, incorporated herein by reference.
 //
 
-@include('../set_include_path.inc.php');
+@include ('../set_include_path.inc.php');
 $permission = 21; // FIXME need a permission for add service
 
 require('db_connect.inc.php');
@@ -45,7 +45,7 @@ else
 
 if (empty($submit) OR !empty($_SESSION['formerrors']['add_service']))
 {
-    include('htmlheader.inc.php');
+    include ('htmlheader.inc.php');
     echo show_form_errors('add_service');
     clear_form_errors('add_service');
     echo "<h2> ";
@@ -127,7 +127,7 @@ if (empty($submit) OR !empty($_SESSION['formerrors']['add_service']))
 
     //cleanup form vars
     clear_form_data('add_service');
-    include('htmlfooter.inc.php');
+    include ('htmlfooter.inc.php');
 }
 else
 {

@@ -20,8 +20,8 @@ session_start();
 journal(CFG_LOGGING_NORMAL, 'Logout', "User {$sit[2]} logged out", CFG_JOURNAL_LOGIN, $sit[2]);
 
 // End the session, remove the cookie and destroy all data registered with the session
-$_SESSION['auth']=FALSE;
-$_SESSION['portalauth']=FALSE;
+$_SESSION['auth'] = FALSE;
+$_SESSION['portalauth'] = FALSE;
 $_SESSION = array();
 
 session_unset();

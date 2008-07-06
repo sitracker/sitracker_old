@@ -105,7 +105,7 @@ switch ($action)
         if ($temporary == 'yes') $assigntype = 'tempassigning';
         else $assigntype = 'reassigning';
 
-        if ($_REQUEST['cust_vis']=='yes') $customervisibility='show';
+        if ($_REQUEST['cust_vis'] == 'yes') $customervisibility='show';
         else $customervisibility='hide';
 
         $sql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, bodytext, type, timestamp, currentowner, currentstatus, customervisibility) ";

@@ -35,7 +35,7 @@ if (empty($submit))
     echo "<form action='{$_SERVER['PHP_SELF']}' method='post' onsubmit='return confirm_action(\"{$strAreYouSureAddProduct}\");'>";
     echo "<table align='center'>";
     echo "<tr><th>{$strVendor}<sup class='red'>*</sup></th><td>";
-    if ($_SESSION['formdata']['add_product']['vendor'] != "")
+    if ($_SESSION['formdata']['add_product']['vendor'] != '')
     {
         echo vendor_drop_down('vendor', $_SESSION['formdata']['add_product']['vendor'])."</td></tr>\n";
     }
@@ -44,7 +44,7 @@ if (empty($submit))
         echo vendor_drop_down('vendor', 0)."</td></tr>\n";
     }
     echo "<tr><th>{$strProduct}<sup class='red'>*</sup></th><td><input maxlength='50' name='name' size='40' ";
-    if ($_SESSION['formdata']['add_product']['name'] != "")
+    if ($_SESSION['formdata']['add_product']['name'] != '')
     {
         echo "value=".$_SESSION['formdata']['add_product']['name'];
     }
@@ -53,7 +53,7 @@ if (empty($submit))
     echo "<tr><th>{$strDescription}</th>";
     echo "<td>";
     echo "<textarea name='description' cols='40' rows='6'>";
-    if ($_SESSION['formdata']['add_product']['description'] != "")
+    if ($_SESSION['formdata']['add_product']['description'] != '')
     {
         echo $_SESSION['formdata']['add_product']['description'];
     }
@@ -80,12 +80,12 @@ else
     $errors = 0;
 
     // check for blank name
-    if ($name == "")
+    if ($name == '')
     {
         $errors++;
         $_SESSION['formerrors']['add_product']['name'] = "Product name cannot be blank";
     }
-    if ($vendor == "" OR $vendor == "0")
+    if ($vendor == '' OR $vendor == "0")
     {
         $errors++;
         $_SESSION['formerrors']['add_product']['vendor'] = "Vendor cannot be blank";

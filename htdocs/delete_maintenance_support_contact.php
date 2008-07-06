@@ -71,7 +71,7 @@ if (empty($action) OR $action == "showform")
     echo "</table>";
     echo "<p align='center'><input name='submit' type='submit' value='{$strContinue}' /></p>";
     echo "</form>";
-    include('htmlfooter.inc.php');
+    include ('htmlfooter.inc.php');
 }
 elseif ($action == "delete")
 {
@@ -99,9 +99,9 @@ elseif ($action == "delete")
         // show error message if deletion failed
         if (!$result)
         {
-            include('htmlheader.inc.php');
+            include ('htmlheader.inc.php');
             throw_error('Deletion of maintenance support conact failed:','$sql');
-            include('htmlfooter.inc.php');
+            include ('htmlfooter.inc.php');
         }
         // update db and show success message
         else
@@ -115,9 +115,9 @@ elseif ($action == "delete")
     else
     {
         // show error message if errors
-        include('htmlheader.inc.php');
+        include ('htmlheader.inc.php');
         echo $errors_string;
-        include('htmlfooter.inc.php');
+        include ('htmlfooter.inc.php');
     }
 }
 ?>

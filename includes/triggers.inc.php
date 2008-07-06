@@ -14,10 +14,10 @@ include ('mime.inc.php');
 include ('triggertypes.inc.php');
 
 //set up all the action types
-define(ACTION_NONE, 1);
-define(ACTION_NOTICE, 2);
-define(ACTION_EMAIL, 3);
-define(ACTION_JOURNAL, 4);
+define (ACTION_NONE, 1);
+define (ACTION_NOTICE, 2);
+define (ACTION_EMAIL, 3);
+define (ACTION_JOURNAL, 4);
 plugin_do('trigger_actions');
 
 $actionarray['ACTION_NONE'] =
@@ -399,7 +399,7 @@ function send_trigger_email($userid, $triggerid, $template, $paramarray)
 
 
     $mailok = send_email($toemail, $from, $subject, $body, $replytoemail, $ccemail, $bccemail);
-    if ($mailok==FALSE)
+    if ($mailok == FALSE)
     {
         trigger_error('Internal error sending email: '. $mailerror.' send_mail() failed', E_USER_ERROR);
         $return = FALSE;
@@ -646,7 +646,7 @@ function trigger_checks($checkstrings, $paramarray)
 function trigger_description($triggervar)
 {
     global $CONFIG, $iconset, $triggerarray;
-    $html = "".icon('trigger', 16)." ";
+    $html = ''.icon('trigger', 16)." ";
     $html .= "<strong>";
     if (!empty($triggervar['name'])) $html .= "{$triggervar['name']}";
     else $html .= "{$trigger}";
@@ -663,7 +663,7 @@ function trigger_description($triggervar)
     * @param $editlink bool. Do a hyperlink to edit template when TRUE
     * @returns HTML
 */
-function triggeraction_description($trigaction, $editlink=FALSE)
+function triggeraction_description($trigaction, $editlink = FALSE)
 {
     global $CONFIG, $iconset, $actionarray, $dbEmailTemplates, $dbNoticeTemplates;
     $html = icon('triggeraction', 16)." ";

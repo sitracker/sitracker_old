@@ -13,7 +13,7 @@ $permission=27; // View your calendar FIXME
 require('db_connect.inc.php');
 require('functions.inc.php');
 require('auth.inc.php');
-include('calendar.inc.php');
+include ('calendar.inc.php');
 
 foreach (array('user') as $var)
     eval("\$$var=cleanvar(\$_REQUEST['$var']);");

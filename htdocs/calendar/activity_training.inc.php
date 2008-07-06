@@ -17,7 +17,7 @@ if (realpath(__FILE__) == realpath($_SERVER['SCRIPT_FILENAME']))
     exit;
 }
 
-$activity_types['Training'] = "";
+$activity_types['Training'] = '';
 
 echo "<script type='text/javascript'>
 \n//<![CDATA[\n

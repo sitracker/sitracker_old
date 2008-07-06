@@ -45,7 +45,7 @@ $pretty_file_size = round($pretty_file_size / pow(1024,$j-1) * 100) / 100 . ' ' 
 <tr><th>File:</th><td><img src="<?php echo getattachmenticon($frow['filename']); ?>" alt="<?php echo $frow['filename']; ?> (<?php echo $pretty_file_size; ?>)" border='0' />
 <strong><?php echo $frow['filename']; ?></strong> (<?php echo $pretty_file_size; ?>)</td></tr>
 <?php
-if ($frow['path']=='') $ftp_path=$CONFIG['ftp_path']; else $ftp_path=$CONFIG['ftp_path'].substr($frow['path'],1).'/';
+if ($frow['path'] == '') $ftp_path=$CONFIG['ftp_path']; else $ftp_path=$CONFIG['ftp_path'].substr($frow['path'],1).'/';
 ?>
 <tr><th>Location:</th><td><a href="<?php echo 'ftp://'.$CONFIG['ftp_hostname'].$ftp_path.$frow['filename']; ?>"><code><?php echo 'ftp://'.$CONFIG['ftp_hostname'].$ftp_path.$frow['filename']; ?></code></a></td></tr>
 <tr><th>Title:</th><td><?php echo $frow['shortdescription']; ?></td></tr>

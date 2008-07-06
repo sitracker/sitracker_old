@@ -56,7 +56,7 @@ if ($action == "showform" OR $action == '')
     echo "value='{$_SESSION['formdata']['add_site']['county']}' /></td></tr>\n";
 
     echo "<tr><th>{$strCountry}</th><td>";
-    if ($_SESSION['formdata']['add_site']['country'] != "")
+    if ($_SESSION['formdata']['add_site']['country'] != '')
     {
         echo country_drop_down('country', $_SESSION['formdata']['add_site']['country'])."</td></tr>\n";
     }
@@ -66,7 +66,7 @@ if ($action == "showform" OR $action == '')
     }
 
     echo "<tr><th>{$strPostcode}</th><td><input maxlength='255' name='postcode' size='30'";
-    if ($_SESSION['formdata']['add_site']['postcode'] != "")
+    if ($_SESSION['formdata']['add_site']['postcode'] != '')
     {
         echo "value='{$_SESSION['formdata']['add_site']['postcode']}'";
     }
@@ -89,7 +89,7 @@ if ($action == "showform" OR $action == '')
     echo "value='{$_SESSION['formdata']['add_site']['websiteurl']}' /></td></tr>\n";
 
     echo "<tr><th>{$strSiteType}</th><td>";
-    if ($_SESSION['formdata']['add_site']['typeid'] != "")
+    if ($_SESSION['formdata']['add_site']['typeid'] != '')
     {
         echo sitetype_drop_down('typeid', $_SESSION['formdata']['add_site']['typeid'])."</td></tr>\n";
     }
@@ -99,13 +99,13 @@ if ($action == "showform" OR $action == '')
     }
 
     echo "<tr><th>{$strSalesperson}</th><td>";
-    if ($_SESSION['formdata']['add_site']['owner'] != "")
+    if ($_SESSION['formdata']['add_site']['owner'] != '')
     {
-        user_drop_down('owner', $_SESSION['formdata']['add_site']['owner'], $accepting=FALSE);
+        user_drop_down('owner', $_SESSION['formdata']['add_site']['owner'], FALSE);
     }
     else
     {
-        user_drop_down('owner', 0, $accepting=FALSE);
+        user_drop_down('owner', 0, FALSE);
     }
 
     echo "</td></tr>\n";
@@ -146,17 +146,17 @@ elseif ($action == "add")
 
     $errors = 0;
     // check for blank name
-    if ($name == "")
+    if ($name == '')
     {
         $errors++;
         $_SESSION['formerrors']['add_site']['name'] = "Site name cannot be blank";
     }
-    if ($address1 == "")
+    if ($address1 == '')
     {
         $errors++;
         $_SESSION['formerrors']['add_site']['address1'] = "Address1 cannot be blank";
     }
-    if ($email == "")
+    if ($email == '')
     {
         $errors++;
         $_SESSION['formerrors']['add_site']['email'] = "Email cannot be blank";

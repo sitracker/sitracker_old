@@ -49,7 +49,7 @@ else
 {
     // perform search
     // check input
-    if ($expired == "")
+    if ($expired == '')
     {
         $errors = 1;
         echo "<p class='error'>You must enter a number of days</p>\n";
@@ -95,7 +95,7 @@ else
         }
         else
         {
-            if ($_REQUEST['output']=='screen')
+            if ($_REQUEST['output'] == 'screen')
             {
                 include ('htmlheader.inc.php');
                 ?>
@@ -149,7 +149,7 @@ else
                     echo "<td class='{$class}'>{$results['admincontactphone']}</td>";
                     echo "<td class='{$class}'>{$results['admincontactemail']}</td>";
                     ?>
-                    <td align='center' class='<?php echo $class; ?>' width='150'><?php if ($results["notes"] == "") echo "&nbsp;"; else echo nl2br($results["notes"]); ?></td>
+                    <td align='center' class='<?php echo $class; ?>' width='150'><?php if ($results["notes"] == '') echo "&nbsp;"; else echo nl2br($results["notes"]); ?></td>
                     </tr>
                     <?php
                     // invert shade

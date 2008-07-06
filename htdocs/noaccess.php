@@ -37,7 +37,7 @@ if ($username != '')
     unset($errlog);
 }
 
-if (strpos($id,',')!==FALSE)
+if (strpos($id,',') !== FALSE)
 {
     $refused = explode(',', $id);
 }

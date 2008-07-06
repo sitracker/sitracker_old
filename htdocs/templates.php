@@ -358,7 +358,7 @@ elseif ($action == "edit")
 }
 elseif ($action == "delete")
 {
-    if (empty($id) OR is_numeric($id)==FALSE)
+    if (empty($id) OR is_numeric($id) == FALSE)
     {
         // id must be filled and be a number
         header("Location: {$_SERVER['PHP_SELF']}?action=showform");

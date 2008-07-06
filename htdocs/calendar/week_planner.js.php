@@ -22,7 +22,7 @@ header('Content-Type: text/javascript');
 foreach (array('user') as $var)
     eval("\$$var=cleanvar(\$_REQUEST['$var']);");
 
-if ( ($user == "") || (($user != $_SESSION['userid']) && (!user_permission($_SESSION['userid'], 50))))
+if ( ($user == '') || (($user != $_SESSION['userid']) && (!user_permission($_SESSION['userid'], 50))))
     $user = $_SESSION['userid'];
 
 echo "var user = '$user';\n\n";
@@ -342,20 +342,20 @@ function getTime(inputObj)
 
     if (startTime>23) startTime = startTime - 24;
     var startHour = Math.floor(startTime);
-    var hourPrefix = "";
+    var hourPrefix = '';
     if (startHour< 10) hourPrefix = "0";
     var startMinute = Math.floor((startTime - startHour) *60);
-    var startMinutePrefix = "";
+    var startMinutePrefix = '';
     if (startMinute < 10) startMinutePrefix="0";
 
     var endTime = (getTopPos(inputObj) + inputObj.offsetHeight - appointmentsOffsetTop) / (itemRowHeight+1) + weekplannerStartHour;
     if (endTime > 23) endTime = endTime - 24;
     var endHour = Math.floor(endTime);
 
-    var endHourPrefix = "";
+    var endHourPrefix = '';
     if (endHour < 10) endHourPrefix = "0";
     var endMinute = Math.floor((endTime - endHour) * 60);
-    var endMinutePrefix = "";
+    var endMinutePrefix = '';
     if (endMinute < 10) endMinutePrefix = "0";
 
 
@@ -404,7 +404,7 @@ function timerNewAppointment()
         currentAppointmentDiv = createNewAppointmentDiv((el_x - appointmentsOffsetLeft),topPos,(elWidth-(appointmentMarginSize*2)),'');
         currentAppointmentDiv.id = 'new_' + startIdOfNewItems;
         appointmentProperties[currentAppointmentDiv.id] = new Array();
-        appointmentProperties[currentAppointmentDiv.id]['description'] = "";
+        appointmentProperties[currentAppointmentDiv.id]['description'] = '';
         appointmentProperties[currentAppointmentDiv.id]['object'] = currentAppointmentDiv;
         appointmentProperties[currentAppointmentDiv.id]['id'] = currentAppointmentDiv.id;
         startIdOfNewItems++;
@@ -720,7 +720,7 @@ function toggleAppointmentView(e,inputObj)
 
     currentAppointmentDiv = inputObj;
     var spans = inputObj.getElementsByTagName('DIV');
-    var tmpValue = "";
+    var tmpValue = '';
     for (var no=0; no < spans.length; no ++){
         if (spans[no].className=='weekScheduler_appointment_txt')
         {

@@ -23,7 +23,7 @@ require ('auth.inc.php');
 function to_row($contactrow)
 {
     global $now, $updateid, $CONFIG;
-    $str = "";
+    $str = '';
     if ($contactrow['expirydate'] < $now || $contactrow['term'] == 'yes') $class = 'expired';
     else $class = "shade2";
 
@@ -194,8 +194,8 @@ elseif ($action=='findcontact')
         echo "<h3>".icon('contract', 32)." {$strContracts}</h3>";
         echo "<p align='center'>".sprintf($strListShowsContracts, $strAddIncident).".</p>";
 
-        $str_prefered = "";
-        $str_alternative = "";
+        $str_prefered = '';
+        $str_alternative = '';
 
         $headers = "<tr><th>&nbsp;</th><th>{$strName}</th><th>{$strSite}</th><th>{$strContract}</th><th>{$strServiceLevel}</th><th>{$strExpiryDate}</th></tr>";
 
@@ -424,7 +424,7 @@ elseif ($action=='incidentform')
     <script type="text/javascript">
     function validateForm(form)
     {
-        if (form.incidenttitle.value == "")
+        if (form.incidenttitle.value == '')
         {
             alert("You must enter an incident title.");
             form.incidenttitle.focus( );
@@ -589,7 +589,7 @@ elseif ($action == 'assign')
         }
 
         // check for blank type
-        if ($type == "")
+        if ($type == '')
         {
             $errors = 1;
             $error_string .= "Incident type was blank";
@@ -678,11 +678,11 @@ elseif ($action == 'assign')
             $updatetext = "Opened as Priority: [b]" . priority_name($priority) . "[/b]";
             if (!empty($prioritychangedmessage)) $updatetext .= $prioritychangedmessage;
             $updatetext .= "\n\n" . $bodytext;
-            if ($probdesc != "") $updatetext .= "<b>Problem Description</b>\n" . $probdesc . "\n\n";
-            if ($workarounds != "") $updatetext .= "<b>Workarounds Attempted</b>\n" . $workarounds . "\n\n";
-            if ($probreproduction != "") $updatetext .= "<b>Problem Reproduction</b>\n" . $probreproduction . "\n\n";
-            if ($custimpact != "") $updatetext .= "<b>Customer Impact</b>\n" . $custimpact . "\n\n";
-            if ($other != "") $updatetext .= "<b>Other Details</b>\n" . $other . "\n";
+            if ($probdesc != '') $updatetext .= "<b>Problem Description</b>\n" . $probdesc . "\n\n";
+            if ($workarounds != '') $updatetext .= "<b>Workarounds Attempted</b>\n" . $workarounds . "\n\n";
+            if ($probreproduction != '') $updatetext .= "<b>Problem Reproduction</b>\n" . $probreproduction . "\n\n";
+            if ($custimpact != '') $updatetext .= "<b>Customer Impact</b>\n" . $custimpact . "\n\n";
+            if ($other != '') $updatetext .= "<b>Other Details</b>\n" . $other . "\n";
             if ($cust_vis == "on") $customervisibility='show';
             else $customervisibility='hide';
 
@@ -860,7 +860,7 @@ elseif ($action == 'assign')
                 echo "<td align='center'>".$incpriority['1']."</td>";
 
                 echo "<td align='center'>";
-                echo $userrow['accepting']=='Yes' ? $strYes : "<span class='error'>{$strNo}</span>";
+                echo $userrow['accepting'] == 'Yes' ? $strYes : "<span class='error'>{$strNo}</span>";
                 echo "</td>";
                 echo "</tr>\n";
                 if ($shade == 'shade2') $shade = 'shade1';

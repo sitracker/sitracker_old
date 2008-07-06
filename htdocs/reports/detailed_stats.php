@@ -109,7 +109,7 @@ else
                     foreach ($d AS $a)
                     {
                         $right .= "<tr><td>".$a['type']."</td><td><a href='../incident_details.php?id=".$a['id']."' class='direct'>".$a['id']."</td><td>".$a['title']."</a></td><td>".user_realname($a['owner'])."</td></tr>";
-                        if ($a['type']=='opened')
+                        if ($a['type'] == 'opened')
                         {
                             $opened++;
                             $owners[$a['owner']]['owner']=$a['owner'];

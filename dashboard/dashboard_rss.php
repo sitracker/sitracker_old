@@ -37,9 +37,9 @@ function dashboard_rss_install()
     {
         echo "<p>Dashboard RSS failed to install, please run the following SQL statement on the SiT database to create the required schema.</p>";
         echo "<pre>{$schema}</pre>";
-        $res=FALSE;
+        $res = FALSE;
     }
-    else $res=TRUE;
+    else $res = TRUE;
 
     $datasql = "INSERT INTO `{$CONFIG['db_tableprefix']}dashboard_rss` (`owner`, `url`, `items`, `enabled`) VALUES (1, 'http://sourceforge.net/export/rss2_projfiles.php?group_id=160319', 3, 'true');";
     $result = mysql_query($datasql);
@@ -71,9 +71,9 @@ function dashboard_rss_display($dashletid)
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
-    define('MAGPIE_CACHE_ON',TRUE);
-    define('MAGPIE_CACHE_DIR', $CONFIG['attachment_fspath'].'feeds');
-    define('MAGPIE_OUTPUT_ENCODING', $i18ncharset);
+    define ('MAGPIE_CACHE_ON',TRUE);
+    define ('MAGPIE_CACHE_DIR', $CONFIG['attachment_fspath'].'feeds');
+    define ('MAGPIE_OUTPUT_ENCODING', $i18ncharset);
 
     $feedallowedtags = '<img><strong><em><br><p>';
 

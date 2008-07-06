@@ -98,8 +98,8 @@ if ($numwaiting > 0)
         {
             echo "<tr class='shade1'><td>{$dates['name']}</td>";
             echo "<td>".ldate('l', $dates['startdate'])." ";
-            if ($dates['length']=='am') echo "<u>{$strMorning}</u> ";
-            if ($dates['length']=='pm') echo "<u>{$strAfternoon}</u> ";
+            if ($dates['length'] == 'am') echo "<u>{$strMorning}</u> ";
+            if ($dates['length'] == 'pm') echo "<u>{$strAfternoon}</u> ";
             echo ldate('jS F Y', $dates['startdate']);
             echo "</td>";
             echo "<td>";
@@ -156,8 +156,8 @@ foreach ($holidaytype AS $htypeid => $htype)
         {
             echo "<tr class='shade1'>";
             echo "<td colspan='2'>".ldate('l', $dates['startdate'])." ";
-            if ($dates['length']=='am') echo "<u>{$strMorning}</u> ";
-            if ($dates['length']=='pm') echo "<u>{$strAfternoon}</u> ";
+            if ($dates['length'] == 'am') echo "<u>{$strMorning}</u> ";
+            if ($dates['length'] == 'pm') echo "<u>{$strAfternoon}</u> ";
             echo ldate('jS F Y', $dates['startdate']);
             echo "</td>";
             echo "<td colspan='2'>";
@@ -191,7 +191,7 @@ if ($user==$sit[2])
             echo "<tr><td class='shade2'>";
             $title=userstatus_name($users["status"]);
             $title.=" - ";
-            if ($users['accepting']=='Yes') $title .= "{$GLOBALS['strAcceptingIncidents']}";
+            if ($users['accepting'] == 'Yes') $title .= "{$GLOBALS['strAcceptingIncidents']}";
             else $title .= "{$GLOBALS['strNotAcceptingIncidents']}";
             if (!empty($users['message'])) $title.= "\n(".$users['message'].")";
 

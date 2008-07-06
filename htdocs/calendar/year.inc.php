@@ -39,8 +39,8 @@ if ($type < 10)
         while ($dates = mysql_fetch_array($result))
         {
             echo date('l ', $dates['startdate']);
-            if ($dates['length']=='am') echo "{$strMorning} ";
-            if ($dates['length']=='pm') echo "{$strAfternoon} ";
+            if ($dates['length'] == 'am') echo "{$strMorning} ";
+            if ($dates['length'] == 'pm') echo "{$strAfternoon} ";
             echo date('jS F Y', $dates['startdate']);
             echo "<br/>\n";
         }

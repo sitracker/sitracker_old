@@ -44,12 +44,12 @@ if (isset($_POST['submit']))
     $_SESSION['formdata']['kb_add_article'] = $_POST;
 
     $errors = 0;
-    if ($kbtitle == "")
+    if ($kbtitle == '')
     {
         $_SESSION['formerrors']['kb_add_article']['title'] = "Title cannot be empty";
         $errors++;
     }
-    if ($keywords == "")
+    if ($keywords == '')
     {
         $_SESSION['formerrors']['kb_add_article']['keywords'] = "Keywords cannot be empty";
         $errors++;
@@ -336,7 +336,7 @@ else
     echo "</form></div>";
     echo "<p align='center'><a href='kb_view_article.php?id=$kbid'>{$strReturnWithoutSaving}</a></p>";
     echo "<script type='text/javascript'>\n//<![CDATA[\nkbSectionCollapse();\n//]]>\n</script>";
-    include('htmlfooter.inc.php');
+    include ('htmlfooter.inc.php');
 }
 
 /*

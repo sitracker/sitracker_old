@@ -115,7 +115,7 @@ $sql .= " ORDER BY s.name, u.id";
 
 if ($countskills > 0 AND $countusers > 0)
 {
-    $previous = "";
+    $previous = '';
     while ($row = mysql_fetch_object($result))
     {
         if (($row->realname != NULL) AND ($row->realname != '')) $skills[$row->name][$row->realname] = $row->realname;
@@ -127,7 +127,7 @@ if ($countskills > 0 AND $countusers > 0)
     foreach ($users AS $u) echo "<th>$u</th>";
     echo "<th>{$strTotal}</th>";
     echo "</tr></thead>\n";
-    $previous = "";
+    $previous = '';
     while ($row = mysql_fetch_object($result))
     {
         if ($previous != $row->name)

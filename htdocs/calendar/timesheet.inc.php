@@ -97,7 +97,7 @@ else
 
     foreach ($activity_files as $activity_name => $activity_file)
     {
-        include($activity_file);
+        include ($activity_file);
     }
 
     ksort($activity_types);

@@ -104,7 +104,7 @@ if (mysql_num_rows($mresult) >= 1)
                 //print_r($storeone);
                 //print_r($storetwo);
             }
-            else $html = ""; // don't print name where theres  no survey data
+            else $html = ''; // don't print name where theres  no survey data
 
             if ($total_average>0)
             {
