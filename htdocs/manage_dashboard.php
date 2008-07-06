@@ -123,7 +123,7 @@ switch ($_REQUEST['action'])
             $result = mysql_query(substr($sql, 0, strlen($sql)-2));
             if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
-            if(!$result)
+            if (!$result)
             {
                 echo "<p class='error'>{$strInstallDashboardComponentFailed}</p>";
             }

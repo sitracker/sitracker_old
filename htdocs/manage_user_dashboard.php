@@ -81,7 +81,7 @@ else
             // Find the emptiest column and add the dashlet there
             $col = array(0 => 0,1 => 0, 2 => 0);
             $dashlets = explode(',', $dashboardstr);
-            foreach($dashlets as $key => $value)
+            foreach ($dashlets as $key => $value)
             {
                 if ($value == '') unset($dashlets[$key]);
             }

@@ -206,7 +206,7 @@ switch ($type)
             echo "<p class='info'>".sprintf($strHidingIncidentsOlderThan, $CONFIG['hide_closed_incidents_older_than']);
             echo " - <a href='{$_SERVER['PHP_SELF']}?{$_SERVER['QUERY_STRING']}&show=all'>".$strShowAll."</a></p>";
         }
-        elseif($queue == 4 AND $CONFIG['hide_closed_incidents_older_than'] != -1)
+        elseif ($queue == 4 AND $CONFIG['hide_closed_incidents_older_than'] != -1)
         {
             echo "<p class='info'>{$strShowingAllIncidents} - ";
             echo "<a href='{$_SERVER['PHP_SELF']}?user=$user&amp;type=$type&amp;queue=4'>";

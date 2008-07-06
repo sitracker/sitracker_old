@@ -354,7 +354,7 @@ if (is_array($incidentqueuerows))
 if ($spamcount > 0)
 {
     echo "<h2>{$strSpamEmail}";
-    if($spamcount > 1) echo "s"; // FIXME i18n cant we do this ?
+    if ($spamcount > 1) echo "s"; // FIXME i18n cant we do this ?
     echo " ({$spamcount} {$strTotal})</h2>\n";
     echo "<p align='center'>{$strIncomingEmailSpam}</p>";
 

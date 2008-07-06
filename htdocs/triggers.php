@@ -317,7 +317,7 @@ switch ($_REQUEST['mode'])
         echo "<table align='center'><tr><th>{$strTrigger}</th><th>{$strActions}</th><th>{$strOperation}</th></tr>\n";
 
         $shade = 'shade1';
-        foreach($triggerarray AS $trigger => $triggervar)
+        foreach ($triggerarray AS $trigger => $triggervar)
         {
             $perm = TRUE;
             //echo $trigger;

@@ -15,7 +15,7 @@
 require ('db_connect.inc.php');
 require ('functions.inc.php');
 require ('auth.inc.php');
-if(!$CONFIG['tasks_enabled'])
+if (!$CONFIG['tasks_enabled'])
 {
     header("Location: main.php");
 }

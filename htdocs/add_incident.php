@@ -698,11 +698,11 @@ elseif ($action == 'assign')
                 {
                     if (!file_exists($CONFIG['attachment_fspath'] ."$incidentid"))
                     {
-                        $umask=umask(0000);
+                        $umask = umask(0000);
                         mkdir($CONFIG['attachment_fspath'] ."$incidentid", 0770);
                         umask($umask);
                     }
-                    $sym=symlink($update_path, $CONFIG['attachment_fspath'] . "$incidentid/" . $now);
+                    $sym = symlink($update_path, $CONFIG['attachment_fspath'] . "$incidentid/" . $now);
                     if (!$sym) throw_error('!Error creating symlink for update','');
                 }
             }

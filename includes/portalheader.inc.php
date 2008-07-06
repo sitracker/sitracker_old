@@ -135,7 +135,7 @@ $filter = array('page' => $page);
 echo "<div id='menu'>\n";
 echo "<ul id='menuList'>\n";
 echo "<li><a href='index.php'>{$strIncidents}</a></li>";
-if(sizeof($_SESSION['entitlement']) == 1)
+if (sizeof($_SESSION['entitlement']) == 1)
 {
     echo "<li><a href='add.php?contractid={$contractid}'>{$strAddIncident}</a></li>";
 }

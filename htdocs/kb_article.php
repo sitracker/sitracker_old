@@ -69,7 +69,7 @@ if (isset($_POST['submit']))
         $sql[] = "DELETE FROM `{$dbKBSoftware}` WHERE docid='{$kbid}'";
     }
 
-    foreach($sections AS $section)
+    foreach ($sections AS $section)
     {
         $sectionvar = strtolower($section);
         $sectionid = $_POST["{$sectionvar}id"];
@@ -131,12 +131,12 @@ else
         $result = mysql_query($sql);
         $kbobj = mysql_fetch_object($result);
 
-        foreach($sections AS $section)
+        foreach ($sections AS $section)
         {
             $secsql = "SELECT * FROM `{$dbKBContent}` ";
             $secsql .= "WHERE docid='{$kbobj->docid}' ";
             $secsql .= "AND header='{$section}' LIMIT 1";
-            if($secresult = mysql_query($secsql))
+            if ($secresult = mysql_query($secsql))
             {
                 $secobj = mysql_fetch_object($secresult);
                 if (!empty($secobj->content))

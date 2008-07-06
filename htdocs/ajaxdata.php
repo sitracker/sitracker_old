@@ -35,7 +35,7 @@ if (mysql_error())trigger_error(mysql_error(),E_USER_WARNING);
 
 list($iconset) = mysql_fetch_row($iconresult);
 
-switch($action)
+switch ($action)
 {
     case 'servicelevel_timed':
         $sltag = servicelevel_id2tag(cleanvar($_REQUEST['servicelevel']));

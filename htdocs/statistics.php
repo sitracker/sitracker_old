@@ -508,7 +508,7 @@ function give_overview()
 
 include('htmlheader.inc.php');
 
-switch($mode)
+switch ($mode)
 {
     case 'breakdown':
         $query = $_REQUEST['query'];

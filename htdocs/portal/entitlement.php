@@ -50,7 +50,7 @@ if (sizeof($_SESSION['entitlement']) >= 1)
         echo "</td>";
         echo "<td>{$contract->incidents_used}</td>";
         echo "<td>";
-        if($contract->expirydate == -1)
+        if ($contract->expirydate == -1)
         {
             echo $strUnlimited;
         }

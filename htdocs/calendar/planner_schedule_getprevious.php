@@ -15,7 +15,7 @@ require('functions.inc.php');
 require('auth.inc.php');
 include('calendar.inc.php');
 
-foreach(array('user') as $var)
+foreach (array('user') as $var)
     eval("\$$var=cleanvar(\$_REQUEST['$var']);");
 
 header('Content-Type: text/xml');

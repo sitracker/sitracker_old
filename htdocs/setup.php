@@ -287,14 +287,14 @@ function setup_configure()
     if ($_REQUEST['config']=='advanced')
     {
         $html .= "<input type='hidden' name='config' value='advanced' />\n";
-        foreach($CFGVAR AS $setupvar => $setupval)
+        foreach ($CFGVAR AS $setupvar => $setupval)
         {
             $SETUP[] = $setupvar;
         }
     }
 
     $c=1;
-    foreach($SETUP AS $setupvar)
+    foreach ($SETUP AS $setupvar)
     {
         $html .= "<div class='configvar{$c}'>";
         if ($CFGVAR[$setupvar]['title']!='') $title = $CFGVAR[$setupvar]['title'];
@@ -394,7 +394,7 @@ function setup_exec_sql($sqlquerylist)
                 $sqlqueries = explode( ';', $queryelement);
                 // We don't need the last entry it's blank, as we end with a ;
                 array_pop($sqlqueries);
-                foreach($sqlqueries AS $sql)
+                foreach ($sqlqueries AS $sql)
                 {
                     //$html .= "<p style='border: 1px solid red;'>&bull; <code>".nl2br($sql)."</code></p>\n"; // FIXME
                     if (!empty($sql))
@@ -596,14 +596,14 @@ switch ($_REQUEST['action'])
 
         if ($_REQUEST['config']=='advanced')
         {
-            foreach($CFGVAR AS $setupvar => $setupval)
+            foreach ($CFGVAR AS $setupvar => $setupval)
             {
                 $SETUP[] = $setupvar;
             }
         }
 
         // Keep the posted setup
-        foreach($SETUP AS $setupvar)
+        foreach ($SETUP AS $setupvar)
         {
             if ($_POST[$setupvar]==='TRUE') $_POST[$setupvar] = TRUE;
             if ($_POST[$setupvar]==='FALSE') $_POST[$setupvar] = FALSE;
@@ -615,7 +615,7 @@ switch ($_REQUEST['action'])
 
         if (count($CFGDIFF) > 0)
         {
-            foreach($CFGDIFF AS $setupvar => $setupval)
+            foreach ($CFGDIFF AS $setupvar => $setupval)
             {
                 if ($CFGVAR[$setupvar]['title'] != '')
                 {
@@ -768,7 +768,7 @@ switch ($_REQUEST['action'])
 //                     $installed_schema = 0;
 //                     $installed_schema = substr(end(array_keys($upgrade_schema[$application_version*100])),1);
                     $errors = setup_exec_sql($schema);
-                    if(empty($errors))
+                    if (empty($errors))
                     {
                         echo "<p>Schema created OK</p>";
                     }

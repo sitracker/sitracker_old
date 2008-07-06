@@ -104,9 +104,9 @@ else
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
-        if(!$result)
+        if (!$result)
         {
-            $_SESSION['formerrors']['add_escalation_path']['error'] = "{$strError}: Addition of escalation path failed";   // FIXME i18n error
+            $_SESSION['formerrors']['add_escalation_path']['error'] = "{$strError}: {$strFailed}";
         }
         else
         {
@@ -121,6 +121,5 @@ else
         html_redirect("add_escalation_path.php", FALSE);
     }
 }
-
 
 ?>

@@ -184,7 +184,7 @@ function feedback_html_question($type, $name, $required, $options, $answer='')
     $options = str_replace('<br>', '{@}', $options);
     $options = str_replace('<br />', '{@}', $options);
     $options = str_replace('<br/>', '{@}', $options);
-    switch($type)
+    switch ($type)
     {
         case 'rating':
             $html = feedback_html_rating($name, $required, $options, $answer);

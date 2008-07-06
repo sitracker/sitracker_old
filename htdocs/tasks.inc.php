@@ -36,9 +36,9 @@ function checkAll(checkStatus)
     var frm = document.held_emails.elements;
     for(i = 0; i < frm.length; i++)
     {
-        if(frm[i].type == 'checkbox')
+        if (frm[i].type == 'checkbox')
         {
-            if(checkStatus)
+            if (checkStatus)
             {
                 frm[i].checked = true;
             }
@@ -94,10 +94,10 @@ function setClosedDuration(closed)
 function formatSeconds(secondsOpen)
 {
     var str = "";
-    if(secondsOpen >= 86400)
+    if (secondsOpen >= 86400)
     {   //days
         var days = Math.floor(secondsOpen/86400);
-        if(days < 10)
+        if (days < 10)
         {
             str += "0"+days;
         }
@@ -114,10 +114,10 @@ function formatSeconds(secondsOpen)
 
     str += ":";
 
-    if(secondsOpen >= 3600)
+    if (secondsOpen >= 3600)
     {   //hours
         var hours = Math.floor(secondsOpen/3600);
-        if(hours < 10)
+        if (hours < 10)
         {
             str += "0"+hours;
         }
@@ -134,10 +134,10 @@ function formatSeconds(secondsOpen)
 
     str += ":";
 
-    if(secondsOpen > 60)
+    if (secondsOpen > 60)
     {   //minutes
         var minutes = Math.floor(secondsOpen/60);
-        if(minutes < 10)
+        if (minutes < 10)
         {
             str += "0"+minutes;
         }
@@ -154,9 +154,9 @@ function formatSeconds(secondsOpen)
 
     str += ":";
 
-    if(secondsOpen > 0)
+    if (secondsOpen > 0)
     {  // seconds
-        if(secondsOpen < 10)
+        if (secondsOpen < 10)
         {
             str += "0"+secondsOpen;
         }
@@ -568,7 +568,7 @@ if (mysql_num_rows($result) >=1 )
             }
         }
 
-        if($mode != 'incident')
+        if ($mode != 'incident')
         {
             echo "<td";
             if ($startdate > 0 AND $startdate <= $now AND $task->completion <= 0)
@@ -646,7 +646,7 @@ if (mysql_num_rows($result) >=1 )
 
             echo "</td>";
         }
-        if($mode == 'incident' OR $show == 'incidents')
+        if ($mode == 'incident' OR $show == 'incidents')
         {
             echo "<td>".user_realname($task->owner)."</td>";
         }

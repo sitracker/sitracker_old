@@ -140,7 +140,7 @@ else
     }
 
     // receive the uploaded file to a temp directory on the local server
-    if($_FILES['file']['error'] != '' AND $_FILES['file']['error'] != UPLOAD_ERR_OK)
+    if ($_FILES['file']['error'] != '' AND $_FILES['file']['error'] != UPLOAD_ERR_OK)
     {
         echo get_file_upload_error_message($_FILES['file']['error'], $_FILES['file']['name']);
     }

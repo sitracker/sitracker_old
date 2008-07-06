@@ -23,7 +23,7 @@ $perpage = 20;
 $order = cleanvar($_GET['order']);
 $sort = cleanvar($_GET['sort']);
 
-if(!isset($_GET['start']))
+if (!isset($_GET['start']))
 {
     $start = 0;
 }
@@ -46,13 +46,13 @@ $sql = "SELECT k.*, s.name FROM `{$dbKBArticles}` AS k,
 // $sql .= "ON kbs.softwareid=s.id ";
 // $sql .= "WHERE k.docid = kbs.docid AND k.distribution='public' ";
 
-if($view != 'all')
+if ($view != 'all')
 {
     $softwares = contract_software();
     $sql .= "AND (1=0 ";
     if (is_array($softwares))
     {
-        foreach($softwares AS $software)
+        foreach ($softwares AS $software)
         {
             $sql .= "OR kbs.softwareid={$software} ";
         }
@@ -88,11 +88,11 @@ else
 }
 $sql .= " LIMIT {$start}, {$perpage} ";
 
-if($result = mysql_query($sql))
+if ($result = mysql_query($sql))
 {
     $countresult = mysql_query($countsql);
     $numtotal = mysql_num_rows($countresult);
-    if($end > $numtotal)
+    if ($end > $numtotal)
     {
         $end = $numtotal;
     }
@@ -102,7 +102,7 @@ if($result = mysql_query($sql))
 
         echo "<p align='center'>";
 
-        if(!empty($_GET['start']))
+        if (!empty($_GET['start']))
         {
             echo " <a href='{$_SERVER['PHP_SELF']}?start=";
             echo $start-$perpage."&amp;sort={$sort}&amp;order={$order}&amp;view={$view}nerw'>{$strPrevious}</a> ";
@@ -112,7 +112,7 @@ if($result = mysql_query($sql))
             echo $strPrevious;
         }
         echo " | ";
-        if($end != $numtotal)
+        if ($end != $numtotal)
         {
             echo " <a href='{$_SERVER['PHP_SELF']}?start=";
             echo $start+$perpage."&amp;sort={$sort}&amp;order={$order}&amp;view={$view}'>{$strNext}</a> ";    }
@@ -144,7 +144,7 @@ if($result = mysql_query($sql))
             echo "<td>".user_realname($row->author)."</td>";
             echo "<td>{$row->keywords}</td></tr>";
 
-            if($shade == 'shade1')
+            if ($shade == 'shade1')
                 $shade = 'shade2';
             else
                 $shade = 'shade1';

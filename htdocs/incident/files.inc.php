@@ -27,7 +27,7 @@ $att_max_filesize = return_bytes($CONFIG['upload_max_filesize']);
 if ($_FILES['attachment']['name'] != "")
 {
     // Check if we had an error whilst uploading
-    if($_FILES['attachment']['error'] != '' AND $_FILES['attachment']['error'] != UPLOAD_ERR_OK)
+    if ($_FILES['attachment']['error'] != '' AND $_FILES['attachment']['error'] != UPLOAD_ERR_OK)
     {
         echo get_file_upload_error_message($_FILES['attachment']['error'], $_FILES['attachment']['name']);
     }

@@ -12,7 +12,7 @@
 //          Kieran Hogg <kieran_hogg[at]users.sourceforge.net>
 // included by view_task.php
 
-if($mode != 'incident')
+if ($mode != 'incident')
     echo "<h2>".icon('task', 32)." $title</h2>";
 else
     echo "<h2><img

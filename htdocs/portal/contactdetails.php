@@ -43,7 +43,7 @@ if (!empty($_SESSION['formerrors']['portalcontactdetails']))
 //if new details posted
 if (cleanvar($_REQUEST['action']) == 'update')
 {
-    if($CONFIG['portal_usernames_can_be_changed'] AND contact)
+    if ($CONFIG['portal_usernames_can_be_changed'] AND contact)
     {
         $username = cleanvar($_REQUEST['username']);
         $oldusername = cleanvar($_REQUEST['oldusername']);
@@ -66,7 +66,7 @@ if (cleanvar($_REQUEST['action']) == 'update')
     $errors = 0;
 
     // VALIDATION CHECKS */
-    if($CONFIG['portal_usernames_can_be_changed'] AND ($oldusername != $username))
+    if ($CONFIG['portal_usernames_can_be_changed'] AND ($oldusername != $username))
     {
         if (!valid_username($username))
         {
@@ -75,12 +75,12 @@ if (cleanvar($_REQUEST['action']) == 'update')
         }
     }
     
-    if(!empty($newpass) AND empty($newpass2))
+    if (!empty($newpass) AND empty($newpass2))
     {
         $errors++;
         $_SESSION['formerrors']['portalcontactdetails'] .= "<p class='error'>{$strYouMustEnterYourNewPasswordTwice}</p>\n";
     }
-    elseif($newpass != $newpass2)
+    elseif ($newpass != $newpass2)
     {
         $errors++;
         $_SESSION['formerrors']['portalcontactdetails'] .= "<p class='error'>{$strPasswordsDoNotMatch}</p>";
@@ -104,7 +104,7 @@ if (cleanvar($_REQUEST['action']) == 'update')
         $updatesql .= "department='$department', address1='$address1', address2='$address2', ";
         $updatesql .= "county='$county', country='$country', postcode='$postcode', ";
         $updatesql .= "phone='$phone', mobile='$mobile', fax='$fax', email='$email'";
-        if($newpass != '')
+        if ($newpass != '')
             $updatesql .= ", password=MD5($newpass) ";
         $updatesql .= "WHERE id='{$id}'";
         mysql_query($updatesql);
@@ -159,7 +159,7 @@ else
     echo "<form action='$_SERVER[PHP_SELF]?action=update' method='post'>";
     echo "<table align='center' class='vertical'>";
 
-    if($CONFIG['portal_usernames_can_be_changed'])
+    if ($CONFIG['portal_usernames_can_be_changed'])
     {
         echo "<tr><th>{$strUsername}: </th><td><input class='required' name='username' value='{$user->username}' />";
         echo "<span class='required'><span>{$strRequired}</span></td></tr>";

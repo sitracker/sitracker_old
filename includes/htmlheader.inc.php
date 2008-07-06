@@ -128,7 +128,7 @@ if ($sit[0] != '')
                 echo "\n<ul>"; //  id='menuSub'
                 foreach ($hmenu[$topvalue['submenu']] as $sub => $subvalue)
                 {
-                    if((!empty($subvalue['enablevar']) AND $CONFIG[$subvalue['enablevar']])
+                    if ((!empty($subvalue['enablevar']) AND $CONFIG[$subvalue['enablevar']])
                         OR empty($subvalue['enablevar']))
                     {
                         if ($subvalue['submenu'] > 0)
@@ -154,7 +154,7 @@ if ($sit[0] != '')
                             echo "<ul>"; // id ='menuSubSub'
                             foreach ($hmenu[$subvalue['submenu']] as $subsub => $subsubvalue)
                             {
-                                if((!empty($subsubvalue['enablevar']) AND $CONFIG[$subsubvalue['enablevar']])
+                                if ((!empty($subsubvalue['enablevar']) AND $CONFIG[$subsubvalue['enablevar']])
                                     OR empty($subsubvalue['enablevar']))
                                 {
                                     if ($subsubvalue['submenu'] > 0)
@@ -180,7 +180,7 @@ if ($sit[0] != '')
                                         echo "<ul>"; // id ='menuSubSubSub'
                                         foreach ($hmenu[$subsubvalue['submenu']] as $subsubsub => $subsubsubvalue)
                                         {
-                                             if((!empty($subsubsubvalue['enablevar']) AND $CONFIG[$subsubsubvalue['enablevar']])
+                                             if ((!empty($subsubsubvalue['enablevar']) AND $CONFIG[$subsubsubvalue['enablevar']])
                                                 OR empty($subsubsubvalue['enablevar']))
                                             {
                                                 if ($subsubsubvalue['submenu'] > 0)
@@ -284,7 +284,7 @@ if ($sit[0] != '')
                 echo "<div class='error'><p class='error'>";
                 echo $notice->text;
 
-                if($notice->resolutionpage)
+                if ($notice->resolutionpage)
                 {
                     $redirpage = $CONFIG['application_webpath'].$notice->resolutionpage;
                 }

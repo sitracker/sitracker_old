@@ -107,7 +107,7 @@ if ($servicelevel_tag == '')
 
 $servicelevel_name = servicelevel_name($servicelevelid);
 
-if($incident->closed == 0)
+if ($incident->closed == 0)
 {
     $closed = time();
 }

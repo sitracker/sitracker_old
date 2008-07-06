@@ -16,7 +16,7 @@ require('auth.inc.php');
 
 header('Content-Type: text/plain');
 
-foreach(array('week', 'id' ) as $var)
+foreach (array('week', 'id' ) as $var)
 {
     $var = cleanvar($_REQUEST['$var']);
     eval("\$$var=$var;");

@@ -102,7 +102,7 @@ function dashboard_watch_incidents_display($dashletid)
             {
                 $html .= "<table>";
             }
-            else if($obj->type != 3)
+            else if ($obj->type != 3)
             {
                 $html .= "<table>";
             }
@@ -192,7 +192,7 @@ function dashboard_watch_incidents_display($dashletid)
                         $html .= "</tr>\n";
                         $header_printed = TRUE;
                     }
-                    else if($obj->type != 3)
+                    else if ($obj->type != 3)
                     {
                         $html .= "<tr>";
                         $html .= colheader('id', $GLOBALS['strID']);
@@ -224,13 +224,13 @@ function dashboard_watch_incidents_display($dashletid)
                 }
                 else
                 {
-                    if($obj->type == 3 AND !$header_printed)
+                    if ($obj->type == 3 AND !$header_printed)
                     {
                         $html .= "<tr><th colspan='3'>{$GLOBALS['strIncidents']}</th></tr>";
                         $html .= "<tr><td colspan='3'>{$GLOBALS['strNoIncidents']}</td></tr>\n";
                         $header_printed = TRUE;
                     }
-                    else if($obj->type != 3)
+                    else if ($obj->type != 3)
                     {
                         $html .= "<tr><td colspan='3'>{$GLOBALS['strNoIncidents']}</td></tr>\n";
                     }

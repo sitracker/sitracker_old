@@ -285,7 +285,7 @@ if (user_permission($sit[2],19)) // View contracts
 
             echo "</td>";
             echo "<td class='{$class}'>";
-            if($results['expirydate'] == -1)
+            if ($results['expirydate'] == -1)
                 echo $strUnlimited;
             else
                 echo ldate($CONFIG['dateformat_date'], $results['expirydate']);

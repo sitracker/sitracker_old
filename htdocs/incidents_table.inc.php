@@ -408,9 +408,9 @@ while ($incidents = mysql_fetch_array($result))
 }
 echo "</table>\n\n";
 
-if(empty($incidents_minimal) && $user != 'all')
+if (empty($incidents_minimal) && $user != 'all')
 
-if($rowcount != 1)
+if ($rowcount != 1)
 {
     echo "<p align='center'>".sprintf($strIncidentsMulti, $rowcount)."</p>";
 }

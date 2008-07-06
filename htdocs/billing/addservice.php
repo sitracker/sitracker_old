@@ -78,7 +78,7 @@ if (empty($submit) OR !empty($_SESSION['formerrors']['add_service']))
     echo "/> ";
     echo date_picker('serviceform.enddate');
     echo " <input type='checkbox' name='noexpiry' ";
-    if($_SESSION['formdata']['add_contract']['noexpiry'] == "on")
+    if ($_SESSION['formdata']['add_contract']['noexpiry'] == "on")
     {
         echo "checked='checked' ";
     }

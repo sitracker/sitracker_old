@@ -221,7 +221,7 @@ function trigger_replace_specials($triggerid, $string, $paramarray)
             if (is_numeric($key))
             {
                 $trigger_replaces = replace_vars($ttvar[$key], $triggerid, $identifier, $paramarray);
-                if(!empty($trigger_replaces))
+                if (!empty($trigger_replaces))
                 {
                     $trigger_regex[] = $trigger_replaces['trigger_regex'];
                     $trigger_replace[] = $trigger_replaces['trigger_replace'];
@@ -232,7 +232,7 @@ function trigger_replace_specials($triggerid, $string, $paramarray)
         if ($multiple == FALSE)
         {
             $trigger_replaces = replace_vars($ttvar, $triggerid, $identifier, $paramarray);
-            if(!empty($trigger_replaces))
+            if (!empty($trigger_replaces))
             {
                 $trigger_regex[] = $trigger_replaces['trigger_regex'];
                 $trigger_replace[] = $trigger_replaces['trigger_replace'];
@@ -332,7 +332,7 @@ function replace_specials($string, $paramarray)
             if (is_numeric($key))
             {
                 $trigger_replaces = replace_vars($ttvar[$key], $triggerid, $identifier, $paramarray, $required);
-                if(!empty($trigger_replaces))
+                if (!empty($trigger_replaces))
                 {
                     $trigger_regex[] = $trigger_replaces['trigger_regex'];
                     $trigger_replace[] = $trigger_replaces['trigger_replace'];
@@ -343,7 +343,7 @@ function replace_specials($string, $paramarray)
         if ($multiple == FALSE)
         {
             $trigger_replaces = replace_vars($ttvar, $triggerid, $identifier, $paramarray, $required);
-            if(!empty($trigger_replaces))
+            if (!empty($trigger_replaces))
             {
                 $trigger_regex[] = $trigger_replaces['trigger_regex'];
                 $trigger_replace[] = $trigger_replaces['trigger_replace'];
@@ -555,7 +555,7 @@ function trigger_checks($checkstrings, $paramarray)
     foreach ($checks as $check)
     {
         $values = explode("=", $check);
-        switch($values[0])
+        switch ($values[0])
         {
             case 'siteid':
                 $sql = "SELECT s.id AS siteid ";
@@ -565,7 +565,7 @@ function trigger_checks($checkstrings, $paramarray)
                 $sql .= "AND s.id=c.siteid";
                 $query = mysql_query($sql);
                 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
-                if($query)
+                if ($query)
                 {
                     $result = mysql_fetch_object($query);
                     $siteid = $result->siteid;
@@ -583,7 +583,7 @@ function trigger_checks($checkstrings, $paramarray)
                 $sql .= "AND i.contact=c.id ";
                 $query = mysql_query($sql);
                 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
-                if($query)
+                if ($query)
                 {
                     $result = mysql_fetch_object($query);
                     $contactid = $result->contactid;
@@ -600,7 +600,7 @@ function trigger_checks($checkstrings, $paramarray)
                 $sql .= "WHERE i.id='{$paramarray[incidentid]}' ";
                 $query = mysql_query($sql);
                 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
-                if($query)
+                if ($query)
                 {
                     $result = mysql_fetch_object($query);
                     $userid = $result->userid;
@@ -617,7 +617,7 @@ function trigger_checks($checkstrings, $paramarray)
                 $sql .= "WHERE i.id={$paramarray[incidentid]} ";
                 $query = mysql_query($sql);
                 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
-                if($query)
+                if ($query)
                 {
                     $result = mysql_fetch_object($query);
                     $sla = $result->sla;
@@ -734,7 +734,7 @@ function trigger_revoke($triggerid, $userid, $referenceid=0)
         $templatesql .= "WHERE template={$triggerobj->template} ";
         $templatesql .= "AND userid={$userid} ";
 
-        if($referenceid != 0)
+        if ($referenceid != 0)
         {
             $templatesql .= "AND referenceid={$referenceid}";
         }

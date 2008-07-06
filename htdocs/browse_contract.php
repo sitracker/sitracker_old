@@ -250,7 +250,7 @@ else
         }
 
         echo "</td><td>";
-        if($results["expirydate"] == '-1')
+        if ($results["expirydate"] == '-1')
         {
             echo $strUnlimited;
         }

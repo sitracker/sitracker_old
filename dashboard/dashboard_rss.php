@@ -223,7 +223,7 @@ function dashboard_rss_edit($dashletid)
             if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
             if (mysql_affected_rows() < 1) html_redirect("edit_rss_feeds.php", FALSE, "Changed enabled state failed");
-            if(mysql_affected_rows() < 1)
+            if (mysql_affected_rows() < 1)
             {
                 html_redirect("edit_rss_feeds.php", FALSE, "Changed enabled state failed");
             }
@@ -256,7 +256,7 @@ function dashboard_rss_edit($dashletid)
                 $shade = 'shade1';
                 while ($obj = mysql_fetch_object($result))
                 {
-                    if($obj->enabled == "true")
+                    if ($obj->enabled == "true")
                     {
                         $opposite = "false";
                     }

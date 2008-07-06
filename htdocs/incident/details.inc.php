@@ -96,7 +96,7 @@ echo " / ";
 
 echo "{$servicelevel_tag}<br />\n ";
 
-switch(does_contact_have_billable_contract($incident->contactid))
+switch (does_contact_have_billable_contract($incident->contactid))
 {
     case CONTACT_HAS_BILLABLE_CONTRACT:
         echo "{$strContactHasBillableContract} (&cong;".contract_unit_balance(get_billable_contract_id($incident->contactid))." units)<br />";

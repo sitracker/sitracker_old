@@ -17,10 +17,10 @@ $accesslevel = 'admin';
 include 'portalauth.inc.php';
 include 'portalheader.inc.php';
 
-if($_POST['submit'])
+if ($_POST['submit'])
 {
     $errors = 0;
-    foreach(array_keys($_POST['visibility']) as $id)
+    foreach (array_keys($_POST['visibility']) as $id)
     {
     	$id = intval($id);
 
@@ -87,7 +87,7 @@ if ($CONFIG['portal_site_incidents'])
     echo colheader('actions', $strActions);
 
     echo "<form action='{$_SERVER['PHP_SELF']}' method='post'>";
-    foreach($contracts as $contract)
+    foreach ($contracts as $contract)
     {
         $sql = "SELECT *, m.id AS id ";
         $sql .= "FROM `{$dbMaintenance}` AS m, `{$dbProducts}` AS p ";
@@ -100,9 +100,9 @@ if ($CONFIG['portal_site_incidents'])
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
         $shade = 'shade1';
-        if($row = mysql_fetch_object($result))
+        if ($row = mysql_fetch_object($result))
         {
-            if($row->expirydate == -1)
+            if ($row->expirydate == -1)
             {
                 $row->expirydate = $strUnlimited;
             }

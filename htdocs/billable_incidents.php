@@ -186,9 +186,9 @@ elseif ($mode == 'approvalpage')
             var frm = Form.getElements(form);
             for(i = 0; i < frm.length; i++)
             {
-                if(frm[i].type == 'checkbox')
+                if (frm[i].type == 'checkbox')
                 {
-                    if(checkStatus)
+                    if (checkStatus)
                     {
                         frm[i].checked = true;
                     }

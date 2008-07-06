@@ -108,7 +108,7 @@ if (mysql_numrows($result) > 0)
         }
         elseif ($display == 'csv')
         {
-            if($obj->site != $lastsite)
+            if ($obj->site != $lastsite)
             {
                 $str .= site_name($obj->site).",";
                 $str .= product_name($obj->product).",";

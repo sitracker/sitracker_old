@@ -41,7 +41,7 @@ $result = mysql_query($sql);
 if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
 $dashboardcomponents = array();
-if(mysql_num_rows($result) > 0)
+if (mysql_num_rows($result) > 0)
 {
     $obj = mysql_fetch_object($result);
     $dashboardcomponents = explode(",",$obj->dashboard);
@@ -214,7 +214,7 @@ echo "<a href=\"javascript:save_layout();\" id='savelayout' title='Save Dashboar
         xmlhttp.onreadystatechange=function() {
             //remove this in the future after testing
             if (xmlhttp.readyState==4) {
-                if(xmlhttp.responseText != ""){
+                if (xmlhttp.responseText != ""){
                     //alert(xmlhttp.responseText);
                 }
             }

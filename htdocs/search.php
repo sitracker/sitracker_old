@@ -33,7 +33,7 @@ if (!isNaN(id))
             {
             ?>
                 window.location = 'incident_details.php?id=' + id + '&win=jump&return=<?php
-                if(!empty($_SERVER['HTTP_REFERER']))
+                if (!empty($_SERVER['HTTP_REFERER']))
                 {
                     echo $_SERVER['HTTP_REFERER'];
                 }
@@ -56,7 +56,7 @@ $sort = cleanvar($_GET['sort']);
 $order = cleanvar($_GET['order']);
 $filter = array('start' => $start, 'order' => $order, 'q' => $q);
 $hits = 0;
-if(!isset($_GET['start']))
+if (!isset($_GET['start']))
 {
     $start = 0;
 }
@@ -65,11 +65,11 @@ else
     $start = $_GET['start'];
 }
 $domain = cleanvar($_GET['domain']);
-if(isset($_GET['q']))
+if (isset($_GET['q']))
 {
     $q = cleanvar($_GET['q']);
 }
-elseif(isset($_GET['search_string']))
+elseif (isset($_GET['search_string']))
 {
     $q = $_GET['search_string'];
 }
@@ -169,7 +169,7 @@ if (!empty($q))
         $incidentsql .= "LIMIT 0, {$resultsperpage} ";
     }
 
-    if($incidentresult = mysql_query($incidentsql) AND mysql_num_rows($incidentresult) > 0)
+    if ($incidentresult = mysql_query($incidentsql) AND mysql_num_rows($incidentresult) > 0)
     {
         echo "<h3>".icon('support', 32)." {$strIncidents}</h3>";
         $hits++;
@@ -187,7 +187,7 @@ if (!empty($q))
             $begin = 0;
         }
 
-        if($end > $results)
+        if ($end > $results)
         {
             $end = $results;
         }
@@ -207,7 +207,7 @@ if (!empty($q))
             echo "{$strPrevious}";
         }
         echo " | ";
-        if($end < $results)
+        if ($end < $results)
         {
             echo " <a href='{$_SERVER['PHP_SELF']}?domain=incidents&q={$q}&start=";
             echo $begin+$resultsperpage."&amp;sort={$sort}&amp;order={$order}&amp;view={$view}'>{$strNext} ";
@@ -275,7 +275,7 @@ if (!empty($q))
         $sitesql .= "LIMIT {$start}, {$resultsperpage} ";
     }
 
-    if($siteresult = mysql_query($sitesql) AND mysql_num_rows($siteresult) > 0)
+    if ($siteresult = mysql_query($sitesql) AND mysql_num_rows($siteresult) > 0)
     {
         echo "<h3>".icon('site', 32)." {$strSites}</h3>";
         $hits++;
@@ -294,7 +294,7 @@ if (!empty($q))
             $begin = 0;
         }
 
-        if($end > $results)
+        if ($end > $results)
         {
             $end = $results;
         }
@@ -302,7 +302,7 @@ if (!empty($q))
                                           "<strong>".($begin+1)."</strong>",
                                           "<strong>".$end."</strong>",
                                           "<strong>".$results."</strong>")."<br />";
-        if(!empty($start) AND $domain == 'sites')
+        if (!empty($start) AND $domain == 'sites')
         {
             echo " <a href='{$_SERVER['PHP_SELF']}?domain=sites&q={$q}&start=";
             echo $begin-$resultsperpage."&amp;sort={$sort}&amp;order={$order}&amp;view={$view}'>";
@@ -378,7 +378,7 @@ if (!empty($q))
         $contactsql .= "LIMIT {$start}, {$resultsperpage} ";
     }
 
-    if($contactresult = mysql_query($contactsql) AND mysql_num_rows($contactresult) > 0)
+    if ($contactresult = mysql_query($contactsql) AND mysql_num_rows($contactresult) > 0)
     {
         echo "<h3>".icon('contact', 32)." {$strContacts}</h3>";
         $hits++;
@@ -396,7 +396,7 @@ if (!empty($q))
             $begin = 0;
         }
 
-        if($end > $results)
+        if ($end > $results)
         {
             $end = $results;
         }
@@ -405,7 +405,7 @@ if (!empty($q))
                                           "<strong>".$end."</strong>",
                                           "<strong>".$results."</strong>")."</p>";
         echo "<p align='center'>";
-        if(!empty($start) AND $domain == 'contacts')
+        if (!empty($start) AND $domain == 'contacts')
         {
             echo " <a href='{$_SERVER['PHP_SELF']}?domain=contacts&q={$q}&start=";
             echo $begin-$resultsperpage."&amp;sort={$sort}&amp;order={$order}";
@@ -417,7 +417,7 @@ if (!empty($q))
             echo "{$strPrevious}";
         }
         echo " | ";
-        if($end < $results)
+        if ($end < $results)
         {
             echo " <a href='{$_SERVER['PHP_SELF']}?domain=contacts&q={$q}&start=";
             echo $begin+$resultsperpage."&amp;sort={$sort}&amp;order={$order}";
@@ -492,7 +492,7 @@ if (!empty($q))
         $usersql .= "LIMIT {$start}, {$resultsperpage} ";
     }
 
-    if($userresult = mysql_query($usersql) AND mysql_num_rows($userresult) > 0)
+    if ($userresult = mysql_query($usersql) AND mysql_num_rows($userresult) > 0)
     {
         echo "<h3>".icon('user', 32)." {$strUsers}</h3>";
         $hits++;
@@ -510,7 +510,7 @@ if (!empty($q))
             $begin = 0;
         }
 
-        if($end > $results)
+        if ($end > $results)
         {
             $end = $results;
         }
@@ -519,7 +519,7 @@ if (!empty($q))
                                           "<strong>".$end."</strong>",
                                           "<strong>".$results."</strong>")."</p>";
         echo "<p align='center'>";
-        if(!empty($_GET['start']))
+        if (!empty($_GET['start']))
         {
             echo " <a href='{$_SERVER['PHP_SELF']}?domain=users&q={$q}&start=";
             echo $begin-$resultsperpage."&amp;sort={$sort}&amp;order={$order}&amp;view={$view}'>";
@@ -530,7 +530,7 @@ if (!empty($q))
             echo "{$strPrevious}";
         }
         echo " | ";
-        if($end < $results)
+        if ($end < $results)
         {
             echo " <a href='{$_SERVER['PHP_SELF']}?domain=users&q={$q}&start=";
             echo $begin+$resultsperpage."&amp;sort={$sort}&amp;order={$order}&amp;view={$view}'>{$strNext} ";
@@ -594,7 +594,7 @@ if (!empty($q))
         $kbsql .= "LIMIT {$start}, {$resultsperpage} ";
     }
 
-    if($kbresult = mysql_query($kbsql) AND mysql_num_rows($kbresult) > 0)
+    if ($kbresult = mysql_query($kbsql) AND mysql_num_rows($kbresult) > 0)
     {
         echo "<h3>".icon('kb', 32)." {$strKnowledgeBase}</h3>";
         $hits++;
@@ -612,7 +612,7 @@ if (!empty($q))
             $begin = 0;
         }
 
-        if($end > $results)
+        if ($end > $results)
         {
             $end = $results;
         }
@@ -621,7 +621,7 @@ if (!empty($q))
                                           "<strong>".$end."</strong>",
                                           "<strong>".$results."</strong>")."</p>";
         echo "<p align='center'>";
-        if(!empty($_GET['start']) AND $domain == 'kb')
+        if (!empty($_GET['start']) AND $domain == 'kb')
         {
             echo " <a href='{$_SERVER['PHP_SELF']}?domain=kb&q={$q}&start=";
             echo $begin-$resultsperpage."&amp;sort={$sort}&amp;order={$order}&amp;view={$view}'>";
@@ -631,7 +631,7 @@ if (!empty($q))
             echo "{$strPrevious}";
         }
         echo " | ";
-        if($end < $results)
+        if ($end < $results)
         {
             echo " <a href='{$_SERVER['PHP_SELF']}?domain=kb&q={$q}&start=";
             echo $begin+$resultsperpage."&amp;sort={$sort}&amp;order={$order}&amp;view={$view}'>{$strNext} ";

@@ -67,7 +67,7 @@ switch ($mode)
                 echo "value='{$obj->enddate}' />";
                 echo date_picker('serviceform.enddate');
                 echo " <input type='checkbox' name='noexpiry' ";
-                if($_SESSION['formdata']['add_contract']['noexpiry'] == "on")
+                if ($_SESSION['formdata']['add_contract']['noexpiry'] == "on")
                 {
                     echo "checked='checked' ";
                 }

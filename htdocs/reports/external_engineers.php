@@ -37,7 +37,7 @@ function incident_details_window_l(incidentid,second)
 
 function hide_filter(hide)
 {
-    if(hide==true)
+    if (hide==true)
     {
         $('filter').hide();
     }
@@ -131,7 +131,7 @@ while ($escalations = mysql_fetch_object($escs))
 
         if (!empty($filterby))
         {
-            switch($filterby)
+            switch ($filterby)
             {
                 case 'sla':
                     $sql .= "AND i.servicelevel = '{$filter}' ";
@@ -204,7 +204,7 @@ while ($escalations = mysql_fetch_object($escs))
                     $replace = array("Response","Action");
                     $html .= "<tr><td width='50%'>{$call['text']}</td>";
                     $html .= "<td width='12%'>".user_realname($call['localowner']);
-                    if(!empty($call['salfordtowner']))
+                    if (!empty($call['salfordtowner']))
                     {
                         $html .= "<br />T: ".user_realname($call['salfordtowner']);
                     }

@@ -124,7 +124,7 @@ if (empty($submit))
     echo "/></td></tr>\n";
 
     echo "<tr><th>{$strHolidayEntitlement}</th><td><input maxlength='3' name='holiday_entitlement' size='3' ";
-    if($_SESSION['formdata']['add_user']['holiday_entitlement'] != "")
+    if ($_SESSION['formdata']['add_user']['holiday_entitlement'] != "")
     {
         echo "value='{$_SESSION['formdata']['add_user']['holiday_entitlement']}'";
     }

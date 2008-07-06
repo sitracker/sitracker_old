@@ -268,7 +268,7 @@ elseif ($mode=='save')
     $newpassword1 = cleanvar($_POST['newpassword1']);
     $newpassword2 = cleanvar($_POST['newpassword2']);
 
-    if(!empty($_GET['userid']))
+    if (!empty($_GET['userid']))
         $userid = intval($_GET['userid']);
     else
         $userid = $sit[2];

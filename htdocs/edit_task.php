@@ -18,7 +18,7 @@ require ('functions.inc.php');
 
 // This page requires authentication
 require ('auth.inc.php');
-if(!$CONFIG['tasks_enabled'])
+if (!$CONFIG['tasks_enabled'])
 {
     header("Location: main.php");
 }

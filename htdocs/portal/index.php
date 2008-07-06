@@ -128,7 +128,7 @@ else
 
 echo portal_incident_table($sql);
 echo "<p align='center'>";
-if($numcontracts == 1)
+if ($numcontracts == 1)
 {
     //only one contract
     echo "<a href='add.php?contractid={$contractid}'>";
@@ -143,13 +143,13 @@ echo icon('add', 16, $strAddIncident)." {$strAddIncident}</a></p>";
 //find list of other incidents we're allowed to see
 $otherincidents = array();
 $contracts = $_SESSION['contracts'];
-if(!empty($contracts))
+if (!empty($contracts))
 {
     $sql = "SELECT DISTINCT i.id
         FROM `{$dbIncidents}` AS i, `{$dbMaintenance}` AS m
         WHERE (1=0 ";
 
-    foreach($contracts AS $contract)
+    foreach ($contracts AS $contract)
     {
         $sql .= "OR i.maintenanceid = {$contract} ";
     }
@@ -177,7 +177,7 @@ if ($CONFIG['portal_site_incidents'] AND $otherincidents != NULL)
         $sql .= "AND c.siteid=s.id AND s.id={$_SESSION['siteid']} ";
         $sql .= "AND (1=0 ";
 
-        foreach($otherincidents AS $maintid)
+        foreach ($otherincidents AS $maintid)
         {
             $sql .= "OR i.maintenanceid={$maintid} ";
         }
@@ -197,7 +197,7 @@ if ($CONFIG['portal_site_incidents'] AND $otherincidents != NULL)
         $sql .= "AND c.siteid=s.id AND s.id={$_SESSION['siteid']} ";
         $sql .= "AND (1=0 ";
 
-        foreach($otherincidents AS $incident)
+        foreach ($otherincidents AS $incident)
         {
             $sql .= "OR i.id={$incident} ";
         }

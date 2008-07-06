@@ -64,7 +64,7 @@ if ($action == "showform" OR $action=='')
     echo "{$strAllSiteContactsSupported}";
     echo "</td></tr>";
     echo "<tr><th>{$strProduct} <sup class='red'>*</sup></th><td>";
-    if($_SESSION['formdata']['add_contract']['product'] != "")
+    if ($_SESSION['formdata']['add_contract']['product'] != "")
     {
         echo product_drop_down("product", $_SESSION['formdata']['add_contract']['product'])."</td></tr>\n";
     }
@@ -253,7 +253,7 @@ elseif ($action == "add")
             $term = 'no';
         }
 
-        if(empty($reseller) OR $reseller == 0)
+        if (empty($reseller) OR $reseller == 0)
         {
             $reseller = "NULL";
         }
@@ -262,7 +262,7 @@ elseif ($action == "add")
             $reseller = "'{$reseller}'";
         }
 
-        if(empty($licence_type) OR $licence_type == 0)
+        if (empty($licence_type) OR $licence_type == 0)
         {
             $licence_type = "NULL";
         }

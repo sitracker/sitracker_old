@@ -19,7 +19,7 @@ require ('auth.inc.php');
 
 header('Content-Type: text/javascript');
 
-foreach(array('user') as $var)
+foreach (array('user') as $var)
     eval("\$$var=cleanvar(\$_REQUEST['$var']);");
 
 if ( ($user == "") || (($user != $_SESSION['userid']) && (!user_permission($_SESSION['userid'], 50))))

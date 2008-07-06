@@ -75,7 +75,7 @@ if (empty($action) OR $action == "showform")
     echo "<td><input type='text' size='5' name='review_days' maxlength='3' value='{$sla->review_days}' /> {$strDays}</td></tr>";
     echo "<tr><th>{$strAllowIncidentReopen}</th><td>".html_checkbox('allow_reopen', $sla->allow_reopen, TRUE)."</td></tr>\n";
     echo "<tr><th>{$strTimed} <img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/timer.png' width='16' height='16' alt='' /></th><td>";
-    if($sla->timed == 'yes')
+    if ($sla->timed == 'yes')
     {
         echo "<input type='checkbox' name='timed' id='timed' onchange='enableBillingPeriod();' checked='checked' />";
         $billingSQL = "SELECT * FROM `{$dbBillingPeriods}` WHERE servicelevelid = {$sla->id} AND priority = {$priority} AND tag = '{$tag}'";

@@ -69,7 +69,7 @@ if (!in_array($display, $calendarTypes)) $display = 'month';
 
 // Navigation
 echo "<p>{$strDisplay}: ";
-foreach($calendarTypes as $navType)
+foreach ($calendarTypes as $navType)
 {
     $navHtml[$navType]  = "<a href='{$_SERVER['PHP_SELF']}?display={$navType}";
     $navHtml[$navType] .= "&amp;year={$year}&amp;month={$month}&amp;day={$day}";
