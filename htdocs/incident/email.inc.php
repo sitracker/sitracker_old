@@ -185,30 +185,82 @@ switch ($step)
         echo "<option value='none' onclick='notarget(this.form)'>{$strNo}</option>\n";
         switch ($target->type)
         {
+            //FIXME can this be put into the style sheets?
             case 'initialresponse':
-                echo "<option value='initialresponse' style='text-indent: 15px; height: 17px; background-image: url({$CONFIG['application_webpath']}/images/icons/{$iconset}/16x16/initialresponse.png); background-repeat: no-repeat;' onclick='initialresponse(this.form)' >{$strInitialResponse}</option>\n";
-                echo "<option value='probdef' style='text-indent: 15px; height: 17px; background-image: url({$CONFIG['application_webpath']}/images/icons/{$iconset}/16x16/probdef.png); background-repeat: no-repeat;' onclick='probdef(this.form)'>{$strProblemDefinition}</option>\n";
-                echo "<option value='actionplan' style='text-indent: 15px; height: 17px; background-image: url({$CONFIG['application_webpath']}/images/icons/{$iconset}/16x16/actionplan.png); background-repeat: no-repeat;' onclick='actionplan(this.form)'>{$strActionPlan}</option>\n";
-                echo "<option value='solution' style='text-indent: 15px; height: 17px; background-image: url({$CONFIG['application_webpath']}/images/icons/{$iconset}/16x16/solution.png); background-repeat: no-repeat;' onclick='reprioritise(this.form)'>{$strResolutionReprioritisation}</option>\n";
+                echo "<option value='initialresponse' style='text-indent: 15px;";
+                echo " height: 17px; background-image: ";
+                echo "url({$CONFIG['application_webpath']}/images/icons/";
+                echo "{$iconset}/16x16/initialresponse.png); background-repeat:";
+                echo " no-repeat;' onclick='initialresponse(this.form)' >";
+                echo "{$strInitialResponse}</option>\n";
+                echo "<option value='probdef' style='text-indent: 15px; height:";
+                echo " 17px; background-image: ";
+                echo "url({$CONFIG['application_webpath']}/images/icons/";
+                echo "{$iconset}/16x16/probdef.png); background-repeat: ";
+                echo "no-repeat;' onclick='probdef(this.form)'>";
+                echo "{$strProblemDefinition}</option>\n";
+                echo "<option value='actionplan' style='text-indent: 15px; ";
+                echo "height: 17px; background-image: ";
+                echo "url({$CONFIG['application_webpath']}/images/icons/";
+                echo "{$iconset}/16x16/actionplan.png); background-repeat: ";
+                echo "no-repeat;' onclick='actionplan(this.form)'>";
+                echo "{$strActionPlan}</option>\n";
+                echo "<option value='solution' style='text-indent: 15px; ";
+                echo "height: 17px; background-image: ";
+                echo "url({$CONFIG['application_webpath']}/images/icons/";
+                echo "{$iconset}/16x16/solution.png); background-repeat: ";
+                echo "no-repeat;' onclick='reprioritise(this.form)'>";
+                echo "{$strResolutionReprioritisation}</option>\n";
             break;
             case 'probdef':
-                echo "<option value='probdef' style='text-indent: 15px; height: 17px; background-image: url({$CONFIG['application_webpath']}/images/icons/{$iconset}/16x16/probdef.png); background-repeat: no-repeat;' onclick='probdef(this.form)'>{$strProblemDefinition}</option>\n";
-                echo "<option value='actionplan' style='text-indent: 15px; height: 17px; background-image: url({$CONFIG['application_webpath']}/images/icons/{$iconset}/16x16/actionplan.png); background-repeat: no-repeat;' onclick='actionplan(this.form)'>{$strActionPlan}</option>\n";
-                echo "<option value='solution' style='text-indent: 15px; height: 17px; background-image: url({$CONFIG['application_webpath']}/images/icons/{$iconset}/16x16/solution.png); background-repeat: no-repeat;' onclick='reprioritise(this.form)'>{$strResolutionReprioritisation}</option>\n";
+                echo "<option value='probdef' style='text-indent: 15px; height:";
+                echo " 17px; background-image: ";
+                echo "url({$CONFIG['application_webpath']}/images/icons/";
+                echo "{$iconset}/16x16/probdef.png); background-repeat: ";
+                echo "no-repeat;' onclick='probdef(this.form)'>";
+                echo "{$strProblemDefinition}</option>\n";
+                echo "<option value='actionplan' style='text-indent: 15px; ";
+                echo "height: 17px; background-image: ";
+                echo "url({$CONFIG['application_webpath']}/images/icons/";
+                echo "{$iconset}/16x16/actionplan.png); background-repeat: ";
+                echo "no-repeat;' onclick='actionplan(this.form)'>";
+                echo "{$strActionPlan}</option>\n";
+                echo "<option value='solution' style='text-indent: 15px; ";
+                echo "height: 17px; background-image: ";
+                echo "url({$CONFIG['application_webpath']}/images/icons/";
+                echo "{$iconset}/16x16/solution.png); background-repeat: ";
+                echo "no-repeat;' onclick='reprioritise(this.form)'>";
+                echo "{$strResolutionReprioritisation}</option>\n";
             break;
             case 'actionplan':
-                echo "<option value='actionplan' style='text-indent: 15px; height: 17px; background-image: url({$CONFIG['application_webpath']}/images/icons/{$iconset}/16x16/actionplan.png); background-repeat: no-repeat;' onclick='actionplan(this.form)'>{$strActionPlan}</option>\n";
-                echo "<option value='solution' style='text-indent: 15px; height: 17px; background-image: url({$CONFIG['application_webpath']}/images/icons/{$iconset}/16x16/solution.png); background-repeat: no-repeat;' onclick='reprioritise(this.form)'>{$strResolutionReprioritisation}</option>\n";
+                echo "<option value='actionplan' style='text-indent: 15px; ";
+                echo "height: 17px; background-image: ";
+                echo "url({$CONFIG['application_webpath']}/images/icons/";
+                echo "{$iconset}/16x16/actionplan.png); background-repeat: ";
+                echo "no-repeat;' onclick='actionplan(this.form)'>";
+                echo "{$strActionPlan}</option>\n";
+                echo "<option value='solution' style='text-indent: 15px; ";
+                echo "height: 17px; background-image: ";
+                echo "url({$CONFIG['application_webpath']}/images/icons/";
+                echo "{$iconset}/16x16/solution.png); background-repeat: ";
+                echo "no-repeat;' onclick='reprioritise(this.form)'>";
+                echo "{$strResolutionReprioritisation}</option>\n";
             break;
                 case 'solution':
-                echo "<option value='solution' style='text-indent: 15px; height: 17px; background-image: url({$CONFIG['application_webpath']}/images/icons/{$iconset}/16x16/solution.png); background-repeat: no-repeat;' onclick='reprioritise(this.form)'>{$strResolutionReprioritisation}</option>\n";
+                echo "<option value='solution' style='text-indent: 15px; ";
+                echo "height: 17px; background-image: ";
+                echo "url({$CONFIG['application_webpath']}/images/icons/";
+                echo "{$iconset}/16x16/solution.png); background-repeat: ";
+                echo "no-repeat;' onclick='reprioritise(this.form)'>";
+                echo "{$strResolutionReprioritisation}</option>\n";
             break;
         }
         echo "</select>\n</td></tr>";
 
         if ($CONFIG['auto_chase'] == TRUE)
         {
-            $sql = "SELECT * FROM `{$dbUpdates}` WHERE incidentid = {$id} ORDER BY timestamp DESC LIMIT 1";
+            $sql = "SELECT * FROM `{$dbUpdates}` WHERE incidentid = {$id} ";
+            $sql .= "ORDER BY timestamp DESC LIMIT 1";
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
 
@@ -217,16 +269,20 @@ switch ($step)
             if ($obj->type == 'auto_chase_phone')
             {
                 echo "<tr><th>{$strCustomerChaseUpdate}</th><td>";
-                echo "<label><input type='radio' name='chase_customer' value='no' checked='yes' />{$strNo}</label> ";
-                echo "<label><input type='radio' name='chase_customer' value='yes' />{$strYes}</label>";
+                echo "<label><input type='radio' name='chase_customer' ";
+                echo "value='no' checked='yes' />{$strNo}</label> ";
+                echo "<label><input type='radio' name='chase_customer' ";
+                echo "value='yes' />{$strYes}</label>";
                 echo "</td></tr>";
             }
 
             if ($obj->type == 'auto_chase_manager')
             {
                 echo "<tr><th>{$strManagerChaseUpdate}</th>";
-                echo "<label><input type='radio' name='chase_manager' value='no' checked='yes' />{$strNo}</label> ";
-                echo "<label><input type='radio' name='chase_manager' value='yes' />{$strYes}</label>";
+                echo "<label><input type='radio' name='chase_manager' ";
+                echo "value='no' checked='yes' />{$strNo}</label> ";
+                echo "<label><input type='radio' name='chase_manager' ";
+                echo "value='yes' />{$strYes}</label>";
                 echo "</td></tr>";
             }
         }
@@ -238,30 +294,7 @@ switch ($step)
         echo "<td>";
         echo show_next_action();
         echo "</td>";
-
-
-    /*    echo "<input type='radio' name='timetonextaction_none' value='none' checked='checked' onchange=\"update_ttna();\" />{$strNone}<br />";
-        echo "<input type='radio' name='timetonextaction_none' value='time' />In <em>x</em> days, hours, minutes<br />&nbsp;&nbsp;&nbsp;";
-        echo "<input maxlength='3' name='timetonextaction_days' onclick='window.document.updateform.timetonextaction_none[1].checked = true;' size='3' /> Days&nbsp;";
-        echo "<input maxlength='2' name='timetonextaction_hours' onclick='window.document.updateform.timetonextaction_none[1].checked = true;' size='3' /> Hours&nbsp;";
-        echo "<input maxlength='2' name='timetonextaction_minutes' onclick='window.document.updateform.timetonextaction_none[1].checked = true;' size='3' /> Minutes<br />";
-        echo "<input type='radio' name='timetonextaction_none' value='date' />At specific date and time<br />&nbsp;&nbsp;&nbsp;";
-        echo "<input name='date' size='10' value='{$date}' onclick=\"window.document.updateform.timetonextaction_none[2].checked = true;\"/> ";
-        echo date_picker('updateform.date');
-        echo " <select name='timeoffset' onchange='window.document.updateform.timetonextaction_none[2].checked = true;'>";
-        echo "<option value=''></option>";
-        echo "<option value='0'>8:00 AM</option>";
-        echo "<option value='1'>9:00 AM</option>";
-        echo "<option value='2'>10:00 AM</option>";
-        echo "<option value='3'>11:00 AM</option>";
-        echo "<option value='4'>12:00 PM</option>";
-        echo "<option value='5'>1:00 PM</option>";
-        echo "<option value='6'>2:00 PM</option>";
-        echo "<option value='7'>3:00 PM</option>";
-        echo "<option value='8'>4:00 PM</option>";
-        echo "<option value='9'>5:00 PM</option>";
-        echo "</select>";
-    */    echo "<br />";
+        echo "<br />";
         echo "</td></tr>";
         echo "</table>";
         echo "<p align='center'>";
@@ -289,7 +322,7 @@ switch ($step)
         <script type='text/javascript'>
         function confirm_send_mail()
         {
-            return window.confirm('Are you sure you want to send this email?');
+            return window.confirm('<?php echo $strAreYouSureSendEmail ?>');
         }
 
         function urlencode(str) {
@@ -344,7 +377,10 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
 
             if (toPass != '')
             {
-                xmlhttp.open("GET", "auto_save.php?userid="+<?php echo $_SESSION['userid']; ?>+"&type=email&incidentid="+<?php echo $id; ?>+"&draftid="+draftid+"&meta="+meta+"&content="+escape(toPass), true);
+                xmlhttp.open("GET", "auto_save.php?userid="+<?php echo $_SESSION['userid']; ?>+
+                             "&type=email&incidentid="+<?php echo $id; ?>+
+                             "&draftid="+draftid+"&meta="+meta+"&content="+
+                             escape(toPass), true);
 
                 xmlhttp.onreadystatechange=function() {
                     if (xmlhttp.readyState==4) {
@@ -414,106 +450,85 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
             $timeoffset = $metadata[13];
         }
 
-        if ($emailtype == 0 AND $draftid == -1)
+
+        if ($draftid == -1)
         {
-            echo "<p class='error'>You must select an email type</p>\n";
+            $tsql = "SELECT * FROM `{$dbEmailTemplates}` WHERE id=$emailtype";
+            $tresult = mysql_query($tsql);
+            if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+            $template = mysql_fetch_object($tresult);
+            $paramarray = array('incidentid' => $id, 'triggeruserid' => $sit[2],);
+            $from = replace_specials($template->fromfield, $paramarray);
+            $replyto = replace_specials($template->replytofield, $paramarray);
+            $ccemail = replace_specials($template->ccfield, $paramarray);
+            $bccemail = replace_specials($template->bccfield, $paramarray);
+            $toemail = replace_specials($template->tofield, $paramarray);
+            $subject = replace_specials($template->subjectfield, $paramarray);
+            $body = replace_specials($template->body, $paramarray);
         }
         else
         {
-            if ($draftid == -1)
-            {
-                $tsql = "SELECT * FROM `{$dbEmailTemplates}` WHERE id=$emailtype";
-                $tresult = mysql_query($tsql);
-                if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
-                $template = mysql_fetch_object($tresult);
-                $paramarray = array('incidentid' => $id, 'triggeruserid' => $sit[2],);
-                $from = replace_specials($template->fromfield, $paramarray);
-                $replyto = replace_specials($template->replytofield, $paramarray);
-                $ccemail = replace_specials($template->ccfield, $paramarray);
-                $bccemail = replace_specials($template->bccfield, $paramarray);
-                $toemail = replace_specials($template->tofield, $paramarray);
-                $subject = replace_specials($template->subjectfield, $paramarray);
-                $body = replace_specials($template->body, $paramarray);
-            }
-            else
-            {
-                $from = $metadata[12];
-                $replyTo = $metadata[13];
-                $ccemail = $metadata[14];
-                $bccemail = $metadata[15];
-                $toemail = $metadata[16];
-//                 $subject = stripslashes($metadata[17]);
-//                 $body = stripslashes($metadata[18]);
-                $subject = $metadata[17];
-                $body = $metadata[18];
-            }
-
-            // NOTE \" used rather than ' so email address can contain a ' (as permitted by RFC) PH 28/10/2007
-
-            // encoding is multipart/form-data again as it no longer works without (why was this disabled?) - TPG 13/08/2002
-            echo "<form action='{$_SERVER['PHP_SELF']}?id={$id}' method='post' enctype='multipart/form-data' onsubmit='return confirm_send_mail();' >";
-            echo "<table align='center' class='vertical' width='95%'>";
-            echo "<tr><th width='30%'>{$strFrom}</th><td><input maxlength='100' name='fromfield' id='fromfield' size='40' value=\"{$from}\" /></td></tr>\n";
-            echo "<tr><th>{$strReplyTo}</th><td><input maxlength='100' name='replytofield' id='replytofield' size='40' value=\"{$replyto}\" /></td></tr>\n";
-            if (trim($ccemail) == ",") $ccemail = '';
-            if (substr($ccemail, 0, 1) == ",") $ccfield = substr($ccemail, 1, strlen($ccemail));
-            echo "<tr><th>CC</th><td><input maxlength='100' name='ccfield' id='ccfield' size='40' value=\"{$ccemail}\" /></td></tr>\n";
-            echo "<tr><th>BCC</th><td><input maxlength='100' name='bccfield' id='bccfield' size='40' value=\"{$bccemail}\" /></td></tr>\n";
-            echo "<tr><th>{$strTo}</th><td><input maxlength='100' name='tofield' id='tofield' size='40' value=\"{$toemail}\" /></td></tr>\n";
-            echo "<tr><th>{$strSubject}</th><td><input maxlength='255' name='subjectfield' id='subjectfield' size='40' value=\"{$subject}\" /></td></tr>\n";
-            echo "<tr><th>{$strAttachment}";
-            // calculate filesize
-            $j = 0;
-            $ext = array($strBytes, $strKBytes, $strMBytes, $strGBytes, $strTBytes);
-            $file_size = $CONFIG['upload_max_filesize'];
-            while ($file_size >= pow(1024,$j)) ++$j;
-            $file_size = round($file_size / pow(1024,$j-1) * 100) / 100 . ' ' . $ext[$j-1];
-            echo "(&lt; $file_size)";
-            echo "</th><td>";
-            echo "<input type='hidden' name='MAX_FILE_SIZE' value='{$CONFIG['upload_max_filesize']}' />";
-            echo "<input type='file' name='attachment' size='40' maxfilesize='{$CONFIG['upload_max_filesize']}' />";
-            echo "</td></tr>";
-            echo "<tr><th>{$strMessage}</th><td>";
-            echo "<textarea name='bodytext' id='bodytext' rows='20' cols='65'>";
-            // Attempt to restore email body from session in case there was an error submitting previously
-            if (!empty($_SESSION['temp-emailbody']))
-            {
-                echo $_SESSION['temp-emailbody'];
-            }
-            else
-            {
-                echo $body;
-            }
-            echo "</textarea>";
-            echo "<div id='updatestr'></div>";
-            echo "</td></tr>";
-            if ($CONFIG['enable_spellchecker'] == TRUE)
-            {
-                echo "<tr><th>&nbsp;</th>";
-                echo "<td><input type='checkbox' name='spellcheck' value='yes' />";
-                echo "Check Spelling before sending</td></tr>\n"; // FIXME i18n
-            }
-            echo "</table>";
-            echo "<p align='center'>";
-            echo "<input name='newincidentstatus' id='newincidentstatus' type='hidden' value='{$newincidentstatus}' />";
-            echo "<input name='timetonextaction_none' id='timetonextaction_none' type='hidden' value='{$timetonextaction_none}' />";
-            echo "<input name='timetonextaction_days' id='timetonextaction_days' type='hidden' value='{$timetonextaction_days}' />";
-            echo "<input name='timetonextaction_hours' id='timetonextaction_hours' type='hidden' value='{$timetonextaction_hours}' />";
-            echo "<input name='timetonextaction_minutes' id='timetonextaction_minutes' type='hidden' value='{$timetonextaction_minutes}' />";
-            echo "<input name='chase_customer' id='chase_customer' type='hidden' value='{$chase_customer}' />";
-            echo "<input name='chase_manager' id='chase_manager' type='hidden' value='{$chase_manager}' />";
-            echo "<input name='date' id='date' type='hidden' value='{$date}' />";
-            echo "<input name='timeoffset' id='timeoffset' type='hidden' value='{$timeoffset}' />";
-//             echo "<input name='day' id='day' type='hidden' value='{$day}' />";
-//             echo "<input name='month' id='month' type='hidden' value='{$month}' />";
-//             echo "<input name='year' id='year' type='hidden' value='{$year}' />";
-            echo "<input name='target' id='target' type='hidden' value='{$target}' />";
-            echo "<input type='hidden' id='step' name='step' value='3' />";
-            echo "<input type='hidden' id='emailtype' name='emailtype' value='{$emailtype}' />";
-            echo "<input type='hidden' id='draftid' name='draftid' value='{$draftid}' />";
-            echo "<input name='submit2' type='submit' value='{$strSendEmail}' />";
-            echo "</p>\n</form>\n";
+            $from = $metadata[12];
+            $replyTo = $metadata[13];
+            $ccemail = $metadata[14];
+            $bccemail = $metadata[15];
+            $toemail = $metadata[16];
+            $subject = $metadata[17];
+            $body = $metadata[18];
         }
+
+        echo "<form action='{$_SERVER['PHP_SELF']}?id={$id}' method='post' enctype='multipart/form-data' onsubmit='return confirm_send_mail();' >";
+        echo "<table align='center' class='vertical' width='95%'>";
+        echo "<tr><th width='30%'>{$strFrom}</th><td><input maxlength='100' name='fromfield' id='fromfield' size='40' value=\"{$from}\" /></td></tr>\n";
+        echo "<tr><th>{$strReplyTo}</th><td><input maxlength='100' name='replytofield' id='replytofield' size='40' value=\"{$replyto}\" /></td></tr>\n";
+        if (trim($ccemail) == ",") $ccemail = '';
+        if (substr($ccemail, 0, 1) == ",") $ccfield = substr($ccemail, 1, strlen($ccemail));
+        echo "<tr><th>CC</th><td><input maxlength='100' name='ccfield' id='ccfield' size='40' value=\"{$ccemail}\" /></td></tr>\n";
+        echo "<tr><th>BCC</th><td><input maxlength='100' name='bccfield' id='bccfield' size='40' value=\"{$bccemail}\" /></td></tr>\n";
+        echo "<tr><th>{$strTo}</th><td><input maxlength='100' name='tofield' id='tofield' size='40' value=\"{$toemail}\" /></td></tr>\n";
+        echo "<tr><th>{$strSubject}</th><td><input maxlength='255' name='subjectfield' id='subjectfield' size='40' value=\"{$subject}\" /></td></tr>\n";
+        echo "<tr><th>{$strAttachment}";
+        // calculate filesize
+        $j = 0;
+        $ext = array($strBytes, $strKBytes, $strMBytes, $strGBytes, $strTBytes);
+        $file_size = $CONFIG['upload_max_filesize'];
+        while ($file_size >= pow(1024,$j)) ++$j;
+        $file_size = round($file_size / pow(1024,$j-1) * 100) / 100 . ' ' . $ext[$j-1];
+        echo "(&lt; $file_size)";
+        echo "</th><td>";
+        echo "<input type='hidden' name='MAX_FILE_SIZE' value='{$CONFIG['upload_max_filesize']}' />";
+        echo "<input type='file' name='attachment' size='40' maxfilesize='{$CONFIG['upload_max_filesize']}' />";
+        echo "</td></tr>";
+        echo "<tr><th>{$strMessage}</th><td>";
+        echo "<textarea name='bodytext' id='bodytext' rows='20' cols='65'>";
+        echo $body;
+        echo "</textarea>";
+        echo "<div id='updatestr'></div>";
+        echo "</td></tr>";
+        if ($CONFIG['enable_spellchecker'] == TRUE)
+        {
+            echo "<tr><th>&nbsp;</th>";
+            echo "<td><input type='checkbox' name='spellcheck' value='yes' />";
+            echo "Check Spelling before sending</td></tr>\n"; // FIXME i18n
+        }
+        echo "</table>";
+        echo "<p align='center'>";
+        echo "<input name='newincidentstatus' id='newincidentstatus' type='hidden' value='{$newincidentstatus}' />";
+        echo "<input name='timetonextaction_none' id='timetonextaction_none' type='hidden' value='{$timetonextaction_none}' />";
+        echo "<input name='timetonextaction_days' id='timetonextaction_days' type='hidden' value='{$timetonextaction_days}' />";
+        echo "<input name='timetonextaction_hours' id='timetonextaction_hours' type='hidden' value='{$timetonextaction_hours}' />";
+        echo "<input name='timetonextaction_minutes' id='timetonextaction_minutes' type='hidden' value='{$timetonextaction_minutes}' />";
+        echo "<input name='chase_customer' id='chase_customer' type='hidden' value='{$chase_customer}' />";
+        echo "<input name='chase_manager' id='chase_manager' type='hidden' value='{$chase_manager}' />";
+        echo "<input name='date' id='date' type='hidden' value='{$date}' />";
+        echo "<input name='timeoffset' id='timeoffset' type='hidden' value='{$timeoffset}' />";
+        echo "<input name='target' id='target' type='hidden' value='{$target}' />";
+        echo "<input type='hidden' id='step' name='step' value='3' />";
+        echo "<input type='hidden' id='emailtype' name='emailtype' value='{$emailtype}' />";
+        echo "<input type='hidden' id='draftid' name='draftid' value='{$draftid}' />";
+        echo "<input name='submit2' type='submit' value='{$strSendEmail}' />";
+        echo "</p>\n</form>\n";
+        
         include ('incident_html_bottom.inc.php');
     break;
 
@@ -547,9 +562,7 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
         <script type="text/javascript">
         function confirm_close_window()
         {
-            if (window.confirm('The email was sent successfully, click OK to close this window'))
-            window.opener.location='incident_details.php?id=<?php echo $id; ?>';
-            window.close();
+            <?php echo html_redirect('', TRUE, TRUE, "window.opener.location='incident_details.php?id=<?php echo $id; ?>"); ?>
         }
         </script>
         <?php
@@ -575,19 +588,19 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
         if ($tofield == '')
         {
             $errors = 1;
-            $error_string .= "<p class='error'>You must enter a recipient in the 'To' field</p>\n";
+            $error_string .= "<p class='error'>{$strYouMissedARequiredField}: '{$strTo}'</p>\n";
         }
         // check from field
         if ($fromfield == '')
         {
             $errors = 1;
-            $error_string .= "<p class='error'>You must complete the 'From' field</p>\n";
+            $error_string .= "<p class='error'>{$strYouMissedARequiredField}: '{$strFrom}'</p>\n";
         }
         // check reply to field
         if ($replytofield == '')
         {
             $errors = 1;
-            $error_string .= "<p class='error'>You must complete the 'Reply To' field</p>\n";
+            $error_string .= "<p class='error'>{$strYouMissedARequiredField}: '{$strReplyTo}' field</p>\n";
         }
         // Store email body in session if theres been an error
         if ($errors > 0) $_SESSION['temp-emailbody'] = $bodytext;
@@ -735,11 +748,13 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
 
                 // add update
                 $bodytext = htmlentities($bodytext, ENT_COMPAT, 'UTF-8');
-                $updateheader .= "To: <b>$tofield</b>\nFrom: <b>$fromfield</b>\nReply-To: <b>$replytofield</b>\n";
-                if ($ccfield != '' AND $ccfield != ",") $updateheader .=   "CC: <b>$ccfield</b>\n";
-                if ($bccfield != '') $updateheader .= "BCC: <b>$bccfield</b>\n";
-                if ($filename != '') $updateheader .= "Attachment: <b>".$filename_end_part."</b>\n";
-                $updateheader .= "Subject: <b>$subjectfield</b>\n";
+                $updateheader .= "{$SYSLANG['strTo']}: [b]{$tofield}[/b]\n";
+                $updateheader .= "{$SYSLANG['strFrom']}: [b]{$fromfield}[/b]\n";
+                $updateheader .= "{$SYSLANG['strReplyTo']}: [b]{$replytofield}[/b]\n";
+                if ($ccfield != '' AND $ccfield != ",") $updateheader .=   "CC: [b]{$ccfield}[/b]\n";
+                if ($bccfield != '') $updateheader .= "BCC: [b]{$bccfield}[/b]\n";
+                if ($filename != '') $updateheader .= "{$SYSLANG['strAttachment']}: [b]".$filename_end_part."[/b]\n";
+                $updateheader .= "{$SYSLANG['strSubject']}: [b]{$subjectfield}[/b]\n";
 
                 if (!empty($updateheader)) $updateheader .= "<hr>";
                 $updatebody = $timetext . $updateheader . $bodytext;
@@ -760,22 +775,22 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
 
                     case 'initialresponse':
                         $sql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, timestamp, currentowner, currentstatus, customervisibility, sla, bodytext) ";
-                        $sql .= "VALUES ('$id', '".$sit[2]."', 'slamet', '$now', '".$sit[2]."', '$newincidentstatus', 'show', 'initialresponse','The Initial Response has been made.')";
+                        $sql .= "VALUES ('$id', '".$sit[2]."', 'slamet', '$now', '".$sit[2]."', '$newincidentstatus', 'show', 'initialresponse','{$SYSLANG['strInitialResponseHasBeenMade']}')";
                     break;
 
                     case 'probdef':
                         $sql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, timestamp, currentowner, currentstatus, customervisibility, sla, bodytext) ";
-                        $sql .= "VALUES ('$id', '".$sit[2]."', 'slamet', '$now', '".$sit[2]."', '$newincidentstatus', 'show', 'probdef','The problem has been defined.')";
+                        $sql .= "VALUES ('$id', '".$sit[2]."', 'slamet', '$now', '".$sit[2]."', '$newincidentstatus', 'show', 'probdef','{$SYSLANG['strProblemHasBeenDefined']}')";
                     break;
 
                     case 'actionplan':
                         $sql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, timestamp, currentowner, currentstatus, customervisibility, sla, bodytext) ";
-                        $sql .= "VALUES ('$id', '".$sit[2]."', 'slamet', '$now', '".$sit[2]."', '$newincidentstatus', 'show', 'actionplan','An action plan has been made.')";
+                        $sql .= "VALUES ('$id', '".$sit[2]."', 'slamet', '$now', '".$sit[2]."', '$newincidentstatus', 'show', 'actionplan','{$SYSLANG['strActionPlanHasBeenMade']}')";
                     break;
 
                     case 'solution':
                         $sql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, timestamp, currentowner, currentstatus, customervisibility, sla, bodytext) ";
-                        $sql .= "VALUES ('$id', '".$sit[2]."', 'slamet', '$now', '".$sit[2]."', '$newincidentstatus', 'show', 'solution','The incident has been resolved or reprioritised.\nThe issue should now be brought to a close or a new problem definition created within the service level.')";
+                        $sql .= "VALUES ('$id', '".$sit[2]."', 'slamet', '$now', '".$sit[2]."', '$newincidentstatus', 'show', 'solution','{$SYSLANG['strIncidentResolved']}')";
                     break;
                 }
                 if (!empty($sql))
@@ -793,7 +808,7 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
 
                 if (!empty($chase_customer))
                 {
-                    $sql_insert = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, bodytext, timestamp, customervisibility) VALUES ('{$id}','{$sit['2']}','auto_chased_phone','Customer has been called to chase','{$now}','hide')";
+                    $sql_insert = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, bodytext, timestamp, customervisibility) VALUES ('{$id}','{$sit['2']}','auto_chased_phone','{$SYSLANG['strCustomerHasBeenCalledToChase']}','{$now}','hide')";
                     mysql_query($sql_insert);
                     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
@@ -820,7 +835,7 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
                     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
                 }
 
-                journal(CFG_LOGGING_FULL, 'Email Sent', "Email sent subject: $subjectfield, regarding incident $id", CFG_JOURNAL_INCIDENTS, $id);
+                journal(CFG_LOGGING_FULL, $SYSLANG['strEmailSent'], "{$SYSLANG['strSubject']}: $subjectfield, {$SYSLANG['strIncident']}: $id", CFG_JOURNAL_INCIDENTS, $id);
                 echo "<html>";
                 echo "<head></head>";
                 echo "<body onload=\"confirm_close_window();\">";
@@ -830,7 +845,7 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
             else
             {
                 include ('incident_html_top.inc.php');
-                echo "<p class='error'>Error sending email: $mailerror</p>\n";
+                echo "<p class='error'>{$SYSLANG['strErrorSendingEmail']}: $mailerror</p>\n";
                 include ('incident_html_bottom.inc.php');
             }
         }
@@ -844,7 +859,7 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
     break;
 
     default:
-        throw_error('Fatal error', "Invalid Step $step");
+        trigger_error("{$SYSLANG['strInvalidParameter']}: $step", E_USER_ERROR);
     break;
 } // end switch step
 
