@@ -2943,22 +2943,23 @@ function format_workday_minutes($minutes)
     * @author Ivan Lucas
     * @param $date a UNIX timestamp
     * @returns string. Date in a readable friendly format
+    * @note See also readable_date() dupe?
 */
 function format_date_friendly($date)
 {
     global $CONFIG, $now;
-    if (date('dmy', $date) == date('dmy', time()))
+    if (ldate('dmy', $date) == ldate('dmy', time()))
     {
         $datestring = "{$GLOBALS['strToday']} @ ".ldate($CONFIG['dateformat_time'], $date);
     }
-    elseif (date('dmy', $date) == date('dmy', (time() - 86400)))
+    elseif (ldate('dmy', $date) == ldate('dmy', (time() - 86400)))
     {
         $datestring = "{$GLOBALS['strYesterday']} @ ".ldate($CONFIG['dateformat_time'], $date);
     }
     elseif ($date < $now-86400 AND
             $date > $now-(86400*6))
     {
-        $datestring = date('l', $date)." @ ".ldate($CONFIG['dateformat_time'], $date);
+        $datestring = ldate('l', $date)." @ ".ldate($CONFIG['dateformat_time'], $date);
     }
     else
     {
@@ -5347,13 +5348,13 @@ function leading_zero($length,$number)
 
 function readable_date($date)
 {
-    // Takes a UNIX Timestamp and resturns a string with a pretty readable date
+    // Takes a UNIX Timestamp and returns a string with a pretty readable date
     // e.g. Yesterday @ 5:28pm
-    if (date('dmy', $date) == date('dmy', time()))
+    if (ldate('dmy', $date) == ldate('dmy', time()))
     {
         $datestring = "{$GLOBALS['strToday']} @ ".ldate('g:ia', $date);
     }
-    elseif (date('dmy', $date) == ldate('dmy', (time()-86400)))
+    elseif (ldate('dmy', $date) == ldate('dmy', (time()-86400)))
     {
         $datestring = "{$GLOBALS['strYesterday']} @ ".ldate('g:ia', $date);
     }
@@ -7411,27 +7412,31 @@ function truncate_string($text, $maxlength=255, $html = TRUE)
     * @author Ivan Lucas
     * @param $format string. date() format
     * @param $date int. UNIX timestamp.  Uses 'now' if ommitted
+    * @param $utc bool. Is the timestamp being passed as UTC or system time
+                        TRUE = passed as UTC
+                        FALSE = passed as system time
     * @returns string. An internationised date/time string
     * @todo  th/st and am/pm maybe?
 */
-function ldate($format, $date='')
+function ldate($format, $date = '', $utc = TRUE)
 {
-    if ($date=='') $date = $GLOBALS['now'];
+    if ($date == '') $date = $GLOBALS['now'];
     if ($_SESSION['utcoffset'] != '')
     {
-        // Adjust the date back to UTC
-        $tz = strftime('%z', $date);
-        $tzmins = substr($tz, -4, 2) * (substr($tz, -4, 2) * 60);
-        $tzmins *= 60; // convert to seconds
-        if ($tz{0} == '+') $date -= $tzmins;
-        else $date += $tzmins;
-
+        if (!$utc)
+        {
+            // Adjust the date back to UTC
+            $tz = strftime('%z', $date);
+            $tzmins = (substr($tz, -4, 2) * 60) + substr($tz, -2, 2);
+            $tzsecs = $tzmins * 60; // convert to seconds
+            if (substr($tz, 0, 1) == '+') $date -= $tzsecs;
+            else $date += $tzsecs;
+        }
         // Adjust the display time to the users local timezone
         $useroffsetsec = $_SESSION['utcoffset'] * 60;
         $date += $useroffsetsec;
     }
-
-    $datestring = date($format, $date);
+    $datestring = gmdate($format, $date);
 
     // Internationalise full day names
     if (strpos($format, 'l') !== FALSE)
