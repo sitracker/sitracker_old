@@ -260,21 +260,17 @@ echo "<div id='userbar'>";
 
 if (user_accepting($sit[2])!='Yes')
 {
-    $userstatus = "<span class='error'>{$strNotAccepting}</span>";
+    $userstatus = "<span class='error'>{$strNotAcceptingIncidents}</span>";
 }
 else
 {
-    $userstatus = "<strong>{$strAccepting}</strong>";
+    $userstatus = "<strong>{$strAcceptingIncidents}</strong>";
 }
 
 echo sprintf($strLoggedInAsXAndCurrentlyXAndX,
             "<strong>{$sit[0]}</strong>",
             "<strong>".userstatus_name(user_status($sit[2]))."</strong>",
             $userstatus);
-
-
-
-echo " calls";// FIXME i18n
 
 if ($sit[3] == 'public')
 {
