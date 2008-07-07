@@ -1305,6 +1305,7 @@ $strUnlink = 'Unlink';
 $strUnlock = 'Unlock';
 $strUnsolved = 'Unsolved';
 $strUnsupported = 'Unsupported';
+$strUntilSpecificDateAndTime = 'Until specific date and time';
 $strUntitled = 'Untitled';
 $strUsed = 'Used';
 $strUsedNofN = 'Used %s of %s';
@@ -1382,6 +1383,8 @@ $strXold = '%s old';
 # e.g. 'Fred of ACME Inc'. i.e. Name of Site
 $strXofX = '%s of %s';
 $strXSeconds = '%s Seconds';
+# e.g. 42 units @ 2x
+$strXUnitsAtX = '%d units @ %dx';
 $strXWorkingDay = '%s working day';
 $strXWorkingDays = '%s working days';
 $strXYears = '%s Years';

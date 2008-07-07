@@ -8724,7 +8724,7 @@ function show_next_action()
     $html .= "onchange=\"update_ttna();\" onclick=\"window.document.updateform.";
     $html .= "timetonextaction_days.value = ''; window.document.updateform.";
     $html .= "timetonextaction_hours.value = ''; window.document.updateform.";
-    $html .= "timetonextaction_minutes.value = '';\" value='None' />Unspecified";
+    $html .= "timetonextaction_minutes.value = '';\" value='None' />{$GLOBALS['strNo']}";
     $html .= "</label><br />";
 
     $html .= "<label><input type='radio' name='timetonextaction_none' ";
@@ -8753,8 +8753,8 @@ function show_next_action()
     $html .= "<br /></span>";
 
     $html .= "<input type='radio' name='timetonextaction_none' id='ttna_date' ";
-    $html .= "value='date' onchange=\"update_ttna();\" />Until specific date and ";
-    $html .= "time<br />"; //FIXME i18n Until specific date and time
+    $html .= "value='date' onchange=\"update_ttna();\" />";
+    $html .= "{$GLOBLAS['strUntilSpecificDateAndTime']}<br />";
     $html .= "<span id='ttnadate' style='display: none;'>";
     $html .= "<input name='date' id='date' size='10' value='{$date}' onclick=";
     $html .= "\"window.document.updateform.timetonextaction_none[1].checked = true;\"/> ";
@@ -10255,7 +10255,7 @@ function approve_incident($incidentid)
 
         foreach ($multipliers AS $m)
         {
-            $s .= "{$a[$m]} {$strUnits} @ {$m}&#215;, "; // FIXME i18n multiplication symbol
+            $s .= sprintf($strXUnitsAtX, $a[$m], $m);
             $numberofunits += ($m * $a[$m]);
         }
 

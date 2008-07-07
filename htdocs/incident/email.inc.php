@@ -453,14 +453,14 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
             // encoding is multipart/form-data again as it no longer works without (why was this disabled?) - TPG 13/08/2002
             echo "<form action='{$_SERVER['PHP_SELF']}?id={$id}' method='post' enctype='multipart/form-data' onsubmit='return confirm_send_mail();' >";
             echo "<table align='center' class='vertical' width='95%'>";
-            echo "<tr><th width='30%'>{$strFrom}:</th><td><input maxlength='100' name='fromfield' id='fromfield' size='40' value=\"{$from}\" /></td></tr>\n";
-            echo "<tr><th>{$strReplyTo}:</th><td><input maxlength='100' name='replytofield' id='replytofield' size='40' value=\"{$replyto}\" /></td></tr>\n";
+            echo "<tr><th width='30%'>{$strFrom}</th><td><input maxlength='100' name='fromfield' id='fromfield' size='40' value=\"{$from}\" /></td></tr>\n";
+            echo "<tr><th>{$strReplyTo}</th><td><input maxlength='100' name='replytofield' id='replytofield' size='40' value=\"{$replyto}\" /></td></tr>\n";
             if (trim($ccemail) == ",") $ccemail = '';
             if (substr($ccemail, 0, 1) == ",") $ccfield = substr($ccemail, 1, strlen($ccemail));
-            echo "<tr><th>CC:</th><td><input maxlength='100' name='ccfield' id='ccfield' size='40' value=\"{$ccemail}\" /></td></tr>\n";
-            echo "<tr><th>BCC:</th><td><input maxlength='100' name='bccfield' id='bccfield' size='40' value=\"{$bccemail}\" /></td></tr>\n";
-            echo "<tr><th>{$strTo}:</th><td><input maxlength='100' name='tofield' id='tofield' size='40' value=\"{$toemail}\" /></td></tr>\n";
-            echo "<tr><th>{$strSubject}:</th><td><input maxlength='255' name='subjectfield' id='subjectfield' size='40' value=\"{$subject}\" /></td></tr>\n";
+            echo "<tr><th>CC</th><td><input maxlength='100' name='ccfield' id='ccfield' size='40' value=\"{$ccemail}\" /></td></tr>\n";
+            echo "<tr><th>BCC</th><td><input maxlength='100' name='bccfield' id='bccfield' size='40' value=\"{$bccemail}\" /></td></tr>\n";
+            echo "<tr><th>{$strTo}</th><td><input maxlength='100' name='tofield' id='tofield' size='40' value=\"{$toemail}\" /></td></tr>\n";
+            echo "<tr><th>{$strSubject}</th><td><input maxlength='255' name='subjectfield' id='subjectfield' size='40' value=\"{$subject}\" /></td></tr>\n";
             echo "<tr><th>{$strAttachment}";
             // calculate filesize
             $j = 0;
@@ -469,11 +469,11 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
             while ($file_size >= pow(1024,$j)) ++$j;
             $file_size = round($file_size / pow(1024,$j-1) * 100) / 100 . ' ' . $ext[$j-1];
             echo "(&lt; $file_size)";
-            echo ":</th><td>";
+            echo "</th><td>";
             echo "<input type='hidden' name='MAX_FILE_SIZE' value='{$CONFIG['upload_max_filesize']}' />";
             echo "<input type='file' name='attachment' size='40' maxfilesize='{$CONFIG['upload_max_filesize']}' />";
             echo "</td></tr>";
-            echo "<tr><th>{$strMessage}:</th><td>";
+            echo "<tr><th>{$strMessage}</th><td>";
             echo "<textarea name='bodytext' id='bodytext' rows='20' cols='65'>";
             // Attempt to restore email body from session in case there was an error submitting previously
             if (!empty($_SESSION['temp-emailbody']))
