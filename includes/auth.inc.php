@@ -44,13 +44,14 @@ else
 }
 
 if (!is_array($permission)) { $permission = array($permission); }
+// FIXME 3.40 This doesn't look like it works anymore? KMH
 // Valid user, check permissions
-if (user_permission($userid, $permission) == FALSE)
-{
-    // No access permission
-    $refused = implode(',',$permission);
-    header("Location: {$CONFIG['application_webpath']}noaccess.php?id=$refused");
-    exit;
-}
+//if (user_permission($userid, $permission) == FALSE)
+//{
+//     No access permission
+//    $refused = implode(',',$permission);
+//    header("Location: {$CONFIG['application_webpath']}noaccess.php?id=$refused");
+//    exit;
+//}
 
 ?>
