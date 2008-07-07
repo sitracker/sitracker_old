@@ -21,7 +21,7 @@ if (realpath(__FILE__) == realpath($_SERVER['SCRIPT_FILENAME']))
 $offset = cleanvar($_REQUEST['offset']);
 if (empty($offset))
 {
-	$offset = 0;
+    $offset = 0;
 }
 
 /**
@@ -56,11 +56,11 @@ function log_nav_bar()
 
     if ($offset > $_SESSION['num_update_view'])
     {
-    	$previous = $offset - $_SESSION['num_update_view'];
+        $previous = $offset - $_SESSION['num_update_view'];
     }
     else
     {
-    	$previous = 0;
+        $previous = 0;
     }
     $next = $offset + $_SESSION['num_update_view'];
 
@@ -78,14 +78,14 @@ function log_nav_bar()
     {
         if ($records != 'all')
         {
-        	$nav .= "<a href='{$_SERVER['PHP_SELF']}?id={$incidentid}&amp;";
-        	$nav .= "javascript=enabled&amp;offset=0&amp;records=all'>";
-        	$nav .= "{$GLOBALS['strShowAll']}</a>";
+            $nav .= "<a href='{$_SERVER['PHP_SELF']}?id={$incidentid}&amp;";
+            $nav .= "javascript=enabled&amp;offset=0&amp;records=all'>";
+            $nav .= "{$GLOBALS['strShowAll']}</a>";
         }
         else
         {
-        	$nav .= "<a href='{$_SERVER['PHP_SELF']}?id={$incidentid}&amp;";
-        	$nav .= "javascript=enabled&amp;offset=0&amp;'>{$GLOBALS['strShowPaged']}</a>";
+            $nav .= "<a href='{$_SERVER['PHP_SELF']}?id={$incidentid}&amp;";
+            $nav .= "javascript=enabled&amp;offset=0&amp;'>{$GLOBALS['strShowPaged']}</a>";
         }
     }
     $nav .= "</td>";
@@ -146,7 +146,7 @@ $records = strtolower(cleanvar($_REQUEST['records']));
 
 if ($incidentid=='' OR $incidentid < 1)
 {
-	trigger_error("Incident ID cannot be zero or blank", E_USER_ERROR);
+    trigger_error("Incident ID cannot be zero or blank", E_USER_ERROR);
 }
 
 $sql  = "SELECT * FROM `{$dbUpdates}` WHERE incidentid='{$incidentid}' ";
@@ -195,7 +195,7 @@ while ($update = mysql_fetch_object($result))
 
     if (empty($firstid))
     {
-    	$firstid = $update->id;
+        $firstid = $update->id;
     }
 
     $updateid = $update->id;
@@ -266,16 +266,16 @@ while ($update = mysql_fetch_object($result))
     if ($update->type == 'reviewmet' AND
         ($update->sla == 'opened' OR $update->userid == 0))
     {
-    	$updateheadertext = str_replace('updatereview', $strPeriodStarted, $updateheadertext);
+        $updateheadertext = str_replace('updatereview', $strPeriodStarted, $updateheadertext);
     }
     elseif ($update->type == 'reviewmet' AND $update->sla == '')
     {
-    	$updateheadertext = str_replace('updatereview', $strCompleted, $updateheadertext);
+        $updateheadertext = str_replace('updatereview', $strCompleted, $updateheadertext);
     }
 
     if ($update->type=='slamet')
     {
-    	$updateheadertext = str_replace('updatesla', $slatypes[$update->sla]['text'], $updateheadertext);
+        $updateheadertext = str_replace('updatesla', $slatypes[$update->sla]['text'], $updateheadertext);
     }
 
     echo "<a name='update{$count}'></a>";
@@ -283,28 +283,28 @@ while ($update = mysql_fetch_object($result))
     // Print a header row for the update
     if ($updatebody=='' AND $update->customervisibility=='show')
     {
-    	echo "<div class='detailinfo'>";
+        echo "<div class='detailinfo'>";
     }
     elseif ($updatebody=='' AND $update->customervisibility!='show')
     {
-    	echo "<div class='detailinfohidden'>";
+        echo "<div class='detailinfohidden'>";
     }
     elseif ($updatebody!='' AND $update->customervisibility=='show')
     {
-    	echo "<div class='detailhead'>";
+        echo "<div class='detailhead'>";
     }
     else
     {
-    	echo "<div class='detailheadhidden'>";
+        echo "<div class='detailheadhidden'>";
     }
 
     if ($offset > $_SESSION['num_update_view'])
     {
-    	$previous = $offset - $_SESSION['num_update_view'];
+        $previous = $offset - $_SESSION['num_update_view'];
     }
     else
     {
-    	$previous=0;
+        $previous=0;
     }
     $next = $offset + $_SESSION['num_update_view'];
 
