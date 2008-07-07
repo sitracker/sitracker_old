@@ -121,6 +121,7 @@ switch ($_REQUEST['mode'])
         $refresh = 60;
         include ('htmlheader.inc.php');
         echo "<h2>{$strScheduler}</h2>";
+        echo "<h3>".ldate($CONFIG['dateformat_datetime'], $GLOBALS['now'], FALSE)."</h3>";
         $sql = "SELECT * FROM `{$dbScheduler}` ORDER BY action";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
@@ -151,7 +152,7 @@ switch ($_REQUEST['mode'])
                 echo "</td>";
                 echo "<td>";
                 $lastruntime = mysql2date($schedule->lastran);
-                if ($lastruntime > 0) echo "{$schedule->lastran}";
+                if ($lastruntime > 0) echo ldate($CONFIG['dateformat_datetime'], $lastruntime);
                 else echo $strNever;
                 echo "</td>";
                 echo "<td>";
@@ -159,7 +160,7 @@ switch ($_REQUEST['mode'])
                 {
                     if ($lastruntime > 0) $nextruntime = $lastruntime + $schedule->interval;
                     else $nextruntime = $now;;
-                    echo date($CONFIG['dateformat_datetime'],$nextruntime);
+                    echo ldate($CONFIG['dateformat_datetime'],$nextruntime);
                 }
                 else echo $strNever;
                 echo "</td>";
