@@ -14,10 +14,10 @@ include ('mime.inc.php');
 include ('triggertypes.inc.php');
 
 //set up all the action types
-define (ACTION_NONE, 1);
-define (ACTION_NOTICE, 2);
-define (ACTION_EMAIL, 3);
-define (ACTION_JOURNAL, 4);
+define ('ACTION_NONE', 1);
+define ('ACTION_NOTICE', 2);
+define ('ACTION_EMAIL', 3);
+define ('ACTION_JOURNAL', 4);
 plugin_do('trigger_actions');
 
 $actionarray['ACTION_NONE'] =
