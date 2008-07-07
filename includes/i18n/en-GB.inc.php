@@ -714,8 +714,10 @@ $strMedium = 'Medium';
 $strMediumPriority = 'Medium Priority';
 $strMessage = 'Message';
 $strMine = 'Mine';
-$strMinutes = 'Minutes';
+$strMinutes = 'minutes';
 $strMobile = 'Mobile';
+# Short for 'mobile'
+$strMob = 'Mob';
 # Short for 'Monday'
 $strMon = 'Mon';
 $strMonday = 'Monday';
@@ -895,6 +897,7 @@ $strOpenActivities = 'Open Activities';
 $strOpenedby = 'Opened by %s';
 $strOpenedbyXonY = 'Opened by %s on %s';
 $strOpenedViaThePortalByX = 'Opened via the portal by %s';
+$strOpenForX = 'Open for %s';
 $strOperation = 'Operation';
 $strOrphanedSites = 'Orphaned Sites';
 $strOther = 'Other';
@@ -1138,6 +1141,10 @@ $strSkillsFor = 'Skills For %s';
 $strSkillsMatrix = 'Skills Matrix';
 $strSkillsSupportedUnderContract = 'Skills supported under this contract';
 $strSLAby = 'SLA: %s by %s';
+#E.g. Initial Response in 3 hours
+$strSLAInX = '%s in %s';
+#E.g. Initial Response 3 hours late
+$strSLAXLate = '%s %s late';
 $strSLATarget = 'SLA Target';
 $strSoftware = 'Software';
 $strSoftwareVersion = 'Software Version';

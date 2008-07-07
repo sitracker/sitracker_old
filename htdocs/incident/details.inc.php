@@ -34,8 +34,8 @@ echo "<a href=\"mailto:{$incident->email}\">{$incident->email}</a><br />\n";
 if ($incident->ccemail != '') echo "CC: <a href=\"mailto:{$incident->ccemail}\">{$incident->ccemail}</a><br />\n";
 if ($incident->phone!='' OR $incident->phone!='')
 {
-    if ($incident->phone!='') echo "Tel: {$incident->phone}";
-    if ($incident->mobile!='') echo " Mob: {$incident->mobile}";
+    if ($incident->phone!='') echo "{$strTel}: {$incident->phone}";
+    if ($incident->mobile!='') echo " {$strMob}: {$incident->mobile}";
     echo "<br />\n";
 }
 if ($incident->externalid != '' OR $incident->escalationpath > 0)
@@ -78,10 +78,10 @@ if ($software_name!='' OR $incident->productversion != '' OR $incident->products
     }
     echo "<br />\n";
 }
-echo priority_icon($incident->priority)." ";
+echo priority_icon($incident->priority)." ".priority_name($incident->priority);
 if ($product_name!='')
 {
-    echo "<a href='contract_details.php?id={$incident->maintenanceid}' title='Contract {$incident->maintenanceid} Details' target='top.opener'>";
+    echo " <a href='contract_details.php?id={$incident->maintenanceid}' title='Contract {$incident->maintenanceid} Details' target='top.opener'>";
     echo "{$product_name}";
     echo "</a>";
 }
@@ -129,7 +129,7 @@ if (!empty($incident->product))
     }
 }
 
-echo "Open for {$opened_for} ";
+echo sprintf($strOpenForX, $opened_for)." ";
 echo incidentstatus_name($incident->status);
 if ($incident->status == 2) echo " (" . closingstatus_name($incident->closingstatus) . ")";
 echo "<br />\n";
@@ -139,9 +139,14 @@ if ($incident->status != 2 AND $incident->status!=7)
 {
     if ($slaremain<>0)
     {
-        echo $targettype;
-        if ($slaremain > 0) echo " in ".format_workday_minutes($slaremain);  //  ." left"
-        elseif ($slaremain < 0) echo " ".format_workday_minutes((0-$slaremain))." late";  //  ." left"
+        if ($slaremain > 0)
+        {
+            echo sprintf($strSLAInX, $targettype, format_workday_minutes($slaremain));
+        }
+        elseif ($slaremain < 0)
+        {
+            echo " ".sprintf($strSLAXLate, $targettype, format_workday_minutes((0-$slaremain)));
+        }
     }
     if ($reviewremain>0 && $reviewremain<=2400)
     {
