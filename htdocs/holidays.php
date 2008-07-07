@@ -35,7 +35,7 @@ if ($user == $sit[2])
 }
 else
 {
-    $title = user_realname($user)."'s Holidays"; //FIXME i18n
+    $title = sprintf($strUsersHolidays, user_realname($user));
 }
 
 include ('htmlheader.inc.php');

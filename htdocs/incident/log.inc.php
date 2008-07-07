@@ -399,7 +399,7 @@ while ($update = mysql_fetch_object($result))
 
         if ($update->customervisibility == 'show')
         {
-            echo "<span>{$strHideFromCustomer}</span>";
+            echo "<span>{$strHideInPortal}</span>";
         }
         else
         {
@@ -413,11 +413,11 @@ while ($update = mysql_fetch_object($result))
         echo icon($updatetypes['research']['icon'], 16, $strResearch);
         if ($update->customervisibility == 'show')
         {
-            echo "<span>{$strHideFromCustomer}</span>";
+            echo "<span>{$strHideInPortal}</span>";
         }
         else
         {
-            echo "<span>{$strMakeVisibleToCustomer}</span>";
+            echo "<span>{$strMakeVisibleInPortal}</span>";
         }
 
         if ($update->sla != '')

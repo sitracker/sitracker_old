@@ -289,7 +289,7 @@ $realemails = $countresults - $spamcount;
 //$totalheld = $countresults + mysql_num_rows($resultnew) - $spamcount;
 if (is_array($queuerows))
 {
-    echo "<h2>".icon('email', 32)." {$strIncoming} {$strEmail}</h2>"; //FIXME i18n
+    echo "<h2>".icon('email', 32)." {$strIncomingEmail}</h2>";
 
     echo "<p align='center'>{$strIncomingEmailText}</p>";
     echo "<form action='{$_SERVER['PHP_SELF']}' name='held_emails'  method='post'>";

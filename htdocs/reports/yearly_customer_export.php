@@ -139,7 +139,11 @@ elseif ($_REQUEST['mode'] == 'report')
             {
                 $externalpercent = number_format(($sitetotal['extincidents'] / $sitetotal['incidents'] * 100),1);
             }
-            $html .= "<tr class='shade1'><td colspan='0'>Number of incidents logged by {$sitetotal['name']}: {$sitetotal['incidents']}, Logged externally: {$sitetotal['extincidents']} ({$externalpercent}%)</td></tr>\n"; //FIXME i18n
+            $html .= "<tr class='shade1'><td colspan='0'>";
+            $html .= sprintf($strNumOfIncidentsLoggedByX, $sitetotal['name']);
+            $html .= ": {$sitetotal['incidents']}, ";
+            $html .= "{$strLoggedExternally}: {$sitetotal['extincidents']} ";
+            $html .= "({$externalpercent}%)</td></tr>\n";
         }
     }
 
