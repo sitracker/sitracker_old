@@ -561,7 +561,10 @@ else
     $bodytext = "<hr>" . $bodytext;
     $oldstatus = incident_status($id);
     $oldtimeofnextaction = incident_timeofnextaction($id);
-
+    if ($newstatus != $oldstatus)
+    {
+        $bodytext = "Status: ".incidentstatus_name($oldstatus)." -&gt; <b>" . incidentstatus_name($newstatus) . "</b>\n\n" . $bodytext;
+    }
     if ($newpriority != incident_priority($id))
     {
         $bodytext = "New Priority: <b>" . priority_name($newpriority) . "</b>\n\n" . $bodytext;
