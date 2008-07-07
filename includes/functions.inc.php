@@ -2982,79 +2982,69 @@ function format_date_friendly($date)
     * @note The recommended way to use this function is to call it without headers/footers
     * @note already displayed.
 */
-function html_redirect($url, $success = TRUE, $message='', $close = FALSE, $parenturl = '')
+function html_redirect($url, $success = TRUE, $message='')
 {
     global $CONFIG, $headerdisplayed;
 
-    if ($close AND !empty($parenturl))
+    if (!empty($_REQUEST['dashboard']))
     {
-        echo '<script type="text/javascript">';
-        echo $parenturl;
-        echo 'window.close();';
-        echo '</script>';
+        $headerdisplayed = TRUE;
+    }
+
+    if (empty($message))
+    {
+        $refreshtime = 1;
+    }
+    elseif ($sucess == FALSE)
+    {
+        $refreshtime = 3;
     }
     else
     {
-        if (!empty($_REQUEST['dashboard']))
-        {
-            $headerdisplayed = TRUE;
-        }
-    
-        if (empty($message))
-        {
-            $refreshtime = 1;
-        }
-        elseif ($sucess == FALSE)
-        {
-            $refreshtime = 3;
-        }
-        else
-        {
-            $refreshtime = 6;
-        }
-    
-        $refresh = "{$refreshtime}; url={$url}";
-    
-        $title = $GLOBALS['strPleaseWaitRedirect'];
-        if (!$headerdisplayed)
-        {
-            include ('htmlheader.inc.php');
-        }
-        else
-        {
-            echo "<meta http-equiv=\"refresh\" content=\"$refreshtime; url=$url\" />\n";
-        }
-    
-        echo "<h3>";
-        if ($success)
-        {
-            echo "<span class='success'>{$GLOBALS['strSuccess']}</span>";
-        }
-        else
-        {
-            echo "<span class='failure'>{$GLOBALS['strFailed']}</span>";
-        }
-    
-        if (!empty($message))
-        {
-            echo ": {$message}";
-        }
-    
-        echo "</h3>";
-        if (empty($_REQUEST['dashboard']))
-        {
-            echo "<h4>{$GLOBALS['strPleaseWaitRedirect']}</h4>";
-            if ($headerdisplayed)
-            {
-                echo "<p align='center'><a href=\"{$url}\">{$GLOBALS['strContinue']}</a></p>";
-            }
-        }
-        // TODO 3.35 Add a link to refresh the dashlet if this is run inside a dashlet
-    
+        $refreshtime = 6;
+    }
+
+    $refresh = "{$refreshtime}; url={$url}";
+
+    $title = $GLOBALS['strPleaseWaitRedirect'];
+    if (!$headerdisplayed)
+    {
+        include ('htmlheader.inc.php');
+    }
+    else
+    {
+        echo "<meta http-equiv=\"refresh\" content=\"$refreshtime; url=$url\" />\n";
+    }
+
+    echo "<h3>";
+    if ($success)
+    {
+        echo "<span class='success'>{$GLOBALS['strSuccess']}</span>";
+    }
+    else
+    {
+        echo "<span class='failure'>{$GLOBALS['strFailed']}</span>";
+    }
+
+    if (!empty($message))
+    {
+        echo ": {$message}";
+    }
+
+    echo "</h3>";
+    if (empty($_REQUEST['dashboard']))
+    {
+        echo "<h4>{$GLOBALS['strPleaseWaitRedirect']}</h4>";
         if ($headerdisplayed)
         {
-            include ('htmlfooter.inc.php');
+            echo "<p align='center'><a href=\"{$url}\">{$GLOBALS['strContinue']}</a></p>";
         }
+    }
+    // TODO 3.35 Add a link to refresh the dashlet if this is run inside a dashlet
+
+    if ($headerdisplayed)
+    {
+        include ('htmlfooter.inc.php');
     }
 }
 
