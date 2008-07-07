@@ -398,7 +398,7 @@ array('description' => 'List of holidays',
 
 $ttvararray['{nextslatime}'] =
 array('description' => $strTimeToNextAction,
-      'replacement' => 'format_workday_minutes($GLOBALS[\'now\'] - $paramarray[\'nextslatime\']);',
+      'replacement' => 'format_date_friendly($paramarray[\'nextslatime\']);',
       'requires' => 'nextslatime'
       );
 

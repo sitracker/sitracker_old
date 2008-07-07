@@ -101,6 +101,7 @@ function saction_TimeCalc()
 {
     global $now;
     global $dbIncidents, $dbServiceLevels, $dbMaintenance, $dbUpdates;
+    global $SYSLANG;
 
     $success = TRUE;
     // FIXME this should only run INSIDE the working day
@@ -189,15 +190,32 @@ function saction_TimeCalc()
         if ($newSlaTime!=-1)
         {
             // Get these time of NEXT SLA requirement in minutes
-            $coefficient=1;
+            $coefficient = 1;
+            $NextslaName = $SYSLANG['strSLATarget'];
 
             switch ($slaInfo['sla'])
             {
-                case 'opened':          $slaRequest='initial_response_mins'; break;
-                case 'initialresponse': $slaRequest='prob_determ_mins';      break;
-                case 'probdef':         $slaRequest='action_plan_mins';      break;
-                case 'actionplan':      $slaRequest='resolution_days';       $coefficient=($CONFIG['end_working_day']-$CONFIG['start_working_day'])/60; break;
-                case 'solution':        $slaRequest='initial_response_mins'; break;
+                case 'opened':
+                    $slaRequest='initial_response_mins';
+                    $NextslaName = $SYSLANG['strInitialResponse'];
+                    break;
+                case 'initialresponse':
+                    $slaRequest='prob_determ_mins';
+                    $NextslaName = $SYSLANG['strProblemDefinition'];
+                    break;
+                case 'probdef':
+                    $slaRequest = 'action_plan_mins';
+                    $NextslaName = $SYSLANG['strActionPlan'];
+                    break;
+                case 'actionplan':
+                    $slaRequest = 'resolution_days';
+                    $NextslaName = $SYSLANG['strResolutionReprioritisation'];
+                    $coefficient = ($CONFIG['end_working_day'] - $CONFIG['start_working_day']) / 60;
+                    break;
+                case 'solution':
+                    $slaRequest = 'initial_response_mins';
+                    $NextslaName = $SYSLANG['strInitialResponse'];
+                    break;
             }
 
             // Query the database for the next SLA and review times...
@@ -219,7 +237,7 @@ function saction_TimeCalc()
                 echo "   Reviews need to be made every ".($times['review_days']*24*60)." minutes{$crlf}";
             }
 
-            if ($incident['slanotice']==0)
+            if ($incident['slanotice'] == 0)
             {
                 //reaching SLA
                 if ($times['next_sla_time'] > 0) $reach = $newSlaTime / $times['next_sla_time'];
@@ -230,7 +248,7 @@ function saction_TimeCalc()
 
                     trigger('TRIGGER_INCIDENT_NEARING_SLA', array('incidentid' => $incident['id'],
                                                                   'nextslatime' => $times['next_sla_time'],
-                                                                  'nextsla' => $slaInfo['sla']));
+                                                                  'nextsla' => $NextslaName));
                 }
             }
         }
