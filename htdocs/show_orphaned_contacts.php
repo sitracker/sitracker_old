@@ -21,7 +21,7 @@ include ('htmlheader.inc.php');
 
 $title = $strShowOrphandedContacts;
 
-$sql = "SELECT * FROM contacts WHERE siteid = 0";
+$sql = "SELECT * FROM `{$dbContacts}` WHERE siteid = 0";
 $result = mysql_query($sql);
 if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
