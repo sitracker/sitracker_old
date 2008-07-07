@@ -342,9 +342,6 @@ function display_update_page($draftid=-1)
     echo "<th align='right'>{$GLOBALS['strUpdate']}<br />";
     echo "<span class='required'>{$GLOBALS['strRequired']}</span></th>";
     echo "<td class='shade1'>";
-    //FIXME i18n
-    //echo "New information, relevent to the incident.  Please be as detailed as possible and include full descriptions of any work you have performed.<br />";
-    //echo "<br />";
     $checkbox = '';
     if (!empty($metadata))
     {
@@ -354,7 +351,8 @@ function display_update_page($draftid=-1)
     {
         $checkbox = "checked='checked'";
     }
-    echo "<label><input type='checkbox' name='cust_vis' id='cust_vis' {$checkbox} value='yes' /> Make this update visible in the portal<label><br />"; //FIXME i18n Make this update visible in the portal
+    echo "<label><input type='checkbox' name='cust_vis' id='cust_vis' ";
+    echo "{$checkbox} value='yes' /> {$strMakeVisibleInPortal}<label><br />";
     echo bbcode_toolbar('updatelog');
     echo "<textarea name='bodytext' id='updatelog' rows='13' cols='50'>";
     if ($draftid != -1) echo $draftobj->content;
@@ -374,7 +372,7 @@ function display_update_page($draftid=-1)
 //    $servicelevel=maintenance_servicelevel(incident_maintid($id));
 //    if ($servicelevel == 2 || $servicelevel == 5) $maxpriority = 4;
 //    else $maxpriority = 3;
-	$maxpriority = 4;
+    $maxpriority = 4;
 
     $setPriorityTo = incident_priority($id);
 
@@ -589,11 +587,11 @@ else
         $filename = cleanvar($_FILES['attachment']['name']);
         if ($cust_vis == 'yes')
         {
-        	$category = 'public';
+            $category = 'public';
         }
         else
         {
-        	$category = 'private';
+            $category = 'private';
         }
 
         $sql = "INSERT INTO `{$dbFiles}`(category, filename, size, userid, usertype, shortdescription, longdescription, filedate) ";
@@ -691,11 +689,11 @@ else
         $filename = cleanvar($_FILES['attachment']['name']);
         if ($cust_vis == 'yes')
         {
-        	$category = 'public';
+            $category = 'public';
         }
         else
         {
-        	$category = 'private';
+            $category = 'private';
         }
     }
 
