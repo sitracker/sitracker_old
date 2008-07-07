@@ -220,7 +220,7 @@ while ($update = mysql_fetch_object($result))
     $quote[7] = "/^(&gt;)[\r]*$/m";
     $quote[8] = "/^(&gt;&gt;)[\r]*$/m";
     $quote[9] = "/^(&gt;&gt;(&gt;){1,8})[\r]*$/m";
-    
+
     $quotereplace[0] = "<span class='quote1'>\\1</span>";
     $quotereplace[1] = "<span class='quote2'>\\1</span>";
     $quotereplace[2] = "<span class='quote3'>\\1</span>";
@@ -231,16 +231,16 @@ while ($update = mysql_fetch_object($result))
     $quotereplace[7] = "<span class='quote1'>\\1</span>";
     $quotereplace[8] = "<span class='quote2'>\\1</span>";
     $quotereplace[9] = "<span class='quote3'>\\1</span>";
-    
+
     $updatebody = preg_replace($quote, $quotereplace, $updatebody);
-    
+
     // Make URL's into Hyperlinks
     $search = array("/(?<!quot;|[=\"]|:[\\n]\/{2})\b((\w+:\/{2}|www\.).+?)"."(?=\W*([<>\s]|$))/i");
     $replace = array("<a href=\"\\1\">\\1</a>");
     $updatebody = preg_replace("/href=\"www/i", "href=\"http://www", preg_replace ($search, $replace, $updatebody));
     $updatebody = bbcode($updatebody);
     $updatebody = preg_replace("!([\n\t ]+)(http[s]?:/{2}[\w\.]{2,}[/\w\-\.\?\&\=\#\$\%|;|\[|\]~:]*)!e", "'\\1<a href=\"\\2\" title=\"\\2\">'.(strlen('\\2')>=70 ? substr('\\2',0,70).'...':'\\2').'</a>'", $updatebody);
-    
+
     // Make KB article references into a hyperlink
     $updatebody = preg_replace("/\b{$CONFIG['kb_id_prefix']}([0-9]{3,4})\b/", "<a href=\"kb_view_article.php?id=$1\" title=\"View KB Article $1\">$0</a>", $updatebody);
 
@@ -259,10 +259,11 @@ while ($update = mysql_fetch_object($result))
     {
         $updateheadertext = str_replace('currentowner', $strSelf, $updateheadertext);
     }
-    
+
     $updateheadertext = str_replace('updateuser', $updateuser, $updateheadertext);
-    
-    if ($update->type == 'reviewmet' AND 
+    $updateheadertext = str_replace('updateuser', $updateuser, $updateheadertext);
+
+    if ($update->type == 'reviewmet' AND
         ($update->sla == 'opened' OR $update->userid == 0))
     {
     	$updateheadertext = str_replace('updatereview', $strPeriodStarted, $updateheadertext);
@@ -271,7 +272,7 @@ while ($update = mysql_fetch_object($result))
     {
     	$updateheadertext = str_replace('updatereview', $strCompleted, $updateheadertext);
     }
-    
+
     if ($update->type=='slamet')
     {
     	$updateheadertext = str_replace('updatesla', $slatypes[$update->sla]['text'], $updateheadertext);
@@ -297,7 +298,7 @@ while ($update = mysql_fetch_object($result))
     	echo "<div class='detailheadhidden'>";
     }
 
-    if ($offset > $_SESSION['num_update_view']) 
+    if ($offset > $_SESSION['num_update_view'])
     {
     	$previous = $offset - $_SESSION['num_update_view'];
     }
@@ -324,49 +325,48 @@ while ($update = mysql_fetch_object($result))
         echo "<a href='#update".($count-1)."' class='info'>";
         echo icon('navup', 16, $strPreviousUpdate)."</a>";
     }
-        // Style quoted text
-        $quote[0] = "/^(&gt;([\s][\d\w]).*)[\n\r]$/m";
-        $quote[1] = "/^(&gt;&gt;([\s][\d\w]).*)[\n\r]$/m";
-        $quote[2] = "/^(&gt;&gt;&gt;+([\s][\d\w]).*)[\n\r]$/m";
-        $quote[3] = "/^(&gt;&gt;&gt;(&gt;)+([\s][\d\w]).*)[\n\r]$/m";
-        $quote[4] = "/(-----\s?Original Message\s?-----.*-{3,})/s";
-        $quote[5] = "/(-----BEGIN PGP SIGNED MESSAGE-----)/s";
-        $quote[6] = "/(-----BEGIN PGP SIGNATURE-----.*-----END PGP SIGNATURE-----)/s";
-        $quote[7] = "/^(&gt;)[\r]*$/m";
-        $quote[8] = "/^(&gt;&gt;)[\r]*$/m";
-        $quote[9] = "/^(&gt;&gt;(&gt;){1,8})[\r]*$/m";
+    // Style quoted text
+    $quote[0] = "/^(&gt;([\s][\d\w]).*)[\n\r]$/m";
+    $quote[1] = "/^(&gt;&gt;([\s][\d\w]).*)[\n\r]$/m";
+    $quote[2] = "/^(&gt;&gt;&gt;+([\s][\d\w]).*)[\n\r]$/m";
+    $quote[3] = "/^(&gt;&gt;&gt;(&gt;)+([\s][\d\w]).*)[\n\r]$/m";
+    $quote[4] = "/(-----\s?Original Message\s?-----.*-{3,})/s";
+    $quote[5] = "/(-----BEGIN PGP SIGNED MESSAGE-----)/s";
+    $quote[6] = "/(-----BEGIN PGP SIGNATURE-----.*-----END PGP SIGNATURE-----)/s";
+    $quote[7] = "/^(&gt;)[\r]*$/m";
+    $quote[8] = "/^(&gt;&gt;)[\r]*$/m";
+    $quote[9] = "/^(&gt;&gt;(&gt;){1,8})[\r]*$/m";
 
-        $quotereplace[0] = "<span class='quote1'>\\1</span>";
-        $quotereplace[1] = "<span class='quote2'>\\1</span>";
-        $quotereplace[2] = "<span class='quote3'>\\1</span>";
-        $quotereplace[3] = "<span class='quote4'>\\1</span>";
-        $quotereplace[4] = "<span class='quoteirrel'>\\1</span>";
-        $quotereplace[5] = "<span class='quoteirrel'>\\1</span>";
-        $quotereplace[6] = "<span class='quoteirrel'>\\1</span>";
-        $quotereplace[7] = "<span class='quote1'>\\1</span>";
-        $quotereplace[8] = "<span class='quote2'>\\1</span>";
-        $quotereplace[9] = "<span class='quote3'>\\1</span>";
+    $quotereplace[0] = "<span class='quote1'>\\1</span>";
+    $quotereplace[1] = "<span class='quote2'>\\1</span>";
+    $quotereplace[2] = "<span class='quote3'>\\1</span>";
+    $quotereplace[3] = "<span class='quote4'>\\1</span>";
+    $quotereplace[4] = "<span class='quoteirrel'>\\1</span>";
+    $quotereplace[5] = "<span class='quoteirrel'>\\1</span>";
+    $quotereplace[6] = "<span class='quoteirrel'>\\1</span>";
+    $quotereplace[7] = "<span class='quote1'>\\1</span>";
+    $quotereplace[8] = "<span class='quote2'>\\1</span>";
+    $quotereplace[9] = "<span class='quote3'>\\1</span>";
 
-        $updatebody = preg_replace($quote, $quotereplace, $updatebody);
+    $updatebody = preg_replace($quote, $quotereplace, $updatebody);
 
-        // Make URL's into Hyperlinks
-        $search = array("/(?<!quot;|[=\"]|:[\\n]\/{2})\b((\w+:\/{2}|www\.).+?)"."(?=\W*([<>\s]|$))/i");
-        $replace = array("<a href=\"\\1\">\\1</a>");
-        $updatebody = preg_replace("/href=\"www/i", "href=\"http://www", preg_replace ($search, $replace, $updatebody));
-        $updatebody = bbcode($updatebody);
-        $updatebody = preg_replace("!([\n\t ]+)(http[s]?:/{2}[\w\.]{2,}[/\w\-\.\?\&\=\#\$\%|;|\[|\]~:]*)!e", "'\\1<a href=\"\\2\" title=\"\\2\">'.(strlen('\\2')>=70 ? substr('\\2',0,70).'...':'\\2').'</a>'", $updatebody);
+    // Make URL's into Hyperlinks
+    $search = array("/(?<!quot;|[=\"]|:[\\n]\/{2})\b((\w+:\/{2}|www\.).+?)"."(?=\W*([<>\s]|$))/i");
+    $replace = array("<a href=\"\\1\">\\1</a>");
+    $updatebody = preg_replace("/href=\"www/i", "href=\"http://www", preg_replace ($search, $replace, $updatebody));
+    $updatebody = bbcode($updatebody);
+    $updatebody = preg_replace("!([\n\t ]+)(http[s]?:/{2}[\w\.]{2,}[/\w\-\.\?\&\=\#\$\%|;|\[|\]~:]*)!e", "'\\1<a href=\"\\2\" title=\"\\2\">'.(strlen('\\2')>=70 ? substr('\\2',0,70).'...':'\\2').'</a>'", $updatebody);
 
-        // Make KB article references into a hyperlink
-        $updatebody = preg_replace("/\b{$CONFIG['kb_id_prefix']}([0-9]{3,4})\b/", "<a href=\"kb_view_article.php?id=$1\" title=\"View KB Article $1\">$0</a>", $updatebody);
+    // Make KB article references into a hyperlink
+    $updatebody = preg_replace("/\b{$CONFIG['kb_id_prefix']}([0-9]{3,4})\b/", "<a href=\"kb_view_article.php?id=$1\" title=\"View KB Article $1\">$0</a>", $updatebody);
 
-        $updateheadertext = $updatetypes[$update->type]['text'];
-        if ($currentowner != $updateuser)
-        {
-            echo "<a href='{$_SERVER['PHP_SELF']}?id={$incidentid}&amp;";
-            echo "javascript=enabled&amp;offset={$next}&amp;direction=next' ";
-            echo "class='info'>";
-            echo icon('navdown', 16, $strNextUpdate)."</a>";
-        }
+    if ($currentowner != $updateuser)
+    {
+        echo "<a href='{$_SERVER['PHP_SELF']}?id={$incidentid}&amp;";
+        echo "javascript=enabled&amp;offset={$next}&amp;direction=next' ";
+        echo "class='info'>";
+        echo icon('navdown', 16, $strNextUpdate)."</a>";
+    }
     else
     {
         echo "<a href='#update".($count+1)."' class='info'>";
@@ -379,11 +379,11 @@ while ($update = mysql_fetch_object($result))
 
     if ($update->customervisibility == 'show')
     {
-    	$newmode='hide';
+        $newmode='hide';
     }
     else
     {
-    	$newmode='show';
+        $newmode='show';
     }
 
     echo "<a href='incident_showhide_update.php?mode={$newmode}&amp;";
@@ -393,36 +393,36 @@ while ($update = mysql_fetch_object($result))
     {
         if (!empty($update->sla) AND $update->type=='slamet')
         {
-        	echo icon($slatypes[$update->sla]['icon'], 16, $update->type);
+            echo icon($slatypes[$update->sla]['icon'], 16, $update->type);
         }
         echo icon($updatetypes[$update->type]['icon'], 16, $update->type);
-        
+
         if ($update->customervisibility == 'show')
-	    {
-	    	echo "<span>{$strHideFromCustomer}</span>";
-	    }
-	    else
-	    {
-	    	echo "<span>{$strMakeVisibleToCustomer}</span>";
-	    }
-        
+        {
+            echo "<span>{$strHideFromCustomer}</span>";
+        }
+        else
+        {
+            echo "<span>{$strMakeVisibleToCustomer}</span>";
+        }
+
         echo "</a> {$updateheadertext}";
     }
     else
     {
         echo icon($updatetypes['research']['icon'], 16, $strResearch);
         if ($update->customervisibility == 'show')
-	    {
-	    	echo "<span>{$strHideFromCustomer}</span>";
-	    }
-	    else
-	    {
-	    	echo "<span>{$strMakeVisibleToCustomer}</span>";
-	    }        
-	    
-	    if ($update->sla != '')
         {
-        	echo icon($slatypes[$update->sla]['icon'], 16, $update->type);
+            echo "<span>{$strHideFromCustomer}</span>";
+        }
+        else
+        {
+            echo "<span>{$strMakeVisibleToCustomer}</span>";
+        }
+
+        if ($update->sla != '')
+        {
+            echo icon($slatypes[$update->sla]['icon'], 16, $update->type);
         }
         echo sprintf($strUpdatedXbyX, "(".$update->type.")", $updateuser);
     }
@@ -432,38 +432,38 @@ while ($update = mysql_fetch_object($result))
     {
         if ($update->customervisibility=='show')
         {
-        	echo "<div class='detailentry'>\n";
+            echo "<div class='detailentry'>\n";
         }
         else
         {
-        	echo "<div class='detailentryhidden'>\n";
+            echo "<div class='detailentryhidden'>\n";
         }
-        
+
         if ($updatebodylen > 5)
         {
-        	echo nl2br($updatebody);
+            echo nl2br($updatebody);
         }
         else
         {
-        	echo $updatebody;
+            echo $updatebody;
         }
 
         if (!empty($update->nextaction) OR $update->duration != 0)
         {
-    		echo "<div class='detailhead'>";
+            echo "<div class='detailhead'>";
 
             if ($update->duration != 0)
             {
-                $inminutes = ceil($update->duration/60); // Always round up 
+                $inminutes = ceil($update->duration/60); // Always round up
                 echo  "{$strDuration}: {$inminutes} {$strMinutes}<br />";
             }
-            
-    		if (!empty($update->nextaction))
-    		{
-            	echo "{$strNextAction}: {$update->nextaction}";
+
+            if (!empty($update->nextaction))
+            {
+                echo "{$strNextAction}: {$update->nextaction}";
             }
-    
-    		echo "</div>";
+
+            echo "</div>";
         }
 
     }
@@ -471,13 +471,9 @@ while ($update = mysql_fetch_object($result))
     $count++;
 }
 
-
-
-
 if ($_SESSION['num_update_view'] > 0)
 {
-	echo log_nav_bar();
+    echo log_nav_bar();
 }
 
 ?>
-
