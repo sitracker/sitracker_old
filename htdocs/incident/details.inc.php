@@ -17,7 +17,7 @@ if (realpath(__FILE__) == realpath($_SERVER['SCRIPT_FILENAME']))
 
 echo "<div id='detailsummary'>";
 
-// Two column table
+// Two column table FIXME can be divs
 echo "<table>";
 echo "<tr><td>";
 // First column: Contact Details
@@ -29,7 +29,7 @@ if (!empty($site_notes)) $site .= "<span>{$site_notes}</span>";
 $site .= "</a> ";
 $site .= list_tag_icons($incident->siteid, TAG_SITE); // site tag icons
 $site .= "<br />\n";
-echo sprintf($strContactofSite, $contact, $site);
+echo sprintf($strContactofSite, $contact, $site)." ";
 echo "<a href=\"mailto:{$incident->email}\">{$incident->email}</a><br />\n";
 if ($incident->ccemail != '') echo "CC: <a href=\"mailto:{$incident->ccemail}\">{$incident->ccemail}</a><br />\n";
 if ($incident->phone!='' OR $incident->phone!='')
