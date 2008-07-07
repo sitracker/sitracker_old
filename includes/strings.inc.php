@@ -26,7 +26,7 @@ $hmenu[1031] = array (10=> array ( 'perm'=> 0, 'name'=> "Option1", 'url'=>""),
 //
 // Main Menu
 //
-if (!is_array($hmenu[0])) $hmenu[0] = array();
+$hmenu[0] = array();
 $hmenu[0] = array_merge(array (10=> array ( 'perm'=> 0, 'name'=> $CONFIG['application_shortname'], 'url'=>"{$CONFIG['application_webpath']}main.php", 'submenu'=>"10"),
                    20=> array ( 'perm'=> 11, 'name'=> $strCustomers, 'url'=>"{$CONFIG['application_webpath']}browse_sites.php", 'submenu'=>"20"),
                    30=> array ( 'perm'=> 6, 'name'=> $strSupport, 'url'=>"{$CONFIG['application_webpath']}incidents.php?user=current&amp;queue=1&amp;type=support", 'submenu'=>"30"),
@@ -191,7 +191,7 @@ $updatetypes['closing'] = array('icon' => 'close', 'text' => sprintf($strMarkedf
 $updatetypes['editing'] = array('icon' => 'edit', 'text' => sprintf($strEditedBy,'updateuser'));
 $updatetypes['email'] = array('icon' => 'emailout', 'text' => sprintf($strEmailsentby,'updateuser'));
 $updatetypes['emailin'] = array('icon' => 'emailin', 'text' => sprintf($strEmailreceivedby,'updateuser'));
-$updatetypes['emailout'] = array('icon' => 'emailout', 'text' => sprintf($Emailsentby,'updateuser'));
+$updatetypes['emailout'] = array('icon' => 'emailout', 'text' => sprintf($strEmailsentby,'updateuser'));
 $updatetypes['externalinfo'] = array('icon' => 'externalinfo', 'text' => sprintf($strExternalInfoAddedBy,'updateuser'));
 $updatetypes['probdef'] = array('icon' => 'probdef', 'text' => sprintf($strProblemDefinitionby,'updateuser'));
 $updatetypes['research'] = array('icon' => 'research', 'text' => sprintf($strResearchedby,'updateuser'));
@@ -212,7 +212,7 @@ $updatetypes['auto_chased_phone'] = array('icon' => 'chased', 'text' => $strChas
 $updatetypes['auto_chased_manager'] = array('icon' => 'chased', 'text' => $strChased);
 $updatetypes['auto_chased_managers_manager'] = array('icon' => 'chased', 'text' => $strChased);
 $updatetypes['customerclosurerequest'] = array('icon' => 'close', 'text' => $strCustomerRequestedClosure);
-$updatetypes['fromtask'] = array('icon' => 'timer', text => sprintf($strUpdatedFromActivity, 'updateuser'));
+$updatetypes['fromtask'] = array('icon' => 'timer', 'text' => sprintf($strUpdatedFromActivity, 'updateuser'));
 $slatypes['opened'] = array('icon' => 'open', 'text' => $strOpened);
 $slatypes['initialresponse'] = array('icon' => 'initialresponse', 'text' => $strInitialResponse);
 $slatypes['probdef'] = array('icon' => 'probdef', 'text' => $strProblemDefinition);
