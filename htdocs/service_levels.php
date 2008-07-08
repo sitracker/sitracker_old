@@ -45,12 +45,14 @@ if (mysql_num_rows($tresult) >= 1)
         while ($sla = mysql_fetch_object($result))
         {
             echo "<tr>";
-            echo "<td align='right'>".priority_icon($sla->priority)."</td><td>".priority_name($sla->priority)."</td>";
+            echo "<td align='right'>".priority_icon($sla->priority)."</td>";
+            echo "<td>".priority_name($sla->priority)."</td>";
             echo "<td>".format_workday_minutes($sla->initial_response_mins)."</td>";
             echo "<td>".format_workday_minutes($sla->prob_determ_mins)."</td>";
             echo "<td>".format_workday_minutes($sla->action_plan_mins)."</td>";
-            echo "<td>".round($sla->resolution_days)." working days</td>"; // why is this a float?
-            echo "<td>{$sla->review_days} days</td>";
+            // 480 mins in a working day
+            echo "<td>".format_workday_minutes($sla->resolution_days*480)."</td>";
+            echo "<td>".sprintf($strXDays, $sla->review_days)."</td>";
             if ($sla->timed == 'yes')
             {
                 echo "<td>{$strYes}</td>";
