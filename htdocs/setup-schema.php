@@ -2347,6 +2347,18 @@ INSERT INTO `{$dbLinkTypes}` (`id`, `name`, `lrname`, `rlname`, `origtab`, `orig
 INSERT INTO `{$dbPermissions}` (`id` ,`name`) VALUES (79 , 'Edit service balances'), (80 , 'Edit service details');
 
 INSERT INTO `{$dbRolePermissions}` (`roleid` ,`permissionid` ,`granted`) VALUES ('1', '79', 'true'), ('1', '80', 'true');
+
+UPDATE `{$dbClosingStatus}` SET `name` = 'strSentInformation' WHERE `id` = 1;
+UPDATE `{$dbClosingStatus}` SET `name` =  'strSolvedProblem' WHERE `id` = 2;
+UPDATE `{$dbClosingStatus}` SET `name` =  'strReportedBug' WHERE `id` = 3;
+UPDATE `{$dbClosingStatus}` SET `name` =  'strActionTaken' WHERE `id` = 4;
+UPDATE `{$dbClosingStatus}` SET `name` =  'strDuplicate' WHERE `id` = 5;
+UPDATE `{$dbClosingStatus}` SET `name` =  'strNoLongerRelevant' WHERE `id` = 6;
+UPDATE `{$dbClosingStatus}` SET `name` =  'strUnsupported' WHERE `id` = 7;
+UPDATE `{$dbClosingStatus}` SET `name` =  'strSupportExpired' WHERE `id` = 8;
+UPDATE `{$dbClosingStatus}` SET `name` =  'strUnsolved' WHERE `id` = 9;
+UPDATE `{$dbClosingStatus}` SET `name` =  'strEscalated' WHERE `id` = 10;
+
 ";
 
 // Important: When making changes to the schema you must add SQL to make the alterations
