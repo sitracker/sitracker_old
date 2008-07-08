@@ -1391,6 +1391,7 @@ $strXIncidentsLoggedViaPortal = '%s Incidents Logged via the Portal';
 $strXIncidentsLeft = '%s Incidents Left';
 $strXDays = '%s Days';
 $strXHasAction = '%s Has Action';
+$strXHour = '%s Hour';
 $strXHours = '%s Hours';
 $strXMinutes = '%s Minutes';
 # e.g. '5 days old'
