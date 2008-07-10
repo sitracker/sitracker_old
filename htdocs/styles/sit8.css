@@ -111,7 +111,6 @@ div.window
     overflow: hidden;
 }
 
-#apptitle { height: 50px;}
 #menumenu { background-color: #000; color: #BBB; text-align: center; padding: 2px 0px 2px 0px; margin-bottom: 5px;}
 #menumenu a { text-decoration: none; color: #FFF; }
 #menumenu a:hover { text-decoration: underline; }
