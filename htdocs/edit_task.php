@@ -196,8 +196,8 @@ switch ($action)
             }
             else
             {
-            	trigger_error("Couldn't find any notes, dying" ,E_USER_ERROR);
-            	die();
+                html_redirect("view_task.php?id={$id}&amp;mode=incident&amp;incident={$incident}", FALSE, $strActivityContainsNoNotes);
+                exit();
             }
             //delete all the notes
             $sql = "DELETE FROM `{$dbNotes}` WHERE refid='{$id}'";

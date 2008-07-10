@@ -42,6 +42,7 @@ $strActivityAdded = 'Activity Added';
 $strActivityBilling = 'Activity Billing';
 $strActivityBillingInfo = 'Only closed activities are shown for billing.';
 $strActivityCompleted = 'Activity completed: %s, total duration was: %s';
+$strActivityContainsNoNotes = 'Activity contains no notes';
 $strActivityList = 'Activity List';
 $strActivityMarkedCompleteSuccessfully = 'Activity Marked Complete Successfully';
 $strActivityStarted = 'Activity started: %s';
