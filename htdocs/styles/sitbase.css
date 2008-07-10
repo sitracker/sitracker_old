@@ -552,3 +552,20 @@ div.portalfileicon
 .taglevel2 { color: #3A64B8; }
 .taglevel3 { color: #27437B; }
 .taglevel4 { color: #1F3663; }
+
+#contentpanel
+{
+    width: 80%;
+}
+
+#menupanel
+{
+    display: none;
+    width: 18%;
+    border: 1px solid #ccc;
+    float: right;
+    min-height: 300px;
+    margin-bottom: 2em;
+    padding: 2px;
+    z-index: 15;
+}

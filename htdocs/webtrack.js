@@ -12,6 +12,7 @@
 var popwin;
 dashletrefresh = new Array();
 var isIE = /*@cc_on!@*/false;
+var mainframe = '50%';
 
 function incident_details_window(incidentid,win,rtn)
 {
@@ -620,4 +621,20 @@ function dismissNotice(noticeid, userid)
             },
             onFailure: function(){ alert('Notice Error\nSorry, we could not dismiss the notice.') }
     });
+}
+
+
+function toggleMenuPanel()
+{
+    if ($('menupanel').style.display == 'block')
+    {
+        $('mainframe').style.width = mainframe;
+        $('menupanel').style.display = 'none';
+    }
+    else
+    {
+        mainframe = $('mainframe').style.width;
+        $('mainframe').style.width = '80%';
+        $('menupanel').style.display = 'block';
+    }
 }
