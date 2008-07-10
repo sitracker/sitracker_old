@@ -137,6 +137,7 @@ echo "<ul id='menuList'>\n";
 echo "<li><a href='index.php'>{$strIncidents}</a></li>";
 if (sizeof($_SESSION['entitlement']) == 1)
 {
+    $contractid = $_SESSION['entitlement'][0]->id;
     echo "<li><a href='add.php?contractid={$contractid}'>{$strAddIncident}</a></li>";
 }
 else
