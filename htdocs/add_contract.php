@@ -167,7 +167,10 @@ elseif ($action == "add")
     $licence_quantity = cleanvar($_REQUEST['licence_quantity']);
     $licence_type = cleanvar($_REQUEST['licence_type']);
     $admincontact = cleanvar($_REQUEST['admincontact']);
-    $expirydate = strtotime($_REQUEST['expiry']);
+    if (isset($_REQUEST['expiry']))
+    {
+        $expirydate = strtotime($_REQUEST['expiry']);
+    }
     $notes = cleanvar($_REQUEST['notes']);
     $servicelevelid = cleanvar($_REQUEST['servicelevelid']);
     $incidentpoolid = cleanvar($_REQUEST['incidentpoolid']);
