@@ -192,7 +192,6 @@ echo log_nav_bar();
 $count = 0;
 while ($update = mysql_fetch_object($result))
 {
-
     if (empty($firstid))
     {
         $firstid = $update->id;
@@ -248,7 +247,7 @@ while ($update = mysql_fetch_object($result))
     $updateuser = user_realname($update->userid,TRUE);
     $updatetime = readable_date($update->timestamp);
     $currentowner = user_realname($update->currentowner,TRUE);
-    $currentstatus = incident_status($update->currentstatus);
+    $currentstatus = incident_status($incidentid);
 
     $updateheadertext = $updatetypes[$update->type]['text'];
     if ($currentowner != $updateuser)
@@ -278,24 +277,24 @@ while ($update = mysql_fetch_object($result))
         $updateheadertext = str_replace('updatesla', $slatypes[$update->sla]['text'], $updateheadertext);
     }
 
-    echo "<a name='update{$count}'></a>";
+    $updatehtml .= "<a name='update{$count}'></a>";
 
     // Print a header row for the update
     if ($updatebody=='' AND $update->customervisibility=='show')
     {
-        echo "<div class='detailinfo'>";
+        $updatehtml .= "<div class='detailinfo'>";
     }
     elseif ($updatebody=='' AND $update->customervisibility!='show')
     {
-        echo "<div class='detailinfohidden'>";
+        $updatehtml .= "<div class='detailinfohidden'>";
     }
     elseif ($updatebody!='' AND $update->customervisibility=='show')
     {
-        echo "<div class='detailhead'>";
+        $updatehtml .= "<div class='detailhead'>";
     }
     else
     {
-        echo "<div class='detailheadhidden'>";
+        $updatehtml .= "<div class='detailheadhidden'>";
     }
 
     if ($offset > $_SESSION['num_update_view'])
@@ -308,22 +307,22 @@ while ($update = mysql_fetch_object($result))
     }
     $next = $offset + $_SESSION['num_update_view'];
 
-    echo "<div class='detaildate'>";
+    $updatehtml .= "<div class='detaildate'>";
     if ($count==0)
     {
         // Put the header part (up to the <hr /> in a seperate DIV)
         if (strpos($updatebody, '<hr>') !== FALSE)
         {
-            echo "<a href='{$_SERVER['PHP_SELF']}?id={$incidentid}&amp;";
-            echo "javascript=enabled&amp;offset={$previous}&amp;direction=";
-            echo "previous' class='info'>";
-            echo icon('navup', 16, $strPreviousUpdate)."</a>";
+            $updatehtml .= "<a href='{$_SERVER['PHP_SELF']}?id={$incidentid}&amp;";
+            $updatehtml .= "javascript=enabled&amp;offset={$previous}&amp;direction=";
+            $updatehtml .= "previous' class='info'>";
+            $updatehtml .= icon('navup', 16, $strPreviousUpdate)."</a>";
         }
     }
     else
     {
-        echo "<a href='#update".($count-1)."' class='info'>";
-        echo icon('navup', 16, $strPreviousUpdate)."</a>";
+        $updatehtml .= "<a href='#update".($count-1)."' class='info'>";
+        $updatehtml .= icon('navup', 16, $strPreviousUpdate)."</a>";
     }
     // Style quoted text
     $quote[0] = "/^(&gt;([\s][\d\w]).*)[\n\r]$/m";
@@ -362,20 +361,20 @@ while ($update = mysql_fetch_object($result))
 
     if ($currentowner != $updateuser)
     {
-        echo "<a href='{$_SERVER['PHP_SELF']}?id={$incidentid}&amp;";
-        echo "javascript=enabled&amp;offset={$next}&amp;direction=next' ";
-        echo "class='info'>";
-        echo icon('navdown', 16, $strNextUpdate)."</a>";
+        $updatehtml .= "<a href='{$_SERVER['PHP_SELF']}?id={$incidentid}&amp;";
+        $updatehtml .= "javascript=enabled&amp;offset={$next}&amp;direction=next' ";
+        $updatehtml .= "class='info'>";
+        $updatehtml .= icon('navdown', 16, $strNextUpdate)."</a>";
     }
     else
     {
-        echo "<a href='#update".($count+1)."' class='info'>";
-        echo icon('navdown', 16, $strNextUpdate)."</a>";
+        $updatehtml .= "<a href='#update".($count+1)."' class='info'>";
+        $updatehtml .= icon('navdown', 16, $strNextUpdate)."</a>";
     }
-    echo "</div>";
+    $updatehtml .= "</div>";
 
     // Specific header
-    echo "<div class='detaildate'>{$updatetime}</div>";
+    $updatehtml .= "<div class='detaildate'>{$updatetime}</div>";
 
     if ($update->customervisibility == 'show')
     {
@@ -386,88 +385,87 @@ while ($update = mysql_fetch_object($result))
         $newmode='show';
     }
 
-    echo "<a href='incident_showhide_update.php?mode={$newmode}&amp;";
-    echo "incidentid={$incidentid}&amp;updateid={$update->id}&amp;view";
-    echo "={$view}&amp;expand={$expand}' name='{$update->id}' class='info'>";
+    $updatehtml .= "<a href='incident_showhide_update.php?mode={$newmode}&amp;";
+    $updatehtml .= "incidentid={$incidentid}&amp;updateid={$update->id}&amp;view";
+    $updatehtml .= "={$view}&amp;expand={$expand}' name='{$update->id}' class='info'>";
     if (array_key_exists($update->type, $updatetypes))
     {
         if (!empty($update->sla) AND $update->type=='slamet')
         {
-            echo icon($slatypes[$update->sla]['icon'], 16, $update->type);
+            $updatehtml .= icon($slatypes[$update->sla]['icon'], 16, $update->type);
         }
-        echo icon($updatetypes[$update->type]['icon'], 16, $update->type);
+        $updatehtml .= icon($updatetypes[$update->type]['icon'], 16, $update->type);
 
         if ($update->customervisibility == 'show')
         {
-            echo "<span>{$strHideInPortal}</span>";
+            $updatehtml .= "<span>{$strHideInPortal}</span>";
         }
         else
         {
-            echo "<span>{$strMakeVisibleToCustomer}</span>";
+            $updatehtml .= "<span>{$strMakeVisibleToCustomer}</span>";
         }
 
-        echo "</a> {$updateheadertext}";
+        $updatehtml .= "</a> {$updateheadertext}";
     }
     else
     {
-        echo icon($updatetypes['research']['icon'], 16, $strResearch);
+        $updatehtml .= icon($updatetypes['research']['icon'], 16, $strResearch);
         if ($update->customervisibility == 'show')
         {
-            echo "<span>{$strHideInPortal}</span>";
+            $updatehtml .= "<span>{$strHideInPortal}</span>";
         }
         else
         {
-            echo "<span>{$strMakeVisibleInPortal}</span>";
+            $updatehtml .= "<span>{$strMakeVisibleInPortal}</span>";
         }
 
         if ($update->sla != '')
         {
-            echo icon($slatypes[$update->sla]['icon'], 16, $update->type);
+            $updatehtml .= icon($slatypes[$update->sla]['icon'], 16, $update->type);
         }
-        echo sprintf($strUpdatedXbyX, "(".$update->type.")", $updateuser);
+        $updatehtml .= sprintf($strUpdatedXbyX, "(".$update->type.")", $updateuser);
     }
 
-    echo "</div>\n";
+    $updatehtml .= "</div>\n";
     if (!empty($updatebody))
     {
         if ($update->customervisibility == 'show')
         {
-            echo "<div class='detailentry'>\n";
+            $updatehtml .= "<div class='detailentry'>\n";
         }
         else
         {
-            echo "<div class='detailentryhidden'>\n";
+            $updatehtml .= "<div class='detailentryhidden'>\n";
         }
 
         if ($updatebodylen > 5)
         {
-            echo nl2br($updatebody);
+            $updatehtml .= nl2br($updatebody);
         }
         else
         {
-            echo $updatebody;
+            $updatehtml .= $updatebody;
         }
 
         if (!empty($update->nextaction) OR $update->duration != 0)
         {
-            echo "<div class='detailhead'>";
+            $updatehtml .= "<div class='detailhead'>";
 
             if ($update->duration != 0)
             {
                 $inminutes = ceil($update->duration/60); // Always round up
-                echo  "{$strDuration}: {$inminutes} {$strMinutes}<br />";
+                $updatehtml .=  "{$strDuration}: {$inminutes} {$strMinutes}<br />";
             }
 
             if (!empty($update->nextaction))
             {
-                echo "{$strNextAction}: {$update->nextaction}";
+                $updatehtml .= "{$strNextAction}: {$update->nextaction}";
             }
 
-            echo "</div>";
+            $updatehtml .= "</div>";
         }
-
     }
-    echo "</div>";
+    $updatehtml .= "</div>";
     $count++;
 }
 
