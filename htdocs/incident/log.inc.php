@@ -430,7 +430,7 @@ while ($update = mysql_fetch_object($result))
     echo "</div>\n";
     if (!empty($updatebody))
     {
-        if ($update->customervisibility=='show')
+        if ($update->customervisibility == 'show')
         {
             echo "<div class='detailentry'>\n";
         }

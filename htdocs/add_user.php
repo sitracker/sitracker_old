@@ -59,7 +59,8 @@ if (empty($submit))
     }
     echo "/></td></tr>\n";
 
-    echo "<tr id='password'><th>{$strPassword} <sup class='red'>*</sup></th><td><input maxlength='50' name='password' size='30'";
+    echo "<tr id='password'><th>{$strPassword} <sup class='red'>*</sup></th>";
+    echo "<td><input maxlength='50' name='password' size='30' type='password' ";
     if ($_SESSION['formdata']['add_user']['password'] != '')
     {
         echo "value='{$_SESSION['formdata']['add_user']['password']}'";
