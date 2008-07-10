@@ -28,8 +28,8 @@ $groupid = cleanvar($_REQUEST['gid']);
 $onlineonly = cleanvar($_REQUEST['onlineonly']);
 
 // By default show users in home group
-if ($groupid=='all') $filtergroup = 'all';
-elseif ($groupid=='') $filtergroup = $_SESSION['groupid'];
+if ($groupid == 'all' OR ($groupid == '' AND $_SESSION['groupid'] == 0)) $filtergroup = 'all';
+elseif ($groupid == '') $filtergroup = $_SESSION['groupid'];
 else $filtergroup = $groupid;
 
 include ('htmlheader.inc.php');
@@ -44,7 +44,7 @@ if ($numgroups >= 1 AND $filtergroup == '0')
 {
     $sql .= "AND (groupid='0' OR groupid='' OR groupid IS NULL) ";
 }
-elseif ($numgroups < 1 OR $filtergroup=='all' OR $filtergroup=='allonline')
+elseif ($numgroups == '' OR $numgroups < 1 OR $filtergroup=='all' OR $filtergroup=='allonline')
 {
     $sql .= "AND 1=1 ";
 }
