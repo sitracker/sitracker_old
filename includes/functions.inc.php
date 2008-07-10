@@ -2891,7 +2891,7 @@ function format_workday_minutes($minutes)
     $remainder = ($minutes % $working_day_mins);
     $hours = floor($remainder / 60);
     $minutes = floor($remainder % 60);
-
+    
     if ($days == 1)
     {
         $time = sprintf($strXWorkingDay, $days);
@@ -9410,6 +9410,8 @@ function process_add_contact($mode = 'internal')
         }
         else
         {
+            clear_form_data('add_contact');
+            clear_form_errors('add_contact');
             $sql = "SELECT username, password FROM `{$dbContacts}` WHERE id=$newid";
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
@@ -9432,8 +9434,7 @@ function process_add_contact($mode = 'internal')
                 }
             }
         }
-        clear_form_data('add_contact');
-        clear_form_errors('add_contact');
+
     }
     else
     {
