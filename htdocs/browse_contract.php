@@ -114,6 +114,8 @@ $sql .= "FROM `{$dbMaintenance}` AS m, `{$dbSites}` AS s, `{$dbContacts}` AS c, 
 $sql .= "`{$dbProducts}` AS p, `{$dbLicenceTypes}` AS l, `{$dbResellers}` AS r ";
 $sql .= "WHERE ((reseller = r.id AND reseller IS NOT NULL) OR reseller IS NULL) ";
 $sql .= "AND (licence_type IS NULL OR (licence_type = l.id AND licence_type IS NOT NULL)) ";
+$sql .= "AND m.site = s.id ";
+
 if ($activeonly=='yes')
 {
     $sql .= "AND term!='yes' AND (expirydate > $now OR expirydate = '-1') ";
