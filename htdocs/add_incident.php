@@ -24,8 +24,16 @@ function to_row($contactrow)
 {
     global $now, $updateid, $CONFIG;
     $str = '';
-    if ($contactrow['expirydate'] < $now || $contactrow['term'] == 'yes') $class = 'expired';
-    else $class = "shade2";
+    if ($contactrow['expirydate'] < $now OR
+        $contactrow['term'] == 'yes' AND
+        $contactrow['expirydate'] != -1)
+    {
+        $class = 'expired';
+    }
+    else
+    {
+        $class = "shade2";
+    }
 
     $incidents_remaining = $contactrow['incident_quantity'] - $contactrow['incidents_used'];
 
