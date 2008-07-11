@@ -47,7 +47,7 @@ else $adminuser = FALSE;
 // 5 - Compassionate/Free
 
 // check to see if there is a holiday on this day already, if there is retrieve it
-list($dtype, $dlength, $dapproved, $dapprovedby)=user_holiday($user, 0, $year, $month, $day, FALSE);
+list($dtype, $dlength, $dapproved, $dapprovedby) = user_holiday($user, 0, $year, $month, $day, FALSE);
 
 // allow approver (or admin) to unbook holidays already approved
 if ($length=='0' AND ($approver==TRUE AND ($dapprovedby=$sit[2] OR $adminuser==TRUE)))
@@ -86,7 +86,6 @@ else
                 $sql = "UPDATE `{$dbHolidays}` SET length='$length' ";
                 $sql .= "WHERE userid='$user' AND startdate='$startdate' AND type='$type' AND length='$dlength'";
                 $result = mysql_query($sql);
-//                 echo $sql;
                 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
                 $dlength=$length;
             }
@@ -103,9 +102,6 @@ else
     }
 }
 
-// echo "type: $dtype, len: $dlength, app: $dapproved, by: $dapprovedby <br />";
-
-
 if ($return=='list')
 {
     header("Location: calendar.php?display=list&type=$type&user=$user");
@@ -115,7 +111,6 @@ else
 {
     $url = $_SERVER['HTTP_REFERER'];
     header("Location: $url");
-    // holiday_calendar.php?selectedyear=$year&selectedmonth=$month&selectedday=$day&type=$type&length=$dlength&user=$user&selectedtype=$dtype&approved=$dapproved
     exit;
 }
 ?>
