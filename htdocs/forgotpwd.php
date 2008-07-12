@@ -45,7 +45,14 @@ switch ($_REQUEST['action'])
     {
         include ('htmlheader.inc.php');
         // First look to see if this is a SiT user
-        $sql = "SELECT id, username, password FROM `{$dbUsers}` WHERE email = '{$email}' LIMIT 1";
+        if (empty($email) AND !empty($userid))
+        {
+            $sql = "SELECT id, username, password FROM `{$dbUsers}` WHERE id = '{$userid}' LIMIT 1";
+        }
+        else
+        {
+            $sql = "SELECT id, username, password FROM `{$dbUsers}` WHERE email = '{$email}' LIMIT 1";
+        }
         $userresult = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
         $usercount = mysql_num_rows($userresult);
@@ -58,7 +65,15 @@ switch ($_REQUEST['action'])
             trigger('TRIGGER_USER_RESET_PASSWORD', array('userid' => $userdetails->id, 'passwordreseturl' => $reseturl));
             echo "<h3>{$strInformationSent}</h3>";
             echo "<p>{$strInformationSentRegardingSettingPassword}</p>";
-            echo "<p><a href='index.php'>{$strBackToLoginPage}</a></p>";
+            if ($_REQUEST['action'] == 'forgotpwd')
+            {
+                echo "<p><a href='index.php'>{$strBackToLoginPage}</a></p>";
+            }
+            else
+            {
+                echo "<p><a href='{$_SERVER['HTTP_REFERER']}'>{$strReturnToPreviousPage}</a></p>";
+            }
+
         }
         else
         {
