@@ -52,6 +52,8 @@ switch ($mode)
             {
                 $obj = mysql_fetch_object($result);
 
+                echo "<h2>{$strEditService}</h2>";
+
                 echo "<h5>".sprintf($strMandatoryMarked, "<sup class='red'>*</sup>")."</h5>";
                 echo "<form name='serviceform' action='{$_SERVER['PHP_SELF']}' method='post' onsubmit='return confirm_submit(\"{$strAreYouSureMakeTheseChanges}\");'>";
                 echo "<table align='center' class='vertical'>";
@@ -172,7 +174,6 @@ switch ($mode)
 
             $sql = "UPDATE `{$dbService}` SET startdate = '{$startdate}', enddate = '{$enddate}' {$updateBillingSQL}";
             $sql .= ", notes = '{$notes}' WHERE serviceid = {$serviceid}";
-            echo $sql;
 
             mysql_query($sql);
             if (mysql_error())
