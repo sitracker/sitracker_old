@@ -2359,6 +2359,12 @@ UPDATE `{$dbClosingStatus}` SET `name` =  'strSupportExpired' WHERE `id` = 8;
 UPDATE `{$dbClosingStatus}` SET `name` =  'strUnsolved' WHERE `id` = 9;
 UPDATE `{$dbClosingStatus}` SET `name` =  'strEscalated' WHERE `id` = 10;
 
+-- PH 2008-07-12 Needs to go in new yet
+ALTER TABLE `scheduler` ADD `type` ENUM( 'interval', 'date' ) NOT NULL DEFAULT 'interval' AFTER `end` ;
+ALTER TABLE `scheduler` ADD `date_type` ENUM( 'month', 'year' ) NOT NULL COMMENT 'For type date the type' AFTER `interval` ,
+ADD `date_offset` INT NOT NULL COMMENT 'off set into the period' AFTER `date_type` ,
+ADD `date_time` TIME NOT NULL COMMENT 'Time to perform action' AFTER `date_offset` ;
+
 ";
 
 // Important: When making changes to the schema you must add SQL to make the alterations

@@ -55,10 +55,24 @@ switch ($_REQUEST['mode'])
             echo " <input type='text' id='starttime' name='starttime' value='{$starttime}' size='5' /> ";
             echo "</td></tr>\n";
             echo "<tr><th><label for='enddate'>{$strEndDate}</label></th>";
-            if (mysql2date($saction->end) > 0) $enddate = date('Y-m-d',mysql2date($saction->end));
-            else $enddate = '';
-            if (mysql2date($saction->end) > 0) $endtime = date('H:i',mysql2date($saction->end));
-            else $endtime = '';
+            if (mysql2date($saction->end) > 0)
+            {
+                $enddate = date('Y-m-d',mysql2date($saction->end));
+            }
+            else
+            {
+                $enddate = '';
+            }
+            
+            if (mysql2date($saction->end) > 0)
+            {
+                $endtime = date('H:i',mysql2date($saction->end));
+            }
+            else
+            {
+                $endtime = '';
+            }
+            
             echo "<td><input type='text' id='enddate' name='enddate' value='{$enddate}' size='10' /> ";
             echo date_picker('scheduleform.enddate');
             echo " <input type='text' id='endtime' name='endtime' value='{$endtime}' size='5' /> ";
@@ -135,14 +149,28 @@ switch ($_REQUEST['mode'])
             while ($schedule = mysql_fetch_object($result))
             {
                 $lastruntime = mysql2date($schedule->lastran);
-                if ($schedule->success == 0) $shade = 'critical';
-                elseif ($schedule->status == 'disabled') $shade = 'expired';
-                elseif ($lastruntime > 0 AND $lastruntime + $schedule->interval < $now) $shade = 'notice';
+                if ($schedule->success == 0)
+                {
+                    $shade = 'critical';
+                }
+                elseif ($schedule->status == 'disabled')
+                {
+                    $shade = 'expired';
+                }
+                elseif ($lastruntime > 0 AND $lastruntime + $schedule->interval < $now)
+                {
+                    $shade = 'notice';
+                }
+                
                 echo "<tr class='{$shade}'>";
                 echo "<td><a class='info' href='{$_SERVER['PHP_SELF']}?mode=edit&amp;id={$schedule->id}'>{$schedule->action}";
                 echo "<span>";
                 echo "{$schedule->description}";
-                if (!empty($schedule->params)) echo "\n<br /><strong>{$schedule->paramslabel} = {$schedule->params}</strong>";
+                if (!empty($schedule->params))
+                {
+                    echo "\n<br /><strong>{$schedule->paramslabel} = {$schedule->params}</strong>";
+                }
+                
                 echo "</span></a></td>";
                 echo "<td>{$schedule->start}</td>";
                 echo "<td>".format_seconds($schedule->interval)."</td>";
@@ -152,17 +180,32 @@ switch ($_REQUEST['mode'])
                 echo "</td>";
                 echo "<td>";
                 $lastruntime = mysql2date($schedule->lastran);
-                if ($lastruntime > 0) echo ldate($CONFIG['dateformat_datetime'], $lastruntime);
+                if ($lastruntime > 0)
+                {
+                    echo ldate($CONFIG['dateformat_datetime'], $lastruntime);
+                    }
+                    
                 else echo $strNever;
                 echo "</td>";
                 echo "<td>";
                 if ($schedule->status == 'enabled')
                 {
-                    if ($lastruntime > 0) $nextruntime = $lastruntime + $schedule->interval;
-                    else $nextruntime = $now;;
+                    if ($lastruntime > 0)
+                    {
+                        $nextruntime = $lastruntime + $schedule->interval;
+                    }
+                    else
+                    {
+                        $nextruntime = $now;
+                    }
+                    
                     echo ldate($CONFIG['dateformat_datetime'],$nextruntime);
+                }                
+                else
+                {
+                    echo $strNever;
                 }
-                else echo $strNever;
+                
                 echo "</td>";
                 echo "</tr>";
                 if ($shade == 'shade1') $shade = 'shade2';

@@ -7573,7 +7573,7 @@ function mark_task_completed($taskid, $incident)
     if (!$incident)
     {
         // Insert note to say what happened
-        $bodytext="Task marked 100% complete by {$_SESSION['realname']}:\n\n".$bodytext;
+        $bodytext = "Task marked 100% complete by {$_SESSION['realname']}:\n\n".$bodytext;
         $sql = "INSERT INTO `{$dbNotes}` ";
         $sql .= "(userid, bodytext, link, refid) ";
         $sql .= "VALUES ('0', '{$bodytext}', '10', '{$taskid}')";
@@ -7591,7 +7591,7 @@ function mark_task_completed($taskid, $incident)
 
 /**
     * Finds out which scheduled tasks should be run right now
-    * @author Ivan Lucas
+    * @author Ivan Lucas, Paul Heaney
 **/
 function schedule_actions_due()
 {
@@ -7599,7 +7599,7 @@ function schedule_actions_due()
     global $dbScheduler;
 
     $actions = FALSE;
-    $sql = "SELECT * FROM `{$dbScheduler}` WHERE status = 'enabled' ";
+    $sql = "SELECT * FROM `{$dbScheduler}` WHERE status = 'enabled' AND type = 'interval' ";
     $sql .= "AND UNIX_TIMESTAMP(start) <= $now AND (UNIX_TIMESTAMP(end) >= $now OR UNIX_TIMESTAMP(end) = 0) ";
     $sql .= "AND IF(UNIX_TIMESTAMP(lastran) > 0, UNIX_TIMESTAMP(lastran) + `interval` < $now, UNIX_TIMESTAMP(NOW()))";
     $result = mysql_query($sql);
@@ -7611,6 +7611,24 @@ function schedule_actions_due()
             $actions[$action->action] = $actions->params;
         }
     }
+    
+    $sql = "SELECT * FROM `{$dbScheduler}` WHERE status = 'enabled' AND type = 'date' ";
+    $sql .= "AND UNIX_TIMESTAMP(start) <= $now AND (UNIX_TIMESTAMP(end) >= $now OR UNIX_TIMESTAMP(end) = 0) ";
+    $sql .= "AND ((date_type = 'month' AND (DAYOFMONTH(CURDATE()) > date_offset OR (DAYOFMONTH(CURDATE()) = date_offset AND CURTIME() >= date_time)) ";
+    $sql .= "AND CURDATE() != DATE_FORMAT(lastran, '%Y-%m') ) )";  // not run this month
+    //$sql .= "OR ";
+    //$sql .= "(date_type = 'year'))";
+
+    $result = mysql_query($sql);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+    if (mysql_num_rows($result) > 0)
+    {
+        while ($action = mysql_fetch_object($result))
+        {
+            $actions[$action->action] = $actions->params;
+        }
+    }
+    
     return $actions;
 }
 
@@ -8393,9 +8411,12 @@ function contract_details($id, $mode='internal')
     if ($mode == 'internal')
     {
         $html .= "<p align='center'>";
-        $html .= "<a href=\"edit_contract.php?action=edit&amp;maintid=$id\">{$GLOBALS[strEditContract]}</a></p>";
+        $html .= "<a href=\"edit_contract.php?action=edit&amp;maintid=$id\">{$GLOBALS[strEditContract]}</a> | ";
+        $html .= "<a href='billing/addservice.php?contractid={$id}'>{$GLOBALS['strAddService']}</a></p>";
     }
+    
     $html .= "<h3>{$GLOBALS['strContacts']}</h3>";
+    
     if (mysql_num_rows($maintresult) < 1)
     {
         throw_error("{$GLOBALS[strNoContractsFound]}: ",$id);
@@ -10357,10 +10378,25 @@ function contract_service_table($contractid)
             $html .= "<td><a href='transactions.php?serviceid={$service->serviceid}' class='info'>".ldate($CONFIG['dateformat_date'],$service->startdate);
 
             $span = '';
-            if (!empty($service->notes)) $span .= "<strong>{$GLOBALS['strNotes']}</strong>: {$service->notes}<br />";
-            if ($service->creditamount != 0) $span .= "<strong>{$GLOBALS['strAmount']}</strong>: {$CONFIG['currency_symbol']}".number_format($service->creditamount, 2)."<br />";
-            if ($service->unitrate != 0) $span .= "<strong>{$GLOBALS['strUnitRate']}</strong>: {$CONFIG['currency_symbol']}{$service->unitrate}<br />";
-            if ($service->lastbilled > 0) $span .= "<strong>{$strLastBilled}</strong>: ".ldate($CONFIG['dateformat_date'], $service->lastbilled);
+            if (!empty($service->notes))
+            {
+                $span .= "<strong>{$GLOBALS['strNotes']}</strong>: {$service->notes}<br />";
+            }
+            
+            if ($service->creditamount != 0)
+            {
+                $span .= "<strong>{$GLOBALS['strAmount']}</strong>: {$CONFIG['currency_symbol']}".number_format($service->creditamount, 2)."<br />";
+            }
+                
+            if ($service->unitrate != 0)
+            {
+                $span .= "<strong>{$GLOBALS['strUnitRate']}</strong>: {$CONFIG['currency_symbol']}{$service->unitrate}<br />";
+            }
+                
+            if ($service->lastbilled > 0)
+            {
+                $span .= "<strong>{$strLastBilled}</strong>: ".ldate($CONFIG['dateformat_date'], $service->lastbilled);
+            }
 
             if (!empty($span))
             {
@@ -10372,8 +10408,8 @@ function contract_service_table($contractid)
             $html .= ldate($CONFIG['dateformat_date'], $service->enddate)."</td>";
 
             $html .= "<td>{$CONFIG['currency_symbol']}".number_format($service->balance, 2)."</td>";
-            $html .= "<td><a href='billing/edit_service.php?mode=editservice&amp;serviceid={$service->serviceid}&amp;contractid={$contractid}'>Edit Service</a> | ";
-            $html .= "<a href='billing/edit_service.php?mode=showform&amp;sourceservice={$service->serviceid}&amp;contractid={$contractid}'>Edit Balance</a></td>";
+            $html .= "<td><a href='billing/edit_service.php?mode=editservice&amp;serviceid={$service->serviceid}&amp;contractid={$contractid}'>{$GLOBALS['strEditService']}</a> | ";
+            $html .= "<a href='billing/edit_service.php?mode=showform&amp;sourceservice={$service->serviceid}&amp;contractid={$contractid}'>{$GLOBALS['strEditBalance']}</a></td>";
             $html .= "</tr>\n";
         }
         $html .= "</table>\n";
