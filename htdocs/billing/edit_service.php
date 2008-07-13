@@ -55,7 +55,7 @@ switch ($mode)
                 echo "<h2>{$strEditService}</h2>";
 
                 echo "<h5>".sprintf($strMandatoryMarked, "<sup class='red'>*</sup>")."</h5>";
-                echo "<form name='serviceform' action='{$_SERVER['PHP_SELF']}' method='post' onsubmit='return confirm_submit(\"{$strAreYouSureMakeTheseChanges}\");'>";
+                echo "<form id='serviceform' name='serviceform' action='{$_SERVER['PHP_SELF']}' method='post' onsubmit='return confirm_submit(\"{$strAreYouSureMakeTheseChanges}\");'>";
                 echo "<table align='center' class='vertical'>";
 
                 echo "<tr><th>{$strStartDate}</th>";
@@ -85,24 +85,36 @@ switch ($mode)
                     echo "<tr><th>{$strBilling}</th>";
                     echo "<td>";
                     echo "<label>";
-                    echo "<input type='checkbox' id='billperunit' name='billperunit' value='yes' onchange=\"addservice_showbilling();\" /> ";
-                    echo "{$strPerUnit}</label>";
+                    echo "<input type='radio' name='billtype' value='billperunit' onchange=\"addservice_showbilling();\" ";
+                    if (!empty($obj->unitrate) AND $obj->unitrate > 0)
+                    {
+                        echo "checked ";
+                        $unitstyle = "";
+                        $incidentstyle = "style='display:none'";
+                    }
+                    echo "/> {$strPerUnit}</label>";
                     echo "<label>";
-                    echo "<input type='checkbox' id='billperincident' name='billperincident' value='yes' onchange=\"addservice_showbilling();\" /> ";
-                    echo "{$strPerIncident}</label>";
+                    echo "<input type='radio' name='billtype' value='billperincident' onchange=\"addservice_showbilling();\" ";
+                    if (!empty($obj->incidentrate) AND $obj->incidentrate > 0)
+                    {
+                        echo "checked ";
+                        $unitstyle = "style='display:none'";
+                        $incidentstyle = "";
+                    }
+                    echo "/> {$strPerIncident}</label>";
                     echo "</td></tr>\n";
 
-                    echo "<tbody id='billingsection' style='display:none'>"; //FIXME not XHTML
+                    echo "<tbody id='billingsection'>"; //FIXME not XHTML
 
                     echo "<tr><th>{$strCreditAmount}</th>";
                     echo "<td>{$CONFIG['currency_symbol']} <input type='text' name='amount' size='5' value='{$obj->creditamount}' />";
                     echo "</td></tr>";
 
-                    echo "<tr id='unitratesection' style='display:none'><th>{$strUnitRate}</th>";
+                    echo "<tr id='unitratesection' {$unitstyle}><th>{$strUnitRate}</th>";
                     echo "<td>{$CONFIG['currency_symbol']} <input type='text' name='unitrate' size='5' value='{$obj->unitrate}' />";
                     echo "</td></tr>";
 
-                    echo "<tr id='incidentratesection' style='display:none'><th>{$strIncidentRate}</th>";
+                    echo "<tr id='incidentratesection' {$incidentstyle}><th>{$strIncidentRate}</th>";
                     echo "<td>{$CONFIG['currency_symbol']} <input type='text' name='incidentrate' size='5' value='{$obj->incidentrate}' />";
                     echo "</td></tr>";
 
@@ -161,6 +173,11 @@ switch ($mode)
                 if ($unitrate == '') $unitrate = 0;
                 $incidentrate =  cleanvar($_POST['incidentrate']);
                 if ($incidentrate == '') $incidentrate = 0;
+
+                $billtype = cleanvar($_REQUEST['billtype']);
+
+                if ($billtype == 'billperunit') $incidentrate = 0;
+                elseif ($billtype == 'billperincident') $unitrate = 0;
 
                 $updateBillingSQL = ", creditamount = '{$amount}', balance = '{$amount}', unitrate = '{$unitrate}', incidentrate = '{$incidentrate}' ";
             }

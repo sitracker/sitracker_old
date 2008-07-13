@@ -52,7 +52,7 @@ if (empty($submit) OR !empty($_SESSION['formerrors']['add_service']))
     echo "{$strNewService}</h2>";
 
     echo "<h5>".sprintf($strMandatoryMarked, "<sup class='red'>*</sup>")."</h5>";
-    echo "<form name='serviceform' action='{$_SERVER['PHP_SELF']}' method='post' onsubmit='return confirm_submit(\"{$strAreYouSureMakeTheseChanges}\");'>";
+    echo "<form id='serviceform' name='serviceform' action='{$_SERVER['PHP_SELF']}' method='post' onsubmit='return confirm_submit(\"{$strAreYouSureMakeTheseChanges}\");'>";
     echo "<table align='center' class='vertical'>";
 
     echo "<tr><th>{$strStartDate}</th>";
@@ -90,20 +90,20 @@ if (empty($submit) OR !empty($_SESSION['formerrors']['add_service']))
     echo "<tr><th>{$strBilling}</th>";
     echo "<td>";
     echo "<label>";
-    echo "<input type='checkbox' id='billperunit' name='billperunit' value='yes' onchange=\"addservice_showbilling();\" /> ";
+    echo "<input type='radio' name='billtype' value='billperunit' onchange=\"addservice_showbilling();\" checked /> ";
     echo "{$strPerUnit}</label>";
     echo "<label>";
-    echo "<input type='checkbox' id='billperincident' name='billperincident' value='yes' onchange=\"addservice_showbilling();\" /> ";
+    echo "<input type='radio' name='billtype' value='billperincident' onchange=\"addservice_showbilling();\" /> ";
     echo "{$strPerIncident}</label>";
     echo "</td></tr>\n";
 
-    echo "<tbody id='billingsection' style='display:none'>"; //FIXME not XHTML
+    echo "<tbody id='billingsection'>"; //FIXME not XHTML
 
     echo "<tr><th>{$strCreditAmount}</th>";
     echo "<td>{$CONFIG['currency_symbol']} <input type='text' name='amount' size='5' />";
     echo "</td></tr>";
 
-    echo "<tr id='unitratesection' style='display:none'><th>{$strUnitRate}</th>";
+    echo "<tr id='unitratesection'><th>{$strUnitRate}</th>";
     echo "<td>{$CONFIG['currency_symbol']} <input type='text' name='unitrate' size='5' />";
     echo "</td></tr>";
 
@@ -146,7 +146,11 @@ else
     $incidentrate =  cleanvar($_POST['incidentrate']);
     if ($incidentrate == '') $incidentrate = 0;
 
+    $billtype = cleanvar($_REQUEST['billtype']);
     $notes = cleanvar($_REQUEST['notes']);
+    
+    if ($billtype == 'billperunit') $incidentrate = 0;
+    elseif ($billtype == 'billperincident') $unitrate = 0;
 
     $sql = "INSERT INTO `{$dbService}` (contractid, startdate, enddate, creditamount, unitrate, incidentrate, notes) ";
     $sql .= "VALUES ('{$contractid}', '{$startdate}', '{$enddate}', '{$amount}', '{$unitrate}', '{$incidentrate}', '{$notes}')";

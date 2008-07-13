@@ -336,12 +336,17 @@ function addcontract_sltimed(servicelevel)
 
 function addservice_showbilling()
 {
-    if ($('billperunit').checked == true || $('billperincident').checked == true)
+    /*var a = $('billtype');
+    alert("A: "+a.value);*/
+    
+    var typeValue = Form.getInputs('serviceform','radio','billtype').find(function(radio) { return radio.checked; }).value;
+    // alert("B: "+typeValue);
+    if (typeValue == 'billperunit' || typeValue == 'billperincident')
     {
         $('billingsection').show();
-        if ($('billperunit').checked == true) $('unitratesection').show();
+        if (typeValue == 'billperunit') $('unitratesection').show();
         else $('unitratesection').hide();
-        if ($('billperincident').checked == true) $('incidentratesection').show();
+        if (typeValue == 'billperincident') $('incidentratesection').show();
         else $('incidentratesection').hide();
     }
     else
