@@ -106,6 +106,7 @@ $strAllSiteContactsSupported = 'All of this sites\' contacts are supported';
 $strAlphabetically = 'Alphabetically';
 $strAlternative = 'Alternative';
 $strAmount = 'Amount';
+$strAmountToEditBy = 'Amount to edit by +ve/-ve';
 # i.e. before noon
 $strAM = 'am';
 $strAnswer = 'Answer';

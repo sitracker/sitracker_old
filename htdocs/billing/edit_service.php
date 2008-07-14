@@ -288,7 +288,7 @@ switch ($mode)
 
             echo "</td></tr></tbody>\n";
 
-            echo "<tr><th>{$strAmount}</th><td><input type='textbox' name='amount' id='amount' /></td></tr>";
+            echo "<tr><th>{$strAmountToEditBy}</th><td><input type='textbox' name='amount' id='amount' /></td></tr>";
             echo "<tr><th>{$strReason}</th><td><input type='textbox' name='reason' id='reason' /></td></tr>";
 
             echo "</table>";
