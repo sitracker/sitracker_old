@@ -36,8 +36,9 @@ if ($application_revision == 'svn')
 $_SERVER['PHP_SELF'] = substr($_SERVER['PHP_SELF'], 0,
                               (strlen($_SERVER['PHP_SELF'])
                               - @strlen($_SERVER['PATH_INFO'])));
-
-$oldeh = set_error_handler("sit_error_handler");
+// Report all PHP errors
+//error_reporting(E_ALL);
+//$oldeh = set_error_handler("sit_error_handler");
 
 if (version_compare(PHP_VERSION, "5.1.0", ">="))
 {
@@ -125,7 +126,6 @@ if (!empty($_SESSION['lang'])
     include ("i18n/{$_SESSION['lang']}.inc.php");
 }
 ini_set('default_charset', $i18ncharset);
-
 
 // Time settings
 $now = time();
@@ -2229,7 +2229,7 @@ function userstatus_bardrop_down($name, $id)
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
-    $html = "<select name='$name' title='{$strSetYourStatus}' onchange=\"if ";
+    $html = "<select name='$name' title='{$GLOBALS['strSetYourStatus']}' onchange=\"if ";
     $html .= "(this.options[this.selectedIndex].value != 'null') { ";
     $html .= "window.open(this.options[this.selectedIndex].value,'_top') }\">";
     $html .= "\n";
@@ -9905,7 +9905,7 @@ function plugin_register($context, $action)
 function plugin_do($context, $optparams = FALSE)
 {
     global $PLUGINACTIONS;
-
+    $rtnvalue = '';
     if (is_array($PLUGINACTIONS[$context]))
     {
         foreach ($PLUGINACTIONS[$context] AS $action)
@@ -10525,6 +10525,85 @@ function get_billable_contract_id($contactid)
 }
 
 
+/**
+ * Outputs a table or csv file based on csv-based array
+ * @author Kieran Hogg
+ * @param array $data Array of data, see @note for format
+ * @param string $ouput Whether to show a table or create a csv file
+ * @return string $html The html to produce the output
+ * @note format: $array[] = 'Colheader1,Colheader2'; $array[] = 'data1,data2';
+ */
+function create_report($data, $output = 'table', $filename = 'report.csv')
+{
+    if ($output == 'table')
+    {
+        $html = "<table><tr>";
+        $headers = explode(',', $data[0]);
+        $rows = sizeof($headers);
+        foreach ($headers as $header)
+        {
+            $html .= colheader($header, $header);
+        }
+        $html .= "</tr>";
+        if (sizeof($data) == 1)
+        {
+            echo "<tr><td rowspan='{$rows}'>{$GLOBALS['strNoRecords']}</td></tr>";
+        }
+        else
+        {
+            // use 0 -> sizeof as we've already done one row
+            for ($i = 0; $i < sizeof($data); $i++)
+            {
+                $html .= "<tr>";
+                $values = explode(',', $data[$i]);
+                foreach ($values as $value)
+                {
+                    $html .= "<td>$value</td>";
+                }
+                $html .= "</tr>";
+            }
+        }
+    }
+    else
+    {
+        $html = header("Content-type: text/csv\r\n");
+        $html .= header("Content-disposition-type: attachment\r\n");
+        $html .= header("Content-disposition: filename={$filename}");
+        
+        foreach($data as $line)
+        {
+            $html .= $line;
+        }
+    }
+    
+    return $html;
+}
+
+
+/**
+ * Postpones a task's due date 24 hours
+ * @author Kieran Hogg
+ * @param int $taskid The ID of the task to postpone
+ */
+function postpone_task($taskid)
+{
+    global $dbTasks;
+    if (is_numeric($taskid))
+    {    
+        $sql = "SELECT duedate FROM `{$dbTasks}` AS t ";
+        $sql .= "WHERE id = '{$taskid}'";
+        $result = mysql_query($sql);
+        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
+        $task = mysql_fetch_object($result);
+        if ($task->duedate != "0000-00-00 00:00:00")
+        {
+            $newtime = date("Y-m-d H:i:s", (mysql2date($task->duedate) + 60 * 60 * 24));
+            $sql = "UPDATE `{$dbTasks}` SET duedate = '{$newtime}' WHERE id = '{$taskid}'";
+            mysql_query($sql);
+            if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
+        }
+    }
+}
 // ** Place no more function defs below this **
 
 

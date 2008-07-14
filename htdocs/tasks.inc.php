@@ -55,12 +55,18 @@ function checkAll(checkStatus)
 
 
 $selected = $_POST['selected'];
-
 if (!empty($selected))
 {
     foreach ($selected as $taskid)
     {
-        mark_task_completed($taskid, FALSE);
+        if ($POST['action'] == 'markcomplete')
+        {
+            mark_task_completed($taskid, FALSE);
+        }
+        elseif ($_POST['action'] == 'postpone')
+        {
+            postpone_task($taskid);
+        }
     }
 }
 
@@ -680,7 +686,16 @@ if (mysql_num_rows($result) >=1 )
     else if ($show != 'incidents')
     {
         echo "<tr>";
-        echo "<td colspan='7'><a href=\"javascript: submitform()\">{$strMarkComplete}</a></td>";
+        echo "<td colspan='7'>";
+        //echo "<label for='action'>{$strAction} ";
+        echo "<select name='action' onchange='submitform();'>";
+        echo "<option>{$strSelectAction}</option>";
+        echo "<option value='markcomplete'>{$strMarkComplete}</option>";
+        echo "<option value='postpone'>{$strPostpone}</option>";
+        echo "</select>";
+        //echo "<a href=\"javascript: submitform()\">{$strMarkComplete}</a>";
+        //echo " <a href=\"javascript: submitform()\">{$strPostpone}</a>";
+        echo "</td>";
         echo "</tr>";
     }
 
