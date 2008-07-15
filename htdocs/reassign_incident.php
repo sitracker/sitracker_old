@@ -154,21 +154,21 @@ switch ($action)
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
         $incident = mysql_fetch_object($result);
 
-        if ($incident->towner >0 AND $incident->owner == $sit[2]) $suggested = suggest_reassign_userid($id);
+        if ($incident->towner == $sit[2]) $suggested = suggest_reassign_userid($id);
         else $suggested = suggest_reassign_userid($id, $incident->owner);
 
         echo "<form name='assignform' action='{$_SERVER['PHP_SELF']}?id={$id}' method='post'>";
 
         $sql = "SELECT * FROM `{$dbUsers}` WHERE status!=0 ";
-        $sql .= "AND NOT id=$incident->owner ";
-        if ($suggested) $sql .= "AND NOT id='$suggested' ";
-        if (!$forcepermission) $sql .= "AND accepting='Yes' ";
+        $sql .= "AND NOT id = {$incident->owner} ";
+        if ($suggested > 0) $sql .= "AND NOT id = '$suggested' ";
+        if (!$forcepermission) $sql .= "AND accepting = 'Yes' ";
         $sql .= "ORDER BY realname";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
 
         echo "<p>{$strOwner}: <strong>";
-        if ($sit[2]==$incident->owner) echo "{$strYou} (".user_realname($incident->owner,TRUE).")";
+        if ($sit[2] == $incident->owner) echo "{$strYou} (".user_realname($incident->owner,TRUE).")";
         else echo user_realname($incident->owner,TRUE);
         echo "</strong>";
 
@@ -201,7 +201,7 @@ switch ($action)
         echo "<th align='center'>".priority_icon(1)."</th>";
         echo "<th></th></tr>\n";
 
-        if ($suggested)
+        if ($suggested > 0)
         {
             // Suggested user is shown as the first row
             $sugsql = "SELECT * FROM `{$dbUsers}` WHERE id='$suggested' LIMIT 1";
@@ -230,7 +230,7 @@ switch ($action)
 
             if ($countincidents >= 1)
             {
-                $countactive=user_activeincidents($suguser->id);
+                $countactive = user_activeincidents($suguser->id);
             }
             else
             {
@@ -252,7 +252,7 @@ switch ($action)
         if ($countusers >= 1)
         {
             // Other users are shown in a optional section
-            if ($suggested) echo "<tbody id='moreusers' style='display:none;'>";  // FIXME tbody
+            if ($suggested > 0) echo "<tbody id='moreusers' style='display:none;'>";  // FIXME tbody
             $shade='shade1';
 
             while ($users = mysql_fetch_object($result))
@@ -285,10 +285,10 @@ switch ($action)
                 if ($shade=='shade1') $shade='shade2';
                 else $shade='shade1';
             }
-            if ($suggested) echo "</tbody>";
-            echo "</table><br />";
-            if ($suggested) echo "<p id='morelink'><a href=\"#\" onclick=\"$('moreusers').toggle();$('morelink').toggle();\">{$countusers} {$strMore}</a></p>";
+            if ($suggested > 0) echo "</tbody>";
         }
+        echo "\n</table><br />\n";
+        if ($suggested > 0 AND $countusers >= 1) echo "<p id='morelink'><a href=\"#\" onclick=\"$('moreusers').toggle();$('morelink').toggle();\">{$countusers} {$strMore}</a></p>";
         echo "</div>\n"; // reassignlist
 
         echo "<table class='vertical'>";

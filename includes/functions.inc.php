@@ -5723,7 +5723,7 @@ function incident_backup_switchover($userid, $accepting)
     * @note Users are chosen randomly in a weighted lottery depending on their
     * avilability and queue status
 */
-function suggest_reassign_userid($incidentid, $exceptuserid=0)
+function suggest_reassign_userid($incidentid, $exceptuserid = 0)
 {
     global $now, $dbUsers, $dbIncidents, $dbUserSoftware;
     $sql = "SELECT product, softwareid, priority, contact, owner FROM `{$dbIncidents}` WHERE id={$incidentid} LIMIT 1";
@@ -5751,7 +5751,8 @@ function suggest_reassign_userid($incidentid, $exceptuserid=0)
         }
         else
         {
-            $sql = "SELECT id AS userid, status, lastseen FROM `{$dbUsers}` WHERE status > 0 AND users.accepting='Yes'";
+            $sql = "SELECT id AS userid, status, lastseen FROM `{$dbUsers}` WHERE status > 0 AND users.accepting='Yes' ";
+            if ($exceptuserid > 0) $sql .= "AND NOT id = '$exceptuserid' ";
         }
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
@@ -5760,6 +5761,7 @@ function suggest_reassign_userid($incidentid, $exceptuserid=0)
         if (mysql_num_rows($result) < 1)
         {
             $sql = "SELECT id AS userid, status, lastseen FROM `{$dbUsers}` WHERE status > 0 ";
+            if ($exceptuserid > 0) $sql .= "AND NOT id = '$exceptuserid' ";
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
         }
