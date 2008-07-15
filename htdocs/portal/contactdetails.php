@@ -109,7 +109,8 @@ if (cleanvar($_REQUEST['action']) == 'update')
         $updatesql .= "WHERE id='{$id}'";
         mysql_query($updatesql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-        html_redirect($_SERVER['PHP_SELF']."?id={$id}");
+        if ($_SESSION['contactid'] != $id) html_redirect($_SERVER['PHP_SELF']."?id={$id}");
+        else html_redirect($_SERVER['PHP_SELF']);
     }
     else
     {
