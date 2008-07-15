@@ -2891,7 +2891,7 @@ function format_workday_minutes($minutes)
     $remainder = ($minutes % $working_day_mins);
     $hours = floor($remainder / 60);
     $minutes = floor($remainder % 60);
-    
+
     if ($days == 1)
     {
         $time = sprintf($strXWorkingDay, $days);
@@ -7611,7 +7611,7 @@ function schedule_actions_due()
             $actions[$action->action] = $actions->params;
         }
     }
-    
+
     $sql = "SELECT * FROM `{$dbScheduler}` WHERE status = 'enabled' AND type = 'date' ";
     $sql .= "AND UNIX_TIMESTAMP(start) <= $now AND (UNIX_TIMESTAMP(end) >= $now OR UNIX_TIMESTAMP(end) = 0) ";
     $sql .= "AND ((date_type = 'month' AND (DAYOFMONTH(CURDATE()) > date_offset OR (DAYOFMONTH(CURDATE()) = date_offset AND CURTIME() >= date_time)) ";
@@ -7628,7 +7628,7 @@ function schedule_actions_due()
             $actions[$action->action] = $actions->params;
         }
     }
-    
+
     return $actions;
 }
 
@@ -8414,9 +8414,9 @@ function contract_details($id, $mode='internal')
         $html .= "<a href=\"edit_contract.php?action=edit&amp;maintid=$id\">{$GLOBALS[strEditContract]}</a> | ";
         $html .= "<a href='billing/addservice.php?contractid={$id}'>{$GLOBALS['strAddService']}</a></p>";
     }
-    
+
     $html .= "<h3>{$GLOBALS['strContacts']}</h3>";
-    
+
     if (mysql_num_rows($maintresult) < 1)
     {
         throw_error("{$GLOBALS[strNoContractsFound]}: ",$id);
@@ -10382,17 +10382,17 @@ function contract_service_table($contractid)
             {
                 $span .= "<strong>{$GLOBALS['strNotes']}</strong>: {$service->notes}<br />";
             }
-            
+
             if ($service->creditamount != 0)
             {
                 $span .= "<strong>{$GLOBALS['strAmount']}</strong>: {$CONFIG['currency_symbol']}".number_format($service->creditamount, 2)."<br />";
             }
-                
+
             if ($service->unitrate != 0)
             {
                 $span .= "<strong>{$GLOBALS['strUnitRate']}</strong>: {$CONFIG['currency_symbol']}{$service->unitrate}<br />";
             }
-                
+
             if ($service->lastbilled > 0)
             {
                 $span .= "<strong>{$strLastBilled}</strong>: ".ldate($CONFIG['dateformat_date'], $service->lastbilled);
@@ -10569,13 +10569,13 @@ function create_report($data, $output = 'table', $filename = 'report.csv')
         $html = header("Content-type: text/csv\r\n");
         $html .= header("Content-disposition-type: attachment\r\n");
         $html .= header("Content-disposition: filename={$filename}");
-        
+
         foreach($data as $line)
         {
             $html .= $line;
         }
     }
-    
+
     return $html;
 }
 
@@ -10589,7 +10589,7 @@ function postpone_task($taskid)
 {
     global $dbTasks;
     if (is_numeric($taskid))
-    {    
+    {
         $sql = "SELECT duedate FROM `{$dbTasks}` AS t ";
         $sql .= "WHERE id = '{$taskid}'";
         $result = mysql_query($sql);
@@ -10604,6 +10604,30 @@ function postpone_task($taskid)
         }
     }
 }
+
+
+/**
+ * Returns HTML for a gravatar (Globally recognised avatar)
+ * @author Ivan Lucas
+ * @param string $email - Email address
+ * @param int $size - Size in pixels
+ * @returns string - HTML img tag
+ */
+function gravatar($email, $size)
+{
+    global $CONFIG, $iconset;
+    $default = $CONFIG['default_gravatar'];
+
+    $grav_url = "http://www.gravatar.com/avatar.php?
+                 gravatar_id=".md5(strtolower($email)).
+                "&default=".urlencode($CONFIG['default_gravatar']).
+                "&size=".$size;
+
+    $html = "<img src='{$grav_url}' />";
+
+    return $html;
+}
+
 // ** Place no more function defs below this **
 
 

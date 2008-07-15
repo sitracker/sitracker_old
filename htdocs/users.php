@@ -119,6 +119,7 @@ while ($users = mysql_fetch_array($result))
     }
     echo " {$users['realname']}";
     echo "<span>";
+    echo gravatar($users['email'], 50);
     if (!empty($users['title']))
     {
         echo "<strong>{$users['title']}</strong><br />";

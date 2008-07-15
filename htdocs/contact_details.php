@@ -69,7 +69,9 @@ while ($contactrow = mysql_fetch_array($contactresult))
     }
 
     echo "<table align='center' class='vertical'>";
-    echo "<tr><th colspan='2'><h3>".icon('contact', 32)." {$contactrow['forenames']} {$contactrow['surname']}</h3></th></tr>\n";
+    echo "<tr><th colspan='2'><h3>".icon('contact', 32)." {$contactrow['forenames']} {$contactrow['surname']}";
+    echo ' '.gravatar($contactrow['email'], 32);
+    echo "</h3></th></tr>\n";
     if ($contactrow['active'] == 'false')
     {
         echo "<tr><th>{$strStatus}:</th><td><span class='expired'>{$strInactive}</span></td></tr>\n";
@@ -214,7 +216,7 @@ while ($contactrow = mysql_fetch_array($contactresult))
 
 
     // Check if user has permission to view maintenace contracts, if so display those related to this contact
-    
+
     echo user_contracts_table($id);
 }
 mysql_free_result($contactresult);

@@ -201,6 +201,8 @@ $CFGVAR['auto_assign_incidents']['options'] = 'TRUE|FALSE';
 $CFGVAR['auto_assign_incidents']['help'] = "incidents are automatically assigned based on a lottery weighted towards who are less busy, assumes everyone set to accepting is an engineer and willing to take incidents";
 $CFGVAR['default_roleid']['title'] = "Default role id";
 $CFGVAR['default_roleid']['help'] = "Role given to new users by default";
+$CFGVAR['default_gravatar']['title'] = "Default Gravatar";
+$CFGVAR['default_gravatar']['help'] = "can be 'wavatar', 'identicon', 'monsterid' a URL to an image, or blank for a blue G. see <a href='http://www.gravatar.com/'>www.gravatar.com</a> to learn about gravatars";
 
 
 $upgradeok = FALSE;

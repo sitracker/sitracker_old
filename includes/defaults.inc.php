@@ -238,4 +238,8 @@ $CONFIG['auto_assign_incidents'] = TRUE;
 // Default role for new users, where 1 is admin, 2 is manager and 3 is user
 $CONFIG['default_roleid'] = 3;
 
+// Default gravatar, can be 'wavatar', 'identicon', 'monsterid' a URL to an image, or blank for a blue G
+// see www.gravatar.com to learn about gravatars
+$CONFIG['default_gravatar'] = 'identicon';
+
 ?>

@@ -153,7 +153,9 @@ else
         include 'htmlfooter.inc.php';
         exit;
     }
-    echo "<h2>".icon('contact', 32)." {$user->forenames} {$user->surname}</h2>";
+    echo "<h2>".icon('contact', 32)." {$user->forenames} {$user->surname}";
+    echo ' '.gravatar($user->email, 32);
+    echo "</h2>";
 
 
     echo "<form action='$_SERVER[PHP_SELF]?action=update' method='post'>";
