@@ -182,7 +182,7 @@ function saction_TimeCalc()
                 if ($reviewInfo['currentowner'] != 0) echo "   There has been no review on this incident, which was opened $newReviewTime minutes ago{$crlf}";
                 else echo "   The last review took place $newReviewTime minutes ago{$crlf}";
             }
-            trigger('TRIGGER_REVIEW_DUE', array('incidentid' => $incident['id'], 'time' => $newReviewTime));
+            trigger('TRIGGER_INCIDENT_REVIEW_DUE', array('incidentid' => $incident['id'], 'time' => $newReviewTime));
         }
         mysql_free_result($update_result);
 
