@@ -94,12 +94,14 @@ $strAfternoon = 'Afternoon';
 $strAge = 'Age';
 # e.g. 4 hours ago
 $strAgo = '%s ago';
-$strAListOfAvailableTicket = 'A list of available triggers and the actions that are set when triggers occur';
+$strAListOfAvailableTriggers = 'A list of available triggers and the actions that are set when triggers occur';
 $strAll = 'All';
+$strAllActivities = 'All Activities';
 $strAllClosed = 'All Closed';
 $strAllDay = 'all day';
 $strAllOnline = 'All Online';
 $strAllOpen = 'All Open';
+$strAllTasks = 'All Tasks';
 $strAllowIncidentReopen = 'Allow Incident Reopening';
 $strAllSiteContactsSupported = 'All of this sites\' contacts are supported';
 # i.e. Sorted by alphabet
@@ -567,7 +569,7 @@ $strID = 'ID';
 $strImportant = 'Important';
 $strInactive = 'Inactive';
 $strIncident = 'Incident';
-$strIncidentActivitiesIntro = 'This page is to keep track of activities relating to an incident where time spent dealing with the call needs to be known';
+$strIncidentActivitiesIntro = 'This page is to keep track of activities relating to an incident where time spent dealing with the incident needs to be known';
 $strIncidentAdded = 'Incident Added';
 $strIncidentCCList = 'Extra email addresses to CC regarding incidents';
 $strIncidentID = 'Incident ID';
@@ -594,7 +596,7 @@ $strIncidentsForEngineer = 'Incidents for %s (Engineer)';
 $strIncidentsinQueue = 'Incidents in Queue';
 $strIncidentsLoggedOpenClosed = 'Incidents Logged (Open/Closed)';
 $strIncidentsLoggedToday = '%s Incidents Logged Today';
-$strIncidentsMulti = '%d Incidents';
+$strIncidentsMulti = '%s Incidents';
 $strIncidentsRequiringChaseByPhone = 'Incidents requiring chasing by phone';
 # e.g. Incidents opened on 2007-12-03
 $strIncidentsVerbOnDate = 'Incidents %s on %s';
@@ -766,6 +768,8 @@ $strMySubstitutes = 'My Substitutes';
 $strMyTriggers = 'My Triggers';
 
 $strName = 'Name';
+#English suffix for second - 2nd
+$strnd = 'nd';
 $strNeedsSubstitueEngineers = '%s need substitute engineers to be defined';
 $strNever = 'Never';
 $strNewContact = 'New Contact';
@@ -997,6 +1001,8 @@ $strQuestionXNeedsAnsweringBeforeContinuing = 'Question %s requires an answer be
 $strQueue = 'Queue';
 
 $strRandomTip = 'Random Tip';
+#English suffix for third - 3rd
+$strrd = 'rd';
 $strRealName = 'Real Name';
 $strReassign = 'Reassign';
 $strReason = 'Reason';
@@ -1136,7 +1142,7 @@ $strShowOrphandedContacts = 'Show orphaned contacts (no site)';
 $strShowPaged = 'Show Paged';
 $strShowQuote = 'Show quote';
 $strShowRenewals = 'Show Renewals';
-$strSingleIncident = '%d Incident';
+$strSingleIncident = '%s Incident';
 $strSite = 'Site';
 $strSiteAreYouSure = 'This incident will be logged against the customers SITE and NOT against a contract, you will be prompted to choose a service level. Are you sure you want to continue?';
 # Break down the report by site
@@ -1161,11 +1167,14 @@ $strSkillAssignedToIncident = 'Skill assigned to an incident';
 $strSkillsFor = 'Skills For %s';
 $strSkillsMatrix = 'Skills Matrix';
 $strSkillsSupportedUnderContract = 'Skills supported under this contract';
+$strSLAApproaching = 'SLA approaching';
 $strSLAby = 'SLA: %s by %s';
+$strSLADue = 'SLA due';
 #E.g. Initial Response in 3 hours
 $strSLAInX = '%s in %s';
 #E.g. Initial Response 3 hours late
 $strSLAXLate = '%s %s late';
+$strSLAMissed = 'SLA missed';
 $strSLATarget = 'SLA Target';
 $strSoftware = 'Software';
 $strSoftwareVersion = 'Software Version';
@@ -1177,6 +1186,8 @@ $strSortDescending = 'Sort Decending';
 $strSortResults = 'Sort Results';
 $strSpamEmail = 'Spam Email';
 $strSpecifyAddress = 'Specify an address for this contact that is different to the site';
+#English suffix for first - 1st
+$strst = 'st';
 $strStartDate = 'Start Date';
 $strStartNewActivity = 'Start New Activity';
 $strStatsFromDayStatistics = 'Statistics from %s';
@@ -1234,6 +1245,8 @@ $strTemporarilyAssignedto = 'Temporarily assigned to %s by %s';
 $strTemporaryOwner = 'Temporary Owner';
 $strTerminated = 'Terminated';
 $strText = 'Text';
+#English suffix for most numbers - 5th, 6th, 7th
+$strth = 'th';
 $strTheFollowingVariables = 'The following variables may be used:';
 $strThereAreXIncidentsInThisList = 'There are %s incidents in this list';
 $strTheInfoInThisArticle = 'The information in this article applies to';
@@ -1339,7 +1352,6 @@ $strUsersHolidays = '%s\'s Holidays';
 $strUserStillAway = 'Your current status is not set to In Office, you can change it at the bottom of the front page';
 $strUserIncidents = '%s\'s Incidents';
 $strUsersNoGroup = 'Users with no group';
-$strUsersTasks = '%s\'s Tasks';
 $strUsersBoldSkills = 'Users shows in bold typeface are known to have relevant skills';
 $strUseThisInFuture = 'Use this in future';
 # Offset from Coordinated Universal Time / Temps Universel Coordonné
@@ -1404,7 +1416,11 @@ $strXMinutes = '%s Minutes';
 $strXold = '%s old';
 # e.g. 'Fred of ACME Inc'. i.e. Name of Site
 $strXofX = '%s of %s';
+# e.g. John's Activities
+$strXsActivities = '%s\'s Activities';
 $strXSeconds = '%s Seconds';
+# e.g. John's Tasks
+$strXsTasks = '%s\'s Tasks';
 # e.g. 42 units @ 2x
 $strXUnitsAtX = '%d units @ %dx';
 $strXWorkingDay = '%s working day';

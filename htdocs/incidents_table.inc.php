@@ -406,17 +406,25 @@ while ($incidents = mysql_fetch_array($result))
     }
     echo "</tr>\n";
 }
-echo "</table>\n\n";
+echo "</table><br /></br >\n\n";
 
+echo "<table class='incidentkey'><tr>";
+echo "<td class='shade1'>{$strOpen}</td>";
+echo "<td class='notice'>{$strSLAApproaching}</td>";
+echo "<td class='urgent'>{$strSLADue}</td>";
+echo "<td class='critical'>{$strSLAMissed}</td>";
+
+
+echo "</tr></table>";
 if (empty($incidents_minimal) && $user != 'all')
 
 if ($rowcount != 1)
 {
-    echo "<p align='center'>".sprintf($strIncidentsMulti, $rowcount)."</p>";
+    echo "<p align='center'>".sprintf($strIncidentsMulti, "<strong>$rowcount</strong>")."</p>";
 }
 else
 {
-    echo "<p align='center'>".sprintf($strSingleIncident, $rowcount)."</p>";
+    echo "<p align='center'>".sprintf($strSingleIncident, "<strong>$rowcount</strong>")."</p>";
 }
 
 if ($CONFIG['debug']) echo "<!-- End of Support Incidents Table -->\n";

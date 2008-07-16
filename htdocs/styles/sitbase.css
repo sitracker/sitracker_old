@@ -568,3 +568,17 @@ div.portalfileicon
     padding: 2px;
     z-index: 15;
 }
+
+.incidentkey
+{
+    text-align: center;
+    margin: 0 auto;
+    width: 95%;
+    border: 1px solid;
+    font-weight: bold;
+}
+
+.incidentkey td
+{
+    width: 25%;
+}
