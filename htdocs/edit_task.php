@@ -160,7 +160,7 @@ switch ($action)
             //shouldn't happen in sit, but 3rd party might not set one
             if (!isset($status) OR $status == 0)
             {
-            	$status = 1;
+                $status = 1;
             }
 
             $sql = "SELECT * FROM `{$dbTasks}` WHERE id='{$id}'";
@@ -176,8 +176,8 @@ switch ($action)
             }
             else
             {
-            	trigger_error("Couldn't find task, dying", E_USER_ERROR);
-            	die();
+                trigger_error("Couldn't find task, dying", E_USER_ERROR);
+                die();
             }
 
             //get all the notes
@@ -207,15 +207,15 @@ switch ($action)
             $enddate = $now;
             $duration = $enddate - $startdate;
 
-            $startdate = readable_date($startdate);
-            $enddate = readable_date($enddate);
+            $startdate = readable_date($startdate, 'system');
+            $enddate = readable_date($enddate, 'system');
 
             $updatehtml = sprintf($SYSLANG['strActivityStarted'], $startdate)."\n\n";
 
             for ($i = $numnotes-1; $i >= 0; $i--)
             {
                 $updatehtml .= "[b]";
-                $updatehtml .= readable_date(mysql2date($notesarray[$i]->timestamp));
+                $updatehtml .= readable_date(mysql2date($notesarray[$i]->timestamp), 'system');
                 $updatehtml .= "[/b]\n".mysql_escape_string($notesarray[$i]->bodytext)."\n\n";
             }
 
@@ -229,10 +229,10 @@ switch ($action)
             mysql_query($sql);
             if (mysql_error())
             {
-            	trigger_error(mysql_error(),E_USER_ERROR);
-            	echo "<p class='error'>";
-            	echo "Couldn't add update, update will need to be done manually: {$sql}'</p>";
-            	die();
+                trigger_error(mysql_error(),E_USER_ERROR);
+                echo "<p class='error'>";
+                echo "Couldn't add update, update will need to be done manually: {$sql}'</p>";
+                die();
             }
 
             mark_task_completed($id, TRUE);

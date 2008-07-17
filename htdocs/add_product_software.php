@@ -44,7 +44,7 @@ if (empty($action) OR $action == "showform")
             echo "{$strSkill}: $name</h3>";
         }
         echo "<input name=\"softwareid\" type=\"hidden\" value=\"$softwareid\" />\n";
-        echo "<p align='center'>{$strProduct}: ".icon('product')." ";
+        echo "<p align='center'>{$strProduct}: ".icon('product', 16)." ";
         echo product_drop_down("productid", 0);
         echo "</p>";
     }

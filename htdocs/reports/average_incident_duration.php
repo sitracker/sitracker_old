@@ -11,6 +11,7 @@
 // Authors: Ivan Lucas <ivanlucas[at]users.sourceforge.net> & Tom Gerrard
 //
 // Comments: How long do we take to close incidents?
+// FIXME 3.40 this doesn't look like it gives correct values?
 
 @include ('../set_include_path.inc.php');
 set_time_limit(60);
@@ -28,11 +29,23 @@ $id = cleanvar($_REQUEST['id']);
 $mode = cleanvar($_REQUEST['mode']);
 
 // Increment selects the number of months to group together
-if (empty($_REQUEST['increment'])) $increment = 1;
-else $increment = cleanvar($_REQUEST['increment']);
+if (empty($_REQUEST['increment']))
+{
+    $increment = 1;
+}
+else
+{
+    $increment = cleanvar($_REQUEST['increment']);
+}
 
-if (empty($_REQUEST['states'])) $states = array('0,2,6,7,8');
-else $states = explode(',',$_REQUEST['states']);
+if (empty($_REQUEST['states']))
+{
+    $states = array('0,2,6,7,8');
+}
+else
+{
+    $states = explode(',',$_REQUEST['states']);
+}
 
 
 /**
@@ -98,70 +111,63 @@ function average_incident_duration($start,$end,$states)
 $sql = "SELECT opened FROM `{$dbIncidents}` ORDER BY id ASC LIMIT 1";
 $result = mysql_query($sql);
 if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
-list($firstdate)=mysql_fetch_row($result);
+list($firstdate) = mysql_fetch_row($result);
 
-$current_time=$firstdate;
+$current_time = $firstdate;
 
-$html .= "<h2>$title</h2>";
-$html .= "<p align='center'>";
-$html .= "<a href='{$_SERVER['PHP_SELF']}?mode=all&amp;increment=$increment&amp;states=2,3,4,6,7,9'>Active</a> | ";
-$html .= "<a href='{$_SERVER['PHP_SELF']}?mode=all&amp;increment=$increment&amp;states=0,1,2,3,4,5,9,10'>Waiting</a> | ";
-$html .= "<a href='{$_SERVER['PHP_SELF']}?mode=all&amp;increment=$increment&amp;states=0,1,2,3,5,6,9,10'>Waiting for customer</a> | ";
-$html .= "<a href='{$_SERVER['PHP_SELF']}?mode=all&amp;increment=$increment&amp;states=0,1,2,3,4,5,7,8,9,10'>Waiting for support</a>";
-$html .= "</p>";
-$html .= "<table align='center'>";
-$html .= "<tr><th>Period</th><th># Incidents</th><th>Total Duration</th><th>Time</th><th>Users</th><th># Updates</th><th># Updates per incident</th></tr>\n";
-$csv .= "Period,# Incidents,Total Duration,Worked Time\n";
-$shade='shade1';
-while ($current_time<time()) {
-
-  $current_month=date('m', $current_time);
-  $current_year=date('Y', $current_time);
-
-  $next_month=$current_month+$increment;
-  $next_year=$current_year;
-  if ($next_month>12) {
-    $next_year++;
-    $next_month%=12;
-  }
-
-  $next_time=mktime(0,0,0,$next_month,1,$next_year);
-
-  $stats=average_incident_duration($current_time,$next_time,$states);
-
-
-  $html .= "<tr class='$shade'>";
-  $html .= "<td>".ldate('F Y',mktime(0,0,0,$current_month,1,$current_year));
-  if ($next_month > $current_month+1 AND $next_year==$current_year)  $html .= " - ".ldate('F Y',mktime(0,0,0,$next_month,1,$next_year))."</td>";
-  $html .= "<td>{$stats[0]}</td>";
-  $html .= "<td>".format_seconds($stats[1]*60)."</td>";
-  $html .= "<td>".round($stats[2]/60)." hours</td>";
-  $html .= "<td>{$stats[3]}</td>";
-  $html .= "<td>{$stats[4]}</td>";
-  $html .= "<td>{$stats[5]}</td>";
-  $html .= "</tr>\n";
-  $csv .= ldate('F Y',mktime(0,0,0,$current_month,1,$current_year))." - ".ldate('F Y',mktime(0,0,0,$next_month,1,$next_year));
-  $csv .= ",{$stats[0]},".($stats[1]/60).",".round($stats[2]/60)."\n";
-  if ($shade=='shade1') $shade='shade2';
-  else $shade='shade1';
-  $current_time=$next_time;
-
+$data[] = "Period,# Incidents,Total Duration,Time,Users,# Updates,# Updates per incident";
+while ($current_time < time())
+{
+    $current_month = date('m', $current_time);
+    $current_year = date('Y', $current_time);
+    
+    $next_month = $current_month + $increment;
+    $next_year = $current_year;
+    if ($next_month > 12)
+    {
+        $next_year++;
+        $next_month %= 12;
+    }
+    
+    $next_time = mktime(0,0,0,$next_month,1,$next_year);
+    $stats = average_incident_duration($current_time,$next_time,$states);
+    $row = ldate('F Y',mktime(0,0,0,$current_month,1,$current_year)).",";
+    
+    if ($next_month > $current_month + 1 AND $next_year == $current_year)
+    {
+        $row .= " - ".ldate('F Y',mktime(0,0,0,$next_month,1,$next_year)).",";
+    }
+    $row .= $stats[0].",";
+    $row .= format_seconds($stats[1]*60).",";
+    $row .= round($stats[2]/60)." $strHours,";
+    $row .= $stats[3].",";
+    $row .= $stats[4].",";
+    $row .= $stats[5];
+    $data[] = $row;
+    $current_time = $next_time;
 }
-$html .= "</table>";
-$html .= "<p align='center'><a href='{$_SERVER['PHP_SELF']}?mode={$mode}&amp;output=csv'>Save this report in CSV format</a></p>";
 
 if ($_REQUEST['output'] == 'csv')
 {
-    // --- CSV File HTTP Header
-    header("Content-type: text/csv\r\n");
-    header("Content-disposition-type: attachment\r\n");
-    header("Content-disposition: filename=average_incident_duration_{$increment}_months.csv");
-    echo $csv;
+    echo create_report($data, 'csv', 'average_incident_duration.csv');
 }
 else
 {
     include ('htmlheader.inc.php');
-    echo $html;
+    echo "<h2>$title</h2>";
+    echo "<p align='center'>";
+    echo "<a href='{$_SERVER['PHP_SELF']}?mode=all&amp;increment=$increment";
+    echo "&amp;states=2,3,4,6,7,9'>{$strActive}</a> | ";
+    echo "<a href='{$_SERVER['PHP_SELF']}?mode=all&amp;increment=$increment";
+    echo "&amp;states=0,1,2,3,4,5,9,10'>{$strWaiting}</a> | ";
+    echo "<a href='{$_SERVER['PHP_SELF']}?mode=all&amp;increment=$increment";
+    echo "&amp;states=0,1,2,3,5,6,9,10'>{$strWaitingForCustomer}</a> | ";
+    echo "<a href='{$_SERVER['PHP_SELF']}?mode=all&amp;increment=$increment";
+    echo "&amp;states=0,1,2,3,4,5,7,8,9,10'>{$strWaitingForSupport}</a>";
+    echo "</p>";
+    echo create_report($data);
+    echo "<p align='center'><a href='{$_SERVER['PHP_SELF']}?mode={$mode}&amp;";
+    echo "output=csv'>{$strSaveAsCSV}</a></p>";
     include ('htmlfooter.inc.php');
 }
 

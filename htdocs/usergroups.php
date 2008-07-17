@@ -68,7 +68,7 @@ switch ($action)
     default:
         include ('htmlheader.inc.php');
 
-        echo "<h2>{$title}</h2>";
+        echo "<h2>{$strUserGroups}</h2>";
 
         $gsql = "SELECT * FROM `{$dbGroups}` ORDER BY name";
         $gresult = mysql_query($gsql);

@@ -208,7 +208,7 @@ switch ($type)
         }
         elseif ($queue == 4 AND $CONFIG['hide_closed_incidents_older_than'] != -1)
         {
-            echo "<p class='info'>{$strShowingAllIncidents} - ";
+            echo "<p class='info'>{$strShowingAllClosedIncidents} - ";
             echo "<a href='{$_SERVER['PHP_SELF']}?user=$user&amp;type=$type&amp;queue=4'>";
             echo sprintf($strOnlyShowNewerThan, $CONFIG['hide_closed_incidents_older_than'])."</a></p>";
         }

@@ -29,13 +29,13 @@ function get_sql_statement($startdate,$enddate,$statementnumber,$count=TRUE)
 
     if ($count) $count = "count(*)";
     else $count = "*";
-    $sql[0] = "SELECT {$count} FROM `{$dbIncidents}` WHERE opened BETWEEN '{$startdate}' AND '{$enddate}'";
-    $sql[1] = "SELECT {$count} FROM `{$dbIncidents}` WHERE closed BETWEEN '{$startdate}' AND '{$enddate}'";
-    $sql[2] = "SELECT {$count} FROM `{$dbIncidents}` WHERE lastupdated BETWEEN '{$startdate}' AND '{$enddate}'";
-    $sql[3] = "SELECT {$count} FROM `{$dbIncidents}` WHERE opened <= '{$enddate}' AND (closed >= '$startdate' OR closed = 0)";
-    $sql[4] = "SELECT count(*), count(DISTINCT userid) FROM `{$dbUpdates}` WHERE timestamp >= '$startdate' AND timestamp <= '$enddate'";
-    $sql[5] = "SELECT count(DISTINCT softwareid), count(DISTINCT owner) FROM `{$dbIncidents}` WHERE opened <= '{$enddate}' AND (closed >= '$startdate' OR closed = 0)";
-    $sql[6] = "SELECT {$count} FROM `{$dbUpdates}` WHERE timestamp >= '$startdate' AND timestamp <= '$enddate' AND type='email'";
+    $sql[0] = "SELECT {$count} FROM `{$GLOBALS['dbIncidents']}` WHERE opened BETWEEN '{$startdate}' AND '{$enddate}'";
+    $sql[1] = "SELECT {$count} FROM `{$GLOBALS['dbIncidents']}` WHERE closed BETWEEN '{$startdate}' AND '{$enddate}'";
+    $sql[2] = "SELECT {$count} FROM `{$GLOBALS['dbIncidents']}` WHERE lastupdated BETWEEN '{$startdate}' AND '{$enddate}'";
+    $sql[3] = "SELECT {$count} FROM `{$GLOBALS['dbIncidents']}` WHERE opened <= '{$enddate}' AND (closed >= '$startdate' OR closed = 0)";
+    $sql[4] = "SELECT count(*), count(DISTINCT userid) FROM `{$GLOBALS['dbUpdates']}` WHERE timestamp >= '$startdate' AND timestamp <= '$enddate'";
+    $sql[5] = "SELECT count(DISTINCT softwareid), count(DISTINCT owner) FROM `{$GLOBALS['dbIncidents']}` WHERE opened <= '{$enddate}' AND (closed >= '$startdate' OR closed = 0)";
+    $sql[6] = "SELECT {$count} FROM `{$GLOBALS['dbUpdates']}` WHERE timestamp >= '$startdate' AND timestamp <= '$enddate' AND type='email'";
     $sql[7] = "SELECT {$count} FROM `{$dbUpdates}` WHERE timestamp >= '$startdate' AND timestamp <= '$enddate' AND type='emailin'";
     $sql[8] = "SELECT {$count} FROM `{$dbIncidents}` WHERE opened <= '{$enddate}' AND (closed >= '$startdate' OR closed = 0) AND priority >= 3";
     return $sql[$statementnumber];
@@ -418,7 +418,7 @@ function give_overview()
     if ($todaysclosed > 0)
     {
         $sql = "SELECT COUNT(i.id), realname, u.id AS owner FROM `{$GLOBALS['dbIncidents']}` AS i ";
-        $sql .= "LEFT JOIN `{$GLOBALS['users']}` AS u ON i.owner = u.id WHERE closed > '{$todayrecent}' ";
+        $sql .= "LEFT JOIN `{$GLOBALS['dbUsers']}` AS u ON i.owner = u.id WHERE closed > '{$todayrecent}' ";
         $sql .= "GROUP BY owner";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);

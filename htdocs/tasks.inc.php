@@ -301,39 +301,33 @@ else
             $user = $sit[2]; // force to current user if username not found
         }
     }
-    echo "<h2>".icon('task', 32)." ";
-
-    if ($user == 'all')
-    {
-        echo $strAll;
-    }
-    else
-    {
-        echo user_realname($user,TRUE)."'s "; // FIXME i18n
-    }
 
     if ($show != 'incidents')
     {
-        echo " {$strTasks}:</h2>";
         if ($user != 'all')
         {
+            echo "<h2>".icon('task', 32)." ";
+            echo sprintf($strXsTasks, user_realname($sit[2]))."</h2>";
             echo "<p align='center'><a href='{$_SERVER['PHP_SELF']}?user=all&amp;show={$show}&amp;sort={$sort}&amp;order={$order}'>{$strShowAll}</a></p>";
         }
         else
         {
+            echo "<h2>".icon('task', 32)." {$strAllTasks}</h2>";
             echo "<p align='center'><a href='{$_SERVER['PHP_SELF']}?show={$show}&amp;sort={$sort}&amp;order={$order}'>{$strShowMine}</a></p>";
         }
     }
     else
     {
-        echo " {$strActivities}:</h2>";
-
         if ($user != 'all')
         {
+            echo "<h2>".icon('task', 32)." ";
+            echo sprintf($strXsTasks, user_realname($sit[2]))."</h2>";
             echo "<p align='center'><a href='{$_SERVER['PHP_SELF']}?show=incidents&amp;user=all'>{$strShowAll}</a></p>";
         }
         else
         {
+            echo "<h2>".icon('task', 32)." {$strAllActivities}</h2>";
+
             echo "<p align='center'><a href='{$_SERVER['PHP_SELF']}?show=incidents'>{$strShowMine}</a></p>";
         }
     }
