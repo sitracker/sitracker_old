@@ -41,7 +41,7 @@ if (!function_exists('strip_comma'))
 if (empty($_REQUEST['mode']))
 {
     include ('htmlheader.inc.php');
-    echo "<h2>$title</h2>";
+    echo "<h2>$strCustomerExport</h2>";
     echo "<form action='{$_SERVER['PHP_SELF']}' method='post'>";
     echo "<table align='center'>";
     echo "<tr><th colspan='2' align='center'>{$strInclude}</th></tr>";
@@ -121,7 +121,7 @@ elseif ($_REQUEST['mode'] == 'report')
     $excsql .= ")";
     }
     */
-    $sql = "SELECT *, c.id AS contactid, s.name AS site, c.email AS cemail FROM `{$dbContacts}` ";
+    $sql = "SELECT *, c.id AS contactid, s.name AS site, c.email AS cemail FROM `{$dbContacts}` AS c ";
     $sql .= "LEFT JOIN `{$dbSites}` AS s ON c.siteid = s.id ";
 
     if (empty($incsql) == FALSE OR empty($excsql) == FALSE) $sql .= "WHERE ";
@@ -137,6 +137,7 @@ elseif ($_REQUEST['mode'] == 'report')
 
     // FIXME i18n
     // FIXME strip slashes from output
+    $html .= "<h2>{$strCustomerExport}</h2>";
     $html .= "<p align='center'>This report is a list of ($numrows) contact details for all sites that you selected</p>";
     $html .= "<table width='99%' align='center'>";
     $html .= "<tr><th>{$strForenames}</th><th>{$strSurname}</th><th>{$strEmail}</th><th>{$strAddress1}</th>";
