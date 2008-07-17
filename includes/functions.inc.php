@@ -2634,10 +2634,10 @@ function closingstatus_name($id)
     }
     else
     {
-        $closingstatus = $GLOBALS['strUnknown'];
+        $closingstatus = 'strUnknown';
     }
 
-    return ($closingstatus);
+    return ($GLOBALS[$closingstatus]);
 }
 
 
@@ -4877,11 +4877,11 @@ function mysql2date($mysqldate)
         $hour = substr($mysqldate,11,2);
         $minute = substr($mysqldate,14,2);
         $second = substr($mysqldate,17,2);
-        $phpdate= mktime($hour,$minute,$second,$month,$day,$year);
+        $phpdate = mktime($hour,$minute,$second,$month,$day,$year);
     }
     else
     {
-        $phpdate= mktime(0, 0, 0, $month, $day, $year);
+        $phpdate = mktime(0, 0, 0, $month, $day, $year);
     }
 
     return $phpdate;
@@ -5346,17 +5346,36 @@ function leading_zero($length,$number)
 }
 
 
-function readable_date($date)
+
+/**
+ * @param $lang string takes either 'user' or 'system' as to which language to use
+ **/
+function readable_date($date, $lang = 'user')
 {
+    global $SYSLANG;
     // Takes a UNIX Timestamp and returns a string with a pretty readable date
     // e.g. Yesterday @ 5:28pm
     if (ldate('dmy', $date) == ldate('dmy', time()))
     {
-        $datestring = "{$GLOBALS['strToday']} @ ".ldate('g:ia', $date);
+        if ($lang == 'user')
+        {
+            $datestring = "{$GLOBALS['strToday']} @ ".ldate('g:ia', $date);
+        }
+        else
+        {
+            $datestring = "{$SYSLANG['strToday']} @ ".ldate('g:ia', $date);
+        }
     }
     elseif (ldate('dmy', $date) == ldate('dmy', (time()-86400)))
     {
-        $datestring = "{$GLOBALS['strYesterday']} @ ".ldate('g:ia', $date);
+        if ($lang == 'user')
+        {
+            $datestring = "{$GLOBALS['strYesterday']} @ ".ldate('g:ia', $date);
+        }
+        else
+        {
+            $datestring = "{$SYSLANG['strYesterday']} @ ".ldate('g:ia', $date);
+        }
     }
     else
     {
@@ -7439,6 +7458,16 @@ function ldate($format, $date = '', $utc = TRUE)
         $date += $useroffsetsec;
     }
     $datestring = gmdate($format, $date);
+    
+    // Internationalise date endings (e.g. st)
+    if (strpos($format, 'S') !== FALSE)
+    {
+        $endings = array('st', 'nd', 'rd', 'th');
+        $i18nendings = array($GLOBALS['strst'], $GLOBALS['strnd'],
+                            $GLOBALS['strrd'], $GLOBALS['strth']);
+        $datestring = str_replace($endings, $i18nendings, $datestring);
+    }
+
 
     // Internationalise full day names
     if (strpos($format, 'l') !== FALSE)
@@ -10539,7 +10568,7 @@ function create_report($data, $output = 'table', $filename = 'report.csv')
 {
     if ($output == 'table')
     {
-        $html = "<table><tr>";
+        $html = "\n<table align='center'><tr>\n";
         $headers = explode(',', $data[0]);
         $rows = sizeof($headers);
         foreach ($headers as $header)
@@ -10549,12 +10578,12 @@ function create_report($data, $output = 'table', $filename = 'report.csv')
         $html .= "</tr>";
         if (sizeof($data) == 1)
         {
-            echo "<tr><td rowspan='{$rows}'>{$GLOBALS['strNoRecords']}</td></tr>";
+            $html .= "<tr><td rowspan='{$rows}'>{$GLOBALS['strNoRecords']}</td></tr>";
         }
         else
         {
-            // use 0 -> sizeof as we've already done one row
-            for ($i = 0; $i < sizeof($data); $i++)
+            // use 1 -> sizeof as we've already done one row
+            for ($i = 1; $i < sizeof($data); $i++)
             {
                 $html .= "<tr>";
                 $values = explode(',', $data[$i]);
@@ -10565,6 +10594,7 @@ function create_report($data, $output = 'table', $filename = 'report.csv')
                 $html .= "</tr>";
             }
         }
+        $html .= "</table>";
     }
     else
     {
