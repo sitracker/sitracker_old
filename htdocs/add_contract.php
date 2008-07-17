@@ -167,10 +167,6 @@ elseif ($action == "add")
     $licence_quantity = cleanvar($_REQUEST['licence_quantity']);
     $licence_type = cleanvar($_REQUEST['licence_type']);
     $admincontact = cleanvar($_REQUEST['admincontact']);
-    if (isset($_REQUEST['expiry']))
-    {
-        $expirydate = strtotime($_REQUEST['expiry']);
-    }
     $notes = cleanvar($_REQUEST['notes']);
     $servicelevelid = cleanvar($_REQUEST['servicelevelid']);
     $incidentpoolid = cleanvar($_REQUEST['incidentpoolid']);
@@ -185,6 +181,7 @@ elseif ($action == "add")
     if ($enddate > 0) $enddate = date('Y-m-d',$enddate);
     else $enddate = date('Y-m-d',$now);
     if ($_REQUEST['noexpiry'] == 'on') $expirydate = '-1';
+    else $expirydate = strtotime($_REQUEST['expiry']);
     $amount =  cleanvar($_POST['amount']);
     if ($amount == '') $amount = 0;
     $unitrate =  cleanvar($_POST['unitrate']);

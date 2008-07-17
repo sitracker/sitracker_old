@@ -176,11 +176,11 @@ else if ($action == "update")
     $terminated = cleanvar($_POST['terminated']);
     $servicelevelid = cleanvar($_POST['servicelevelid']);
     $incidentpoolid = cleanvar($_POST['incidentpoolid']);
-    $expirydate = strtotime($_REQUEST['expirydate']);
     $product = cleanvar($_POST['product']);
     $productonly = cleanvar($_POST['productonly']);
     $contacts = cleanvar($_REQUEST['contacts']);
     if ($_REQUEST['noexpiry'] == 'on') $expirydate = '-1';
+    else $expirydate = strtotime($_REQUEST['expirydate']);
 
     $allcontacts = 'No';
     if ($contacts == 'amount') $amount = cleanvar($_REQUEST['amount']);
