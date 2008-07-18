@@ -159,6 +159,7 @@ elseif ($action=='findcontact')
     $altsql .= "FROM `{$dbContacts}` AS c, `{$dbMaintenance}` AS m, `{$dbProducts}` AS p, `{$dbSites}` AS s ";
     $altsql .= "WHERE m.product = p.id ";
     $altsql .= "AND m.site = s.id ";
+    $altsql .= "AND c.siteid = m.site ";
     $altsql .= "AND m.allcontactssupported='yes' ";
 
     if (empty($contactid))
