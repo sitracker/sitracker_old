@@ -46,14 +46,14 @@ if (empty($_REQUEST['mode']))
 
     echo "<table align='center'><tr><td>";
     echo "<h4>{$strCSVFileFormatAsFollows}:</h4>";
-    echo "<strong>{$strField1}:</strong> {$strSite}<br />";
-    echo "<strong>{$strField1}:</strong> {$strAddress1}<br />";
-    echo "<strong>{$strField1}:</strong> {$strAddress2}<br />";
-    echo "<strong>{$strField1}:</strong> {$strCity}<br />";
-    echo "<strong>{$strField1}:</strong> {$strCounty}<br />";
-    echo "<strong>{$strField1}:</strong> {$strCountry}<br />";
-    echo "<strong>{$strField1}:</strong> {$strPostcode}<br />";
-    echo "<strong>{$strField1}:</strong> {$strProducts}<br />";
+    echo "<strong>{$strField} 1:</strong> {$strSite}<br />";
+    echo "<strong>{$strField} 2:</strong> {$strAddress1}<br />";
+    echo "<strong>{$strField} 3:</strong> {$strAddress2}<br />";
+    echo "<strong>{$strField} 4:</strong> {$strCity}<br />";
+    echo "<strong>{$strField} 5:</strong> {$strCounty}<br />";
+    echo "<strong>{$strField} 6:</strong> {$strCountry}<br />";
+    echo "<strong>{$strField} 7:</strong> {$strPostcode}<br />";
+    echo "<strong>{$strField} 8:</strong> {$strProducts}<br />";
     echo "</td></tr></table>";
     include ('htmlfooter.inc.php');
 }
