@@ -38,6 +38,10 @@ if (empty($_REQUEST['mode']))
     echo "<td><input type='text' name='startdate' id='startdate' size='10' /> ";
     echo date_picker('incidentsbysoftware.startdate');
     echo "</td></tr>\n";
+    echo "<tr><th>{$strEndDate}:</th>";
+    echo "<td><input type='text' name='enddate' id='enddate' size='10' /> ";
+    echo date_picker('incidentsbysoftware.enddate');
+    echo "</td></tr>\n";
     // FIXME i18n month breakdown
     echo "<tr><th>Month breakdown:</th><td><input type='checkbox' name='monthbreakdown' /></td></tr>\n";
     echo "<tr><th>{$strSkill}</th><td>".software_drop_down('software', 0)."</td></tr>\n";
@@ -54,12 +58,16 @@ else
 {
     $monthbreakdownstatus = $_REQUEST['monthbreakdown'];
     $startdate = strtotime($_REQUEST['startdate']);
+    $enddate = strtotime($_REQUEST['enddate']);
+
     $sql = "SELECT count(s.id) AS softwarecount, s.name, s.id ";
     $sql .= "FROM `{$dbSoftware}` AS s, `{$dbIncidents}` AS i ";
     $sql .= "WHERE s.id = i.softwareid AND i.opened > '{$startdate}' ";
+    if (!empty($enddate)) $sql .= "AND i.opened < '{$enddate}' ";
     $software = $_REQUEST['software'];
     if (!empty($software)) $sql .= "AND s.id ='{$software}' ";
     $sql .= "GROUP BY s.id ORDER BY softwarecount DESC";
+
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
 
@@ -87,7 +95,10 @@ else
         $resultSLA = mysql_query($sqlSLA);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
 
-        if ($startdate > 1) echo "<p align='center'>since ".ldate($CONFIG['dateformat_date'], $startdate)."</p>"; // FIXME i18n since
+        if ($startdate > 1)
+        {
+            echo "<p align='center'>since ".ldate($CONFIG['dateformat_date'], $startdate)."</p>"; // FIXME i18n since
+        }
         echo "<table class='vertical' align='center'>";
         echo "<tr><th>Number of calls</th><th>%</th><th>{$strSkill}</th>";     // FIXME i18n number of calls
         while ($sla = mysql_fetch_object($resultSLA))
@@ -103,7 +114,7 @@ else
         $shade = 'shade1';
         for ($i = 0; $i < $c; $i++)
         {
-            if ($i<=25)
+            if ($i <= 25)
             {
                 $data .= $countArray[$i]."|";
                 $percentage = number_format(($countArray[$i]/$count) * 100,1);
@@ -164,7 +175,10 @@ else
             {
                 echo "<tr class='$shade'><td></td><td colspan='".(count($slas)+2)."'>";
                 echo "<table style='width: 100%'><tr>";
-                foreach ($monthbreakdown AS $month) echo "<th>{$month['month']}</th>";
+                foreach ($monthbreakdown AS $month)
+                {
+                    echo "<th>{$month['month']}</th>";
+                }
                 echo "</tr>\n<tr>";
                 foreach ($monthbreakdown AS $month)
                 {//echo "<pre>".print_r($month)."</pre>";
@@ -178,7 +192,7 @@ else
                         echo "</tr>\n";
                         $total += $month[$slaNames['name']];
                     }
-                    echo "<tr><td><strong>TOTAL</strong></td><td><strong>";
+                    echo "<tr><td><strong>{$strTotal}</strong></td><td><strong>";
                     echo $total;
                     echo "</strong></td></tr>\n";
                     $monthtotals[$month['month']]['month'] = $month['month'];
