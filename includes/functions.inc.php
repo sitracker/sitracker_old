@@ -9828,10 +9828,13 @@ function user_contracts_table($userid, $mode = 'internal')
         $sql .= "m.expirydate, m.term ";
         $sql .= "FROM `{$GLOBALS['dbSupportContacts']}` AS sc, ";
         $sql .= "`{$GLOBALS['dbMaintenance']}` AS m, ";
-        $sql .= "`{$GLOBALS['dbProducts']}` AS p ";
+        $sql .= "`{$GLOBALS['dbProducts']}` AS p, ";
+        $sql .= "`{$GLOBALS['dbContacts']}` AS c ";
         $sql .= "WHERE ((sc.maintenanceid=m.id AND sc.contactid='$userid') ";
         $sql .= "OR m.allcontactssupported = 'yes') ";
         $sql .= "AND m.product=p.id  ";
+        $sql .= "AND c.id = '{$userid}' ";
+        $sql .= "AND m.site = c.siteid ";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
         if (mysql_num_rows($result)>0)
@@ -9850,7 +9853,7 @@ function user_contracts_table($userid, $mode = 'internal')
                     $shade='expired';
                 }
 
-                if ($supportedrow['expirydate'] < $now)
+                if ($supportedrow['expirydate'] < $now AND $supportedrow['expirydate'] != -1)
                 {
                     $shade='expired';
                 }
@@ -9870,7 +9873,14 @@ function user_contracts_table($userid, $mode = 'internal')
                 $html .= "{$supportedrow['maintenanceid']}</a></td>";
                 $html .= "<td class='$shade'>{$supportedrow['productname']}</td>";
                 $html .= "<td class='$shade'>";
-                $html .= ldate($CONFIG['dateformat_date'], $supportedrow['expirydate']);
+                if ($supportedrow['expirydate'] == -1)
+                {
+                    $html .= $GLOBALS['strUnlimited'];
+                }
+                else
+                {
+                    $html .= ldate($CONFIG['dateformat_date'], $supportedrow['expirydate']);
+                }
                 if ($supportedrow['term'] == 'yes')
                 {
                     $html .= " {$GLOBALS['strTerminated']}";
