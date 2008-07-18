@@ -36,7 +36,7 @@ switch ($action)
         $permnewowner = cleanvar($_REQUEST['permnewowner']);
         $newstatus = cleanvar($_REQUEST['newstatus']);
         $userid = cleanvar($_REQUEST['userid']);
-        $temporary  = cleanvar($_REQUEST['temporary']);
+        $temporary = cleanvar($_REQUEST['temporary']);
         $id = cleanvar($_REQUEST['id']);
 
         // Retrieve current incident details
@@ -46,7 +46,9 @@ switch ($action)
         $incident = mysql_fetch_object($result);
 
         if ($newstatus != $incident->status)
-        $bodytext = "Status: ".incidentstatus_name($incident->status)." -&gt; <b>" . incidentstatus_name($newstatus) . "</b>\n\n" . $bodytext;
+        {
+            $bodytext = "Status: ".incidentstatus_name($incident->status)." -&gt; <b>" . incidentstatus_name($newstatus) . "</b>\n\n" . $bodytext;
+        }
 
         // Update incident
         $sql = "UPDATE `{$dbIncidents}` SET ";
@@ -70,7 +72,7 @@ switch ($action)
             $sql .= "owner='{$userid}', towner=0, ";
             $triggeruserid = $userid;
         }
-        elseif ($temporary=='yes')
+        elseif ($temporary == 'yes')
         {
             $sql .= "towner='{$userid}', ";
             $triggeruserid = $userid;
@@ -234,7 +236,7 @@ switch ($action)
             }
             else
             {
-                $countactive=0;
+                $countactive = 0;
             }
 
             $countdiff = $countincidents-$countactive;
@@ -248,12 +250,14 @@ switch ($action)
             echo "</td>";
             echo "</tr>\n";
         }
+
         $countusers = mysql_num_rows($result);
+
         if ($countusers >= 1)
         {
             // Other users are shown in a optional section
             if ($suggested > 0) echo "<tbody id='moreusers' style='display:none;'>";  // FIXME tbody
-            $shade='shade1';
+            $shade = 'shade1';
 
             while ($users = mysql_fetch_object($result))
             {
@@ -270,9 +274,9 @@ switch ($action)
                 $incpriority = user_incidents($users->id);
                 $countincidents = ($incpriority['1']+$incpriority['2']+$incpriority['3']+$incpriority['4']);
 
-                if ($countincidents >= 1) $countactive=user_activeincidents($users->id);
-                else $countactive=0;
-                $countdiff=$countincidents-$countactive;
+                if ($countincidents >= 1) $countactive = user_activeincidents($users->id);
+                else $countactive = 0;
+                $countdiff = $countincidents - $countactive;
                 echo "<td align='center'>$countactive / {$countdiff}</td>";
                 echo "<td align='center'>".$incpriority['4']."</td>";
                 echo "<td align='center'>".$incpriority['3']."</td>";
@@ -282,13 +286,17 @@ switch ($action)
                 echo $users->accepting=='Yes' ? $strYes : "<span class='error'>{$strNo}</span>";
                 echo "</td>";
                 echo "</tr>\n";
-                if ($shade=='shade1') $shade='shade2';
-                else $shade='shade1';
+                if ($shade == 'shade1') $shade = 'shade2';
+                else $shade = 'shade1';
             }
             if ($suggested > 0) echo "</tbody>";
         }
         echo "\n</table><br />\n";
-        if ($suggested > 0 AND $countusers >= 1) echo "<p id='morelink'><a href=\"#\" onclick=\"$('moreusers').toggle();$('morelink').toggle();\">{$countusers} {$strMore}</a></p>";
+        if ($suggested > 0 AND $countusers >= 1)
+        {
+            echo "<p id='morelink'><a href=\"#\" onclick=\"$('moreusers').toggle();$('morelink').toggle();\">";
+            echo "{$countusers} {$strMore}</a></p>";
+        }
         echo "</div>\n"; // reassignlist
 
         echo "<table class='vertical'>";
@@ -346,7 +354,8 @@ switch ($action)
             else echo "{$strAssignTemporarily}";
             echo "</label></td></tr>\n";
         }
-        echo "<tr><th>{$strVisibility}:</th><td><label><input type='checkbox' name='cust_vis' value='yes' /> {$strVisibleToCustomer}</label></td></tr>\n";
+        echo "<tr><th>{$strVisibility}:</th><td><label>";
+        echo "<input type='checkbox' name='cust_vis' value='yes' /> {$strVisibleToCustomer}</label></td></tr>\n";
 
         echo "<tr><th>{$strNewIncidentStatus}:</th>";
         echo "<td>".incidentstatus_drop_down("newstatus", $incident->status)."</td></tr>\n";
