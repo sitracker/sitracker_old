@@ -8,6 +8,8 @@
 // of the GNU General Public License, incorporated herein by reference.
 //
 
+// FIXME i18n
+
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
 // This Page Is Valid XHTML 1.0 Transitional!   15Mar06
@@ -26,10 +28,10 @@ $title = $strIncidentsBySite;
 if (empty($_REQUEST['mode']))
 {
     include ('htmlheader.inc.php');
-    echo "<h2>$title</h2>";
+    echo "<h2>{$title}</h2>";
     echo "<p align='center'>This report lists the incidents that each site has logged over the past twelve months.</p>";
     echo "<form action='{$_SERVER['PHP_SELF']}' method='post'>";
-    echo "<table summary='Site Selection Table' align='center'>";
+    echo "<table summary='Site Selection Table' class='vertical'>";
     echo "<tr><th colspan='2' align='center'>Include</th></tr>";
     echo "<tr><td align='center' colspan='2'>";
     $sql = "SELECT * FROM `{$dbSites}` ORDER BY name";
@@ -105,18 +107,19 @@ elseif ($_REQUEST['mode'] == 'report')
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
     $numrows = mysql_num_rows($result);
 
+    $html .= "<h2>{$title}</h2>";
     // FIXME i18n
-
     $html .= "<p align='center'>This report is a list of ($numrows) incidents for all sites that you selected</p>";
     $html .= "<table width='99%' align='center'>";
     $html .= "<tr><th>{$strOpened}</th><th>{$strIncident}</th><th>{$strExternalID}</th><th>{$strTitle}</th><th>{$strContact}</th><th>{$strSite}</th><th>{$strType}</th></tr>";
     $csvfieldheaders .= "{$strOpened},{$strIncident},{$strExternalID},{$strTitle},{$strContact},{$strSite},{$strType}\r\n";
     $rowcount = 0;
     $externalincidents = 0;
+    $shade = 'shade1';
     while ($row = mysql_fetch_object($result))
     {
         $nicedate = ldate('d/m/Y',$row->opened);
-        $html .= "<tr class='shade2'><td>$nicedate</td><td>{$row->incid}</td><td>{$row->externalid}</td><td>{$row->title}</td><td>{$row->cname}</td><td>{$row->site}</td><td>{$row->typename}</td></tr>\n";
+        $html .= "<tr class='{$shade}'><td>$nicedate</td><td>{$row->incid}</td><td>{$row->externalid}</td><td>{$row->title}</td><td>{$row->cname}</td><td>{$row->site}</td><td>{$row->typename}</td></tr>\n";
         $csv .="'".$nicedate."', '{$row->incid}','{$row->externalid}', '{$row->title}','{$row->cname}','{$row->site}','{$row->typename}'\n";
         if (!empty($row->externalid))
         {
@@ -129,6 +132,8 @@ elseif ($_REQUEST['mode'] == 'report')
             $sitetotals[$row->siteid]['name'] = $row->site;
         }
 
+        if ($shade == "shade1") $shade = "shade2";
+        else $shade = "shade1";
     }
 
     if ($showsitetotals)
