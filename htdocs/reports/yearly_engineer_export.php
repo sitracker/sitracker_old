@@ -181,9 +181,6 @@ elseif ($_REQUEST['statistics'] == 'on')
         }
     }
 
-    //mysqldump version
-    // Escalated
-    //
     // FIXME this SQL uses the bodytext to find out which incidents have been escalated
     $sql = "SELECT COUNT(DISTINCT(incidentid)) AS numberEscalated, u.id, u.realname ";
     $sql .= "FROM `{$dbUpdates}` AS up, `{$dbIncidents}` AS i, `{$dbUsers}` AS u ";
@@ -225,6 +222,7 @@ elseif ($_REQUEST['statistics'] == 'on')
 
     if (sizeof($data) > 0)
     {
+        // FIXME i18n headings
         $html .= "<table align='center'>";
         $html .= "<tr>";
         $html .= "<th>{$strUser}</th>";
@@ -240,7 +238,7 @@ elseif ($_REQUEST['statistics'] == 'on')
         $csv .= "{$strUser},Assigned,{$strEscalated},{$strClosed},Avg Assigned (Month),Avg Escalated (Month),";
         $csv .= "Avg Closed (Month),Percentage escalated\n";
 
-        $class="class='shade1'";
+        $class = "class='shade1'";
         foreach ($data AS $engineer)
         {
             $html .= "<tr>";
@@ -270,11 +268,11 @@ elseif ($_REQUEST['statistics'] == 'on')
             $csv .= round(($engineer['escalated']/$engineer['opened'])*100,2)."%\n";
 
 
-            if ($class=="class='shade1'") $class="class='shade2'";
-            else $class="class='shade1'";
+            if ($class == "class='shade1'") $class = "class='shade2'";
+            else $class = "class='shade1'";
         }
         $html .= "<tr>";
-        $html .= "<td {$class} align='right'><super>TOTALS:</super></td>";
+        $html .= "<td {$class} align='right'><super>{$strTOTALS}:</super></td>";
         $html .= "<td {$class}>$totalOpened</td>";
         $html .= "<td {$class}>$totalEscalated</td>";
         $html .= "<td {$class}>$totalClosed</td>";
@@ -285,7 +283,7 @@ elseif ($_REQUEST['statistics'] == 'on')
         $html .= "</tr>";
         $html .= "</table>";
 
-        $csv .= "TOTALS:,";
+        $csv .= "{$strTOTALS}:,";
         $csv .= $totalOpened.",";
         $csv .= $totalEscalated.",";
         $csv .= $totalClosed.",";
@@ -294,7 +292,7 @@ elseif ($_REQUEST['statistics'] == 'on')
         $csv .= round($totalClosed/12,2).","; //The average over a 12mnth period
         $csv .= round(($totalEscalated/$totalOpened)*100,2)."%\n";
 
-
+        // FIXME i18n
         $html .= "<p align='center'>The statistics are approximation only. They don't take into consideration incidents reassigned</p>";
         $csv .= "The statistics are approximation only. They don't take into consideration incidents reassigned\n";
 
@@ -304,7 +302,7 @@ elseif ($_REQUEST['statistics'] == 'on')
     if ($_POST['output'] == 'screen')
     {
         include ('htmlheader.inc.php');
-        echo "<h2>Engineer statistics for past year</h2>";
+        echo "<h2>Engineer statistics for past year</h2>"; // FIXME i18n
         echo $html;
         include ('htmlfooter.inc.php');
     }
@@ -324,8 +322,11 @@ elseif ($_REQUEST['mode'] == 'report')
     if (!empty($_POST['enddate'])) $enddate = strtotime($_POST['enddate']);
     else $enddate = mktime(23,59,59,31,12,date('Y'));
     $type = $_POST['type'];
-    if (is_array($_POST['exc']) && is_array($_POST['exc'])) $_POST['inc']=array_values(array_diff($_POST['inc'],$_POST['exc']));  // don't include anything excluded
-    $includecount=count($_POST['inc']);
+    if (is_array($_POST['exc']) && is_array($_POST['exc']))
+    {
+        $_POST['inc'] = array_values(array_diff($_POST['inc'],$_POST['exc']));  // don't include anything excluded
+    }
+    $includecount = count($_POST['inc']);
     if ($includecount >= 1)
     {
         // $html .= "<strong>Include:</strong><br />";
@@ -335,22 +336,22 @@ elseif ($_REQUEST['mode'] == 'report')
         {
             // $html .= "<strong>Include:</strong><br />";
             $incsql .= "(";
-	        $incsql_esc .= "(";
+            $incsql_esc .= "(";
             for ($i = 0; $i < $includecount; $i++)
             {
                 // $html .= "{$_POST['inc'][$i]} <br />";
-                $incsql .= "users.id={$_POST['inc'][$i]}";
-		        $incsql_esc .= "incidents.owner={$_POST['inc'][$i]}";
+                $incsql .= "u.id={$_POST['inc'][$i]}";
+                $incsql_esc .= "i.owner={$_POST['inc'][$i]}";
                 if ($i < ($includecount-1)) $incsql .= " OR ";
-		        if ($i < ($includecount-1)) $incsql_esc .= " OR ";
+                if ($i < ($includecount-1)) $incsql_esc .= " OR ";
             }
             $incsql .= ")";
-	        $incsql_esc .= ")";
+            $incsql_esc .= ")";
         }
         $incsql .= ")";
         $incsql_esc .= ")";
     }
-//
+
     $sql = "SELECT i.id AS incid, i.title AS title, u.realname AS realname, u.id AS userid, ";
     $sql .= "i.opened AS opened, i.closed AS closed ";
     $sql .= "FROM `{$dbUsers}` AS u, `{$dbIncidents}` AS i ";
@@ -419,15 +420,16 @@ elseif ($_REQUEST['mode'] == 'report')
         $count++;
     }
 
-
+    // FIXME i18n
     $html .= "<p align='center'>This report is a list of ($numrows) incidents for your selections of which ($numrows_esc) where escalated</p>";
     $html .= "<table width='99%' align='center'>";
-    $html .= "<tr><th>{$strOpened}</th><th>{$strClosed}</th><th>{$strIncident}</th><th>{$strTitle}</th><th>{$strEngineer}</th><th>{$strEscalated}</th></tr>";
+    $html .= "<tr><th>{$strOpened}</th><th>{$strClosed}</th><th>{$strIncident}</th>";
+    $html .= "<th>{$strTitle}</th><th>{$strEngineer}</th><th>{$strEscalated}</th></tr>";
     $csvfieldheaders .= "opened,closed,id,title,engineer,escalated\r\n";
-    $rowcount=0;
+    $rowcount = 0;
     while ($row = mysql_fetch_object($result))
     {
-        $nicedate = ldate('d/m/Y',$row->opened);
+        $nicedate = ldate('d/m/Y', $row->opened);
         if ($row->closed > 0)
         {
             $niceclose = ldate('d/m/Y',$row->closed);
@@ -437,7 +439,9 @@ elseif ($_REQUEST['mode'] == 'report')
             $niceclose = $strOpen;
         }
         $ext = external_escalation($escalated_array, $row->incid);
-        $html .= "<tr class='shade2'><td>$nicedate</td><td>{$niceclose}</td><td><a href='../incident_details.php?id={$row->incid}'>{$row->incid}</a></td><td>{$row->title}</td><td>{$row->realname}</td><td>$ext</td></tr>";
+        $html .= "<tr class='shade2'><td>$nicedate</td><td>{$niceclose}</td>";
+        $html .= "<td><a href='../incident_details.php?id={$row->incid}'>{$row->incid}</a></td>";
+        $html .= "<td>{$row->title}</td><td>{$row->realname}</td><td>$ext</td></tr>";
         $csv .="'".$nicedate."','".$niceclose."', '{$row->incid}','{$row->title}','{$row->realname},'$ext'\n";
     }
     $html .= "</table>";
