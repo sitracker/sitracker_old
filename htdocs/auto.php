@@ -187,7 +187,7 @@ function saction_TimeCalc()
         mysql_free_result($update_result);
 
 
-        if ($newSlaTime!=-1)
+        if ($newSlaTime != -1)
         {
             // Get these time of NEXT SLA requirement in minutes
             $coefficient = 1;
@@ -294,54 +294,55 @@ function saction_SetUserStatus()
             }
             if ($newstatus != $currentstatus)
             {
-                $accepting='';
+                $accepting = '';
+                // FIXME these should be constants
                 switch ($newstatus)
                 {
                     case 1: // in office
-                        $accepting='Yes';
+                        $accepting = 'Yes';
                     break;
 
                     case 2: // Not in office
-                        $accepting='No';
+                        $accepting = 'No';
                     break;
 
                     case 3: // In Meeting
                         // don't change
-                        $accepting='';
+                        $accepting = '';
                     break;
 
                     case 4: // At Lunch
-                        $accepting='';
+                        $accepting = '';
                     break;
 
                     case 5: // On Holiday
-                        $accepting='No';
+                        $accepting = 'No';
                     break;
 
                     case 6: // Working from home
-                        $accepting='Yes';
+                        $accepting = 'Yes';
                     break;
 
                     case 7: // On training course
-                        $accepting='No';
+                        $accepting = 'No';
                     break;
 
                     case 8: // Absent Sick
-                        $accepting='No';
+                        $accepting =' No';
                     break;
 
                     case 9: // Working Away
                         // don't change
-                        $accepting='';
+                        $accepting = '';
                     break;
 
                     default:
                         $accepting='';
                 }
                 $usql = "UPDATE `{$dbUsers}` SET status='{$newstatus}'";
-                if ($accepting!='') $usql .= ", accepting='{$accepting}'";
+                if ($accepting != '') $usql .= ", accepting='{$accepting}'";
                 $usql .= " WHERE id='{$huser->userid}' LIMIT 1";
-                if ($accepting=='No') incident_backup_switchover($huser->userid, 'no');
+                if ($accepting == 'No') incident_backup_switchover($huser->userid, 'no');
                 if ($verbose) echo user_realname($huser->userid).': '.userstatus_name($currentstatus).' -> '.userstatus_name($newstatus).$crlf;
                 if ($verbose) echo $usql.$crlf;
                 mysql_query($usql);
@@ -588,7 +589,38 @@ function saction_PurgeExpiredFTPItems()
 // TODO PurgeAttachments
 // Look for the review due trigger, where did it go
 
+/**
+ *
+ * @author Paul Heaney 
+*/
+function saction_MailPreviousMonthsTransactions()
+{
+    /*
+     Get todays date
+     Subtract one from the month and find last month
+     Find the last day of last month
+     fope(transactions.php?mode=csv&start=X&end=Y&breakdonw=yes
+     mail to people
 
+     TODO need a mechanism to subscribe to scheduled events? Could this be done with a trigger? Hmmhhhhhh
+
+    */
+    $currentmonth = date('%m');
+    $currentyear = date('%y');
+    if ($currentmonth == 1)
+    {
+        $currentyear--;
+        $lastmonth = 12;
+    }
+    else
+    {
+        $lastmonth = $currentmonth - 1;
+    }
+
+    $start = '{$currentyear}-{$lastmonth}-01';
+
+    $csv = fopen("transactions.php?startdate={$startdate}&amp;enddate={$enddate}&amp;display=csv&amp;sitebreakdown=on");
+}
 // =======================================================================================
 $actions = schedule_actions_due();
 if ($actions !== FALSE)

@@ -254,7 +254,7 @@ function trigger_replace_specials($triggerid, $string, $paramarray)
     * we're not dealing with a trigger
     * @return mixed array if replacement found, NULL if not
 */
-function replace_vars(&$ttvar, &$triggerid, &$identifier, &$paramarray, $required='')
+function replace_vars(&$ttvar, &$triggerid, &$identifier, &$paramarray, $required = '')
 {
     global $triggerarray, $ttvararray, $CONFIG;
 
@@ -423,8 +423,8 @@ function send_trigger_email($userid, $triggerid, $template, $paramarray)
     * @param $paramarray array. The array of extra parametes to apply to the
     * trigger
 */
-function create_trigger_notice($userid, $noticetext='', $triggertype='',
-                               $template, $paramarray='')
+function create_trigger_notice($userid, $noticetext = '', $triggertype = '',
+                               $template, $paramarray = '')
 {
     global $CONFIG, $dbg, $dbNotices, $dbNoticeTemplates;
     /*if ($CONFIG['debug'])
@@ -721,14 +721,14 @@ function triggeraction_description($trigaction, $editlink = FALSE)
 */
 //TODO should this be limited to one delete, is there ever more than one?
 //TODO make it fail quietly
-function trigger_revoke($triggerid, $userid, $referenceid=0)
+function trigger_revoke($triggerid, $userid, $referenceid = 0)
 {
     global $GLOBALS;
     //find all triggers of this type and user
     $sql = "SELECT * FROM `{$GLOBALS['dbTriggers']}` WHERE triggerid='{$triggerid}' ";
     $sql .= "AND userid={$userid} AND action='ACTION_NOTICE' AND template!=0";
     $result = mysql_query($sql);
-    while($triggerobj = @mysql_fetch_object($result))
+    while ($triggerobj = @mysql_fetch_object($result))
     {
         $templatesql = "DELETE FROM {$GLOBALS['dbNotices']} ";
         $templatesql .= "WHERE template={$triggerobj->template} ";
