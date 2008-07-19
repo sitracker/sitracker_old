@@ -1041,12 +1041,16 @@ CREATE TABLE `{$dbScheduler}` (
   `status` enum('enabled','disabled') NOT NULL default 'enabled',
   `start` datetime NOT NULL,
   `end` datetime NOT NULL,
+  `type` enum('interval','date') NOT NULL default 'interval',
   `interval` int(11) NOT NULL,
+  `date_type` enum('month','year') NOT NULL COMMENT 'For type date the type',
+  `date_offset` int(11) NOT NULL COMMENT 'off set into the period',
+  `date_time` time NOT NULL COMMENT 'Time to perform action',
   `lastran` datetime NOT NULL,
   `success` tinyint(1) NOT NULL default '1',
   PRIMARY KEY  (`id`),
   KEY `job` (`action`)
-) ENGINE=MyISAM  ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
 INSERT INTO `{$dbScheduler}` (`id`, `action`, `params`, `paramslabel`, `description`, `status`, `start`, `end`, `interval`, `lastran`, `success`) VALUES (1, 'CloseIncidents', '554400', 'closure_delay', 'Close incidents that have been marked for closure for longer than the <var>closure_delay</var> parameter (which is in seconds)', 'enabled', '2008-01-01 00:00:00', '0000-00-00 00:00:00', 60, '0000-00-00 00:00:00', 1);
 INSERT INTO `{$dbScheduler}` (`id`, `action`, `params`, `paramslabel`, `description`, `status`, `start`, `end`, `interval`, `lastran`, `success`) VALUES (2, 'SetUserStatus', '', NULL, '(EXPERIMENTAL) This will set users status                         based on data from their holiday calendar.                        e.g. Out of Office/Away sick.', 'enabled', '2008-01-01 00:00:00', '0000-00-00 00:00:00', 60, '0000-00-00 00:00:00', 1);
@@ -2359,9 +2363,9 @@ UPDATE `{$dbClosingStatus}` SET `name` =  'strSupportExpired' WHERE `id` = 8;
 UPDATE `{$dbClosingStatus}` SET `name` =  'strUnsolved' WHERE `id` = 9;
 UPDATE `{$dbClosingStatus}` SET `name` =  'strEscalated' WHERE `id` = 10;
 
--- PH 2008-07-12 Needs to go in new yet
-ALTER TABLE `scheduler` ADD `type` ENUM( 'interval', 'date' ) NOT NULL DEFAULT 'interval' AFTER `end` ;
-ALTER TABLE `scheduler` ADD `date_type` ENUM( 'month', 'year' ) NOT NULL COMMENT 'For type date the type' AFTER `interval` ,
+-- PH 2008-07-12 
+ALTER TABLE `{$dbScheduler}` ADD `type` ENUM( 'interval', 'date' ) NOT NULL DEFAULT 'interval' AFTER `end` ;
+ALTER TABLE `{$dbScheduler}` ADD `date_type` ENUM( 'month', 'year' ) NOT NULL COMMENT 'For type date the type' AFTER `interval` ,
 ADD `date_offset` INT NOT NULL COMMENT 'off set into the period' AFTER `date_type` ,
 ADD `date_time` TIME NOT NULL COMMENT 'Time to perform action' AFTER `date_offset` ;
 
