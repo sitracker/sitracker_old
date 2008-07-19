@@ -582,8 +582,8 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
         {
             include ('spellcheck_email.php');
             exit;
-        }
-        if ($encoded=='yes')
+        } 
+        if ($encoded == 'yes') // FIXME does this have a purpose?
 
         $errors = 0;
         // check to field
