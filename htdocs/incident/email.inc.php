@@ -742,7 +742,7 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
                     }
                     else
                     {
-                        $timetext.=date("D jS M Y @ g:i A", $timeofnextaction);
+                        $timetext .= date("D jS M Y @ g:i A", $timeofnextaction);
                     }
                     $timetext .= "</b>\n\n";
                     //$bodytext = $timetext.$bodytext;

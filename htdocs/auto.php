@@ -122,7 +122,7 @@ function saction_TimeCalc()
     {
         // Get the service level timings for this class of incident, we may have one
         // from the incident itself, otherwise look at contract type
-        if ($incident['servicelevel']== '')
+        if ($incident['servicelevel'] ==  '')
         {
             $sql = "SELECT tag FROM `{$dbServiceLevels}` s, `{$dbMaintenance}` m ";
             $sql .= "WHERE m.id = '{$incident['maintenanceid']}' AND s.id = m.servicelevelid";
@@ -595,6 +595,8 @@ function saction_PurgeExpiredFTPItems()
 */
 function saction_MailPreviousMonthsTransactions()
 {
+	echo "Running saction_MailPreviousMonthsTransactions";
+	global $CONFIG;
     /*
      Get todays date
      Subtract one from the month and find last month
@@ -605,8 +607,8 @@ function saction_MailPreviousMonthsTransactions()
      TODO need a mechanism to subscribe to scheduled events? Could this be done with a trigger? Hmmhhhhhh
 
     */
-    $currentmonth = date('%m');
-    $currentyear = date('%y');
+    $currentmonth = date('m');
+    $currentyear = date('y');
     if ($currentmonth == 1)
     {
         $currentyear--;
@@ -617,9 +619,30 @@ function saction_MailPreviousMonthsTransactions()
         $lastmonth = $currentmonth - 1;
     }
 
-    $start = '{$currentyear}-{$lastmonth}-01';
+    $startdate = "{$currentyear}-{$lastmonth}-01";
+    // Find last date of previous month, 5 day an arbitary choice
+	$lastday = date('t', strtotime('{$currentyear}-{$lastmonth}-05'));
+	$enddate = 	"{$currentyear}-{$lastmonth}-{$lastday}";
 
-    $csv = fopen("transactions.php?startdate={$startdate}&amp;enddate={$enddate}&amp;display=csv&amp;sitebreakdown=on");
+    $csv = file_get_contents("http://sit.pheaney.co.uk/transactions.php?startdate={$startdate}&amp;enddate={$enddate}&amp;display=csv&amp;sitebreakdown=on");
+    
+    $extra_headers = "Reply-To: {$CONFIG['support_email']}\nErrors-To: {$CONFIG['support_email']}\n"; // TODO should probably be different
+    $extra_headers .= "X-Mailer: {$CONFIG['application_shortname']} {$application_version_string}/PHP " . phpversion() . "\n";
+    $extra_headers .= "X-Originating-IP: {$_SERVER['REMOTE_ADDR']}\n";
+//    if ($ccfield != '')  $extra_headers .= "cc: $ccfield\n";
+//    if ($bccfield != '') $extra_headers .= "Bcc: $bccfield\n";
+
+    $extra_headers .= "\n"; // add an extra crlf to create a null line to separate headers from body
+                        // this appears to be required by some email clients - INL
+
+	$subject = "Billable incidents for period {$startdate} to {$enddate}";
+
+	$bodytext = "Attached is the billable incidents for the above period";
+
+    $mime = new MIME_mail($CONFIG['support_email'], "paul@pheaney.co.uk", html_entity_decode($subject), $bodytext, $extra_headers, '');
+    $mime->attach($csv, "Billable report", OCTET, BASE64, "filename=billable_incidents_{$lastmonth}_{$currentyear}.csv");
+    return $mime->send_mail();
+
 }
 // =======================================================================================
 $actions = schedule_actions_due();

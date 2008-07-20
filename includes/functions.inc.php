@@ -1031,23 +1031,23 @@ function contact_vcard($id)
     $vcard .= "FN:{$contact->forenames} {$contact->surname}\r\n";
     if (!empty($contact->jobtitle)) $vcard .= "TITLE:{$contact->jobtitle}\r\n";
     if (!empty($contact->sitename)) $vcard .= "ORG:{$contact->sitename}\r\n";
-    if ($contact->dataprotection_phone!='Yes') $vcard .= "TEL;TYPE=WORK:{$contact->phone}\r\n";
-    if ($contact->dataprotection_phone!='Yes' && !empty($contact->fax))
+    if ($contact->dataprotection_phone != 'Yes') $vcard .= "TEL;TYPE=WORK:{$contact->phone}\r\n";
+    if ($contact->dataprotection_phone != 'Yes' && !empty($contact->fax))
     {
         $vcard .= "TEL;TYPE=WORK;TYPE=FAX:{$contact->fax}\r\n";
     }
 
-    if ($contact->dataprotection_phone!='Yes' && !empty($contact->mobile))
+    if ($contact->dataprotection_phone != 'Yes' && !empty($contact->mobile))
     {
         $vcard .= "TEL;TYPE=WORK;TYPE=CELL:{$contact->mobile}\r\n";
     }
 
-    if ($contact->dataprotection_email!='Yes' && !empty($contact->email))
+    if ($contact->dataprotection_email != 'Yes' && !empty($contact->email))
     {
         $vcard .= "EMAIL;TYPE=INTERNET:{$contact->email}\r\n";
     }
 
-    if ($contact->dataprotection_address!='Yes')
+    if ($contact->dataprotection_address != 'Yes')
     {
         if ($contact->address1 != '')
         {
