@@ -242,4 +242,7 @@ $CONFIG['default_roleid'] = 3;
 // see www.gravatar.com to learn about gravatars
 $CONFIG['default_gravatar'] = 'identicon';
 
+// Default for whom the billing reports should be mailed to, multiple address can be seperared by commas 
+$CONFIG['billing_reports_email'] = 'admin@localhost';
+
 ?>

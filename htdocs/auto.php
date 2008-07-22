@@ -595,7 +595,6 @@ function saction_PurgeExpiredFTPItems()
 */
 function saction_MailPreviousMonthsTransactions()
 {
-	echo "Running saction_MailPreviousMonthsTransactions";
 	global $CONFIG;
     /*
      Get todays date
@@ -624,7 +623,7 @@ function saction_MailPreviousMonthsTransactions()
 	$lastday = date('t', strtotime('{$currentyear}-{$lastmonth}-05'));
 	$enddate = 	"{$currentyear}-{$lastmonth}-{$lastday}";
 
-    $csv = file_get_contents("http://sit.pheaney.co.uk/transactions.php?startdate={$startdate}&amp;enddate={$enddate}&amp;display=csv&amp;sitebreakdown=on");
+    $csv = transactions_report('', $startdate, $enddate, '', 'csv', TRUE);
     
     $extra_headers = "Reply-To: {$CONFIG['support_email']}\nErrors-To: {$CONFIG['support_email']}\n"; // TODO should probably be different
     $extra_headers .= "X-Mailer: {$CONFIG['application_shortname']} {$application_version_string}/PHP " . phpversion() . "\n";
@@ -639,7 +638,7 @@ function saction_MailPreviousMonthsTransactions()
 
 	$bodytext = "Attached is the billable incidents for the above period";
 
-    $mime = new MIME_mail($CONFIG['support_email'], "paul@pheaney.co.uk", html_entity_decode($subject), $bodytext, $extra_headers, '');
+    $mime = new MIME_mail($CONFIG['support_email'], $CONFIG['billing_reports_email'], html_entity_decode($subject), $bodytext, $extra_headers, '');
     $mime->attach($csv, "Billable report", OCTET, BASE64, "filename=billable_incidents_{$lastmonth}_{$currentyear}.csv");
     return $mime->send_mail();
 
