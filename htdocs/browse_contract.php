@@ -195,26 +195,28 @@ else
     echo "<th>{$strLicense}</th>";
     echo colheader('expiry', $strExpiryDate, $sort, $order, $filter);
     echo "<th width='200'>{$strNotes}</th>";
+    echo "<th>{$strActions}</th>";
     echo "</tr>\n";
-    $shade = 0;
+    $shade = 'shade1';
     while ($results = mysql_fetch_array($result))
     {
         // define class for table row shading
         if (($results['expirydate']<$now AND $results['expirydate'] != '-1') || ( $results['term'] == 'yes' AND $results['productonly'] == 'no'))
         {
-            $class = 'expired';
+            $shade = 'expired';
         }
         elseif ($results['productonly'] == 'yes')
         {
-            $class = 'notice';
+            $shade = 'notice';
         }
         else
         {
-            if ($shade) $class = "shade1";
-            else $class = "shade2";
+                // invert shade
+                if ($shade == 'shade1') $shade = 'shade2';
+                else $shade = 'shade1';
         }
 
-        echo "<tr class='{$class}'>";
+        echo "<tr class='{$shade}'>";
         echo "<td><a href='contract_details.php?id={$results['maintid']}'>{$strContract} {$results['maintid']}</a></td>";
         echo "<td>{$results["product"]}</td>";
         echo "<td><a href='site_details.php?id={$results['siteid']}#contracts'>".htmlspecialchars($results['site'])."</a><br />";
@@ -272,11 +274,9 @@ else
             echo nl2br($results["notes"]);
         }
 
-        echo "</td></tr>";
-
-        // invert shade
-        if ($shade == 1) $shade = 0;
-        else $shade = 1;
+        echo "</td>";
+		echo "<td><a href='edit_contract.php?action=edit&amp;maintid={$results['maintid']}'>{$strEdit}</a></td>";
+		echo"</tr>";
     }
 
     echo "</table>";

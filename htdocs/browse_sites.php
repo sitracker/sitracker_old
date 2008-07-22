@@ -216,7 +216,6 @@ if ($errors == 0)
         }
         $sql .= " ORDER BY name ASC";
 
-//echo "  ^^".$displayinactive."^^";
         // execute query
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
@@ -253,22 +252,22 @@ if ($errors == 0)
         echo "<th>{$strID}</th>";
         echo "<th>{$strSiteName}</th>";
         echo "<th>{$strDepartment}</th>";
+        echo "<th>{$strActions}</th>";
         echo "</tr>";
-        $shade = 0;
+        $shade = 'shade1';
         while ($results = mysql_fetch_array($result))
         {
             // define class for table row shading
-            if ($shade) $class = "shade1";
-            else $class = "shade2";
-            if ($results['active'] == 'false') $class='expired';
-            echo "<tr class='{$class}'>";
+            if ($results['active'] == 'false') $shade='expired';
+            echo "<tr class='{$shade}'>";
             echo "<td align='center'>{$results['id']}</td>";
             echo "<td><a href='site_details.php?id={$results['id']}&amp;action=show'>{$results['name']}</a></td>";
             echo "<td>".nl2br($results["department"])."</td>";
+            echo "<td><a href='edit_site.php?action=edit&amp;site={$results['id']}'>{$strEdit}</a></td>";
             echo "</tr>";
             // invert shade
-            if ($shade == 1) $shade = 0;
-            else $shade = 1;
+            if ($shade == 'shade1') $shade = 'shade2';
+            else $shade = 'shade1';
         }
         echo "</table>\n";
     }

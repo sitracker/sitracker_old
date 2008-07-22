@@ -82,11 +82,11 @@ dojo.require ("dojo.widget.ComboBox");
 <?php
 echo "<h2>".icon('contact', 32)." ";
 echo "{$strBrowseContacts}</h2>";
-?>
-<table summary="alphamenu" align="center">
-<tr>
-<td align="center">
-    <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="get">
+echo "<table summary='alphamenu' align='center''>";
+echo "<tr>";
+echo "<td align='center'>";
+    echo "<form action='{$_SERVER['PHP_SELF']}' method='get'>";
+    ?>
     <!-- <input type="text" name="search_string" />-->
     <?php
     echo "<p>{$strBrowseContacts}: "; ?>
@@ -156,7 +156,7 @@ else
     if ($search_string == '')
     {
         $errors = 1;
-        echo "<p class='error'>You must enter a search string</p>\n";
+        echo "<p class='error'>You must enter a search string</p>\n"; // FIXME i18n
     }
     // search for criteria
     if ($errors == 0)
@@ -171,8 +171,9 @@ else
             if ($search_string != '*')
             {
                 $sql .= " AND (";
-                if ($search_string_len<=6) $sql .= "c.id=('$search_string') OR ";
-                if ($search_string_len<=2)
+                if ($search_string_len <= 6) $sql .= "c.id=('$search_string') OR ";
+                
+                if ($search_string_len <= 2)
                 {
                     $sql .= "SUBSTRING(c.surname,1,$search_string_len)=('$search_string') ";
                 }
@@ -183,7 +184,7 @@ else
                 }
                 $sql .= " ) ";
             }
-            if ($displayinactive=="false")
+            if ($displayinactive == "false")
             {
                 $sql .= " AND c.active = 'true' AND s.active = 'true'";
             }
@@ -195,12 +196,14 @@ else
         }
 
         if (mysql_num_rows($result) == 0)
+        {
             echo "<p align='center'>Sorry, unable to find any contacts matching <em>'$search_string</em>'</p>\n";
+        }
         else
         {
-            ?>
-            <p align='center'>Displaying <?php echo mysql_num_rows($result) ?> contact(s) matching <em>'<?php echo $search_string; ?>'</em></p>
-            <?php
+            
+            echo "<p align='center'>Displaying ".mysql_num_rows($result)." contact(s) matching <em>'{$search_string}'</em></p>";
+            
             echo "<table align='center'>
             <tr>
             <th>{$strName}</th>
@@ -208,32 +211,34 @@ else
             <th>{$strEmail}</th>
             <th>{$strTelephone}</th>
             <th>{$strFax}</th>
-            <th>{$strAddIncident}</th>
+            <th>{$strAction}</th>
             </tr>";
-            $shade = 0;
+            $shade = 'shade1';
             while ($results = mysql_fetch_array($result))
             {
-                // define class for table row shading
-                if ($shade) $class = "shade1";
-                else $class = "shade2";
-                if ($results['active'] == 'false') $class='expired';
-                ?>
-                <tr class='<?php echo $class ?>'>
-                    <td><a href="contact_details.php?id=<?php echo $results["id"] ?>" ><?php echo $results['surname'].', '.$results['forenames']; ?></a></td>
-                    <td><a href="site_details.php?id=<?php echo $results['siteid'] ?>"><?php echo site_name($results['siteid']) ?></a></td>
-                    <td><?php echo $results["email"]; ?></td>
-                    <td><?php if ($results["phone"] == '') { echo "<em>{$strNone}</em>"; } else { echo $results["phone"]; } ?></td>
-                    <td><?php if ($results["fax"] == '') { echo "<em>{$strNone}</em>"; } else { echo $results["fax"]; } ?></td>
-                    <?php echo "<td><a href='add_incident.php?action=findcontact&amp;contactid={$results['id']}'>{$strAddIncident}</a></td>"; ?>
-                </tr>
-                <?php
+                if ($results['active'] == 'false') $shade = 'expired';
+
+                echo "<tr class='{$shade}'>";
+                echo "<td><a href='contact_details.php?id={$results['id']}'>{$results['surname']}, {$results['forenames']}</a></td>";
+                echo "<td><a href='site_details.php?id={$results['siteid']}'>".site_name($results['siteid'])."</a></td>";
+                echo "<td>{$results['email']}</td>";
+                echo "<td>";
+                if ($results["phone"] == '')  echo "<em>{$strNone}</em>";
+				else echo $results["phone"];
+				echo "</td>";
+                echo "<td>";
+                if ($results["fax"] == '') echo "<em>{$strNone}</em>"; 
+				else echo $results["fax"]; 
+				echo "</td>";
+                echo "<td><a href='add_incident.php?action=findcontact&amp;contactid={$results['id']}'>{$strAddIncident}</a> | ";
+                echo "<a href='edit_contact.php?action=edit&amp;contact={$results['id']}'>{$strEditContact}</a>";
+                echo "</td></tr>";
+
                 // invert shade
-                if ($shade == 1) $shade = 0;
-                else $shade = 1;
+                if ($shade == 'shade1') $shade = 'shade2';
+                else $shade = 'shade1';
             }
-            ?>
-            </table>
-            <?php
+            echo "</table>";
         }
         // free result
         mysql_free_result($result);
