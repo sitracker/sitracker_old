@@ -6091,11 +6091,6 @@ function external_escalation($escalated, $incid)
 }
 
 
-function user_notification_on_reassign($user)
-{
-    return db_read_column('var_notify_on_reassign', $GLOBALS['dbUsers'], $user);
-}
-
 
 /**
     * Converts BBcode to HTML
@@ -6530,6 +6525,7 @@ function dashboard_do($context, $row=0, $dashboardid=0)
         if (function_exists($action)) $action($dashletid);
     }
 }
+
 
 function show_dashboard_component($row, $dashboardid)
 {
