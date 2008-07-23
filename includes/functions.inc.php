@@ -887,130 +887,6 @@ function contact_count_open_incidents($id)
 
 
 /**
-    * Returns a string depending on whether the given contact has support for the given product.
-    * @author Ivan Lucas
-    * @deprecated
-    * @param $contactid Contact ID to check
-    * @param $productid Product ID to check
-    * @return string
-    * @retval 'yes' Contact has support for product
-    * @retval 'no'  Contact doesn't have support for product
-    * @retval 'expired' Contact did have support for product but it has now expired
-    * @note Based on contactproducts and so DEPRECATED needs updating to be based on contracts
-    * @todo TODO update contact_productsupport() to be based on contracts
-    *
-*/
-function contact_productsupport($contactid, $productid)
-{
-    global $now, $dbContactProducts;
-    // check support
-    $sql = "SELECT id, expirydate FROM `{$dbContactProducts}` WHERE contactid={$contactid} AND productid={$productid}";
-    $result = mysql_query($sql);
-
-    if (mysql_num_rows($result) == 0)
-    {
-        return ("no");
-    }
-    else
-    {
-        $product = mysql_fetch_array($result);
-        if ($product['expirydate'] <= $now)
-        {
-            return ("expired");
-        }
-        else if ($product['expirydate'] > $now)
-        {
-            return ("yes");
-        }
-    }
-}
-
-
-/**
-    * Returns an integer representing the expiry day of the month for the given contact's product support.
-    * @author Ivan Lucas
-    * @deprecated
-    * @returns integer day of month
-    * @retval 0 the contact or product does not exist or if the contact does not have support for the given product.
-    * @note Based on contactproducts and so DEPRECATED needs updating to be based on contracts
-*/
-function contact_productsupport_expiryday($contactid, $productid)
-{
-    global $dbContactProducts;
-    // check support
-    $sql = "SELECT id, expirydate FROM `{$dbContactProducts}` WHERE contactid={$contactid} AND productid={$productid}";
-    $result = mysql_query($sql);
-
-    if (mysql_num_rows($result) == 0)
-    {
-        return 0;
-    }
-    else
-    {
-        $productsupport = mysql_fetch_array($result);
-        $date_array = getdate($productsupport["expirydate"]);
-        return $date_array["mday"];
-    }
-}
-
-
-/**
-    * Returns an integer representing the expiry month of the year for the given contact's product support.
-    * @author Ivan Lucas
-    * @deprecated
-    * @returns integer month of year
-    * @retval 0 the contact or product does not exist or if the contact does not have support for the given product.
-    * @note Based on contactproducts and so DEPRECATED needs updating to be based on contracts
-*/
-function contact_productsupport_expirymonth($contactid, $productid)
-{
-    global $dbContactProducts;
-    // check support
-    $sql = "SELECT id, expirydate FROM `{$dbContactProducts}` WHERE contactid={$contactid} AND productid={$productid}";
-    $result = mysql_query($sql);
-
-    if (mysql_num_rows($result) == 0)
-    {
-        return (0);
-    }
-    else
-    {
-        $productsupport = mysql_fetch_array($result);
-        $date_array = getdate($productsupport["expirydate"]);
-        return ($date_array["mon"]);
-    }
-}
-
-
-/**
-    * Returns an integer representing the expiry year for the given contact's product support.
-    * @author Ivan Lucas
-    * @deprecated
-    * @returns integer year
-    * @retval 0 the contact or product does not exist or if the contact does not have support for the given product.
-    * @deprecated Based on contactproducts and so DEPRECATED needs updating to be based on contracts
-*/
-function contact_productsupport_expiryyear($contactid, $productid)
-{
-    global $dbContactProducts;
-    // check support
-    $sql = "SELECT id, expirydate FROM `{$dbContactProducts}` WHERE contactid={$contactid} AND productid={$productid}";
-    $result = mysql_query($sql);
-
-    if (mysql_num_rows($result) == 0)
-    {
-        return (0);
-    }
-    else
-    {
-        $productsupport = mysql_fetch_array($result);
-        $date_array = getdate($productsupport["expirydate"]);
-        return ($date_array["year"]);
-    }
-}
-
-
-/**
     * Creates a vcard electronic business card for the given contact
     * @author Ivan Lucas
     * @param $id integer Contact ID
@@ -2094,44 +1970,6 @@ function incidentstatus_drop_down($name, $id, $disabled = FALSE)
 
 
 /**
-    * prints the HTML for a drop down list of incident status names, with the given name and with the
-    * given id selected. Also prints an 'All' option with value 'all' for viewing all incidents.
-    * @author Ivan Lucas
-    * @deprecated DEPRECATED remove after 3.35
-*/
-function incidentstatus_drop_down_all($name, $id)
-{
-    global $dbIncidentStatus;
-    // extract statuses
-    $sql  = "SELECT id, name FROM `{$dbIncidentStatus}` ORDER BY name ASC";
-    $result = mysql_query($sql);
-
-    echo "<select name='{$name}'>\n";
-    if ($id == 0)
-    {
-        echo "<option selected='selected' value=\"all\">{$GLOBALS['strAll']}</option>\n";
-    }
-    else
-    {
-        echo "<option value=\"all\">{$GLOBALS['strAll']}</option>\n";
-    }
-
-    while ($statuses = mysql_fetch_array($result))
-    {
-        echo "<option";
-        if ($statuses["id"] == $id)
-        {
-            echo "selected='selected'";
-        }
-        echo " value='{$statuses["id"]}'>{$GLOBALS[$statuses['name']]}";
-        echo "</option>";
-        echo "\n";
-}
-    echo "</select>";
-}
-
-
-/**
     * Return HTML for a select box of closing statuses
     * @author Ivan Lucas
     * @param $name string. Name attribute
@@ -2361,38 +2199,6 @@ function priority_drop_down($name, $id, $max=4, $disable = FALSE)
     $html .= "</select>\n";
 
     return $html;
-}
-
-
-/**
-    * prints the HTML for a multiple select list of products, with the given name and with all the products
-    * the given customer has support for already selected
-    * @author Ivan Lucas
-    * @deprecated
-    * @note DEPRECATED uses contactproducts
-*/
-function contactproducts_drop_down($name, $contactid)
-{
-    // extract products
-    $sql  = "SELECT * FROM `{$dbProducts}` ORDER BY name ASC";
-    $result = mysql_query($sql);
-
-    // print HTML
-
-    echo "<select multiple='mutliple' name='{$name}' size='10'>";
-    while ($products = mysql_fetch_array($result))
-    {
-        echo "<option ";
-        if (contact_productsupport($contactid, $products["id"]) == 1)
-        {
-            echo "selected='selected' ";
-        }
-
-        echo "value='{$products['id']}'>{$products['name']}</option>";
-        echo "\n";
-    }
-
-    echo "</select>";
 }
 
 
@@ -3402,17 +3208,6 @@ function sit_error_handler($errno, $errstr, $errfile, $errline, $errcontext)
     * @deprecated Remove after 3.40 release
     * @note DEPRECATED and replaced by sit_error_handler() / trigger_error()
 **/
-function throw_fatal_error($message,$details)
-{
-    trigger_error("{$message}: {$details}", E_USER_ERROR);
-}
-
-
-/**
-    * @author Ivan Lucas
-    * @deprecated Remove after 3.40 release
-    * @note DEPRECATED and replaced by sit_error_handler() / trigger_error()
-**/
 function throw_error($message, $details)
 {
     trigger_error("{$message}: {$details}", E_USER_WARNING);
@@ -3602,17 +3397,6 @@ function reseller_drop_down($name, $id)
 }
 
 
-/**
-*
-* @deprecated  - PH
-* @note DEPRECATED for 3.35, remove after 3.40
-*/
-function reseller_name($id)
-{
-    return db_read_column('name', $GLOBALS['dbResellers'], $id);
-}
-
-
 //  prints the HTML for a drop down list of
 // licence types, with the given name and with the given id
 // selected.
@@ -3643,15 +3427,6 @@ function licence_type_drop_down($name, $id)
     }
 
     echo "</select>";
-}
-
-/**
-*
-* @deprecated  - PH
-*/
-function licence_type($id)
-{
-    return db_read_column('name', $GLOBALS['dbLicenceTypes'], $id);
 }
 
 
@@ -4769,59 +4544,6 @@ function target_type_name($targettype)
         default: $name=''; break;
     }
     return $name;
-}
-
-
-/**
-* No long used anywhere, suggest removal
-* @deprecated
-* @note DEPRECATED remove after 3.40
-*/
-function target_radio_buttons($incidentid)
-{
-    global $strNo, $strInitialResponse;
-    $target = incident_get_next_target($incidentid);
-    if (empty($target->time))
-    {
-        echo "N/A (This incident has no unfulfilled targets)";
-    }
-    else
-    {
-        switch ($target->type)
-        {
-            case 'initialresponse':
-                echo "<input type='radio' name='target' checked='checked' value='none' />{$strNo} ";
-                echo "<input type='radio' name='target' value='initialresponse' />{$strInitialResponse} ";
-                echo "<input type='radio' name='target' value='probdef' />Prob. Def. ";
-                echo "<input type='radio' name='target' value='actionplan' />Act. Plan ";
-                echo "<input type='radio' name='target' disabled='disabled' value='solution' />Reprioritise ";
-            break;
-
-            case 'probdef':
-                echo "<input type='radio' name='target' checked='checked' value='none' />No ";
-                echo "<input type='radio' name='target' disabled='disabled' value='initialresponse' />{$strInitialResponse} ";
-                echo "<input type='radio' name='target' value='probdef' />Prob. Def. ";
-                echo "<input type='radio' name='target' value='actionplan' />Act. Plan ";
-                echo "<input type='radio' name='target' value='solution' />Reprioritise ";
-            break;
-
-            case 'actionplan':
-                echo "<input type='radio' name='target' checked='checked' value='none' />No ";
-                echo "<input type='radio' name='target' disabled='disabled' value='initialresponse' />{$strInitialResponse} ";
-                echo "<input type='radio' name='target' disabled='disabled' value='probdef' />Prob. Def. ";
-                echo "<input type='radio' name='target' value='actionplan' />Act. Plan ";
-                echo "<input type='radio' name='target' value='solution' />Reprioritise ";
-            break;
-
-            case 'solution':
-                echo "<input type='radio' name='target' checked='checked' value='none' />No ";
-                echo "<input type='radio' name='target' disabled='disabled' value='initialresponse' />{$strInitialResponse} ";
-                echo "<input type='radio' name='target' disabled='disabled' value='probdef' />Prob. Def. ";
-                echo "<input type='radio' name='target' disabled='disabled' value='actionplan' />Act. Plan ";
-                echo "<input type='radio' name='target' value='solution' />Reprioritise ";
-            break;
-        }
-    }
 }
 
 
