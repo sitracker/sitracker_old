@@ -6015,14 +6015,24 @@ function file_permissions_info($perms)
 
 function cleanvar($var, $striphtml = TRUE, $transentities = TRUE,$mysqlescape = TRUE)
 {
-    if ($striphtml) $var = strip_tags($var);
-    if ($transentities) $var = htmlentities($var, ENT_COMPAT, $GLOBALS['i18ncharset']);
-    else $var = htmlspecialchars($var, ENT_COMPAT, $GLOBALS['i18ncharset']);
+    if (is_array($var))
+    {
+        foreach ($var as $singlevar)
+        {
+            cleanvar($singlevar);
+        }
+    }
+    else
+    {
+        if ($striphtml) $var = strip_tags($var);
+        if ($transentities) $var = htmlentities($var, ENT_COMPAT, $GLOBALS['i18ncharset']);
+        else $var = htmlspecialchars($var, ENT_COMPAT, $GLOBALS['i18ncharset']);
 
-    if ($mysqlescape) $var = mysql_real_escape_string($var);
-    $var = trim($var);
+        if ($mysqlescape) $var = mysql_real_escape_string($var);
+        $var = trim($var);
 
-    return $var;
+        return $var;
+    }
 }
 
 
