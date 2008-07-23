@@ -6208,12 +6208,20 @@ function date_picker($formelement)
 }
 
 
+/**
+    * Produces HTML for a percentage indicator
+    * @author Ivan Lucas
+    * @param $percent int. Number between 0 and 100
+    * @returns string HTML
+*/
 function percent_bar($percent)
 {
     if ($percent == '') $percent = 0;
+    if ($percent < 0) $percent = 0;
+    if ($percent > 100) $percent = 100;
     // #B4D6B4;
-    $html = "<div style='width: 100px; border: 1px solid #ccc; background-color: white; height: 12px;'>";
-    $html .= "<div style='text-align: center; height: 12px; font-size: 90%; width: {$percent}%; background: #AFAFAF;'>  {$percent}&#037;";
+    $html = "<div class='percentcontainer'>";
+    $html .= "<div class='percentbar' style='width: {$percent}%;'>  {$percent}&#037;";
     $html .= "</div></div>\n";
     return $html;
 }

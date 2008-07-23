@@ -582,3 +582,14 @@ div.portalfileicon
 {
     width: 25%;
 }
+
+
+.percentcontainer {
+    width: 100px; border: 1px solid #ccc; background-color: white; height: 12px;
+}
+
+.percentbar {
+    text-align: center; height: 12px; font-size: 90%;
+    background: #AFAFAF;
+    width: 0px; /* default */
+}
