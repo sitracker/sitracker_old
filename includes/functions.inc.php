@@ -6024,27 +6024,29 @@ function file_permissions_info($perms)
     * @param array $replacechars array of chars to replace as $orig => $replace
     * @returns variable
 */
-function cleanvar($var, $striphtml = TRUE, $transentities = TRUE,
+function cleanvar($vars, $striphtml = TRUE, $transentities = TRUE,
                   $mysqlescape = TRUE, $disallowedchars = array(),
                   $replacechars = array())
 {
-    if (is_array($var))
+    if (is_array($vars))
     {
-        foreach ($var as $singlevar)
+        foreach ($vars as $key => $singlevar)
         {
-            cleanvar($singlevar);
+            $var[$key] = cleanvar($singlevar, $striphtml, $transentities, $mysqlescape,
+                     $disallowedchars, $replacechars);
         }
     }
     else
     {
+        $var = $vars;
         if ($striphtml === TRUE)
         {
             $var = strip_tags($var);
         }
 
-        if (!empty($dissallowedchars))
+        if (!empty($disallowedchars))
         {
-            $var = str_replace($dissallowedchars, '', $var);
+            $var = str_replace($disallowedchars, '', $var);
         }
 
         if (!empty($replacechars))
@@ -6070,9 +6072,8 @@ function cleanvar($var, $striphtml = TRUE, $transentities = TRUE,
         }
 
         $var = trim($var);
-
-        return $var;
     }
+    return $var;
 }
 
 

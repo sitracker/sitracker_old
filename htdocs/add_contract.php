@@ -120,6 +120,7 @@ if ($action == "showform" OR $action=='')
     echo "<tr><th>{$strAdminContact}</th>";
     echo "<td>".contact_drop_down("admincontact", 0, TRUE, TRUE);
     echo " <span class='required'>{$strRequired}</span></td></tr>\n";
+
     echo "<tr><th>{$strNotes}</th><td><textarea cols='40' name='notes' rows='5'>{$_SESSION['formdata']['add_contract']['notes']}</textarea></td></tr>\n";
 
     echo "<tr><th></th><td><a href=\"javascript:void(0);\" onclick=\"$('hidden').toggle();\">{$strMore}</a></td></tr>\n";
@@ -180,7 +181,11 @@ elseif ($action == "add")
     $enddate = strtotime($_REQUEST['expiry']);
     if ($enddate > 0) $enddate = date('Y-m-d',$enddate);
     else $enddate = date('Y-m-d',$now);
-    if ($_REQUEST['noexpiry'] == 'on') $expirydate = '-1';
+    
+    if ($_REQUEST['noexpiry'] == 'on')
+    {
+        $expirydate = '-1';        
+    }
     else $expirydate = strtotime($_REQUEST['expiry']);
     $amount =  cleanvar($_POST['amount']);
     if ($amount == '') $amount = 0;
@@ -194,7 +199,8 @@ elseif ($action == "add")
     $incident_pools = explode(',', "0,{$CONFIG['incident_pools']}");
     $incident_quantity = $incident_pools[$_POST['incident_poolid']];
 
-    $_SESSION['formdata']['add_contract'] = $_REQUEST;
+    $_SESSION['formdata']['add_contract'] = cleanvar($_POST, TRUE, FALSE, FALSE,
+                                                     array("@"), array("'" => '"'));
 
     // Add maintenance to database
     $errors = 0;
@@ -217,7 +223,7 @@ elseif ($action == "add")
         $_SESSION['formerrors']['add_contract']['admincontact'] = "You must select an admin contact\n";
     }
     // check for blank expiry day
-    if ($expirydate == 0)
+    if (!isset($expirydate))
     {
         $errors++;
         $_SESSION['formerrors']['add_contract']['expirydate'] = "You must enter an expiry date\n";
