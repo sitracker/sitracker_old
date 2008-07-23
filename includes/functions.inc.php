@@ -6013,7 +6013,17 @@ function file_permissions_info($perms)
 }
 
 
-function cleanvar($var, $striphtml = TRUE, $transentities = TRUE,$mysqlescape = TRUE)
+/**
+    * Make an external variable safe for database and HTML display
+    * @author Ivan Lucas, Kieran Hogg
+    * @param $var
+    * @param $striphtml
+    * @param $transentities
+    * @param $mysqlescape
+    * @param $disallowedchars - not implemented yet
+    * @returns variable
+*/
+function cleanvar($var, $striphtml = TRUE, $transentities = TRUE, $mysqlescape = TRUE, $disallowedchars = array())
 {
     if (is_array($var))
     {
@@ -7468,7 +7478,7 @@ function ldate($format, $date = '', $utc = TRUE)
         $date += $useroffsetsec;
     }
     $datestring = gmdate($format, $date);
-    
+
     // Internationalise date endings (e.g. st)
     if (strpos($format, 'S') !== FALSE)
     {
@@ -10598,35 +10608,35 @@ function transactions_report($serviceid, $startdate, $enddate, $sites, $display,
 	if ($serviceid > 0) $sql .= "AND t.serviceid = {$serviceid} ";
 	if (!empty($startdate)) $sql .= "AND t.date >= '{$startdate}' ";
 	if (!empty($enddate)) $sql .= "AND t.date <= '{$enddate}' ";
-	
+
 	if (!empty($sites))
 	{
 	    $sitestr = '';
-	
+
 	    foreach ($sites AS $s)
 	    {
 	        if (empty($sitestr)) $sitestr .= "m.site = {$s} ";
 	        else $sitestr .= "OR m.site = {$s} ";
 	    }
-	
+
 	    $sql .= "AND {$sitestr} ";
 	}
-	
+
 	if (!empty($site)) $sql .= "AND m.site = {$site} ";
-	
+
 	$sql .= "ORDER BY s.name ";
-	
+
 	$result = mysql_query($sql);
 	if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
-	
+
 	if (mysql_num_rows($result) > 0)
 	{
 	    $shade = 'shade1';
-	
+
 	    $total = 0;
 	    $totalcredit = 0;
 	    $totaldebit = 0;
-	
+
 	    while ($transaction = mysql_fetch_object($result))
 	    {
 	        if ($display == 'html')
@@ -10646,7 +10656,7 @@ function transactions_report($serviceid, $startdate, $enddate, $sites, $display,
 	            $str .= site_name($transaction->site)."\",";
 	            $str .= "\"{$transaction->description}\",";
 	        }
-	
+
 	        $total += $transaction->amount;
 	        if ($transaction->amount < 0)
 	        {
@@ -10672,10 +10682,10 @@ function transactions_report($serviceid, $startdate, $enddate, $sites, $display,
 	                $str .= "\"{$CONFIG['currency_symbol']}".number_format($transaction->amount, 2)."\",,";
 	            }
 	        }
-	
+
 	        if ($display == 'html') $str .= "</tr>";
 	        elseif ($display == 'csv') $str .= "\n";
-	
+
 	        if ($sitebreakdown == TRUE)
 	        {
 	            $table[$transaction->site]['site'] = site_name($transaction->site);
@@ -10694,7 +10704,7 @@ function transactions_report($serviceid, $startdate, $enddate, $sites, $display,
 	            $table .= $str;
 	        }
 	    }
-	
+
 	    if ($sitebreakdown == TRUE)
 	    {
 	        foreach ($table AS $e)
@@ -10749,8 +10759,8 @@ function transactions_report($serviceid, $startdate, $enddate, $sites, $display,
 	            $text .= "{$CONFIG['currency_symbol']}".number_format($totaldebit, 2)."\"\n";
 	        }
 	    }
-	
-	
+
+
 	    if ($shade == 'shade1') $shade = 'shade2';
 	    else $shade = 'shade1';
 	}
@@ -10764,8 +10774,8 @@ function transactions_report($serviceid, $startdate, $enddate, $sites, $display,
 	    {
 	        $text = $GLOBALS['strNoTransactionsMatchYourSearch']."\n";
 	    }
-	}	
-	
+	}
+
 	return $text;
 }
 
