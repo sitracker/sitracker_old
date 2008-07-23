@@ -120,7 +120,7 @@ if ($action == "showform" OR $action=='')
     echo "<tr><th>{$strAdminContact}</th>";
     echo "<td>".contact_drop_down("admincontact", 0, TRUE, TRUE);
     echo " <span class='required'>{$strRequired}</span></td></tr>\n";
-    echo "<tr><th>{$strNotes}</th><td><textarea cols='40' name='notes' rows='5'></textarea></td></tr>\n";
+    echo "<tr><th>{$strNotes}</th><td><textarea cols='40' name='notes' rows='5'>{$_SESSION['formdata']['add_contract']['notes']}</textarea></td></tr>\n";
 
     echo "<tr><th></th><td><a href=\"javascript:void(0);\" onclick=\"$('hidden').toggle();\">{$strMore}</a></td></tr>\n";
 

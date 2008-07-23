@@ -6018,7 +6018,7 @@ function file_permissions_info($perms)
     * @author Ivan Lucas, Kieran Hogg
     * @param mixed $var variable to replace
     * @param bool $striphtml whether to strip html
-    * @param bool $transentities whether to translate forward (true) or backward (false) from html entites
+    * @param bool $transentities whether to translate all aplicable chars (true) or just special chars (false) into html entites
     * @param bool $mysqlescape whether to mysql_escape()
     * @param array $disallowedchars array of chars to remove
     * @param array $replacechars array of chars to replace as $orig => $replace
@@ -6037,27 +6037,38 @@ function cleanvar($var, $striphtml = TRUE, $transentities = TRUE,
     }
     else
     {
-        if (sizeof($disallowedchars) > 0)
+        if ($striphtml === TRUE)
         {
-            foreach ($disallowedchars as $replace)
-            {
-                str_replace($replace, "", $var);
-            }
+            $var = strip_tags($var);
         }
-        
-        if (sizeof($replacechars) > 0)
+
+        if (!empty($dissallowedchars))
+        {
+            $var = str_replace($dissallowedchars, '', $var);
+        }
+
+        if (!empty($replacechars))
         {
             foreach ($replacechars as $orig => $replace)
             {
-                str_replace($orig, $replace, $var);
+                $var = str_replace($orig, $replace, $var);
             }
         }
 
-        if ($striphtml) $var = strip_tags($var);
-        if ($transentities) $var = htmlentities($var, ENT_COMPAT, $GLOBALS['i18ncharset']);
-        else $var = htmlspecialchars($var, ENT_COMPAT, $GLOBALS['i18ncharset']);
+        if ($transentities)
+        {
+            $var = htmlentities($var, ENT_COMPAT, $GLOBALS['i18ncharset']);
+        }
+        else
+        {
+            $var = htmlspecialchars($var, ENT_COMPAT, $GLOBALS['i18ncharset']);
+        }
 
-        if ($mysqlescape) $var = mysql_real_escape_string($var);
+        if ($mysqlescape)
+        {
+            $var = mysql_real_escape_string($var);
+        }
+
         $var = trim($var);
 
         return $var;
