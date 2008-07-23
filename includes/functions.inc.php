@@ -6016,14 +6016,17 @@ function file_permissions_info($perms)
 /**
     * Make an external variable safe for database and HTML display
     * @author Ivan Lucas, Kieran Hogg
-    * @param $var
-    * @param $striphtml
-    * @param $transentities
-    * @param $mysqlescape
-    * @param $disallowedchars - not implemented yet
+    * @param mixed $var variable to replace
+    * @param bool $striphtml whether to strip html
+    * @param bool $transentities whether to translate forward (true) or backward (false) from html entites
+    * @param bool $mysqlescape whether to mysql_escape()
+    * @param array $disallowedchars array of chars to remove
+    * @param array $replacechars array of chars to replace as $orig => $replace
     * @returns variable
 */
-function cleanvar($var, $striphtml = TRUE, $transentities = TRUE, $mysqlescape = TRUE, $disallowedchars = array())
+function cleanvar($var, $striphtml = TRUE, $transentities = TRUE,
+                  $mysqlescape = TRUE, $disallowedchars = array(),
+                  $replacechars = array())
 {
     if (is_array($var))
     {
@@ -6034,6 +6037,22 @@ function cleanvar($var, $striphtml = TRUE, $transentities = TRUE, $mysqlescape =
     }
     else
     {
+        if (sizeof($disallowedchars) > 0)
+        {
+            foreach ($disallowedchars as $replace)
+            {
+                str_replace($replace, "", $var);
+            }
+        }
+        
+        if (sizeof($replacechars) > 0)
+        {
+            foreach ($replacechars as $orig => $replace)
+            {
+                str_replace($orig, $replace, $var);
+            }
+        }
+
         if ($striphtml) $var = strip_tags($var);
         if ($transentities) $var = htmlentities($var, ENT_COMPAT, $GLOBALS['i18ncharset']);
         else $var = htmlspecialchars($var, ENT_COMPAT, $GLOBALS['i18ncharset']);
