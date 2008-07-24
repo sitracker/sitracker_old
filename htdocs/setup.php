@@ -785,7 +785,7 @@ switch ($_REQUEST['action'])
                     $installed_version = $application_version;
                     echo "<h2>Database schema created</h2>";
                     echo "<p>If no errors were reported above you should continue and check the installation.</p>";
-                    echo "<p>If there are errors, please log a bug <a href='https://sourceforge.net/tracker/?group_id=160319&amp;atid=815372'>here</a>";
+                    echo "<p>If there are errors, please log a bug <a href='http://sitracker.sourceforge.net/Bugs'>here</a>";
                     echo ", with the full error message.</p>";
                     echo "<p><a href='setup.php?action=checkinstallcomplete' class='button'>Next</a></p>";
                 }
