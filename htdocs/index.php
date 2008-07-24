@@ -53,6 +53,19 @@ if ($_SESSION['auth'] != TRUE)
         throw_user_error("{$strInvalidCredentials}");
     }
 
+    // Check this is current
+    $sql = "SELECT version FROM `{$dbSystem}` WHERE id = 0";
+    $result = mysql_query($sql);
+    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
+    list($dbversion) = mysql_fetch_row($result);
+    if ($dbversion < $application_version)
+    {
+        echo "<p class='error'><strong>IMPORTANT</strong> The SiT database schema needs to be updated from ";
+        echo "v{$dbversion} to v{$application_version}</p>";
+        echo "<p class='tip'>Visit <a href='setup.php'>Setup</a> to update the schema";
+    }
+
+    // Language selector
     echo "<div style='margin-left: auto; margin-right: auto; width: 380px;";
     echo " text-align: center; margin-top: 3em;'>";
     echo "<form id='langselectform' action='login.php' method='post'>";
