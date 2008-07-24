@@ -938,7 +938,7 @@ switch ($_REQUEST['action'])
                             if (!empty($upgrade_schema[$v]))
                             {
                                 $newversion = number_format(($v/100),2);
-                                echo "<p>Updating schema to v{$newversion}&hellip;</p>";
+                                echo "<p>Updating schema from {$installed_version} to v{$newversion}&hellip;</p>";
                                 //echo  $upgrade_schema[$v];
                                 $errors = setup_exec_sql($upgrade_schema[$v]);
                                 // Update the system version
@@ -958,7 +958,7 @@ switch ($_REQUEST['action'])
                                 }
                                 else
                                 {
-                                    $html .= "<p class='error'>{$errors} Errors occurred while updating the schema, ";
+                                    $html .= "<p class='error'>{$errors} Error(s) occurred while updating the schema, ";
                                     $html .= "please resolve the problems reported and then try running setup again.</p>";
                                 }
                                 echo $html;

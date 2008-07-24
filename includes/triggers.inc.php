@@ -372,7 +372,7 @@ function send_trigger_email($userid, $triggerid, $template, $paramarray)
     }
     // $triggerarray[$triggerid]['type'])
 
-    //if we have an incidentid, get it to pass to emailtype_replace_specials()
+    //if we have an incidentid, get it to pass to trigger_replace_specials()
     if (!empty($paramarray['incidentid']))
     {
         $incidentid = $paramarray['incidentid'];

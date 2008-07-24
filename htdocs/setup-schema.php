@@ -2363,11 +2363,14 @@ UPDATE `{$dbClosingStatus}` SET `name` =  'strSupportExpired' WHERE `id` = 8;
 UPDATE `{$dbClosingStatus}` SET `name` =  'strUnsolved' WHERE `id` = 9;
 UPDATE `{$dbClosingStatus}` SET `name` =  'strEscalated' WHERE `id` = 10;
 
--- PH 2008-07-12 
+-- PH 2008-07-12
 ALTER TABLE `{$dbScheduler}` ADD `type` ENUM( 'interval', 'date' ) NOT NULL DEFAULT 'interval' AFTER `end` ;
 ALTER TABLE `{$dbScheduler}` ADD `date_type` ENUM( 'month', 'year' ) NOT NULL COMMENT 'For type date the type' AFTER `interval` ,
 ADD `date_offset` INT NOT NULL COMMENT 'off set into the period' AFTER `date_type` ,
 ADD `date_time` TIME NOT NULL COMMENT 'Time to perform action' AFTER `date_offset` ;
+
+-- INL 2008-07-21
+ALTER TABLE `{$dbEscalationPaths}` ADD `type` ENUM( 'internal', 'external' ) NOT NULL DEFAULT 'internal' AFTER `name` ;
 
 ";
 

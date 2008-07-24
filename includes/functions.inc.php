@@ -9413,7 +9413,7 @@ function setup_user_triggers($userid)
     }
     else
     {
-        trigger_error("Invalid userid specified");
+        trigger_error("setup_user_triggers() Invalid userid specified", E_USER_NOTICE);
         $return = FALSE;
     }
 

@@ -35,12 +35,17 @@ if (empty($submit))
     echo "<form action='".$_SERVER['PHP_SELF']."' method='post' onsubmit='return confirm_action(\"{$strAreYouSureAddEscalationPath}\")'>";
     echo "<table class='vertical'>";
 
-    echo "<tr><th>{$strName}<sup class='red'>*</sup></th><td><input name='name'";
+    echo "<tr><th>{$strName}</th><td><input name='name' class='required' ";
     if ($_SESSION['formdata']['add_escalation_path']['name'] != '')
     {
         echo "value='{$_SESSION['formdata']['add_escalation_path']['name']}'";
     }
-    echo "/></td></tr>";
+    echo "/> <span class='required'>{$strRequired}</span></td></tr>";
+
+    echo "<tr><th>{$strType}</th><td>";
+    $type = array('internal' => 'Internal','external' => 'External');
+    echo array_drop_down($type, 'type', $_SESSION['formdata']['add_escalation_path']['type']);
+    echo "</td></tr>";
 
     echo "<tr><th>{$strTrackURL}<br /></th><td><input name='trackurl'";
     if ($_SESSION['formdata']['add_escalation_path']['trackurl'] != '')
@@ -82,7 +87,9 @@ if (empty($submit))
 }
 else
 {
+    // External variables
     $name = cleanvar($_REQUEST['name']);
+    $type = cleanvar($_REQUEST['type']);
     $trackurl = cleanvar($_REQUEST['trackurl']);
     $homeurl = cleanvar($_REQUEST['homeurl']);
     $title = cleanvar($_REQUEST['title']);

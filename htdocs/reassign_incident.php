@@ -158,16 +158,22 @@ switch ($action)
 
         if ($incident->towner == $sit[2]) $suggested = suggest_reassign_userid($id);
         else $suggested = suggest_reassign_userid($id, $incident->owner);
+        if ($suggested === FALSE)
+        {
+            $suggested = 0;
+            echo "<p class='warning'>No users suggested</p>";
+        }
 
         echo "<form name='assignform' action='{$_SERVER['PHP_SELF']}?id={$id}' method='post'>";
 
-        $sql = "SELECT * FROM `{$dbUsers}` WHERE status!=0 ";
+        $sql = "SELECT * FROM `{$dbUsers}` WHERE status != 0 ";
         $sql .= "AND NOT id = {$incident->owner} ";
         if ($suggested > 0) $sql .= "AND NOT id = '$suggested' ";
         if (!$forcepermission) $sql .= "AND accepting = 'Yes' ";
         $sql .= "ORDER BY realname";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
+        $countusers = mysql_num_rows($result);
 
         echo "<p>{$strOwner}: <strong>";
         if ($sit[2] == $incident->owner) echo "{$strYou} (".user_realname($incident->owner,TRUE).")";
@@ -250,8 +256,6 @@ switch ($action)
             echo "</td>";
             echo "</tr>\n";
         }
-
-        $countusers = mysql_num_rows($result);
 
         if ($countusers >= 1)
         {
