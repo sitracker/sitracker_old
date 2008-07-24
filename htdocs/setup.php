@@ -396,6 +396,7 @@ function setup_exec_sql($sqlquerylist)
                 $sqlqueries = explode( ';', $queryelement);
                 // We don't need the last entry it's blank, as we end with a ;
                 array_pop($sqlqueries);
+                $errors = 0;
                 foreach ($sqlqueries AS $sql)
                 {
                     //$html .= "<p style='border: 1px solid red;'>&bull; <code>".nl2br($sql)."</code></p>\n"; // FIXME
@@ -404,35 +405,79 @@ function setup_exec_sql($sqlquerylist)
                         mysql_query($sql);
                         if (mysql_error())
                         {
-                            $html .= "<p><strong>FAILED:</strong> <code>".htmlspecialchars($sql)."</code> <span style='color: red;'>({$schemaversion})</span></p>";
-                            $html .= "<p class='error'>".mysql_error()."<br />A MySQL error occurred, this could be because the MySQL user '{$CONFIG['db_username']}' does not have appropriate permission to modify the database schema.<br />";
-                            //echo "The SQL command was:<br /><code>$sql</code><br />";
-                            if (strpos($errstr, 'does not have appropriate permission') !== FALSE)
+                            $errno = mysql_errno();
+                            $errstr = '';
+                            // See http://dev.mysql.com/doc/refman/5.0/en/error-messages-server.html
+                            // For list of mysql error numbers
+                            switch ($errno)
                             {
-                                $html .= "<strong>Check your MySQL permissions allow the schema to be modified</strong>.<br />";
+                                case 1022:
+                                case 1050:
+                                case 1060:
+                                case 1061:
+                                case 1062:
+                                    $severity = 'info';
+                                    $errstr = "This could be because this part of the database schema is already up to date.";
+                                break;
+
+                                case 1058:
+                                    $severity = 'error';
+                                    $errstr = "This looks suspiciously like a bug, if you think this is the case please report it.";
+                                break;
+
+//                                 case 1054:
+//                                     if (preg_match("/ALTER TABLE/", $sql) >= 1)
+//                                     {
+//                                         $severity = 'info';
+//                                         $errstr = "This could be because this part of the database schema is already up to date.";
+//                                     }
+//                                 break;
+
+                                case 1051:
+                                case 1091:
+                                    if (preg_match("/DROP/", $sql) >= 1)
+                                    {
+                                        $severity = 'info';
+                                        $errstr = "We expected to find something in order to remove it but it doesn't exist. This could be because this part of the database schema is already up to date..";
+                                    }
+                                break;
+
+
+
+                                case 1044:
+                                case 1045:
+                                case 1142:
+                                case 1143:
+                                case 1227:
+                                    $severity = 'error';
+                                    $errstr = "This could be because the MySQL user '{$CONFIG['db_username']}' does not have appropriate permission to modify the database schema.<br />";
+                                    $errstr .= "<strong>Check your MySQL permissions allow the schema to be modified</strong>.";
+
+                                default:
+                                    $severity = 'error';
+                                    $errstr = "You may have found a bug, if you think this is the case please report it.";
+                            }
+                            $html .= "<p class='$severity'>";
+                            if ($severity == 'info')
+                            {
+                                $html .= "<strong>Infomation:</strong>";
                             }
                             else
                             {
-                                $html .= "An error might also be caused by an attempt to upgrade a version that is not supported by this script.<br />";
+                                $html .= "<strong>A MySQL error occurred:</strong>";
+                                $errors ++;
                             }
-                            $html .= "Alternatively, you may have found a bug, if you think this is the case please report it.</p>";
-                        }
-                        else
-                        {
-                            // Update the system schema version
-    //                         $vsql = "REPLACE INTO `{$dbSystem}` ( `id`, `version`, `schemaversion`) VALUES (0, $application_version, $schemaversion)";
-    //                         mysql_query($vsql);
-    //                         if (mysql_error())
-    //                         {
-    //                             $html .= "<p class='error'>Could not store new schema version number '$schemaversion'. ".mysql_error()."</p>";
-    //                         }
+                            $html .= " [".mysql_errno()."] ".mysql_error()."<br />";
+                            if (!empty($errstr)) $html .= $errstr."<br />";
+                            $html .= "Raw SQL: <code class='small'>".htmlspecialchars($sql)."</code>";
                         }
                     }
                 }
             }
         }
     }
-    return $html;
+    echo $html;
+    return $errors;
 }
 
 // Returns TRUE if an admin account exists, or false if not
@@ -528,7 +573,7 @@ a.button:active
 }
 
 var { font-family: Andale Mono, monospace; font-style: normal; }
-
+code.small { font-size: 75%; color: #555; }
 }
 
 ";
@@ -770,18 +815,30 @@ switch ($_REQUEST['action'])
 //                     $installed_schema = 0;
 //                     $installed_schema = substr(end(array_keys($upgrade_schema[$application_version*100])),1);
                     $errors = setup_exec_sql($schema);
-                    if (empty($errors))
+                    // Update the system version
+                    if ($errors < 1)
                     {
-                        echo "<p>Schema created OK</p>";
+                        $vsql = "REPLACE INTO `{$dbSystem}` ( `id`, `version`) VALUES (0, $application_version)";
+                        mysql_query($vsql);
+                        if (mysql_error())
+                        {
+                            $html .= "<p class='error'>Could not store new schema version number '{$application_version}'. ".mysql_error()."</p>";
+                        }
+                        else
+                        {
+                            $html .= "<p>Schema successfully created as version {$application_version}</p>";
+                        }
                     }
                     else
                     {
-                        echo $errors;
+                        $html .= "<p class='error'>{$errors} Errors occurred while creating the schema, ";
+                        $html .= "please resolve the problems reported and then try running setup again.</p>";
                     }
-                    // Set the system version number
+                    echo $html;
+/*                    // Set the system version number
                     $sql = "REPLACE INTO `{$dbSystem}` ( id, version) VALUES (0, $application_version)";
                     mysql_query($sql);
-                    if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+                    if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);*/
                     $installed_version = $application_version;
                     echo "<h2>Database schema created</h2>";
                     echo "<p>If no errors were reported above you should continue and check the installation.</p>";
@@ -877,12 +934,34 @@ switch ($_REQUEST['action'])
                         // for ($v=(($installed_version*100)+1); $v<=($application_version*100); $v++)
                         for ($v=(($installed_version*100)); $v<=($application_version*100); $v++)
                         {
+                            $html = '';
                             if (!empty($upgrade_schema[$v]))
                             {
-                                echo "<p>Updating schema to v".number_format(($v/100),2)."</p>";
+                                $newversion = number_format(($v/100),2);
+                                echo "<p>Updating schema to v{$newversion}&hellip;</p>";
                                 //echo  $upgrade_schema[$v];
-                                echo setup_exec_sql($upgrade_schema[$v]);
-                                $upgradeok = TRUE;
+                                $errors = setup_exec_sql($upgrade_schema[$v]);
+                                // Update the system version
+                                if ($errors < 1)
+                                {
+                                    $vsql = "REPLACE INTO `{$dbSystem}` ( `id`, `version`) VALUES (0, $newversion)";
+                                    mysql_query($vsql);
+                                    if (mysql_error())
+                                    {
+                                        $html .= "<p class='error'>Could not store new schema version number '{$newversion}'. ".mysql_error()."</p>";
+                                    }
+                                    else
+                                    {
+                                        $html .= "<p>Schema successfully updated to version {$newversion}</p>";
+                                    }
+                                    $upgradeok = TRUE;
+                                }
+                                else
+                                {
+                                    $html .= "<p class='error'>{$errors} Errors occurred while updating the schema, ";
+                                    $html .= "please resolve the problems reported and then try running setup again.</p>";
+                                }
+                                echo $html;
                             }
                         }
 
