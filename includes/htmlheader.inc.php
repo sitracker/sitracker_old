@@ -232,7 +232,7 @@ if ($sit[0] != '')
     echo "</div>\n";
 }
 
-if (!isset($refresh))
+if (!isset($refresh) AND $_SESSION['auth'] === TRUE)
 {
     //update last seen (only if this is a page that does not auto-refresh)
     $lastseensql = "UPDATE LOW_PRIORITY `{$GLOBALS['dbUsers']}` SET lastseen=NOW() WHERE id='{$_SESSION['userid']}' LIMIT 1";
