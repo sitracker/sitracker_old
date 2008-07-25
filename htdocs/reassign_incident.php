@@ -161,14 +161,14 @@ switch ($action)
         if ($suggested === FALSE)
         {
             $suggested = 0;
-            echo "<p class='warning'>No users suggested</p>";
+            $dbg .= "<p>No users suggested</p>";
         }
 
         echo "<form name='assignform' action='{$_SERVER['PHP_SELF']}?id={$id}' method='post'>";
 
         $sql = "SELECT * FROM `{$dbUsers}` WHERE status != 0 ";
-        $sql .= "AND NOT id = {$incident->owner} ";
-        if ($suggested > 0) $sql .= "AND NOT id = '$suggested' ";
+        $sql .= "AND id != {$incident->owner} ";
+        if ($suggested > 0) $sql .= "AND id != '$suggested' ";
         if (!$forcepermission) $sql .= "AND accepting = 'Yes' ";
         $sql .= "ORDER BY realname";
         $result = mysql_query($sql);
