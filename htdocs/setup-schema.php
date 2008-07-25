@@ -1833,8 +1833,6 @@ ALTER TABLE `{$dbUserStatus}` DROP INDEX `id` ;
 ALTER TABLE `{$dbDashboard}` ADD `version` MEDIUMINT NOT NULL DEFAULT '1' AFTER `name` ;
 
 -- INL 10/12/07
-ALTER TABLE `{$dbContacts}` ADD INDEX ( `active` );
-ALTER TABLE `{$dbSites}` ADD INDEX ( `active` );
 ALTER TABLE `{$dbUpdates}` ADD INDEX ( `customervisibility` );
 DELETE FROM `{$dbIncidentStatus}` WHERE id = 0 OR id = 10;
 INSERT INTO `{$dbIncidentStatus}` VALUES (10, 'Active (Unassigned)', 'Active');
