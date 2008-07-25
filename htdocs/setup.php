@@ -931,15 +931,13 @@ switch ($_REQUEST['action'])
                         }
 
                         // Upgrade schema
-                        // for ($v=(($installed_version*100)+1); $v<=($application_version*100); $v++)
-                        for ($v=(($installed_version*100)); $v<=($application_version*100); $v++)
+                        for ($v=(($installed_version*100)); $v<($application_version*100); $v++)
                         {
                             $html = '';
                             if (!empty($upgrade_schema[$v]))
                             {
                                 $newversion = number_format(($v/100),2);
                                 echo "<p>Updating schema from {$installed_version} to v{$newversion}&hellip;</p>";
-                                //echo  $upgrade_schema[$v];
                                 $errors = setup_exec_sql($upgrade_schema[$v]);
                                 // Update the system version
                                 if ($errors < 1)
@@ -952,8 +950,9 @@ switch ($_REQUEST['action'])
                                     }
                                     else
                                     {
-                                        $html .= "<p>Schema successfully updated to version {$newversion}</p>";
+                                        $html .= "<p>Schema successfully updated to version {$newversion}.</p>";
                                     }
+                                    $installed_version = $newversion;
                                     $upgradeok = TRUE;
                                 }
                                 else

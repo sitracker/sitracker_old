@@ -1857,6 +1857,25 @@ INSERT INTO `{$dbUserStatus}` (`id` ,`name`) VALUES ('0', 'Account Disabled');
 ";
 
 $upgrade_schema[335] = "
+-- INL 25Jul08 fix upgrade issues for 3.40
+CREATE TABLE IF NOT EXISTS `{$dbLinkTypes}` (
+     `id` int(11) NOT NULL auto_increment,
+     `name` varchar(255) NOT NULL default '',
+     `lrname` varchar(255) NOT NULL default '',
+     `rlname` varchar(255) NOT NULL default '',
+     `origtab` varchar(255) NOT NULL default '',
+     `origcol` varchar(255) NOT NULL default '',
+     `linktab` varchar(255) NOT NULL default '',
+     `linkcol` varchar(255) NOT NULL default 'id',
+     `selectionsql` varchar(255) NOT NULL default '',
+     `filtersql` varchar(255) NOT NULL default '',
+     `viewurl` varchar(255) NOT NULL default '',
+     PRIMARY KEY  (`id`),
+     KEY `origtab` (`origtab`),
+     KEY `linktab` (`linktab`)
+   ) ENGINE=MyISAM;
+
+
 DROP TABLE IF EXISTS `{$CONFIG['db_tableprefix']}contactflags`;
 DROP TABLE IF EXISTS `{$CONFIG['db_tableprefix']}contactproducts`;
 
@@ -2195,11 +2214,6 @@ INSERT INTO `{$dbTriggers}` (`triggerid`, `userid`, `action`, `template`, `param
 INSERT INTO `{$dbTriggers}` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_INCIDENT_CLOSED', 0, 'ACTION_EMAIL', 'EMAIL_EXTERNAL_INCIDENT_CLOSURE', '', '{notifyexternal} == 1');
 
 -- INL 22May08
-INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (1, 72, 'true');
-INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (1, 73, 'true');
-INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (1, 74, 'true');
-INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (1, 75, 'true');
-INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (1, 76, 'true');
 INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (1, 77, 'true');
 INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (2, 73, 'true');
 INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (2, 76, 'true');
@@ -2213,7 +2227,7 @@ ALTER TABLE `{$dbFiles}` CHANGE `path` `path` varchar(255) NULL default '';
 ALTER TABLE `{$dbFiles}` CHANGE `expiry` `expiry` DATETIME NULL;
 ALTER TABLE `{$dbFiles}` CHANGE `fileversion` `fileversion` varchar(50) NULL default '';
 
-INSERT INTO `{$dbInterfaceStyles}` (`id` ,`name` ,`cssurl` ,`iconset` ,`headerhtml`) VALUES ('16', 'Cake', 'sit_cake.css', 'sit', '');
+REPLACE INTO `{$dbInterfaceStyles}` (`id` ,`name` ,`cssurl` ,`iconset` ,`headerhtml`) VALUES ('16', 'Cake', 'sit_cake.css', 'sit', '');
 INSERT INTO `{$dbPermissions}` VALUES (78, 'Post System Notices');
 
 UPDATE `{$dbPermissions}` SET `name` = 'Add Templates' WHERE `id` =16;
