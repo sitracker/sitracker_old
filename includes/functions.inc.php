@@ -37,8 +37,8 @@ $_SERVER['PHP_SELF'] = substr($_SERVER['PHP_SELF'], 0,
                               (strlen($_SERVER['PHP_SELF'])
                               - @strlen($_SERVER['PATH_INFO'])));
 // Report all PHP errors
-//error_reporting(E_ALL);
-//$oldeh = set_error_handler("sit_error_handler");
+error_reporting(E_ALL);
+$oldeh = set_error_handler("sit_error_handler");
 
 if (version_compare(PHP_VERSION, "5.1.0", ">="))
 {
@@ -8643,37 +8643,36 @@ function icon($filename, $size='', $alt='', $title='', $id='')
 
     if (!file_exists($file))
     {
-        // TODO 3.35 Return a default (blank?) icon here instead of an error message
-        trigger_error("No such image: '$filename.png', ($file) size {$size}", E_USER_WARNING);
+        $alt = "Missing icon: '$filename.png', ($file) size {$size}";
+        if ($CONFIG['debug']) trigger_error($alt, E_USER_WARNING);
+        $urlpath = "{$CONFIG['application_webpath']}images/icons/sit";
+        $urlpath .= "/16x16/blank.png";
+    }
+    $icon = "<img src=\"{$urlpath}\"";
+    if (!empty($alt))
+    {
+        $icon .= " alt=\"{$alt}\" ";
     }
     else
     {
-        $icon = "<img src=\"{$urlpath}\"";
-        if (!empty($alt))
-        {
-            $icon .= " alt=\"{$alt}\" ";
-        }
-        else
-        {
-            $alt = $filename;
-            $icon .= " alt=\"{$alt}\" ";
-        }
-        if (!empty($title))
-        {
-            $icon .= " title=\"{$title}\"";
-        }
-        else
-        {
-            $icon .= " title=\"{$alt}\"";
-        }
-
-        if (!empty($id))
-        {
-            $icon .= " id=\"{$id}\"";
-        }
-
-        $icon .= " />";
+        $alt = $filename;
+        $icon .= " alt=\"{$alt}\" ";
     }
+    if (!empty($title))
+    {
+        $icon .= " title=\"{$title}\"";
+    }
+    else
+    {
+        $icon .= " title=\"{$alt}\"";
+    }
+
+    if (!empty($id))
+    {
+        $icon .= " id=\"{$id}\"";
+    }
+    $icon .= " />";
+
     return $icon;
 }
 
