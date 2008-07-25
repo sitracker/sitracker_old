@@ -1064,7 +1064,7 @@ switch ($_REQUEST['action'])
                         {
                             //upgrade dashboard components.
 
-                            $sql = "SELECT * FROM `{$dbDashboard}`";
+                            $sql = "SELECT * FROM `{$dbDashboard}` WHERE enabled = 'true'";
                             $result = mysql_query($sql);
                             if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
