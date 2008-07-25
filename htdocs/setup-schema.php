@@ -2247,8 +2247,6 @@ ALTER TABLE `{$dbMaintenance}` ADD INDEX ( `var_incident_visible_contacts` ) ;
 ALTER DATABASE `{$CONFIG['db_database']}` DEFAULT CHARACTER SET utf8;
 
 -- PH 21/06/2008
-INSERT INTO `{$dbPermissions}` VALUES (79, 'Edit Service Balances');
-INSERT INTO `{$dbPermissions}` VALUES (80, 'Edit Service Details');
 INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (1, 78, 'true');
 INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (1, 79, 'true');
 INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (1, 80, 'true');
@@ -2361,8 +2359,6 @@ INSERT INTO `{$dbLinkTypes}` (`id`, `name`, `lrname`, `rlname`, `origtab`, `orig
 (6, 'Incident', 'Transaction', 'Incidents', 'transactions', 'transactionid', 'incidents', 'id', '', '', '');
 
 INSERT INTO `{$dbPermissions}` (`id` ,`name`) VALUES (79 , 'Edit service balances'), (80 , 'Edit service details');
-
-INSERT INTO `{$dbRolePermissions}` (`roleid` ,`permissionid` ,`granted`) VALUES ('1', '79', 'true'), ('1', '80', 'true');
 
 UPDATE `{$dbClosingStatus}` SET `name` = 'strSentInformation' WHERE `id` = 1;
 UPDATE `{$dbClosingStatus}` SET `name` =  'strSolvedProblem' WHERE `id` = 2;

@@ -931,7 +931,7 @@ switch ($_REQUEST['action'])
                         }
 
                         // Upgrade schema
-                        for ($v=(($installed_version*100)); $v<($application_version*100); $v++)
+                        for ($v=(($installed_version*100)+1); $v<=($application_version*100); $v++)
                         {
                             $html = '';
                             if (!empty($upgrade_schema[$v]))
