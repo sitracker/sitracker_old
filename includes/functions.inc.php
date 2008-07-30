@@ -7423,7 +7423,7 @@ function schedule_actions_due()
     $sql = "SELECT * FROM `{$dbScheduler}` WHERE status = 'enabled' AND type = 'date' ";
     $sql .= "AND UNIX_TIMESTAMP(start) <= $now AND (UNIX_TIMESTAMP(end) >= $now OR UNIX_TIMESTAMP(end) = 0) ";
     $sql .= "AND ((date_type = 'month' AND (DAYOFMONTH(CURDATE()) > date_offset OR (DAYOFMONTH(CURDATE()) = date_offset AND CURTIME() >= date_time)) ";
-    $sql .= "AND CURDATE() != DATE_FORMAT(lastran, '%Y-%m') ) )";  // not run this month
+    $sql .= "AND DATE_FORMAT(CURDATE(), '%Y-%m') != DATE_FORMAT(lastran, '%Y-%m') ) )";  // not run this month
     //$sql .= "OR ";
     //$sql .= "(date_type = 'year'))";
 
@@ -7436,6 +7436,26 @@ function schedule_actions_due()
             $actions[$action->action] = $actions->params;
         }
     }
+
+
+    // Year TODO CHECK
+    $sql = "SELECT * FROM `{$dbScheduler}` WHERE status = 'enabled' AND type = 'date' ";
+    $sql .= "AND UNIX_TIMESTAMP(start) <= $now AND (UNIX_TIMESTAMP(end) >= $now OR UNIX_TIMESTAMP(end) = 0) ";
+    $sql .= "AND ((date_type = 'year' AND (DAYOFYEAR(CURDATE()) > date_offset OR (DAYOFYEAR(CURDATE()) = date_offset AND CURTIME() >= date_time)) ";
+    $sql .= "AND DATE_FORMAT(CURDATE(), '%Y') != DATE_FORMAT(lastran, '%Y') ) )";  // not run this year
+    //$sql .= "OR ";
+    //$sql .= "(date_type = 'year'))";
+
+    $result = mysql_query($sql);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+    if (mysql_num_rows($result) > 0)
+    {
+        while ($action = mysql_fetch_object($result))
+        {
+            $actions[$action->action] = $actions->params;
+        }
+    }
+
 
     return $actions;
 }

@@ -12,6 +12,12 @@ $str1Minute = '1 Minute';
 $str1Month = '1 Month';
 $str1Hour = '1 Hour';
 $str1IncidentsLoggedViaPortal = '1 Incident Logged via the Portal';
+# e.g 1st day of month
+$str1st = '1st';
+# e.g 2nd day of month
+$str2nd = '2nd';
+# e.g 3rd day of month
+$str3rd = '3rd';
 
 # e.g. About this site, i.e. more information
 $strAbout = 'About';
@@ -158,6 +164,7 @@ $strAssociateContactWithContract = 'Associate this contact with an existing cont
 $strAtLunch = 'At Lunch';
 $strAttachFile = 'Attach File';
 $strAttachment = 'Attachment';
+$strAttachedIsBillableIncidentsForAbovePeriod ='Attached is the billable incidents for the above period';
 # Short for August
 $strAugAbbr = 'Aug';
 $strAugust = 'August';
@@ -180,6 +187,7 @@ $strBalance = 'Balance';
 $strBCC = 'BCC';
 $strBill = 'Bill';
 $strBillableIncidents = 'Billable Incidents';
+$strBillableIncidentsForPeriodXtoX = 'Billable incidents for period %s to %s';
 $strBillableIncidentsReport = 'Billable Incidents Report';
 $strBilling = 'Billing';
 $strBillingCustomerPeriod = 'Customer Period';
@@ -447,6 +455,7 @@ $strEscalatedIncidents = 'Escalated Incidents';
 $strEscalation = 'Escalation';
 $strEscalationPaths = 'Escalation Paths';
 $strEvent = 'Event';
+$strEvery = 'Every';
 $strExact = 'Exact';
 $strExclude = 'Exclude';
 $strExpired = 'Expired';
@@ -511,6 +520,7 @@ $strForm = 'Form';
 $strForRefundsThisShouldBeNegative = 'For refunds this should be negative';
 $strForwardOneYear = 'Forward One Year';
 $strForXDaysHoursMinutes = 'For <em>x</em> days, hours, minutes';
+$strFrequency = 'Frequency';
 # Short for 'Friday'
 $strFri = 'Fri';
 $strFriday = 'Friday';
@@ -734,6 +744,7 @@ $strMBytes = 'MBytes';
 $strMedium = 'Medium';
 $strMediumPriority = 'Medium Priority';
 $strMessage = 'Message';
+$strMidnight = 'Midnight';
 $strMine = 'Mine';
 $strMinutes = 'minutes';
 $strMinVersion = 'Minimum Version';
@@ -744,6 +755,7 @@ $strMob = 'Mob';
 $strMon = 'Mon';
 $strMonday = 'Monday';
 $strMonth = 'Month';
+$strMonthly = 'Monthly';
 $strMonthView = 'Month View';
 $strMore = 'More...';
 $strMoreContactsThanContractSupports = 'There are more contacts linked than this contract should support';
@@ -908,6 +920,7 @@ $strOccurance = 'Occurance';
 # Short for October
 $strOctAbbr = 'Oct';
 $strOctober = 'October';
+$strOffset = 'Offset';
 $strOK = 'OK';
 $strOldPassword = 'Old Password';
 $strOnHoliday = 'On Holiday';
@@ -1430,6 +1443,8 @@ $strXsActivities = '%s\'s Activities';
 $strXSeconds = '%s Seconds';
 # e.g. John's Tasks
 $strXsTasks = '%s\'s Tasks';
+# e.g. 10th day of month
+$strXth = '%sth';
 # e.g. 42 units @ 2x
 $strXUnitsAtX = '%d units @ %dx';
 $strXWorkingDay = '%s working day';
@@ -1437,6 +1452,7 @@ $strXWorkingDays = '%s working days';
 $strXYears = '%s Years';
 
 $strYear = 'Year';
+$strYearly = 'Yearly';
 $strYearView = 'Year View';
 $strYes = 'Yes';
 $strYesterday = 'Yesterday';

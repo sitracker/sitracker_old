@@ -50,8 +50,8 @@ function saction_CloseIncidents($closure_delay)
     if ($verbose) echo "Found ".mysql_num_rows($result)." Incidents to close{$crlf}";
     while ($irow = mysql_fetch_array($result))
     {
-        $sqlb="UPDATE `{$dbIncidents}` SET lastupdated='$now', closed='$now', status='2', closingstatus='4', timeofnextaction='0' WHERE id='".$irow['id']."'";
-        $resultb=mysql_query($sqlb);
+        $sqlb = "UPDATE `{$dbIncidents}` SET lastupdated='$now', closed='$now', status='2', closingstatus='4', timeofnextaction='0' WHERE id='".$irow['id']."'";
+        $resultb = mysql_query($sqlb);
         if (mysql_error())
         {
             trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
@@ -59,8 +59,8 @@ function saction_CloseIncidents($closure_delay)
         }
         if ($verbose) echo "  Incident ".$row['id']." closed{$crlf}";
 
-        $sqlc="INSERT INTO `{$dbUpdates}` (incidentid, userid, type, currentowner, currentstatus, bodytext, timestamp, nextaction, customervisibility) ";
-        $sqlc.="VALUES ('".$irow['id']."', '0', 'closing', '".$irow['owner']."', '".$irow['status']."', 'Incident Closed by {$CONFIG['application_shortname']}', '$now', '', 'show' ) ";
+        $sqlc = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, currentowner, currentstatus, bodytext, timestamp, nextaction, customervisibility) ";
+        $sqlc .= "VALUES ('".$irow['id']."', '0', 'closing', '".$irow['owner']."', '".$irow['status']."', 'Incident Closed by {$CONFIG['application_shortname']}', '$now', '', 'show' ) ";
         $resultc = mysql_query($sqlc);
         if (mysql_error())
         {
@@ -343,8 +343,12 @@ function saction_SetUserStatus()
                 if ($accepting != '') $usql .= ", accepting='{$accepting}'";
                 $usql .= " WHERE id='{$huser->userid}' LIMIT 1";
                 if ($accepting == 'No') incident_backup_switchover($huser->userid, 'no');
-                if ($verbose) echo user_realname($huser->userid).': '.userstatus_name($currentstatus).' -> '.userstatus_name($newstatus).$crlf;
-                if ($verbose) echo $usql.$crlf;
+                if ($verbose)
+                {
+                    echo user_realname($huser->userid).': '.userstatus_name($currentstatus).' -> '.userstatus_name($newstatus).$crlf;
+                    echo $usql.$crlf;
+                }
+                
                 mysql_query($usql);
                 if (mysql_error())
                 {
@@ -620,8 +624,8 @@ function saction_MailPreviousMonthsTransactions()
 
     $startdate = "{$currentyear}-{$lastmonth}-01";
     // Find last date of previous month, 5 day an arbitary choice
-	$lastday = date('t', strtotime('{$currentyear}-{$lastmonth}-05'));
-	$enddate = 	"{$currentyear}-{$lastmonth}-{$lastday}";
+    $lastday = date('t', strtotime('{$currentyear}-{$lastmonth}-05'));
+    $enddate = 	"{$currentyear}-{$lastmonth}-{$lastday}";
 
     $csv = transactions_report('', $startdate, $enddate, '', 'csv', TRUE);
     
@@ -634,15 +638,15 @@ function saction_MailPreviousMonthsTransactions()
     $extra_headers .= "\n"; // add an extra crlf to create a null line to separate headers from body
                         // this appears to be required by some email clients - INL
 
-	$subject = "Billable incidents for period {$startdate} to {$enddate}";
+    $subject = sprintf($strBillableIncidentsForPeriodXtoX, $startdate, $enddate);
 
-	$bodytext = "Attached is the billable incidents for the above period";
+    $bodytext = $strAttachedIsBillableIncidentsForAbovePeriod;
 
     $mime = new MIME_mail($CONFIG['support_email'], $CONFIG['billing_reports_email'], html_entity_decode($subject), $bodytext, $extra_headers, '');
     $mime->attach($csv, "Billable report", OCTET, BASE64, "filename=billable_incidents_{$lastmonth}_{$currentyear}.csv");
     return $mime->send_mail();
-
 }
+
 // =======================================================================================
 $actions = schedule_actions_due();
 if ($actions !== FALSE)
