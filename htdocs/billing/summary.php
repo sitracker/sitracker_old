@@ -29,6 +29,8 @@ $sql .= "WHERE m.servicelevelid = sl.id AND sl.timed = 'yes' AND m.id = s.contra
 
 $sitestr = '';
 
+$csv_currency = html_entity_decode($CONFIG['currency_symbol'], ENT_NOQUOTES, "ISO-8859-15"); // Note using -15 as -1 doesnt support euro
+
 if (!empty($sites))
 {
     foreach ($sites AS $s)
@@ -56,7 +58,7 @@ if (mysql_numrows($result) > 0)
     }
     elseif ($display == 'csv')
     {
-        $str .= "{$strSiteName},{$strProduct},{$strStartDate},{$strEndDate},{$strCreditAmount},{$strBalance},{$strUnitRate},Units remaining @1 x\n";
+        $str .= "\"{$strSiteName}\",\"{$strProduct}\",\"{$strStartDate}\",\"{$strEndDate}\",\"{$strCreditAmount}\",\"{$strBalance}\",\"{$strUnitRate}\",\"Units remaining @1 x\"\n"; // FIXME i18n
     }
 
     $lastsite = '';
@@ -111,8 +113,8 @@ if (mysql_numrows($result) > 0)
         {
             if ($obj->site != $lastsite)
             {
-                $str .= site_name($obj->site).",";
-                $str .= product_name($obj->product).",";
+                $str .= "\"".site_name($obj->site)."\",";
+                $str .= "\"".product_name($obj->product)."\",";
             }
             else
             {
@@ -127,10 +129,10 @@ if (mysql_numrows($result) > 0)
                 }
             }
 
-            $str .= "{$obj->startdate},{$obj->enddate},";
-            $str .= "{$CONFIG['currency_symbol']}{$obj->creditamount},{$CONFIG['currency_symbol']}{$obj->balance},";
-            $str .= "{$CONFIG['currency_symbol']}{$obj->unitrate},";
-            $str .= "{$unitsat1times}\n";
+            $str .= "\"{$obj->startdate}\",\"{$obj->enddate}\",";
+            $str .= "\"{$csv_currency}{$obj->creditamount}\",\"{$csv_currency}{$obj->balance}\",";
+            $str .= "\"{$csv_currency}{$obj->unitrate}\",";
+            $str .= "\"{$unitsat1times}\"\n";
         }
     }
 
@@ -143,8 +145,8 @@ if (mysql_numrows($result) > 0)
     }
     elseif ($display == 'csv')
     {
-        $str .= ",,,{$strTOTALS},{$CONFIG['currency_symbol']}{$totalcredit},";
-        $str .= "{$CONFIG['currency_symbol']}{$totalbalance},,{$remainingunits}\n";
+        $str .= ",,,\"{$strTOTALS}\",\"{$csv_currency}{$totalcredit}\",";
+        $str .= "\"{$csv_currency}{$totalbalance}\",,\"{$remainingunits}\"\n";
     }
 }
 else

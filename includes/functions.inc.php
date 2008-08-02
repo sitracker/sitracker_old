@@ -10380,6 +10380,9 @@ function get_billable_contract_id($contactid)
 function transactions_report($serviceid, $startdate, $enddate, $sites, $display, $sitebreakdown=TRUE)
 {
 	global $CONFIG;
+    
+    $csv_currency = html_entity_decode($CONFIG['currency_symbol'], ENT_NOQUOTES, "ISO-8859-15"); // Note using -15 as -1 doesnt support euro
+    
 	$sql = "SELECT DISTINCT t.*, m.site FROM `{$GLOBALS['dbTransactions']}` AS t, `{$GLOBALS['dbService']}` AS p, ";
 	$sql .= "`{$GLOBALS['dbMaintenance']}` AS m, `{$GLOBALS['dbServiceLevels']}` AS sl, `{$GLOBALS['dbSites']}` AS s ";
 	$sql .= "WHERE t.serviceid = p.serviceid AND p.contractid = m.id "; // AND t.date <= '{$enddateorig}' ";
@@ -10434,7 +10437,7 @@ function transactions_report($serviceid, $startdate, $enddate, $sites, $display,
 	            $str .= "\"{$transaction->transactionid}\",";
 	            $str .= "\"{$transaction->serviceid}\",\"";
 	            $str .= site_name($transaction->site)."\",";
-	            $str .= "\"{$transaction->description}\",";
+	            $str .= "\"".html_entity_decode($transaction->description)."\",";
 	        }
 
 	        $total += $transaction->amount;
@@ -10447,7 +10450,7 @@ function transactions_report($serviceid, $startdate, $enddate, $sites, $display,
 	            }
 	            elseif ($display == 'csv')
 	            {
-	                $str .= ",\"{$CONFIG['currency_symbol']}".number_format($transaction->amount, 2)."\",";
+	                $str .= ",\"{$csv_currency}".number_format($transaction->amount, 2)."\",";
 	            }
 	        }
 	        else
@@ -10459,7 +10462,7 @@ function transactions_report($serviceid, $startdate, $enddate, $sites, $display,
 	            }
 	            elseif ($display == 'csv')
 	            {
-	                $str .= "\"{$CONFIG['currency_symbol']}".number_format($transaction->amount, 2)."\",,";
+	                $str .= "\"{$csv_currency}".number_format($transaction->amount, 2)."\",,";
 	            }
 	        }
 
@@ -10509,8 +10512,8 @@ function transactions_report($serviceid, $startdate, $enddate, $sites, $display,
 	                $text .= "\"{$GLOBALS['strSite']}\",\"{$GLOBALS['strDescription']}\",\"{$GLOBALS['strCredit']}\",\"{$GLOBALS['strDebit']}\"\n";
 	                $text .= $e['str'];
 	                $text .= ",,,,{$GLOBALS['strTotal']},";
-	                $text .= "\"{$CONFIG['currency_symbol']}".number_format($e['credit'], 2)."\",\"";
-	                $text .="{$CONFIG['currency_symbol']}".number_format($e['debit'], 2)."\"\n";
+	                $text .= "\"{$csv_currency}".number_format($e['credit'], 2)."\",\"";
+	                $text .="{$csv_currency}".number_format($e['debit'], 2)."\"\n";
 	            }
 	        }
 	    }
@@ -10535,8 +10538,8 @@ function transactions_report($serviceid, $startdate, $enddate, $sites, $display,
 	            $text .= "\"{$GLOBALS['strDescription']}\",\"{$GLOBALS['strCredit']}\",\"{$GLOBALS['strDebit']}\"\n";
 	            $text .= $table;
 	            $text .= ",,,,{$GLOBALS['strTOTALS']},";
-	            $text .= "\"{$CONFIG['currency_symbol']}".number_format($totalcredit, 2)."\",\"";
-	            $text .= "{$CONFIG['currency_symbol']}".number_format($totaldebit, 2)."\"\n";
+	            $text .= "\"{$csv_currency}".number_format($totalcredit, 2)."\",\"";
+	            $text .= "{$csv_currency}".number_format($totaldebit, 2)."\"\n";
 	        }
 	    }
 
@@ -10580,6 +10583,7 @@ function create_report($data, $output = 'table', $filename = 'report.csv')
             $html .= colheader($header, $header);
         }
         $html .= "</tr>";
+        
         if (sizeof($data) == 1)
         {
             $html .= "<tr><td rowspan='{$rows}'>{$GLOBALS['strNoRecords']}</td></tr>";
@@ -10663,6 +10667,7 @@ function gravatar($email, $size)
 
     return $html;
 }
+
 
 // ** Place no more function defs below this **
 
