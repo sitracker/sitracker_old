@@ -2317,7 +2317,7 @@ function incident_lastupdate($id)
         $update = mysql_fetch_array($result);
 
         // In certain circumstances go back even further, find an earlier update
-        if (($update['type'] == "reassigning" AND !isset($update['body'])) OR ($update['type'] == 'slamet' AND $row['sla'] == 'opened'))
+        if (($update['type'] == "reassigning" AND !isset($update['body'])) OR ($update['type'] == 'slamet' AND $update['sla'] == 'opened')) 
         {
             //check if the previous update was by userid == 0 if so then we can assume this is a new call
             $sqlPrevious = "SELECT userid, type, currentowner, currentstatus, LEFT(bodytext,500) AS body, timestamp, nextaction, id, sla, type ";
@@ -2334,7 +2334,7 @@ function incident_lastupdate($id)
                 $row = mysql_fetch_array($resultPrevious);
                 if ($row['userid'] == 0)
                 {
-                    $last;
+                    $last = "";
                     //This was an initial assignment so we now want the first update - looping round data retrieved rather than second query
                     while ($row = mysql_fetch_array($resultPrevious))
                     {
@@ -2612,7 +2612,7 @@ function format_seconds($seconds)
 
         if ($years > 0)
         {
-            $return_string .= sprintf($strXYears, $year).' ';
+            $return_string .= sprintf($strXYears, $years).' ';
         }
 
         if ($months > 0 AND $years < 2)
@@ -2801,7 +2801,7 @@ function html_redirect($url, $success = TRUE, $message='')
     {
         $refreshtime = 1;
     }
-    elseif ($sucess == FALSE)
+    elseif ($success == FALSE)
     {
         $refreshtime = 3;
     }
@@ -3119,7 +3119,7 @@ function increment_incidents_used($maintid)
 **/
 function sit_error_handler($errno, $errstr, $errfile, $errline, $errcontext)
 {
-    global $CONFIG;
+    global $CONFIG, $sit;
     $errortype = array(
     E_ERROR           => 'Fatal Error',
     E_WARNING         => 'Warning',
@@ -5479,7 +5479,7 @@ function suggest_reassign_userid($incidentid, $exceptuserid = 0)
     {
         $incident = mysql_fetch_object($result);
         // If this is a critical incident the user we're assigning to must be online
-        if ($priority >= 4) $req_online = TRUE;
+        if ($incident->priority >= 4) $req_online = TRUE;
         else $req_online = FALSE;
 
         // Find the users with this skill (or all users)
@@ -5685,7 +5685,7 @@ function create_incident_feedback($formid, $incidentid)
 {
     global $dbFeedbackRespondents;
     $contactid = incident_contact($incidentid);
-    $email = contact_email($respondent);
+    $email = contact_email($respondent);  // BUGBUG where is this variable comeing from ?
 
     $sql = "INSERT INTO `{$dbFeedbackRespondents}` (formid, contactid, email, incidentid) VALUES (";
     $sql .= "'".mysql_real_escape_string($formid)."', ";
@@ -6988,6 +6988,7 @@ function string_find_all($haystack, $needle, $limit=0)
     $positions = array();
     $currentoffset = 0;
 
+	$offset = 0;
     $count = 0;
     while (($pos = stripos($haystack, $needle, $offset)) !== false && ($count < $limit || $limit == 0))
     {
@@ -7069,7 +7070,7 @@ function exact_seconds($seconds)
     $minutes = floor($seconds / 60);
     $seconds -= $minutes * 60;
 
-    $string;
+    $string = "";
     if ($days != 0) $string .= "{$days} {$GLOBALS['strDays']}, ";
     if ($hours != 0) $string .= "{$hours} {$GLOBALS['strHours']}, ";
     if ($minutes != 0) $string .= "{$minutes} {$GLOBALS['strMinutes']}, ";
@@ -7811,13 +7812,14 @@ function get_incident_billable_breakdown_array($incidentid)
 **/
 function billable_units_site($siteid, $startdate=0, $enddate=0)
 {
-    $sql = "SELECT i.id FROM `{$GLOBALS['dbIncidents']}` AS i, `{$GLOBALS['dbContacts']}` AS c WHERE c.id = i.contact AND c.siteid = {$siteid} ";
+    $sql = "SELECT i.id FROM `{$GLOBALS['dbIncidents']}` AS i, `{$GLOBALS['dbContacts']}` AS c ";
+    $sql .= "WHERE c.id = i.contact AND c.siteid = {$siteid} ";
     if ($startdate != 0)
     {
         $sql .= "AND closed >= {$startdate} ";
     }
 
-    if ($enedate != 0)
+    if ($enddate != 0)
     {
         $sql .= "AND closed <= {$enddate} ";
     }
@@ -8109,7 +8111,7 @@ function readable_file_size($filesize)
 **/
 function contract_details($id, $mode='internal')
 {
-    global $CONFIG, $iconset, $dbMaintenance, $dbSites, $dbResellers, $dbLicenceTypes;
+    global $CONFIG, $iconset, $dbMaintenance, $dbSites, $dbResellers, $dbLicenceTypes, $now;
 
     $sql  = "SELECT m.*, m.notes AS maintnotes, s.name AS sitename, ";
     $sql .= "r.name AS resellername, lt.name AS licensetypename ";
@@ -8384,7 +8386,7 @@ function upload_file($file, $incidentid, $updateid, $type='public')
 {
     global $CONFIG, $now;
     $att_max_filesize = return_bytes($CONFIG['upload_max_filesize']);
-    $incident_attachment_fspath = $CONFIG['attachment_fspath'] . $id;
+    $incident_attachment_fspath = $CONFIG['attachment_fspath'] . $id; //FIXME $id never declared
     if ($file['name'] != '')
     {
         // try to figure out what delimeter is being used (for windows or unix)...
@@ -8551,18 +8553,19 @@ function group_user_selector($title, $level="engineer", $groupid)
 * Used in add incident and update incident
 * @return $html string html to output
 * @author Kieran Hogg
+* @TODO populate $id
 */
 function show_next_action()
 {
-
+	global $now;
     $html = "{$GLOBALS['strPlaceIncidentInWaitingQueue']}<br />";
 
-    $oldtimeofnextaction = incident_timeofnextaction($id);
+    $oldtimeofnextaction = incident_timeofnextaction($id); //FIXME $id never populated
     if ($oldtimeofnextaction < 1)
     {
         $oldtimeofnextaction = $now;
     }
-    $wait_time = ($oldtimeofnextaction-$now);
+    $wait_time = ($oldtimeofnextaction - $now);
 
     $na_days = floor($wait_time / 86400);
     $na_remainder = $wait_time % 86400;
@@ -8976,7 +8979,8 @@ function show_edit_site($site, $mode='internal')
 */
 function show_add_contact($siteid = 0, $mode = 'internal')
 {
-    $html .= show_form_errors('add_contact');
+	global $CONFIG;
+    $html = show_form_errors('add_contact');
     clear_form_errors('add_contact');
     $html .= "<h2>".icon('contact', 32)." ";
     $html .= "{$GLOBALS['strNewContact']}</h2>";
@@ -9129,7 +9133,7 @@ function show_add_contact($siteid = 0, $mode = 'internal')
 */
 function process_add_contact($mode = 'internal')
 {
-    global $now, $CONFIG, $dbContacts;
+    global $now, $CONFIG, $dbContacts, $sit;
     // Add new contact
     // External variables
     $siteid = mysql_real_escape_string($_REQUEST['siteid']);
@@ -10119,7 +10123,7 @@ function approve_incident($incidentid)
 
         foreach ($multipliers AS $m)
         {
-            $s .= sprintf($strXUnitsAtX, $a[$m], $m);
+            $s .= sprintf($GLOBALS['strXUnitsAtX'], $a[$m], $m);
             $numberofunits += ($m * $a[$m]);
         }
 
