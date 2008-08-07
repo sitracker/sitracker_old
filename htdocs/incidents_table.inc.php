@@ -305,7 +305,7 @@ while ($incidents = mysql_fetch_array($result))
     if (empty($incidents_minimal))
     {
         echo "<td align='center'>";
-        if ($incidents['status'] == 5 AND $incidents['towner'] == $user)
+        if ($incidents['status'] == 5 AND $incidents['towner'] == $sit[2])
         {
             echo "<strong>{$strAwaitingYourResponse}</strong>";
         }
