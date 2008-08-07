@@ -82,7 +82,7 @@ dojo.require ("dojo.widget.ComboBox");
 <?php
 echo "<h2>".icon('contact', 32)." ";
 echo "{$strBrowseContacts}</h2>";
-echo "<table summary='alphamenu' align='center''>";
+echo "<table summary='alphamenu' align='center'>";
 echo "<tr>";
 echo "<td align='center'>";
     echo "<form action='{$_SERVER['PHP_SELF']}' method='get'>";
@@ -172,7 +172,7 @@ else
             {
                 $sql .= " AND (";
                 if ($search_string_len <= 6) $sql .= "c.id=('$search_string') OR ";
-                
+
                 if ($search_string_len <= 2)
                 {
                     $sql .= "SUBSTRING(c.surname,1,$search_string_len)=('$search_string') ";
@@ -201,9 +201,9 @@ else
         }
         else
         {
-            
+
             echo "<p align='center'>Displaying ".mysql_num_rows($result)." contact(s) matching <em>'{$search_string}'</em></p>";
-            
+
             echo "<table align='center'>
             <tr>
             <th>{$strName}</th>
@@ -227,8 +227,8 @@ else
 				else echo $results["phone"];
 				echo "</td>";
                 echo "<td>";
-                if ($results["fax"] == '') echo "<em>{$strNone}</em>"; 
-				else echo $results["fax"]; 
+                if ($results["fax"] == '') echo "<em>{$strNone}</em>";
+				else echo $results["fax"];
 				echo "</td>";
                 echo "<td><a href='add_incident.php?action=findcontact&amp;contactid={$results['id']}'>{$strAddIncident}</a> | ";
                 echo "<a href='edit_contact.php?action=edit&amp;contact={$results['id']}'>{$strEditContact}</a>";
