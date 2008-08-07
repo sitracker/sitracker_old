@@ -418,6 +418,9 @@ function user_realname($id, $allowhtml = FALSE)
     }
     elseif (!empty($incidents['email']))
     {
+        // TODO this code does not belong here
+        // The SQL is also looking at all escalation paths not just the relevant
+        // one.
         //an an incident
         preg_match('/From:[ A-Za-z@\.]*/', $update_body, $from);
         if (!empty($from))
@@ -432,9 +435,12 @@ function user_realname($id, $allowhtml = FALSE)
             if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
             while ($escpath = mysql_fetch_object($result))
             {
-                if (strstr(strtolower($frommail), strtolower($escpath->email_domain)))
+                if (!empty($escpath->email_domain))
                 {
-                    return $escpath->name;
+                    if (strstr(strtolower($frommail), strtolower($escpath->email_domain)))
+                    {
+                        return $escpath->name;
+                    }
                 }
             }
         }
@@ -2317,7 +2323,7 @@ function incident_lastupdate($id)
         $update = mysql_fetch_array($result);
 
         // In certain circumstances go back even further, find an earlier update
-        if (($update['type'] == "reassigning" AND !isset($update['body'])) OR ($update['type'] == 'slamet' AND $update['sla'] == 'opened')) 
+        if (($update['type'] == "reassigning" AND !isset($update['body'])) OR ($update['type'] == 'slamet' AND $update['sla'] == 'opened'))
         {
             //check if the previous update was by userid == 0 if so then we can assume this is a new call
             $sqlPrevious = "SELECT userid, type, currentowner, currentstatus, LEFT(bodytext,500) AS body, timestamp, nextaction, id, sla, type ";
@@ -10380,9 +10386,9 @@ function get_billable_contract_id($contactid)
 function transactions_report($serviceid, $startdate, $enddate, $sites, $display, $sitebreakdown=TRUE)
 {
 	global $CONFIG;
-    
+
     $csv_currency = html_entity_decode($CONFIG['currency_symbol'], ENT_NOQUOTES, "ISO-8859-15"); // Note using -15 as -1 doesnt support euro
-    
+
 	$sql = "SELECT DISTINCT t.*, m.site FROM `{$GLOBALS['dbTransactions']}` AS t, `{$GLOBALS['dbService']}` AS p, ";
 	$sql .= "`{$GLOBALS['dbMaintenance']}` AS m, `{$GLOBALS['dbServiceLevels']}` AS sl, `{$GLOBALS['dbSites']}` AS s ";
 	$sql .= "WHERE t.serviceid = p.serviceid AND p.contractid = m.id "; // AND t.date <= '{$enddateorig}' ";
@@ -10583,7 +10589,7 @@ function create_report($data, $output = 'table', $filename = 'report.csv')
             $html .= colheader($header, $header);
         }
         $html .= "</tr>";
-        
+
         if (sizeof($data) == 1)
         {
             $html .= "<tr><td rowspan='{$rows}'>{$GLOBALS['strNoRecords']}</td></tr>";
