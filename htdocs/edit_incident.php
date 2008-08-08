@@ -76,7 +76,7 @@ if (empty($submit))
         plugin_do('edit_incident_form');
         echo "</table>\n";
         echo "<p align='center'>";
-        echo "<input name='type' type='hidden' value='Submit' />";
+        echo "<input name='type' type='hidden' value='Support' />";
 
         echo "<input name='id' type='hidden' value=\"{$id}\" />";
         echo "<input name='oldtitle' type='hidden' value=\"{$incident['title']}\" />";
