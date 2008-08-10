@@ -100,13 +100,13 @@ elseif (authenticate($username, $password) == 1)
     if (mysql_error())
     {
         $_SESSION['auth'] = FALSE;
-        trigger_error(mysql_error(),E_USER_ERROR);
+        trigger_error(mysql_error(), E_USER_ERROR);
     }
     if (mysql_num_rows($result) >= 1)
     {
         while ($perm = mysql_fetch_object($result))
         {
-            $userpermissions[]=$perm->permissionid;
+            $userpermissions[] = $perm->permissionid;
         }
     }
 
@@ -118,14 +118,16 @@ elseif (authenticate($username, $password) == 1)
         $_SESSION['auth'] = FALSE;
         trigger_error(mysql_error(),E_USER_ERROR);
     }
+    
     if (mysql_num_rows($result) >= 1)
     {
         while ($perm = mysql_fetch_object($result))
         {
-            $userpermissions[]=$perm->permissionid;
+            $userpermissions[] = $perm->permissionid;
         }
     }
 
+    
     $_SESSION['permissions'] = array_unique($userpermissions);
 
     // redirect
