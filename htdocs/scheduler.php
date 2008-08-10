@@ -81,29 +81,41 @@ switch ($_REQUEST['mode'])
             
             echo "<tr>";
             echo "<th>{$strType}</th><td>";
-            echo "<input type='radio' name='type' value='interval' id='interval' onclick=\"$('intervalsection').show(); $('datesection').hide();\" checked='checked' />{$strInterval} ";
-            echo "<input type='radio' name='type' value='date' id='date' onclick=\"$('intervalsection').hide(); $('datesection').show();\" />{$strDate} ";
+            
+            if ($saction->type == 'interval')
+            {
+            	$interval = "checked='checked'";
+                $visibilitydate = "style='display:none'";
+            }
+            elseif ($saction->type == 'date')
+            {
+            	$date = "checked='checked'";
+                $visibilityinterval = "style='display:none'";
+            }
+            
+            echo "<input type='radio' name='type' value='interval' id='interval' onclick=\"$('intervalsection').show(); $('datesection').hide();\" {$interval} />{$strInterval} ";
+            echo "<input type='radio' name='type' value='date' id='date' onclick=\"$('intervalsection').hide(); $('datesection').show();\" {$date} />{$strDate} ";
             echo "</td></tr>";
             
-            echo "<tbody id='intervalsection'>";
+            echo "<tbody id='intervalsection' {$visibilityinterval}>";
             echo "<tr><th><label for='interval'>{$strInterval}</label></th>";
             echo "<td><input type='text' id='interval' name='interval' value='{$saction->interval}' size='5' /> ({$strSeconds})";
             echo "</td></tr>\n";
             echo "</tbody>";
             
-            echo "<tbody id='datesection' style='display:none'>";
+            echo "<tbody id='datesection' {$visibilitydate}>";
             // date_type - month, year
             // date_offset
             // date_time
             echo "<tr><th>{$strFrequency}</th><td>";
             
-            if (empty($saction->date_type) OR empty($saction->date_type) == 'month')
+            if (empty($saction->date_type) OR $saction->date_type == 'month')
             {
-                $month = " checked='yes'"; // TODO figure this out
+                $month = " selected='selected' ";
             }
             else
             {
-                $year = " checked='yes'"; // TODO figure this out
+                $year = " selected='selected' ";
             }
             
             echo "<select name='frequency'><option value='month' {$month}>{$strMonthly}</option>";
@@ -111,34 +123,15 @@ switch ($_REQUEST['mode'])
             echo "</td></tr>";
             echo "<tr><th>{$strOffset}</th><td><input type='text' id='date_offset' name='date_offset' value='{$saction->date_offset}' size='5' /> ({$strDays})</td></tr>";
             echo "<tr><th>{$strTime}</th><td>";
-            //<input type='text' id='date_time' name='date_time' value='{$saction->date_time}' size='5' />
-            // TODO select based on DB
-            echo "<select name='date_time' id='date_time'>";
-            echo "<option value='0'>{$strMidnight}</option>";
-            echo "<option value='1'>1:00 AM</option>";
-            echo "<option value='2'>2:00 AM</option>";
-            echo "<option value='3'>3:00 AM</option>";
-            echo "<option value='4'>4:00 AM</option>";
-            echo "<option value='5'>5:00 AM</option>";
-            echo "<option value='6'>6:00 AM</option>";
-            echo "<option value='7'>7:00 AM</option>";
-            echo "<option value='8'>8:00 AM</option>";
-            echo "<option value='9'>9:00 AM</option>";
-            echo "<option value='10'>10:00 AM</option>";
-            echo "<option value='11'>11:00 AM</option>";
-            echo "<option value='12'>12:00 PM</option>";
-            echo "<option value='13'>1:00 PM</option>";
-            echo "<option value='14'>2:00 PM</option>";
-            echo "<option value='15'>3:00 PM</option>";
-            echo "<option value='16'>4:00 PM</option>";
-            echo "<option value='17'>5:00 PM</option>";
-            echo "<option value='18'>6:00 PM</option>";
-            echo "<option value='19'>7:00 PM</option>";
-            echo "<option value='20'>8:00 PM</option>";
-            echo "<option value='21'>9:00 PM</option>";
-            echo "<option value='22'>10:00 PM</option>";
-            echo "<option value='23'>11:00 PM</option>";
-            echo "</select>";
+            $dates = array(0 => $strMidnight, 1 => "1:00 AM", 2 => "2:00 AM", 3 => "3:00 AM", 
+                                4 => "4:00 AM", 5 => "5:00 AM", 6 => "6:00 AM", 7 => "7:00 AM", 8 => "8:00 AM",
+                                9 => "9:00 AM", 10 => "10:00 AM", 11 => "11:00 AM", 12 => "12:00 PM", 
+                                13 => "1:00 PM", 14 => "2:00 PM", 15 => "3:00 PM", 
+                                16 => "4:00 PM", 17 => "5:00 PM", 18 => "6:00 PM", 19 => "7:00 PM", 20 => "8:00 PM",
+                                21 => "9:00 PM", 22 => "10:00 PM", 23 => "11:00 PM",);
+            $selected = substr($saction->date_time, 0, 2);
+            if ($selected[0] == '0') $selected = $selected[1];
+            echo array_drop_down($dates, 'date_time', $selected);
     
             echo "</td></tr>";
             echo "</tbody>";
@@ -161,7 +154,6 @@ switch ($_REQUEST['mode'])
         
         if (!empty($_REQUEST['startdate']))
         {
-            echo "moo";
             $start = strtotime($_REQUEST['startdate'].' '.$_REQUEST['starttime']);
             $start = date('Y-m-d H:i', $start);
         }
@@ -181,9 +173,10 @@ switch ($_REQUEST['mode'])
         }
         
         $status = cleanvar($_REQUEST['status']);
+
         $params = cleanvar($_REQUEST['params']);
         $interval = cleanvar($_REQUEST['interval']);
-        if ($interval <= 0)
+        if ($interval <= 0 AND $type == 'interval')
         {
             $status = 'disabled';
             $interval = 0;
@@ -194,7 +187,7 @@ switch ($_REQUEST['mode'])
         $date_time = cleanvar($_REQUEST['date_time']);
         
         if ($date_time < 10) $date_time = "0{$date_time}:00:00";
-        else "{$date_time}:00:00";
+        else $date_time = "{$date_time}:00:00";
         
         if ($type == 'interval')
         {
@@ -319,16 +312,38 @@ switch ($_REQUEST['mode'])
                 echo "<td>";
                 if ($schedule->status == 'enabled')
                 {
+                    $starttime = mysql2date($schedule->start);
                     if ($lastruntime > 0)
                     {
-                        $nextruntime = $lastruntime + $schedule->interval;
+                        if ($schedule->type == 'interval')
+                        {
+                            $nextruntime = $lastruntime + $schedule->interval;
+                        }
+                        elseif ($schedule->type == 'date')
+                        {
+                            $nextruntime = 1;
+                            // TODO
+                            /*
+                            if over schedule
+                                now
+                            else
+                                find date
+                             */
+                        }
                     }
                     else
                     {
-                        $nextruntime = $now;
+                        if ($schedule->type == 'interval')
+                        {
+                            $nextruntime = $now;
+                        }
+                        elseif ($schedule->type == 'date')
+                        {
+                            $nextruntime = 1;                        	
+                        }
                     }
                     
-                    echo ldate($CONFIG['dateformat_datetime'],$nextruntime);
+                    echo ldate($CONFIG['dateformat_datetime'], $nextruntime);
                 }                
                 else
                 {

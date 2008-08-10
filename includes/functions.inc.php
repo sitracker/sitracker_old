@@ -1254,28 +1254,23 @@ function array_drop_down($array, $name, $setting='', $enablefield='')
     {
         $usekey = FALSE;
     }
+    
     foreach ($array AS $key => $value)
     {
         $value = htmlentities($value, ENT_COMPAT, $GLOBALS['i18ncharset']);
         if ($usekey)
         {
             $html .= "<option value='$key'";
+            if ($key == $setting)
+            {
+                $html .= " selected='selected'";
+            }
+            
         }
         else
         {
             $html .= "<option value='$value'";
-        }
-
-        if ($usekey)
-        {
-            if ($key==$setting)
-            {
-                $html .= " selected='selected'";
-            }
-        }
-        else
-        {
-            if ($value==$setting)
+            if ($value == $setting)
             {
                 $html .= " selected='selected'";
             }

@@ -24,7 +24,7 @@ function saction_test()
 {
     echo "<h2>Testing testing 1 2 3.</h2>";
 
-    return FALSE;
+    return TRUE;
 }
 
 
@@ -101,7 +101,7 @@ function saction_TimeCalc()
 {
     global $now;
     global $dbIncidents, $dbServiceLevels, $dbMaintenance, $dbUpdates;
-    global $SYSLANG;
+    global $SYSLANG, $CONFIG;
 
     $success = TRUE;
     // FIXME this should only run INSIDE the working day
@@ -156,7 +156,10 @@ function saction_TimeCalc()
         {
             $slaInfo = mysql_fetch_array($update_result);
             $newSlaTime = calculate_incident_working_time($incident['id'],$slaInfo['timestamp'],$now);
-            if ($verbose) echo "   Last SLA record is ".$slaInfo['sla']." at ".date("jS F Y H:i",$slaInfo['timestamp'])." which is $newSlaTime working minutes ago{$crlf}";
+            if ($verbose)
+            {
+                echo "   Last SLA record is ".$slaInfo['sla']." at ".date("jS F Y H:i",$slaInfo['timestamp'])." which is $newSlaTime working minutes ago{$crlf}";
+            }
         }
         mysql_free_result($update_result);
 
@@ -343,6 +346,7 @@ function saction_SetUserStatus()
                 if ($accepting != '') $usql .= ", accepting='{$accepting}'";
                 $usql .= " WHERE id='{$huser->userid}' LIMIT 1";
                 if ($accepting == 'No') incident_backup_switchover($huser->userid, 'no');
+                
                 if ($verbose)
                 {
                     echo user_realname($huser->userid).': '.userstatus_name($currentstatus).' -> '.userstatus_name($newstatus).$crlf;
@@ -376,7 +380,7 @@ function saction_SetUserStatus()
 */
 function saction_ChaseCustomers()
 {
-    global $CONFIG;
+    global $CONFIG, $now;
     global $dbIncidents, $dbUpdates;
     $success = TRUE;
 
@@ -638,9 +642,9 @@ function saction_MailPreviousMonthsTransactions()
     $extra_headers .= "\n"; // add an extra crlf to create a null line to separate headers from body
                         // this appears to be required by some email clients - INL
 
-    $subject = sprintf($strBillableIncidentsForPeriodXtoX, $startdate, $enddate);
+    $subject = sprintf($GLOBALS['strBillableIncidentsForPeriodXtoX'], $startdate, $enddate);
 
-    $bodytext = $strAttachedIsBillableIncidentsForAbovePeriod;
+    $bodytext = $GLOBALS['strAttachedIsBillableIncidentsForAbovePeriod'];
 
     $mime = new MIME_mail($CONFIG['support_email'], $CONFIG['billing_reports_email'], html_entity_decode($subject), $bodytext, $extra_headers, '');
     $mime->attach($csv, "Billable report", OCTET, BASE64, "filename=billable_incidents_{$lastmonth}_{$currentyear}.csv");
