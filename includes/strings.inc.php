@@ -233,6 +233,7 @@ $availablelanguages = array('en-GB' => 'English (British)',
                             'ja-JP' => '日本語',
                             'it-IT' => 'Italiano',
                             'lt-LT' => 'Lietuvių',
+                            'pt-PT' => 'Português',
                             'cy-GB' => 'Cymraeg'
                            );
 
