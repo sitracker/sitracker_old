@@ -171,11 +171,6 @@ elseif ($mode == 'approvalpage')
         ?>
         <script type="text/javascript">
         //<![CDATA[
-        function confirm_delete()
-        {
-            return window.confirm('Confirm approval.');
-        }
-
         function submitform(form)
         {
             $(form).request();
@@ -404,7 +399,7 @@ elseif ($mode == 'approvalpage')
                 }
             }
 
-            // $str .= "<tr><td><a href=\"javascript: submitform({$sitenamenospaces})\" onclick='return confirm_delete();'>{$strApprove}</a>";
+            // $str .= "<tr><td><a href=\"javascript: submitform({$sitenamenospaces})\" onclick='return confirm_action('Confirm approval');'>{$strApprove}</a>";
             $str .= "<tr><td><input type='submit' value='{$strApprove}' />";
             $str .= "</td><td colspan='5'></td><td>{$strTOTALS}</td>";
 
