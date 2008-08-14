@@ -223,7 +223,7 @@ if (!empty($q))
         echo "<tr>".colheader(id, $strID, $sort, $order, $filter);
         echo colheader(incident, $strIncident, $sort, $order, $filter);
         echo colheader(result, $strResult, $sort, $order, $filter);
-        echo colheader(score, $strScore, $sort, $order, $filter);
+        //echo colheader(score, $strScore, $sort, $order, $filter);
         echo colheader(date, $strDate, $sort, $order, $filter);
 
         $shade = 'shade1';
@@ -235,7 +235,6 @@ if (!empty($q))
                     <td><a href=\"{$url}\">".search_highlight($row->title,
                     $search)."</a></td>
                     <td>".search_highlight($row->bodytext, $search)."</td>
-                    <td>".number_format($row->score, 2)."</td>
                     <td>".ldate($CONFIG['dateformat_datetime'], $row->timestamp)."</td></tr>";
 
             if ($shade == 'shade1')
