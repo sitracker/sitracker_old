@@ -15,7 +15,7 @@
 require ('db_connect.inc.php');
 include ('strings.inc.php');
 require ('functions.inc.php');
-
+populate_syslang();
 
 /**
     * @author Ivan Lucas
@@ -101,7 +101,7 @@ function saction_TimeCalc()
 {
     global $now;
     global $dbIncidents, $dbServiceLevels, $dbMaintenance, $dbUpdates;
-    global $SYSLANG, $CONFIG;
+    global $GLOBALS, $CONFIG;
 
     $success = TRUE;
     // FIXME this should only run INSIDE the working day
@@ -194,30 +194,30 @@ function saction_TimeCalc()
         {
             // Get these time of NEXT SLA requirement in minutes
             $coefficient = 1;
-            $NextslaName = $SYSLANG['strSLATarget'];
+            $NextslaName = $GLOBALS['strSLATarget'];
 
             switch ($slaInfo['sla'])
             {
                 case 'opened':
                     $slaRequest='initial_response_mins';
-                    $NextslaName = $SYSLANG['strInitialResponse'];
+                    $NextslaName = $GLOBALS['strInitialResponse'];
                     break;
                 case 'initialresponse':
                     $slaRequest='prob_determ_mins';
-                    $NextslaName = $SYSLANG['strProblemDefinition'];
+                    $NextslaName = $GLOBALS['strProblemDefinition'];
                     break;
                 case 'probdef':
                     $slaRequest = 'action_plan_mins';
-                    $NextslaName = $SYSLANG['strActionPlan'];
+                    $NextslaName = $GLOBALS['strActionPlan'];
                     break;
                 case 'actionplan':
                     $slaRequest = 'resolution_days';
-                    $NextslaName = $SYSLANG['strResolutionReprioritisation'];
+                    $NextslaName = $GLOBALS['strResolutionReprioritisation'];
                     $coefficient = ($CONFIG['end_working_day'] - $CONFIG['start_working_day']) / 60;
                     break;
                 case 'solution':
                     $slaRequest = 'initial_response_mins';
-                    $NextslaName = $SYSLANG['strInitialResponse'];
+                    $NextslaName = $GLOBALS['strInitialResponse'];
                     break;
             }
 
@@ -252,6 +252,11 @@ function saction_TimeCalc()
                     trigger('TRIGGER_INCIDENT_NEARING_SLA', array('incidentid' => $incident['id'],
                                                                   'nextslatime' => $times['next_sla_time'],
                                                                   'nextsla' => $NextslaName));
+                       print_r($GLOBALS);
+                    echo "trigger('TRIGGER_INCIDENT_NEARING_SLA',";
+                    echo "array('incidentid' => {$incident['id']},";
+                    echo "'nextslatime' => {$times['next_sla_time']},";
+                    echo "'nextsla' => $NextslaName));";
                 }
             }
         }
