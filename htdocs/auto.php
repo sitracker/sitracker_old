@@ -252,11 +252,6 @@ function saction_TimeCalc()
                     trigger('TRIGGER_INCIDENT_NEARING_SLA', array('incidentid' => $incident['id'],
                                                                   'nextslatime' => $times['next_sla_time'],
                                                                   'nextsla' => $NextslaName));
-                       print_r($GLOBALS);
-                    echo "trigger('TRIGGER_INCIDENT_NEARING_SLA',";
-                    echo "array('incidentid' => {$incident['id']},";
-                    echo "'nextslatime' => {$times['next_sla_time']},";
-                    echo "'nextsla' => $NextslaName));";
                 }
             }
         }
