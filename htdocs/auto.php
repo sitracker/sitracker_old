@@ -658,7 +658,8 @@ if ($actions !== FALSE)
     foreach ($actions AS $action => $params)
     {
         $fn = "saction_{$action}";
-        echo "<strong>{$fn}()</strong> ";
+        if ($verbose)
+            echo "<strong>{$fn}()</strong> ";
         // Possibly initiate a trigger here named TRIGGER_SCHED_{$action} ?
         if (function_exists($fn))
         {
@@ -666,8 +667,10 @@ if ($actions !== FALSE)
             schedule_action_done($action, $success);
         }
         else schedule_action_done($action, FALSE);
-        if ($success) echo "TRUE<br />";
-        else echo "FALSE<br />";
+        if ($success && $verbose)
+            echo "TRUE<br />";
+        elseif ($verbose)
+            echo "FALSE<br />";
     }
 }
 plugin_do('automata');
