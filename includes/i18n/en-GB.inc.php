@@ -380,6 +380,7 @@ $strDraftDelete = 'Delete Draft';
 $strDraftEdit = 'Edit Draft';
 $strDraftLastSaved = 'Draft last saved';
 $strDueDate = 'Due Date';
+$strDueNow = 'Due Now';
 # the noun; 'a duplicate'
 $strDuplicate = 'Duplicate';
 $strDurability = 'Durability';
@@ -1190,6 +1191,7 @@ $strSkillsSupportedUnderContract = 'Skills supported under this contract';
 $strSLAApproaching = 'SLA approaching';
 $strSLAby = 'SLA: %s by %s';
 $strSLADue = 'SLA due';
+$strSLAXDueNow = '%s due now';
 #E.g. Initial Response in 3 hours
 $strSLAInX = '%s in %s';
 #E.g. Initial Response 3 hours late
@@ -1427,12 +1429,13 @@ $strWorkStatus = 'Work Status';
 $strWebsite = 'Website';
 $strWithheld = 'Withheld';
 
+$strXDays = '%s Days';
 $strXIncidentsLoggedViaPortal = '%s Incidents Logged via the Portal';
 $strXIncidentsLeft = '%s Incidents Left';
-$strXDays = '%s Days';
 $strXHasAction = '%s Has Action';
 $strXHour = '%s Hour';
 $strXHours = '%s Hours';
+$strXLate = '%s late';
 $strXMinutes = '%s Minutes';
 # e.g. '5 days old'
 $strXold = '%s old';

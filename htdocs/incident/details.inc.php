@@ -137,7 +137,7 @@ echo "<br />\n";
 // Show sla target/review target if incident is still open
 if ($incident->status != 2 AND $incident->status!=7)
 {
-    if ($slaremain<>0)
+    if ($targettype != '')
     {
         if ($slaremain > 0)
         {
@@ -147,8 +147,13 @@ if ($incident->status != 2 AND $incident->status!=7)
         {
             echo " ".sprintf($strSLAXLate, $targettype, format_workday_minutes((0-$slaremain)));
         }
+        else
+        {
+        	echo " ".sprintf($strSLAXDueNow , $targettype);
+        }
     }
-    if ($reviewremain>0 && $reviewremain<=2400)
+    
+    if ($reviewremain > 0 && $reviewremain <= 2400)
     {
         // Only display if review is due in the next five days
         if ($slaremain<>0) echo "<br />"; // only need a line sometimes
@@ -169,19 +174,19 @@ $rresult = mysql_query($rsql);
 if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 if (mysql_num_rows($rresult) >= 1)
 {
-    echo "<tr><td colspan='2'>Relations: ";
+    echo "<tr><td colspan='2'>{$strRelations}: ";
     while ($related = mysql_fetch_object($rresult))
     {
-        if ($related->relatedid==$id)
+        if ($related->relatedid == $id)
         {
-            if ($related->relation=='child') $linktitle='Child';
+            if ($related->relation == 'child') $linktitle='Child';
             else $linktitle='Sibling';
             $linktitle .= ": ".incident_title($related->incidentid);
             echo "<a href='incident_details.php?id={$related->incidentid}' title='$linktitle'>{$related->incidentid}</a> ";
         }
         else
         {
-            if ($related->relation=='child') $linktitle='Parent';
+            if ($related->relation == 'child') $linktitle='Parent';
             else $linktitle='Sibling';
             $linktitle .= ": ".incident_title($related->relatedid);
             echo "<a href='incident_details.php?id={$related->relatedid}' title='$linktitle'>{$related->relatedid}</a> ";

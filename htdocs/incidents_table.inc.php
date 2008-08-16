@@ -100,8 +100,8 @@ while ($incidents = mysql_fetch_array($result))
     {
         $updated = "{$strYesterday} @ ".ldate($CONFIG['dateformat_time'], $incidents['lastupdated']);
     }
-    elseif ($incidents['lastupdated'] < $now-86400 AND
-            $incidents['lastupdated'] > $now-(86400*6))
+    elseif ($incidents['lastupdated'] < $now - 86400 AND
+            $incidents['lastupdated'] > $now - (86400 * 6))
     {
         $updated = ldate('l', $incidents['lastupdated'])." @ ".ldate($CONFIG['dateformat_time'], $incidents['lastupdated']);
     }
@@ -349,14 +349,18 @@ while ($incidents = mysql_fetch_array($result))
         $targettype = target_type_name($target->type);
         if ($targettype != '')
         {
-            echo $targettype;
+            echo $targettype;  //FIXME this needs to be properly i18n'ed
             if ($slaremain > 0)
             {
                 echo "<br />in ".format_workday_minutes($slaremain);  //  ." left"
             }
             elseif ($slaremain < 0)
             {
-                echo "<br />".format_workday_minutes((0 - $slaremain))." late";  //  ." left"
+                echo "<br />".sprintf($strXLate, format_workday_minutes((0 - $slaremain)));  //  ." left"
+            }
+            elseif ($slaremain == 0)
+            {
+            	echo "<br />{$strDueNow}";
             }
         }
         else
