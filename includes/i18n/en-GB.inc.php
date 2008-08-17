@@ -218,6 +218,8 @@ $strBytes = 'Bytes';
 $strByDate = 'By Date';
 $strBySLA = 'By SLA';
 $strByVendor = 'By Vendor';
+# e.g. By: Joe Bloggs
+$strByX = 'By: %s';
 
 $strCalendar = 'Calendar';
 # incident status: e.g. Made a phone call and left a message
@@ -930,6 +932,8 @@ $strOneOfTheSignaturesWillBeInserted = 'One of the signatures below will be chos
 $strOnline = 'Online';
 $strOnlyShowNewerThan = 'Only show newer than %d days old';
 $strOnTrainingCourse = 'On Training Course';
+# e.g. on 16 July at 8:00am
+$strOnxAtY = 'On %s at %s';
 $strOpen = 'Open';
 $strOpened = 'Opened';
 $strOpenActivities = 'Open Activities';

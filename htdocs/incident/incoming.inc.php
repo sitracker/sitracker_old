@@ -21,7 +21,9 @@ $incomingid = cleanvar($_REQUEST['id']);
 if ($_REQUEST['action'] == "updatereason")
 {
     $newreason = cleanvar($_REQUEST['newreason']);
-    $update = "UPDATE `{$dbTempIncoming}` SET reason='{$newreason}' WHERE id={$incomingid}";
+    $updatetime = date('Y-m-d H:i:s',$now);
+    $update = "UPDATE `{$dbTempIncoming}` SET reason='{$newreason}', ";
+    $update .= "reason_user='{$sit['2']}', reason_time='{$updatetime}' WHERE id={$incomingid}";
     $result = mysql_query($update);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
     unset($result);
@@ -51,20 +53,24 @@ if (mysql_num_rows($result) > 0)
         $lockedbyresult = mysql_query($lockedbysql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
         while ($row = mysql_fetch_object($lockedbyresult))
+        {
             $lockedbyname = $row->realname;
+        }
     }
     else
+    {
         $lockedbyname = "you";
+    }
 
     echo "<div class='detailinfo'>";
     if ($lockedbyname == "you")
     {
-        echo "<div class='detaildate'>
-                <form method='post' action='{$_SERVER['PHP_SELF']}?id={$incomingid}&win=incomingview&action=updatereason'>
-                {$strMessage}: <input name='newreason' type='text' value=\"{$incoming->reason}\" size='25' maxlength='100' />
-                <input type='submit' value='{$strSave}' />
-                </form>
-            </div>";
+        echo "<div class='detaildate'>";
+        echo "<form method='post' action='{$_SERVER['PHP_SELF']}?id={$incomingid}&win=incomingview&action=updatereason'>";
+        echo "{$strMessage}: <input name='newreason' type='text' value=\"{$incoming->reason}\" size='25' maxlength='100' />";
+        echo "<input type='submit' value='{$strSave}' />";
+        echo "</form>";
+        echo "</div>";
     }
     else
     {
@@ -91,7 +97,12 @@ if (mysql_num_rows($result) > 0)
         echo "</div>";
     }
 
-} else echo "<p class='error'>{$strNoRecords}</p>";
+}
+else
+{
+    echo "<p class='error'>{$strNoRecords}</p>";
+}
+
 unset($result);
 unset($uresult);
 

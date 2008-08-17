@@ -1265,6 +1265,8 @@ CREATE TABLE `{$dbTempIncoming}` (
   `locked` tinyint(4) default NULL,
   `lockeduntil` datetime default NULL,
   `reason` varchar(255) default NULL,
+  `reason_user` int(11) NOT NULL,
+  `reason_time` datetime NOT NULL,
   `contactid` int(11) default NULL,
   PRIMARY KEY  (`id`),
   KEY `updateid` (`updateid`)
@@ -2380,6 +2382,10 @@ ADD `date_time` TIME NOT NULL COMMENT 'Time to perform action' AFTER `date_offse
 
 -- INL 2008-07-21
 ALTER TABLE `{$dbEscalationPaths}` ADD `type` ENUM( 'internal', 'external' ) NOT NULL DEFAULT 'internal' AFTER `name` ;
+
+-- PH 2008-08-17
+ALTER TABLE `{$dbTempIncoming}` ADD `reason_user` INT NOT NULL AFTER `reason` ,
+ADD `reason_time` DATETIME NOT NULL AFTER `reason_user` ;        
 
 ";
 

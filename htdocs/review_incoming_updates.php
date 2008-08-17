@@ -41,7 +41,7 @@ function generate_row($update)
     $updatebodytext = htmlspecialchars(str_replace($search, $replace, $updatebodytext));
     if ($updatebodytext == '') $updatebodytext = '&nbsp;';
 
-    $shade='shade1';
+    $shade = 'shade1';
     if (!empty($update['fromaddr']))
     {
         // Have a look if we've got a customer or user with this email address
@@ -83,10 +83,14 @@ function generate_row($update)
 
     $html_row.="<td width='20%'><a href=\"javascript:incident_details_window('{$update['tempid']}','incomingview');\" id='update{$update['id']}' class='info'>";
 //     $html_row.="<td width='20%'><a href=\"javascript:void(0);\" id='update{$update['id']}' class='info' style='cursor:help;'>";
-    if (empty($update['subject'])) $update['subject'] = $strUntitled;
+    if (empty($update['subject'])) $update['subject'] = $GLOBALS['strUntitled'];
     $html_row .= htmlentities($update['subject'],ENT_QUOTES, $GLOBALS['i18ncharset']);
     $html_row .= '<span>'.parse_updatebody($updatebodytext).'</span></a></td>';
-    $html_row .= "<td align='center' width='20%'>{$update['reason']}</td>";
+
+    $span = sprintf($GLOBALS['strByX'], user_realname($update['reason_user']))."<br />";
+    $span .= sprintf($GLOBALS['strOnxAtY'], ldate($CONFIG['dateformat_date'], mysql2date($update['reason_time'])), ldate($CONFIG['dateformat_time'], mysql2date($update['reason_time'])));
+    
+    $html_row .= "<td align='center' width='20%'><a class='info'>{$update['reason']}<span>{$span}</span></a></td>";
     $html_row .= "<td align='center' width='20%'>";
     if (($update['locked'] != $sit[2]) && ($update['locked'] > 0))
     {
@@ -107,6 +111,7 @@ function generate_row($update)
     $html_row .= "</td></tr>\n";
     return $html_row;
 }
+
 
 function deldir($location)
 {
@@ -236,7 +241,7 @@ if (!empty($selected))
 // extract updates
 $sql  = "SELECT u.id AS id, u.bodytext AS bodytext, ti.emailfrom AS emailfrom, ti.subject AS subject, ";
 $sql .= "u.timestamp AS timestamp, ti.incidentid AS incidentid, ti.id AS tempid, ti.locked AS locked, ";
-$sql .= "ti.reason AS reason, ti.contactid AS contactid, ti.`from` AS fromaddr ";
+$sql .= "ti.reason AS reason, ti.reason_user AS reason_user, ti.reason_time AS reason_time, ti.contactid AS contactid, ti.`from` AS fromaddr ";
 $sql .= "FROM `{$dbUpdates}` AS u, `{$dbTempIncoming}` AS ti ";
 $sql .= "WHERE u.incidentid = 0 AND ti.updateid = u.id ";
 $sql .= "ORDER BY timestamp ASC, id ASC";
@@ -484,7 +489,7 @@ if (mysql_num_rows($result) >= 1)
             $rhtml .= "<a href=\"javascript:wt_winpopup('reassign_incident.php?id={$assign->id}&amp;reason={$reason}&amp;asktemp=temporary&amp;popup=yes','mini');\" title='Re-assign this incident to another engineer'>Assign to other</a> | <a href='set_user_status.php?mode=deleteassign&amp;incidentid={$assign->incidentid}&amp;originalowner={$assign->originalowner}' title='Ignore this reassignment and delete this notice'>Ignore</a></td>";
             $rhtml .= "</tr>\n";
         }
-        elseif ($assign->owner != $assign->originalowner AND $useraccepting =='yes')
+        elseif ($assign->owner != $assign->originalowner AND $useraccepting == 'yes')
         {
             $show = TRUE;
             // display a row to assign the incident back to the original owner
@@ -509,12 +514,11 @@ if (mysql_num_rows($result) >= 1)
     }
     $rhtml .= "</table>\n";
 }
+
 if ($show)
 {
     echo $rhtml;
 }
-
-// TODO v3.2x Merge the sections into a single queue using an array
 
 include ('htmlfooter.inc.php');
 ?>
