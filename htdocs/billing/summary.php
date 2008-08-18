@@ -20,12 +20,18 @@ require_once('functions.inc.php');
 require_once('auth.inc.php');
 
 $display = cleanvar($_REQUEST['display']);
+$showfoc = cleanvar($_REQUEST('foc'));
 
 if (empty($display)) $display = 'html';
 
 $sql = "SELECT DISTINCT(CONCAT(m.id,sl.id)), m.site, m.product, s.* ";
 $sql .= "FROM `{$dbMaintenance}` AS m, `{$dbServiceLevels}` AS sl, `{$dbService}` AS s, `{$dbSites}` AS site ";
 $sql .= "WHERE m.servicelevelid = sl.id AND sl.timed = 'yes' AND m.id = s.contractid AND m.site = site.id ";
+
+if (empty($showfoc) OR $showfoc != 'show')
+{
+	$sql .= "AND s.foc = 'no' ";
+}
 
 $sitestr = '';
 

@@ -10376,9 +10376,10 @@ function get_billable_contract_id($contactid)
  * @param int[] $sites - Array of sites to report on
  * @param String $display either csv or html
  * @param boolean $sitebreakdown - Breakdown per site
+ * @param boolean showfoc - Show free of charge as well (defaults to true);
  * @return String -either HTML or CSV
  */
-function transactions_report($serviceid, $startdate, $enddate, $sites, $display, $sitebreakdown=TRUE)
+function transactions_report($serviceid, $startdate, $enddate, $sites, $display, $sitebreakdown=TRUE, $showfoc=TRUE)
 {
 	global $CONFIG;
 
@@ -10392,6 +10393,8 @@ function transactions_report($serviceid, $startdate, $enddate, $sites, $display,
 	if ($serviceid > 0) $sql .= "AND t.serviceid = {$serviceid} ";
 	if (!empty($startdate)) $sql .= "AND t.date >= '{$startdate}' ";
 	if (!empty($enddate)) $sql .= "AND t.date <= '{$enddate}' ";
+
+    if (!showfoc) $sql .= "AND s.foc = 'no' ";
 
 	if (!empty($sites))
 	{

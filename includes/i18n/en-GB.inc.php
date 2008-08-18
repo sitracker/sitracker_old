@@ -1162,6 +1162,7 @@ $strShowingAllArticles = 'Showing all articles';
 $strShowingAllClosedIncidents = 'Showing all closed incidents';
 $strShowingXtoXofX = 'Showing %s to %s of %s';
 $strShowingOnlyRelevantArticles = 'Showing only relevant articles';
+$strShowFreeOfCharge = 'Show Free of Charge';
 $strShowMine = 'Show Mine';
 $strShowOnlyRelevant = 'Show only relevant';
 $strShowOpenIncidents = 'Show open incidents';
