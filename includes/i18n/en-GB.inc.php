@@ -24,6 +24,7 @@ $strAbout = 'About';
 # e.g. About John Smith
 $strAboutPerson = 'About %s';
 $strAboutXMinutesAgo = 'About %d Mins Ago';
+$strAboveMustBeCompletedToAllowDeductions = 'Above must be completed to allow deductions';
 $strAbsentSick = 'Absent Sick';
 $strAcceptingIncidents = 'Accepting Incidents';
 $strActual = 'Actual';
@@ -523,6 +524,7 @@ $strForm = 'Form';
 $strForRefundsThisShouldBeNegative = 'For refunds this should be negative';
 $strForwardOneYear = 'Forward One Year';
 $strForXDaysHoursMinutes = 'For <em>x</em> days, hours, minutes';
+$strFreeOfCharge = 'Free of Charge';
 $strFrequency = 'Frequency';
 # Short for 'Friday'
 $strFri = 'Fri';

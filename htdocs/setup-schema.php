@@ -1074,7 +1074,8 @@ CREATE TABLE IF NOT EXISTS `{$dbService}` (
   `billingmatrix` int(11) NOT NULL default '1',
   `priority` smallint(6) NOT NULL default '0',
   `notes` TEXT NOT NULL,
-  PRIMARY KEY  (`serviceid`)
+  `foc` enum('yes','no') NOT NULL default 'no' COMMENT 'Free of charge (customer not charged)',
+    PRIMARY KEY  (`serviceid`)
 ) ENGINE=MyISAM;
 
 
@@ -2387,6 +2388,8 @@ ALTER TABLE `{$dbEscalationPaths}` ADD `type` ENUM( 'internal', 'external' ) NOT
 ALTER TABLE `{$dbTempIncoming}` ADD `reason_user` INT NOT NULL AFTER `reason` ,
 ADD `reason_time` DATETIME NOT NULL AFTER `reason_user` ;        
 
+-- PH 2008-08-18
+ALTER TABLE `{$dbService}` ADD `foc` ENUM( 'yes', 'no' ) NOT NULL DEFAULT 'no' COMMENT 'Free of charge (customer not charged)';
 ";
 
 // Important: When making changes to the schema you must add SQL to make the alterations

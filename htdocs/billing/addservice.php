@@ -110,6 +110,11 @@ if (empty($submit) OR !empty($_SESSION['formerrors']['add_service']))
     echo "<tr id='incidentratesection' style='display:none'><th>{$strIncidentRate}</th>";
     echo "<td>{$CONFIG['currency_symbol']} <input type='text' name='incidentrate' size='5' />";
     echo "</td></tr>";
+    
+    echo "<tr>";
+    echo "<th>{$strFreeOfCharge}</th>";
+    echo "<td><input type='checkbox' id='foc' name='foc' value='yes' /> {$strAboveMustBeCompletedToAllowDeductions}</td>";
+    echo "</tr>";
 
     echo "</tbody>"; //FIXME not XHTML
 
@@ -148,12 +153,14 @@ else
 
     $billtype = cleanvar($_REQUEST['billtype']);
     $notes = cleanvar($_REQUEST['notes']);
+    $foc = cleanvar($_REQUEST['foc']);
+    if (empty($foc)) $foc = 'no';
     
     if ($billtype == 'billperunit') $incidentrate = 0;
     elseif ($billtype == 'billperincident') $unitrate = 0;
 
-    $sql = "INSERT INTO `{$dbService}` (contractid, startdate, enddate, creditamount, unitrate, incidentrate, notes) ";
-    $sql .= "VALUES ('{$contractid}', '{$startdate}', '{$enddate}', '{$amount}', '{$unitrate}', '{$incidentrate}', '{$notes}')";
+    $sql = "INSERT INTO `{$dbService}` (contractid, startdate, enddate, creditamount, unitrate, incidentrate, notes, foc) ";
+    $sql .= "VALUES ('{$contractid}', '{$startdate}', '{$enddate}', '{$amount}', '{$unitrate}', '{$incidentrate}', '{$notes}', '{$foc}')";
 
     mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
