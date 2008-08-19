@@ -579,14 +579,14 @@ elseif ($action == 'assign')
         $productservicepacks = cleanvar($_REQUEST['productservicepacks']);
         $bodytext = cleanvar($_REQUEST['bodytext']);
         $cust_vis = $_REQUEST['cust_vis'];
-	if ($_REQUEST['send_email']) == 'on')
+	    if ($_REQUEST['send_email'] == 'on')
         {
-	    $send_email = 1;
-	}
-	else
-	{
-	    $send_email = 0;
-	}
+	       $send_email = 1;
+	   }
+	   else
+	   {
+	        $send_email = 0;
+	   }
 
         // check form input
         $errors = 0;
