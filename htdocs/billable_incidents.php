@@ -201,7 +201,7 @@ elseif ($mode == 'approvalpage')
         </script>
         <?php
 
-        echo "<p align='center'>This report shows incidents closed in the period ";
+        echo "<p align='center'>This report shows incidents closed in the period "; // FIXME i18n
         echo ldate($CONFIG['dateformat_date'], $startdate)." - ".ldate($CONFIG['dateformat_date'], $enddate)."</p>";
     }
 
@@ -300,9 +300,11 @@ elseif ($mode == 'approvalpage')
 
                         $unitrate = get_unit_rate(incident_maintid($obj->id));
 
+                        if ($unitrate == -1) $unapprovable = TRUE;
+
                         $line = "<tr class='{$shade}'><td style='text-align: center'>";
 
-                        if (!$isapproved)
+                        if (!$isapproved AND !$unapprovable)
                         {
                             $line .= "<input type='checkbox' name='selected[]' value='{$obj->id}' />";
                         }
@@ -362,7 +364,9 @@ elseif ($mode == 'approvalpage')
                         $line .= "<td>{$a[-1]['totalcustomerperiods']}</td>";
                         $line .= "<td>{$billableunitsincident}</td>";
                         $line .= "<td>{$a[-1]['refunds']}</td>";
-                        $line .= "<td>{$CONFIG['currency_symbol']}".number_format($cost, 2)."</td>";
+                        $bill = number_format($cost, 2);
+                        if ($unapprovable) $bill = "?";
+                        $line .= "<td>{$CONFIG['currency_symbol']} {$bill}</td>";
 
                         $line .= "<td>";
                         // Approval ?
@@ -370,6 +374,10 @@ elseif ($mode == 'approvalpage')
                         if ($isapproved)
                         {
                             $line .= $strApproved;
+                        }
+                        elseif ($unapprovable)
+                        {
+                        	$line .= $strUnapprovable; 
                         }
                         else
                         {

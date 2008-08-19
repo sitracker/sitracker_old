@@ -1358,6 +1358,7 @@ $strUpdatedViaThePortalBy = 'Updated via the portal by %s %s';
 $strUpdateSuccessful = 'Update Successful';
 $strUpdateType = 'Update Type';
 $strUploadedBy = 'Uploaded by %s';
+$strUnapprovable = 'Unapprovable';
 $strUnitRate = 'Unit Rate';
 $strUnits = 'Units';
 $strUnknown = 'Unknown';

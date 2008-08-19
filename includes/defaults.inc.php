@@ -245,4 +245,7 @@ $CONFIG['default_gravatar'] = 'identicon';
 // Default for whom the billing reports should be mailed to, multiple address can be seperared by commas 
 $CONFIG['billing_reports_email'] = 'admin@localhost';
 
+// Allow incidents to be approved against overdrawn services
+$CONFIG['billing_allow_incident_approval_against_overdrawn_service'] = TRUE;
+
 ?>

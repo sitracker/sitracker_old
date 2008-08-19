@@ -9812,16 +9812,23 @@ function get_billable_multiplier($dayofweek, $hour, $billingmatrix = 1)
   * @author Paul Heaney
   * @param $contractid  The Contract ID
   * @param $date  UNIX timestamp. The function will look for service that is current as of this timestamp
-  * @returns mixed.     Service ID, or -1 if not found, or FALSE on error
+  * @return mixed.     Service ID, or -1 if not found, or FALSE on error
  */
 function get_serviceid($contractid, $date = '')
 {
-    global $now;
+    global $now, $CONFIG;
     if (empty($date)) $date = $now;
 
     $sql = "SELECT serviceid FROM `{$GLOBALS['dbService']}` AS p ";
     $sql .= "WHERE contractid = {$contractid} AND UNIX_TIMESTAMP(startdate) <= {$date} ";
-    $sql .= "AND UNIX_TIMESTAMP(enddate) > {$date} AND balance > 0 ORDER BY priority DESC, enddate ASC LIMIT 1";
+    $sql .= "AND UNIX_TIMESTAMP(enddate) > {$date} ";
+    
+    if (!$CONFIG['billing_allow_incident_approval_against_overdrawn_service'])
+    {
+    	$sql .= "AND balance > 0 ";
+    }
+    
+    $sql .= "ORDER BY priority DESC, enddate, balance ASC LIMIT 1";
 
     $result = mysql_query($sql);
     if (mysql_error())
@@ -9842,6 +9849,10 @@ function get_serviceid($contractid, $date = '')
 
 
 /**
+ * Function to find the most applicable unit rate for a particular contract
+ * @param $contractid - The contract id
+ * @param $date UNIX timestamp. The function will look for service that is current as of this timestamp
+ * @return int th eunit rate, -1 if non found
   * @author Paul Heaney
  */
 function get_unit_rate($contractid, $date='')
@@ -9857,7 +9868,7 @@ function get_unit_rate($contractid, $date='')
         return FALSE;
     }
 
-    $unitrate = 0;
+    $unitrate = -1;
 
     if (mysql_num_rows($result) > 0)
     {
