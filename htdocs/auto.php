@@ -252,6 +252,12 @@ function saction_TimeCalc()
                     trigger('TRIGGER_INCIDENT_NEARING_SLA', array('incidentid' => $incident['id'],
                                                                   'nextslatime' => $times['next_sla_time'],
                                                                   'nextsla' => $NextslaName));
+                                                                  echo
+                                                                  $times['next_sla_time'];
+                                                                  
+                    $sql = "UPDATE `{$dbIncidents}` SET slanotice='1' WHERE id='{$incident['id']}'";
+                    mysql_query($sql);
+                    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
                 }
             }
         }
