@@ -118,6 +118,14 @@ switch ($mode)
                     echo "<td>{$CONFIG['currency_symbol']} <input type='text' name='incidentrate' size='5' value='{$obj->incidentrate}' />";
                     echo "</td></tr>";
 
+                    $fochecked = '';
+                    if ($obj->foc == 'yes') $fochecked = 'checked';
+
+                    echo "<tr>";
+                    echo "<th>{$strFreeOfCharge}</th>";
+                    echo "<td><input type='checkbox' id='foc' name='foc' value='yes'  '{$fochecked}' /> {$strAboveMustBeCompletedToAllowDeductions}</td>";
+                    echo "</tr>";
+
                     echo "</tbody>"; //FIXME not XHTML
                 }
                 else
@@ -165,6 +173,9 @@ switch ($mode)
 
             $editbilling = cleanvar($_REQUEST['editbilling']);
 
+            $foc = cleanvar($_REQUEST['foc']);
+            if (empty($foc)) $foc = 'no';
+
             if ($editbilling == "true")
             {
                 $amount =  cleanvar($_POST['amount']);
@@ -190,7 +201,7 @@ switch ($mode)
             }
 
             $sql = "UPDATE `{$dbService}` SET startdate = '{$startdate}', enddate = '{$enddate}' {$updateBillingSQL}";
-            $sql .= ", notes = '{$notes}' WHERE serviceid = {$serviceid}";
+            $sql .= ", notes = '{$notes}', foc = '{$foc}' WHERE serviceid = {$serviceid}";
 
             mysql_query($sql);
             if (mysql_error())
