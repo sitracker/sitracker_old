@@ -540,10 +540,10 @@ elseif ($action=='incidentform')
         echo "<tr><th>{$strVisibleToCustomer}".help_link('VisibleToCustomer')."</th>\n";
         echo "<td><label><input name='cust_vis' type='checkbox' checked='checked' /> {$strVisibleToCustomer}</label>";
         echo "</td></tr>\n";
-	echo "<tr><th>{$strSendOpeningEmail}</th>\n";
-	echo "<td><label for='send_email'><input name='send_email' ";
-	echo "type='checkbox' checked='checked' />";
-	echo "{$strSendOpeningEmailDesc}</label></td></tr>\n";
+    	echo "<tr><th>{$strSendOpeningEmail}</th>\n";
+    	echo "<td><label for='send_email'><input name='send_email' ";
+    	echo "type='checkbox' checked='checked' />";
+    	echo "{$strSendOpeningEmailDesc}</label></td></tr>\n";
     }
     echo "<tr><th>{$strPriority}</th><td>".priority_drop_down("priority", 1, 4, FALSE)." </td></tr>";
     echo "</table>\n";
