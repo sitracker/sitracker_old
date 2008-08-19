@@ -50,7 +50,7 @@ array('name' => 'Incident closed',
 $triggerarray['TRIGGER_INCIDENT_CREATED'] =
 array('name' => 'Incident Created',
       'description' => 'strTriggerNewIncidentCreatedDesc',
-      'required' => array('incidentid'),
+      'required' => array('incidentid', 'sendemail'),
       'params' => array('contactid', 'siteid', 'priority', 'contractid', 'slaid', 'sitesalespersonid')
       );
 
@@ -457,6 +457,11 @@ array('description' => $strSalespersonAssignedToContactsSiteEmail,
       'requires' => 'siteid',
       'replacement' => 'user_email(db_read_column(\'owner\', $GLOBALS[\'dbSites\'], $siteid));'
       );
+
+$ttvararray['{sendemail}'] =
+array('description' => 'Whether to send an opening email or not',
+      'replacement' => '$paramarray[\'sendemail\'];'
+     );
 
 $ttvararray['{signature}'] =
 array('description' => $strCurrentUsersSignature,

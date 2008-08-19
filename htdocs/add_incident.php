@@ -540,6 +540,10 @@ elseif ($action=='incidentform')
         echo "<tr><th>{$strVisibleToCustomer}".help_link('VisibleToCustomer')."</th>\n";
         echo "<td><label><input name='cust_vis' type='checkbox' checked='checked' /> {$strVisibleToCustomer}</label>";
         echo "</td></tr>\n";
+	echo "<tr><th>{$strSendOpeningEmail}</th>\n";
+	echo "<td><label for='send_email'><input name='send_email' ";
+	echo "type='checkbox' checked='checked' />";
+	echo "{$strSendOpeningEmailDesc}</label></td></tr>\n";
     }
     echo "<tr><th>{$strPriority}</th><td>".priority_drop_down("priority", 1, 4, FALSE)." </td></tr>";
     echo "</table>\n";
@@ -575,6 +579,14 @@ elseif ($action == 'assign')
         $productservicepacks = cleanvar($_REQUEST['productservicepacks']);
         $bodytext = cleanvar($_REQUEST['bodytext']);
         $cust_vis = $_REQUEST['cust_vis'];
+	if ($_REQUEST['send_email']) == 'on')
+        {
+	    $send_email = 1;
+	}
+	else
+	{
+	    $send_email = 0;
+	}
 
         // check form input
         $errors = 0;
@@ -877,7 +889,7 @@ elseif ($action == 'assign')
             }
             echo "</table>";
             echo "<p align='center'>{$strUsersBoldSkills}.</p>";
-            trigger('TRIGGER_INCIDENT_CREATED', array('incidentid' => $incidentid));
+            trigger('TRIGGER_INCIDENT_CREATED', array('incidentid' => $incidentid, 'sendemail' => $send_email));
         }
         else
         {
