@@ -248,21 +248,20 @@ $CONFIG['billing_reports_email'] = 'admin@localhost';
 // Allow incidents to be approved against overdrawn services
 $CONFIG['billing_allow_incident_approval_against_overdrawn_service'] = TRUE;
 
-$CONFIG['service_types'] = array('workstation' => 'Workstation/PC',
-                                 'server' => 'Server',
-                                 'software' => 'Software',
-                                 'ssh' => 'SSH',
-                                 'ssh_port_tunneling' => 'SSH (port tunneled)',
-                                 'rdp' => 'RDP',
-                                 'vnc' => 'VNC',
-                                 'cisco vpn' => 'Cisco VPN',
-                                 'nortel vpn' => 'Nortel VPN',
-                                 'ssl_vpn' => 'SSL VPN',
-                                 'rdp_tunneled_ssh' => 'RDP tunneled through SSH',
-                                 'pc_anywhere' => 'PC Anywhere',
-                                 'reverse_vnc' => 'Reverse VNC',
-                                 'go_to_my_pc' => 'Go to my PC',
-                                 'webex' => 'Webex'
-                                 );
+$CONFIG['inventory_types']['workstation'] = 'Workstation/PC';
+$CONFIG['inventory_types']['server'] = 'Server';
+$CONFIG['inventory_types']['software'] = 'Software';
+$CONFIG['inventory_types']['ssh'] = 'SSH';
+$CONFIG['inventory_types']['ssh_port_tunneling'] = 'SSH (port tunneled)';
+$CONFIG['inventory_types']['rdp'] = 'RDP';
+$CONFIG['inventory_types']['vnc'] = 'VNC';
+$CONFIG['inventory_types']['cisco vpn'] = 'Cisco VPN';
+$CONFIG['inventory_types']['nortel vpn'] = 'Nortel VPN';
+$CONFIG['inventory_types']['ssl_vpn'] = 'SSL VPN';
+$CONFIG['inventory_types']['rdp_tunneled_ssh'] = 'RDP tunneled through SSH';
+$CONFIG['inventory_types']['pc_anywhere'] = 'PC Anywhere';
+$CONFIG['inventory_types']['reverse_vnc'] = 'Reverse VNC';
+$CONFIG['inventory_types']['go_to_my_pc'] = 'Go to my PC';
+$CONFIG['inventory_types']['webex'] = 'Webex';
 
 ?>
