@@ -50,8 +50,8 @@ array('name' => 'Incident closed',
 $triggerarray['TRIGGER_INCIDENT_CREATED'] =
 array('name' => 'Incident Created',
       'description' => 'strTriggerNewIncidentCreatedDesc',
-      'required' => array('incidentid', 'sendemail'),
-      'params' => array('contactid', 'siteid', 'priority', 'contractid', 'slaid', 'sitesalespersonid')
+      'required' => array('incidentid'),
+      'params' => array('contactid', 'siteid', 'priority', 'contractid', 'slaid', 'sitesalespersonid', 'sendemail')
       );
 
 $triggerarray['TRIGGER_INCIDENT_NEARING_SLA'] =
