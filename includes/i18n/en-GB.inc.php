@@ -304,6 +304,7 @@ $strCritical = 'Critical';
 # e.g. JJohn Acme of ACME Widgets Co.
 $strContactofSite = '%s of %s';
 $strCompassionateLeave = 'Maternity/Paternity/Compassionate Leave';
+$strCount = 'Count';
 $strCountContractsByProduct = 'Count contracts by product';
 # Region / State
 $strCounty = 'County';
@@ -649,6 +650,8 @@ $strInvalidEmailAddress = 'Invalid email address';
 $strInvalidParameter = 'Invalid parameter';
 $strInvalidUserID = 'Invalid user id';
 $strInvalidUsername = 'Invalid username, please try another';
+$strInventory = 'Inventory';
+$strInventoryDesc = 'The inventory is a catalogue of site objects such as workstations, software, remote access etc., that belong to sites';
 $strIgnore = 'Ignore';
 
 # short for January
@@ -1184,6 +1187,7 @@ $strSiteHasBillableContract = 'Site has billable contract';
 $strSiteIncidents = 'Site Incidents';
 $strSiteName = 'Site Name';
 $strSiteNotes = 'Site Notes:';
+$strSiteNotListed = 'Site not listed?';
 $strSiteProducts = 'Site Products';
 $strSites = 'Sites';
 $strSiteSupport = 'Site Support';
