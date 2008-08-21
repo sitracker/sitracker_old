@@ -96,6 +96,7 @@ $strAdmin = 'Admin';
 $strAdminContact = 'Admin Contact';
 $strAdminContactForContracts = 'You are an Admin Contact for the following contracts. You can choose who is able to see those incidents in the portal.';
 $strAdministratorsOnly = 'Administrators Only';
+$strAdminOnly = 'Admin only';
 $strAdvanced = 'Advanced';
 $strAfternoon = 'Afternoon';
 $strAge = 'Age';
@@ -248,6 +249,7 @@ $strChaseManager = 'Chase manager';
 $strChasePhone = 'Chase phone';
 $strChooseLanguage = 'Please choose your language';
 $strCity = 'City';
+$strClearFilter = 'Clear filter';
 $strClickTitleHeaders = 'Click title headers to enable the sections';
 # e.g. close an incident
 $strClose = 'Close';
@@ -289,6 +291,7 @@ $strCommentsSentWithRequest = 'The following comments were sent with the request
 $strCreateANotice = 'Create a notice based on %s';
 $strCreateANoticeWhen = 'Create a notice based on %s, when %s';
 $strCreateANoticeForWhen = 'Create a notice based on %s for %s, when %s';
+$strCreatedBy = 'Created by';
 $strCreateNewForm = 'Create New Form';
 $strCredit = 'Credit';
 # e.g. Amount paid into an account
@@ -674,6 +677,7 @@ $strKnowledgeBaseArticles = 'Knowledge Base Articles';
 $strLanguage = 'Language';
 # Last date a bill was generated
 $strLastBilled = 'Last Billed';
+$strLastModifiedBy = 'Last modified by';
 $strLastMonth = 'Last month';
 # Last time an action was executed
 $strLastRan = 'Last Ran';
