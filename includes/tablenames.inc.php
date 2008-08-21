@@ -34,6 +34,7 @@ $dbIncidentProductInfo = "{$CONFIG['db_tableprefix']}incidentproductinfo";
 $dbIncidents = "{$CONFIG['db_tableprefix']}incidents";
 $dbIncidentStatus = "{$CONFIG['db_tableprefix']}incidentstatus";
 $dbInterfaceStyles = "{$CONFIG['db_tableprefix']}interfacestyles";
+$dbInventory = "{$CONFIG['db_tableprefix']}inventory";
 $dbJournal = "{$CONFIG['db_tableprefix']}journal";
 $dbKBArticles = "{$CONFIG['db_tableprefix']}kbarticles";
 $dbKBContent = "{$CONFIG['db_tableprefix']}kbcontent";
