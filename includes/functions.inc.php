@@ -1242,11 +1242,13 @@ function incident_sla_history($incidentid)
     * Takes an array and makes an HTML selection box
     * @author Ivan Lucas
 */
-function array_drop_down($array, $name, $setting='', $enablefield='')
+function array_drop_down($array, $name, $setting='', $enablefield='', $usekey = FALSE)
 {
     $html = "<select name='$name' id='$name' $enablefield>\n";
 
-    if (array_key_exists($setting, $array) AND in_array((string)$setting, $array) == FALSE)
+    if ((array_key_exists($setting, $array) AND
+        in_array((string)$setting, $array) == FALSE) OR
+        $usekey == TRUE)
     {
         $usekey = TRUE;
     }
@@ -1254,7 +1256,7 @@ function array_drop_down($array, $name, $setting='', $enablefield='')
     {
         $usekey = FALSE;
     }
-    
+
     foreach ($array AS $key => $value)
     {
         $value = htmlentities($value, ENT_COMPAT, $GLOBALS['i18ncharset']);
@@ -1362,9 +1364,10 @@ function contact_drop_down($name, $id, $showsite = FALSE, $required = FALSE)
     * @param $id int. Select this contactID by default
     * @param $siteid int. (optional) Filter list to show contacts from this siteID only
     * @param $exclude int|array (optional) Do not show this contactID in the list, accepts an int or array of ints
+    * @param $showsite bool (optional) Suffix the name with the site name
     * @returns string.  HTML select
 */
-function contact_site_drop_down($name, $id, $siteid='', $exclude='')
+function contact_site_drop_down($name, $id, $siteid='', $exclude='', $showsite=TRUE)
 {
     global $dbContacts, $dbSites;
     $sql  = "SELECT c.id AS contactid, forenames, surname, siteid, s.name AS sitename ";
@@ -1400,7 +1403,14 @@ function contact_site_drop_down($name, $id, $siteid='', $exclude='')
             }
 
             $html .= "value='{$contacts->contactid}'>";
-            $html .= htmlspecialchars("{$contacts->surname}, {$contacts->forenames} - {$contacts->sitename}");
+            if ($showsite)
+            {
+                $html .= htmlspecialchars("{$contacts->surname}, {$contacts->forenames} - {$contacts->sitename}");
+            }
+            else
+            {
+                $html .= htmlspecialchars("{$contacts->surname}, {$contacts->forenames}");
+            }
             $html .= "</option>\n";
         }
     }
