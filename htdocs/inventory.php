@@ -61,60 +61,68 @@ if (is_numeric($_GET['site']) AND empty($_GET['action']) AND empty($_GET['edit']
     echo "</select> <a href='{$_SERVER['PHP_SELF']}?site={$siteid}'>";
     echo "{$strClearFilter}</a></p>";
     echo "</form>";
-    while ($row = mysql_fetch_object($result))
+    
+    if (mysql_num_rows($result) > 0)
     {
-        echo "<div id='container' style='width: 40%'>";
-        echo "<h3>{$row->name}";
-        
-        if ($row->active != 1)
+        while ($row = mysql_fetch_object($result))
         {
-            echo " (inactive)";   
-        }    
-        echo " (<a href='?edit={$row->id}&site={$row->siteid}'>{$strEdit}</a>)</h3>";
-        echo "<p><strong>{$strType}:</strong> {$CONFIG['inventory_types'][$row->type]}</p>";
-        if (!empty($row->identifier))
-        {
-            echo "<p><strong>{$strID}:</strong> {$row->identifier}</p>";
+            echo "<div id='container' style='width: 40%'>";
+            echo "<h3>{$row->name}";
+            
+            if ($row->active != 1)
+            {
+                echo " (inactive)";   
+            }    
+            echo " (<a href='?edit={$row->id}&site={$row->siteid}'>{$strEdit}</a>)</h3>";
+            echo "<p><strong>{$strType}:</strong> {$CONFIG['inventory_types'][$row->type]}</p>";
+            if (!empty($row->identifier))
+            {
+                echo "<p><strong>{$strID}:</strong> {$row->identifier}</p>";
+            }
+    
+            echo "<p><strong>{$strAddress}:</strong> $row->address</p>";
+            if (!empty($row->contactid))
+            {
+                echo "<p><strong>{$strOwner}:</strong> ";
+                echo "<a href='contact_details?id={$row->contactid}'>";
+                echo contact_realname($row->contactid)."</a></p>";
+            }
+            echo "<p><strong>{$strUsername}:</strong> ";
+            if ($row->adminonly == 1 AND !user_permission($sit[2], 22))
+            {
+                echo "<strong>{$strWithheld}</strong>";
+            }
+            else
+            {
+                echo $row->username;
+            }
+            echo "</p>";
+            echo "<p><strong>{$strPassword}:</strong> ";
+            if ($row->adminonly == 1 AND !user_permission($sit[2], 22))
+            {
+                echo "<strong>{$strWithheld}</strong>";
+            }
+            else
+            {
+                echo $row->password;
+            }
+            echo "</p>";
+            if (!empty($row->notes))
+            {
+                echo "<p><strong>{$strNotes}: </strong> {$row->notes}</p>";
+            }
+            echo "<strong>{$strCreatedBy}:</strong> ".user_realname($row->createdby);
+            echo " {$row->created}, <strong>{$strLastModifiedBy}:</strong> ";
+            echo user_realname($row->modifiedby)." {$row->modified}</p>";
+            echo "</div>";
         }
-
-        echo "<p><strong>{$strAddress}:</strong> $row->address</p>";
-        if (!empty($row->contactid))
-        {
-            echo "<p><strong>{$strOwner}:</strong> ";
-            echo "<a href='contact_details?id={$row->contactid}'>";
-            echo contact_realname($row->contactid)."</a></p>";
-        }
-        echo "<p><strong>{$strUsername}:</strong> ";
-        if ($row->adminonly == 1 AND !user_permission($sit[2], 22))
-        {
-            echo "<strong>{$strWithheld}</strong>";
-        }
-        else
-        {
-            echo $row->username;
-        }
-        echo "</p>";
-        echo "<p><strong>{$strPassword}:</strong> ";
-        if ($row->adminonly == 1 AND !user_permission($sit[2], 22))
-        {
-            echo "<strong>{$strWithheld}</strong>";
-        }
-        else
-        {
-            echo $row->password;
-        }
-        echo "</p>";
-        if (!empty($row->notes))
-        {
-            echo "<p><strong>{$strNotes}: </strong> {$row->notes}</p>";
-        }
-        echo "<strong>{$strCreatedBy}:</strong> ".user_realname($row->createdby);
-        echo " {$row->created}, <strong>{$strLastModifiedBy}:</strong> ";
-        echo user_realname($row->modifiedby)." {$row->modified}</p>";
-        echo "</div>";
+        echo "<p align='center'><a href='{$_SERVER['PHP_SELF']}?site={$siteid}&action=new'>";
+        echo "{$strAddNew}</a></p>";
     }
-    echo "<p align='center'><a href='{$_SERVER['PHP_SELF']}?site={$siteid}&action=new'>";
-    echo "{$strAddNew}</a></p>";
+    else
+    {
+        echo "<p class='info'>{$strNoRecords}</p>";
+    }
     include ('htmlfooter.inc.php');
 }
 elseif(is_numeric($_GET['edit']) OR $_GET['action'] == 'new')
