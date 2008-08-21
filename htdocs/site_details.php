@@ -12,7 +12,7 @@
 // Created: 9th March 2001
 // This Page Is Valid XHTML 1.0 Transitional! 27Oct05
 
-@include ('../set_include_path.inc.php');
+@include ('set_include_path.inc.php');
 $permission = 11; // View Sites
 require ('db_connect.inc.php');
 require ('functions.inc.php');
