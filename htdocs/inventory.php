@@ -22,6 +22,12 @@ if (is_numeric($_GET['site']) AND empty($_GET['action']) AND empty($_GET['edit']
 {
     //View site inventory
     $siteid = $_GET['site'];
+    
+    if (!empty($_REQUEST['filter']))
+    {
+        $filter = cleanvar($_REQUEST['filter']);
+    }
+    
     echo "<h2>".icon('site', 32)." ".site_name($siteid)."</h2>";
     echo "<p align='center'><a href='{$_SERVER['PHP_SELF']}?site={$siteid}&action=new'>";
     echo "{$strAddNew}</a></p>";
@@ -31,12 +37,30 @@ if (is_numeric($_GET['site']) AND empty($_GET['action']) AND empty($_GET['edit']
     $sql .= "FROM `{$dbInventory}`, sites ";
     $sql .= "WHERE siteid='{$siteid}' ";
     $sql .= "AND siteid=sites.id ";
+    if (!empty($filter))
+    {
+        $sql .= "AND type='{$filter}' ";
+    }
     $sql .= "ORDER BY `{$dbInventory}`.active DESC";
     //$sql .= "GROUP BY type";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
+    
+    echo "<form action='{$_SERVER['PHP_SELF']}?site={$siteid}' method='post'>";
     echo "<p align='center'>".icon('filter', 16)." {$strFilter}: ";
-    echo array_drop_down($CONFIG['inventory_types'], 'filter')."</p>";
+    echo "<select name='filter' onchange='form.submit();'>";
+    foreach ($CONFIG['inventory_types'] as $code => $name)
+    {
+        echo "<option value='{$code}'";
+        if ($filter == $code)
+        {
+            echo " selected='selected' ";
+        }
+        echo ">{$name}</option>";
+    }
+    echo "</select> <a href='{$_SERVER['PHP_SELF']}?site={$siteid}'>";
+    echo "{$strClearFilter}</a></p>";
+    echo "</form>";
     while ($row = mysql_fetch_object($result))
     {
         echo "<div id='container' style='width: 40%'>";
