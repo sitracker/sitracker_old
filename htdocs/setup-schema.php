@@ -2389,7 +2389,30 @@ ALTER TABLE `{$dbTempIncoming}` ADD `reason_user` INT NOT NULL AFTER `reason` ,
 ADD `reason_time` DATETIME NOT NULL AFTER `reason_user` ;        
 
 -- PH 2008-08-18
-ALTER TABLE `{$dbService}` ADD `foc` ENUM( 'yes', 'no' ) NOT NULL DEFAULT 'no' COMMENT 'Free of charge (customer not charged)';
+ALTER TA-LE `{$dbService}` ADD `foc` ENUM( 'yes', 'no' ) NOT NULL DEFAULT 'no' COMMENT 'Free of charge (customer not charged)';
+
+CREATE TABLE IF NOT EXISTS `{$dbInventory}` (
+  `id` int(11) NOT NULL auto_increment,
+  `identifier` varchar(255) default NULL,
+  `name` varchar(255) NOT NULL,
+  `siteid` int(11) NOT NULL,
+  `contactid` int(11) NOT NULL,
+  `address` varchar(255) NOT NULL,
+  `url` varchar(255) default NULL,
+  `username` varchar(255) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `type` varchar(255) NOT NULL,
+  `notes` text,
+  `createdby` int(11) NOT NULL,
+  `created` datetime NOT NULL,
+  `modified` datetime NOT NULL,
+  `modifiedby` int(11) NOT NULL,
+  `active` tinyint(1) NOT NULL default '1',
+  `adminonly` tinyint(1) NOT NULL default '0',
+  PRIMARY KEY  (`id`),
+  KEY `siteid` (`siteid`,`contactid`)
+) ENGINE=MyISAM;
+
 ";
 
 // Important: When making changes to the schema you must add SQL to make the alterations
