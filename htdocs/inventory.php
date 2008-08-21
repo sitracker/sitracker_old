@@ -42,14 +42,16 @@ if (is_numeric($_GET['site']) AND empty($_GET['action']) AND empty($_GET['edit']
     {
         $sql .= "AND type='{$filter}' ";
     }
-    $sql .= "ORDER BY `{$dbInventory}`.active DESC";
-    //$sql .= "GROUP BY type";
+    $sql .= "ORDER BY `{$dbInventory}`.active DESC, ";
+    $sql .= "`{$dbInventory}`.modified DESC";
+    //$sql .= "GROUP BY type DESC ";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
     
     echo "<form action='{$_SERVER['PHP_SELF']}?site={$siteid}' method='post'>";
     echo "<p align='center'>".icon('filter', 16)." {$strFilter}: ";
     echo "<select name='filter' onchange='form.submit();'>";
+    echo "<option value=''></option>";
     foreach ($CONFIG['inventory_types'] as $code => $name)
     {
         echo "<option value='{$code}'";
@@ -289,15 +291,23 @@ else
     $sql .= "WHERE siteid=sites.id ";
     $sql .= "GROUP BY siteid ";
     $result = mysql_query($sql);
-    echo "<table class='vertical' align='center'>";
-    echo "<th>{$strSite}</th><th>{$strCount}</th>";
-    while ($row = mysql_fetch_object($result))
+
+    if (mysql_num_rows($result) > 0)
     {
-        echo "<tr><td><a href='?site={$row->id}'>{$row->name}</a></td>";
-        echo "<td>{$row->count}</td></tr>";
+        echo "<table class='vertical' align='center'>";
+        echo "<th>{$strSite}</th><th>{$strCount}</th>";
+        while ($row = mysql_fetch_object($result))
+        {
+            echo "<tr><td><a href='?site={$row->id}'>{$row->name}</a></td>";
+            echo "<td>{$row->count}</td></tr>";
+        }
+        
+        echo "</table>";
     }
-    
-    echo "</table>";
+    else
+    {
+        echo "<p align='center'>{$strNoRecords}</p>";
+    }
     include ('htmlfooter.inc.php');
 }
 

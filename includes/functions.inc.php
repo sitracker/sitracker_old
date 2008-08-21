@@ -871,6 +871,47 @@ function contact_count_incidents($id)
     return $count;
 }
 
+/**
+    * Return the number of incidents ever logged against a site
+    * @author Kieran
+    * @param $id integer. Site ID
+    * @returns int.
+*/
+function site_count_incidents($id)
+{
+    global $dbIncidents;
+    $count = 0;
+
+    $sql = "SELECT COUNT(id) FROM `{$dbIncidents}` WHERE siteid='$id'";
+    $result = mysql_query($sql);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+    else list($count) = mysql_fetch_row($result);
+    mysql_free_result($result);
+
+    return $count;
+}
+
+
+/**
+    * Return the number of inventory items for a site
+    * @author Kieran
+    * @param $id integer. Site ID
+    * @returns int.
+*/
+function site_count_inventory_items($id)
+{
+    global $dbInventory;
+    $count = 0;
+
+    $sql = "SELECT COUNT(id) FROM `{$dbInventory}` WHERE siteid='$id'";
+    $result = mysql_query($sql);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+    else list($count) = mysql_fetch_row($result);
+    mysql_free_result($result);
+
+    return $count;
+}
+
 
 /**
     * The number representing the total number of currently OPEN incidents submitted by a given contact.

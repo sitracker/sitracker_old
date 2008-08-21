@@ -70,8 +70,12 @@ while ($siterow = mysql_fetch_array($siteresult))
     echo "</td></tr>";
     echo "<tr><th>{$strNotes}:</th><td>".nl2br($siterow['notes'])."</td></tr>";
     echo "<tr><td colspan='2'>&nbsp;</td></tr>";
-    echo "<tr><th>{$strIncidents}:</th><td><a href=\"contact_support.php?id=".$siterow['id']."&amp;mode=site\">{$strSeeHere}</a></td></tr>";
+    echo "<tr><th>{$strIncidents}:</th>";
+    echo "<td>".site_count_incidents($id)." <a href=\"contact_support.php?id=".$siterow['id']."&amp;mode=site\">{$strSeeHere}</a></td></tr>";
     echo "<tr><th>{$strActivities}:</th><td>".open_activities_for_site($siterow['id'])." <a href='tasks.php?siteid={$siterow['id']}'>{$strSeeHere}</a></td></tr>";
+    echo "<tr><th>{$strInventory}</th>";
+    echo "<td>".site_count_inventory_items($id);
+    echo " <a href='inventory.php?site={$id}'>{$strSeeHere}</a></td></tr>";
     $billableunits = billable_units_site($siterow['id'], $now-2678400); // Last 31 days
     if ($billableunits > 0)
     {
