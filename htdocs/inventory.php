@@ -29,7 +29,8 @@ if (is_numeric($_GET['site']) AND empty($_GET['action']) AND empty($_GET['edit']
     }
     
     echo "<h2>".icon('site', 32)." ".site_name($siteid)."</h2>";
-    echo "<p align='center'><a href='{$_SERVER['PHP_SELF']}?site={$siteid}&action=new'>";
+    echo "<p align='center'>".icon('add', 16);
+    echo " <a href='{$_SERVER['PHP_SELF']}?site={$siteid}&action=new'>";
     echo "{$strAddNew}</a></p>";
     $sql = "SELECT *, `{$dbInventory}`.name AS name ,`{$dbInventory}`.id AS id, ";
     $sql .= "`{$dbInventory}`.notes AS notes, ";
@@ -129,7 +130,15 @@ elseif(is_numeric($_GET['edit']) OR $_GET['action'] == 'new')
 {
     //Edit inventry object
     $edit = $_GET['edit'];
-    $siteid = intval($_GET['site']);
+    if (!empty($_GET['newsite']))
+    {
+        $newsite = TRUE;
+    }
+    else
+    {
+        $newsite = FALSE;
+        $siteid = intval($_GET['site']);
+    }
     
     if (isset($_POST['submit']))
     {
@@ -209,9 +218,19 @@ elseif(is_numeric($_GET['edit']) OR $_GET['action'] == 'new')
         echo "<span class='required'>{$strRequired}</span></td></tr>";
         echo "<tr><th>{$strType}</th>";
         echo "<td>".array_drop_down($CONFIG['inventory_types'], 'type', $row->type, '', TRUE)."</td></tr>";
-        echo "<tr><th>{$strOwner}</th><td>";
-        echo contact_site_drop_down('owner', $row->contactid, $siteid, NULL, FALSE);
-        echo "</td></tr>";
+        
+        if ($newsite)
+        {
+            echo "<form action='{$_SERVER['PHP_SELF']}?action=new' method='post' name='form'>";
+            echo "<tr><th>{$strSite}</th><td>";
+            echo site_drop_down('site', 0, TRUE, "onchange='form.submit();'")."</td></form>";
+        }
+        else
+        {
+            echo "<tr><th>{$strOwner}</th><td>";
+            echo contact_site_drop_down('owner', $row->contactid, $siteid, NULL, FALSE);
+            echo "</td></tr>";
+        }
         echo "<tr><th>{$strID} ".help_link('InventoryID')."</th>";
         echo "<td><input name='identifier' value='{$row->identifier}' /></td></tr>";
         echo "<tr><th>{$strAddress}</th>";
@@ -262,16 +281,20 @@ elseif(is_numeric($_GET['edit']) OR $_GET['action'] == 'new')
 
 else
 {
-    echo "<h2>Inventory</h2>";
-    
-    $sql = "SELECT sites.* FROM `{$dbInventory}`, sites ";
+    echo "<h2>{$strInventory}</h2>";
+    echo "<p align='center'>{$strInventoryDesc}</p>";
+    echo "<p align='center'><a href='{$_SERVER['PHP_SELF']}?action=new&newsite=true'>";
+    echo "{$strSiteNotListed}</a></p>";
+    $sql = "SELECT COUNT(*) AS count, sites.* FROM `{$dbInventory}`, sites ";
     $sql .= "WHERE siteid=sites.id ";
     $sql .= "GROUP BY siteid ";
     $result = mysql_query($sql);
-    echo "<table>";
+    echo "<table class='vertical' align='center'>";
+    echo "<th>{$strSite}</th><th>{$strCount}</th>";
     while ($row = mysql_fetch_object($result))
     {
-        echo "<tr><td><a href='?site={$row->id}'>{$row->name}</a></td></tr>";
+        echo "<tr><td><a href='?site={$row->id}'>{$row->name}</a></td>";
+        echo "<td>{$row->count}</td></tr>";
     }
     
     echo "</table>";
