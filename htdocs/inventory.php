@@ -1,12 +1,11 @@
 <?php
-// remote_access.php - Browse remote access details
+// inventory.php - Browse inventory items
 //
 // SiT (Support Incident Tracker) - Support call tracking system
 // Copyright (C) 2000-2008 Salford Software Ltd. and Contributors
 //
 // This software may be used and distributed according to the terms
 // of the GNU General Public License, incorporated herein by reference.
-//
 
 @include ('set_include_path.inc.php');
 $permission = 0;
@@ -29,9 +28,10 @@ if (is_numeric($_GET['site']) AND empty($_GET['action']) AND empty($_GET['edit']
     }
 
     echo "<h2>".icon('site', 32)." ".site_name($siteid)."</h2>";
-    echo "<p align='center'>".icon('add', 16);
-    echo " <a href='{$_SERVER['PHP_SELF']}?site={$siteid}&action=new'>";
-    echo "{$strAddNew}</a></p>";
+    echo "<p align='center'>";
+    echo "<a href='{$_SERVER['PHP_SELF']}?site={$siteid}&action=new'>";
+    echo icon('add', 16)." {$strAddNew}</a> | ";
+    echo "<a href='inventory.php'>".icon('site', 16)." {$strBackToSites}</a></p>";
     $sql = "SELECT *, i.name AS name , i.id AS id, ";
     $sql .= "i.notes AS notes, ";
     $sql .= "i.active AS active ";
@@ -76,8 +76,10 @@ if (is_numeric($_GET['site']) AND empty($_GET['action']) AND empty($_GET['edit']
             {
                 echo " (inactive)";
             }
-            echo " (<a href='?edit={$row->id}&site={$row->siteid}'>{$strEdit}</a>)</h3>";
-            echo "<p><strong>{$strType}:</strong> {$CONFIG['inventory_types'][$row->type]}</p>";
+            echo " (<small><a href='?edit={$row->id}&site={$row->siteid}'>";
+            echo "{$strEdit}</a></small>)</h3>";
+            echo "<p><strong>{$strType}:</strong> ";
+            echo "{$CONFIG['inventory_types'][$row->type]}</p>";
             if (!empty($row->identifier))
             {
                 echo "<p><strong>{$strID}:</strong> {$row->identifier}</p>";
@@ -284,7 +286,16 @@ elseif(is_numeric($_GET['edit']) OR $_GET['action'] == 'new')
         }
         echo "</form>";
         echo "<br /><p align='center'>";
-        echo "<a href='{$_SERVER['PHP_SELF']}?site={$siteid}'>{$strBackToList}</a>";
+        
+        if ($_GET['newsite'] == 'true')
+        {
+            echo icon('site', 16);
+            echo " <a href='{$_SERVER['PHP_SELF']}'>{$strBackToSites}</a>";
+        }
+        else
+        {
+            echo "<a href='{$_SERVER['PHP_SELF']}?site={$siteid}'>{$strBackToList}</a>";
+        }
         include ('htmlfooter.inc.php');
     }
 }
@@ -292,8 +303,7 @@ else
 {
     echo "<h2>".icon('inventory', 32)." {$strInventory}</h2>";
     echo "<p align='center'>{$strInventoryDesc}</p>";
-    echo "<p align='center'><a href='{$_SERVER['PHP_SELF']}?action=new&newsite=true'>";
-    echo "{$strSiteNotListed}</a></p>";
+
     $sql = "SELECT COUNT(*) AS count, s.* FROM `{$dbInventory}` AS i, `{$dbSites}` AS s ";
     $sql .= "WHERE siteid=s.id ";
     $sql .= "GROUP BY siteid ";
@@ -305,7 +315,8 @@ else
         echo "<th>{$strSite}</th><th>{$strCount}</th>";
         while ($row = mysql_fetch_object($result))
         {
-            echo "<tr><td><a href='?site={$row->id}'>{$row->name}</a></td>";
+            echo "<tr><td>".icon('site', 16);
+            echo " <a href='?site={$row->id}'>{$row->name}</a></td>";
             echo "<td>{$row->count}</td></tr>";
         }
         echo "</table>";
@@ -314,6 +325,9 @@ else
     {
         echo "<p align='center'>{$strNoRecords}</p>";
     }
+    
+    echo "<p align='center'><a href='{$_SERVER['PHP_SELF']}?action=new&newsite=true'>";
+    echo "{$strSiteNotListed}</a></p>";
     include ('htmlfooter.inc.php');
 }
 
