@@ -652,6 +652,7 @@ $strInvalidUserID = 'Invalid user id';
 $strInvalidUsername = 'Invalid username, please try another';
 $strInventory = 'Inventory';
 $strInventoryDesc = 'The inventory is a catalogue of site objects such as workstations, software, remote access etc., that belong to sites';
+$strInventoryItems = 'Inventory Items';
 $strIgnore = 'Ignore';
 
 # short for January
