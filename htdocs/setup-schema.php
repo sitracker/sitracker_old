@@ -2409,6 +2409,7 @@ CREATE TABLE IF NOT EXISTS `{$dbInventory}` (
   `modifiedby` int(11) NOT NULL,
   `active` tinyint(1) NOT NULL default '1',
   `adminonly` tinyint(1) NOT NULL default '0',
+  `private` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY  (`id`),
   KEY `siteid` (`siteid`,`contactid`)
 ) ENGINE=MyISAM;
