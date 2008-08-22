@@ -290,7 +290,7 @@ elseif(is_numeric($_GET['edit']) OR $_GET['action'] == 'new')
 }
 else
 {
-    echo "<h2>{$strInventory}</h2>";
+    echo "<h2>".icon('inventory', 32)." {$strInventory}</h2>";
     echo "<p align='center'>{$strInventoryDesc}</p>";
     echo "<p align='center'><a href='{$_SERVER['PHP_SELF']}?action=new&newsite=true'>";
     echo "{$strSiteNotListed}</a></p>";
