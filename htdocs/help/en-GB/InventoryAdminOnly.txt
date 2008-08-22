@@ -1,0 +1,2 @@
+This witholds the username and password from users which don't have admin
+rights
