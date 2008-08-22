@@ -9,7 +9,7 @@
 //
 // Author Kieran Hogg <kieran_hogg[at]users.sourceforge.net>
 
-@include ('set_include_path.inc.php');
+@include ('../set_include_path.inc.php');
 require 'db_connect.inc.php';
 require 'functions.inc.php';
 
@@ -57,7 +57,7 @@ if (sizeof($_SESSION['entitlement']) >= 1)
         else
         {
             echo ldate($CONFIG['dateformat_date'],$contract->expirydate);
-        }    
+        }
         echo "</td>";
         echo "<td>";
         if ($contract->expirydate > $now OR $contract->expirydate == -1)

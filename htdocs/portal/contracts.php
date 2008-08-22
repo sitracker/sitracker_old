@@ -9,7 +9,7 @@
 //
 // Author Kieran Hogg <kieran_hogg[at]users.sourceforge.net>
 
-@include ('set_include_path.inc.php');
+@include ('../set_include_path.inc.php');
 require 'db_connect.inc.php';
 require 'functions.inc.php';
 
@@ -24,7 +24,7 @@ $contactid = intval($_GET['contactid']);
 $action = cleanvar($_GET['action']);
 if ($id != 0 AND $contactid != 0 AND $action == 'remove')
 {
-    if (in_array($id, 
+    if (in_array($id,
                  admin_contact_contracts($_SESSION['contactid'], $_SESSION['siteid'])))
     {
         $sql = "DELETE FROM `{$dbSupportContacts}`

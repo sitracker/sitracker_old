@@ -9,7 +9,7 @@
 // of the GNU General Public License, incorporated herein by reference.
 //
 // Author Kieran Hogg <kieran_hogg[at]users.sourceforge.net>
-@include ('set_include_path.inc.php');
+@include ('../set_include_path.inc.php');
 require 'db_connect.inc.php';
 require 'functions.inc.php';
 

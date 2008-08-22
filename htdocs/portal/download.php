@@ -10,7 +10,7 @@
 
 // Author: Ivan Lucas, <ivanlucas[at]users.sourceforge.net
 
-@include ('set_include_path.inc.php');
+@include ('../set_include_path.inc.php');
 $permission = 0; // no permission required
 
 require ('db_connect.inc.php');
