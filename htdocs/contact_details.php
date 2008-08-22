@@ -110,11 +110,11 @@ while ($contactrow = mysql_fetch_array($contactresult))
 
     if ($contactrow['dataprotection_phone'] != 'Yes')
     {
-        echo "<tr><th>{$strTelephone}:</th><td>{$contactrow['phone']}</td></tr>\n";
-        echo "<tr><th>{$strMobile}:</th><td>{$contactrow['mobile']}</td></tr>\n";
-        echo "<tr><th>{$strFax}:</th><td>{$contactrow['fax']}</td></tr>\n";
+        echo "<tr><th>{$strTelephone}</th><td>{$contactrow['phone']}</td></tr>\n";
+        echo "<tr><th>{$strMobile}</th><td>{$contactrow['mobile']}</td></tr>\n";
+        echo "<tr><th>{$strFax}</th><td>{$contactrow['fax']}</td></tr>\n";
     }
-    echo "<tr><th>{$strDataProtection}:</th><td> ";
+    echo "<tr><th>{$strDataProtection}</th><td> ";
 
     if ($contactrow['dataprotection_email'] == 'Yes')
     {
@@ -144,11 +144,12 @@ while ($contactrow = mysql_fetch_array($contactresult))
     }
 
     echo "</td></tr>\n";
-    echo "<tr><th>{$strNotes}:</th><td>";
+    echo "<tr><th>{$strNotes}</th><td>";
     echo nl2br($contactrow['notes'])."</td></tr>\n";
 
     echo "<tr><td colspan='2'>&nbsp;</td></tr>\n";
-    echo "<tr><th>{$strAccessDetails}:</th><td>{$strUsername}: <code>{$contactrow['username']}</code>";
+    echo "<tr><th>{$strAccessDetails}</th>";
+    echo "<td>{$strUsername}: <code>{$contactrow['username']}</code>";
     echo ", <a href='forgotpwd.php?action=sendpwd&amp;contactid=".urlencode($contactrow['id'])."'>{$strSendPassword}</a>";
     // echo ", password: <code>".$contactrow['password']."</code>";  ## Passwords no longer controlled from SiT INL 23Nov04
     echo "</td></tr>\n";
@@ -169,14 +170,14 @@ while ($contactrow = mysql_fetch_array($contactresult))
 
     if ($totalincidents >= 1)
     {
-        echo "$totalincidents logged, see <a href='contact_support.php?id={$id}'>here</a>"; // FIXME i18n
+        echo "$totalincidents $strLogged, <a href='contact_support.php?id={$id}'>{$strSeeHere}</a>";
     }
 
     echo "</td></tr>\n";
 
     if ($contactrow['notify_contactid'] > 0)
     {
-        echo "<tr><th>{$strNotifyContact}:</th><td>";
+        echo "<tr><th>{$strNotifyContact}</th><td>";
         echo contact_realname($contactrow['notify_contactid']);
         $notify_contact1 = contact_notify($contactrow['notify_contactid'], 1);
         if ($notify_contact1 > 0)
@@ -197,14 +198,20 @@ while ($contactrow = mysql_fetch_array($contactresult))
         }
         echo "</td></tr>\n";
     }
-
-    plugin_do('contact_details');
-
+    
     if ($contactrow['timestamp_modified'] > 0)
     {
-        echo "<tr><th>{$strLastUpdated}:</th>";
+        echo "<tr><th>{$strLastUpdated}</th>";
         echo "<td>".ldate($CONFIG['dateformat_datetime'],$contactrow['timestamp_modified'])."</td></tr>\n";
     }
+    
+    echo "<tr><th>{$strInventoryItems}</th>";
+    echo "<td>".contact_count_inventory_items($id)." ";
+    echo "<a href='inventory.php?site=".contact_siteid($id)."'>{$strSeeHere}";
+    echo "</td></tr>";
+    plugin_do('contact_details');
+
+   
     echo "</table>\n";
 
     echo "<p align='center'>";
