@@ -22,32 +22,32 @@ if (is_numeric($_GET['site']) AND empty($_GET['action']) AND empty($_GET['edit']
 {
     //View site inventory
     $siteid = $_GET['site'];
-    
+
     if (!empty($_REQUEST['filter']))
     {
         $filter = cleanvar($_REQUEST['filter']);
     }
-    
+
     echo "<h2>".icon('site', 32)." ".site_name($siteid)."</h2>";
     echo "<p align='center'>".icon('add', 16);
     echo " <a href='{$_SERVER['PHP_SELF']}?site={$siteid}&action=new'>";
     echo "{$strAddNew}</a></p>";
-    $sql = "SELECT *, `{$dbInventory}`.name AS name ,`{$dbInventory}`.id AS id, ";
-    $sql .= "`{$dbInventory}`.notes AS notes, ";
-    $sql .= "`{$dbInventory}`.active AS active ";
-    $sql .= "FROM `{$dbInventory}`, sites ";
+    $sql = "SELECT *, i.name AS name , i.id AS id, ";
+    $sql .= "i.notes AS notes, ";
+    $sql .= "i.active AS active ";
+    $sql .= "FROM `{$dbInventory}` AS i, `{$dbSites}` AS s ";
     $sql .= "WHERE siteid='{$siteid}' ";
-    $sql .= "AND siteid=sites.id ";
+    $sql .= "AND siteid=s.id ";
     if (!empty($filter))
     {
         $sql .= "AND type='{$filter}' ";
     }
-    $sql .= "ORDER BY `{$dbInventory}`.active DESC, ";
-    $sql .= "`{$dbInventory}`.modified DESC";
+    $sql .= "ORDER BY I.active DESC, ";
+    $sql .= "I.modified DESC";
     //$sql .= "GROUP BY type DESC ";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
-    
+
     echo "<form action='{$_SERVER['PHP_SELF']}?site={$siteid}' method='post'>";
     echo "<p align='center'>".icon('filter', 16)." {$strFilter}: ";
     echo "<select name='filter' onchange='form.submit();'>";
@@ -64,25 +64,25 @@ if (is_numeric($_GET['site']) AND empty($_GET['action']) AND empty($_GET['edit']
     echo "</select> <a href='{$_SERVER['PHP_SELF']}?site={$siteid}'>";
     echo "{$strClearFilter}</a></p>";
     echo "</form>";
-    
+
     if (mysql_num_rows($result) > 0)
     {
         while ($row = mysql_fetch_object($result))
         {
             echo "<div id='container' style='width: 40%'>";
             echo "<h3>{$row->name}";
-            
+
             if ($row->active != 1)
             {
-                echo " (inactive)";   
-            }    
+                echo " (inactive)";
+            }
             echo " (<a href='?edit={$row->id}&site={$row->siteid}'>{$strEdit}</a>)</h3>";
             echo "<p><strong>{$strType}:</strong> {$CONFIG['inventory_types'][$row->type]}</p>";
             if (!empty($row->identifier))
             {
                 echo "<p><strong>{$strID}:</strong> {$row->identifier}</p>";
             }
-    
+
             echo "<p><strong>{$strAddress}:</strong> $row->address</p>";
             if (!empty($row->contactid))
             {
@@ -141,7 +141,7 @@ elseif(is_numeric($_GET['edit']) OR $_GET['action'] == 'new')
         $newsite = FALSE;
         $siteid = intval($_GET['site']);
     }
-    
+
     if (isset($_POST['submit']))
     {
         $post = cleanvar($_POST);
@@ -153,7 +153,7 @@ elseif(is_numeric($_GET['edit']) OR $_GET['action'] == 'new')
         {
             $post['active'] = 0;
         }
-        
+
         if ($post['adminonly'] == 'on')
         {
             $post['adminonly'] = 1;
@@ -162,7 +162,7 @@ elseif(is_numeric($_GET['edit']) OR $_GET['action'] == 'new')
         {
             $post['adminonly'] = 0;
         }
-        
+
         if ($_GET['action'] == 'new')
         {
             $sql = "INSERT INTO `{$dbInventory}`(address, username, password, type,";
@@ -220,7 +220,7 @@ elseif(is_numeric($_GET['edit']) OR $_GET['action'] == 'new')
         echo "<span class='required'>{$strRequired}</span></td></tr>";
         echo "<tr><th>{$strType}</th>";
         echo "<td>".array_drop_down($CONFIG['inventory_types'], 'type', $row->type, '', TRUE)."</td></tr>";
-        
+
         if ($newsite)
         {
             echo "<form action='{$_SERVER['PHP_SELF']}?action=new' method='post' name='form'>";
@@ -253,7 +253,7 @@ elseif(is_numeric($_GET['edit']) OR $_GET['action'] == 'new')
             }
             echo "/>";
         }
-        
+
         if ($_GET['action'] != 'new')
         {
             echo "<tr><th>{$strActive}</th>";
@@ -280,15 +280,14 @@ elseif(is_numeric($_GET['edit']) OR $_GET['action'] == 'new')
         include ('htmlfooter.inc.php');
     }
 }
-
 else
 {
     echo "<h2>{$strInventory}</h2>";
     echo "<p align='center'>{$strInventoryDesc}</p>";
     echo "<p align='center'><a href='{$_SERVER['PHP_SELF']}?action=new&newsite=true'>";
     echo "{$strSiteNotListed}</a></p>";
-    $sql = "SELECT COUNT(*) AS count, sites.* FROM `{$dbInventory}`, sites ";
-    $sql .= "WHERE siteid=sites.id ";
+    $sql = "SELECT COUNT(*) AS count, s.* FROM `{$dbInventory}` AS i, `{$dbSites}` AS s ";
+    $sql .= "WHERE siteid=s.id ";
     $sql .= "GROUP BY siteid ";
     $result = mysql_query($sql);
 
@@ -301,7 +300,6 @@ else
             echo "<tr><td><a href='?site={$row->id}'>{$row->name}</a></td>";
             echo "<td>{$row->count}</td></tr>";
         }
-        
         echo "</table>";
     }
     else
