@@ -93,7 +93,8 @@ if (is_numeric($_GET['site']) AND empty($_GET['action']) AND empty($_GET['edit']
                 echo contact_realname($row->contactid)."</a></p>";
             }
             echo "<p><strong>{$strUsername}:</strong> ";
-            if ($row->adminonly == 1 AND !user_permission($sit[2], 22))
+            if (($row->adminonly == 1 AND !user_permission($sit[2], 22)) OR
+                ($row->private == 1 AND $row->createdby != $sit[2]))
             {
                 echo "<strong>{$strWithheld}</strong>";
             }
@@ -103,7 +104,8 @@ if (is_numeric($_GET['site']) AND empty($_GET['action']) AND empty($_GET['edit']
             }
             echo "</p>";
             echo "<p><strong>{$strPassword}:</strong> ";
-            if ($row->adminonly == 1 AND !user_permission($sit[2], 22))
+            if (($row->adminonly == 1 AND !user_permission($sit[2], 22)) OR
+                ($row->private == 1 AND $row->createdby != $sit[2]))
             {
                 echo "<strong>{$strWithheld}</strong>";
             }
