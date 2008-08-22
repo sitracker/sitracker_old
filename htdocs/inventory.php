@@ -165,6 +165,12 @@ elseif(is_numeric($_GET['edit']) OR $_GET['action'] == 'new')
 
         if ($_GET['action'] == 'new')
         {
+            //if we're adding to a site with nothing previous
+            if (!empty($post['site']))
+            {
+                $siteid = $post['site'];
+            }
+            
             $sql = "INSERT INTO `{$dbInventory}`(address, username, password, type,";
             $sql .= " notes, created, createdby, modified, modifiedby, active,";
             $sql .= " adminonly, name, siteid) VALUES('{$post['address']}', ";
