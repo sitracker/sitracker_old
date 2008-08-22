@@ -184,6 +184,7 @@ $strAwaitingYourResponse = 'Awaiting Your Response';
 
 $strBackToList = 'Back To List';
 $strBackToLoginPage = 'Back to login page';
+$strBackToSites = 'Back to sites';
 $strBackOneYear = 'Back One Year';
 $strBalance = 'Balance';
 $strBCC = 'BCC';
