@@ -914,6 +914,28 @@ function site_count_inventory_items($id)
 
 
 /**
+    * Return the number of inventory items for a contact
+    * @author Kieran
+    * @param $id integer. Contact ID
+    * @returns int.
+*/
+function contact_count_inventory_items($id)
+{
+    global $dbInventory;
+    $count = 0;
+
+    $sql = "SELECT COUNT(id) FROM `{$dbInventory}` WHERE contactid='$id'";
+    $result = mysql_query($sql);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+    else list($count) = mysql_fetch_row($result);
+    mysql_free_result($result);
+
+    return $count;
+}
+
+
+
+/**
     * The number representing the total number of currently OPEN incidents submitted by a given contact.
     * @author Ivan Lucas
     * @param $id The Contact ID to check
