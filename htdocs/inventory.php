@@ -166,6 +166,15 @@ elseif(is_numeric($_GET['edit']) OR $_GET['action'] == 'new')
         {
             $post['adminonly'] = 0;
         }
+        
+        if ($post['private'] == 'on')
+        {
+            $post['private'] = 1;
+        }
+        else
+        {
+            $post['private'] = 0;
+        }
 
         if ($_GET['action'] == 'new')
         {
@@ -177,13 +186,14 @@ elseif(is_numeric($_GET['edit']) OR $_GET['action'] == 'new')
             
             $sql = "INSERT INTO `{$dbInventory}`(address, username, password, type,";
             $sql .= " notes, created, createdby, modified, modifiedby, active,";
-            $sql .= " adminonly, name, siteid) VALUES('{$post['address']}', ";
+            $sql .= " adminonly, name, siteid, private) VALUES('{$post['address']}', ";
             $sql .= "'{$post['username']}', ";
             $sql .= "'{$post['password']}', '{$post['type']}', ";
             $sql .= "'{$post['notes']}', NOW(), ";
             $sql .= "'{$sit[2]}', NOW(), ";
             $sql .= "'{$sit[2]}', '1', ";
-            $sql .= "'{$post['adminonly']}', '{$post['name']}', '{$siteid}')";
+            $sql .= "'{$post['adminonly']}', '{$post['name']}', '{$siteid}', ";
+            $sql .= "'{$post['private']})";
         }
         else
         {
@@ -193,7 +203,8 @@ elseif(is_numeric($_GET['edit']) OR $_GET['action'] == 'new')
             $sql .= "notes='{$post['notes']}', modified=NOW(), ";
             $sql .= "modifiedby='{$sit[2]}', active='{$post['active']}', ";
             $sql .= "adminonly='{$post['adminonly']}', name='{$post['name']}', ";
-            $sql .= "contactid='{$post['owner']}' WHERE id='{$edit}'";
+            $sql .= "contactid='{$post['owner']}', private='{$post['private']}' ";
+            $sql .= "WHERE id='{$edit}'";
         }
         mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
@@ -265,7 +276,23 @@ elseif(is_numeric($_GET['edit']) OR $_GET['action'] == 'new')
             }
             echo "/>";
         }
-
+        
+        if ($_GET['action'] == 'new')
+        {
+            echo "<tr><th>{$strPrivate} ".help_link('InventoryPrivate')."</th>";
+            echo "<td><input type='checkbox' name='private' />";
+        }
+        elseif ($row->createdby == $sit[2])
+        {
+            echo "<tr><th>{$strPrivate} ".help_link('InventoryPrivate')."</th>";
+            echo "<td><input type='checkbox' name='private' ";
+            if ($row->private == '1')
+            {
+                echo "checked = 'checked' ";
+            }
+            echo "/>";
+        }
+        
         if ($_GET['action'] != 'new')
         {
             echo "<tr><th>{$strActive}</th>";
