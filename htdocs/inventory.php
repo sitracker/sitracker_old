@@ -42,8 +42,8 @@ if (is_numeric($_GET['site']) AND empty($_GET['action']) AND empty($_GET['edit']
     {
         $sql .= "AND type='{$filter}' ";
     }
-    $sql .= "ORDER BY I.active DESC, ";
-    $sql .= "I.modified DESC";
+    $sql .= "ORDER BY i.active DESC, ";
+    $sql .= "i.modified DESC";
     //$sql .= "GROUP BY type DESC ";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
