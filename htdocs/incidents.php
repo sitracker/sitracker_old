@@ -223,7 +223,7 @@ switch ($type)
             // Incidents Table
             include ('incidents_table.inc.php');
         }
-        else echo "<h5>{$strNoIncidents}</h5>";
+        else echo "<p class='info'>{$strNoIncidents}</p>";
 
         if ($user=='all') echo "<p align='center'>".sprintf($strNumOfIncidents, $rowcount)."</p>";
 
@@ -327,7 +327,7 @@ switch ($type)
                 // Incidents Table
                 include ('incidents_table.inc.php');
             }
-            else echo "<h5>{$strNoIncidents}</h5>";
+            else echo "<p class='info'>{$strNoIncidents}</p>";
 
             // end of expertise queue
             // ***
