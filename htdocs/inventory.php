@@ -223,9 +223,11 @@ elseif(is_numeric($_GET['edit']) OR $_GET['action'] == 'new')
 
         if ($newsite)
         {
-            echo "<form action='{$_SERVER['PHP_SELF']}?action=new' method='post' name='form'>";
             echo "<tr><th>{$strSite}</th><td>";
-            echo site_drop_down('site', 0, TRUE, "onchange='form.submit();'")."</td></form>";
+            echo site_drop_down('site', 0, TRUE)."</td></form>";
+            echo "<tr><th>{$strOwner}</th><td>";
+            echo contact_site_drop_down('owner', '');
+            echo "</td></tr>";
         }
         else
         {
