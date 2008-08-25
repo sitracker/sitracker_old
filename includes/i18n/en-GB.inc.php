@@ -1052,6 +1052,7 @@ $strRelations = 'Relations';
 $strReleaseNotes = 'Release Notes';
 $strReleaseNotesFor = 'Release Notes For %s';
 $strRemaining = '%s Remaining';
+$strRemainingBalance = 'Remaining Balance';
 $strRemove = 'Remove';
 $strRemoveTemporaryOwner = 'Remove Temporary Owner';
 $strReopen = 'Reopen';

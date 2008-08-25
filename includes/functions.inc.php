@@ -10293,7 +10293,7 @@ function contract_service_table($contractid)
     {
         $shade = '';
         $html = "\n<table align='center'>";
-        $html .= "<tr><th>{$GLOBALS['strStartDate']}</th><th>{$GLOBALS['strEndDate']}</th><th>{$GLOBALS['strBalance']}</th><th></th>";
+        $html .= "<tr><th>{$GLOBALS['strStartDate']}</th><th>{$GLOBALS['strEndDate']}</th><th>{$GLOBALS['strRemainingBalance']}</th><th></th>";
         $html .= "</tr>\n";
         while ($service = mysql_fetch_object($result))
         {

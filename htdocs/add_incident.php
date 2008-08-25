@@ -578,8 +578,10 @@ elseif ($action == 'assign')
         $productversion = cleanvar($_REQUEST['productversion']);
         $productservicepacks = cleanvar($_REQUEST['productservicepacks']);
         $bodytext = cleanvar($_REQUEST['bodytext']);
-        $cust_vis = $_REQUEST['cust_vis'];
-	    if ($_REQUEST['send_email'] == 'on')
+        $cust_vis = cleanvar($_REQUEST['cust_vis']);
+        $send_email = cleanvar($_REQUEST['send_email']);
+
+	    if ($send_email == 'on')
         {
 	       $send_email = 1;
 	   }
