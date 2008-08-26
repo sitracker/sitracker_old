@@ -135,7 +135,9 @@ if (is_numeric($_GET['site']) AND empty($_GET['action']) AND empty($_GET['edit']
 elseif(is_numeric($_GET['edit']) OR $_GET['action'] == 'new')
 {
     //Edit inventry object
-    $edit = $_GET['edit'];
+    $edit = cleanvar($_GET['edit']);
+    $action = cleanvar($_GET['action']);
+    
     if (!empty($_GET['newsite']))
     {
         $newsite = TRUE;
@@ -213,7 +215,7 @@ elseif(is_numeric($_GET['edit']) OR $_GET['action'] == 'new')
     {
         //FIXME
         //$row = cleanvar($row);
-        if ($_GET['action'] == 'new')
+        if ($action == 'new')
         {
             echo "<h2>".icon('add', 32)." {$strAdd}</h2>";
             $siteid = intval($_GET['site']);
@@ -226,7 +228,8 @@ elseif(is_numeric($_GET['edit']) OR $_GET['action'] == 'new')
             $row = mysql_fetch_object($result);
             echo "<h2>".icon('edit', 32)." {$strEdit}</h2>";
         }
-        if ($_GET['action'] == 'new')
+        
+        if ($action == 'new')
         {
             echo "<form action='{$_SERVER['PHP_SELF']}?action=new&site={$siteid}' method='post'>";
         }
@@ -244,7 +247,8 @@ elseif(is_numeric($_GET['edit']) OR $_GET['action'] == 'new')
         if ($newsite)
         {
             echo "<tr><th>{$strSite}</th><td>";
-            echo site_drop_down('site', 0, TRUE)."</td></form>";
+            echo site_drop_down('site', 0, TRUE);
+	    echo " <span class='required'>{$strRequired}</td>";
             echo "<tr><th>{$strOwner}</th><td>";
             echo contact_site_drop_down('owner', '');
             echo "</td></tr>";
@@ -260,7 +264,7 @@ elseif(is_numeric($_GET['edit']) OR $_GET['action'] == 'new')
         echo "<tr><th>{$strAddress}</th>";
         echo "<td><input name='address' value='{$row->address}' /></td></tr>";
                   
-        if (!isset($_GET['edit']) OR
+        if (!is_numeric($edit) OR
             (($row->privacy == 'adminonly' AND user_permission($sit[2], 22)) OR
             ($row->privacy == 'private' AND ($row->createdby == $sit[2]))))
         {
@@ -306,7 +310,7 @@ elseif(is_numeric($_GET['edit']) OR $_GET['action'] == 'new')
         
         echo "</td></tr>";
         
-        if ($_GET['action'] != 'new')
+        if ($action != 'new')
         {
             echo "<tr><th>{$strActive}</th>";
             echo "<td><input type='checkbox' name='active' ";
@@ -318,7 +322,7 @@ elseif(is_numeric($_GET['edit']) OR $_GET['action'] == 'new')
         }
         echo "</table>";
         echo "<p align='center'>";
-        if ($_GET['action'] == 'new')
+        if ($action == 'new')
         {
             echo "<input name='submit' type='submit' value='{$strAdd}' /></p>";
         }
@@ -329,7 +333,7 @@ elseif(is_numeric($_GET['edit']) OR $_GET['action'] == 'new')
         echo "</form>";
         echo "<br /><p align='center'>";
         
-        if ($_GET['newsite'] == 'true')
+        if ($newsite == 'true')
         {
             echo icon('site', 16);
             echo " <a href='{$_SERVER['PHP_SELF']}'>{$strBackToSites}</a>";
