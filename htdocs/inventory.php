@@ -89,7 +89,7 @@ if (is_numeric($_GET['site']) AND empty($_GET['action']) AND empty($_GET['edit']
             if (!empty($row->contactid))
             {
                 echo "<p><strong>{$strOwner}:</strong> ";
-                echo "<a href='contact_details?id={$row->contactid}'>";
+                echo "<a href='contact_details.php?id={$row->contactid}'>";
                 echo contact_realname($row->contactid)."</a></p>";
             }
             echo "<p><strong>{$strUsername}:</strong> ";
