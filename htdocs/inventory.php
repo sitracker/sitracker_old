@@ -93,8 +93,8 @@ if (is_numeric($_GET['site']) AND empty($_GET['action']) AND empty($_GET['edit']
                 echo contact_realname($row->contactid)."</a></p>";
             }
             echo "<p><strong>{$strUsername}:</strong> ";
-            if (($row->adminonly == 1 AND !user_permission($sit[2], 22)) OR
-                ($row->private == 1 AND $row->createdby != $sit[2]))
+            if (($row->privacy == 'adminonly' AND !user_permission($sit[2], 22)) OR
+                ($row->privacy == 'private' AND $row->createdby != $sit[2]))
             {
                 echo "<strong>{$strWithheld}</strong>";
             }
@@ -104,8 +104,8 @@ if (is_numeric($_GET['site']) AND empty($_GET['action']) AND empty($_GET['edit']
             }
             echo "</p>";
             echo "<p><strong>{$strPassword}:</strong> ";
-            if (($row->adminonly == 1 AND !user_permission($sit[2], 22)) OR
-                ($row->private == 1 AND $row->createdby != $sit[2]))
+            if (($row->privacy == 'adminonly' AND !user_permission($sit[2], 22)) OR
+                ($row->privacy == 'private' AND $row->createdby != $sit[2]))
             {
                 echo "<strong>{$strWithheld}</strong>";
             }
@@ -149,31 +149,14 @@ elseif(is_numeric($_GET['edit']) OR $_GET['action'] == 'new')
     if (isset($_POST['submit']))
     {
         $post = cleanvar($_POST);
+        
         if ($post['active'] == 'on')
         {
             $post['active'] = 1;
         }
-        else
+        elseif (isset($post['active']))
         {
             $post['active'] = 0;
-        }
-
-        if ($post['adminonly'] == 'on')
-        {
-            $post['adminonly'] = 1;
-        }
-        else
-        {
-            $post['adminonly'] = 0;
-        }
-        
-        if ($post['private'] == 'on')
-        {
-            $post['private'] = 1;
-        }
-        else
-        {
-            $post['private'] = 0;
         }
 
         if ($_GET['action'] == 'new')
@@ -186,26 +169,42 @@ elseif(is_numeric($_GET['edit']) OR $_GET['action'] == 'new')
             
             $sql = "INSERT INTO `{$dbInventory}`(address, username, password, type,";
             $sql .= " notes, created, createdby, modified, modifiedby, active,";
-            $sql .= " adminonly, name, siteid, private) VALUES('{$post['address']}', ";
-            $sql .= "'{$post['username']}', ";
-            $sql .= "'{$post['password']}', '{$post['type']}', ";
-            $sql .= "'{$post['notes']}', NOW(), ";
-            $sql .= "'{$sit[2]}', NOW(), ";
-            $sql .= "'{$sit[2]}', '1', ";
-            $sql .= "'{$post['adminonly']}', '{$post['name']}', '{$siteid}', ";
-            $sql .= "'{$post['private']})";
+            $sql .= " name, siteid, privacy, identifier) VALUES('{$post['address']}', ";
+            $sql .= "'{$post['username']}', '{$post['password']}', ";
+            $sql .= "'{$post['type']}', ";
+            $sql .= "'{$post['notes']}', NOW(), '{$sit[2]}', NOW(), ";
+            $sql .= "'{$sit[2]}', '1', '{$post['name']}', '{$siteid}', ";
+            $sql .= "'{$post['privacy']}', '{$post['identifier']}')";
         }
         else
         {
             $sql = "UPDATE `{$dbInventory}` ";
-            $sql .= "SET address='{$post['address']}', username='{$post['username']}', ";
-            $sql .= "password='{$post['password']}', type='{$post['type']}', ";
+            $sql .= "SET address='{$post['address']}', ";
+            if (isset($post['username']))
+                $sql .= "username='{$post['username']}', ";
+            
+            if (isset($post['password']))
+                $sql .= "password='{$post['password']}', ";
+                
+            $sql .= "type='{$post['type']}', ";
             $sql .= "notes='{$post['notes']}', modified=NOW(), ";
-            $sql .= "modifiedby='{$sit[2]}', active='{$post['active']}', ";
-            $sql .= "adminonly='{$post['adminonly']}', name='{$post['name']}', ";
-            $sql .= "contactid='{$post['owner']}', private='{$post['private']}' ";
-            $sql .= "WHERE id='{$edit}'";
+            $sql .= "modifiedby='{$sit[2]}', ";
+            $sql .= "name='{$post['name']}', ";
+            $sql .= "contactid='{$post['owner']}', identifier='{$post['identifier']}' ";
+            
+            if (isset($post['privacy']))
+            {
+                $sql .= ", privacy='{$post['privacy']}' ";
+            }
+            
+            if (isset($post['active']))
+            {
+                $sql .= ", active='{$post['active']}' ";
+            }
+
+            $sql .= " WHERE id='{$edit}'";
         }
+
         mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
         else html_redirect($_SERVER['PHP_SELF']."?site={$siteid}");
@@ -260,38 +259,52 @@ elseif(is_numeric($_GET['edit']) OR $_GET['action'] == 'new')
         echo "<td><input name='identifier' value='{$row->identifier}' /></td></tr>";
         echo "<tr><th>{$strAddress}</th>";
         echo "<td><input name='address' value='{$row->address}' /></td></tr>";
-        echo "<tr><th>{$strUsername}</th>";
-        echo "<td><input name='username' value='{$row->username}' /></td></tr>";
-        echo "<tr><th>{$strPassword}</th>";
-        echo "<td><input name='password' value='{$row->password}' /></td></tr>";
-        echo "<tr><th>{$strNotes}</th>";
-        echo "<td><textarea name='notes'>$row->notes</textarea></td></tr>";
-        if (user_permission($sit[2], 22))
+                  
+        if (!isset($_GET['edit']) OR
+            (($row->privacy == 'adminonly' AND user_permission($sit[2], 22)) OR
+            ($row->privacy == 'private' AND ($row->createdby == $sit[2]))))
         {
-            echo "<tr><th>{$strAdminOnly} ".help_link('InventoryAdminOnly');
-            echo "</th><td><input type='checkbox' name='adminonly' ";
-            if ($row->adminonly == '1')
-            {
-                echo "checked = 'checked' ";
-            }
-            echo "/>";
+            echo "<tr><th>{$strUsername}</th>";
+            echo "<td><input name='username' value='{$row->username}' /></td></tr>";
+            echo "<tr><th>{$strPassword}</th>";
+            echo "<td><input name='password' value='{$row->password}' /></td></tr>";
         }
         
-        if ($_GET['action'] == 'new')
+        echo "<tr><th>{$strNotes}</th>";
+        echo "<td><textarea name='notes'>$row->notes</textarea></td></tr>";
+
+        if (($row->privacy == 'adminonly' AND user_permission($sit[2], 22)) OR
+            ($row->privacy == 'private' AND $row->createdby == $sit[2]) OR
+            $row->privacy == 'none' OR $_GET['action'] == 'new')
         {
-            echo "<tr><th>{$strPrivate} ".help_link('InventoryPrivate')."</th>";
-            echo "<td><input type='checkbox' name='private' />";
-        }
-        elseif ($row->createdby == $sit[2])
-        {
-            echo "<tr><th>{$strPrivate} ".help_link('InventoryPrivate')."</th>";
-            echo "<td><input type='checkbox' name='private' ";
-            if ($row->private == '1')
+            echo "<tr><th>{$strPrivacy} ".help_link('InventoryPrivacy')."</th>";
+            echo "<td><input type='radio' name='privacy' value='private' ";
+            if ($row->privacy == 'private')
             {
-                echo "checked = 'checked' ";
+                echo " checked='checked' ";
+                $selected = TRUE;
+            }
+            echo "/>{$strPrivate}<br />";
+
+            echo "<input type='radio' name='privacy' value='adminonly'";
+            if ($row->privacy == 'adminonly')
+            {
+                echo " checked='checked' ";
+                $selected = TRUE;
             }
             echo "/>";
+            echo "{$strAdminOnly}<br />";
+            
+            echo "<input type='radio' name='privacy' value='none'";
+            if (!$selected)
+            {
+                echo " checked='checked' ";
+            }
+            echo "/>";
+            echo "{$strNone}<br />";
         }
+        
+        echo "</td></tr>";
         
         if ($_GET['action'] != 'new')
         {
@@ -299,7 +312,7 @@ elseif(is_numeric($_GET['edit']) OR $_GET['action'] == 'new')
             echo "<td><input type='checkbox' name='active' ";
             if ($row->active == '1')
             {
-                echo "checked = 'checked' ";
+               echo "checked = 'checked' ";
             }
             echo "/>";
         }
