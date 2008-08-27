@@ -471,6 +471,29 @@ elseif ($action=='incidentform')
         echo "<tr><th>{$strContract}</th><td>{$maintid} - ".strip_tags($producttext)."</td></tr>";
         echo "<tr><th>{$strSkill}</th><td>".softwareproduct_drop_down('software', 1, $productid)."</td></tr>";
     }
+    
+    if (site_count_inventory_items($siteid) > 0)
+    {
+        $items_array = array();
+        $sql = "SELECT * FROM `{$dbInventory}` ";
+        $sql .= "WHERE contactid='{$contactid}' ";
+        $result = mysql_query($sql);
+        while ($items = mysql_fetch_object($result))
+        {
+            $var = $items->name;
+            if (!empty($items->identifier))
+            {
+                $var .= " ({$items->identifier})";
+            }
+            elseif (!empty($items->address))
+            {
+                $var .= " ({$items->address})";
+            }
+            $items_array[] = $var;
+        }
+        echo "<tr><th>{$strInventoryItems}</th>";
+        echo "<td>".array_drop_down($items_array)."</td></tr>";
+    }
 
     plugin_do('new_incident_form');
     echo "<tr><th>{$strVersion}</th><td><input maxlength='50' name='productversion' size='40' type='text' /></td></tr>\n";
