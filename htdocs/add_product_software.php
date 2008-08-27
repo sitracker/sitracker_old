@@ -40,7 +40,7 @@ if (empty($action) OR $action == "showform")
         if (!empty($softwareid))
         {
             $name = db_read_column('name', $dbSoftware, $softwareid);
-            echo "<h3>".icon('skill')." ";
+            echo "<h3>".icon('skill',16)." ";
             echo "{$strSkill}: $name</h3>";
         }
         echo "<input name=\"softwareid\" type=\"hidden\" value=\"$softwareid\" />\n";
