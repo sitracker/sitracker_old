@@ -474,7 +474,7 @@ elseif ($action=='incidentform')
     
     if (site_count_inventory_items($siteid) > 0)
     {
-        $items_array = array();
+        $items_array[0] = '';
         $sql = "SELECT * FROM `{$dbInventory}` ";
         $sql .= "WHERE contactid='{$contactid}' ";
         $result = mysql_query($sql);
@@ -489,10 +489,10 @@ elseif ($action=='incidentform')
             {
                 $var .= " ({$items->address})";
             }
-            $items_array[] = $var;
+            $items_array[$items->id] = $var;
         }
         echo "<tr><th>{$strInventoryItems}</th>";
-        echo "<td>".array_drop_down($items_array)."</td></tr>";
+        echo "<td>".array_drop_down($items_array, 'inventory', '', '', TRUE)."</td></tr>";
     }
 
     plugin_do('new_incident_form');
@@ -603,15 +603,16 @@ elseif ($action == 'assign')
         $bodytext = cleanvar($_REQUEST['bodytext']);
         $cust_vis = cleanvar($_REQUEST['cust_vis']);
         $send_email = cleanvar($_REQUEST['send_email']);
+        $inventory = cleanvar($_REQUEST['inventory']);
 
-	    if ($send_email == 'on')
+	if ($send_email == 'on')
         {
-	       $send_email = 1;
-	   }
-	   else
-	   {
-	        $send_email = 0;
-	   }
+	    $send_email = 1;
+	}
+	else
+	{
+	     $send_email = 0;
+	}
 
         // check form input
         $errors = 0;
@@ -793,6 +794,15 @@ elseif ($action == 'assign')
             $sql .= "VALUES ('$incidentid', '{$sit[2]}', 'reviewmet', '$now', '".$sit[2]."', '1', 'hide', 'opened','')";
             mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+
+            if (!empty($inventory) AND $inventory != 0)
+            {
+                $sql = "INSERT INTO `{$dbLinks}`(linktype, origcolref, linkcolref, direction, userid) ";
+                $sql .= "VALUES(7, '$incidentid', '$inventory', 'left', '.$sit[2].')";
+                mysql_query($sql);
+                echo $sql;
+                if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+            }
 
             plugin_do('incident_created');
 
