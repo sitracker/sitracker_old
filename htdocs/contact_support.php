@@ -50,7 +50,7 @@ if ($mode=='site')
 else
 {
     $sql = "SELECT *, (closed - opened) AS duration_closed, i.id AS incidentid ";
-    $sql .= "FROM `{$dbIncidents}` WHERE ";
+    $sql .= "FROM `{$dbIncidents}` AS i WHERE ";
     $sql .= "contact='$id' ";
     if ($status=='open') $sql .= "AND i.status!=2 ";
     elseif ($status=='closed') $sql .= "AND i.status=2 ";
