@@ -588,7 +588,15 @@ elseif ($mode == 'approve')
             $status = $status AND $l;
         }
     }
-
+    $maintid = incident_maintid($incidentid);
+    $percent = get_service_percentage($maintid);
+    
+    if ($percent !== FALSE)
+    {
+        trigger('TRIGGER_SERVICE_LIMIT', array('maintid' => $maintid,
+                                               'serviceremaning' => $percent));
+    }
+    
     if ($status)
     {
         html_redirect("{$_SERVER['PHP_SELF']}?mode=approvalpage&amp;startdate={$startdateorig}&amp;enddate={$enddateorig}");
