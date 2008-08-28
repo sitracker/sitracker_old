@@ -147,8 +147,8 @@ array('name' => 'Waiting Held Email',
 $triggerarray['TRIGGER_SERVICE_LIMIT'] =
 array('name' => 'Service Limit',
       'description' => 'Occurs when an billable incident is approved',
-      'required' => array('contractid', 'serviceremaning'),
-      'params' => array('contractid', 'serviceremaning'),
+      'required' => array('contractid', 'serviceremaining'),
+      'params' => array('contractid', 'serviceremaining'),
       );
 
 plugin_do('trigger_types');
@@ -477,13 +477,13 @@ array('description' => 'Whether to send an opening email or not',
       'replacement' => '$paramarray[\'sendemail\'];'
      );
 
-$ttvararray['{serviceremaning}'] =
+$ttvararray['{serviceremaining}'] =
 array('description' => 'The amount of remaining service i.e. 34%',
       'requires' => 'contractid',
       'replacement' => 'get_service_percentage($paramarray[\'contractid\']);'
      );
 
-$ttvararray['{serviceremaningstring}'] =
+$ttvararray['{serviceremainingstring}'] =
 array('description' => 'The amount of remaining service i.e. 0.34',
       'requires' => 'maintid',
       'replacement' => 'get_service_percentage($paramarray[\'contractid\']) * 100."%"'
