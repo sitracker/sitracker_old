@@ -2389,7 +2389,7 @@ ALTER TABLE `{$dbTempIncoming}` ADD `reason_user` INT NOT NULL AFTER `reason` ,
 ADD `reason_time` DATETIME NOT NULL AFTER `reason_user` ;        
 
 -- PH 2008-08-18
-ALTER TA-LE `{$dbService}` ADD `foc` ENUM( 'yes', 'no' ) NOT NULL DEFAULT 'no' COMMENT 'Free of charge (customer not charged)';
+ALTER TABLE `{$dbService}` ADD `foc` ENUM( 'yes', 'no' ) NOT NULL DEFAULT 'no' COMMENT 'Free of charge (customer not charged)';
 
 -- KMH 2008-08-22
 CREATE TABLE IF NOT EXISTS `{$dbInventory}` (
