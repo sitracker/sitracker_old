@@ -800,7 +800,6 @@ elseif ($action == 'assign')
                 $sql = "INSERT INTO `{$dbLinks}`(linktype, origcolref, linkcolref, direction, userid) ";
                 $sql .= "VALUES(7, '$incidentid', '$inventory', 'left', '.$sit[2].')";
                 mysql_query($sql);
-                echo $sql;
                 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
             }
 
