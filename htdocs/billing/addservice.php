@@ -55,7 +55,7 @@ if (empty($submit) OR !empty($_SESSION['formerrors']['add_service']))
     echo "<table align='center' class='vertical'>";
 
     echo "<tr><th>{$strStartDate}</th>";
-    echo "<td><input type='text' name='startdate' id='startdate' size='10'";
+    echo "<td><input class='required' type='text' name='startdate' id='startdate' size='10'";
     if ($_SESSION['formdata']['add_service']['startdate'] != '')
     {
         echo "value='{$_SESSION['formdata']['add_service']['startdate']}'";
@@ -66,7 +66,7 @@ if (empty($submit) OR !empty($_SESSION['formerrors']['add_service']))
     }
     echo "/> ";
     echo date_picker('serviceform.startdate');
-    echo "</td></tr>";
+    echo " <span class='required'>{$strRequired}</span></td></tr>";
 
     echo "<tr><th>{$strEndDate}</th>";
     echo "<td><input class='required' type='text' name='enddate' id='enddate' size='10'";
@@ -94,16 +94,19 @@ if (empty($submit) OR !empty($_SESSION['formerrors']['add_service']))
     echo "<tbody id='billingsection'>"; //FIXME not XHTML
 
     echo "<tr><th>{$strCreditAmount}</th>";
-    echo "<td>{$CONFIG['currency_symbol']} <input type='text' name='amount' size='5' />";
-    echo "</td></tr>";
+    echo "<td>{$CONFIG['currency_symbol']} ";
+    echo "<input class='required' type='text' name='amount' size='5' />";
+    echo " <span class='required'>{$strRequired}</span><</td></tr>";
 
     echo "<tr id='unitratesection'><th>{$strUnitRate}</th>";
-    echo "<td>{$CONFIG['currency_symbol']} <input type='text' name='unitrate' size='5' />";
-    echo "</td></tr>";
+    echo "<td>{$CONFIG['currency_symbol']} ";
+    echo "<input class='required' type='text' name='unitrate' size='5' />";
+    echo " <span class='required'>{$strRequired}</span><</td></tr>";
 
     echo "<tr id='incidentratesection' style='display:none'><th>{$strIncidentRate}</th>";
-    echo "<td>{$CONFIG['currency_symbol']} <input type='text' name='incidentrate' size='5' />";
-    echo "</td></tr>";
+    echo "<td>{$CONFIG['currency_symbol']} ";
+    echo "<input class='required' type='text' name='incidentrate' size='5' />";
+    echo " <span class='required'>{$strRequired}</span></td></tr>";
     
     echo "<tr>";
     echo "<th>{$strFreeOfCharge}</th>";

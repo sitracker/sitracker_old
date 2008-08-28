@@ -54,26 +54,20 @@ switch ($mode)
 
                 echo "<h2>{$strEditService}</h2>";
 
-                echo "<h5>".sprintf($strMandatoryMarked, "<sup class='red'>*</sup>")."</h5>";
                 echo "<form id='serviceform' name='serviceform' action='{$_SERVER['PHP_SELF']}' method='post' onsubmit='return confirm_submit(\"{$strAreYouSureMakeTheseChanges}\");'>";
                 echo "<table align='center' class='vertical'>";
 
                 echo "<tr><th>{$strStartDate}</th>";
-                echo "<td><input type='text' name='startdate' id='startdate' size='10'";
+                echo "<td><input class='required' type='text' name='startdate' id='startdate' size='10'";
                 echo "value='{$obj->startdate}' />";
                 echo date_picker('serviceform.startdate');
-                echo "</td></tr>";
+                echo " <span class='required'>{$strRequired}</span></td></tr>";
 
-                echo "<tr><th>{$strEndDate}<sup class='red'>*</sup></th>";
-                echo "<td><input type='text' name='enddate' id='enddate' size='10'";
+                echo "<tr><th>{$strEndDate}</th>";
+                echo "<td><input class='required' type='text' name='enddate' id='enddate' size='10'";
                 echo "value='{$obj->enddate}' />";
                 echo date_picker('serviceform.enddate');
-                echo " <input type='checkbox' name='noexpiry' ";
-                if ($_SESSION['formdata']['add_contract']['noexpiry'] == "on")
-                {
-                    echo "checked='checked' ";
-                }
-                echo "onclick=\"$('enddate').value='';\" /> {$strUnlimited}</td></tr>\n";
+                echo " <span class='required'>{$strRequired}</span></td></tr>\n";
 
                 echo "<tr><th>{$strNotes}</th><td>";
                 echo "<textarea rows='5' cols='20' name='notes'>{$obj->notes}</textarea></td></tr>";
@@ -107,16 +101,19 @@ switch ($mode)
                     echo "<tbody id='billingsection'>"; //FIXME not XHTML
 
                     echo "<tr><th>{$strCreditAmount}</th>";
-                    echo "<td>{$CONFIG['currency_symbol']} <input type='text' name='amount' size='5' value='{$obj->creditamount}' />";
-                    echo "</td></tr>";
+                    echo "<td>{$CONFIG['currency_symbol']} ";
+                    echo "<input class='required' type='text' name='amount' size='5' value='{$obj->creditamount}' />";
+                    echo " <span class='required'>{$strRequired}</span></td></tr>";
 
                     echo "<tr id='unitratesection' {$unitstyle}><th>{$strUnitRate}</th>";
-                    echo "<td>{$CONFIG['currency_symbol']} <input type='text' name='unitrate' size='5' value='{$obj->unitrate}' />";
-                    echo "</td></tr>";
+                    echo "<td>{$CONFIG['currency_symbol']} ";
+                    echo "<input class='required' type='text' name='unitrate' size='5' value='{$obj->unitrate}' />";
+                    echo " <span class='required'>{$strRequired}</span></td></tr>";
 
                     echo "<tr id='incidentratesection' {$incidentstyle}><th>{$strIncidentRate}</th>";
-                    echo "<td>{$CONFIG['currency_symbol']} <input type='text' name='incidentrate' size='5' value='{$obj->incidentrate}' />";
-                    echo "</td></tr>";
+                    echo "<td>{$CONFIG['currency_symbol']} ";
+                    echo "<input class='required' type='text' name='incidentrate' size='5' value='{$obj->incidentrate}' />";
+                    echo " <span class='required'>{$strRequired}</span></td></tr>";
 
                     $fochecked = '';
                     if ($obj->foc == 'yes') $fochecked = 'checked';
