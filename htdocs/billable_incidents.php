@@ -593,8 +593,7 @@ elseif ($mode == 'approve')
     
     if ($percent !== FALSE)
     {
-        trigger('TRIGGER_SERVICE_LIMIT', array('maintid' => $maintid,
-                                               'serviceremaning' => $percent));
+        trigger('TRIGGER_SERVICE_LIMIT', array('contractid' => $maintid));
     }
     
     if ($status)
