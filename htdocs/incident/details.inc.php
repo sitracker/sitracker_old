@@ -50,6 +50,26 @@ if ($incident->externalengineer != '')
     echo "<br />\n";
 }
 
+$sql = "SELECT * FROM links, inventory ";
+$sql .= "WHERE linktype = 7 ";
+$sql .= "AND origcolref = {$incidentid} ";
+$sql .= "AND inventory.id = linkcolref ";
+$result = mysql_query($sql);
+if (@mysql_num_rows($result) > 0)
+{
+    $inventory = mysql_fetch_object($result);
+    echo "<a href='inventory.php?view={$inventory->id}'>";
+    echo "$inventory->name";
+    if (!empty($inventory->identifier))
+    {
+        echo " ({$inventory->identifier})";
+    }
+    elseif (!empty($inventory->address))
+    {
+        echo " ({$inventory->address})";
+    }    
+}
+
 $tags = list_tags($id, TAG_INCIDENT, TRUE);
 if (!empty($tags)) echo "{$tags}\n";
 echo "</td>";
