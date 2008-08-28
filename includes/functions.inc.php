@@ -8321,7 +8321,6 @@ function contract_details($id, $mode='internal')
         $html .= "<a href=\"edit_contract.php?action=edit&amp;maintid=$id\">{$GLOBALS[strEditContract]}</a> | ";
         $html .= "<a href='billing/addservice.php?contractid={$id}'>{$GLOBALS['strAddService']}</a></p>";
     }
-
     $html .= "<h3>{$GLOBALS['strContacts']}</h3>";
 
     if (mysql_num_rows($maintresult) < 1)
@@ -10757,6 +10756,36 @@ function gravatar($email, $size)
     $html = "<img src='{$grav_url}' />";
 
     return $html;
+}
+
+
+/**
+ * Returns the percentage remaining for ALL services on a contract
+ * @author Kieran Hogg
+ * @param string $mainid - contract ID
+ * @returns mixed - percentage between 0 and 1 if services, FALSE if not
+ */
+function get_service_percentage($maintid)
+{
+    global $dbService;
+    if (does_contact_have_billable_contract(maintenance_siteid($maintid)) != NO_BILLABLE_CONTRACT)
+    {
+        $sql = "SELECT * FROM `{$dbService}` ";
+        $sql .= "WHERE contractid = '{$maintid}'";
+        $result = mysql_query($sql);
+        while ($service = mysql_fetch_object($result))
+        {
+            $total += (float) $service->balance / (float) $service->creditamount;
+            $num++;
+        }
+        $return = (float) $total / (float) $num;
+    }
+    else
+    {
+        $return = FALSE;
+    }
+    
+    return $return;
 }
 
 
