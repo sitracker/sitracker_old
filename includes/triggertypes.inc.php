@@ -147,8 +147,8 @@ array('name' => 'Waiting Held Email',
 $triggerarray['TRIGGER_SERVICE_LIMIT'] =
 array('name' => 'Service Limit',
       'description' => 'Occurs when an billable incident is approved',
-      'required' => array('maintid', 'servicelevel'),
-      'params' => array('maintid', 'serviceremaning'),
+      'required' => array('contractid', 'serviceremaning'),
+      'params' => array('contractid', 'serviceremaning'),
       );
 
 plugin_do('trigger_types');
@@ -457,18 +457,36 @@ array('description' => 'The language the user has stored in their profile',
 $ttvararray['{salesperson}'] =
 array('description' => 'Salesperson',
       'requires' => 'siteid',
-      'replacement' => 'user_realname(db_read_column(\'owner\', $GLOBALS[\'dbSites\'], $siteid));'
+      'replacement' => 'user_realname(db_read_column(\'owner\', $GLOBALS[\'dbSites\'], $paramarray[\'siteid\']));'
       );
 
 $ttvararray['{salespersonemail}'] =
 array('description' => $strSalespersonAssignedToContactsSiteEmail,
       'requires' => 'siteid',
-      'replacement' => 'user_email(db_read_column(\'owner\', $GLOBALS[\'dbSites\'], $siteid));'
+      'replacement' => 'user_email(db_read_column(\'owner\', $GLOBALS[\'dbSites\'], $paramarray[\'siteid\']));'
+      );
+
+$ttvararray['{salespersonemail}'] =
+array('description' => $strSalespersonAssignedToContactsSiteEmail,
+      'requires' => 'contractid',
+      'replacement' => 'user_email(db_read_column(\'owner\', $GLOBALS[\'dbSites\'], maintenance_siteid($paramarray[\'contractid\]));'
       );
 
 $ttvararray['{sendemail}'] =
 array('description' => 'Whether to send an opening email or not',
       'replacement' => '$paramarray[\'sendemail\'];'
+     );
+
+$ttvararray['{serviceremaning}'] =
+array('description' => 'The amount of remaining service i.e. 34%',
+      'requires' => 'contractid',
+      'replacement' => 'get_service_percentage($paramarray[\'contractid\']);'
+     );
+
+$ttvararray['{serviceremaningstring}'] =
+array('description' => 'The amount of remaining service i.e. 0.34',
+      'requires' => 'maintid',
+      'replacement' => 'get_service_percentage($paramarray[\'contractid\']) * 100."%"'
      );
 
 $ttvararray['{signature}'] =
