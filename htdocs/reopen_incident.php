@@ -23,9 +23,18 @@ $id = cleanvar($_REQUEST['id']);
 $newstatus = cleanvar($_REQUEST['newstatus']);
 $bodytext = cleanvar($_REQUEST['bodytext']);
 
+$sql = "SELECT * FROM incidents WHERE id = $id LIMIT 1";
+$result = mysql_query($sql);
+if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+if (mysql_num_rows($result) > 0)
+{
+    $incident = mysql_fetch_object($result);
+}
+
 // Find out whether the service level in use allows reopening
 $slsql = "SELECT allow_reopen FROM `{$dbServiceLevels}` ";
 $slsql .= "WHERE tag = '{$incident->servicelevel}' AND priority = '{$incident->priority}' LIMIT 1";
+
 $slresult = mysql_query($slsql);
 if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 if (mysql_num_rows($slresult) > 0)
