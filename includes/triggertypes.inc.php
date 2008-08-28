@@ -140,7 +140,15 @@ $triggerarray['TRIGGER_WAITING_HELD_EMAIL'] =
 array('name' => 'Waiting Held Email',
       'description' => 'strTriggerNewHeldEmailMinsDesc',
       'required' => array('holdingmins'),
-      'params' => array(),
+      'params' => array('holdingmins'),
+      );
+
+
+$triggerarray['TRIGGER_SERVICE_LIMIT'] =
+array('name' => 'Service Limit',
+      'description' => 'Occurs when an billable incident is approved',
+      'required' => array('maintid', 'servicelevel'),
+      'params' => array('maintid', 'serviceremaning'),
       );
 
 plugin_do('trigger_types');
