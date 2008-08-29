@@ -397,16 +397,22 @@ function send_trigger_email($userid, $triggerid, $template, $paramarray)
     $subject = cleanvar(trigger_replace_specials($triggerid, $template->subjectfield, $paramarray));
     $body .= trigger_replace_specials($triggerid, $template->body, $paramarray);
 
-
-    $mailok = send_email($toemail, $from, $subject, $body, $replytoemail, $ccemail, $bccemail);
-    if ($mailok == FALSE)
+    if (!empty($from) AND !empty($toemail) AND !empty($subject) AND !empty($body))
     {
-        trigger_error('Internal error sending email: '. $mailerror.' send_mail() failed', E_USER_ERROR);
-        $return = FALSE;
+        $mailok = send_email($toemail, $from, $subject, $body, $replytoemail, $ccemail, $bccemail);
+        if ($mailok == FALSE)
+        {
+            trigger_error('Internal error sending email: '. $mailerror.' send_mail() failed', E_USER_ERROR);
+            $return = FALSE;
+        }
+        else
+        {
+            $return = TRUE;
+        }
     }
     else
     {
-        $return = TRUE;
+        $return = FALSE;
     }
     return $return;
 }
