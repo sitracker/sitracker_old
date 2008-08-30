@@ -3385,17 +3385,29 @@ function site_name($id)
 }
 
 
-//  prints the HTML for a drop down list of
-// maintenance contracts, with the given name and with the
-// given id selected.
-function maintenance_drop_down($name, $id, $excludes = '', $return = FALSE)
+/**
+ * prints the HTML for a drop down list of maintenance contracts
+ * @param $name name of the drop down box
+ * @param $id 
+ * @param $return Whether to return to HTML or echo
+ * @param $showonlyactive True show only active (with a future expiry date), false shows all
+ * 
+ */
+function maintenance_drop_down($name, $id, $excludes = '', $return = FALSE, $showonlyactive = FALSE)
 {
-    global $GLOBALS;
+    global $GLOBALS, $now;
     // TODO make maintenance_drop_down a hierarchical selection box sites/contracts
     // extract all maintenance contracts
     $sql  = "SELECT s.name AS sitename, p.name AS productname, m.id AS id ";
     $sql .= "FROM `{$GLOBALS['dbMaintenance']}` AS m, `{$GLOBALS['dbSites']}` AS s, `{$GLOBALS['dbProducts']}` AS p ";
-    $sql .= "WHERE site = s.id AND product = p.id ORDER BY s.name ASC";
+    $sql .= "WHERE site = s.id AND product = p.id ";
+    
+    if ($showonlyactive)
+    {
+    	$sql .= "AND m.expirydate > {$now} ";
+    }
+    
+    $sql .= "ORDER BY s.name ASC";
     $result = mysql_query($sql);
     $results = 0;
     // print HTML
@@ -3419,6 +3431,7 @@ function maintenance_drop_down($name, $id, $excludes = '', $return = FALSE)
             $results++;
         }
     }
+    
     if ($results == 0)
     {
         $html .= "<option>{$GLOBALS['strNoRecords']}</option>";
