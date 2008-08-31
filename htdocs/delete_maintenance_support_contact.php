@@ -45,26 +45,26 @@ if (empty($action) OR $action == "showform")
 
     if (empty($maintid))
     {
-        echo "<tr><th>{$strContract} ".icon('contract')."</th>";
+        echo "<tr><th>{$strContract} ".icon('contract', 16)."</th>";
         echo "<td>";
         maintenance_drop_down("maintid", 0);
         echo "</td></tr>";
     }
     else
     {
-        echo "<tr><th>{$strContract} ".icon('contract')."</th>";
-        echo "<td>$maintid";
+        echo "<tr><th>{$strContract} ".icon('contract', 16)."</th>";
+        echo "<td>$maintid - ".contract_product($maintid)." for ".contract_site($maintid);
         echo "<input name=\"maintid\" type=\"hidden\" value=\"$maintid\" /></td></tr>";
     }
 
     if (empty($contactid))
     {
-        echo "<tr><th>{$strSupport} {$strContact} ".icon('contact')."</th><td width='400'>";
+        echo "<tr><th>{$strSupport} {$strContact} ".icon('contact', 16)."</th><td width='400'>";
         echo contact_drop_down("contactid", 0)."</td></tr>";
     }
     else
     {
-        echo "<tr><th>{$strContact} ".icon('contact')."</th><td>{$contactid}";
+        echo "<tr><th>{$strContact} ".icon('contact', 16)."</th><td>{$contactid} - ".contact_realname($contactid);
         echo "<input name='contactid' type='hidden' value='$contactid' /></td></tr>";
     }
 
