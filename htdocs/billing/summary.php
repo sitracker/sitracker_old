@@ -20,7 +20,7 @@ require_once('functions.inc.php');
 require_once('auth.inc.php');
 
 $display = cleanvar($_REQUEST['display']);
-$showfoc = cleanvar($_REQUEST('foc'));
+$showfoc = cleanvar($_REQUEST['foc']);
 
 if (empty($display)) $display = 'html';
 
