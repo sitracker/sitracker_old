@@ -29,6 +29,7 @@ if (empty($submit))
 {
     $title = $strEdit;
     include ('incident_html_top.inc.php');
+
     // extract incident details
     $sql  = "SELECT * FROM `{$dbIncidents}` WHERE id='$id'";
     $result = mysql_query($sql);
@@ -38,41 +39,40 @@ if (empty($submit))
     // SUPPORT INCIDENT
     if ($incident["type"] == "Support")
     {
-        echo "<div id='container'>";
         echo "<form action='{$_SERVER['PHP_SELF']}' method='post' name='editform'>";
-        echo "<h3>{$strTitle}</h3>";
-        echo "<input maxlength='150' name='title' size='40' type='text' value=\"".$incident['title']."\" />\n";
-        echo "<h3>{$strContract}</h3>";
-        echo "<strong>{$strImportant}</strong>: {$strChangingContact}. ";
+        echo "<table class='vertical'>";
+        echo "<tr><th>{$strTitle}:</th><td><input maxlength='150' name='title' size='40' type='text' value=\"".$incident['title']."\" /></td></tr>\n";
+        echo "<tr><th>{$strTags}:</th><td><textarea rows='2' cols='40' name='tags'>".list_tags($id, 2, false)."</textarea></td></tr>\n";
+        echo "<tr><th>{$strImportant}:</th>";
+        echo "<td>{$strChangingContact}. ";
         if ($incident['maintenanceid'] >= 1)
         {
             echo sprintf($strLoggedUnder, $incident['maintenanceid']).". ";
         }
 
         else echo "{$strIncidentNoContract}. ";
-        echo "{$strToChangeContract}.\n";
-        echo "<h3>{$strContact}</h3>";
-        echo contact_drop_down("contact", $incident["contact"], TRUE)."\n";
+        echo "{$strToChangeContract}.";
+        echo "</td></tr>\n";
+        echo "<tr><th>{$strContact}:</th><td>";
+        echo contact_drop_down("contact", $incident["contact"], TRUE)."</td></tr>\n";
         flush();
         $maintid = maintenance_siteid($incident['maintenanceid']);
-        echo "<h3>{$strSite}</h3>".site_name($maintid)."";
-        echo "<h3>{$strSkill}</h3>".software_drop_down("software", $incident["softwareid"])."\n";
-        echo "<h3>{$strVersion}</h3>";
-        echo "<input maxlength='50' name='productversion' size='30' type='text' value=\"{$incident["productversion"]}\" />\n";
-        echo "<h3>{$strServicePacksApplied}</h3>";
-        echo "<input maxlength='100' name='productservicepacks' size='30' type='text' value=\"{$incident["productservicepacks"]}\" />\n";
-        echo "<h3>CC {$strEmail}</h3>";
-        echo "<input maxlength='255' name='ccemail' size='30' type='text' value=\"{$incident["ccemail"]}\" />\n";
-        echo "<h3>{$strEscalation}</h3>";
-        echo "".escalation_path_drop_down('escalationpath', $incident['escalationpath'])."";
-        echo "<h3>{$strExternalID}</h3>";
-        echo "<input maxlength='50' name='externalid' size='30' type='text' value=\"{$incident["externalid"]}\" />\n";
-        echo "<h3>{$strExternalEngineersName}</h3>";
-        echo "<input maxlength='80' name='externalengineer' size='30' type='text' value=\"{$incident["externalengineer"]}\" />\n";
-        echo "<h3>{$strExternalEmail}</h3>";
-        echo "<input maxlength='255' name='externalemail' size='30' type='text' value=\"{$incident["externalemail"]}\" />\n";
-        echo "<h3>{$strTags}</h3>";
-        echo "<textarea rows='2' cols='40' name='tags'>".list_tags($id, 2, false)."</textarea>\n";
+        echo "<tr><th>{$strSite}:</th><td>".site_name($maintid)."</td></tr>";
+        echo "<tr><th>{$strSkill}:</th><td>".software_drop_down("software", $incident["softwareid"])."</td></tr>\n";
+        echo "<tr><th>{$strVersion}:</th>";
+        echo "<td><input maxlength='50' name='productversion' size='30' type='text' value=\"{$incident["productversion"]}\" /></td></tr>\n";
+        echo "<tr><th>{$strServicePacksApplied}:</th>";
+        echo "<td><input maxlength='100' name='productservicepacks' size='30' type='text' value=\"{$incident["productservicepacks"]}\" /></td></tr>\n";
+        echo "<tr><th>CC {$strEmail}:</th>";
+        echo "<td><input maxlength='255' name='ccemail' size='30' type='text' value=\"{$incident["ccemail"]}\" /></td></tr>\n";
+        echo "<tr><th>{$strEscalation}</th>";
+        echo "<td>".escalation_path_drop_down('escalationpath', $incident['escalationpath'])."</td></tr>";
+        echo "<tr><th>{$strExternalID}:</th>";
+        echo "<td><input maxlength='50' name='externalid' size='30' type='text' value=\"{$incident["externalid"]}\" /></td></tr>\n";
+        echo "<tr><th>{$strExternalEngineersName}:</th>";
+        echo "<td><input maxlength='80' name='externalengineer' size='30' type='text' value=\"{$incident["externalengineer"]}\" /></td></tr>\n";
+        echo "<tr><th>{$strExternalEmail}:</th>";
+        echo "<td><input maxlength='255' name='externalemail' size='30' type='text' value=\"{$incident["externalemail"]}\" /></td></tr>\n";
         plugin_do('edit_incident_form');
         echo "</table>\n";
         echo "<p align='center'>";
@@ -94,7 +94,6 @@ if (empty($submit))
 
         echo "<input name='submit' type='reset' value='{$strReset}' /> <input name='submit' type='submit' value='{$strSave}' /></p>";
         echo "</form>\n";
-        echo "</div>";
     }
     include ('incident_html_bottom.inc.php');
 }
