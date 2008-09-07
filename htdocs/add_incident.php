@@ -769,10 +769,13 @@ elseif ($action == 'assign')
             if (empty($servicelevel) OR $servicelevel==0)
             {
                 // FIXME: for now we use id but in future use tag, once maintenance uses tag
-                $servicelevel=maintenance_servicelevel($maintid);
+                $servicelevel = maintenance_servicelevel($maintid);
                 $sql = "SELECT * FROM `{$dbServiceLevels}` WHERE id='$servicelevel' AND priority='$priority' ";
             }
-            else $sql = "SELECT * FROM `{$dbServiceLevels}` WHERE tag='$servicelevel' AND priority='$priority' ";
+            else
+            {
+                $sql = "SELECT * FROM `{$dbServiceLevels}` WHERE tag='$servicelevel' AND priority='$priority' ";
+            }
 
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
@@ -806,7 +809,7 @@ elseif ($action == 'assign')
             plugin_do('incident_created');
 
             // Decrement free support, where appropriate
-            if ($type=='free')
+            if ($type == 'free')
             {
                 decrement_free_incidents(contact_siteid($contactid));
                 plugin_do('incident_created_site');
@@ -824,6 +827,8 @@ elseif ($action == 'assign')
             $html .= "</p>\n";
 
             $suggested_user = suggest_reassign_userid($incidentid);
+            trigger('TRIGGER_INCIDENT_CREATED', array('incidentid' => $incidentid, 'sendemail' => $send_email));
+
             if ($CONFIG['auto_assign_incidents'])
             {
                 html_redirect("add_incident.php?action=reassign&userid={$suggested_user}&incidentid={$incidentid}");
@@ -833,6 +838,7 @@ elseif ($action == 'assign')
             {
                 echo $html;
             }
+
             // List Engineers
             // We need a user type 'engineer' so we don't just list everybody
             // Status zero means account disabled
@@ -923,7 +929,6 @@ elseif ($action == 'assign')
             }
             echo "</table>";
             echo "<p align='center'>{$strUsersBoldSkills}.</p>";
-            trigger('TRIGGER_INCIDENT_CREATED', array('incidentid' => $incidentid, 'sendemail' => $send_email));
         }
         else
         {
@@ -932,7 +937,7 @@ elseif ($action == 'assign')
     }
     include ('htmlfooter.inc.php');
 }
-elseif ($action=='reassign')
+elseif ($action == 'reassign')
 {
     // External variables
     $incidentid = cleanvar($_REQUEST['incidentid']);
