@@ -31,7 +31,7 @@ else
     $selecteduser = $_SESSION['userid'];
 }
 
-$title = $strTriggers;
+$title = $strNotifications;
 
 switch ($_REQUEST['mode'])
 {
