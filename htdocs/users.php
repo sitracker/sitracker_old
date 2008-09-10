@@ -169,6 +169,10 @@ while ($users = mysql_fetch_array($result))
     echo $countactive;
     echo "</a> / <a href='incidents.php?user={$users['id']}&amp;queue=2&amp;";
     echo "type=support'>{$countdiff}</a></td>";
+    $critical += $incpriority['4'];
+    $high += $incpriority['3'];
+    $med += $incpriority['2'];
+    $low += $incpriority['1'];
     echo "<td align='center'>".$incpriority['4']."</td>";
     echo "<td align='center'>".$incpriority['3']."</td>";
     echo "<td align='center'>".$incpriority['2']."</td>";
@@ -230,7 +234,13 @@ while ($users = mysql_fetch_array($result))
     if ($shade == 1) $shade = 0;
     else $shade = 1;
 }
-echo "</table>\n";
+$total = $critical + $high + $med + $low;
+echo "<tr align='center'><td></td><td align='right'>";
+echo "<strong>{$strTotal}</strong> ({$total})</td><td>{$critical}</td>";
+echo "<td>{$high}</td><td>{$med}</td><td>{$low}</td>";
+
+
+echo "</tr></table>\n";
 
 mysql_free_result($result);
 
