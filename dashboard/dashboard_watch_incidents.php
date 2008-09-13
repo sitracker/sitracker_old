@@ -144,7 +144,7 @@ function dashboard_watch_incidents_display($dashletid)
                     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
                     $lobj = mysql_fetch_object($lresult);
                     $html .= "<tr><th colspan='3'>";
-                    printf($GLOBALS['strIncidentsForEngineer'], $lobj->realname);
+                    $html .= sprintf($GLOBALS['strIncidentsForEngineer'], $lobj->realname);
                     $html .= "</th></tr>";
 
                     break;

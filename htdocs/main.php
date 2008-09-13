@@ -234,7 +234,7 @@ echo "<td width=\"33%\" valign='top' id='col0'>";
 $arr = explode(",",$cols0);
 foreach ($arr AS $a)
 {
-    show_dashboard_component(0,$a);
+    show_dashboard_component(0, $a);
 }
 
 echo "</td><td width=\"33%\" valign='top' id='col1'>";
@@ -242,7 +242,7 @@ echo "</td><td width=\"33%\" valign='top' id='col1'>";
 $arr = explode(",",$cols1);
 foreach ($arr AS $a)
 {
-    show_dashboard_component(1,$a);
+    show_dashboard_component(1, $a);
 }
 
 echo "</td><td width=\"33%\" valign=\"top\" id='col2'>";
@@ -250,7 +250,7 @@ echo "</td><td width=\"33%\" valign=\"top\" id='col2'>";
 $arr = explode(",",$cols2);
 foreach ($arr AS $a)
 {
-    show_dashboard_component(2,$a);
+    show_dashboard_component(2, $a);
 }
 
 echo "</td></tr></table>\n";

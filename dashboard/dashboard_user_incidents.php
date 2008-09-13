@@ -34,7 +34,7 @@ function dashboard_user_incidents_display($dashletid)
 
     // Create SQL for chosen queue
     // If you alter this SQL also update the function user_activeincidents($id)
-    if ($user=='current') $user = $sit[2];
+    if ($user == 'current') $user = $sit[2];
     // If the user is passed as a username lookup the userid
     if (!is_number($user) AND $user!='current' AND $user!='all')
     {
@@ -80,19 +80,19 @@ function dashboard_user_incidents_display($dashletid)
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
     $rowcount = mysql_num_rows($result);
     // Toggle Sorting Order
-    if ($sortorder=='ASC')
+    if ($sortorder == 'ASC')
     {
-        $newsortorder='DESC';
+        $newsortorder = 'DESC';
     }
     else
     {
-        $newsortorder='ASC';
+        $newsortorder = 'ASC';
     }
 
     // build querystring for hyperlinks
     $querystring = "?user=$user&amp;queue=$queue&amp;type=$type&amp;";
 
-    if ($user=='all')
+    if ($user == 'all')
     {
         //echo "<p align='center'>There are <strong>{$rowcount}</strong> incidents in this list.</p>";
         echo "<p align='center'>".sprintf($strThereAreXIncidentsInThisList, $rowcount)."</p>";
@@ -118,8 +118,8 @@ function dashboard_user_incidents_display($dashletid)
                 echo "<span>{$update_body}</span>";
             }
             echo "</a></td></tr>\n";
-            if ($shade=='shade1') $shade='shade2';
-            else $shade='shade1';
+            if ($shade == 'shade1') $shade = 'shade2';
+            else $shade = 'shade1';
         }
         echo "</table>";
     }

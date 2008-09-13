@@ -6330,11 +6330,10 @@ function dashlet_link($dashboard, $dashletid, $text='', $action='', $params='', 
 function dashboard_do($context, $row=0, $dashboardid=0)
 {
     global $DASHBOARDCOMP;
-    $dashletid = "{$row}-{$dashboardid}";
     $action = $DASHBOARDCOMP[$context];
     if ($action != NULL || $action != '')
     {
-        if (function_exists($action)) $action($dashletid);
+        if (function_exists($action)) $action($row, $dashboardid);
     }
 }
 
@@ -6349,7 +6348,7 @@ function show_dashboard_component($row, $dashboardid)
     if (mysql_num_rows($result) == 1)
     {
         $obj = mysql_fetch_object($result);
-        dashboard_do("dashboard_".$obj->name,'db_'.$row,$dashboardid);
+        dashboard_do("dashboard_".$obj->name, 'db_'.$row, $dashboardid);
     }
 }
 
