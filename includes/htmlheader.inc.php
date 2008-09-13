@@ -249,7 +249,7 @@ if ($sit[0] != '')
     }
 
     //display (trigger) notices
-    $noticesql = "SELECT * FROM `${GLOBALS['dbNotices']}` ";
+    $noticesql = "SELECT * FROM `{$GLOBALS['dbNotices']}` ";
     // Don't show more than 20 notices, saftey cap
     $noticesql .= "WHERE userid={$sit[2]} ORDER BY timestamp DESC LIMIT 20";
     $noticeresult = mysql_query($noticesql);

@@ -9811,7 +9811,7 @@ if (is_array($CONFIG['plugins']))
         // Remove any slashes
 
         $plugin = str_replace('/','',$plugin);
-        if ($plugin!='')
+        if ($plugin != '')
         {
             include ("{$CONFIG['application_fspath']}plugins/{$plugin}.php");
         }
