@@ -1365,7 +1365,7 @@ function contact_drop_down($name, $id, $showsite = FALSE, $required = FALSE)
         $sql .= "s.name AS sitename, s.department AS department ";
         $sql .= "FROM `{$dbContacts}` AS c, `{$dbSites}` AS s WHERE c.siteid = s.id AND c.active = 'true' ";
         $sql .= "AND s.active = 'true' ";
-        $sql .= "ORDER BY s.name, surname ASC, forenames ASC";
+        $sql .= "ORDER BY s.name, s.department, surname ASC, forenames ASC";
     }
     else
     {
@@ -1391,12 +1391,12 @@ function contact_drop_down($name, $id, $showsite = FALSE, $required = FALSE)
     $prevsite=0;
     while ($contacts = mysql_fetch_array($result))
     {
-        if ($showsite AND $prevsite!= $contacts['siteid'] AND $prevsite!=0)
+        if ($showsite AND $prevsite != $contacts['siteid'] AND $prevsite != 0)
         {
             $html .= "</optgroup>\n";
         }
 
-        if ($showsite AND $prevsite!= $contacts['siteid'])
+        if ($showsite AND $prevsite != $contacts['siteid'])
         {
             $html .= "<optgroup label='".htmlentities($contacts['sitename'], ENT_COMPAT, 'UTF-8').", ".htmlentities($contacts['department'], ENT_COMPAT, $GLOBALS['i18ncharset'])."'>";
         }
@@ -6248,6 +6248,7 @@ function dashlet($dashboard, $dashletid, $icon, $title='', $link='', $content=''
         $html .= "<a href=\"javascript:get_and_display('ajaxdata.php?action=dashboard_display&amp;dashboard={$dashboard}&amp;did={$dashletid}','win{$dashletid}',true);\">";
         $html .= icon('reload', 16, '', '', "refresh{$dashletid}")."</a>";
     }
+    
     if (function_exists($editfn))
     {
         $html .= "<a href=\"javascript:get_and_display('ajaxdata.php?action=dashboard_edit&amp;dashboard={$dashboard}&amp;did={$dashletid}','win{$dashletid}',false);\">";
