@@ -36,7 +36,7 @@ function saction_test()
 function saction_CloseIncidents($closure_delay)
 {
     $success = TRUE;
-    global $dbIncidents, $dbUpdates;
+    global $dbIncidents, $dbUpdates, $CONFIG;
 
     if ($closure_delay < 1) $closure_delay = 554400; // Default  six days and 10 hours
 
@@ -47,7 +47,9 @@ function saction_CloseIncidents($closure_delay)
         trigger_error(mysql_error(),E_USER_WARNING);
         $success = FALSE;
     }
-    if ($verbose) echo "Found ".mysql_num_rows($result)." Incidents to close{$crlf}";
+    
+    if ($CONFIG['debug']) echo "Found ".mysql_num_rows($result)." Incidents to close{$crlf}";
+    
     while ($irow = mysql_fetch_array($result))
     {
         $sqlb = "UPDATE `{$dbIncidents}` SET lastupdated='$now', closed='$now', status='2', closingstatus='4', timeofnextaction='0' WHERE id='".$irow['id']."'";
@@ -57,7 +59,7 @@ function saction_CloseIncidents($closure_delay)
             trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
             $success = FALSE;
         }
-        if ($verbose) echo "  Incident ".$row['id']." closed{$crlf}";
+        if ($CONFIG['debug']) echo "  Incident ".$irow['id']." closed{$crlf}";
 
         $sqlc = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, currentowner, currentstatus, bodytext, timestamp, nextaction, customervisibility) ";
         $sqlc .= "VALUES ('".$irow['id']."', '0', 'closing', '".$irow['owner']."', '".$irow['status']."', 'Incident Closed by {$CONFIG['application_shortname']}', '$now', '', 'show' ) ";
@@ -77,7 +79,7 @@ function saction_CloseIncidents($closure_delay)
 **/
 function saction_PurgeJournal()
 {
-    global $dbJournal;
+    global $dbJournal, $now, $CONFIG;
     $success = TRUE;
     $purgedate = date('YmdHis',($now - $CONFIG['journal_purge_after']));
     $sql = "DELETE FROM `{$dbJournal}` WHERE timestamp < $purgedate";
@@ -87,7 +89,8 @@ function saction_PurgeJournal()
         trigger_error(mysql_error(),E_USER_WARNING);
         $success = FALSE;
     }
-    if ($verbose) echo "Purged ".mysql_affected_rows()." journal entries{$crlf}";
+    
+    if ($CONFIG['debug']) echo "Purged ".mysql_affected_rows()." journal entries{$crlf}";
 
     return $success;
 }
@@ -107,7 +110,7 @@ function saction_TimeCalc()
     // FIXME this should only run INSIDE the working day
     // FIXME ? this will not update the database fully if two SLAs have been met since last run - does it matter ?
 
-    if ($verbose) echo "Calculating SLA times{$crlf}";
+    if ($CONFIG['debug']) echo "Calculating SLA times{$crlf}";
 
     $sql = "SELECT id, title, maintenanceid, priority, slaemail, slanotice, servicelevel, status, owner ";
     $sql .= "FROM `{$dbIncidents}` WHERE status != ".STATUS_CLOSED." AND status != ".STATUS_CLOSING;
@@ -134,7 +137,7 @@ function saction_TimeCalc()
         }
         else $tag = $incident['servicelevel'];
 
-        if ($verbose) echo $incident['id']." is a $tag incident{$crlf}";
+        if ($CONFIG['debug']) echo $incident['id']." is a $tag incident{$crlf}";
 
         $newReviewTime = -1;
         $newSlaTime = -1;
@@ -150,13 +153,13 @@ function saction_TimeCalc()
 
         if (mysql_num_rows($update_result) != 1)
         {
-            if ($verbose) echo "Cannot find SLA information for incident ".$incident['id'].", skipping{$crlf}";
+            if ($CONFIG['debug']) echo "Cannot find SLA information for incident ".$incident['id'].", skipping{$crlf}";
         }
         else
         {
             $slaInfo = mysql_fetch_array($update_result);
             $newSlaTime = calculate_incident_working_time($incident['id'],$slaInfo['timestamp'],$now);
-            if ($verbose)
+            if ($CONFIG['debug'])
             {
                 echo "   Last SLA record is ".$slaInfo['sla']." at ".date("jS F Y H:i",$slaInfo['timestamp'])." which is $newSlaTime working minutes ago{$crlf}";
             }
@@ -174,13 +177,13 @@ function saction_TimeCalc()
 
         if (mysql_num_rows($update_result) != 1)
         {
-            if ($verbose) echo "   Cannot find review information for incident ".$incident['id'].", skipping{$crlf}";
+            if ($CONFIG['debug']) echo "   Cannot find review information for incident ".$incident['id'].", skipping{$crlf}";
         }
         else
         {
             $reviewInfo = mysql_fetch_array($update_result);
             $newReviewTime = floor($now-$reviewInfo['timestamp'])/60;
-            if ($verbose)
+            if ($CONFIG['debug'])
             {
                 if ($reviewInfo['currentowner'] != 0) echo "   There has been no review on this incident, which was opened $newReviewTime minutes ago{$crlf}";
                 else echo "   The last review took place $newReviewTime minutes ago{$crlf}";
@@ -234,7 +237,7 @@ function saction_TimeCalc()
             $times = mysql_fetch_assoc($result);
             mysql_free_result($result);
 
-            if ($verbose)
+            if ($CONFIG['debug'])
             {
                 echo "   The next SLA target should be met in ".$times['next_sla_time']." minutes{$crlf}";
                 echo "   Reviews need to be made every ".($times['review_days']*24*60)." minutes{$crlf}";
@@ -268,7 +271,7 @@ function saction_TimeCalc()
 
 function saction_SetUserStatus()
 {
-    global $dbHolidays, $dbUsers;
+    global $dbHolidays, $dbUsers, $CONFIG;
     // Find users with holidays today who don't have correct status
     $success = TRUE;
     $startdate = mktime(0,0,0,date('m'),date('d'),date('Y'));
@@ -351,10 +354,10 @@ function saction_SetUserStatus()
                 $usql .= " WHERE id='{$huser->userid}' LIMIT 1";
                 if ($accepting == 'No') incident_backup_switchover($huser->userid, 'no');
                 
-                if ($verbose)
+                if ($CONFIG['debug'])
                 {
-                    echo user_realname($huser->userid).': '.userstatus_name($currentstatus).' -> '.userstatus_name($newstatus).$crlf;
-                    echo $usql.$crlf;
+                    echo user_realname($huser->userid).': '.userstatus_name($currentstatus).' -> '.userstatus_name($newstatus)."\n";
+                    echo "{$usql}\n";
                 }
                 
                 mysql_query($usql);

@@ -59,7 +59,7 @@ function to_row($contactrow)
         }
         else
         {
-            $str .= "(".sprintf($strRemaining, $incidents_remaining).")";
+            $str .= "(".sprintf($GLOBALS['strRemaining'], $incidents_remaining).")";
         }
     }
     $str .=  "</td>";
