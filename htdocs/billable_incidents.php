@@ -89,15 +89,18 @@ if (empty($mode))
     echo "<table align='center'>";
 
     echo "<tr><th>{$strType}:</th><td>";
-    echo "<input type='radio' name='mode' value='summarypage' id='summarypage' onclick=\"$('startdatesection').hide(); $('enddatesection').hide(); $('sitebreakdownsection').hide(); $('displaysection').show(); $('showapprovedsection').hide(); $('showfoc').show();\" checked='checked' />{$strSummary} ";
+    echo "<input type='radio' name='mode' value='summarypage' id='summarypage' onclick=\"$('startdatesection').hide();" .
+            " $('enddatesection').hide(); $('sitebreakdownsection').hide(); $('displaysection').show(); $('showapprovedsection').hide(); $('showfoc').show(); $('showfocaszero').show();\" checked='checked' />{$strSummary} ";
     if (user_permission($sit[2], 73) == TRUE)
     {
-        echo "<input type='radio' name='mode' value='approvalpage' id='approvalpage' onclick=\"$('startdatesection').show(); $('enddatesection').show(); $('sitebreakdownsection').hide(); $('displaysection').hide(); $('showapprovedsection').show(); $('showfoc').hide();\" />{$strApprove} ";
+        echo "<input type='radio' name='mode' value='approvalpage' id='approvalpage' onclick=\"$('startdatesection').show();" .
+                " $('enddatesection').show(); $('sitebreakdownsection').hide(); $('displaysection').hide(); $('showapprovedsection').show(); $('showfoc').hide(); $('showfocaszero').hide();\" />{$strApprove} ";
     }
 
     if (user_permission($sit[2], 76) == TRUE)
     {
-        echo "<input type='radio' name='mode' value='transactions' id='transactions' onclick=\"$('startdatesection').show(); $('enddatesection').show(); $('sitebreakdownsection').show(); $('displaysection').show(); $('showapprovedsection').hide(); $('showfoc').show();\" />{$strTransactions} ";
+        echo "<input type='radio' name='mode' value='transactions' id='transactions' onclick=\"$('startdatesection').show(); " .
+                "$('enddatesection').show(); $('sitebreakdownsection').show(); $('displaysection').show(); $('showapprovedsection').hide(); $('showfoc').show(); $('showfocaszero').show();\" />{$strTransactions} ";
     }
     echo "</td></tr>\n";
 
@@ -120,6 +123,9 @@ if (empty($mode))
 
     echo "<tbody id='showfoc'><tr><th>{$strShowFreeOfCharge}</th>";
     echo "<td><input type='checkbox' id='foc' name='foc' value='show' checked /></td></tr></tbody>";
+
+    echo "<tbody id='showfocaszero'><tr><th>{$strShowFreeOfChargeAsZero}</th>";
+    echo "<td><input type='checkbox' id='focaszero' name='focaszero' value='show' checked /></td></tr></tbody>";
 
     echo "<tbody id='displaysection' ><tr><th>{$strOutput}:</th>";
     echo "<td><input type='radio' name='display' value='html' checked='checked' /> {$strScreen}";

@@ -21,6 +21,7 @@ require_once('auth.inc.php');
 
 $display = cleanvar($_REQUEST['display']);
 $showfoc = cleanvar($_REQUEST['foc']);
+$focaszero = cleanvar($_REQUEST['focaszero']);
 
 if (empty($display)) $display = 'html';
 
@@ -76,7 +77,7 @@ if (mysql_numrows($result) > 0)
         if ($obj->unitrate != 0) $unitsat1times = round(($obj->balance/$obj->unitrate), 2);
         else $unitsat1times = 0;
         
-        if ($obj->foc == 'yes')
+        if ($obj->foc == 'yes' AND !empty($focaszero))
         {
 			$obj->creditamount = 0;
 			$obj->balance = 0;

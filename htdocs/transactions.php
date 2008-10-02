@@ -32,6 +32,7 @@ $sites = $_REQUEST['sites'];
 $display = cleanvar($_REQUEST['display']);
 if (empty($display)) $display = 'html';
 $showfoc = cleanvar($_REQUEST['foc']);
+$focaszero = cleanvar($_REQUEST['focaszero']);
 
 if (empty($showfoc) OR $showfoc != 'show') $showfoc = FALSE;
 else $showfoc = TRUE;
@@ -49,7 +50,7 @@ if (!empty($enddate))
 if ($sitebreakdown == 'on') $sitebreakdown = TRUE;
 else $sitebreakdown = FALSE;
 
-$text = transactions_report($serviceid, $startdate, $enddate, $sites, $display, $sitebreakdown, $showfoc);
+$text = transactions_report($serviceid, $startdate, $enddate, $sites, $display, $sitebreakdown, $showfoc, $focaszero);
 
 if ($display == 'html')
 {

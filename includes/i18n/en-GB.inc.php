@@ -1174,6 +1174,7 @@ $strShowingXtoXofX = 'Showing %s to %s of %s';
 $strShowingXofX = 'Showing %s of %s';
 $strShowingOnlyRelevantArticles = 'Showing only relevant articles';
 $strShowFreeOfCharge = 'Show Free of Charge';
+$strShowFreeOfChargeAsZero = 'Show Free of Charge as Zero';
 $strShowMine = 'Show Mine';
 $strShowOnlyRelevant = 'Show only relevant';
 $strShowOpenIncidents = 'Show open incidents';

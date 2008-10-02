@@ -10479,7 +10479,7 @@ function get_billable_contract_id($contactid)
  * @param boolean showfoc - Show free of charge as well (defaults to true);
  * @return String -either HTML or CSV
  */
-function transactions_report($serviceid, $startdate, $enddate, $sites, $display, $sitebreakdown=TRUE, $showfoc=TRUE)
+function transactions_report($serviceid, $startdate, $enddate, $sites, $display, $sitebreakdown=TRUE, $showfoc=TRUE, $focaszero=FALSE)
 {
 	global $CONFIG;
 
@@ -10543,6 +10543,11 @@ function transactions_report($serviceid, $startdate, $enddate, $sites, $display,
 	            $str .= site_name($transaction->site)."\",";
 	            $str .= "\"".html_entity_decode($transaction->description)."\",";
 	        }
+
+            if ($focaszero)
+            {
+            	$transaction->amount = 0;
+            }
 
 	        $total += $transaction->amount;
 	        if ($transaction->amount < 0)
