@@ -162,7 +162,7 @@ function feedback_html_text($name, $required, $options, $answer='')
     $cols = $option_list[0] ? $option_list[0] : 60;
     $rows = $option_list[1] ? $option_list[1] : 5;
 
-    if ($rows==1)
+    if ($rows == 1)
     {
         $html .= "<input type='text' name='{$name}' size='{$cols}' value='{$answer}' />\n";
     }
@@ -203,7 +203,7 @@ function feedback_html_question($type, $name, $required, $options, $answer='')
         break;
 
         default:
-            $html = sprintf($strErrorNoHandlerDefinedForQuestionTypeX, $type);
+            $html = sprintf($GLOBALS['strErrorNoHandlerDefinedForQuestionTypeX'], $type);
         break;
   }
   return $html;
@@ -450,12 +450,13 @@ body { font:10pt Arial, Helvetica, sans-serif; }
                 echo "<input type='hidden' name='ax' value='".strip_tags($_REQUEST['ax'])."' />\n";
                 echo "<input type='submit' value='Submit' />\n";
                 echo "</form>\n";
-                if ($reqd>=1)
+                if ($reqd >= 1)
                 {
                     echo "<p><sup style='color: red; font-size: 120%;'>*</sup> {$strQuestionRequired}</p>";
                 }
             }
         }
+        
         if ($_REQUEST['mode']!='bare')
         {
             include ('htmlfooter.inc.php');
