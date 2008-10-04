@@ -502,6 +502,27 @@ INSERT INTO `{$dbInterfaceStyles}` (`id`, `name`, `cssurl`, `iconset`, `headerht
 (15, 'Richard', 'sit15.css', 'sit', ''),
 (16, 'Cake', 'sit_cake.css', 'sit', '');
 
+CREATE TABLE `{$dbInventory}` (
+  `id` int(11) NOT NULL auto_increment,
+  `identifier` varchar(255) default NULL,
+  `name` varchar(255) NOT NULL,
+  `siteid` int(11) NOT NULL,
+  `contactid` int(11) NOT NULL,
+  `address` varchar(255) NOT NULL,
+  `url` varchar(255) default NULL,
+  `username` varchar(255) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `type` varchar(255) NOT NULL,
+  `notes` text,
+  `createdby` int(11) NOT NULL,
+  `created` datetime NOT NULL,
+  `modified` datetime NOT NULL,
+  `modifiedby` int(11) NOT NULL,
+  `active` tinyint(1) NOT NULL default '1',
+  `privacy` enum('none','adminonly','private') NOT NULL default 'none',
+  PRIMARY KEY  (`id`),
+  KEY `siteid` (`siteid`,`contactid`)
+) ENGINE=MyISAM;
 
 CREATE TABLE `{$dbJournal}` (
   `id` int(11) NOT NULL auto_increment,
@@ -1330,6 +1351,7 @@ INSERT INTO `{$dbTriggers}` (`triggerid`, `userid`, `action`, `template`, `param
 INSERT INTO `{$dbTriggers}` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_HOLIDAY_REQUESTED', 0, 'ACTION_EMAIL', 'EMAIL_HOLIDAY_REQUESTED', '', '');
 INSERT INTO `{$dbTriggers}` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_INCIDENT_CLOSED', 0, 'ACTION_EMAIL', 'EMAIL_INCIDENT_CLOSURE', '', '( {notifycontact} == 1 ) AND ( {awaitingclosure} == 1 )');
 INSERT INTO `{$dbTriggers}` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_INCIDENT_CLOSED', 0, 'ACTION_EMAIL', 'EMAIL_EXTERNAL_INCIDENT_CLOSURE', '', '{notifyexternal} == 1');
+INSERT INTO `{$dbTriggers}` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_SERVICE_LIMIT' , 0, 'ACTION_EMAIL', 'EMAIL_SERVICE_LEVEL', '', '{serviceremaining} <= 0.2');
 
 CREATE TABLE `{$dbUpdates}` (
   `id` int(11) NOT NULL auto_increment,
