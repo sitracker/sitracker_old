@@ -96,12 +96,12 @@ if (empty($submit) OR !empty($_SESSION['formerrors']['add_service']))
     echo "<tr><th>{$strCreditAmount}</th>";
     echo "<td>{$CONFIG['currency_symbol']} ";
     echo "<input class='required' type='text' name='amount' size='5' />";
-    echo " <span class='required'>{$strRequired}</span><</td></tr>";
+    echo " <span class='required'>{$strRequired}</span></td></tr>";
 
     echo "<tr id='unitratesection'><th>{$strUnitRate}</th>";
     echo "<td>{$CONFIG['currency_symbol']} ";
     echo "<input class='required' type='text' name='unitrate' size='5' />";
-    echo " <span class='required'>{$strRequired}</span><</td></tr>";
+    echo " <span class='required'>{$strRequired}</span></td></tr>";
 
     echo "<tr id='incidentratesection' style='display:none'><th>{$strIncidentRate}</th>";
     echo "<td>{$CONFIG['currency_symbol']} ";
@@ -140,7 +140,7 @@ else
     else $startdate = date('Y-m-d',$now);
     $enddate = strtotime($_REQUEST['enddate']);
     if ($enddate > 0) $enddate = date('Y-m-d',$enddate);
-    else $enddate = date('Y-m-d',$now);
+    else $enddate = date('Y-m-d',strtotime($startdate)+31556926); // No date set so we default to one year after start
     $amount =  cleanvar($_POST['amount']);
     if ($amount == '') $amount = 0;
     $unitrate =  cleanvar($_POST['unitrate']);

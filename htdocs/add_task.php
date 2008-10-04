@@ -42,6 +42,25 @@ if ($incident)
     $sql = "INSERT INTO `{$dbLinks}` VALUES(4, {$taskid}, {$incident}, 'left', {$sit[2]})";
     mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+    
+    $sql = "SELECT status FROM `{$dbIncidents}` WHERE id = {$incident}";
+    $result = mysql_query($sql);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+    
+    if (($obj = mysql_fetch_object(($result))) AND $obj->status != 1 AND $obj->status != 3)
+    {
+    	$sql = "UPDATE `{$dbIncidents}` SET status = 1, lastupdated = {$now} WHERE id = {$incident}";
+        mysql_query($sql);
+        if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+        
+        $bodytext = "Status: ".incidentstatus_name($obj->status)." -&gt; <b>" . incidentstatus_name(1) . "</b>\n\n" . $srtrTaskStarted;
+        
+        $sql = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, currentowner, currentstatus, bodytext, timestamp) VALUES ";
+        $sql .= "({$incident}, {$sit[2]}, 'research', {$sit[2]}, 1, '{$bodytext}', $now)";
+        mysql_query($sql);
+        if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+    }
+    
     html_redirect("tasks.php?incident={$incident}", TRUE, $strActivityAdded);
 }
 

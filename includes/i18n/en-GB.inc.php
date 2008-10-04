@@ -1271,6 +1271,7 @@ $strTaskDeletedSuccessfully = 'Task deleted successfully';
 $strTaskEditedSuccessfully = 'Task edited successfully';
 $strTaskMarkedCompleteSuccessfully = 'Task marked completed successfully';
 $strTaskPrivateError = 'Sorry, you cannot view this task as it has been marked private and you are not the owner';
+$srtrTaskStarted = 'Task started';
 $strTBytes = 'TBytes';
 $strTechnicalSupportAdmin = 'Technical Support Admin';
 # Abbreviation for 'Telephone'
