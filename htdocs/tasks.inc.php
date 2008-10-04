@@ -199,7 +199,10 @@ function countUp()
         $("duration"+dataArray[i].id).innerHTML = "<em>"+str+"</em>";
     }
 
-    $('totalduration').innerHTML = formatSeconds(closed);
+    if ($('totalduration') != null)
+    {
+        $('totalduration').innerHTML = formatSeconds(closed);
+     }
 }
 
 setInterval("countUp()", 1000); //every 1 seconds
