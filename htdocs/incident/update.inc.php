@@ -224,13 +224,8 @@ function display_update_page($draftid=-1)
     //-->
     </script>
     <?php
-    if (!empty($_SESSION['formerrors']['update']))
-    {
-        foreach ($_SESSION['formerrors']['update'] as $error)
-        {
-            echo $error;
-        }
-    }
+    
+    echo show_form_errors('update');
     clear_form_errors('update');
 
     //echo "<form action='".$_SERVER['PHP_SELF']."?id={$id}&amp;draftid={$draftid}' method='post' name='updateform' id='updateform' enctype='multipart/form-data'>";
@@ -517,7 +512,7 @@ else
         !preg_match('/[a-z0-9]+/i', $bodytext)))
     {
         //FIXME 3.40 make this two errors and i18n for
-        $_SESSION['formerrors']['update'][] = "<p class='error'>{$strYouMissedARequiredField}</p>";
+        $_SESSION['formerrors']['update'][] = $strYouMissedARequiredField;
         html_redirect($_SERVER['PHP_SELF']."?id={$id}", FALSE);
         exit;
     }
