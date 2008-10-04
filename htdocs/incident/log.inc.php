@@ -103,45 +103,6 @@ function log_nav_bar()
     return $nav;
 }
 
-function nav_icons($count, &$result)
-{
-    $html = "<div class='detaildate'>";
-    if ($count==0)
-    {
-        if ($offset > 0)
-        {
-            $html .= "<a href='{$_SERVER['PHP_SELF']}?id={$incidentid}&amp;";
-            $html .= "javascript=enabled&amp;offset={$previous}&amp;direction=";
-            $html .= "previous' class='info'>";
-            $html .= icon('navup', 16, $GLOBALS['strPreviousUpdate'])."</a>";
-        }
-    }
-    else
-    {
-        $html .= "<a href='#update".($count-1)."' class='info'>";
-        $html .= icon('navup', 16, $GLOBALS['strPreviousUpdate'])."</a>";
-    }
-
-    if ($count == ($_SESSION['num_update_view']-1) OR $count==mysql_num_rows($result)-1)
-    {
-        if ($offset < ($count_updates - $_SESSION['num_update_view']))
-        {
-            $html .= "<a href='{$_SERVER['PHP_SELF']}?id={$incidentid}&amp;";
-            $html .= "javascript=enabled&amp;offset={$next}&amp;direction=next' ";
-            $html .= "class='info'>";
-            $html .= icon('navdown', 16, $GLOBALS['strNextUpdate'])."</a>";
-        }
-    }
-    else
-    {
-        $html .= "<a href='#update".($count+1)."' class='info'>";
-        $html .= icon('navdown', 16, $GLOBALS['strNextUpdate'])."</a>";
-    }
-    $html .= "</div>";
-
-    return $html;
-}
-
 $records = strtolower(cleanvar($_REQUEST['records']));
 
 if ($incidentid=='' OR $incidentid < 1)
