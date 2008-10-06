@@ -409,7 +409,7 @@ elseif ($_REQUEST['mode'] == 'report')
     $sql_esc .= " GROUP BY incidentid";
 
     $result_esc = mysql_query($sql_esc);
-    if (mysql_error()) throw_error("!Error: MySQL Query Error in ($sql_esc)",mysql_error());
+    if (mysql_error()) trigger_error("!Error: MySQL Query Error in ($sql_esc)",mysql_error(), E_USER_WARNING);
     $numrows_esc = mysql_num_rows($result_esc);
 
     $escalated_array = array($numrows_esc);

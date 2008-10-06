@@ -36,33 +36,33 @@ if (!empty($addword))
 
 if (!isset($spellid))
 {
-    if (!isset($updateid)) throw_error('!Error no updateid or spellid', '');
+    if (!isset($updateid)) trigger_error('!Error no updateid or spellid', E_USER_WARNING);
     $sql = "SELECT bodytext FROM `{$dbUpdates}` WHERE id='$updateid'";
-    $result=mysql_query($sql);
+    $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
     list($bodytext) = mysql_fetch_row($result);
     $isql = "INSERT INTO `{$dbSpellCheck}` (updateid, bodytext) VALUES ('$updateid', '".mysql_real_escape_string($bodytext)."')";
-    $result=mysql_query($isql);
+    $result = mysql_query($isql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-    if (!$result) throw_error("Problem inserting spellcheck temp data", '');
-    $spellid=mysql_insert_id();
+    if (!$result) trigger_error("Problem inserting spellcheck temp data", E_USER_WARNING);
+    $spellid = mysql_insert_id();
 }
 else
 {
     $sql = "SELECT updateid, bodytext FROM `{$dbSpellCheck}` WHERE id='$spellid'";
-    $result=mysql_query($sql);
+    $result = mysql_query($sql);
     list($updateid, $bodytext) = mysql_fetch_row($result);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
 }
 
-if (isset($changepos) && $changepos>0)
+if (isset($changepos) && $changepos > 0)
 {
     ## echo "Change position $changepos to word: $replacement<br />";
-    $texttospell=replace_word($bodytext, $changepos, $replacement);
+    $texttospell = replace_word($bodytext, $changepos, $replacement);
     $sql =  "UPDATE `{$dbSpellCheck}` SET bodytext='".mysql_real_escape_string($texttospell)."' WHERE id='$spellid'";
-    $result=mysql_query($sql);
+    $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-    if (!$result) throw_error("Problem updating spellcheck temp data", '');
+    if (!$result) trigger_error("Problem updating spellcheck temp data", E_USER_WARNING);
     echo $newtext;
 }
 else

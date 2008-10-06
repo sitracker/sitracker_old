@@ -39,7 +39,10 @@ if ($action == 'save')
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
-    if (!$result) throw_error('Update of product failed:',$sql);
+    if (!$result)
+    {
+         trigger_error("Update of product failed: {$sql}", E_USER_WARNING);
+    }
     else
     {
         journal(CFG_LOGGING_NORMAL, 'Product Edited', "Product $productid was edited", CFG_JOURNAL_PRODUCTS, $productid);
@@ -59,7 +62,7 @@ else
 
     $sql = "SELECT * FROM `{$dbProducts}` WHERE id='$id' ";
     $result = mysql_query($sql);
-    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
+    if (mysql_error()) trigger_error("MySQL Query Error: ".mysql_error(), E_USER_WARNING);
 
     $row = mysql_fetch_object($result);
 

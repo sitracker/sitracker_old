@@ -36,7 +36,7 @@ switch ($mode)
   break;
 
   default:
-    throw_error("Error showing/hiding update $updateid.", 'invalid mode');
+    trigger_error("Error showing/hiding update {$updateid}: invalid mode", E_USER_WARNING);
 }
 
 $temp_result = mysql_query($vsql);

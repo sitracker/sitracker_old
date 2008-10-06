@@ -197,11 +197,14 @@ else if ($action == "update")
     if ($errors == 0)
     {
         // update contact
-        if ($dataprotection_email != '') $dataprotection_email='Yes'; else $dataprotection_email='No';
-        if ($dataprotection_phone  != '') $dataprotection_phone='Yes'; else $dataprotection_phone='No';
-        if ($dataprotection_address  != '') $dataprotection_address='Yes'; else $dataprotection_address='No';
+        if ($dataprotection_email != '') $dataprotection_email = 'Yes'; 
+        else $dataprotection_email = 'No';
+        if ($dataprotection_phone  != '') $dataprotection_phone = 'Yes'; 
+        else $dataprotection_phone = 'No';
+        if ($dataprotection_address  != '') $dataprotection_address = 'Yes'; 
+        else $dataprotection_address = 'No';
 
-        if ($active=='true') $activeStr = 'true';
+        if ($active == 'true') $activeStr = 'true';
         else $activeStr = 'false';
 
         /*
@@ -219,7 +222,10 @@ else if ($action == "update")
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
-        if (!$result) throw_error('Update of contact failed:',$sql);
+        if (!$result)
+        {
+            trigger_error("Update of contact failed: {$sql}", E_USER_WARNING);
+        }
         else
         {
             plugin_do('save_contact_form');

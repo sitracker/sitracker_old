@@ -8,6 +8,7 @@
 // of the GNU General Public License, incorporated herein by reference.
 //
 // FIXME needs i18n
+// TODO HTML to PHP
 
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 @include ('set_include_path.inc.php');
@@ -148,20 +149,19 @@ else
     {
         $filepath = $CONFIG['attachment_fspath'].$file_name;
         $mv = move_uploaded_file($_FILES['file']['tmp_name'], $filepath);
-        if (!mv) throw_error('!Error: Problem moving uploaded file from temp directory:',$filepath);
+        if (!mv) trigger_error("Problem moving uploaded file from temp directory: {$filepath}", E_USER_WARNING);
 
-        if (!file_exists($filepath)) throw_error("Error the temporary upload file ($file) was not found at: ",$filepath);
+        if (!file_exists($filepath)) trigger_error("Error the temporary upload file ($file) was not found at: {$filepath}", E_USER_WARNING);
 
         // Check file size
         $filesize = filesize($filepath);
         if ($filesize > $CONFIG['upload_max_filesize'])
         {
-            throw_error('User Error: Attachment too large or file ('.$file.') upload error - size:',filesize($filepath));
+            trigger_error("User Error: Attachment too large or file ('.$file.') upload error - size: ".filesize($filepath), E_USER_WARNING);
             // throwing an error isn't the nicest thing to do for the user but there seems to be no way of
             // checking file sizes at the client end before the attachment is uploaded. - INL
         }
-        if ($filesize == FALSE) throw_error('Error handling uploaded file:',$file);
-
+        if ($filesize == FALSE) trigger_error("Error handling uploaded file: {$file}", E_USER_WARNING);
 
         // set up basic connection
         $conn_id = create_ftp_connection();
@@ -169,12 +169,10 @@ else
         $destination_filepath = $CONFIG['ftp_path'] . $file_name;
 
         // check the source file exists
-        if (!file_exists($filepath)) throw_error('Source file cannot be found', $filepath);
-        ## throw_error('dest', $destination_filepath);
-
+        if (!file_exists($filepath)) trigger_error("Source file cannot be found: {$filepath}", E_USER_WARNING);
 
         // set passive mode if required
-        if (!ftp_pasv($conn_id, $CONFIG['ftp_pasv'])) throw_error("Error: Problem setting passive ftp mode", '');
+        if (!ftp_pasv($conn_id, $CONFIG['ftp_pasv'])) trigger_error("Problem setting passive ftp mode", E_USER_WARNING);
 
         // upload the file
         $upload = ftp_put($conn_id, "$destination_filepath", "$filepath", FTP_BINARY);
@@ -196,7 +194,7 @@ else
             journal(CFG_LOGGING_NORMAL, 'FTP File Uploaded', "FTP File $file_name Uploaded", CFG_JOURNAL_OTHER, 0);
 
             html_redirect('ftp_upload_file.php');
-            echo "<code>$ftp_url</code>";
+            echo "<code>{$ftp_url}</code>";
         }
 
         // close the FTP stream

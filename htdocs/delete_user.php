@@ -28,38 +28,38 @@ if (!empty($userid))
     // Check there are no files linked to this user
     $sql = "SELECT userid FROM `{$dbFiles}` WHERE userid=$userid LIMIT 1";
     $result = mysql_query($sql);
-    if (mysql_num_rows($result)>=1) $errors++;
+    if (mysql_num_rows($result) >= 1) $errors++;
 
     // check there are no links linked to this product
     $sql = "SELECT userid FROM `{$dbLinks}` WHERE userid=$userid LIMIT 1";
     $result = mysql_query($sql);
-    if (mysql_num_rows($result)>=1) $errors++;
+    if (mysql_num_rows($result) >= 1) $errors++;
 
     // check there are no notes linked to this product
     $sql = "SELECT userid FROM `{$dbNotes}` WHERE userid=$userid LIMIT 1";
     $result = mysql_query($sql);
-    if (mysql_num_rows($result)>=1) $errors++;
+    if (mysql_num_rows($result) >= 1) $errors++;
 
     // Check there is no software linked to this user
     $sql = "SELECT softwareid FROM `{$dbUserSoftware}` WHERE userid=$userid LIMIT 1";
     $result = mysql_query($sql);
-    if (mysql_num_rows($result)>=1) $errors++;
+    if (mysql_num_rows($result) >= 1) $errors++;
 
     // Check there are no incidents linked to this user
     $sql = "SELECT id FROM `{$dbIncidents}` WHERE owner=$userid OR towner=$userid LIMIT 1";
     $result = mysql_query($sql);
-    if (mysql_num_rows($result)>=1) $errors++;
+    if (mysql_num_rows($result) >= 1) $errors++;
 
     // Check there are no updates by this user
     $sql = "SELECT id FROM `{$dbUpdates}` WHERE userid=$userid LIMIT 1";
     $result = mysql_query($sql);
-    if (mysql_num_rows($result)>=1) $errors++;
+    if (mysql_num_rows($result) >= 1) $errors++;
 
     // FIXME need to check more tables for data possibly linked to userid
     // We break data integrity if we delete the user and there are things
     // related to him/her
 
-    if ($errors==0)
+    if ($errors == 0)
     {
         $sql = Array();
         $sql[] = "DELETE FROM `{$dbUsers}` WHERE id = $userid LIMIT 1";
@@ -86,6 +86,6 @@ if (!empty($userid))
 }
 else
 {
-    throw_error("Could not delete user", "Parameter(s) missing");
+    trigger_error("Cound not delete user: Parameter(s) missing", E_USER_WARNING);
 }
 ?>

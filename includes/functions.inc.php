@@ -1060,7 +1060,7 @@ function incident_maintid($id)
     $maintid = db_read_column('maintenanceid', $GLOBALS['dbIncidents'], $id);
     if ($maintid == '')
     {
-        throw_error("!Error: No matching record while reading in incident_maintid() Incident ID:", $id);
+        trigger_error("!Error: No matching record while reading in incident_maintid() Incident ID: {$id}", E_USER_WARNING);
     }
     else
     {
@@ -3649,11 +3649,11 @@ function html_checkbox($name, $state, $return = FALSE)
 */
 function send_template_email($template, $incidentid, $info1='', $info2='')
 {
-    throw_error("send_template_email() is deprecated in 3.40+", "Use trigger() instead");
+    trigger_error("send_template_email() is deprecated in 3.40+", "Use trigger() instead", E_USER_WARNING);
     global $CONFIG, $application_version_string, $sit, $now;
     global $dbUpdates, $dbEmailTemplates;
-    if (empty($template)) throw_error('Blank template ID:', 'send_template_email()');
-    if (empty($incidentid)) throw_error('Blank incident ID:', 'send_template_email()');
+    if (empty($template)) trigger_error('Blank template ID:', 'send_template_email()', E_USER_WARNING);
+    if (empty($incidentid)) trigger_error('Blank incident ID:', 'send_template_email()', E_USER_WARNING);
 
     if (is_numeric($template))
     {
@@ -3804,7 +3804,7 @@ if (!function_exists('list_dir'))
         $dirname .= $delim;
 
         $handle = opendir($dirname);
-        if ($handle == FALSE) throw_error('Error in list_dir() Problem attempting to open directory',$dirname);
+        if ($handle == FALSE) trigger_error('Error in list_dir() Problem attempting to open directory: {$dirname}',E_USER_WARNING);
 
         while ($file = readdir($handle))
         {
@@ -3859,16 +3859,16 @@ if (!function_exists('is_number'))
 // recursive copy from one directory to another
 function rec_copy ($from_path, $to_path)
 {
-    if ($from_path=='') throw_error('Cannot move file', 'from_path not set');
-    if ($to_path=='') throw_error('Cannot move file', 'to_path not set');
+    if ($from_path == '') trigger_error('Cannot move file', 'from_path not set', E_USER_WARNING);
+    if ($to_path == '') trigger_error('Cannot move file', 'to_path not set', E_USER_WARNING);
 
-    $mk=mkdir($to_path, 0700);
-    if (!$mk) throw_error('Failed creating directory: ',$to_path);
+    $mk = mkdir($to_path, 0700);
+    if (!$mk) trigger_error('Failed creating directory: {$to_path}',E_USER_WARNING);
     $this_path = getcwd();
     if (is_dir($from_path))
     {
         chdir($from_path);
-        $handle=opendir('.');
+        $handle = opendir('.');
         while (($file = readdir($handle)) !== false)
         {
             if (($file != ".") && ($file != ".."))
@@ -4074,7 +4074,7 @@ function spellcheck_text($text, $urltext)
     pspell_config_repl ($pspell_config, $CONFIG['main_dictionary_file']);
     $pspell_link = pspell_new_personal ($CONFIG['custom_dictionary_file'], 'en' , 'british', '', 'iso8859-1', PSPELL_FAST);
 
-    if (!$pspell_link) throw_error('Dictionary Link Error','');
+    if (!$pspell_link) trigger_error('Dictionary Link Error', E_USER_WARNING);
 
     // try and stop html getting through in the source text (INL 2July03)
     $text = str_replace('<','&#060;', $text);
@@ -4112,7 +4112,7 @@ function spellcheck_text($text, $urltext)
                 $suggestions = pspell_suggest($pspell_link, $word);
                 if (count($suggestions) > 1)
                 {
-                    $tooltiptext = "Possible spellings:<br /><br />";
+                    $tooltiptext = "Possible spellings:<br /><br />"; // FIXME i18n
                     $tooltiptext .= "<table summary='suggestions'>";
                     $col = 0;
                     foreach ($suggestions as $suggestion)
@@ -8339,7 +8339,7 @@ function contract_details($id, $mode='internal')
 
     if (mysql_num_rows($maintresult) < 1)
     {
-        throw_error("{$GLOBALS[strNoContractsFound]}: ",$id);
+        trigger_error("{$GLOBALS[strNoContractsFound]}: {$id}", E_USER_WARNING);
     }
     else
     {
@@ -8488,10 +8488,10 @@ function upload_file($file, $incidentid, $updateid, $type='public')
         if (!file_exists($CONFIG['attachment_fspath'] . "$id"))
         {
             $mk = @mkdir($CONFIG['attachment_fspath'] ."$id", 0770);
-            if (!$mk) throw_error('Failed creating incident attachment directory: ',$incident_attachment_fspath .$id);
+            if (!$mk) trigger_error("Failed creating incident attachment directory: {$incident_attachment_fspath }{$id}", E_USER_WARNING);
         }
         $mk = @mkdir($CONFIG['attachment_fspath'] .$id . "{$delim}{$now}", 0770);
-        if (!$mk) throw_error('Failed creating incident attachment (timestamp) directory: ',$incident_attachment_fspath .$id . "{$delim}{$now}");
+        if (!$mk) trigger_error("Failed creating incident attachment (timestamp) directory: {$incident_attachment_fspath} {$id} {$delim}{$now}", E_USER_WARNING);
         umask($umask);
         $returnpath = $id.$delim.$now.$delim.$file['name'];
         $filepath = $incident_attachment_fspath.$delim.$now.$delim;
@@ -8501,13 +8501,10 @@ function upload_file($file, $incidentid, $updateid, $type='public')
         $mv = move_uploaded_file($file['tmp_name'], $newfilename);
         if (!$mv) trigger_error('!Error: Problem moving attachment from temp directory to: '.$newfilename, E_USER_WARNING);
 
-        //$mv=move_uploaded_file($attachment, "$filename");
-        //if (!mv) throw_error('!Error: Problem moving attachment from temp directory:',$filename);
-
         // Check file size before attaching
         if ($file['size'] > $att_max_filesize)
         {
-            throw_error('User Error: Attachment too large or file upload error - size:',$file['size']);
+            trigger_error("User Error: Attachment too large or file upload error - size: {$file['size']}", E_USER_WARNING);
             // throwing an error isn't the nicest thing to do for the user but there seems to be no guaranteed
             // way of checking file sizes at the client end before the attachment is uploaded. - INL
             return FALSE;
@@ -8553,7 +8550,7 @@ function create_ftp_connection()
     // check connection
     if ((!$conn_id) || (!$login_result))
     {
-        throw_error("FTP Connection failed, connecting to {$CONFIG['ftp_hostname']} for user {$CONFIG['ftp_hostname']}}",'');
+        trigger_error("FTP Connection failed, connecting to {$CONFIG['ftp_hostname']} for user {$CONFIG['ftp_hostname']}}", E_USER_WARNING);
     }
     else
     {

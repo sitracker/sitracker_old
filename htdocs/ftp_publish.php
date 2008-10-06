@@ -9,6 +9,7 @@
 //
 
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
+// TODO concert HTML to PHP
 
 @include ('set_include_path.inc.php');
 $permission = 44; // Publish Files to FTP site
@@ -114,13 +115,13 @@ else
 
     // make the temporary directory
     $mk = @ftp_mkdir($conn_id, $CONFIG['ftp_path'] . $temp_directory);
-    if (!mk) throw_error('FTP Failed creating directory', $temp_directory);
+    if (!mk) trigger_error("FTP Failed creating directory: {$temp_directory}", E_USER_WARNING);
 
     // check the source file exists
-    if (!file_exists($source_file)) throw_error('Source file cannot be found', $source_file);
+    if (!file_exists($source_file)) trigger_error("Source file cannot be found: {$source_file}", E_USER_WARNING);
 
     // set passive mode
-    if (!ftp_pasv($conn_id, TRUE)) throw_error("Error: Problem setting passive ftp mode", '');
+    if (!ftp_pasv($conn_id, TRUE)) trigger_error("Problem setting passive FTP mode", E_USER_WARNING);
 
     // upload the file
     $upload = ftp_put($conn_id, "$destination_filepath", "$source_file", FTP_BINARY);
@@ -128,7 +129,7 @@ else
     // check upload status
     if (!$upload)
     {
-        echo "Ftp upload has failed!<br />";
+        echo "FTP upload has failed!<br />";
     }
     else
     {

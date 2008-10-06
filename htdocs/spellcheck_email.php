@@ -8,6 +8,8 @@
 // of the GNU General Public License, incorporated herein by reference.
 //
 
+// TODO HTML to PHP
+
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
 @include ('set_include_path.inc.php');
@@ -27,7 +29,7 @@ if (isset($spellid))
     $sql .= "day, month, year, fromfield, replytofield, ccfield, bccfield, tofield, ";
     $sql .= "subjectfield, attachmenttype, filename ";
     $sql .= "FROM `{$dbSpellCheck}` WHERE id='$spellid'";
-    $result=mysql_query($sql);
+    $result = mysql_query($sql);
     list($updateid, $bodytext, $newincidentstatus, $timetonextaction_none, $timetonextaction_days, $timetonextaction_hours, $timetonextaction_minutes, $day, $month, $year, $fromfield, $replytofield, $ccfield, $bccfield, $tofield, $subjectfield, $attachmenttype, $filename) = mysql_fetch_row($result);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
 }
@@ -39,9 +41,9 @@ else
 
     $isql = "INSERT INTO `{$dbSpellCheck}` (updateid, bodytext, newincidentstatus, timetonextaction_none, timetonextaction_days, timetonextaction_hours, timetonextaction_minutes, day, month, year, fromfield, replytofield, ccfield, bccfield, tofield, subjectfield, attachmenttype, filename) ";
     $isql .= "VALUES (0, '".mysql_real_escape_string($bodytext)."', '$newincidentstatus', '$timetonextaction_none', '$timetonextaction_days', '$timetonextaction_hours', '$timetonextaction_minutes', '$day', '$month', '$year', '$fromfield', '$replytofield', '$ccfield', '$bccfield', '$tofield', '$subjectfield', '$attachmenttype', '$filename')";
-    $result=mysql_query($isql);
+    $result = mysql_query($isql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-    if (!$result) throw_error("Problem inserting spellcheck temp data", '');
+    if (!$result) trigger_error("Problem inserting spellcheck temp data", E_USER_WARNING);
     $spellid=mysql_insert_id();
 }
 // removed by INL 10Dec01 - appears not to be needed and causes all slashes to be removed.
@@ -50,11 +52,11 @@ else
 if (isset($changepos) && $changepos>0)
 {
     ## echo "Change position $changepos to word: $replacement<br />";
-    $texttospell=replace_word(urldecode($bodytext), $changepos, $replacement);
+    $texttospell = replace_word(urldecode($bodytext), $changepos, $replacement);
     $sql =  "UPDATE `{$dbSpellCheck}` SET bodytext='".mysql_real_escape_string($texttospell)."' WHERE id='$spellid'";
-    $result=mysql_query($sql);
+    $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-    if (!$result) throw_error("Problem updating spellcheck temp data", '');
+    if (!$result) trigger_error("Problem updating spellcheck temp data", E_USER_WARNING);
     echo $newtext;
 }
 else

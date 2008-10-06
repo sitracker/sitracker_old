@@ -115,7 +115,7 @@ else
                 $sql = "DELETE FROM `{$dbUpdates}` WHERE id='{$updateid}'";
                 mysql_query($sql);
                 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-                throw_error("Failed creating incident attachment directory: {$CONFIG['attachment_fspath']}{$id}{$fsdelim}u{$updateid}");
+                trigger_error("Failed creating incident attachment directory: {$CONFIG['attachment_fspath']}{$id}{$fsdelim}u{$updateid}", E_USER_WARNING);
             }
         }
         umask($umask);
@@ -140,7 +140,7 @@ else
             $sql = "DELETE FROM `{$dbUpdates}` WHERE id='{$updateid}'";
             mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-            throw_error('User Error: Attachment too large or file upload error - size:',$_FILES['attachment']['size']);
+            trigger_error('User Error: Attachment too large or file upload error - size:',$_FILES['attachment']['size'], E_USER_WARNING);
             // throwing an error isn't the nicest thing to do for the user but there seems to be no guaranteed
             // way of checking file sizes at the client end before the attachment is uploaded. - INL
         }

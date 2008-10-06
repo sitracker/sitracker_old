@@ -485,7 +485,7 @@ function create_trigger_notice($userid, $noticetext = '', $triggertype = '',
         }
         else
         {
-            throw_error("No such trigger type");
+            trigger_error("No such trigger type", E_USER_WARNING);
             $return = FALSE;
         }
 

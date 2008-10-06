@@ -8,6 +8,8 @@
 // of the GNU General Public License, incorporated herein by reference.
 //
 
+// TODO HTML to PHP
+
 @include ('set_include_path.inc.php');
 $permission = 8; // Update Incidents
 require ('db_connect.inc.php');
@@ -21,12 +23,12 @@ $updateid = cleanvar($_REQUEST['updateid']);
 $error = cleanvar($_REQUEST['error']);
 $send_email = cleanvar($_REQUEST['send_email']);
 
-if ($incidentid=='')
+if ($incidentid == '')
 {
-    $title = "Move Update $updateid";
+    $title = "Move Update $updateid"; // FIXME i18n
     include 'incident_html_top.inc.php';
     echo "<h2>$title</h2>";
-    if ($error=='1')
+    if ($error == '1')
     {
         echo "<p class='error'>Error assigning that incident update. Probable cause is ";
         echo "that no incident exists with that ID or it has been closed.</p>";
@@ -174,7 +176,6 @@ else
             $umask=umask(0000);
             @mkdir($CONFIG['attachment_fspath'] ."$incidentid", 0770);
             umask($umask);
-            //     if (!$mk) throw_error('Failed creating incident directory: ',$incident_attachment_fspath ."$incidentid");
         }
 
         $new_path = $CONFIG['attachment_fspath'] ."$incidentid".$fsdelim."u$new_update_id";
@@ -190,7 +191,7 @@ else
                 {
                     if (!rename("$update_path/$file", "$new_path/$file"))
                     {
-                        throw_error("Couldn't move file $file");
+                        trigger_error("Couldn't move file: {$file}", E_USER_WARNING);
                     }
                 }
             }

@@ -20,7 +20,7 @@ require ('auth.inc.php');
 // External variables
 $incomingid = cleanvar($_REQUEST['id']);
 
-if (empty($incomingid)) throw_error('!Error: Update ID was not set', $updateid);
+if (empty($incomingid)) trigger_error("Update ID was not set:{$updateid}", E_USER_WARNING);
 
 $sql = "UPDATE `{$dbTempIncoming}` SET locked = NULL, lockeduntil = NULL ";
 $sql .= "WHERE tempincoming.id='{$incomingid}' AND locked = '{$sit[2]}'";

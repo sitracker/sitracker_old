@@ -306,14 +306,14 @@ elseif ($mode=='save')
 
             if (mysql_affected_rows() < 1)
             {
-                throw_error("!Error password change failed - new password", "$newpassword1");
+                trigger_error("!Error password change failed - new password: {$newpassword1}", E_USER_WARNING);
             }
             $confirm_message = "<h2>Password Changed</h2>\n<p align='center'>You should log out and log back in again</p>\n<p align='center'>Please wait while you are redirected.</p>"; // FIXME i18n
         }
         else
         {
             // TODO produce a better message when password change fails
-            throw_error("User Error changing password, please try again typing your passwords carefully. $password ($newpassword1 / $newpassword2)",'');
+            trigger_error("User Error changing password, please try again typing your passwords carefully. {$password} ({}$newpassword1} / {}$newpassword2})", E_USER_WARNING);
         }
     }
     // check for blank real name
@@ -410,7 +410,7 @@ elseif ($mode=='save')
         if (!$result)
         {
             include ('htmlheader.inc.php');
-            throw_error('!Error while updating users table', '');
+            trigger_error("!Error while updating users table", E_USER_WARNING);
             include ('htmlfooter.inc.php');
         }
         else

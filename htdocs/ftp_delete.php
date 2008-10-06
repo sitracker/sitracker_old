@@ -36,12 +36,12 @@ if ($frow['path'] != '')
     $filewithpath = $CONFIG['ftp_path'] . $frow['path'] . $frow['filename'];
     $filepath = $CONFIG['ftp_path'] . $frow['path'];
     $dele = ftp_delete($conn_id, $filewithpath);
-    if (!$dele) throw_error('Error deleting FTP file:', $filewithpath);
+    if (!$dele) trigger_error("Error deleting FTP file: {$filewithpath}", E_USER_WARNING);
     // remove the directory if it's not a public one
     if ($filepath != $CONFIG['ftp_path'])
     {
         $dele = ftp_delete($conn_id, $filepath);
-        if (!$dele) throw_error('Error deleting FTP folder:', $filepath);
+        if (!$dele) trigger_error("Error deleting FRP folder: {$filepath}", E_USER_WARNING);
     }
 }
 else
@@ -50,12 +50,12 @@ else
     $filewithpath = $CONFIG['ftp_path'] . $frow['filename'];
     $filepath = $CONFIG['ftp_path'] . $frow['path'];
     $dele = ftp_delete($conn_id, $filewithpath);
-    if (!$dele) throw_error('Error deleting FTP file:', $filewithpath);
+    if (!$dele) trigger_error("Error deleting FTP file: {$filewithpath}", E_USER_WARNING);
     // remove the directory if it's not a public one
     if ($filepath != $CONFIG['ftp_path'])
     {
         $dele = ftp_delete($conn_id, $filepath);
-        if (!$dele) throw_error('Error deleting FTP folder:', $filepath);
+        if (!$dele) trigger_error("Error deleting FRP folder: {$filepath}", E_USER_WARNING);
     }
 }
 // close the FTP stream

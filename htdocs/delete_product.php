@@ -63,6 +63,6 @@ if (!empty($productid))
 }
 else
 {
-    throw_error("Could not delete product", "Parameter(s) missing");
+    trigger_error("Count not delete product: Parameter(s) missing".mysql_error(), E_USER_WARNING);
 }
 ?>

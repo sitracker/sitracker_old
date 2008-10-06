@@ -100,7 +100,7 @@ elseif ($action == "delete")
         if (!$result)
         {
             include ('htmlheader.inc.php');
-            throw_error('Deletion of maintenance support conact failed:','$sql');
+            trigger_error("Deletion of maintenance support conact failed: {$sql}", E_USER_WARNING);
             include ('htmlfooter.inc.php');
         }
         // update db and show success message
@@ -108,7 +108,7 @@ elseif ($action == "delete")
         {
             journal(CFG_LOGGING_NORMAL, 'Supported Contact Removed', "Contact $contactid removed from maintenance contract $maintid", CFG_JOURNAL_MAINTENANCED, $maintid);
 
-            if ($context=='maintenance') html_redirect("contract_details.php?id={$maintid}");
+            if ($context == 'maintenance') html_redirect("contract_details.php?id={$maintid}");
             else html_redirect("contact_details.php?id={$contactid}");
         }
     }

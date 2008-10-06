@@ -92,7 +92,7 @@ switch ($_POST['action'])
                 $prodsql .= "ORDER BY expirydate ASC";
 //                 echo $prodsql;
                 $prodresult = mysql_query($prodsql);
-                if (mysql_error()) throw_error('!Error: MySQL Query Error:',mysql_error());
+                if (mysql_error()) trigger_error('!Error: MySQL Query Error:',mysql_error(), E_USER_WARNING);
 
                 if (mysql_num_rows($prodresult)>0)
                 {

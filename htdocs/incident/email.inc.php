@@ -574,7 +574,7 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
         {
             if (!isset($filename)) $filename = $CONFIG['attachment_fspath'].$_FILES['attachment']['name'];
             $mv = move_uploaded_file($_FILES['attachment']['tmp_name'], "$filename");    // Added tmp_name TPG 13/08/2002
-            if (!mv) throw_error('!Error: Problem moving attachment from temp directory:',$filename);
+            if (!mv) trigger_error("Problem moving attachment from temp directory: {$filename}", E_USER_WARNING);
             $attachmenttype = $_FILES['attachment']['type'];
         }
         // spellcheck email if required
@@ -628,13 +628,13 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
             {
                 //          if (!isset($filename)) $filename = $attachment_fspath.$_FILES['attachment']['name'];   ??? TPG 13/08/2002
                 ## bugbug move was here
-                if (!file_exists($filename)) throw_error('Error: File did not exist upon processing attachment', $filename);
-                if ($filename == '') throw_error('Error: Filename was blank upon processing attachment', $filename);
+                if (!file_exists($filename)) trigger_error("File did not exist upon processing attachment: {$filename}", E_USER_WARNING);
+                if ($filename == '') trigger_error("Filename was blank upon processing attachment: {$filename}", E_USER_WARNING);
 
                 // Check file size before sending
                 if (filesize($filename) > $CONFIG['upload_max_filesize'] || filesize($filename)==FALSE)
                 {
-                    throw_error("User Error: Attachment too large or file upload error, filename: $filename,  perms: ".fileperms($filename).", size:",filesize($filename));
+                    trigger_error("User Error: Attachment too large or file upload error, filename: $filename,  perms: ".fileperms($filename).", size:",filesize($filename), E_USER_WARNING);
                     // throwing an error isn't the nicest thing to do for the user but there seems to be no way of
                     // checking file sizes at the client end before the attachment is uploaded. - INL
                 }
@@ -662,23 +662,23 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
                 if (!file_exists($CONFIG['attachment_fspath'] . "$id"))
                 {
                     $mk = mkdir($CONFIG['attachment_fspath'] ."$id", 0770);
-                    if (!$mk) throw_error('Failed creating incident attachment directory after sending mail: ',$CONFIG['attachment_fspath'] .$id);
+                    trigger_error("Failed creating incident attachment directory after sending mail: {$CONFIG['attachment_fspath']} {$id}", E_USER_WARNING);
                 }
                 $mk = mkdir($CONFIG['attachment_fspath'] .$id . "/$now", 0770);
-                if (!$mk) throw_error('Failed creating incident attachment (timestamp) directory after sending mail: ',$CONFIG['attachment_fspath'] .$id . "/$now");
+                trigger_error("Failed creating incident attachment (timestamp) directory after sending mail: {$CONFIG['attachment_fspath']} {$id}/{$now}", E_USER_WARNING);
                 umask($umask);
                 // failes coz renaming file to a directory
                 $filename_parts_array = explode('/', $filename);
                 $filename_parts_count = count($filename_parts_array)-1;
                 $filename_end_part = $filename_parts_array[$filename_parts_count]; // end part of filename (actual name)
                 $rn = rename($filename, $CONFIG['attachment_fspath'] . $id . "/$now/" . $filename_end_part);
-                if (!rn) throw_error('Failed moving attachment after sending mail: ',$CONFIG['attachment_fspath'] .$id . "/$now");
+                if (!rn) trigger_error("Failed moving attachment after sending mail: {$CONFIG['attachment_fspath']} {$id}/{$now}", E_USER_WARNING);
                 // unlink ($filename);  // used to delete the file - don't any more INL 6Nov01
             }
 
             if ($mailok == FALSE)
             {
-                throw_error('Internal error sending email:','send_mail() failed');
+                trigger_error("Internal error sending email: send_mail() failed", E_USER_WARNING);
             }
 
             if ($mailok == TRUE)

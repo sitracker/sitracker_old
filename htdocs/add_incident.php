@@ -750,7 +750,7 @@ elseif ($action == 'assign')
                         umask($umask);
                     }
                     $sym = symlink($update_path, $CONFIG['attachment_fspath'] . "$incidentid/" . $now);
-                    if (!$sym) throw_error('!Error creating symlink for update','');
+                    if (!$sym)  trigger_error('!Error creating symlink for update', E_USER_WARNING);
                 }
             }
             else
@@ -932,7 +932,7 @@ elseif ($action == 'assign')
         }
         else
         {
-            throw_error('User input error:', $error_string);
+            trigger_error("User input error: {$error_string}", E_USER_WARNING);
         }
     }
     include ('htmlfooter.inc.php');

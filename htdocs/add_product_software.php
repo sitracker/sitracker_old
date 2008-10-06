@@ -112,7 +112,7 @@ elseif ($action == "add")
         if (!$result)
         {
             include ('htmlheader.inc.php');
-            throw_error("Addition of skill/product failed",$sql);
+            trigger_error("Addition of skill/product failed: {$sql}", E_USER_WARNING);
             include ('htmlfooter.inc.php');
         }
         // update db and show success message

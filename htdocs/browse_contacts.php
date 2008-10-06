@@ -147,7 +147,7 @@ echo "<td align='center'>";
 
 if (empty($search_string))
 {
-    throw_error('No Search String','');
+    trigger_error("No Search String", E_USER_WARNING);
 }
 else
 {
