@@ -1068,6 +1068,7 @@ CREATE TABLE `{$dbScheduler}` (
   `date_type` enum('month','year') NOT NULL COMMENT 'For type date the type',
   `date_offset` int(11) NOT NULL COMMENT 'off set into the period',
   `date_time` time NOT NULL COMMENT 'Time to perform action',
+  `laststarted` datetime NOT NULL,
   `lastran` datetime NOT NULL,
   `success` tinyint(1) NOT NULL default '1',
   PRIMARY KEY  (`id`),
@@ -2441,6 +2442,8 @@ CREATE TABLE IF NOT EXISTS `{$dbInventory}` (
 INSERT INTO `{$dbEmailTemplates}` (`name`, `type`, `description`, `tofield`, `fromfield`, `replytofield`, `ccfield`, `bccfield`, `subjectfield`, `body`, `customervisibility`, `storeinlog`, `created`, `createdby`, `modified`, `modifiedby`) VALUES('EMAIL_SERVICE_LEVEL', 'system', 'Sent to the site\'s salesperson when the value drops below a certain limit', '{salespersonemail}', '{supportemail}', '{supportemail}', NULL , NULL , '{sitename}\'s service credit low', 'Hi, {sitename}\'s total service credit is now standing at {serviceremainingstring}.\r\n\r\nRegards\r\n{applicationname}\r\n\r\n-- \r\n{todaysdate} - {applicationshortname} {applicationversion}\r\n{globalsignature}\r\n{triggersfooter}', 'show', 'No', NULL , NULL , NULL , NULL);
 INSERT INTO `{$dbTriggers}` ('triggerid', 'userid', 'action', 'template', 'parameters', 'checks') VALUES('TRIGGER_SERVICE_LIMIT', 0, 'ACTION_EMAIL', 'EMAIL_SERVICE_LEVEL', '', '{serviceremaining} <= 0.2')
 
+-- PH 2008-10-60
+ALTER TABLE `{$dbScheduler}` ADD `laststarted` DATETIME NOT NULL AFTER `date_time` ;
 ";
 
 // Important: When making changes to the schema you must add SQL to make the alterations

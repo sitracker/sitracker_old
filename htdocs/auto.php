@@ -666,18 +666,26 @@ if ($actions !== FALSE)
     {
         $fn = "saction_{$action}";
         if ($verbose)
+        {
             echo "<strong>{$fn}()</strong> ";
+        }
+        
         // Possibly initiate a trigger here named TRIGGER_SCHED_{$action} ?
         if (function_exists($fn))
         {
+            schedule_action_started($action);
             $success = $fn($params);
             schedule_action_done($action, $success);
         }
         else schedule_action_done($action, FALSE);
         if ($success && $verbose)
+        {
             echo "TRUE<br />";
+        }
         elseif ($verbose)
+        {
             echo "FALSE<br />";
+        }
     }
 }
 plugin_do('automata');
