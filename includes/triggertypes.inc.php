@@ -67,6 +67,13 @@ array('name' => 'Incident Review Due',
       'required' => array('incidentid', 'time'),
       'params' => array('incidentid'),
       );
+      
+$triggerarray['TRIGGER_INCIDENT_UPDATED'] = 
+array('name' => 'Incident updated',
+      'description' => 'Occurs when an incident is updated by someone other than the incident owner',
+      'required' => array('incidentid'),
+      'params' => array('incidentid')
+      );
 
 $triggerarray['TRIGGER_KB_CREATED'] =
 array('name' => 'Knowledgebase Article Created',
