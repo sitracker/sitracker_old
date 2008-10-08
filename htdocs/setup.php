@@ -483,7 +483,7 @@ function setup_exec_sql($sqlquerylist)
                             $html .= "<p class='$severity'>";
                             if ($severity == 'info')
                             {
-                                $html .= "<strong>Infomation:</strong>";
+                                $html .= "<strong>Information:</strong>";
                             }
                             else
                             {
