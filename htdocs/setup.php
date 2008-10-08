@@ -33,8 +33,14 @@ if ($_REQUEST['action'] == 'reconfigure')
 }
 
 // These are the required variables we want to configure during installation
-$SETUP = array('db_hostname','db_database','db_username','db_password','db_tableprefix','application_fspath','application_webpath', 'attachment_fspath', 'attachment_webpath');
-
+$SETUP = array('db_hostname','db_database','db_username','db_password','db_tableprefix','application_fspath','application_webpath', 'attachment_fspath', 'attachment_webpath', 'enable_inbound_mail', 'email_username', 'email_password', 'email_address', 'email_server', 'email_servertype', 'email_options');
+$CFGVAR['email_username']['title'] = "Incoming email account username";
+$CFGVAR['email_password']['title'] = "Incoming email account password";
+$CFGVAR['email_address']['title'] = "Incoming email account address";
+$CFGVAR['email_server']['title'] = "Incoming email account server URL";
+$CFGVAR['email_servertype']['title'] = "Incoming email account server type";
+$CFGVAR['email_servertype']['type'] = 'select';
+$CFGVAR['email_servertype']['options'] = 'imap|pop';
 // Descriptions of all the config variables
 $CFGVAR['db_hostname']['title'] = 'MySQL Database Hostname';
 $CFGVAR['db_hostname']['help']="The Hostname or IP address of the MySQL Database Server, usually 'localhost'";
@@ -203,6 +209,23 @@ $CFGVAR['default_roleid']['title'] = "Default role id";
 $CFGVAR['default_roleid']['help'] = "Role given to new users by default";
 $CFGVAR['default_gravatar']['title'] = "Default Gravatar";
 $CFGVAR['default_gravatar']['help'] = "can be 'wavatar', 'identicon', 'monsterid' a URL to an image, or blank for a blue G. see <a href='http://www.gravatar.com/'>www.gravatar.com</a> to learn about gravatars";
+$CFGVAR['enable_inbound_mail']['title'] = "Enable incoming mail to SiT";
+$CFGVAR['enable_inbound_mail']['help'] = "Normal users should choose 'POP/IMAP' and fill in the details below', advanced users can choose to pipe straight to SiT from their MTA, please read the docs for help on this.";
+$CFGVAR['enable_inbound_mail']['type'] = 'select';
+$CFGVAR['enable_inbound_mail']['options'] = "POP/IMAP|MTA|disabled";
+$CFGVAR['email_username']['title'] = "Incoming email account username";
+$CFGVAR['email_username']['help'] = "Only fill in this and the following options if you have selected 'POP/IMAP email retrieval";
+$CFGVAR['email_password']['title'] = "Incoming email account password";
+$CFGVAR['email_address']['title'] = "Incoming email account address";
+$CFGVAR['email_server']['title'] = "Incoming email account server URL";
+$CFGVAR['email_servertype']['title'] = "Incoming email account server type";
+$CFGVAR['email_servertype']['type'] = 'select';
+$CFGVAR['email_servertype']['options'] = 'imap|pop';
+// e.g. Gmail needs '/ssl', secure Groupwise needs /novalidate-cert etc.
+// see http://uk2.php.net/imap_open for examples
+$CFGVAR['email_options']['title'] = "Extra options to pass to the mailbox";
+$CFGVAR['email_options']['help'] = "e.g. Gmail needs '/ssl', secure Groupwise needs /novalidate-cert etc. See http://uk2.php.net/imap_open for examples";
+$CFGVAR['email_port']['title'] = "Incoming email account port";
 
 
 $upgradeok = FALSE;
