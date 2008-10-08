@@ -658,6 +658,12 @@ function saction_MailPreviousMonthsTransactions()
     return $mime->send_mail();
 }
 
+function saction_CheckIncomingMail()
+{
+    include 'inboundemail.php';
+    return TRUE;
+}
+
 // =======================================================================================
 $actions = schedule_actions_due();
 if ($actions !== FALSE)

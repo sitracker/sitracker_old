@@ -1082,6 +1082,7 @@ INSERT INTO `{$dbScheduler}` (`id`, `action`, `params`, `paramslabel`, `descript
 INSERT INTO `{$dbScheduler}` (`id`, `action`, `params`, `paramslabel`, `description`, `status`, `start`, `end`, `interval`, `lastran`, `success`) VALUES (5, 'ChaseCustomers', '', NULL, 'Chase customers', 'disabled', '2008-01-01 00:00:00', '0000-00-00 00:00:00', 3600, '0000-00-00 00:00:00', 1);
 INSERT INTO `{$dbScheduler}` (`id`, `action`, `params`, `paramslabel`, `description`, `status`, `start`, `end`, `interval`, `lastran`, `success`) VALUES (6, 'CheckWaitingEmail', '', NULL, 'Checks the holding queue for emails and fires the TRIGGER_WAITING_HELD_EMAIL trigger when it finds some.', 'enabled', '2008-01-01 00:00:00', '0000-00-00 00:00:00', 60, '0000-00-00 00:00:00', 1);
 INSERT INTO `{$dbScheduler}` (`id`, `action`, `params`, `paramslabel`, `description`, `status`, `start`, `end`, `interval`, `lastran`, `success`) VALUES (7, 'PurgeExpiredFTPItems', '', NULL, 'purges files which have expired from the FTP site when run.', 'enabled', '2008-01-01 00:00:00', '0000-00-00 00:00:00', 216000, '0000-00-00 00:00:00', 1);
+INSERT INTO `{$dbScheduler}` (`id`, `action`, `params`, `paramslabel`, `description`, `status`, `start`, `end`, `interval`, `lastran`, `success`) VALUES (7, 'CheckIncomingMail', '', NULL, 'Check incoming support mailbox.', 'enabled', '2008-01-01 00:00:00', '0000-00-00 00:00:00', 216000, '0000-00-00 00:00:00', 1);
 
 CREATE TABLE IF NOT EXISTS `{$dbService}` (
   `serviceid` int(11) NOT NULL auto_increment,
@@ -2441,6 +2442,9 @@ CREATE TABLE IF NOT EXISTS `{$dbInventory}` (
 -- KMH 2008-08-28
 INSERT INTO `{$dbEmailTemplates}` (`name`, `type`, `description`, `tofield`, `fromfield`, `replytofield`, `ccfield`, `bccfield`, `subjectfield`, `body`, `customervisibility`, `storeinlog`, `created`, `createdby`, `modified`, `modifiedby`) VALUES('EMAIL_SERVICE_LEVEL', 'system', 'Sent to the site\'s salesperson when the value drops below a certain limit', '{salespersonemail}', '{supportemail}', '{supportemail}', NULL , NULL , '{sitename}\'s service credit low', 'Hi, {sitename}\'s total service credit is now standing at {serviceremainingstring}.\r\n\r\nRegards\r\n{applicationname}\r\n\r\n-- \r\n{todaysdate} - {applicationshortname} {applicationversion}\r\n{globalsignature}\r\n{triggersfooter}', 'show', 'No', NULL , NULL , NULL , NULL);
 INSERT INTO `{$dbTriggers}` ('triggerid', 'userid', 'action', 'template', 'parameters', 'checks') VALUES('TRIGGER_SERVICE_LIMIT', 0, 'ACTION_EMAIL', 'EMAIL_SERVICE_LEVEL', '', '{serviceremaining} <= 0.2')
+
+-- KMH 2008-10-08
+INSERT INTO `{$dbScheduler}` (`id`, `action`, `params`, `paramslabel`, `description`, `status`, `start`, `end`, `interval`, `lastran`, `success`) VALUES (7, 'CheckIncomingMail', '', NULL, 'Check incoming support mailbox.', 'enabled', '2008-01-01 00:00:00', '0000-00-00 00:00:00', 216000, '0000-00-00 00:00:00', 1);
 
 -- PH 2008-10-60
 ALTER TABLE `{$dbScheduler}` ADD `laststarted` DATETIME NOT NULL AFTER `date_time` ;

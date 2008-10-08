@@ -749,8 +749,9 @@ elseif ($action == 'assign')
                         mkdir($CONFIG['attachment_fspath'] ."$incidentid", 0770);
                         umask($umask);
                     }
-                    $sym = symlink($update_path, $CONFIG['attachment_fspath'] . "$incidentid/" . $now);
-                    if (!$sym)  trigger_error('!Error creating symlink for update', E_USER_WARNING);
+
+                    $move = rename($update_path, $CONFIG['attachment_fspath']."$incidentid/u1/");
+                    if (!$move) trigger_error('!Error moving attachments folder');
                 }
             }
             else

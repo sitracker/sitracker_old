@@ -49,6 +49,18 @@ $CONFIG['support_email'] = 'support@localhost';
 $CONFIG['sales_email'] = 'sales@localhost';
 $CONFIG['support_manager_email'] = 'support_manager@localhost';
 
+// These are the settings for the account to download incoming mail from
+$CONFIG['email_username'] = '';
+$CONFIG['email_password'] = '';
+$CONFIG['email_address'] = '';
+$CONFIG['email_server'] = '';
+//'imap' or 'pop'
+$CONFIG['email_servertype'] = '';
+// e.g. Gmail needs '/ssl', secure Groupwise needs /novalidate-cert etc.
+// see http://uk2.php.net/imap_open for examples
+$CONFIG['email_options'] = '';
+$CONFIG['email_port'] = '';
+
 $CONFIG['bugtracker_name'] = 'Bug Tracker';
 $CONFIG['bugtracker_url'] = 'http://sitracker.sourceforge.net/Bugs';
 

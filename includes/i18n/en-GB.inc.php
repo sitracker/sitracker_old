@@ -166,6 +166,7 @@ $strAssociateContactWithContract = 'Associate this contact with an existing cont
 $strAtLunch = 'At Lunch';
 $strAttachFile = 'Attach File';
 $strAttachment = 'Attachment';
+$strAttachments = 'Attachments';
 $strAttachedIsBillableIncidentsForAbovePeriod ='Attached is the billable incidents for the above period';
 # Short for August
 $strAugAbbr = 'Aug';
@@ -622,6 +623,7 @@ $strIncidentOwnersFullName = 'Full name of the person who owns the incident';
 $strIncidentsUsed = 'Incidents Used';
 $strIncidentTitle = 'Incident Title';
 $strIncidentUpdatesPerPage = 'Incident Updates per page';
+$strIncidentXIsClosed = 'Incident %s is closed';
 $strInclude = 'Include';
 $strIncoming = 'Incoming';
 $strIncomingEmail = 'Incoming Email';
@@ -994,6 +996,7 @@ $strPlugins = 'Plugins';
 $strPopularity = 'Popularity';
 $strPortal = 'Portal';
 $strPositivity = 'Positivity';
+$strPossibleNewIncident = 'Possible new incident';
 # Postal code
 $strPostcode = 'Postcode';
 $strPostNewNotice = 'Post New Notice';
