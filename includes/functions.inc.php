@@ -10840,6 +10840,11 @@ function get_service_percentage($maintid)
 // Check that the correct modules are loaded
 if (!extension_loaded('pspell')) $CONFIG['enable_spellchecker'] = FALSE; // FORCE Turn off spelling if module not found
 if (!extension_loaded('mysql')) trigger_error('SiT requires the php/mysql module', E_USER_ERROR);
+if (!extension_loaded('imap') AND $CONFIG['enable_inbound_mail'] !== FALSE)
+{
+    trigger_error('SiT requires the php IMAP module to recieve incoming mail.'
+                  .' If you really don\'t need this, you can set \$CONFIG[\'enable_inbound_mail\'] to false');
+}
 if (version_compare(PHP_VERSION, "5.0.0", "<")) trigger_error('INFO: You are running an older PHP version, some features may not work properly.', E_USER_NOTICE);
 if (@ini_get('register_globals') == 1 OR strtolower(@ini_get('register_globals')) == 'on')
 {
