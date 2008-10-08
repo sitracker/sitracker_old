@@ -14,6 +14,21 @@
 require ('mime_email.class.php');
 require ('fetchSitMail.class.php');
 
+if (realpath(__FILE__) == realpath($_SERVER['SCRIPT_FILENAME']))
+{
+    @include ('set_include_path.inc.php');
+    require ('db_connect.inc.php');
+    include ('strings.inc.php');
+    require ('functions.inc.php');
+}
+else
+{
+    global $CONFIG, $dbFiles, $dbUpdates, $dbTempIncoming, $dbIncidents, $now;
+}
+
+//FIXME
+$fsdelim = (strstr($CONFIG['attachment_fspath'],"/")) ? "/" : "\\";
+
 function subjectdecode($subject)
 {
     if (ereg("=\?.{0,}\?[Bb]\?", $subject))
@@ -80,18 +95,30 @@ function populate_syslang2()
 
 $SYSLANG = populate_syslang2();
 
-global $CONFIG, $dbFiles, $dbUpdates, $dbTempIncoming, $dbIncidents, $now;
 
-//FIXME
-$fsdelim = (strstr($CONFIG['attachment_fspath'],"/")) ? "/" : "\\";
-$mailbox = new fetchSitMail($CONFIG['email_username'], $CONFIG['email_password'], 
-                            $CONFIG['email_address'], $CONFIG['email_server'],
-                            $CONFIG['email_servertype'], $CONFIG['email_port'],
-                            $CONFIG['email_options']);
-                            
+if ($CONFIG['enable_inbound_mail'] == 'MTA')
+{
+    // read the email from stdin (it should be piped to us by the MTA)
+    $fp = fopen("php://stdin", "r");
+    $rawemail = '';
+    while (!feof($fp))
+    {
+        $rawemail[] = fgets($fp); // , 1024
+    }
+    fclose($fp);
+    $emails = 1;
+}
+elseif ($CONFIG['enable_inbound_mail'] == 'POP/IMAP')
+{
+    $mailbox = new fetchSitMail($CONFIG['email_username'], $CONFIG['email_password'], 
+                                $CONFIG['email_address'], $CONFIG['email_server'],
+                                $CONFIG['email_servertype'], $CONFIG['email_port'],
+                                $CONFIG['email_options']);
+                                
 
-$mailbox->connect();
-$emails = $mailbox->getNumUnreadEmails();
+    $mailbox->connect();
+    $emails = $mailbox->getNumUnreadEmails();
+}
 
 if ($emails > 0)
 {
@@ -136,7 +163,7 @@ if ($emails > 0)
 
             //new call
             $sql = "INSERT INTO `{$dbTempIncoming}` (updateid, incidentid, emailfrom, subject, reason, contactid) ";
-            $sql.= "VALUES ('{$updateid}', '0', '{$decoded_email->from_name}', '".mysql_real_escape_string($decoded_email->subject)."', 'Possible new call', '{$contactid}' )";
+            $sql.= "VALUES ('{$updateid}', '0', '{$decoded_email->from_name}', '".mysql_real_escape_string($decoded_email->subject)."', '{$GLOBALS[\'strPossibleNewIncident\']}'', '{$contactid}' )";
             mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
             trigger('TRIGGER_INCIDENT_UPDATED', array('incident' => $incidentid));
