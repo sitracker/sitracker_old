@@ -59,7 +59,7 @@ function to_row($contactrow)
         }
         else
         {
-            $str .= "(".sprintf($GLOBALS['strRemaining'], $incidents_remaining).")";
+            $str .= "(".sprintf($strRemaining, $incidents_remaining).")";
         }
     }
     $str .=  "</td>";
@@ -558,16 +558,13 @@ elseif ($action=='incidentform')
     echo "<input type='text' name='nextaction' maxlength='50' size='30' value='Initial Response' /><br /><br />";
     echo show_next_action();
     echo "</td></tr>";
-    if (empty($updateid))
-    {
-        echo "<tr><th>{$strVisibleToCustomer}".help_link('VisibleToCustomer')."</th>\n";
-        echo "<td><label><input name='cust_vis' type='checkbox' checked='checked' /> {$strVisibleToCustomer}</label>";
-        echo "</td></tr>\n";
-    	echo "<tr><th>{$strSendOpeningEmail}</th>\n";
-    	echo "<td><label for='send_email'><input name='send_email' ";
-    	echo "type='checkbox' checked='checked' />";
-    	echo "{$strSendOpeningEmailDesc}</label></td></tr>\n";
-    }
+    echo "<tr><th>{$strVisibleToCustomer}".help_link('VisibleToCustomer')."</th>\n";
+    echo "<td><label><input name='cust_vis' type='checkbox' checked='checked' /> {$strVisibleToCustomer}</label>";
+    echo "</td></tr>\n";
+    echo "<tr><th>{$strSendOpeningEmail}</th>\n";
+    echo "<td><label for='send_email'><input name='send_email' ";
+    echo "type='checkbox' checked='checked' />";
+    echo "{$strSendOpeningEmailDesc}</label></td></tr>\n";
     echo "<tr><th>{$strPriority}</th><td>".priority_drop_down("priority", 1, 4, FALSE)." </td></tr>";
     echo "</table>\n";
     echo "<input type='hidden' name='win' value='{$win}' />";
@@ -749,7 +746,6 @@ elseif ($action == 'assign')
                         mkdir($CONFIG['attachment_fspath'] ."$incidentid", 0770);
                         umask($umask);
                     }
-
                     $move = rename($update_path, $CONFIG['attachment_fspath']."$incidentid/u1/");
                     if (!$move) trigger_error('!Error moving attachments folder');
                 }
@@ -933,7 +929,7 @@ elseif ($action == 'assign')
         }
         else
         {
-            trigger_error("User input error: {$error_string}", E_USER_WARNING);
+            throw_error('User input error:', $error_string);
         }
     }
     include ('htmlfooter.inc.php');
