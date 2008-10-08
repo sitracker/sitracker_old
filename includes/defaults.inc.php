@@ -50,6 +50,7 @@ $CONFIG['sales_email'] = 'sales@localhost';
 $CONFIG['support_manager_email'] = 'support_manager@localhost';
 
 // These are the settings for the account to download incoming mail from
+$CONFIG['enable_inbound_mail'] = '';
 $CONFIG['email_username'] = '';
 $CONFIG['email_password'] = '';
 $CONFIG['email_address'] = '';
