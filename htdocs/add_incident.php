@@ -746,7 +746,7 @@ elseif ($action == 'assign')
                         mkdir($CONFIG['attachment_fspath'] ."$incidentid", 0770);
                         umask($umask);
                     }
-                    $move = rename($update_path, $CONFIG['attachment_fspath']."$incidentid/u1/");
+                    $move = rename($update_path, $CONFIG['attachment_fspath']."$incidentid/u{$updateid}/");
                     if (!$move) trigger_error('!Error moving attachments folder');
                 }
             }
