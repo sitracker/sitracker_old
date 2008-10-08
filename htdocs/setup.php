@@ -33,7 +33,7 @@ if ($_REQUEST['action'] == 'reconfigure')
 }
 
 // These are the required variables we want to configure during installation
-$SETUP = array('db_hostname','db_database','db_username','db_password','db_tableprefix','application_fspath','application_webpath', 'attachment_fspath', 'attachment_webpath', 'enable_inbound_mail', 'email_username', 'email_password', 'email_address', 'email_server', 'email_servertype', 'email_options');
+$SETUP = array('db_hostname','db_database','db_username','db_password','db_tableprefix','application_fspath','application_webpath', 'attachment_fspath', 'attachment_webpath', 'enable_inbound_mail', 'email_username', 'email_password', 'email_address', 'email_server', 'email_servertype', 'email_options', 'email_port');
 $CFGVAR['email_username']['title'] = "Incoming email account username";
 $CFGVAR['email_password']['title'] = "Incoming email account password";
 $CFGVAR['email_address']['title'] = "Incoming email account address";
