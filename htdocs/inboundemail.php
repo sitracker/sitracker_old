@@ -124,11 +124,13 @@ if ($emails > 0)
 {
     for ($i = 0; $i < $emails; $i++)
     {
-        $rawemail = $mailbox->getMessageHeader($i + 1)."\n";
-        $rawemail .= $mailbox->messageBody($i + 1);
-        $rawemail = explode("\n", $rawemail);
-        $mailbox->deleteEmail($i + 1);
-
+        if ($CONFIG['enable_inbound_mail'] == 'POP/IMAP')
+        {
+            $rawemail = $mailbox->getMessageHeader($i + 1)."\n";
+            $rawemail .= $mailbox->messageBody($i + 1);
+            $rawemail = explode("\n", $rawemail);
+            $mailbox->deleteEmail($i + 1);
+        }
         // Create and populate the email object
         $email = new mime_email;
         $email->set_emaildata($rawemail);
@@ -450,6 +452,10 @@ if ($emails > 0)
     {
         imap_expunge($mailbox->mailbox);
     }
-    imap_close($mailbox->mailbox);
+    
+    if ($CONFIG['enable_inbound_mail'] == 'POP/IMAP')
+    {
+        imap_close($mailbox->mailbox);
+    }
 }
 ?>
