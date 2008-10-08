@@ -25,7 +25,7 @@ $send_email = cleanvar($_REQUEST['send_email']);
 
 if ($incidentid == '')
 {
-    $title = "Move Update $updateid"; // FIXME i18n
+    $title = $strMoveUpdate;
     include 'incident_html_top.inc.php';
     echo "<h2>$title</h2>";
     if ($error == '1')
@@ -162,7 +162,6 @@ else
         $sql = "UPDATE `{$dbUpdates}` SET incidentid='$incidentid', userid='$sit[2]', bodytext='$bodytext', timestamp='$now' WHERE id='$updateid'";
         mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-        $new_update_id = mysql_insert_id();
 
         // update the incident record, change the incident status to active
         $sql = "UPDATE `{$dbIncidents}` SET status='1', lastupdated='$now', timeofnextaction='0' WHERE id='$incidentid'";
@@ -178,25 +177,16 @@ else
             umask($umask);
         }
 
-        $new_path = $CONFIG['attachment_fspath'] ."$incidentid".$fsdelim."u$new_update_id";
+        $new_path = $CONFIG['attachment_fspath'] ."$incidentid".$fsdelim."u$updateid";
         $update_path = $CONFIG['attachment_fspath'].'updates'.$fsdelim.$updateid;
-        echo $new_path." ".$update_path;
         if (file_exists($update_path))
         {
-            $dh = opendir($update_path);
-            while (false !== ($file = readdir($dh)))
+            $rename = rename("$update_path/$file", "$new_path/$file");
+            if (!$rename)
             {
-                //Don't list subdirectories
-                if (!is_dir("$update_path/$file"))
-                {
-                    if (!rename("$update_path/$file", "$new_path/$file"))
-                    {
-                        trigger_error("Couldn't move file: {$file}", E_USER_WARNING);
-                    }
-                }
+                trigger_error("Couldn't move file: {$file}", E_USER_WARNING);
             }
         }
-        rmdir($update_path);
 
         //remove from tempincoming to prevent build up
         $sql = "DELETE FROM `{$dbTempIncoming}` WHERE updateid='$updateid'";
