@@ -772,6 +772,7 @@ $strMonthView = 'Month View';
 $strMore = 'More...';
 $strMoreContactsThanContractSupports = 'There are more contacts linked than this contract should support';
 $strMorning = 'Morning';
+$strMoveUpdate = 'Move Update';
 $strMustCompleteActivitiesBeforeClosure = 'You must complete all activities for the incident before closure.';
 $strMustEnterEmail = 'You must enter an email address';
 $strMustEnterName = 'You must enter a name';
