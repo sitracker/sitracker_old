@@ -34,10 +34,13 @@ switch ($action)
         // External variables
         $tempnewowner = cleanvar($_REQUEST['tempnewowner']);
         $permnewowner = cleanvar($_REQUEST['permnewowner']);
+        $removetempowner = cleanvar($_REQUEST['removetempowner']);
         $newstatus = cleanvar($_REQUEST['newstatus']);
         $userid = cleanvar($_REQUEST['userid']);
         $temporary = cleanvar($_REQUEST['temporary']);
         $id = cleanvar($_REQUEST['id']);
+
+        if ($tempnewowner == 'yes') $temporary = 'yes';
 
         // Retrieve current incident details
         $sql = "SELECT * FROM `{$dbIncidents}` WHERE id='$id' LIMIT 1";
@@ -52,7 +55,7 @@ switch ($action)
 
         // Update incident
         $sql = "UPDATE `{$dbIncidents}` SET ";
-        if ($temporary != 'yes' AND $incident->towner > 0 AND $sit[2]==$incident->owner)
+        if ($temporary != 'yes' AND $incident->towner > 0 AND $sit[2] == $incident->owner)
         {
             $sql .= "owner='{$sit[2]}', towner=0, "; // make current user = owner
             $triggeruserid = $sit[2];
@@ -62,12 +65,12 @@ switch ($action)
             $sql .= "towner=0, "; // temp owner removing temp ownership
             $triggeruserid = $incident->towner;
         }
-        elseif ($temporary == 'yes' AND $incident->towner < 1 AND $sit[2]!=$incident->owner)
+        elseif ($temporary == 'yes' AND $tempnewowner != 'yes' AND $incident->towner < 1 AND $sit[2]!=$incident->owner)
         {
             $sql .= "towner={$sit[2]}, "; // Temp to self
             $triggeruserid = $sit[2];
         }
-        elseif ($temporary == 'yes' AND $userid==$incident->owner)
+        elseif ($temporary == 'yes' AND $tempnewowner != 'yes'  AND $userid==$incident->owner)
         {
             $sql .= "owner='{$userid}', towner=0, ";
             $triggeruserid = $userid;
@@ -120,7 +123,7 @@ switch ($action)
         {
             $sql .= "'{$incident->owner}', ";
         }
-        elseif ($temporary == 'yes' AND $incident->towner < 1 AND $sit[2] != $incident->owner)
+        elseif ($temporary == 'yes' AND $tempnewowner != 'yes' AND $incident->towner < 1 AND $sit[2] != $incident->owner)
         {
             $sql .= "'{$sit[2]}', ";
         }
@@ -328,7 +331,7 @@ switch ($action)
 
         echo "<tr><td colspan='2'><br />{$strReassignText}</td></tr>\n";
         echo "<tr><th>{$strUpdate}:</th>";
-        echo "</th><td>";
+        echo "<td>";
         echo "<textarea name='bodytext' wrap='soft' rows='10' cols='65'>";
         if (!empty($reason)) echo $reason;
         echo "</textarea>";
@@ -336,15 +339,19 @@ switch ($action)
         if ($incident->towner > 0 AND ($sit[2] == $incident->owner OR $sit[2] == $incident->towner))
         {
             echo "<tr><th>{$strTemporaryOwner}:</th><td>";
-            echo "<label><input type='radio' name='temporary' value='yes' checked='checked' onchange=\"$('reassignlist').show();\" /> {$strChangeTemporaryOwner}</label>";
-            echo "<label><input type='radio' name='temporary' value='no' onchange=\"$('reassignlist').hide();\" /> {$strRemoveTemporaryOwner}</label> ";
+            echo "<label><input type='checkbox' name='temporary' value='yes' onchange=\"$('reassignlist').show();\" /> {$strChangeTemporaryOwner}</label>";
+            echo "<label><input type='checkbox' name='removetempowner' value='yes' onchange=\"$('reassignlist').hide();\" /> {$strRemoveTemporaryOwner}</label> ";
             echo "</td></tr>\n";
         }
-        elseif ($incident->towner < 1 AND $sit[2] != $incident->owner)
+        elseif ($sit[2] != $incident->owner)
         {
+            // $incident->towner < 1 AND 
             echo "<tr><th>{$strTemporaryOwner}:</th><td>";
             echo "<label><input type='checkbox' name='temporary' value='yes' onchange=\"$('reassignlist').toggle();\" /> ";
-            echo "{$strAssignTemporarily} to <strong>{$strYou}</strong> ({$_SESSION['realname']})</label>";
+            echo "{$strAssignTemporarily} to <strong>{$strYou}</strong> ({$_SESSION['realname']})</label><br />";
+            echo "<label><input type='checkbox' name='tempnewowner' value='yes'  /> ";
+            echo "{$strAssignTemporarily}</label>";
+            echo "</td></tr>";
         }
         else
         {
