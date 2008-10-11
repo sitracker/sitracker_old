@@ -31,7 +31,7 @@ $strActual = 'Actual';
 $strAcknowledge = 'Acknowledge';
 # e.g. Accepting incidents
 $strAccepting = 'Accepting';
-$strAccessDetails = 'Access Details';
+$strAccessDetails = 'Access DetstrActivityCompletedails';
 $strAction = 'Action';
 $strActions = 'Actions';
 $strActionNeeded = 'Action Needed';
@@ -48,7 +48,7 @@ $strActivity = 'Activity';
 $strActivityAdded = 'Activity Added';
 $strActivityBilling = 'Activity Billing';
 $strActivityBillingInfo = 'Only closed activities are shown for billing.';
-$strActivityCompleted = 'Activity completed: %s, total duration was: %s';
+$strActivityCompleted = 'Activity completed: %s';
 $strActivityContainsNoNotes = 'Activity contains no notes';
 $strActivityList = 'Activity List';
 $strActivityMarkedCompleteSuccessfully = 'Activity Marked Complete Successfully';

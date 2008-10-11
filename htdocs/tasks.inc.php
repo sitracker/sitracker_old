@@ -606,6 +606,8 @@ if (mysql_num_rows($result) >=1 )
         }
         else
         {
+             $billing = make_incident_billing_array($incidentid);
+            
             echo "<td>".format_date_friendly($startdate)."</td>";
             if ($enddate == '0')
             {
@@ -618,16 +620,20 @@ if (mysql_num_rows($result) >=1 )
 
                 echo "$strNotCompleted</td>";
                 $duration = $now - $startdate;
+                                
                 //echo "<td id='duration{$task->id}'><em><div id='duration{$task->id}'>".format_seconds($duration)."</div></em></td>";
                 echo "<td id='duration{$task->id}'>".format_seconds($duration)."</td>";
             }
             else
             {
                 $duration = $enddate - $startdate;
+                
+                $a = $duration % ($billing[-1]['customerperiod']);
+                $duration += ($billing[-1]['customerperiod'] - $a);
+                
                 echo "<td>".format_date_friendly($enddate)."</td>";
                 echo "<td>".format_seconds($duration)."</td>";
                 $closedduration += $duration;
-
 
                 $temparray['owner'] = $task->owner;
                 $temparray['starttime'] = $startdate;
@@ -726,8 +732,6 @@ if (mysql_num_rows($result) >=1 )
         echo "<h3>".icon('billing', 32, $strActivityBilling)." ";
         echo "{$strActivityBilling}</h3>";
         echo "<p align='center'>{$strActivityBillingInfo}</p>";
-
-        $billing = make_incident_billing_array($incidentid);
 
         if (!empty($billing))
         {
