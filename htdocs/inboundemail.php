@@ -165,7 +165,7 @@ if ($emails > 0)
 
             //new call
             $sql = "INSERT INTO `{$dbTempIncoming}` (updateid, incidentid, emailfrom, subject, reason, contactid) ";
-            $sql.= "VALUES ('{$updateid}', '0', '{$decoded_email->from_name}', '".mysql_real_escape_string($decoded_email->subject)."', '{$GLOBALS[\'strPossibleNewIncident\']}'', '{$contactid}' )";
+            $sql.= "VALUES ('{$updateid}', '0', '{$decoded_email->from_name}', '".mysql_real_escape_string($decoded_email->subject)."', '{$GLOBALS['strPossibleNewIncident']}'', '{$contactid}' )";
             mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
             trigger('TRIGGER_INCIDENT_UPDATED', array('incident' => $incidentid));
