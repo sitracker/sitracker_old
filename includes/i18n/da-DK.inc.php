@@ -1,8 +1,12 @@
 <?php
-## Translation to Danish by Carsten Jensen aka Tomse <tomse[at]tomse.dk>
+
+## Translation to Danish by Carsten Jensen aka Tomse
 ## Translation startet 14. Oct. 2008
 
-## Mangler     -   mangler oversættelse
+## Mangler     -   mangler oversættelse CJ
+
+## stop    - progress stop CJ
+
 
 $languagestring = 'Danish (DK)';
 $i18ncharset = 'UTF-8';
@@ -36,7 +40,7 @@ $strAcknowledge = 'Acknowledge';
 # e.g. Accepting hændelses
 $strAccepting = 'Accepterer';
 ## Access what ? string or just sentence ? CJ
-$strAccessDetails = 'Tilgå DetstrActivityCompletedails';
+$strAccessDetails = 'Tilgå oplysninger';
 $strAction = 'Handling';
 $strActions = 'Handlinger';
 $strActionNeeded = 'Handling mangler';
@@ -95,7 +99,6 @@ $strAddSkill = 'Tilføj evne';
 $strAddTask = 'Tilføj opgave';
 $strAddTemplate = 'Tilføj skabelon';
 $strAddUser = 'Tilføj bruger';
-## mangler - CJ
 $strAddVendor = 'Tilføj sælger';
 $strAdjust = 'Juster';
 $strAdmin = 'Admin';
@@ -103,7 +106,7 @@ $strAdminContact = 'Admin kontakt';
 $strAdminContactForContracts = 'Du er en Admin kontakt for de følgende kontrakter. Du kan vælge hvem der er istand til at se disse hændelser i portalen.';
 $strAdministratorsOnly = 'Kun for Administratorer';
 $strAdminOnly = 'Kun for Admin';
-$strAdvanced = 'Advanceret';
+$strAdvanced = 'Avanceret';
 $strAfternoon = 'Eftermiddag';
 $strAge = 'Alder';
 # e.g. 4 hours ago
@@ -123,7 +126,7 @@ $strAlphabetically = 'Alfabetisk';
 $strAlternative = 'Alternativ';
 $strAmount = 'Mænge';
 ##  This might not be right - CJ
-$strAmountToEditBy = 'Mængde der skal editeres +ve/-ve';
+$strAmountToEditBy = 'Mængde der skal redigeres +ve/-ve';
 # i.e. before noon
 $strAM = 'am';
 $strAnswer = 'Svar';
@@ -132,8 +135,8 @@ $strApprove = 'Godkend';
 $strApproveAll = 'Godkend alt';
 $strApproveTimesheets = 'Godkend tidsskemaer';
 $strApproved = 'Godkendt';
-$strApprovedFree = 'Godkend fri';
-$strApproveHolidays = 'godkend ferie';
+$strApprovedFree = 'Godkendt fri';
+$strApproveHolidays = 'Godkend ferie';
 # Short for April
 $strAprAbbr = 'Apr';
 $strApril = 'April';
@@ -180,186 +183,188 @@ $strAugAbbr = 'Aug';
 $strAugust = 'August';
 $strAuthor = 'Forfatter';
 $strAuthors = 'Forfattere';
-## Stop - CJ
-$strAutoReassignmentsThatCouldntBeMade = 'Automatic reassignments that could not be made because brugers were set to \'not accepting\'';
-$strAverageIncidentDuration = 'Average hændelse Duration';
-$strAvoidDupes = 'Please help avoid duplicates by checking that the record you are adding does not already exist';
-$strAwaitingApproval = 'Awaiting Approval';
-$strAwaitingClosure = 'Awaiting Closure';
-$strAwaitingColleagueResponse = 'Awaiting Colleague Response';
-$strAwaitingCustomerAction = 'Awaiting Customer Action';
-$strAwaitingSupportResponse = 'Awaiting Support Response';
-$strAwaitingYourResponse = 'Awaiting Your Response';
+$strAutoReassignmentsThatCouldntBeMade = 'Automatisk tildelinger der ikke kunne gennemføres fordi brugere er sat til \'accepterer ikke\'';
+$strAverageIncidentDuration = 'Gennemsnitlig hændelses varighed';
+$strAvoidDupes = 'Kontrollér venligst om posten du er ved at oprette ikke allerede eksisterer for at undgå dubletter';
+$strAwaitingApproval = 'Afventer godkendelse';
+$strAwaitingClosure = 'Afventer lukning';
+$strAwaitingColleagueResponse = 'Afventer svar fra kollega ';
+$strAwaitingCustomerAction = 'Afventer kunde afgørelse';
+$strAwaitingSupportResponse = 'Afventer svar fra supporten';
+$strAwaitingYourResponse = 'Afventer dit svar';
 
-$strBackToList = 'Back To List';
-$strBackToLoginPage = 'Back to login page';
-$strBackToSites = 'Back to sites';
-$strBackOneYear = 'Back One Year';
+$strBackToList = 'Tilbage til listen';
+$strBackToLoginPage = 'Tilbage til login siden';
+$strBackToSites = 'Tilbage til sites';
+$strBackOneYear = 'Tilbage ét år';
 $strBalance = 'Balance';
 $strBCC = 'BCC';
-$strBill = 'Bill';
-$strBillableIncidents = 'Billable hændelses';
-$strBillableIncidentsForPeriodXtoX = 'Billable hændelses for period %s to %s';
-$strBillableIncidentsReport = 'Billable hændelses Report';
-$strBilling = 'Billing';
-$strBillingCustomerPeriod = 'Customer Period';
-$strBillingEngineerPeriod = 'Engineer Period';
-$strBillingSummary = 'Billing Summary';
-$strBook = 'Book';
-$strBookHoliday = 'Book Holiday';
-$strBoth = 'Both';
-$strBrowse = 'Browse';
-$strBrowseContacts = 'Browse kontakter';
-$strBrowseContracts = 'Browse kontrakter';
-$strBrowseContractsBySite = 'Browse kontrakter by Site';
-$strBrowseFeedback = 'Browse feedback';
-$strBrowseFeedbackForms = 'Browse Feedback Forms';
-$strBrowseJournal = 'Browse Journal';
-$strBrowseKB = 'Browse Knowledge Base';
-$strBrowseSites = 'Browse sites';
-$strBulkModify = 'Bulk Modify';
+$strBill = 'Faktura';
+$strBillableIncidents = 'Fakturerbar hændelser';
+$strBillableIncidentsForPeriodXtoX = 'Fakturerbar hændelser for perioden %s to %s';
+$strBillableIncidentsReport = 'Fakturerbar hændelses rapport';
+$strBilling = 'Fakturering';
+$strBillingCustomerPeriod = 'Kunde periode';
+$strBillingEngineerPeriod = 'Ingenginør Periode';
+$strBillingSummary = 'Faktura udtog';
+$strBook = 'Reservér';
+$strBookHoliday = 'Reservér ferie';
+$strBoth = 'Begge';
+$strBrowse = 'Gennemse';
+$strBrowseContacts = 'Gennemse kontakter';
+$strBrowseContracts = 'Gennemse kontrakter';
+$strBrowseContractsBySite = 'Gennemse kontrakter pr Site';
+$strBrowseFeedback = 'Gennemse feedback';
+$strBrowseFeedbackForms = 'Gennemse Feedback Forms';
+$strBrowseJournal = 'Gennemse journal';
+$strBrowseKB = 'Gennemse knowledge base';
+$strBrowseSites = 'Gennemse sites';
+$strBulkModify = 'Masse rediger';
 # e.g. by Fred
-$strby = 'by';
-$strByGroup = 'By Group';
-$strByMaintenance = 'By Maintenance';
-$strByReseller = 'By Reseller';
+$strby = 'af';
+$strByGroup = 'Af Gruppe';
+$strByMaintenance = 'Af vedligeholdelse';
+$strByReseller = 'Af forhandler';
 # e.g. Ordered By Product
-$strByProduct = 'By Product';
-$strBySkill = 'By Skill';
+$strByProduct = 'Af produkt';
+$strBySkill = 'Af evne';
 $strBytes = 'Bytes';
-$strByDate = 'By Date';
-$strBySLA = 'By SLA';
-$strByVendor = 'By Vendor';
+$strByDate = 'Af dato';
+$strBySLA = 'Af SLA';
+$strByVendor = 'Af sælger';
 # e.g. By: Joe Bloggs
-$strByX = 'By: %s';
+$strByX = 'Af: %s';
 
-$strCalendar = 'Calendar';
-# hændelse status: e.g. Made a phone cAlle and left a message
-$strCalledAndLeftMessage = 'Called And Left Message';
-$strCallFromCustomer = 'Phone cAlle from customer';
-$strCallToCustomer = 'Phone cAlle to customer';
-$strCallMustBeAssignedBeforeClosure = 'CAlle must be assigned before closure';
+$strCalendar = 'Kalender';
+# hændelse status: e.g. Made a phone call and left a message
+$strCalledAndLeftMessage = 'Ringet og efterladt besked';
+$strCallFromCustomer = 'Telefonbesked fra kunde';
+$strCallToCustomer = 'Telefonbesked til kunde';
+$strCallMustBeAssignedBeforeClosure = 'Opkald skal være tildelt før lukning';
 # Data Protection message, happy to receive phone calls
-$strCallsOK = 'Calls OK';
-$strCannotDeleteSkill = 'Sorry, this skill cannot be deleted because it has been associated with one or more hændelses';
-$strCannotResetThisPassword = 'You cannot reset this brugers password';
-$strCannotResetPasswordInDemoMode = 'You cannot reset passwords while in DEMO MODE';
-$strCause = 'Cause';
+$strCallsOK = 'Opringning OK';
+$strCannotDeleteSkill = 'Denne evne kan ikke slettes fordi den er associeret med en eller flere hændelser';
+$strCannotResetThisPassword = 'Du kan ikke resette denne brugers adgangskode';
+$strCannotResetPasswordInDemoMode = 'Du kan ikke resette adgangskoder i DEMO MODE';
+## whats the meaning here ? CJ
+$strCause = 'Årsag';
 $strCC = 'CC';
-$strChange = 'Change';
-$strChangeExternalDetailsOnAllOpenForSelected = 'This will change the external engineer details for Alle open hændelses for the external engineer you select.';
-$strChangeStateFailed = 'Change state failed';
-$strChangePassword = 'Change Password';
-$strChangeTemporaryOwner = 'Change temporary owner';
-$strChangingContact = 'Changing the kontakt or skill will not reassign this hændelse to another kontrakt';
-$strCharsToKeepWhenTranslating = 'When translating, please do not translate anything that looks like the following: [b] {word} %s. These are placeholders, leave them in the appropriate place in your translated string';
-$strChase = 'Chase';
-$strChased = 'Chased';
-$strChaseManager = 'Chase manager';
-$strChasePhone = 'Chase phone';
-$strChooseLanguage = 'Please choose your language';
-$strCity = 'City';
-$strClearFilter = 'Clear filter';
-$strClickTitleHeaders = 'Click title headers to enable the sections';
+$strChange = 'Ændre';
+$strChangeExternalDetailsOnAllOpenForSelected = 'Dette vil ændre extern ingenginør oplysningerne for alle åbne hændelser for den externe ingenginør du vælger.';
+$strChangeStateFailed = 'Ændring af tilstand fejlet';
+$strChangePassword = 'Skift adgangskode';
+$strChangeTemporaryOwner = 'Skift midlertidig ejer';
+$strChangingContact = 'Ændring af kontakt eller evne til ikke redelegere denne hændelse til en anden kontrakt';
+$strCharsToKeepWhenTranslating = 'Ved oversættelse, oversæt venligst ikke noget der ligner: [b] {word} %s. Disse er specielle parametre, efterlad dem i de respektive steder i den oversatte tekst';
+$strChase = 'Påmind';
+$strChased = 'Påmindet';
+$strChaseManager = 'Påmindelses manager';
+$strChasePhone = 'Påmindelses telefon';
+$strChooseLanguage = 'Vælg venligst dit sprog';
+$strCity = 'By';
+$strClearFilter = 'Fjern filter';
+$strClickTitleHeaders = 'Klik på titelhovederne for at aktivere sektionerne';
 # e.g. close an hændelse
-$strClose = 'Close';
+$strClose = 'Luk';
 # e.g. hændelse is lukket
-$strClosed = 'Closed';
-$strClosedBy = 'Closed by';
-$strClosedOnX = 'Closed on %s';
-$strCloseImmediately = 'Close Immediately';
-$strCloseWindow = 'Close Window';
+$strClosed = 'Lukket';
+$strClosedBy = 'Lukket af';
+$strClosedOnX = 'Lukket den %s';
+$strCloseImmediately = 'Luk øjeblikkelig';
+$strCloseWindow = 'Luk vindue';
 # i.e. the status at the time of closure
-$strClosingStatus = 'Closing Status';
-$strClosureRequested = 'Closure Requested';
-$strClosureRequestForIncident = 'Closure request for hændelse';
-$strCode = 'Code';
-$strCollapseData = 'Collapse Data';
-$strConfirmNewPassword = 'Confirm New Password';
+$strClosingStatus = 'Luknings status';
+$strClosureRequested = 'Anmodet lukning';
+$strClosureRequestForIncident = 'Anmod lukning for hændelse';
+$strCode = 'Kode';
+$strCollapseData = 'Kollaps data';
+$strConfirmNewPassword = 'Bekræft ny adgangskode';
 # noun, he is a kontakt
-$strContact = 'Contact';
-$strContactAddedSuccessfully = 'Contact Added Successfully';
-$strContinue = 'Continue';
-$strContactDetails = 'Contact Details';
-$strContactRecordExists = 'A kontakt record already exists with that Surname and Email address';
-$strContactNotes = 'Contact Notes:';
-$strContacts = 'Contacts';
-$strContactHasBillableContract = 'Contact has a billable kontrakt';
+$strContact = 'Kontakt';
+$strContactAddedSuccessfully = 'Kontakt tilføjet successfuldt';
+$strContinue = 'Fortsæt';
+$strContactDetails = 'Kontakt oplysninger';
+$strContactRecordExists = 'En kontakt eksisterer allerede med det fornavn og email adresse';
+$strContactNotes = 'Kontakt noter:';
+$strContacts = 'Kontakter';
+$strContactHasBillableContract = 'Kontakten har en fakturerbar kontrakt';
 # e.g. 5 kontakter
 $strContactsMulti = '%d kontakter';
 # i.e. legal agreement
-$strContract = 'Contract';
-$strContractAreYouSure = 'This hændelse will be logged against the customers kontrakt. Er du sikker på du vil continue?';
-$strContractID = 'Contract ID';
-$strContractNum = 'Contract %d';
-$strContracts = 'Contracts';
-$strControlPanel = 'Control Panel';
-$strComplete = 'Complete';
-$strCompleted = 'Completed';
-$strCompletion = 'Completion';
-$strCommentsSentWithRequest = 'The following comments were sent with the request';
-$strCreateANotice = 'Create a notice based on %s';
-$strCreateANoticeWhen = 'Create a notice based on %s, when %s';
-$strCreateANoticeForWhen = 'Create a notice based on %s for %s, when %s';
-$strCreatedBy = 'Created by';
-$strCreateNewForm = 'Create New Form';
-$strCredit = 'Credit';
+$strContract = 'Kontrakt';
+$strContractAreYouSure = 'Denne hændelse vil blive logget mod kundens kontrakt. Er du sikker på du vil continue?';
+$strContractID = 'Kontrakt ID';
+$strContractNum = 'Kontrakt %d';
+$strContracts = 'Kontrakter';
+$strControlPanel = 'Kontrol panel';
+$strComplete = 'Udfør';
+$strCompleted = 'Udført';
+$strCompletion = 'Fuldførelse';
+$strCommentsSentWithRequest = 'Følgende kommentarer var sendt med forespørgslen';
+$strCreateANotice = 'Opret en notits baseret på %s';
+$strCreateANoticeWhen = 'Opret en notits baseret på %s, når %s';
+$strCreateANoticeForWhen = 'Opret en notits baseret på %s for %s, når %s';
+$strCreatedBy = 'Oprettet af';
+$strCreateNewForm = 'Opret ny form';
+$strCredit = 'Kredit';
 # e.g. Amount paid into an account
-$strCreditAmount = 'Credit Amount';
+$strCreditAmount = 'Kredit mængde';
 # e.g. film credits
 $strCredits = 'Credits';
-$strCriteria = 'Criteria';
-$strCritical = 'Critical';
+$strCriteria = 'Kriterie';
+$strCritical = 'Kritisk';
 # e.g. JJohn Acme of ACME Widgets Co.
-$strContactofSite = '%s of %s';
-$strCompassionateLeave = 'Maternity/Paternity/Compassionate Leave';
-$strCount = 'Count';
-$strCountContractsByProduct = 'Count kontrakter by product';
+$strContactofSite = '%s fra %s';
+$strCompassionateLeave = 'Forælder orlov';
+$strCount = 'Tæl';
+$strCountContractsByProduct = 'Tæl kontrakter af produkt';
 # Region / State
-$strCounty = 'County';
-$strCountry = 'Country';
+$strCounty = 'Amt';
+$strCountry = 'Land';
 $strCourtesyTitle = 'Courtesy Title';
-$strCreate = 'Create';
-$strCSVfile = 'CSV (Comma Seperated) file';
-$strCSVFileFormatAsFollows = 'CSV File format is as follows';
-$strCurrentDate = 'Current Date';
-$strCurrentOwner = 'Current Owner';
-$strCurrentUserEmailAddress = 'Email address of current bruger';
-$strCurrentUsersSignature = 'Current brugers Signature';
-$strCurrentlyOpen = 'Currently Open';
-$strCurrentlyNoOpenEscalatedIncidentsToModify = 'There are currently no escalated hændelses to modify';
-$strCustomer = 'Customer';
-$strCustomerChaseUpdate = 'Was this a customer chase?';
-$strCustomerFeedback = 'Customer Feedback';
-$strCustomerExport = 'Customer Export';
-$strCustomerHasBeenCalledToChase = 'Customer has been called to chase';
-$strCustomerImpact = 'Customer Impact';
-$strCustomerImpactCustomerText = 'How many brugers are affected by this issue? Is this an issue of downtime or a minor niggle? Does the issue prevent people from working?';
-$strCustomerRequestedClosure = 'Customer Requested hændelse Closure';
-$strDailyRate = 'Daily Rate';
-$strCustomers = 'Customers';
+$strCreate = 'Opret';
+$strCSVfile = 'CSV (komma separeret) fil';
+$strCSVFileFormatAsFollows = 'CSV Fil formatet er som følger';
+$strCurrentDate = 'Dags dato';
+$strCurrentOwner = 'Nuværende ejer';
+$strCurrentUserEmailAddress = 'Email adresse af nuværende bruger';
+$strCurrentUsersSignature = 'Nuværende brugers signatur';
+$strCurrentlyOpen = 'I øjeblikket åben';
+$strCurrentlyNoOpenEscalatedIncidentsToModify = 'Der er ingen nuværende eskalerede redigerbare hændelser';
+$strCustomer = 'Kunde';
+$strCustomerChaseUpdate = 'Var dette en kunde påmindelse?';
+$strCustomerFeedback = 'Kunde feedback';
+$strCustomerExport = 'Kunde export';
+$strCustomerHasBeenCalledToChase = 'Kunde har fået påmindelse via opkald';
+$strCustomerImpact = 'Kunde indvirkning';
+$strCustomerImpactCustomerText = 'Hvor mange brugere er påvirkert af dette problem? Er dette et problem af nedetid, eller til mindre irritation? Er problemet så omfangsrigt at folk ikke kan arbejde?';
+$strCustomerRequestedClosure = 'Kunden forespurgte om lukning af hændelse';
+$strDailyRate = 'Daglig rate';
+$strCustomers = 'Kunder';
 # i.e. place for widgets
 $strDashboard = 'Dashboard';
-$strDashboardComponentDoesntExist = 'Dashboard component %s doesn\'t exist';
-$strDataProtection = 'Data Protection';
+$strDashboardComponentDoesntExist = 'Dashboard komponent %s eksisterer ikke';
+$strDataProtection = 'Data beskyttelse';
 # i.e. 25th December
-$strDate = 'Date';
-$strDateAndTime = 'Date and Time';
-$strDatesAwaitingApproval = 'Dates awaiting approval';
-$strDatesNotRequested = 'Dates Not Requested';
-$strDatesNotYetApproved = 'Dates not yet approved';
-$strDay = 'Day';
-$strDays = 'Days';
+$strDate = 'Dato';
+$strDateAndTime = 'Dato og tid';
+$strDatesAwaitingApproval = 'Datoer afventer godkendelse';
+$strDatesNotRequested = 'Datoer ikke forespurgte';
+$strDatesNotYetApproved = 'Datoer endnu ikke godkendte';
+$strDay = 'Dag';
+$strDays = 'Dage';
 $strdaysother = 'days other leave';
 $strdayssick = 'days sick leave';
-$strdaystraining = 'days training';
-$strdaysworkingaway = 'days working away';
+$strdaystraining = 'dage, træning/kursus';
+$strdaysworkingaway = 'dage, arbejder ude';
+##
 $strDebit = 'Debit';
 # Short for December
 $strDecAbbr = 'Dec';
 $strDecember = 'December';
-$strDecline = 'Decline';
-$strDeclined = 'Declined';
+$strDecline = 'Afvis';
+$strDeclined = 'Afvist';
+## stop
 $strDefault = 'Default';
 $strDefaultSubstitute = 'Default Substitute';
 $strDefineSubstituteEngineersFor = 'Define Substitute Engineers For %s';
