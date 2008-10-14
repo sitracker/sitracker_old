@@ -31,7 +31,7 @@ $strActual = 'Actual';
 $strAcknowledge = 'Acknowledge';
 # e.g. Accepting incidents
 $strAccepting = 'Accepting';
-$strAccessDetails = 'Access DetstrActivityCompletedails';
+$strAccessDetails = 'Access Details';
 $strAction = 'Action';
 $strActions = 'Actions';
 $strActionNeeded = 'Action Needed';
