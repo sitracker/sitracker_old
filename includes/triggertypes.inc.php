@@ -128,6 +128,13 @@ array('name' => 'SiT! Upgraded',
       'required' => array('applicationversion'),
       'params' => array(),
       );
+      
+$triggerarray['TRIGGER_TASK_DUE'] =
+array('name' => 'Task Due',
+      'description' => 'Occurs when a task reaches its due date',
+      'required' => array('taskid'),
+      'params' => array('userid')
+      );
 
 $triggerarray['TRIGGER_USER_CHANGED_STATUS'] =
 array('name' => 'User Changes Status',

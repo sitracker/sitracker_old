@@ -657,11 +657,33 @@ function saction_MailPreviousMonthsTransactions()
 
 function saction_CheckIncomingMail()
 {
+    global $CONFIG;
     if ($CONFIG['enable_inbound_mail'] == 'POP/IMAP')
     {
         include 'inboundemail.php';
     }
     return TRUE;
+}
+
+function saction_CheckTasksDue()
+{
+    $sql = "SELECT interval FROM $GLOBALS['dbScheduler'] ";
+    $sql .= "WHERE action = 'CheckTasksDue'";
+    $result = mysql_query($sql);
+    $intervalobj = mysql_fetch_obj($result);
+    
+    // check the tasks due between now and in N minutes time,
+    // where N is the time this action is run
+    $format = "Y-m-d H:i:s";
+    $startdue = date($format, $GLOBALS['now']);
+    $enddue =  date($format, $GLOBALS['now'] + $intervalobj->interval);
+    $sql = "SELECT * FROM $GLOBALS['dbTasks'] ";
+    $sql .= "WHERE duedate > {$startdue} AND duedate < {$enddue} ";
+    $result = mysql_query($sql);
+    while ($row = mysql_fetch_object($result))
+    {
+        trigger('TRIGGER_TASK_DUE', array('taskid' => $row->id));
+    }
 }
 
 // =======================================================================================
