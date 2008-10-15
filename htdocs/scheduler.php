@@ -33,7 +33,7 @@ switch ($_REQUEST['mode'])
         {
             $saction = mysql_fetch_object($result);
             include ('htmlheader.inc.php');
-            echo "<h2>{$strScheduler}</h2>";
+            echo "<h2>{$strScheduler}".help_link('Scheduler')."</h2>";
             echo "<form name='scheduleform' action='{$_SERVER['PHP_SELF']}' method='post'>";
             echo "<table class='vertical' width='350'>";
             echo "<tr><th>{$strAction}</th>";
@@ -227,7 +227,7 @@ switch ($_REQUEST['mode'])
     default:
         $refresh = 60;
         include ('htmlheader.inc.php');
-        echo "<h2>{$strScheduler}</h2>";
+        echo "<h2>{$strScheduler}".help_link('Scheduler')."</h2>";
         echo "<h3>".ldate($CONFIG['dateformat_datetime'], $GLOBALS['now'], FALSE)."</h3>";
         $sql = "SELECT * FROM `{$dbScheduler}` ORDER BY action";
         $result = mysql_query($sql);
@@ -356,7 +356,6 @@ switch ($_REQUEST['mode'])
                 else $shade = 'shade1';
             }
             echo "</table>\n";
-            echo "<p align='center'>".help_link('Scheduler')."</p>";
 
             // TODO add a check to see if any of the above actions are long overdue, if they are
             // print a message explaining how to set up cron/scheduling
