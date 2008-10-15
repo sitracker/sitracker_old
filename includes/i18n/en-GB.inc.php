@@ -489,7 +489,7 @@ $strFebruary = 'February';
 $strFeedback = 'Feedback';
 $strFeedbackForms = 'Feedback Forms';
 $strFeedbackFormsRequested = 'There are %s feedback forms that have been returned already';
-$strFeedbackFormsWaiting = 'There are %s feedbackforms that have not been returned yet';
+$strFeedbackFormsWaiting = 'There are %s feedback forms that have not been returned yet';
 $strFeedbackRequested = 'Feedback Requested but not yet received for form';
 # e.g. rss feeds
 $strFeeds = 'Feeds';
