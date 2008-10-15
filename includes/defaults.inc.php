@@ -50,7 +50,7 @@ $CONFIG['sales_email'] = 'sales@localhost';
 $CONFIG['support_manager_email'] = 'support_manager@localhost';
 
 // These are the settings for the account to download incoming mail from
-$CONFIG['enable_inbound_mail'] = '';
+$CONFIG['enable_inbound_mail'] = 'POP/IMAP';
 $CONFIG['email_username'] = '';
 $CONFIG['email_password'] = '';
 $CONFIG['email_address'] = '';
@@ -177,7 +177,7 @@ $CONFIG['demo'] = FALSE;
 $CONFIG['debug'] = FALSE;
 
 // Enable user portal
-$CONFIG['portal'] = FALSE;
+$CONFIG['portal'] = TRUE;
 
 // Journal Logging Level
 //      0 = No logging
