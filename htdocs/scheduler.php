@@ -268,7 +268,7 @@ switch ($_REQUEST['mode'])
                 echo "<td>{$schedule->start}</td>";
                 if ($schedule->type == 'interval')
                 {
-                    echo "<td>{$strEvery} ".format_seconds($schedule->interval)."</td>";
+                    echo "<td>{$strEvery} ".format_seconds($schedule->interval, TRUE)."</td>";
                 }
                 elseif ($schedule->type == 'date')
                 {

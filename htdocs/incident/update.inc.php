@@ -347,7 +347,7 @@ function display_update_page($draftid=-1)
         $checkbox = "checked='checked'";
     }
     echo "<label><input type='checkbox' name='cust_vis' id='cust_vis' ";
-    echo "{$checkbox} value='yes' /> {$strMakeVisibleInPortal}<label><br />";
+    echo "{$checkbox} value='yes' /> {$GLOBALS['strMakeVisibleInPortal']}<label><br />";
     echo bbcode_toolbar('updatelog');
     echo "<textarea name='bodytext' id='updatelog' rows='13' cols='50'>";
     if ($draftid != -1) echo $draftobj->content;

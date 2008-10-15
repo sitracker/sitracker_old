@@ -667,25 +667,30 @@ function saction_CheckIncomingMail()
 
 function saction_CheckTasksDue()
 {
-    $sql = "SELECT interval FROM {$GLOBALS['dbScheduler']} ";
-    $sql .= "WHERE action = 'CheckTasksDue'";
-    $result = mysql_query($sql);
-    $intervalobj = mysql_fetch_object($result);
-    
-    // check the tasks due between now and in N minutes time,
-    // where N is the time this action is run
-    $format = "Y-m-d H:i:s";
-    $startdue = date($format, $GLOBALS['now']);
-    $enddue =  date($format, $GLOBALS['now'] + $intervalobj->interval);
-    $sql = "SELECT * FROM {$GLOBALS['dbTasks']} ";
-    $sql .= "WHERE duedate > {$startdue} AND duedate < {$enddue} ";
+    $rtn = TRUE;
+
+    $sql = "SELECT `interval` FROM {$GLOBALS['dbScheduler']} ";
+    $sql .= "WHERE `s.action`='CheckTasksDue'";
     if ($result = mysql_query($sql))
     {
-        while ($row = mysql_fetch_object($result))
+        $intervalobj = mysql_fetch_object($result);
+        
+        // check the tasks due between now and in N minutes time,
+        // where N is the time this action is run
+        $format = "Y-m-d H:i:s";
+        $startdue = date($format, $GLOBALS['now']);
+        $enddue =  date($format, $GLOBALS['now'] + $intervalobj->interval);
+        $sql = "SELECT * FROM {$GLOBALS['dbTasks']} ";
+        $sql .= "WHERE duedate > {$startdue} AND duedate < {$enddue} ";
+        if ($result = mysql_query($sql))
         {
-            trigger('TRIGGER_TASK_DUE', array('taskid' => $row->id));
+            while ($row = mysql_fetch_object($result))
+            {
+                trigger('TRIGGER_TASK_DUE', array('taskid' => $row->id));
+            }
         }
     }
+    return $rtn;
 }
 
 // =======================================================================================

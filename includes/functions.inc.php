@@ -2657,23 +2657,34 @@ function emailtype_replace_specials($string, $incidentid=0, $userid=0)
 
 /**
     * Formats a given number of seconds into a readable string showing days, hours and minutes.
-    * If $seconds is less than 60 the function returns 1 minute.
     * @author Ivan Lucas
     * @param $seconds integer number of seconds
+    * @param $showseconds bool If TRUE and $seconds is less than 60 the function returns 1 minute.
     * @returns string Readable date/time
 */
-function format_seconds($seconds)
+function format_seconds($seconds, $showseconds = FALSE)
 {
-    global $str1Hour, $str1Minute, $str1Day, $str1Month;
+    global $str1Hour, $str1Minute, $str1Day, $str1Month, $strXSeconds, $str1Second;
     global $strXHours, $strXMinutes, $strXDays, $strXMonths, $strXYears;
 
     if ($seconds <= 0)
     {
         return sprintf($strXMinutes, 0);
     }
-    elseif ($seconds <= 60 AND $seconds >= 1)
+    elseif ($seconds <= 60 AND $seconds >= 1 AND $showseconds == FALSE)
     {
         return $str1Minute;
+    }
+    elseif ($seconds < 60 AND $seconds >= 1 AND $showseconds == TRUE)
+    {
+        if ($seconds == 1)
+        {
+            return $str1Second;
+        }
+        else
+        {
+            return sprintf($strXSeconds, $seconds);
+        }
     }
     else
     {
@@ -5913,41 +5924,42 @@ function external_escalation($escalated, $incid)
 function bbcode($text)
 {
     $bbcode_regex = array(0 => '/\[b\](.*?)\[\/b\]/s',
-                        1 => '/\[i\](.*?)\[\/i\]/s',
-                        2 => '/\[u\](.*?)\[\/u\]/s',
-                        3 => '/\[quote\](.*?)\[\/quote\]/s',
-                        4 => '/\[quote\=(.*?)](.*?)\[\/quote\]/s',
-                        5 => '/\[url\](.*?)\[\/url\]/s',
-                        6 => '/\[url\=(.*?)\](.*?)\[\/url\]/s',
-                        7 => '/\[img\](.*?)\[\/img\]/s',
-                        8 => '/\[color\=(.*?)\](.*?)\[\/color\]/s',
-                        9 => '/\[color\](.*?)\[\/color\]/s',
-                        10 => '/\[size\=(.*?)\](.*?)\[\/size\]/s',
-                        11 => '/\[size\](.*?)\[\/size\]/s',
-                        12 => '/\[code\](.*?)\[\/code\]/s',
-                        13 => '/\[hr\]/s',
-                        14 => '/\[s\](.*?)\[\/s\]/s',
-                        15 => '/\[\[att\=(.*?)]](.*?)\[\[\/att]]/s');
+//                         1 => '/\[i\](.*?)\[\/i\]/s',
+//                         2 => '/\[u\](.*?)\[\/u\]/s',
+//                         3 => '/\[quote\](.*?)\[\/quote\]/s',
+//                         4 => '/\[size=(.+?)\](.+?)\[\/size\]/is',
+//                         //5 => '/\[url\](.*?)\[\/url\]/s',
+//                         6 => '/\[size=(.+?)\](.+?)\[\/size\]/is',
+//                         7 => '/\[img\](.*?)\[\/img\]/s',
+//                         8 => '/\[size=(.+?)\](.+?)\[\/size\]/is',
+//                         9 => '/\[color\](.*?)\[\/color\]/s',
+//                         10 => '/\[size=(.+?)\](.+?)\[\/size\]/is',
+//                         11 => '/\[size\](.*?)\[\/size\]/s',
+//                         12 => '/\[code\](.*?)\[\/code\]/s',
+//                         13 => '/\[hr\]/s',
+//                         14 => '/\[s\](.*?)\[\/s\]/s',
+//                         15 => '/\[\[att\=(.*?)]](.*?)\[\[\/att]]/s',
+                        16 => '/\[url=(.+?)\](.+?)\[\/url\]/is');
 
     $bbcode_replace = array(0 => '<strong>$1</strong>',
-                            1 => '<em>$1</em>',
-                            2 => '<u>$1</u>',
-                            3 => '<blockquote><p>$1</p></blockquote>',
-                            4 => '<blockquote cite="$1"><p>$1 said:<br />$2</p></blockquote>',
-                            5 => '<a href="$1" title="$1">$1</a>',
-                            6 => '<a href="$1" title="$1">$2</a>',
-                            7 => '<img src="$1" alt="User submitted image" />',
-                            8 => '<span style="color:$1">$2</span>',
-                            9 => '<span style="color:red;">$1</span>',
-                            10 => '<span style="font-size:$1">$2</span>',
-                            11 => '<span style="font-size:large">$1</span>',
-                            12 => '<code>$1</code>',
-                            13 => '<hr />',
-                            14 => '<span style="text-decoration:line-through">$1</span>',
-                            15 => '<a href="download.php?id=$1">$2</a>');
-
+//                             1 => '<em>$1</em>',
+//                             2 => '<u>$1</u>',
+//                             3 => '<blockquote><p>$1</p></blockquote>',
+//                             4 => '<blockquote cite="$1"><p>$1 said:<br />$2</p></blockquote>',
+//                             //5 => '<a href="$1" title="$1">$1</a>',
+//                             6 => '<a href="$1" title="$1">$2</a>',
+//                             7 => '<img src="$1" alt="User submitted image" />',
+//                             8 => '<span style="color:$1">$2</span>',
+//                             9 => '<span style="color:red;">$1</span>',
+//                             10 => '<span style="font-size:$1">$2</span>',
+//                             11 => '<span style="font-size:large">$1</span>',
+//                             12 => '<code>$1</code>',
+//                             13 => '<hr />',
+//                             14 => '<span style="text-decoration:line-through">$1</span>',
+//                             15 => '<a href="download.php?id=$1">$2</a>',
+                            16 => '<a href="$1">$2</a>');
+                            
     $html = preg_replace($bbcode_regex, $bbcode_replace, $text);
-
     return $html;
 }
 
@@ -5955,6 +5967,7 @@ function bbcode($text)
 function strip_bbcode_tooltip($text)
 {
     $bbcode_regex = array(0 => '/\[url\](.*?)\[\/url\]/s',
+
                         1 => '/\[url\=(.*?)\](.*?)\[\/url\]/s',
                         2 => '/\[color\=(.*?)\](.*?)\[\/color\]/s',
                         3 => '/\[size\=(.*?)\](.*?)\[\/size\]/s',
