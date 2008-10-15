@@ -541,7 +541,6 @@ $strInformX = 'Informa %s';
 $strInitialResponse = 'Respuesta inicial';
 $strInitialResponseBy = 'Respuesta inicial por %s';
 $strInMeeting = 'Reunido';
-$strInMinutes = 'en minutos';
 $strInOffice = 'En la oficina';
 $strInstall = 'Instalar';
 $strInstallOpensearch = 'Si está usando navegadores que soportan OpenSearch, por ejemplo Firefox 3 / IE 7 y posteriores, puede hacer %s para que la búsqueda sea más fácil';

@@ -381,7 +381,6 @@ $strHolidayType = 'Urlaub Typ';
 $strHours = 'Stunden';
 
 $strImportant = 'Wichtig';
-$strInMinutes = 'in Minuten';
 $strInactive = 'Inaktiv';
 $strIncident = 'Aufgabe';
 $strIncidentID = 'Aufgaben ID';

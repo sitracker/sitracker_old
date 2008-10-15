@@ -566,7 +566,6 @@ $strInitialResponse = 'strInitialResponse';
 $strInitialResponseBy = 'strInitialResponseBy';
 $strInitialResponseHasBeenMade = 'strInitialResponseHasBeenMade';
 $strInMeeting = 'strInMeeting';
-$strInMinutes = 'strInMinutes';
 $strInOffice = 'strInOffice';
 $strInstall = 'strInstall';
 $strInstallOpensearch = 'strInstallOpensearch';

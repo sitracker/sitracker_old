@@ -300,7 +300,6 @@ $strHours = 'Ore';
 
 $strID = 'ID';
 $strImportant = 'Importante';
-$strInMinutes = 'in minuti';
 $strInactive = 'Inattivo';
 $strIncidentTitle = 'Oggetto Segnalazione';
 $strIncident = 'Segnalazione';

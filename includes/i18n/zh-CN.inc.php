@@ -454,7 +454,6 @@ $strHours = '小时';
 
 $strID = '编号';
 $strImportant = '重要';
-$strInMinutes = '分钟之内';
 $strInactive = '不活跃的';
 $strIncident = '事件';
 $strIncidentCCList = '额外的Email地址用于接受抄送的事件';

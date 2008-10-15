@@ -403,7 +403,6 @@ $strHours = 'Horas';
 # i.e. short for identification; unique number
 $strID = 'ID';
 $strImportant = 'Importante';
-$strInMinutes = 'en minutos';
 $strInactive = 'Inactivo';
 $strIncident = 'Incidente';
 $strIncidentCCList = 'Direcciones de email adicionales para copiar los incidentes relavantes';

@@ -635,7 +635,6 @@ $strInitialResponse = 'Initial Response';
 $strInitialResponseBy = 'Initial Response by %s';
 $strInitialResponseHasBeenMade = 'The Initial Response has been made';
 $strInMeeting = 'In Meeting';
-$strInMinutes = 'in minutes';
 $strInOffice = 'In Office';
 $strInstall = 'Install';
 $strInstallOpensearch = 'If you\'re using a browsers that support OpenSearch e.g. Firefox 2 / IE 7 and later you can %s to make searching easier.';
