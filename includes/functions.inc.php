@@ -3756,6 +3756,8 @@ function send_email($to, $from, $subject, $body, $replyto='', $cc='', $bcc='')
 {
     global $CONFIG;
 
+    if (empty($to)) trigger_error('Empty TO address in email', E_USER_WARNING);
+
     $extra_headers  = "From: {$from}\n";
     if (!empty($replyto)) $extra_headers .= "Reply-To: {$replyto}\n";
     if (!empty($email_cc))
