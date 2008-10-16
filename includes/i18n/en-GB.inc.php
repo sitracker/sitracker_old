@@ -711,9 +711,7 @@ $strLinkSkillToX = 'Link skill to %s';
 $strLoading = 'Loading';
 $strLocked = 'Locked';
 $strLockedByX = 'Locked by %s';
-$strLogTriggerInJournal = 'Log the trigger in the system journal';
 $strLoggedExternally = 'Logged externally';
-$strLoggedUnder = 'This incident is logged under contract %d';
 $strLogged = 'Logged';
 # E.g. Logged in as: admin, currently On Holiday and Not Accepting calls
 $strLoggedInAsXAndCurrentlyXAndX = 'Logged in as: %s, currently %s and %s';
