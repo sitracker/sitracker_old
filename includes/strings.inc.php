@@ -226,16 +226,17 @@ $slatypes['closed'] = array('icon' => 'close', 'text' => $strClosed);
 $availablelanguages = array('en-GB' => 'English (British)',
                             'en-US' => 'English (US)',
                             'zh-CN' => '简体中文',
-                            'zh-TW' => '繁體中文',
+                            'cy-GB' => 'Cymraeg'
+                            'da-DK' => 'Dansk',
                             'de-DE' => 'Deutsch',
                             'es-ES' => 'Español',
                             'es-CO' => 'Español (Colombia)',
                             'fr-FR' => 'Français',
-                            'ja-JP' => '日本語',
                             'it-IT' => 'Italiano',
+                            'ja-JP' => '日本語',                            
                             'lt-LT' => 'Lietuvių',
                             'pt-PT' => 'Português',
-                            'cy-GB' => 'Cymraeg'
+                            'zh-TW' => '繁體中文',
                            );
 
 
