@@ -196,9 +196,12 @@ while ($update = mysql_fetch_object($result))
     $updatebody = preg_replace($quote, $quotereplace, $updatebody);
 
     // Make URL's into Hyperlinks
+    /* This breaks BBCode by replacing URls in a tags PH 19/10/2008
     $search = array("/(?<!quot;|[=\"]|:[\\n]\/{2})\b((\w+:\/{2}|www\.).+?)"."(?=\W*([<>\s]|$))/i");
     $replace = array("<a href=\"\\1\">\\1</a>");
-    $updatebody = preg_replace("/href=\"www/i", "href=\"http://www", preg_replace ($search, $replace, $updatebody));
+    $updatebody = preg_replace ($search, $replace, $updatebody);
+    */
+    $updatebody = preg_replace("/href=\"(?!http[s]?:\/\/)/", "href=\"http://", $updatebody);
     $updatebody = bbcode($updatebody);
     $updatebody = preg_replace("!([\n\t ]+)(http[s]?:/{2}[\w\.]{2,}[/\w\-\.\?\&\=\#\$\%|;|\[|\]~:]*)!e", "'\\1<a href=\"\\2\" title=\"\\2\">'.(strlen('\\2')>=70 ? substr('\\2',0,70).'...':'\\2').'</a>'", $updatebody);
 
@@ -312,9 +315,12 @@ while ($update = mysql_fetch_object($result))
     $updatebody = preg_replace($quote, $quotereplace, $updatebody);
 
     // Make URL's into Hyperlinks
+    /* This breaks BBCode by replacing URls in a tags PH 19/10/2008
     $search = array("/(?<!quot;|[=\"]|:[\\n]\/{2})\b((\w+:\/{2}|www\.).+?)"."(?=\W*([<>\s]|$))/i");
     $replace = array("<a href=\"\\1\">\\1</a>");
-    $updatebody = preg_replace("/href=\"www/i", "href=\"http://www", preg_replace ($search, $replace, $updatebody));
+    $updatebody = preg_replace ($search, $replace, $updatebody);
+    */
+    $updatebody = preg_replace("/href=\"(?!http[s]?:\/\/)/", "href=\"http://", $updatebody);
     $updatebody = bbcode($updatebody);
     $updatebody = preg_replace("!([\n\t ]+)(http[s]?:/{2}[\w\.]{2,}[/\w\-\.\?\&\=\#\$\%|;|\[|\]~:]*)!e", "'\\1<a href=\"\\2\" title=\"\\2\">'.(strlen('\\2')>=70 ? substr('\\2',0,70).'...':'\\2').'</a>'", $updatebody);
 
