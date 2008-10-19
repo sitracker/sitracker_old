@@ -138,14 +138,14 @@ foreach ($keeptags AS $keeptag)
     }
     else
     {
-        $origtag[]="<{$keeptag}>";
-        $origtag[]="</{$keeptag}>";
-        $origtag[]="<'.strtoupper($keeptag).'>";
-        $origtag[]="</'.strtoupper($keeptag).'>";
-        $temptag[]="[[{$keeptag}]]";
-        $temptag[]="[[/{$keeptag}]]";
-        $temptag[]="[['.strtoupper($keeptag).']]";
-        $temptag[]="[[/'.strtoupper($keeptag).']]";
+        $origtag[] = "<{$keeptag}>";
+        $origtag[] = "</{$keeptag}>";
+        $origtag[] = "<'.strtoupper($keeptag).'>";
+        $origtag[] = "</'.strtoupper($keeptag).'>";
+        $temptag[] = "[[{$keeptag}]]";
+        $temptag[] = "[[/{$keeptag}]]";
+        $temptag[] = "[['.strtoupper($keeptag).']]";
+        $temptag[] = "[[/'.strtoupper($keeptag).']]";
     }
 }
 
@@ -160,7 +160,7 @@ while ($update = mysql_fetch_object($result))
     }
 
     $updateid = $update->id;
-    $updatebody=trim($update->bodytext);
+    $updatebody = trim($update->bodytext);
     $updatebodylen=strlen($updatebody);
     $updatebody = str_replace($origtag, $temptag, $updatebody);
     $updatebody = str_replace($temptag, $origtag, $updatebody);
@@ -234,7 +234,7 @@ while ($update = mysql_fetch_object($result))
         $updateheadertext = str_replace('updatereview', $strCompleted, $updateheadertext);
     }
 
-    if ($update->type=='slamet')
+    if ($update->type == 'slamet')
     {
         $updateheadertext = str_replace('updatesla', $slatypes[$update->sla]['text'], $updateheadertext);
     }
@@ -242,15 +242,15 @@ while ($update = mysql_fetch_object($result))
     echo "<a name='update{$count}'></a>";
 
     // Print a header row for the update
-    if ($updatebody=='' AND $update->customervisibility=='show')
+    if ($updatebody == '' AND $update->customervisibility == 'show')
     {
         echo "<div class='detailinfo'>";
     }
-    elseif ($updatebody=='' AND $update->customervisibility!='show')
+    elseif ($updatebody == '' AND $update->customervisibility != 'show')
     {
         echo "<div class='detailinfohidden'>";
     }
-    elseif ($updatebody!='' AND $update->customervisibility=='show')
+    elseif ($updatebody != '' AND $update->customervisibility == 'show')
     {
         echo "<div class='detailhead'>";
     }
@@ -265,12 +265,12 @@ while ($update = mysql_fetch_object($result))
     }
     else
     {
-        $previous=0;
+        $previous = 0;
     }
     $next = $offset + $_SESSION['num_update_view'];
 
     echo "<div class='detaildate'>";
-    if ($count==0)
+    if ($count == 0)
     {
         // Put the header part (up to the <hr /> in a seperate DIV)
         if (strpos($updatebody, '<hr>') !== FALSE)
