@@ -1,3 +1,8 @@
+Changes in v3.40 - Unreleased
+-- 
+* Support for POP/IMAP retrieval (see config file)
+
+
 Changes in v3.35 - Unreleased
 -----------------------------------------------------------------------
 

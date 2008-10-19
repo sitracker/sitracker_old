@@ -49,7 +49,7 @@ $CONFIG['support_email'] = 'support@localhost';
 $CONFIG['sales_email'] = 'sales@localhost';
 $CONFIG['support_manager_email'] = 'support_manager@localhost';
 
-// These are the settings for the account to download incoming mail from
+// These are the settings for the account to download incoming mail from, settings POP/IMAP or MTA (for piping message in)
 $CONFIG['enable_inbound_mail'] = 'POP/IMAP';
 $CONFIG['email_username'] = '';
 $CONFIG['email_password'] = '';
