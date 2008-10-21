@@ -68,11 +68,18 @@ array('name' => 'Incident Review Due',
       'params' => array('incidentid'),
       );
       
-$triggerarray['TRIGGER_INCIDENT_UPDATED'] = 
+$triggerarray['TRIGGER_INCIDENT_UPDATED_EXTERNAL'] = 
 array('name' => 'Incident updated',
-      'description' => 'Occurs when an incident is updated by someone other than the incident owner',
+      'description' => 'Occurs when an incident is updated by someone external',
       'required' => array('incidentid'),
       'params' => array('incidentid')
+      );
+
+$triggerarray['TRIGGER_INCIDENT_UPDATED_INTERNAL'] = 
+array('name' => 'Incident updated',
+      'description' => 'Occurs when an incident is updated by an engineer',
+      'required' => array('incidentid', 'userid'),
+      'params' => array('incidentid', 'userid')
       );
 
 $triggerarray['TRIGGER_KB_CREATED'] =
@@ -571,6 +578,10 @@ $ttvararray['{supportmanageremail}'] =
 array('description' => $strSupportManagersEmailAddress,
       'replacement' => '$CONFIG[\'support_manager_email\'];'
       );
+      
+$ttvararray['{taskid}'] = 
+array('description' => 'ID of the task',
+      'replacement' => '$paramarray[\'taskid\']');
 
 $ttvararray['{todaysdate}'] =
 array('description' => $strCurrentDate,
@@ -605,9 +616,15 @@ array('description' => $strCurrentUserEmailAddress,
       'replacement' => 'user_email($paramarray[\'userid\']);'
       );
 
-$ttvararray['{userid}'] =
+$ttvararray['{userid}'][] =
 array('description' => 'UserID the trigger passes',
       'replacement' => '$paramarray[\'userid\'];'
+      );
+      
+$ttvararray['{userid}'][] =
+array('description' => 'Owner of a task',
+      'replacement' => 'task_owner($paramarray[\'taskid\']);',
+      'requires' => 'taskid'
       );
 
 $ttvararray['{userrealname}'] =

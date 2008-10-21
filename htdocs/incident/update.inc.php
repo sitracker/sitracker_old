@@ -640,6 +640,7 @@ else
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     $updateid = mysql_insert_id();
+    trigger('TRIGGER_INCIDENT_UPDATED_INTERNAL', array('incidentid' => $id, 'userid' => $sit[2]));
 
     //upload file, here because we need updateid
     if ($_FILES['attachment']['name'] != '')
