@@ -18,7 +18,8 @@
 
 function get_globalsignature($sig_id)
 {
-    $sql = "SELECT signature FROM `{$dbEmailsig}` WHERE id = $sig_id";
+    global $dbEmailSig;
+    $sql = "SELECT signature FROM `{$dbEmailSig}` WHERE id = $sig_id";
     $result=mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
     list($signature)=mysql_fetch_row($result);
@@ -28,12 +29,14 @@ function get_globalsignature($sig_id)
 
 function delete_signature($sig_id)
 {
-    $sql = "DELETE FROM `{$dbEmailsig}` WHERE id = $sig_id";
+    global $dbEmailSig;
+    $sql = "DELETE FROM `{$dbEmailSig}` WHERE id = $sig_id";
     mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
     journal(CFG_LOGGING_NORMAL, 'Global Signature deleted', "A global signature was deleted", CFG_JOURNAL_ADMIN, 0);
     html_redirect("edit_global_signature.php");
+    exit;
 }
 
 $permission = 43; // Edit global signature
