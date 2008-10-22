@@ -201,12 +201,6 @@ else if ($action == "update")
         $errors = 1;
         $errors_string .= "<p class='error'>You must enter a licence quantity</p>\n";
     }
-    // check for blank licence type
-    if ($licence_type == 0)
-    {
-        $errors = 1;
-        $errors_string .= "<p class='error'>You must select a licence type</p>\n";
-    }
     // check for blank admin contact
     if ($admincontact == 0)
     {
