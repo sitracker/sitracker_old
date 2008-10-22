@@ -680,7 +680,7 @@ function trigger_description($triggervar)
 */
 function triggeraction_description($trigaction, $editlink = FALSE)
 {
-    global $CONFIG, $iconset, $actionarray, $dbEmailTemplates, $dbNoticeTemplates;
+    global $CONFIG, $iconset, $actionarray, $dbEmailTemplates, $dbNoticeTemplates, $sit;
     $html = icon('triggeraction', 16)." ";
     if (!empty($trigaction->template))
     {
