@@ -22,7 +22,7 @@ $site = cleanvar($_REQUEST['site']);
 
 function portal_incident_table($sql)
 {
-    global $CONFIG;
+    global $CONFIG, $showclosed;
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     $numincidents = mysql_num_rows($result);
