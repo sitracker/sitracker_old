@@ -31,7 +31,7 @@ include ('htmlheader.inc.php');
 
 function display_holiday_table($result)
 {
-    global $CONFIG, $user, $approver, $mode;
+    global $CONFIG, $user, $approver, $mode, $sit;
 
     echo "<table align='center'>";
     echo "<tr>";
