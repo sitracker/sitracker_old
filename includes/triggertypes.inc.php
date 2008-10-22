@@ -69,14 +69,14 @@ array('name' => 'Incident Review Due',
       );
       
 $triggerarray['TRIGGER_INCIDENT_UPDATED_EXTERNAL'] = 
-array('name' => 'Incident updated',
+array('name' => 'Incident updated externally',
       'description' => 'Occurs when an incident is updated by someone external',
       'required' => array('incidentid'),
       'params' => array('incidentid')
       );
 
 $triggerarray['TRIGGER_INCIDENT_UPDATED_INTERNAL'] = 
-array('name' => 'Incident updated',
+array('name' => 'Incident updated internally',
       'description' => 'Occurs when an incident is updated by an engineer',
       'required' => array('incidentid', 'userid'),
       'params' => array('incidentid', 'userid')
