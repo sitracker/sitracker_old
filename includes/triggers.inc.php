@@ -657,7 +657,14 @@ function trigger_description($triggervar)
     if (!empty($triggervar['name'])) $html .= "{$triggervar['name']}";
     else $html .= "{$trigger}";
     $html .= "</strong><br />\n";
-    $html .= $GLOBALS[$triggervar['description']];
+    if (isset($GLOBALS[$triggervar['description']]))
+    {
+    	$html .= $GLOBALS[$triggervar['description']];
+    }
+    else
+    {
+    	$html .=  $triggervar['description'];
+    }
     return $html;
 }
 
