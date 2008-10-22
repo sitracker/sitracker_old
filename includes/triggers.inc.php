@@ -515,7 +515,9 @@ function email_templates($name, $triggertype='system', $selected = '')
         //$name = strpos()
         //$name = str_replace("_", " ", $name);
         $name = strtolower($name);
-        $html .= "<option value='{$template->name}' title=\"{$template->description}\">{$template->name}</option>\n";
+        $html .= "<option value='{$template->name}'>{$template->name}</option>\n";
+        $html .= "<option disabled='disabled' style='color: #333; text-indent: 10px;' value='{$template->name}'>".$template->description."</option>\n";
+    	
     }
     $html .= "</select>\n";
     return $html;
