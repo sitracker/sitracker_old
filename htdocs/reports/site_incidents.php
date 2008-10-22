@@ -44,6 +44,9 @@ if (empty($mode))
     echo date_picker('date.end');
     echo "</td></tr>";
     echo "<tr><td>Show sites that have logged no incidents</td><td><input type='checkbox' name='zerologged' /></td></tr>";
+    echo "<tr><th>{$strOutput}</th>";
+	echo "<td><select name='mode'><option value='screen'>{$strScreen}</option>";
+	echo "<option value='csv'>{$strCSVfile}</option></td></tr>";
     echo "</table>";
     echo "<p align='center'>";
     echo "<input type='hidden' name='user' value='{$user}' />";
@@ -63,8 +66,6 @@ else
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     if (mysql_num_rows($result) > 0)
     {
-        $csv.="START:,{$startdate}";
-        $csv.="END:,{$enddate}";
         while ($site = mysql_fetch_object($result))
         {
             $sql = "SELECT count(i.id) AS incidentz, s.name AS site FROM `{$dbContacts}` AS c, `{$dbSites}` AS s, `{$dbIncidents}` AS i ";
@@ -78,18 +79,27 @@ else
             $count=1*($details->incidentz);
             if (!empty($zerologged))
             {
-                $csv .="$count,'{$site->name},'{$site->resel}'\n";
+                $csv .="$count,{$site->name},{$site->resel}\n";
             }
             else
             {
-                if ($count!=0) $csv .="$count,'{$site->name},'{$site->resel}'\n";
+                if ($count!=0) $csv .="$count,{$site->name},{$site->resel}\n";
             }
         }
-        header("Content-type: text/csv\r\n");
-        header("Content-disposition-type: attachment\r\n");
-        header("Content-disposition: filename=yearly_incidents.csv");
-        echo "incidents, site, reseller\n";
-        echo $csv;
+        $csv = "{$strIncidents}, {$strSite}, {$strReseller}\n".$csv;
+        if ($_POST['mode'] == 'csv')
+        {
+        	$csv = "START:,{$startdate}\nEND:,{$enddate}".$csv;
+			echo create_report($csv, 'csv', 'yearly_incidents.csv');    		
+        }
+        else
+        {
+        	include 'htmlheader.inc.php';
+        	echo "<h2>".icon('site', 32)." {$strSiteIncidents}</h2>";
+        	echo create_report($csv, 'table');
+        }
+
+
     }
     else html_redirect('site_incidents.php', FALSE, $strNoResults);
 

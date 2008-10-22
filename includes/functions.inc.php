@@ -10724,7 +10724,8 @@ function create_report($data, $output = 'table', $filename = 'report.csv')
     if ($output == 'table')
     {
         $html = "\n<table align='center'><tr>\n";
-        $headers = explode(',', $data);
+        $data = explode("\n", $data);
+        $headers = explode(',', $data[0]);
         $rows = sizeof($headers);
         foreach ($headers as $header)
         {
