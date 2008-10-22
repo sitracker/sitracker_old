@@ -8392,58 +8392,57 @@ function contract_details($id, $mode='internal')
         else
         {
             $allowedcontacts = $maintrow['supportedcontacts'];
-
+            
             $supportedcontacts = supported_contacts($id);
             $numberofcontacts = 0;
 
-            if ($supportedcontacts != NULL)
-            {
                 $numberofcontacts = sizeof($supportedcontacts);
-
                 if ($allowedcontacts == 0)
                 {
-                    $allowedcontacts = $GLOBALS[strUnlimited];
+                    $allowedcontacts = $GLOBALS['strUnlimited'];
                 }
-
                 $html .= "<table align='center'>";
                 $supportcount = 1;
-                foreach ($supportedcontacts AS $contact)
+                
+                if ($numberofcontacts > 0)
                 {
-                    $html .= "<tr><th>{$GLOBALS[strContact]} #{$supportcount}:</th>";
-                    $html .= "<td>".icon('contact', 16)." ";
-                    if ($mode == 'internal')
+                    foreach ($supportedcontacts AS $contact)
                     {
-                        $html .= "<a href=\"contact_details.php?";
-                    }
-                    else
-                    {
-                        $html .= "<a href=\"contactdetails.php?";
-                    }
-                    $html .= "id={$contact}\">".contact_realname($contact)."</a>, ";
-                    $html .= contact_site($contact). "</td>";
+                        $html .= "<tr><th>{$GLOBALS[strContact]} #{$supportcount}:</th>";
+                        $html .= "<td>".icon('contact', 16)." ";
+                        if ($mode == 'internal')
+                        {
+                            $html .= "<a href=\"contact_details.php?";
+                        }
+                        else
+                        {
+                            $html .= "<a href=\"contactdetails.php?";
+                        }
+                        $html .= "id={$contact}\">".contact_realname($contact)."</a>, ";
+                        $html .= contact_site($contact). "</td>";
 
-                    if ($mode == 'internal')
-                    {
-                        $html .= "<td><a href=\"delete_maintenance_support_contact.php?contactid=".$contact."&amp;maintid=$id&amp;context=maintenance\">{$GLOBALS[strRemove]}</a></td></tr>\n";
+                        if ($mode == 'internal')
+                        {
+                            $html .= "<td><a href=\"delete_maintenance_support_contact.php?contactid=".$contact."&amp;maintid=$id&amp;context=maintenance\">{$GLOBALS[strRemove]}</a></td></tr>\n";
+                        }
+                        else
+                        {
+                            $html .= "<td><a href=\"{$_SERVER['PHP_SELF']}?id={$id}&amp;contactid=".$contact."&amp;action=remove\">{$GLOBALS[strRemove]}</a></td></tr>\n";
+                        }
+                        $supportcount++;
                     }
-                    else
-                    {
-                        $html .= "<td><a href=\"{$_SERVER['PHP_SELF']}?id={$id}&amp;contactid=".$contact."&amp;action=remove\">{$GLOBALS[strRemove]}</a></td></tr>\n";
-                    }
-                    $supportcount++;
+                    $html .= "</table>";
                 }
-                $html .= "</table>";
-            }
-            else
-            {
-                $html .= "<p align='center'>{$GLOBALS[strNoRecords]}<p>";
-            }
+                else
+                {
+                    $html .= "<p class='info'>{$GLOBALS[strNoRecords]}<p>";
+                }
         }
     }
 
     if ($maintrow['allcontactssupported'] != 'yes')
     {
-        $html .= "<p align='center'>$strUsedNofN";
+        $html .= "<p align='center'>";
         $html .= sprintf($GLOBALS['strUsedNofN'],
                         "<strong>".$numberofcontacts."</strong>",
                         "<strong>".$allowedcontacts."</strong>");
