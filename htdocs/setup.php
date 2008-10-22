@@ -273,7 +273,7 @@ function is_assoc_callback($a, $b)
 
 function setup_configure()
 {
-    global $SETUP, $CFGVAR, $CONFIG, $configfiles, $config_filename, $cfg_file_exists, $cfg_file_writable;
+    global $SETUP, $CFGVAR, $CONFIG, $configfiles, $config_filename, $cfg_file_exists, $cfg_file_writable, $numconfigfiles;
     $html = '';
 
     if ($cfg_file_exists)
