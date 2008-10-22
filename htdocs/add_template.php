@@ -1,5 +1,5 @@
 <?php
-// add_emailtype.php - Form for adding email templates
+// add_template.php - Form for adding new templates
 //
 // SiT (Support Incident Tracker) - Support call tracking system
 // Copyright (C) 2000-2008 Salford Software Ltd. and Contributors
@@ -7,8 +7,6 @@
 // This software may be used and distributed according to the terms
 // of the GNU General Public License, incorporated herein by reference.
 //
-
-// Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
 @include ('set_include_path.inc.php');
 $permission = 16; // Add Email Template
