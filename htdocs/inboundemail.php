@@ -129,7 +129,10 @@ if ($emails > 0)
             $rawemail = $mailbox->getMessageHeader($i + 1)."\n";
             $rawemail .= $mailbox->messageBody($i + 1);
             $rawemail = explode("\n", $rawemail);
-            $mailbox->deleteEmail($i + 1);
+            if ($mailbox->servertype == 'imap')
+            {
+                $mailbox->deleteEmail($i + 1);
+            }
         }
         // Create and populate the email object
         $email = new mime_email;
@@ -450,6 +453,11 @@ if ($emails > 0)
     
     if ($mailbox->servertype == 'imap')
     {
+        imap_expunge($mailbox->mailbox);
+    }
+    elseif ($mailbox->servertype == 'pop')
+    {
+        imap_delete($mailbox->mailbox, '1:*');
         imap_expunge($mailbox->mailbox);
     }
     
