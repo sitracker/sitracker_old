@@ -168,7 +168,7 @@ if ($emails > 0)
             $sql.= "VALUES ('{$updateid}', '0', '{$decoded_email->from_name}', '".mysql_real_escape_string($decoded_email->subject)."', '{$GLOBALS['strPossibleNewIncident']}', '{$contactid}' )";
             mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
-            trigger('TRIGGER_INCIDENT_UPDATED', array('incident' => $incidentid));
+            trigger('TRIGGER_INCIDENT_UPDATED_EXTERNAL', array('incident' => $incidentid));
         }
         else
         {
