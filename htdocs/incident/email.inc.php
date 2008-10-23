@@ -580,7 +580,7 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
         // spellcheck email if required
         if ($spellcheck == 'yes')
         {
-            include ('spellcheck_email.php');
+            include ('../spellcheck_email.php');
             exit;
         } 
         if ($encoded == 'yes') // FIXME does this have a purpose?

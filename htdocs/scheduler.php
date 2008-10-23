@@ -339,7 +339,14 @@ switch ($_REQUEST['mode'])
                         }
                         elseif ($schedule->type == 'date')
                         {
-                            $nextruntime = 1;                        	
+                            $nextruntime = 1;    
+                            // TODO
+                            /*
+                            if over schedule
+                                now
+                            else
+                                find date
+                             */
                         }
                     }
                     

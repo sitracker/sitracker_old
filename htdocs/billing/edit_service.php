@@ -11,7 +11,7 @@
 
 // Author:  Paul Heaney Paul Heaney <paulheaney[at]users.sourceforge.net>
 
-@include ('set_include_path.inc.php');
+@include ('../set_include_path.inc.php');
 $permission =  80;
 
 require_once('db_connect.inc.php');

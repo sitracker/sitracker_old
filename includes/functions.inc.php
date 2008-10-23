@@ -4206,6 +4206,7 @@ function holiday_approval_status($approvedid, $approvedby=-1)
     global $strApproved, $strApprovedFree, $strRequested, $strNotRequested;
     global $strArchivedDenied, $strArchivedNotRequested, $strArchivedRequested;
     global $strArchivedApproved, $strArchivedApprovedFree, $strApprovalStatusUnknown;
+    global $strDenied;
 
     // We add 10 to normal status when we archive holiday
     switch ($approvedid)

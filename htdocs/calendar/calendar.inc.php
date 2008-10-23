@@ -25,7 +25,7 @@ $holidaytype[5] = $GLOBALS['strCompassionateLeave'];
 */
 function draw_calendar($nmonth, $nyear)
 {
-    global $type, $user, $selectedday, $selectedmonth, $selectedyear;
+    global $type, $user, $selectedday, $selectedmonth, $selectedyear, $CONFIG;
 
     // Get the current date/time for the users timezone
     $timebase = gmmktime() + ($timezone * 3600);
@@ -55,13 +55,13 @@ function draw_calendar($nmonth, $nyear)
         echo "<p>first day of the first week of $nmonth $nyear is $firstday (from 0 to 6) <p>\n";
         echo "The last day of $nmonth $nyear is $lastday\n<p>";
     }
-    $days[0] = $strSun;
-    $days[1] = $strMon;
-    $days[2] = $strTue;
-    $days[3] = $strWed;
-    $days[4] = $strThu;
-    $days[5] = $strFri;
-    $days[6] = $strSat;
+    $days[0] = $GLOBALS['strSun'];
+    $days[1] = $GLOBALS['strMon'];
+    $days[2] = $GLOBALS['strTue'];
+    $days[3] = $GLOBALS['strWed'];
+    $days[4] = $GLOBALS['strThu'];
+    $days[5] = $GLOBALS['strFri'];
+    $days[6] = $GLOBALS['strSat'];
 
     $dayRow = 0;
     echo "\n<table summary='{$monthName} {$nyear}'>";
@@ -790,12 +790,12 @@ function get_users_appointments($user, $start, $end)
             break;
 
             case 10:
-                $description = $strPublicHoliday;
+                $description = $GLOBALS['strPublicHoliday'];
                 $bgcolor = '#ADADAD';
             break;
 
             default:
-                $description = $strUnknown;
+                $description = $GLOBALS['strUnknown'];
                 $bgcolor = '#ADADAD';
             break;
         }

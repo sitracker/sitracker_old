@@ -9,7 +9,7 @@
 //
 // Author: Tom Gerrard <tom.gerrard[at]salfordsoftware.co.uk>
 
-@include ('set_include_path.inc.php');
+@include ('../set_include_path.inc.php');
 $permission = 50; /* Approve holidays */
 require ('db_connect.inc.php');
 require ('functions.inc.php');

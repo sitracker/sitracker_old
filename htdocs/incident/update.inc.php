@@ -752,9 +752,9 @@ else
 
     if (!$result)
     {
-        include ('includes/incident_html_top.inc');
+        include ('incident_html_top.inc.php');
         echo "<p class='error'>{$strUpdateIncidentFailed}</p>\n";
-        include ('includes/incident_html_bottom.inc');
+        include ('incident_html_bottom.inc.php');
     }
     else
     {
