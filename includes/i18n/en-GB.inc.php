@@ -12,8 +12,10 @@ $str1Minute = '1 Minute';
 $str1Month = '1 Month';
 $str1Hour = '1 Hour';
 $str1IncidentsLoggedViaPortal = '1 Incident Logged via the Portal';
+$str1Second = '1 Second';
 # e.g 1st day of month
 $str1st = '1st';
+$str1Year = '1 Year';
 # e.g 2nd day of month
 $str2nd = '2nd';
 # e.g 3rd day of month
@@ -48,7 +50,7 @@ $strActivity = 'Activity';
 $strActivityAdded = 'Activity Added';
 $strActivityBilling = 'Activity Billing';
 $strActivityBillingInfo = 'Only closed activities are shown for billing.';
-$strActivityCompleted = 'Activity completed: %s';
+$strActivityCompleted = 'Activity completed: %s, total duration was: %s';
 $strActivityContainsNoNotes = 'Activity contains no notes';
 $strActivityList = 'Activity List';
 $strActivityMarkedCompleteSuccessfully = 'Activity Marked Complete Successfully';
@@ -300,6 +302,7 @@ $strCredit = 'Credit';
 $strCreditAmount = 'Credit Amount';
 # e.g. film credits
 $strCredits = 'Credits';
+$strCreateANotice = 'Create a notice based on %s';
 $strCriteria = 'Criteria';
 $strCritical = 'Critical';
 # e.g. JJohn Acme of ACME Widgets Co.
@@ -382,6 +385,7 @@ $strDocumentIDX = 'Document ID %s %s';
 $strDoesNOTApply = 'Does NOT apply';
 $strDoesThisUpdateMeetSLA = 'Does this update meet an SLA target?';
 $strDoNothing = 'Do Nothing';
+$strDoNothing = 'Do nothing';
 $strDraftChoose = 'Multiple drafts exist please select one';
 $strDraftDelete = 'Delete Draft';
 $strDraftEdit = 'Edit Draft';
@@ -635,6 +639,7 @@ $strInitialResponse = 'Initial Response';
 $strInitialResponseBy = 'Initial Response by %s';
 $strInitialResponseHasBeenMade = 'The Initial Response has been made';
 $strInMeeting = 'In Meeting';
+$strInMinutes = 'in minutes';
 $strInOffice = 'In Office';
 $strInstall = 'Install';
 $strInstallOpensearch = 'If you\'re using a browsers that support OpenSearch e.g. Firefox 2 / IE 7 and later you can %s to make searching easier.';
@@ -908,6 +913,8 @@ $strNoticeNewUser = '{userrealname} has been added as a new user to {application
 $strNotices = 'Notices';
 $strNoticeSitUpgradedDesc = 'Notifies of a system upgrade';
 $strNoticeSitUpgraded ='{applicationshortname} has been upgraded to {applicationversion}';
+$strNoticeTaskDue = 'Task {taskid} - {taskname} is now due';
+$strNoticeTaskDueDesc = 'Notifies of a due task.';
 $strNoticeUserChangedStatusDesc = 'Notifies of an user\'s status change';
 $strNoticeUserChangedStatus = '{userrealname} has changed their status to {userstatus} and {useraccepting} incidents';
 $strNoticesBlurb = 'This page allows you to post a new global notice. BB code is allowed.';
@@ -1460,6 +1467,7 @@ $strXHour = '%s Hour';
 $strXHours = '%s Hours';
 $strXLate = '%s late';
 $strXMinutes = '%s Minutes';
+$strXMonths = '%s Months';
 # e.g. '5 days old'
 $strXold = '%s old';
 # e.g. 'Fred of ACME Inc'. i.e. Name of Site

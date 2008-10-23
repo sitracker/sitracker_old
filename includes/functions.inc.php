@@ -2664,7 +2664,7 @@ function emailtype_replace_specials($string, $incidentid=0, $userid=0)
 */
 function format_seconds($seconds, $showseconds = FALSE)
 {
-    global $str1Hour, $str1Minute, $str1Day, $str1Month, $strXSeconds, $str1Second;
+    global $str1Year, $str1Hour, $str1Minute, $str1Day, $str1Month, $strXSeconds, $str1Second;
     global $strXHours, $strXMinutes, $strXDays, $strXMonths, $strXYears;
 
     if ($seconds <= 0)
@@ -2700,7 +2700,14 @@ function format_seconds($seconds, $showseconds = FALSE)
 
         if ($years > 0)
         {
-            $return_string .= sprintf($strXYears, $years).' ';
+        	if ($years == 1)
+        	{
+        		$return_string .= $str1Year.' ';
+        	}
+        	else
+        	{
+            	$return_string .= sprintf($strXYears, $years).' ';
+        	}
         }
 
         if ($months > 0 AND $years < 2)
@@ -2710,7 +2717,7 @@ function format_seconds($seconds, $showseconds = FALSE)
                 $return_string .= $str1Month." ";
             }
             else
-            {
+            {            	
                 $return_string .= sprintf($strXMonths, $months).' ';
             }
         }
@@ -4208,10 +4215,9 @@ function holiday_type ($id)
 
 function holiday_approval_status($approvedid, $approvedby=-1)
 {
-    global $strApproved, $strApprovedFree, $strRequested, $strNotRequested;
+    global $strApproved, $strApprovedFree, $strRequested, $strNotRequested, $strDenied;
     global $strArchivedDenied, $strArchivedNotRequested, $strArchivedRequested;
     global $strArchivedApproved, $strArchivedApprovedFree, $strApprovalStatusUnknown;
-    global $strDenied;
 
     // We add 10 to normal status when we archive holiday
     switch ($approvedid)
@@ -5045,7 +5051,7 @@ function get_public_holidays($startdate, $enddate)
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
-    $publicholidays;
+    $publicholidays = array();
 
     if (mysql_num_rows($result) > 0)
     {
