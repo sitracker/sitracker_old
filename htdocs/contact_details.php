@@ -68,9 +68,10 @@ while ($contactrow = mysql_fetch_array($contactresult))
         $postcode = $contactrow['postcode'];
     }
 
+    echo "<h2>".icon('contact', 32)." {$strContactDetails}</h2>";
+
     echo "<table align='center' class='vertical'>";
-    echo "<tr><th colspan='2'><h3>".icon('contact', 32)." {$contactrow['forenames']} {$contactrow['surname']}";
-    echo ' '.gravatar($contactrow['email'], 32);
+    echo "<tr><th colspan='2'><h3>".gravatar($contactrow['email'], 32)." {$contactrow['forenames']} {$contactrow['surname']}";
     echo "</h3></th></tr>\n";
     if ($contactrow['active'] == 'false')
     {
