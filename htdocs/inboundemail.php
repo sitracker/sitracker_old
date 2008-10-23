@@ -140,7 +140,8 @@ if ($emails > 0)
         unset($rawemail);
 
         $decoded_email = $email->go_decode();
-        
+        unset($email);
+
         //fix for ISO-8859-1 subjects
         $decoded_email->subject = subjectdecode($decoded_email->subject);
         // Extract Incident ID etc.

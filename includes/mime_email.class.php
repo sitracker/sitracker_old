@@ -198,7 +198,7 @@ class mime_email
 	# function to grab all the necessary data from the email header and put
 	# them into the object/attributes
 
-	function parseHeader($rawemail)
+	function parseHeader(&$rawemail)
 	{
 		// for performance measuring
 		// $time_start = $this->getmicrotime();
@@ -324,7 +324,7 @@ class mime_email
 	# function to grab all the necessary data from the email body and put
 	# them into the object/attributes
 
-	function parseBody($rawemail)
+	function parseBody(&$rawemail)
 	{
 		if ($this->contenttype == "text/plain" or $this->contenttype== '') {
 			//
@@ -353,7 +353,7 @@ class mime_email
 	# parse given Boundary Marker, this has to be a function because for example a html email
 	# with attachments has several (mostly 2) nested Boundary Markers
 
-	function parseBoundary($boundary, $rawemail) {
+	function parseBoundary($boundary, &$rawemail) {
 
 		// default value for newboundary, because if we leave it blank, our
 		// regex below would become true if some write in his email things like "--"
