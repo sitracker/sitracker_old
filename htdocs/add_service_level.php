@@ -33,6 +33,8 @@ if (empty($action) OR $action == "showform")
 
     echo "<p align='center'>{$strTag}: <input type='text' name='tag' value='' /></p>";
 
+    echo "<p align='center'>{$strTimed}: <input type='checkbox' name='timed' value='yes' /></p>";
+
     echo "<table align='center'>";
     echo "<tr><th>{$strPriority}</th><th>{$strInitialResponse}</th>";
     echo "<th>{$strProblemDefinition}</th><th>{$strActionPlan}</th><th>{$strResolutionReprioritisation}</th>";
@@ -101,12 +103,21 @@ elseif ($action == "edit")
     $crit_resolution_days = mysql_real_escape_string($_POST['crit_resolution_days']);
     $crit_review_days = mysql_real_escape_string($_POST['crit_review_days']);
 
+    $timed = cleanvar($_POST['timed']);
+    $allow_reopen = 'no';
+    
+    if (empty($timed))
+    {
+    	$timed = 'no';
+        $allow_reopen = 'yes';  
+    }
+
     // Check input
     $errors=0;
     if (empty($tag)) $errors++;
     if ($errors >= 1)
     {
-        echo "<p class='error'>Invalid input. Please go back and check you filled all fields correctly.</p>";
+        echo "<p class='error'>Invalid input. Please go back and check you filled all fields correctly.</p>"; // FIMXE i18m
         exit;
     }
     // FIXME as temporary measure until we've completely stopped using ID's, fill in the id field
@@ -118,49 +129,57 @@ elseif ($action == "edit")
     $newslid++;
 
     // Insert low
-    $sql = "INSERT INTO `{$dbServiceLevels}` (id, tag, priority, initial_response_mins, prob_determ_mins, action_plan_mins, resolution_days, review_days) VALUES (";
+    $sql = "INSERT INTO `{$dbServiceLevels}` (id, tag, priority, initial_response_mins, prob_determ_mins, action_plan_mins, resolution_days, review_days, timed, allow_reopen) VALUES (";
     $sql .= "'$newslid', '$tag', '1', ";
     $sql .= "'$low_initial_response_mins', ";
     $sql .= "'$low_prob_determ_mins', ";
     $sql .= "'$low_action_plan_mins', ";
     $sql .= "'$low_resolution_days', ";
-    $sql .= "'$low_review_days')";
+    $sql .= "'$low_review_days', ";
+    $sql .= "'{$timed}', ";
+    $sql .= "'{$allow_reopen}')";
     mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     if (mysql_affected_rows() == 0) trigger_error("INSERT affected zero rows",E_USER_WARNING);
 
     // Insert medium
-    $sql = "INSERT INTO `{$dbServiceLevels}` (id, tag, priority, initial_response_mins, prob_determ_mins, action_plan_mins, resolution_days, review_days) VALUES (";
+    $sql = "INSERT INTO `{$dbServiceLevels}` (id, tag, priority, initial_response_mins, prob_determ_mins, action_plan_mins, resolution_days, review_days, timed, allow_reopen) VALUES (";
     $sql .= "'$newslid', '$tag', '2', ";
     $sql .= "'$med_initial_response_mins', ";
     $sql .= "'$med_prob_determ_mins', ";
     $sql .= "'$med_action_plan_mins', ";
     $sql .= "'$med_resolution_days', ";
-    $sql .= "'$med_review_days')";
+    $sql .= "'$med_review_days', ";
+    $sql .= "'{$timed}', ";
+    $sql .= "'{$allow_reopen}')";
     mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
     if (mysql_affected_rows() == 0) trigger_error("INSERT affected zero rows",E_USER_WARNING);
 
     // Insert high
-    $sql = "INSERT INTO `{$dbServiceLevels}` (id, tag, priority, initial_response_mins, prob_determ_mins, action_plan_mins, resolution_days, review_days) VALUES (";
+    $sql = "INSERT INTO `{$dbServiceLevels}` (id, tag, priority, initial_response_mins, prob_determ_mins, action_plan_mins, resolution_days, review_days, timed, allow_reopen) VALUES (";
     $sql .= "'$newslid', '$tag', '3', ";
     $sql .= "'$hi_initial_response_mins', ";
     $sql .= "'$hi_prob_determ_mins', ";
     $sql .= "'$hi_action_plan_mins', ";
     $sql .= "'$hi_resolution_days', ";
-    $sql .= "'$hi_review_days')";
+    $sql .= "'$hi_review_days', ";
+    $sql .= "'{$timed}', ";
+    $sql .= "'{$allow_reopen}')";
     mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
     if (mysql_affected_rows() == 0) trigger_error("INSERT affected zero rows",E_USER_WARNING);
 
     // Insert critical
-    $sql = "INSERT INTO `{$dbServiceLevels}` (id, tag, priority, initial_response_mins, prob_determ_mins, action_plan_mins, resolution_days, review_days) VALUES (";
+    $sql = "INSERT INTO `{$dbServiceLevels}` (id, tag, priority, initial_response_mins, prob_determ_mins, action_plan_mins, resolution_days, review_days, timed, allow_reopen) VALUES (";
     $sql .= "'$newslid', '$tag', '4', ";
     $sql .= "'$crit_initial_response_mins', ";
     $sql .= "'$crit_prob_determ_mins', ";
     $sql .= "'$crit_action_plan_mins', ";
     $sql .= "'$crit_resolution_days', ";
-    $sql .= "'$crit_review_days')";
+    $sql .= "'$crit_review_days', ";
+    $sql .= "'{$timed}', ";
+    $sql .= "'{$allow_reopen}')";
     mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
     if (mysql_affected_rows() == 0) trigger_error("INSERT affected zero rows",E_USER_WARNING);
