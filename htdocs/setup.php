@@ -762,7 +762,7 @@ switch ($_REQUEST['action'])
         require ('tablenames.inc.php');
         // Connect to Database server
         $db = @mysql_connect($CONFIG['db_hostname'], $CONFIG['db_username'], $CONFIG['db_password']);
-        if (mysql_error())
+        if (@mysql_error())
         {
             echo setup_configure();
         }
@@ -773,17 +773,20 @@ switch ($_REQUEST['action'])
             mysql_select_db($CONFIG['db_database'], $db);
             if (mysql_error())
             {
-                echo "<p class='error'>".mysql_error()."<br />Could not select database";
-                if ($CONFIG['db_database']!='')
-                {
-                    echo " '{$CONFIG['db_database']}', check the database name,";
-                }
-                else
-                {
-                    echo ", the database name was not configured, please set the <code>\$CONFIG['db_database'] config variable";
-                    $CONFIG['db_database'] = 'sit';
-                }
-                echo "</p>";
+            	if (!empty($CONFIG['db_username']) AND !empty($CONFIG['db_password']))
+            	{
+	                echo "<p class='error'>".mysql_error()."<br />Could not select database";
+	                if ($CONFIG['db_database']!='')
+	                {
+	                    echo " '{$CONFIG['db_database']}', check the database name,";
+	                }
+	                else
+	                {
+	                    echo ", the database name was not configured, please set the <code>\$CONFIG['db_database'] config variable";
+	                    $CONFIG['db_database'] = 'sit';
+	                }
+	                echo "</p>";
+            	}
                 $sql = "CREATE DATABASE `{$CONFIG['db_database']}` DEFAULT CHARSET utf8";
                 if ($_REQUEST['action'] == 'createdatabase')
                 {
