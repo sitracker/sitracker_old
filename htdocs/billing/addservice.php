@@ -84,10 +84,10 @@ if (empty($submit) OR !empty($_SESSION['formerrors']['add_service']))
     echo "<tr><th>{$strBilling}</th>";
     echo "<td>";
     echo "<label>";
-    echo "<input type='radio' name='billtype' value='billperunit' onchange=\"addservice_showbilling();\" checked /> ";
+    echo "<input type='radio' name='billtype' value='billperunit' onchange=\"addservice_showbilling('serviceform');\" checked /> ";
     echo "{$strPerUnit}</label>";
     echo "<label>";
-    echo "<input type='radio' name='billtype' value='billperincident' onchange=\"addservice_showbilling();\" /> ";
+    echo "<input type='radio' name='billtype' value='billperincident' onchange=\"addservice_showbilling('serviceform');\" /> ";
     echo "{$strPerIncident}</label>";
     echo "</td></tr>\n";
 

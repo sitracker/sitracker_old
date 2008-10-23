@@ -79,7 +79,7 @@ switch ($mode)
                     echo "<tr><th>{$strBilling}</th>";
                     echo "<td>";
                     echo "<label>";
-                    echo "<input type='radio' name='billtype' value='billperunit' onchange=\"addservice_showbilling();\" ";
+                    echo "<input type='radio' name='billtype' value='billperunit' onchange=\"addservice_showbilling('serviceform');\" ";
                     if (!empty($obj->unitrate) AND $obj->unitrate > 0)
                     {
                         echo "checked ";
@@ -88,7 +88,7 @@ switch ($mode)
                     }
                     echo "/> {$strPerUnit}</label>";
                     echo "<label>";
-                    echo "<input type='radio' name='billtype' value='billperincident' onchange=\"addservice_showbilling();\" ";
+                    echo "<input type='radio' name='billtype' value='billperincident' onchange=\"addservice_showbilling('serviceform');\" ";
                     if (!empty($obj->incidentrate) AND $obj->incidentrate > 0)
                     {
                         echo "checked ";

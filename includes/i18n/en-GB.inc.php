@@ -1156,6 +1156,7 @@ $strServiceLevel = 'Service Level';
 $strServiceLevelPreventsReopen = 'The service level of this incident prevents it being reopened';
 $strServiceLevels = 'Service Levels';
 $strServicePacksApplied = 'Service Packs Applied';
+$strServicePeriod = 'Service Period';
 $strSession = 'Session';
 $strSessionExpired = 'Your session has expired or you have not yet logged in';
 $strSetPassword = 'Set Password';

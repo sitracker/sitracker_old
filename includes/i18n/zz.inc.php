@@ -1035,6 +1035,7 @@ $strServiceLevel = 'strServiceLevel';
 $strServiceLevelPreventsReopen = 'strServiceLevelPreventsReopen';
 $strServiceLevels = 'strServiceLevels';
 $strServicePacksApplied = 'strServicePacksApplied';
+$strServicePeriod = 'Service Period';
 $strSession = 'strSession';
 $strSessionExpired = 'strSessionExpired';
 $strSetPassword = 'strSetPassword';

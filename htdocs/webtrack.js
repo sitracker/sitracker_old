@@ -334,16 +334,19 @@ function addcontract_sltimed(servicelevel)
 }
 
 
-function addservice_showbilling()
+function addservice_showbilling(form)
 {
     /*var a = $('billtype');
     alert("A: "+a.value);*/
     
-    var typeValue = Form.getInputs('serviceform','radio','billtype').find(function(radio) { return radio.checked; }).value;
+    var typeValue = Form.getInputs(form,'radio','billtype').find(function(radio) { return radio.checked; }).value;
     // alert("B: "+typeValue);
     if (typeValue == 'billperunit' || typeValue == 'billperincident')
     {
-        $('billingsection').show();
+    	if ($('billingsection') != null)
+    	{
+    		$('billingsection').show();
+    	}
         if (typeValue == 'billperunit') $('unitratesection').show();
         else $('unitratesection').hide();
         if (typeValue == 'billperincident') $('incidentratesection').show();

@@ -2954,9 +2954,14 @@ function calculate_time_of_next_action($days, $hours, $minutes)
 }
 
 
-// Returns the HTML for a drop down list of service levels,
-// with the given name and with the given id selected.
-function servicelevel_drop_down($name, $id, $collapse = FALSE)
+/**
+ * @param $name String name of select
+ * @param $id Int The ID which should be choosed
+ * @param $collapse Boolean Only show the tag rather than tag + priority
+ * @param $select String additional parameter to the select clause e.g. onchange code
+ * @return String HTML of the SLA drop down
+ */
+function servicelevel_drop_down($name, $id, $collapse = FALSE, $select = '')
 {
     global $dbServiceLevels;
 
@@ -2970,7 +2975,7 @@ function servicelevel_drop_down($name, $id, $collapse = FALSE)
     }
     $result = mysql_query($sql);
 
-    $html = "<select name='$name'>\n";
+    $html = "<select id='{$name}' name='{$name}' {$select}>\n";
     // INL 30Mar06 Removed this ability to select a null service level
     // if ($id == 0) $html .= "<option selected='selected' value='0'></option>\n";
     while ($servicelevels = mysql_fetch_object($result))
@@ -10377,7 +10382,12 @@ function contract_service_table($contractid)
 
             if ($service->lastbilled > 0)
             {
-                $span .= "<strong>{$strLastBilled}</strong>: ".ldate($CONFIG['dateformat_date'], $service->lastbilled);
+                $span .= "<strong>{$GLOBALS['strLastBilled']}</strong>: ".ldate($CONFIG['dateformat_date'], $service->lastbilled)."<br />";
+            }
+
+            if ($service->foc == 'yes')
+            {
+            	$span .= "<strong>{$GLOBALS['strFreeOfCharge']}</strong>";
             }
 
             if (!empty($span))
