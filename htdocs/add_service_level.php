@@ -33,7 +33,8 @@ if (empty($action) OR $action == "showform")
 
     echo "<p align='center'>{$strTag}: <input type='text' name='tag' value='' /></p>";
 
-    echo "<p align='center'>{$strTimed}: <input type='checkbox' name='timed' value='yes' /></p>";
+    echo "<p align='center'>{$strTimed}: <input type='checkbox' name='timed' value='yes' />";
+	echo help_link('ServiceLevelTimed');"</p>";
 
     echo "<table align='center'>";
     echo "<tr><th>{$strPriority}</th><th>{$strInitialResponse}</th>";
