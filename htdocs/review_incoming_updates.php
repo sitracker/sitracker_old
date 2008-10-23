@@ -117,22 +117,25 @@ function deldir($location)
 {
     if (substr($location,-1) <> "/")
     $location = $location."/";
-    $all = opendir($location);
-    while ($file = readdir($all))
+    if (is_dir($location))
     {
-        if (is_dir($location.$file) && $file <> ".." && $file <> ".")
+        $all = opendir($location);
+        while ($file = readdir($all))
         {
-            deldir($location.$file);
-            rmdir($location.$file);
-            unset($file);
+            if (is_dir($location.$file) && $file <> ".." && $file <> ".")
+            {
+                deldir($location.$file);
+                rmdir($location.$file);
+                unset($file);
+            }
+            elseif (!is_dir($location.$file))
+            {
+                unlink($location.$file);
+                unset($file);
+            }
         }
-        elseif (!is_dir($location.$file))
-        {
-            unlink($location.$file);
-            unset($file);
-        }
+        rmdir($location);
     }
-    rmdir($location);
 }
 
 $title = $strReviewHeldUpdates;
