@@ -5925,6 +5925,7 @@ function external_escalation($escalated, $incid)
 */
 function bbcode($text)
 {
+    global $CONFIG;
     $bbcode_regex = array(0 => "/\[b\](.*?)\[\/b\]/s",
                          1 => "/\[i\](.*?)\[\/i\]/s",
                          2 => "/\[u\](.*?)\[\/u\]/s",
@@ -5958,7 +5959,7 @@ function bbcode($text)
                              12 => "<code>$1</code>",
                              13 => "<hr />",
                              14 => "<span style=\"text-decoration:line-through\">$1</span>",
-                             15 => "<a href=\"{$_SERVER['HTTP_HOST']}/{$CONFIG['application_webpath']}download.php?id=$1\">$2</a>",
+                             15 => "<a href=\"{$_SERVER['HTTP_HOST']}{$CONFIG['application_webpath']}download.php?id=$1\">$2</a>",
                             16 => "<a href=\"$1\">$2</a>");
                                                         
     $html = preg_replace($bbcode_regex, $bbcode_replace, $text);
