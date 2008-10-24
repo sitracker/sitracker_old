@@ -1046,7 +1046,6 @@ $strReason = 'Reason';
 $strReassignTo = 'Reassign to';
 $strReassignedToBy = 'Reassigned to %s by %s';
 $strReassignText = 'Explain in detail why you are reassigning this incident and include instructions to the new owner as to what action should be taken next.  Please be as detailed as possible and include full descriptions of any work you have performed.';
-$strReason = 'Reason';
 $strReceivedByEmail = 'This information was received in the email.  It is not editable.';
 $strRecent = 'Recent';
 $strRecentIncidents = 'Recent Incidents';
