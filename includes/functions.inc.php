@@ -9999,23 +9999,30 @@ function get_unit_rate($contractid, $date='')
 {
     $serviceid = get_serviceid($contractid, $date);
 
-    $sql = "SELECT unitrate FROM `{$GLOBALS['dbService']}` AS p WHERE serviceid = {$serviceid}";
-
-    $result = mysql_query($sql);
-    if (mysql_error())
-    {
-        trigger_error(mysql_error(),E_USER_WARNING);
-        return FALSE;
-    }
-
-    $unitrate = -1;
-
-    if (mysql_num_rows($result) > 0)
-    {
-        $obj = mysql_fetch_object($result);
-        $unitrate = $obj->unitrate;
-    }
-
+	if ($serviceid != -1)
+	{
+	    $sql = "SELECT unitrate FROM `{$GLOBALS['dbService']}` AS p WHERE serviceid = {$serviceid}";
+	
+	    $result = mysql_query($sql);
+	    if (mysql_error())
+	    {
+	        trigger_error(mysql_error(),E_USER_WARNING);
+	        return FALSE;
+	    }
+	
+	    $unitrate = -1;
+	
+	    if (mysql_num_rows($result) > 0)
+	    {
+	        $obj = mysql_fetch_object($result);
+	        $unitrate = $obj->unitrate;
+	    }
+	}
+	else
+	{
+		$unitrate = -1;
+	}
+	
     return $unitrate;
 }
 
