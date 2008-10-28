@@ -475,6 +475,11 @@ elseif ($mode == 'approvalpage')
                 if ($output == 'html')
                 {
                     echo $str;
+                    
+                    if ($unapprovable)
+                    {
+                    	echo "<p align='center'>{$strUnapprovableBilledIncidentsDesc}</p>";
+                    }
                 }
             }
         }

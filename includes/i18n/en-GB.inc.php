@@ -1381,6 +1381,7 @@ $strUpdateSuccessful = 'Update Successful';
 $strUpdateType = 'Update Type';
 $strUploadedBy = 'Uploaded by %s';
 $strUnapprovable = 'Unapprovable';
+$strUnapprovableBilledIncidentsDesc = 'Some incidents are unapprovable this could be due to: No service present, No active service for the period, overdrafts are disabled and no service with credit has been found';
 $strUnitRate = 'Unit Rate';
 $strUnits = 'Units';
 $strUnknown = 'Unknown';
