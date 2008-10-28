@@ -350,7 +350,7 @@ elseif ($mode == 'approvalpage')
 
                                 if (!$isapproved)
                                 {
-                                    $billableunitsincidentunapproved += $m * $billtotalssiteunapproved[$m];
+                                    $billableunitsincidentunapproved += $m * $billtotalsincident[$m];
                                 }
                             }
                             else
@@ -418,27 +418,34 @@ elseif ($mode == 'approvalpage')
 
             // $str .= "<tr><td><a href=\"javascript: submitform({$sitenamenospaces})\" onclick='return confirm_action('Confirm approval');'>{$strApprove}</a>";
             $str .= "<tr><td><input type='submit' value='{$strApprove}' />";
-            $str .= "</td><td colspan='5'></td><td>{$strTOTALS}</td>";
+            $str .= "</td><td colspan='5'></td>";
 
-            foreach ($multipliers AS $m)
+            if (!$showonlyapproved) 
             {
-                $str .= "<td>";
-                if (!empty($billtotalssite[$m])) $str .= $billtotalssite[$m];
-                else $str .= "0";
-                $str .= "</td>";
+                $str .= "<td>{$strTOTALS}</td>";
+    
+                foreach ($multipliers AS $m)
+                {
+                    $str .= "<td>";
+                    if (!empty($billtotalssite[$m])) $str .= $billtotalssite[$m];
+                    else $str .= "0";
+                    $str .= "</td>";
+                }
+    
+                $str .= "<td>{$sitetotals}</td>";
+                $str .= "<td>{$sitetotalsbillable}</td>";
+                $str .= "<td>{$sitetotalrefunds}</td>";
+    
+                $cost = ($sitetotalsbillable + $sitetotalrefunds) * $unitrate;
+    
+                $str.= "<td>{$CONFIG['currency_symbol']}".number_format($cost, 2)."</td><td></td>";
+    
+                $str .= "</tr>\n";
+    
+                $str .= "<tr><td align='right' colspan='6'></td>";
             }
-
-            $str .= "<td>{$sitetotals}</td>";
-            $str .= "<td>{$sitetotalsbillable}</td>";
-            $str .= "<td>{$sitetotalrefunds}</td>";
-
-            $cost = ($sitetotalsbillable + $sitetotalrefunds) * $unitrate;
-
-            $str.= "<td>{$CONFIG['currency_symbol']}".number_format($cost, 2)."</td><td></td>";
-
-            $str .= "</tr>\n";
-
-            $str .= "<tr><td align='right' colspan='7'>{$strAwaitingApproval}</td>";
+            
+            $str .= "<td>{$strAwaitingApproval}</td>";
 
             foreach ($multipliers AS $m)
             {
