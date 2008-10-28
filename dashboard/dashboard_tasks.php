@@ -38,8 +38,6 @@ function dashboard_tasks($dashletid)
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
-
-
         if (mysql_num_rows($result) >=1 )
         {
             $content .= "<table align='center' width='100%'>";
@@ -78,7 +76,7 @@ function dashboard_tasks($dashletid)
         $content .= "<p class='warning'>{$GLOBALS['strDisabled']}</p>";
     }
 
-    echo dashlet('tasks', $dashletid, icon('task', 16), sprintf($GLOBALS['strUsersTasks'], user_realname($user,TRUE)), 'tasks.php', $content);
+    echo dashlet('tasks', $dashletid, icon('task', 16), sprintf($GLOBALS['strXsTasks'], user_realname($user,TRUE)), 'tasks.php', $content);
 }
 
 ?>
