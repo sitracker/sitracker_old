@@ -343,8 +343,10 @@ switch ($mode)
                 $status = update_contract_balance($contractid, $reason, $amount, $destinationservice);
                 if ($status) html_redirect("{$CONFIG['application_webpath']}contract_details.php?id={$contractid}", TRUE, 'Transfer sucessful');
                 else html_redirect("{$CONFIG['application_webpath']}contract_details.php?id={$contractid}", FALSE, 'Transfer failed');
+                exit;
             }
             html_redirect('main.php', FALSE, 'Transfer failed');
+            exit;
         }
         break;
 
