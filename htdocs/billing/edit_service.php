@@ -270,15 +270,15 @@ switch ($mode)
             echo "<table align='center' class='vertical'>";
             echo "<tr><th>{$strEdit}</th><td>{$sourceservice}</td></tr>";
             echo "<tr><th></th><td>";
-            echo "<input type='radio' name='mode' id='edit' value='edit' checked='checked' onclick=\"setDivState('transfersection', 'false');\" /> {$strEdit} ";
-            echo "<input type='radio' name='mode' id='transfer' value='transfer' onclick=\"setDivState('transfersection', 'true');\" /> Transfer ";
+            echo "<input type='radio' name='mode' id='edit' value='edit' checked='checked' onclick=\"$('transfersection').hide();\" /> {$strEdit} ";
+            echo "<input type='radio' name='mode' id='transfer' value='transfer' onclick=\"$('transfersection').show();\" /> Transfer ";
             echo "</td></tr>";
             echo "<tbody  style='display:none' id='transfersection' ><tr><th>Destination Account:</th>";
             echo "<td>";
 
 
             // Only allow transfers on the same contractid
-            $sql = "SELECT * FROM `{$dbService}` WHERE contractid = '{$contractid}'";
+            $sql = "SELECT * FROM `{$dbService}` WHERE contractid = '{$contractid}' AND serviceid != {$sourceservice}";
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
