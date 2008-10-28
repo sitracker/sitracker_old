@@ -595,6 +595,9 @@ elseif ($mode == 'approve')
     if (!empty($incidentid))
     {
         $status = approve_incident($incidentid);
+        
+        $maintid = incident_maintid($incidentid);
+        $percent = get_service_percentage($maintid);
     }
     elseif (!empty($selected))
     {
@@ -604,10 +607,13 @@ elseif ($mode == 'approve')
             $l = approve_incident($s);
 
             $status = $status AND $l;
+            
+            $maintid = incident_maintid($s);
+            $p = get_service_percentage($maintid);
+            if (p == FALSE) $percent = true;
         }
     }
-    $maintid = incident_maintid($incidentid);
-    $percent = get_service_percentage($maintid);
+    
     
     if ($percent !== FALSE)
     {
