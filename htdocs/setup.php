@@ -1013,6 +1013,7 @@ switch ($_REQUEST['action'])
                             }
                             echo "<p>".mysql_num_rows($result)." incidents upgraded</p>";
                         }
+                        
                         if ($installed_version < 3.35)
                         {
                             if ($CONFIG['closure_delay'] > 0 AND $CONFIG['closure_delay'] != 554400)
@@ -1076,14 +1077,26 @@ switch ($_REQUEST['action'])
                                 }
                             }
                         }
-                        elseif ($installed_version == $application_version)
+                        
+                        if ($installed_version < 3.40)
+                        {
+                        	//remove any brackets from checks as per mantis 197
+                        	$sql = "UPDATE `triggers` SET `checks` = REPLACE(`checks`, '(', ''); ";
+                        	$sql .= "UPDATE `triggers` SET `checks` = REPLACE(`checks`, ')', '')";
+                        	mysql_query($sql);
+                            if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);                        	
+                        }
+                        
+                        if ($installed_version == $application_version)
                         {
                             echo "<p>Everything is up to date</p>";
+                            echo "<p>See the <code>doc/UPGRADE</code> file for further upgrade notes.<br />";
                         }
                         else
                         {
                             $upgradeok = TRUE;
                             echo "<p>See the <code>doc/UPGRADE</code> file for further upgrade instructions and help.<br />";
+                            
                         }
 
                         if ($installed_version >= 3.24)
