@@ -7561,9 +7561,11 @@ function schedule_actions_due()
     }
 
     // Year TODO CHECK
-    $sql = "SELECT * FROM `{$dbScheduler}` WHERE status = 'enabled' AND type = 'date' ";
-    $sql .= "AND UNIX_TIMESTAMP(start) <= $now AND (UNIX_TIMESTAMP(end) >= $now OR UNIX_TIMESTAMP(end) = 0) ";
-    $sql .= "AND ((date_type = 'year' AND (DAYOFYEAR(CURDATE()) > date_offset OR (DAYOFYEAR(CURDATE()) = date_offset AND CURTIME() >= date_time)) ";
+    $sql = "SELECT * FROM `{$dbScheduler}` WHERE status = 'enabled' ";
+    $sql .= "AND type = 'date' AND UNIX_TIMESTAMP(start) <= $now ";
+    $sql .= "AND (UNIX_TIMESTAMP(end) >= $now OR UNIX_TIMESTAMP(end) = 0) ";
+    $sql .= "AND ((date_type = 'year' AND (DAYOFYEAR(CURDATE()) > date_offset ";
+    $sql .= "OR (DAYOFYEAR(CURDATE()) = date_offset AND CURTIME() >= date_time)) ";
     $sql .= "AND DATE_FORMAT(CURDATE(), '%Y') != DATE_FORMAT(lastran, '%Y') ) ) ";  // not run this year
     $sql .= "AND laststarted <= lastran";
     //$sql .= "OR ";
@@ -7607,6 +7609,7 @@ function schedule_action_started($action)
     if (mysql_affected_rows() > 0) return TRUE;
     else return FALSE;
 }
+
 
 /**
     * Mark a schedule action as done
