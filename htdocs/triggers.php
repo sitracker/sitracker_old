@@ -216,7 +216,7 @@ switch ($_REQUEST['mode'])
             {
                 echo "<var><strong><a href='javascript:void(0);' onclick=\"insertRuletext('{$op}');\">{$op}</a></strong></var> ";
             }
-            $logicaloperators = array('OR', 'AND', '(', ')');
+            $logicaloperators = array('OR', 'AND');
             foreach ($logicaloperators AS $op)
             {
                 echo "<var><strong><a href='javascript:void(0);' onclick=\"insertRuletext('{$op}');\">{$op}</a></strong></var> ";
@@ -259,6 +259,8 @@ switch ($_REQUEST['mode'])
         $emailtemplate = cleanvar($_POST['emailtemplate']);
         $parameters = cleanvar($_POST['parameters']);
         $rules = cleanvar($_POST['rules']);
+        $rules = str_replace("(", "", $rules);
+        $rules = str_replace(")", "", $rules);
 
         //TODO if we do more than one of these, we should probably use
         //trigger_replace_specials()
