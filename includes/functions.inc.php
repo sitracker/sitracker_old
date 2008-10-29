@@ -8371,15 +8371,18 @@ function contract_details($id, $mode='internal')
 
     $html .= "</td></tr>";
 
-    $html .= "<tr><th>{$GLOBALS['strService']}</th><td>";
-    $html .= contract_service_table($id);
-    $html .= "</td></tr>\n";
-
-    // FIXME not sure if this should be here
-    $html .= "<tr><th>{$GLOBALS['strBalance']}</th><td>{$CONFIG['currency_symbol']}".number_format(get_contract_balance($id), 2);
-    $multiplier = get_billable_multiplier(strtolower(date('D', $now)), date('G', $now));
-    $html .= " (&cong;".contract_unit_balance($id)." units)";
-    $html .= "</td></tr>";
+    if ($mode == 'internal')
+    {
+	    $html .= "<tr><th>{$GLOBALS['strService']}</th><td>";
+	    $html .= contract_service_table($id);
+	    $html .= "</td></tr>\n";
+	
+	    // FIXME not sure if this should be here
+	    $html .= "<tr><th>{$GLOBALS['strBalance']}</th><td>{$CONFIG['currency_symbol']}".number_format(get_contract_balance($id), 2);
+	    $multiplier = get_billable_multiplier(strtolower(date('D', $now)), date('G', $now));
+	    $html .= " (&cong;".contract_unit_balance($id)." units)";
+	    $html .= "</td></tr>";
+    }
 
     if ($maintrow['maintnotes'] != '' AND $mode == 'internal')
     {
