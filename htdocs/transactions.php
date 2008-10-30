@@ -37,6 +37,8 @@ $focaszero = cleanvar($_REQUEST['focaszero']);
 if (empty($showfoc) OR $showfoc != 'show') $showfoc = FALSE;
 else $showfoc = TRUE;
 
+if (!empty($site) AND empty($sites)) $sites = array($site);
+
 $sitebreakdown = $_REQUEST['sitebreakdown'];
 
 if (!empty($enddate))
