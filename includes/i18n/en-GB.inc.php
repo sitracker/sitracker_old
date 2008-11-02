@@ -1319,8 +1319,8 @@ $strToChangeBrackets = '(to change)';
 $strToChangeContract = 'To change the contract close this incident and create a new one';
 $strToChangePassword = 'To change your password, first enter your existing password and then type your new password twice to confirm it';
 $strToday = 'Today';
-$strTodaysDate = 'Todays Date';
-$strTodaysStats = 'Todays Statistics';
+$strTodaysDate = 'Today's Date';
+$strTodaysStats = 'Today's Statistics';
 $strTotal = 'Total';
 # Totals capitalised
 $strTOTALS = 'TOTALS';
