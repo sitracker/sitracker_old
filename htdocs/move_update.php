@@ -145,57 +145,78 @@ else
     // check that the incident is still open.  i.e. status not = closed
     if (incident_open($incidentid) == $GLOBALS['strYes'])
     {
-        // retrieve the update body so that we can insert time headers
-        $sql = "SELECT incidentid, bodytext, timestamp FROM `{$dbUpdates}` WHERE id='$updateid'";
-        $uresult=mysql_query($sql);
-        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
-        list($oldincidentid, $bodytext, $timestamp)=mysql_fetch_row($uresult);
-        if ($oldincidentid==0) $oldincidentid='Inbox';
-        $prettydate = ldate('r', $timestamp);
-        // prepend 'moved' header to bodytext
-        $body ="Moved from <b>$oldincidentid</b> -> <b>$incidentid</b> by: <b>".user_realname($sit[2])."</b>\n";
-        $body .="Original Message Received at: <b>$prettydate</b>\n";
-        $body .= "Status: -&gt; <b>Active</b>\n";
-        $bodytext = $body . $bodytext;
-        $bodytext = mysql_real_escape_string($bodytext);
-        // move the update.
-        $sql = "UPDATE `{$dbUpdates}` SET incidentid='$incidentid', userid='$sit[2]', bodytext='$bodytext', timestamp='$now' WHERE id='$updateid'";
-        mysql_query($sql);
-        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-
+        $moved_attachments = TRUE;
         // update the incident record, change the incident status to active
         $sql = "UPDATE `{$dbIncidents}` SET status='1', lastupdated='$now', timeofnextaction='0' WHERE id='$incidentid'";
         mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
-
+        $old_path = $CONFIG['attachment_fspath']. 'updates' . $fsdelim;
+        $new_path = $CONFIG['attachment_fspath'] . $incidentid . $fsdelim;
+        
         //move attachments from updates to incident
-        if (!file_exists($CONFIG['attachment_fspath'] ."$incidentid"))
+        $sql = "SELECT linkcolref, filename FROM `{$dbLinks}` AS l, ";
+        $sql .= "`{$dbFiles}` as f ";
+        $sql .= "WHERE l.origcolref = '{$updateid}' ";
+        $sql .= "AND l.linktype = 5 ";
+        $sql .= "AND l.linkcolref = f.id";
+        $result = mysql_query($sql);
+        if ($result)
         {
-            $umask=umask(0000);
-            @mkdir($CONFIG['attachment_fspath'] ."$incidentid", 0770);
-            umask($umask);
-        }
-
-        $new_path = $CONFIG['attachment_fspath'] ."$incidentid".$fsdelim."u$updateid";
-        $update_path = $CONFIG['attachment_fspath'].'updates'.$fsdelim.$updateid;
-        if (file_exists($update_path))
-        {
-            $rename = rename("$update_path/$file", "$new_path/$file");
-            if (!$rename)
+            if (!file_exists($old_path))
             {
-                trigger_error("Couldn't move file: {$file}", E_USER_WARNING);
+                $umask=umask(0000);
+                @mkdir($CONFIG['attachment_fspath'] ."$incidentid", 0770);
+                umask($umask);
+            }
+            while ($row = mysql_fetch_object($result))
+            {
+                $filename = $row->linkcolref . "-" . $row->filename;
+                $old_file = $old_path . $filename;
+                if (file_exists($old_file))
+                {
+                    $rename = rename($old_file, $new_path . $filename);
+                    if (!$rename)
+                    {
+                        trigger_error("Couldn't move file: {$file}", E_USER_WARNING);
+                        $moved_attachments = FALSE;
+                    }
+                }
             }
         }
+        
+        if ($moved_attachments)
+        {
+            // retrieve the update body so that we can insert time headers
+            $sql = "SELECT incidentid, bodytext, timestamp FROM `{$dbUpdates}` WHERE id='$updateid'";
+            $uresult=mysql_query($sql);
+            if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
+            list($oldincidentid, $bodytext, $timestamp)=mysql_fetch_row($uresult);
+            if ($oldincidentid==0) $oldincidentid='Inbox';
+            $prettydate = ldate('r', $timestamp);
+            // prepend 'moved' header to bodytext
+            $body = sprintf($strMovedFromXtoXbyX, "<b>$oldincidentid</b>",
+                            "<b>$incidentid</b>", 
+                            "<b>".user_realname($sit[2])."</b>")."\n";
+            $body .= sprintf($strOriginalMessageReceivedAt, 
+                             "<b>$prettydate</b>")."\n";
+            $body .= $strStatus . " -&gt; <b>{$strActive}</b>\n";
+            $bodytext = $body . $bodytext;
+            $bodytext = mysql_real_escape_string($bodytext);
+            // move the update.
+            $sql = "UPDATE `{$dbUpdates}` SET incidentid='$incidentid', userid='$sit[2]', bodytext='$bodytext', timestamp='$now' WHERE id='$updateid'";
+            mysql_query($sql);
+            if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
-        //remove from tempincoming to prevent build up
-        $sql = "DELETE FROM `{$dbTempIncoming}` WHERE updateid='$updateid'";
-        mysql_query($sql);
-        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+            //remove from tempincoming to prevent build up
+            $sql = "DELETE FROM `{$dbTempIncoming}` WHERE updateid='$updateid'";
+            mysql_query($sql);
+            if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
-        journal(CFG_LOGGING_NORMAL, 'Incident Update Moved', "Incident update $update moved to incident $incidentid", CFG_JOURNAL_INCIDENTS, $incidentid);
+            journal(CFG_LOGGING_NORMAL, 'Incident Update Moved', "Incident update $update moved to incident $incidentid", CFG_JOURNAL_INCIDENTS, $incidentid);
 
-        html_redirect("incident_details.php?id=$incidentid");
+            html_redirect("incident_details.php?id=$incidentid");
+        }
     }
     else
     {
