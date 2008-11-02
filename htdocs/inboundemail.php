@@ -120,10 +120,9 @@ elseif ($CONFIG['enable_inbound_mail'] == 'POP/IMAP')
 }
 else
 {
-    echo 'WRONG';
     return FALSE;
 }
-echo 'emails: '.$emails;
+
 if ($emails > 0)
 {
     for ($i = 0; $i < $emails; $i++)
