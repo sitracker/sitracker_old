@@ -122,7 +122,6 @@ else
 {
     return FALSE;
 }
-
 if ($emails > 0)
 {
     for ($i = 0; $i < $emails; $i++)
@@ -267,7 +266,7 @@ if ($emails > 0)
                     // Write the attachment
                     if (!empty($incidentid))
                     {
-                        $fa_dir = $CONFIG['attachment_fspath'].$incidentid.$fsdelim."u".$updateid.$fsdelim;
+                        $fa_dir = $CONFIG['attachment_fspath'].$incidentid.$fsdelim;
                     }
                     else
                     {
