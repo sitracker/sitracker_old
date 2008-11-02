@@ -10877,6 +10877,66 @@ function get_service_percentage($maintid)
     return $return;
 }
 
+/*
+ * DEPRECATED THOUGH STILL CALLED
+ * 
+ * The following are deprecated and had been emoved though have been readded as they are still called by code which will be released in 3.4 following this they will be removed
+ */
+
+function emailtype_to($id)
+{
+    return db_read_column('tofield', 'emailtype', $id);
+}
+
+
+function emailtype_from($id)
+{
+    return db_read_column('fromfield', 'emailtype', $id);
+}
+
+
+function emailtype_replyto($id)
+{
+    return db_read_column('replytofield', 'emailtype', $id);
+}
+
+
+function emailtype_cc($id)
+{
+   return db_read_column('ccfield', 'emailtype', $id);
+}
+
+
+function emailtype_bcc($id)
+{
+    return db_read_column('bccfield', 'emailtype', $id);
+}
+
+
+function emailtype_subject($id)
+{
+    return db_read_column('subjectfield', 'emailtype', $id);
+}
+
+
+function emailtype_body($id)
+{
+    return db_read_column('body', 'emailtype', $id);
+}
+
+function emailtype_customervisibility($id)
+{
+    return db_read_column('customervisibility', 'emailtype', $id);
+}
+
+function emailtype_storeinlog($id)
+{
+    return db_read_column('storeinlog', 'emailtype', $id);
+}
+
+/*
+ * END DEPRECATED
+ */
 
 // ** Place no more function defs below this **
 
