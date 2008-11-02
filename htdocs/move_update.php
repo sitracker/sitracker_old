@@ -195,12 +195,12 @@ else
             if ($oldincidentid==0) $oldincidentid='Inbox';
             $prettydate = ldate('r', $timestamp);
             // prepend 'moved' header to bodytext
-            $body = sprintf($strMovedFromXtoXbyX, "<b>$oldincidentid</b>",
+            $body = sprintf($SYSLANG['strMovedFromXtoXbyX'], "<b>$oldincidentid</b>",
                             "<b>$incidentid</b>", 
                             "<b>".user_realname($sit[2])."</b>")."\n";
-            $body .= sprintf($strOriginalMessageReceivedAt, 
+            $body .= sprintf($SYSLANG['strOriginalMessageReceivedAt'], 
                              "<b>$prettydate</b>")."\n";
-            $body .= $strStatus . " -&gt; <b>{$strActive}</b>\n";
+            $body .= $SYSLANG['strStatus'] . " -&gt; <b>{$SYSLANG['strActive']}</b>\n";
             $bodytext = $body . $bodytext;
             $bodytext = mysql_real_escape_string($bodytext);
             // move the update.
