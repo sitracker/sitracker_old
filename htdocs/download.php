@@ -53,11 +53,11 @@ else
 
 if ($incidentid == 0 OR empty($incidentid))
 {
-    $file_fspath = "{$CONFIG['attachment_fspath']}updates{$fsdelim}{$updateid}{$fsdelim}{$filename}";
+    $file_fspath = "{$CONFIG['attachment_fspath']}updates{$fsdelim}{$id}-{$filename}";
 }
 else
 {
-    $file_fspath = "{$CONFIG['attachment_fspath']}{$incidentid}{$fsdelim}u{$updateid}{$fsdelim}{$filename}";
+    $file_fspath = "{$CONFIG['attachment_fspath']}{$incidentid}{$fsdelim}{$id}-{$filename}";
 }
 
 if (!file_exists($file_fspath))
@@ -72,10 +72,9 @@ elseif ($access == TRUE)
 {
     $file_size = filesize($file_fspath);
     $fp = fopen($file_fspath, 'r');
-    $file_ext = substr($file_fspath, (strrpos('.', $file_fspath)*-1));
     if ($fp && ($file_size !=-1))
     {
-        header("Content-Type: application/octet-stream\r\n");
+        header("Content-Type: ".mime_content_type($filename)."\r\n");
         header("Content-Length: {$file_size}\r\n");
         header("Content-Disposition-Type: attachment\r\n");
         header("Content-Disposition: filename={$filename}\r\n");
