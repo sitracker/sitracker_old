@@ -391,7 +391,7 @@ while ($update = mysql_fetch_object($result))
         {
             echo icon($slatypes[$update->sla]['icon'], 16, $update->type);
         }
-        echo sprintf($strUpdatedXbyX, "(".$update->type.")", $updateuser);
+        echo "</a>" . sprintf($strUpdatedXbyX, "(".$update->type.")", $updateuser);
     }
 
     echo "</div>\n";
