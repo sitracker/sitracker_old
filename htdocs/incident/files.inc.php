@@ -53,12 +53,7 @@ if ($_FILES['attachment']['name'] != '')
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
         $updateid = mysql_insert_id();
 
-        // Add the updateid to the attachment path
-        $incident_attachment_fspath .= "{$fsdelim}u{$updateid}";
-
-        // make incident attachment dir if it doesn't exist
-        $newfilename = $incident_attachment_fspath.$fsdelim.$_FILES['attachment']['name'];
-        $umask = umask(0000);
+        $newfilename = $incident_attachment_fspath.$fsdelim.$fileid."-".$_FILES['attachment']['name'];
         $mk = TRUE;
         if (!file_exists($incident_attachment_fspath))
         {
@@ -176,21 +171,13 @@ function draw_file_row($file, $fsdelim, $incidentid, $path)
     $filepathparts = explode($fsdelim, $file);
     $parts = count($filepathparts);
     $filename = $filepathparts[$parts-1];
+    $fileid = explode("-", $filename);
+    $fileid = $fileid[0];
     $filedir = $filepathparts[$parts-2];
     $preview = ''; // reset the preview
 
-    if ($filedir != $incidentid)
-    {
-        // files are in a subdirectory
-        //$url="attachments/$id/".substr($filesarray[$c],strrpos($directory,$delim)+1,strlen($filesarray[$c])-strlen(urlencode($filename)).urlencode(filename));
-        $url = "{$CONFIG['attachment_webpath']}{$incidentid}/{$filedir}/".str_replace('+','%20',urlencode($filename));
-    }
-    else
-    {
-        // files are in the root of the incident attachment directory
-        // $url="attachments/".substr($filesarray[$c],strrpos($directory,$delim)+1,strlen($filesarray[$c])-strlen(urlencode($filename)).urlencode(filename));
-        $url="{$CONFIG['attachment_webpath']}{$incidentid}/".str_replace('+','%20',urlencode($filename));
-    }
+    $url="{$CONFIG['attachment_webpath']}{$incidentid}/".str_replace('+','%20',urlencode($filename));
+    
     $filesize = filesize($file);
     $file_size = readable_file_size($filesize);
 
@@ -205,14 +192,6 @@ function draw_file_row($file, $fsdelim, $incidentid, $path)
         // At the moment we leave mime_type blank if we can't find mime_content_type
         $mime_type = '';
     }
-
-    $updateid = str_replace("u", "", $filedir);
-    $sql = "SELECT f.id FROM `{$GLOBALS['dbLinks']}`, `{$GLOBALS['dbFiles']}` AS f  ";
-    $sql .= "WHERE linktype = '5' AND origcolref='$updateid' ";
-    $sql .= "AND f.id = linkcolref AND f.filename='$filename'";
-    $result = mysql_query($sql);
-    $fileobj = mysql_fetch_object($result);
-    $fileid = $fileobj->id;
 
     // FIXME url
 
