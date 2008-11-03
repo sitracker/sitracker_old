@@ -31,8 +31,10 @@ include ('htmlheader.inc.php');
 
 echo "<h2>".icon('skill', 32)." ";
 echo "$title</h2>";
-if (empty($legacy)) echo "<p align='center'><a href='{$_SERVER['PHP_SELF']}?legacy=yes&amp;gid={$groupid}'>Show legacy skills</a></p>";
-else echo "<p align='center'><a href='{$_SERVER['PHP_SELF']}?gid={$groupid}'>Hide legacy skills</a></p>";
+echo "<p align='center'>{$strDisplay}: ";
+if (empty($legacy)) echo "<a href='{$_SERVER['PHP_SELF']}?legacy=yes&amp;gid={$groupid}'>{$strAll}</a>";
+else echo "<a href='{$_SERVER['PHP_SELF']}?gid={$groupid}'>{$strActive}</a>";
+echo "</p>";
 
 $gsql = "SELECT * FROM `{$dbGroups}` ORDER BY name";
 $gresult = mysql_query($gsql);
