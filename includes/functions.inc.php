@@ -2079,7 +2079,16 @@ function closingstatus_drop_down($name, $id, $required = FALSE)
         {
             $html .= "selected='selected' ";
         }
-        $html .= "value='{$statuses["id"]}'>{$GLOBALS[$statuses["name"]]}</option>\n";
+        $html .= "value='{$statuses["id"]}'>";
+        if (isset($GLOBALS[$statuses['name']]))
+        {
+            $html .= $GLOBALS[$statuses['name']];
+        }
+        else
+        {
+            $html .= $statuses['name'];
+        }
+        $html .= "</option>\n";
     }
     $html .= "</select>\n";
 
