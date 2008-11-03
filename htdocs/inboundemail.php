@@ -270,7 +270,7 @@ if ($emails > 0)
                     }
                     else
                     {
-                        $fa_dir = $CONFIG['attachment_fspath']."updates{$fsdelim}{$updateid}{$fsdelim}";
+                        $fa_dir = $CONFIG['attachment_fspath']."updates{$fsdelim}";
                     }
                 
                     if (!file_exists($fa_dir))
