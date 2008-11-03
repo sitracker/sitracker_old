@@ -37,7 +37,6 @@ switch ($action)
             $result = mysql_query($sql);
             if (mysql_num_rows($result) < 1 AND $relatedid!=$id)
             {
-                echo "<p align='center'>Adding a relation</p>";
                 switch ($relation)
                 {
                     case 'sibling':
