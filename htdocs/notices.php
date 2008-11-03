@@ -23,22 +23,7 @@ if ($action == 'new')
 {
     echo "<h2>{$strNotices}</h2>";
     echo "<p align='center'>{$strNoticesBlurb}</p>";
-    echo "<table align='center'><tr><th>{$strCode}</th><th>{$strOutput}</th></tr>";
-    echo "<tr><th>[b][/b]</th><td>".bbcode("[b]Bold[/b]")."</td></tr>";
-    echo "<tr><th>[i][/i]</th><td>".bbcode("[i]Italic[/i]")."</td></tr>";
-    echo "<tr><th>[u][/u]</th><td>".bbcode("[u]Underline[/u]")."</td></tr>";
-    echo "<tr><th>[quote][/quote]</th><td>".bbcode("[quote]Quote[/quote]")."</td></tr>";
-    echo "<tr><th>[quote=][/quote]</th><td>".bbcode("[quote=Quote]Quote[/quote]")."</td></tr>";
-    echo "<tr><th>[url][/url]</th><td>".bbcode("[url]http://url.com[/url]")."</td></tr>";
-    echo "<tr><th>[url=][/url]</th><td>".bbcode("[url=http://url.com]URL[/url]")."</td></tr>";
-    echo "<tr><th>[img][/img]</th><td>".bbcode("[img]http://sitdemo.salfordsoftware.co.uk/images/sit_favicon.png[/img]")."</td></tr>";
-    echo "<tr><th>[color=][/color]</th><td>".bbcode("[color=red]Red[/color]")."</td></tr>";
-    echo "<tr><th>[size=][/size]</th><td>".bbcode("[size=12]Size 12[/size]")."</td></tr>";
-    echo "<tr><th>[code][/code]</th><td>".bbcode("[code]echo 'code';[/code]")."</td></tr>";
-    echo "<tr><th>[hr]</th><td>".bbcode("[hr]")."</td></tr>";
-    echo "</table>";
-    echo "<div align='center'><form action='{$_SERVER[PHP_SELF]}?action=post' method='post'><br /><br />";
-    echo "";
+    echo "<div align='center'><form action='{$_SERVER[PHP_SELF]}?action=post' method='post'>";
     echo "<table align='center'>";
     echo "<tr><th><h3>{$strNotice}</h3></th>";
     echo "<td>";
