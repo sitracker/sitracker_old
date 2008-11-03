@@ -57,6 +57,7 @@ else
     $sql .= "ORDER BY opened DESC";
 }
 $result = mysql_query($sql);
+if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
 echo "<h3>All Incidents</h3>";
 
