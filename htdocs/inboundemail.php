@@ -361,8 +361,8 @@ if ($emails > 0)
             $updateid = mysql_insert_id();
 
             //new call
-            $sql = "INSERT INTO `{$dbTempIncoming}` (updateid, incidentid, emailfrom, subject, reason, contactid) ";
-            $sql.= "VALUES ('{$updateid}', '0', '{$decoded_email->from_name}', '".mysql_real_escape_string($decoded_email->subject)."', '{$GLOBALS['strPossibleNewIncident']}', '{$contactid}' )";
+            $sql = "INSERT INTO `{$dbTempIncoming}` (updateid, incidentid, `from`, emailfrom, subject, reason, contactid) ";
+            $sql.= "VALUES ('{$updateid}', '0', '{$decoded_email->from_email}', '{$decoded_email->from_name}', '".mysql_real_escape_string($decoded_email->subject)."', '{$SYSLANG['strPossibleNewIncident']}', '{$contactid}' )";
             mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
             trigger('TRIGGER_INCIDENT_UPDATED_EXTERNAL', array('incident' => $incidentid));
@@ -421,8 +421,9 @@ if ($emails > 0)
                     if ($incident_open == "No")
                     {
                         //incident closed
+                        $reason = sprintf($SYSLANG['strIncidentXIsClosed'], $oldincidentid);
                         $sql = "INSERT INTO `{$GLOBALS['dbTempIncoming']}` (updateid, incidentid, emailfrom, subject, reason, contactid) ";
-                        $sql.= "VALUES ('{$updateid}', '0', '{$decoded_email->from_name}', '".mysql_real_escape_string($decoded_email->subject)."', '".mysql_real_escape_string("Incident <a href=\"javascript:incident_details_window('{$oldincidentid}','incident{$oldincidentid}')\" class='info'>{$oldincidentid}</a> is closed")."', '$contactid' )";
+                        $sql.= "VALUES ('{$updateid}', '0', '{$decoded_email->from_name}', '".mysql_real_escape_string($decoded_email->subject)."', '{$reason}', '$contactid' )";
                         mysql_query($sql);
                         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
                     }
@@ -430,7 +431,7 @@ if ($emails > 0)
                     {
                         //new call
                         $sql = "INSERT INTO `{$dbTempIncoming}` (updateid, incidentid, emailfrom, subject, reason, contactid) ";
-                        $sql.= "VALUES ('{$updateid}', '0', '{$decoded_email->from_name}', '".mysql_real_escape_string($decoded_email->subject)."', 'Possible new call', '{$contactid}' )";
+                        $sql.= "VALUES ('{$updateid}', '0', '{$decoded_email->from_name}', '".mysql_real_escape_string($decoded_email->subject)."', '{$SYSLANG['strPossibleNewIncident']}', '{$contactid}' )";
                         mysql_query($sql);
                         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
                     }
