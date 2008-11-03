@@ -63,16 +63,16 @@ echo "<h3>All Incidents</h3>";
 
 echo "<table align='center'>";
 echo "<tr>";
-echo "<th>Incident ID</th>";
-echo "<th>Title</th>";
-if ($mode=='site') echo "<th>Contact</th>";
-echo "<th>Product</th>";
-echo "<th>Status</th>";
-echo "<th>Engineer</th>";
-echo "<th>Opened</th>";
-echo "<th>Closed</th>";
-echo "<th>Duration</th>";
-echo "<th>SLA</th>";
+echo "<th>{$strIncidentID}</th>";
+echo "<th>{$strTitle}</th>";
+if ($mode=='site') echo "<th>{$strContact}</th>";
+echo "<th>{$strProduct}</th>";
+echo "<th>{$strStatus}</th>";
+echo "<th>{$strEngineer}</th>";
+echo "<th>{$strOpened}</th>";
+echo "<th>{$strClosed}</th>";
+echo "<th>{$strDuration}</th>";
+echo "<th>SLA</th>"; // FIXME i18n SLA
 echo "</tr>";
 $shade = 'shade1';
 $totalduration = 0;
@@ -149,9 +149,9 @@ if (mysql_num_rows($result)>=1 && $countclosed >= 1)
     echo "<p align='center'>Average incident duration: ".format_seconds($totalduration/$countclosed)."</p>";
 }
 echo "<p class='contextmenu' align='center'>Show: ";
-echo "<a href=\"{$_SERVER['PHP_SELF']}?id=$id&amp;mode=$mode&amp;status=open\">Open Only</a> | ";
-echo "<a href=\"{$_SERVER['PHP_SELF']}?id=$id&amp;mode=$mode&amp;status=closed\">Closed  Only</a> | ";
-echo "<a href=\"{$_SERVER['PHP_SELF']}?id=$id&amp;mode=$mode\">All</a>";
+echo "<a href=\"{$_SERVER['PHP_SELF']}?id=$id&amp;mode=$mode&amp;status=open\">{$strShowOpenIncidents}</a> | ";
+echo "<a href=\"{$_SERVER['PHP_SELF']}?id=$id&amp;mode=$mode&amp;status=closed\">{$strShowClosedIncidents}</a> | ";
+echo "<a href=\"{$_SERVER['PHP_SELF']}?id=$id&amp;mode=$mode\">{$strAll}</a>";
 echo "</p>";
 
 $countproducts = array_sum($productlist);
