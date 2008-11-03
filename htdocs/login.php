@@ -200,6 +200,7 @@ elseif ($CONFIG['portal'] == TRUE)
         $sql .= "AND ((sc.contactid='{$_SESSION['contactid']}' AND sc.maintenanceid=m.id) ";
         $sql .= "OR m.allcontactssupported = 'yes') ";
         $sql .= "AND (expirydate > (UNIX_TIMESTAMP(NOW()) - 15778463) OR expirydate = -1) ";
+        $sql .= "AND m.site = {$_SESSION['siteid']} ";
         $sql .= "ORDER BY expirydate DESC";
         $contractresult = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
