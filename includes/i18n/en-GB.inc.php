@@ -545,6 +545,7 @@ $strFullDetails = 'Full Details';
 $strFullNameCurrentUser = 'Full name of current user';
 
 $strGBytes = 'GBytes';
+$strGetHelpOnline = 'Get Help Online';
 $strGlobalSignature = 'Global Signature';
 $strGlobalSignatureDescription = 'A signature to insert at the bottom of outgoing emails.  It\'s recommended that you begin this signature with two dashes, a space and a line feed.';
 $strGlobalSignatureRemember = 'Remember that any changes here will be effective immediately and outgoing emails will carry the new signature.';
