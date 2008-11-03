@@ -65,7 +65,8 @@ switch ($action)
             }
             else
             {
-                echo "<br /><p class='error' align='center'>A relationship already exists with that incident</p>";
+                echo "<br /><p class='error' align='center'>";
+                echo "{$strADuplicateAlreadyExists}</p>";
             }
         }
         else
@@ -104,16 +105,17 @@ switch ($action)
         // do nothing
 }
 
-
+echo "<h2>{$strRelatedIncidents}</h2>";
 // Incident relationships
 $rsql = "SELECT * FROM `{$dbRelatedIncidents}` WHERE incidentid='$id' OR relatedid='$id'";
 $rresult = mysql_query($rsql);
 if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 if (mysql_num_rows($rresult) >= 1)
 {
-    echo "<h2>Related Incidents</h2>";
     echo "<table summary='Related Incidents' align='center'>";
-    echo "<tr><th>Incident ID</th><th>Title</th><th>Relationship</th><th>Created by</th><th>Action</th></tr>\n";
+    echo "<tr><th>{$strIncidentID}</th><th>{$strTitle}</th>";
+    echo "<th>{$strRelationship}</th><th>{$strCreatedBy}</th>";
+    echo "<th>{$strAction}</th></tr>\n";
     while ($related = mysql_fetch_object($rresult))
     {
         echo "<tr>";
@@ -134,25 +136,25 @@ if (mysql_num_rows($rresult) >= 1)
         echo "<td>$incidenttitle</td>";
         echo "<td>$relationship</td>";
         echo "<td>".user_realname($related->owner,TRUE)."</td>";
-        echo "<td><a href='incident_relationships.php?id={$id}&amp;rid={$related->id}&amp;action=delete'>Remove</a></td>";
+        echo "<td><a href='incident_relationships.php?id={$id}&amp;rid={$related->id}&amp;action=delete'>{$strRemove}</a></td>";
         echo "</tr>\n";
     }
     echo "</table>";
 }
-else echo "<p align='center'>There are no related incidents</p>";
-
+else echo "<p align='center'>{$strNoResults}</p>";
+echo "<br /><hr/>";
 echo "\n<form action='incident_relationships.php' method='post'>";
-echo "<h2>Add a relation</h2>";
+echo "<h2>".icon('add', 32)." {$strAdd}</h2>";
 echo "<table summary='Add a relationship' class='vertical'>";
-echo "<tr><th>Incident ID</th><td><input type='text' name='relatedid' size='10' /></td></tr>\n";
+echo "<tr><th>{$strIncidentID}</th><td><input type='text' name='relatedid' size='10' /></td></tr>\n";
 // TODO v3.24 Child/Parent incident relationships
-//echo "<tr><th>Relationship to this incident</th><td>";
-//echo "<select name='relation'>";
-//echo "<option value='child'>Child</option>";
-//echo "<option value='parent'>Parent</option>";
-//echo "<option value='sibling'>Sibling</option>";
-//echo "</select>";
-//echo "</td></tr>\n";
+// echo "<tr><th>Relationship to this incident</th><td>";
+// echo "<select name='relation'>";
+// echo "<option value='child'>Child</option>";
+// echo "<option value='parent'>Parent</option>";
+// echo "<option value='sibling'>Sibling</option>";
+// echo "</select>";
+// echo "</td></tr>\n";
 echo "</table>\n";
 echo "<input type='hidden' name='action' value='add' />";
 echo "<input type='hidden' name='id' value='{$id}' />";
