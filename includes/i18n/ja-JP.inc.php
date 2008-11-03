@@ -4,6 +4,10 @@
 $languagestring = 'Japanese (ja-JP)';
 $i18ncharset = 'UTF-8';
 
+# List of letters of the alphabet for this language
+# in standard alphabetical order (upper case, where applicable)
+$i18nAlphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+
 $str0MeansUnlimited = '0 Means Unlimited';
 
 $str1Day = '一日間';

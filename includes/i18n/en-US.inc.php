@@ -3,6 +3,10 @@
 $languagestring = 'English (US) (en-US)';
 $i18ncharset = 'UTF-8';
 
+# List of letters of the alphabet for this language
+# in standard alphabetical order (upper case, where applicable)
+$i18nAlphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+
 $strApproveHolidays = 'Approve Vacations';
 
 $strBookHoliday = 'Book Vacation';

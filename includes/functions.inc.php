@@ -1333,7 +1333,7 @@ function array_drop_down($array, $name, $setting='', $enablefield='', $usekey = 
             {
                 $html .= " selected='selected'";
             }
-            
+
         }
         else
         {
@@ -2726,7 +2726,7 @@ function format_seconds($seconds, $showseconds = FALSE)
                 $return_string .= $str1Month." ";
             }
             else
-            {            	
+            {
                 $return_string .= sprintf($strXMonths, $months).' ';
             }
         }
@@ -3420,10 +3420,10 @@ function site_name($id)
 /**
  * prints the HTML for a drop down list of maintenance contracts
  * @param $name name of the drop down box
- * @param $id 
+ * @param $id
  * @param $return Whether to return to HTML or echo
  * @param $showonlyactive True show only active (with a future expiry date), false shows all
- * 
+ *
  */
 function maintenance_drop_down($name, $id, $excludes = '', $return = FALSE, $showonlyactive = FALSE)
 {
@@ -3433,12 +3433,12 @@ function maintenance_drop_down($name, $id, $excludes = '', $return = FALSE, $sho
     $sql  = "SELECT s.name AS sitename, p.name AS productname, m.id AS id ";
     $sql .= "FROM `{$GLOBALS['dbMaintenance']}` AS m, `{$GLOBALS['dbSites']}` AS s, `{$GLOBALS['dbProducts']}` AS p ";
     $sql .= "WHERE site = s.id AND product = p.id ";
-    
+
     if ($showonlyactive)
     {
     	$sql .= "AND m.expirydate > {$now} ";
     }
-    
+
     $sql .= "ORDER BY s.name ASC";
     $result = mysql_query($sql);
     $results = 0;
@@ -3463,7 +3463,7 @@ function maintenance_drop_down($name, $id, $excludes = '', $return = FALSE, $sho
             $results++;
         }
     }
-    
+
     if ($results == 0)
     {
         $html .= "<option>{$GLOBALS['strNoRecords']}</option>";
@@ -5982,7 +5982,7 @@ function bbcode($text)
                              14 => "<span style=\"text-decoration:line-through\">$1</span>",
                              15 => "<a href=\"{$_SERVER['HTTP_HOST']}{$CONFIG['application_webpath']}download.php?id=$1\">$2</a>",
                             16 => "<a href=\"$1\">$2</a>");
-                                                        
+
     $html = preg_replace($bbcode_regex, $bbcode_replace, $text);
     return $html;
 }
@@ -6285,7 +6285,7 @@ function dashlet($dashboard, $dashletid, $icon, $title='', $link='', $content=''
         $html .= "<a href=\"javascript:get_and_display('ajaxdata.php?action=dashboard_display&amp;dashboard={$dashboard}&amp;did={$dashletid}','win{$dashletid}',true);\">";
         $html .= icon('reload', 16, '', '', "refresh{$dashletid}")."</a>";
     }
-    
+
     if (function_exists($editfn))
     {
         $html .= "<a href=\"javascript:get_and_display('ajaxdata.php?action=dashboard_edit&amp;dashboard={$dashboard}&amp;did={$dashletid}','win{$dashletid}',false);\">";
@@ -7604,9 +7604,9 @@ function schedule_actions_due()
 function schedule_action_started($action)
 {
     global $now;
-    
+
     $nowdate = date('Y-m-d H:i:s', $now);
-    
+
     $sql = "UPDATE `{$GLOBALS['dbScheduler']}` SET laststarted = '$nowdate' ";
     $sql .= "WHERE action = '{$action}'";
     mysql_query($sql);
@@ -8385,7 +8385,7 @@ function contract_details($id, $mode='internal')
 	    $html .= "<tr><th>{$GLOBALS['strService']}</th><td>";
 	    $html .= contract_service_table($id);
 	    $html .= "</td></tr>\n";
-	
+
 	    // FIXME not sure if this should be here
 	    $html .= "<tr><th>{$GLOBALS['strBalance']}</th><td>{$CONFIG['currency_symbol']}".number_format(get_contract_balance($id), 2);
 	    $multiplier = get_billable_multiplier(strtolower(date('D', $now)), date('G', $now));
@@ -8420,7 +8420,7 @@ function contract_details($id, $mode='internal')
         else
         {
             $allowedcontacts = $maintrow['supportedcontacts'];
-            
+
             $supportedcontacts = supported_contacts($id);
             $numberofcontacts = 0;
 
@@ -8431,7 +8431,7 @@ function contract_details($id, $mode='internal')
                 }
                 $html .= "<table align='center'>";
                 $supportcount = 1;
-                
+
                 if ($numberofcontacts > 0)
                 {
                     foreach ($supportedcontacts AS $contact)
@@ -9977,12 +9977,12 @@ function get_serviceid($contractid, $date = '')
     $sql = "SELECT serviceid FROM `{$GLOBALS['dbService']}` AS p ";
     $sql .= "WHERE contractid = {$contractid} AND UNIX_TIMESTAMP(startdate) <= {$date} ";
     $sql .= "AND UNIX_TIMESTAMP(enddate) > {$date} ";
-    
+
     if (!$CONFIG['billing_allow_incident_approval_against_overdrawn_service'])
     {
     	$sql .= "AND balance > 0 ";
     }
-    
+
     $sql .= "ORDER BY priority DESC, enddate, balance ASC LIMIT 1";
 
     $result = mysql_query($sql);
@@ -10017,16 +10017,16 @@ function get_unit_rate($contractid, $date='')
 	if ($serviceid != -1)
 	{
 	    $sql = "SELECT unitrate FROM `{$GLOBALS['dbService']}` AS p WHERE serviceid = {$serviceid}";
-	
+
 	    $result = mysql_query($sql);
 	    if (mysql_error())
 	    {
 	        trigger_error(mysql_error(),E_USER_WARNING);
 	        return FALSE;
 	    }
-	
+
 	    $unitrate = -1;
-	
+
 	    if (mysql_num_rows($result) > 0)
 	    {
 	        $obj = mysql_fetch_object($result);
@@ -10037,7 +10037,7 @@ function get_unit_rate($contractid, $date='')
 	{
 		$unitrate = -1;
 	}
-	
+
     return $unitrate;
 }
 
@@ -10882,13 +10882,88 @@ function get_service_percentage($maintid)
     {
         $return = FALSE;
     }
-    
+
     return $return;
 }
 
+
+/**
+ * UTF8 substr() replacement
+ * @author Anon / Public Domain
+ * @note see http://www.php.net/manual/en/function.substr.php#57899
+ */
+function utf8_substr($str, $from, $len)
+{
+    # utf8 substr
+    # www.yeap.lv
+    return preg_replace('#^(?:[\x00-\x7F]|[\xC0-\xFF][\x80-\xBF]+){0,'.$from.'}'.
+                       '((?:[\x00-\x7F]|[\xC0-\xFF][\x80-\xBF]+){0,'.$len.'}).*#s',
+                       '$1',$str);
+}
+
+
+/**
+ * UTF8 strlen() replacement
+ * @author anpaza at mail dot ru / Public Domain
+ * @note see http://www.php.net/manual/en/function.strlen.php#59258
+ */
+function utf8_strlen($str)
+{
+    $i = 0;
+    $count = 0;
+    $len = strlen ($str);
+    while ($i < $len)
+    {
+    $chr = ord ($str[$i]);
+    $count++;
+    $i++;
+    if ($i >= $len)
+        break;
+
+    if ($chr & 0x80)
+    {
+        $chr <<= 1;
+        while ($chr & 0x80)
+        {
+        $i++;
+        $chr <<= 1;
+        }
+    }
+    }
+    return $count;
+}
+
+
+
+/**
+ * HTML for an alphabetical index of links
+ * @author Ivan Lucas
+ * @param string $baseurl start of a URL, the letter will be appended to this
+ * @returns HTML
+ */
+function alpha_index($baseurl = '#')
+{
+    global $i18nAlphabet;
+
+    $html = '';
+    if (!empty($i18nAlphabet))
+    {
+        $len = utf8_strlen($i18nAlphabet);
+        for ($i = 0; $i < $len; $i++)
+        {
+            $html .= "<a href=\"{$baseurl}";
+            $html .= urlencode(utf8_substr($i18nAlphabet, $i, 1))."\">";
+            $html .= utf8_substr($i18nAlphabet, $i, 1)."</a> | \n";
+
+        }
+    }
+    return $html;
+}
+
+
 /*
  * DEPRECATED THOUGH STILL CALLED
- * 
+ *
  * The following are deprecated and had been emoved though have been readded as they are still called by code which will be released in 3.4 following this they will be removed
  */
 

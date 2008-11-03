@@ -11,6 +11,10 @@
 $languagestring = 'Danish (DK)';
 $i18ncharset = 'UTF-8';
 
+# List of letters of the alphabet for this language
+# in standard alphabetical order (upper case, where applicable)
+$i18nAlphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZÆØÅ';
+
 // list of strings (*ALPHABETICAL ORDER BY (KEY) VARIABLE NAME* - ABCDEFGHIJKLMNOPQRSTUVWXYZ 0123456789)
 
 $str0MeansUnlimited = '0 Betyder Uendeligt';

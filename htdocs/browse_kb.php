@@ -46,35 +46,8 @@ elseif (strtolower($mode)=='today') echo "<h4>{$strArticlesPublishedToday}</h4>"
         <td valign="middle">
         <?php
         echo "<a href='{$_SERVER['PHP_SELF']}?mode=RECENT'>{$strRecent}</a> | ";
-        //FIXME this doesn't make sense for other languages
-        ?>
-        <a href="<?php echo $_SERVER['PHP_SELF'] ?>?search_string=A">A</a> |
-        <a href="<?php echo $_SERVER['PHP_SELF'] ?>?search_string=B">B</a> |
-        <a href="<?php echo $_SERVER['PHP_SELF'] ?>?search_string=C">C</a> |
-        <a href="<?php echo $_SERVER['PHP_SELF'] ?>?search_string=D">D</a> |
-        <a href="<?php echo $_SERVER['PHP_SELF'] ?>?search_string=E">E</a> |
-        <a href="<?php echo $_SERVER['PHP_SELF'] ?>?search_string=F">F</a> |
-        <a href="<?php echo $_SERVER['PHP_SELF'] ?>?search_string=G">G</a> |
-        <a href="<?php echo $_SERVER['PHP_SELF'] ?>?search_string=H">H</a> |
-        <a href="<?php echo $_SERVER['PHP_SELF'] ?>?search_string=I">I</a> |
-        <a href="<?php echo $_SERVER['PHP_SELF'] ?>?search_string=J">J</a> |
-        <a href="<?php echo $_SERVER['PHP_SELF'] ?>?search_string=K">K</a> |
-        <a href="<?php echo $_SERVER['PHP_SELF'] ?>?search_string=L">L</a> |
-        <a href="<?php echo $_SERVER['PHP_SELF'] ?>?search_string=M">M</a> |
-        <a href="<?php echo $_SERVER['PHP_SELF'] ?>?search_string=N">N</a> |
-        <a href="<?php echo $_SERVER['PHP_SELF'] ?>?search_string=O">O</a> |
-        <a href="<?php echo $_SERVER['PHP_SELF'] ?>?search_string=P">P</a> |
-        <a href="<?php echo $_SERVER['PHP_SELF'] ?>?search_string=Q">Q</a> |
-        <a href="<?php echo $_SERVER['PHP_SELF'] ?>?search_string=R">R</a> |
-        <a href="<?php echo $_SERVER['PHP_SELF'] ?>?search_string=S">S</a> |
-        <a href="<?php echo $_SERVER['PHP_SELF'] ?>?search_string=T">T</a> |
-        <a href="<?php echo $_SERVER['PHP_SELF'] ?>?search_string=U">U</a> |
-        <a href="<?php echo $_SERVER['PHP_SELF'] ?>?search_string=V">V</a> |
-        <a href="<?php echo $_SERVER['PHP_SELF'] ?>?search_string=W">W</a> |
-        <a href="<?php echo $_SERVER['PHP_SELF'] ?>?search_string=X">X</a> |
-        <a href="<?php echo $_SERVER['PHP_SELF'] ?>?search_string=Y">Y</a> |
-        <a href="<?php echo $_SERVER['PHP_SELF'] ?>?search_string=Z">Z</a>
-        </td>
+        echo alpha_index("{$_SERVER['PHP_SELF']}?search_string=");
+        ?></td>
     </tr>
     </table>
     <br />
