@@ -12,6 +12,7 @@
 $permission = 42; // Delete Incident Updates
 require ('db_connect.inc.php');
 require ('functions.inc.php');
+$fsdelim = (strstr($_SERVER['SCRIPT_FILENAME'],"/")) ? "/" : "\\";
 
 // This page requires authentication
 require ('auth.inc.php');
@@ -23,40 +24,42 @@ $tempid = cleanvar($_REQUEST['tempid']);
 
 if (empty($updateid)) trigger_error("!Error: Update ID was not set, not deleting!: {$updateid}", E_USER_WARNING);
 
-// We delete using ID and timestamp to make sure we dont' delete the wrong update by accident
-$sql = "DELETE FROM `{$dbUpdates}` WHERE id='$updateid' AND timestamp='$timestamp'";  // We might in theory have more than one ...
-mysql_query($sql);
-if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+$deleted_files = TRUE;
+$path = $CONFIG['attachment_fspath'].'updates'.$fsdelim;
 
-$sql = "DELETE FROM `{$dbTempIncoming}` WHERE id='$tempid'";
-mysql_query($sql);
-if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+$sql = "SELECT linkcolref, filename FROM `{$dbLinks}` as l, `{$dbFiles}` as f ";
+$sql .= "WHERE origcolref = '{$updateid}' ";
+$sql .= "AND linktype = 5 ";
+$sql .= "AND l.linkcolref = f.id ";
 
-// TODO move this deldir function to lib
-function deldir($location)
+if ($result = @mysql_query($sql))
 {
-    if (substr($location,-1) <> "/")
-        $location = $location."/";
-    $all=opendir($location);
-    while ($file=readdir($all))
+    while ($row = mysql_fetch_object($result))
     {
-        if (is_dir($location.$file) && $file <> ".." && $file <> ".")
+        $file = $path.$row->linkcolref."-".$row->filename;
+        if (file_exists($file))
         {
-            deldir($location.$file);
-            rmdir($location.$file);
-            unset($file);
-        }
-        elseif (!is_dir($location.$file))
-        {
-            unlink($location.$file);
-            unset($file);
+            $del = unlink($file);
+            if (!$del)
+            {
+                trigger_error("Deleting attachment failed", E_USER_ERROR);
+                $deleted = FALSE;
+            }
         }
     }
-    rmdir($location);
 }
 
-$path = $CONFIG['attachment_fspath'].'updates/'.$updateid;
-if (file_exists($path)) deldir($path);
+if ($deleted_files)
+{
+    // We delete using ID and timestamp to make sure we dont' delete the wrong update by accident
+    $sql = "DELETE FROM `{$dbUpdates}` WHERE id='$updateid' AND timestamp='$timestamp'";  // We might in theory have more than one ...
+    mysql_query($sql);
+    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+
+    $sql = "DELETE FROM `{$dbTempIncoming}` WHERE id='$tempid'";
+    mysql_query($sql);
+    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+}
 
 journal(CFG_LOGGING_NORMAL, 'Incident Log Entry Deleted', "Incident Log Entry $updateid was deleted from Incident $incidentid", CFG_JOURNAL_INCIDENTS, $incidentid);
 html_redirect("review_incoming_updates.php");
