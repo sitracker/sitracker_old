@@ -4,6 +4,10 @@
 $languagestring = 'Italian (it-IT)';
 $i18ncharset = 'utf-8';
 
+# List of letters of the alphabet for this language
+# in standard alphabetical order (upper case, where applicable)
+$i18nAlphabet = 'ABCDEFGHILMNOPQRSTUVZ';
+
 $str0MeansUnlimited = '0 = Illimitato';
 
 $strActual = 'Attuale';
