@@ -312,8 +312,8 @@ elseif ($mode=='save')
         }
         else
         {
-            // TODO produce a better message when password change fails
-            trigger_error("User Error changing password, please try again typing your passwords carefully. {$password} ({}$newpassword1} / {}$newpassword2})", E_USER_WARNING);
+            $errors++;
+            $error_string .= "<h5 class='error'>{$strPasswordsDoNotMatch}</h5>";
         }
     }
     // check for blank real name
