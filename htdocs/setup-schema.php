@@ -2463,6 +2463,15 @@ INSERT INTO `$dbEmailTemplates` (`name`, `type`, `description`, `tofield`, `from
 -- KMH 2008-11-04
 ALTER TABLE `{$dbIncidents}` CHANGE `id` `id` INT( 11 ) NOT NULL;  
 ALTER TABLE `{$dbIncidents}` CHANGE `id` `id` VARCHAR( 11 ) NOT NULL;
+ALTER TABLE `{$dbDrafts}` CHANGE `incidentid` `incidentid` VARCHAR( 11 ) NOT NULL;
+ALTER TABLE `{$dbFeedbackReport}` CHANGE `incidentid` `incidentid` VARCHAR( 11 ) NOT NULL;
+ALTER TABLE `{$dbFeedbackRespondents}` CHANGE `incidentid` `incidentid` VARCHAR( 11 ) NOT NULL;
+ALTER TABLE `{$dbIncidentProductInfo}` CHANGE `incidentid` `incidentid` VARCHAR( 11 ) NOT NULL;
+ALTER TABLE `{$dbRelatedIncidents}` CHANGE `incidentid` `incidentid` VARCHAR( 11 ) NOT NULL;
+ALTER TABLE `{$dbTempAssigns}` CHANGE `incidentid` `incidentid` VARCHAR( 11 ) NOT NULL;
+ALTER TABLE `{$dbTempIncoming}` CHANGE `incidentid` `incidentid` VARCHAR( 11 ) NOT NULL;
+ALTER TABLE `{$dbUpdates}` CHANGE `incidentid` `incidentid` VARCHAR( 11 ) NOT NULL;
+
 ";
 // Important: When making changes to the schema you must add SQL to make the alterations
 // to existing databases in $upgrade_schema[] *AND* you must also change $schema[] for
