@@ -108,15 +108,15 @@ if ($CONFIG['enable_inbound_mail'] == 'MTA')
 }
 elseif ($CONFIG['enable_inbound_mail'] == 'POP/IMAP')
 {
-    $mailbox = new fetchSitMail($CONFIG['email_username'], $CONFIG['email_password'], 
+    $mailbox = new fetchSitMail($CONFIG['email_username'], $CONFIG['email_password'],
                                 $CONFIG['email_address'], $CONFIG['email_server'],
                                 $CONFIG['email_servertype'], $CONFIG['email_port'],
                                 $CONFIG['email_options']);
-                                
+
 
     $mailbox->connect();
     $emails = $mailbox->getNumUnreadEmails();
-    $size = $mailbox->getTotalSize($emails);
+//     $size = $mailbox->getTotalSize($emails);
 }
 else
 {
@@ -147,7 +147,7 @@ if ($emails > 0)
 
         //fix for ISO-8859-1 subjects
         $decoded_email->subject = subjectdecode($decoded_email->subject);
-        
+
 	// Extract Incident ID
 	if ($CONFIG['incident_number_type'] == 2)
 	{
@@ -203,17 +203,17 @@ if ($emails > 0)
                             $fsdelim = (strstr($CONFIG['attachment_fspath'],"/")) ? "/" : "\\";
                             $filename = str_replace(' ','_',$block->mime_contentdispositionname);
                             if (empty($filename)) $filename = "part{$part}";
-                            
+
                             $sql = "INSERT into `{$GLOBALS['dbFiles']}` ";
                             $sql .= "( `id` ,`category` ,`filename` ,`size` ,`userid` ,`usertype` ,`shortdescription` ,`longdescription` ,`webcategory` ,`path` ,`downloads` ,`filedate` ,`expiry` ,`fileversion` ,`published` ,`createdby` ,`modified` ,`modifiedby` ) ";
                             $sql .= "VALUES('', '', '{$filename}', '0', '0', '', '', '', '', '', '', NOW(), '', '', '', '0', '', '')";
                             mysql_query($sql);
                             if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
                             $fileid = mysql_insert_id();
-                            
+
                             $attachment[] = array('filename' => $filename, 'fileid' => $fileid);
                             $filename = $fileid."-".$filename;
-                            
+
                             // Write the attachment
                             if (!empty($incidentid))
                             {
@@ -223,17 +223,17 @@ if ($emails > 0)
                             {
                                 $fa_dir = $CONFIG['attachment_fspath']."updates{$fsdelim}";
                             }
-                        
+
                             if (!file_exists($fa_dir))
                             {
                                 if (!mkdir($fa_dir, 0775, TRUE)) trigger_error("Failed to create incident update attachment directory $fa_dir",E_USER_WARNING);
                             }
-                            
+
                             if ($CONFIG['debug'])
                             {
                                 echo "default:About to write to ".$fa_dir.$filename."\n";
                             }
-                            
+
                             if (is_writable($fa_dir)) //File doesn't exist yet .$filename
                             {
                                 $fwp = fopen($fa_dir.$filename, 'a');
@@ -246,7 +246,7 @@ if ($emails > 0)
                             {
                                 echo "NOT WRITABLE $filename\n";
                             }
-                            
+
                             $sql = "INSERT INTO `{$GLOBALS['dbLinks']}` (`linktype`, `origcolref`, `linkcolref`, `direction`, `userid`) ";
                             $sql .= "VALUES('5', '{$updateid}', '{$fileid}', 'left', '0') ";
                             mysql_query($sql);
@@ -260,15 +260,15 @@ if ($emails > 0)
 
                     $filename = str_replace(' ','_',$block->mime_contentdispositionname);
                     if (empty($filename)) $filename = "part{$part}";
-                    
+
                     $sql = "INSERT into `{$GLOBALS['dbFiles']}` ";
                     $sql .= "( `id` ,`category` ,`filename` ,`size` ,`userid` ,`usertype` ,`shortdescription` ,`longdescription` ,`webcategory` ,`path` ,`downloads` ,`filedate` ,`expiry` ,`fileversion` ,`published` ,`createdby` ,`modified` ,`modifiedby` ) ";
                     $sql .= "VALUES('', '', '{$filename}', '0', '0', '', '', '', '', '', '', NOW(), '', '', '', '0', '', '')";
                     mysql_query($sql);
                     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
                     $fileid = mysql_insert_id();
-            
-                    $attachment[] = array('filename' => $filename, 'fileid' => $fileid);     
+
+                    $attachment[] = array('filename' => $filename, 'fileid' => $fileid);
                     $filename = $fileid."-".$filename;
 
                     // Write the attachment
@@ -280,17 +280,17 @@ if ($emails > 0)
                     {
                         $fa_dir = $CONFIG['attachment_fspath']."updates{$fsdelim}";
                     }
-                
+
                     if (!file_exists($fa_dir))
                     {
                         if (!mkdir($fa_dir, 0775, TRUE)) trigger_error("Failed to create incident update attachment directory $fa_dir",E_USER_WARNING);
                     }
-                    
+
                     if ($CONFIG['debug'])
                     {
                         echo "else:About to write to ".$fa_dir.$filename."\n";
                     }
-                    
+
                     if (is_writable($fa_dir)) //File doesn't exist yet .$filename
                     {
                         $fwp = fopen($fa_dir.$filename, 'a');
@@ -303,7 +303,7 @@ if ($emails > 0)
                     {
                         echo "NOT WRITABLE $filename\n";
                     }
-                    
+
                     $sql = "INSERT INTO `{$GLOBALS['dbLinks']}` (`linktype`, `origcolref`, `linkcolref`, `direction`, `userid`) ";
                     $sql .= "VALUES('5', '{$updateid}', '{$fileid}', 'left', '0') ";
                     mysql_query($sql);
@@ -312,7 +312,7 @@ if ($emails > 0)
             }
         }
         //** END WRITE ATTACHMENTS **//
-        
+
         //** BEING UPDATE INCIDENT **//
         $headertext = '';
         // Build up header text to append to the incident log
@@ -350,7 +350,7 @@ if ($emails > 0)
             $headertext .= "\n";
         }
         //** END UPDATE INCIDENT **//
-        
+
         //** BEGIN UPDATE **//
         if (empty($message)) $message = $decoded_email->emailtextplain;
         $bodytext = $headertext . "<hr>" . mysql_real_escape_string($message);
@@ -461,9 +461,9 @@ if ($emails > 0)
         }
 
         //** END UPDATE **//
-        
+
         // We need to update the links table here as otherwise we have a blank
-        // 
+        //
         foreach ($attachment AS $att)
         {
             $sql = "UPDATE `{$GLOBALS['dbLinks']}` SET origcolref = '{$updateid}'";
@@ -472,11 +472,11 @@ if ($emails > 0)
             mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
         }
-        
-        unset($headertext, $newupdate, $attachments, $attachment, $updateobj, 
+
+        unset($headertext, $newupdate, $attachments, $attachment, $updateobj,
             $bodytext, $message, $incidentid);
     }
-    
+
     if ($mailbox->servertype == 'imap')
     {
         imap_expunge($mailbox->mailbox);
@@ -486,7 +486,7 @@ if ($emails > 0)
         imap_delete($mailbox->mailbox, '1:*');
         imap_expunge($mailbox->mailbox);
     }
-    
+
     if ($CONFIG['enable_inbound_mail'] == 'POP/IMAP')
     {
         imap_close($mailbox->mailbox);
