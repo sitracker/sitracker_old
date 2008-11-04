@@ -56,7 +56,7 @@ switch ($_REQUEST['action'])
 
     case 'new':
         include ('htmlheader.inc.php');
-        echo "<h3>Create feedback form</h3>";
+        echo "<h3>{$strAddFeedbackForm}</h3>";
         echo "<form action='{$_SERVER['PHP_SELF']}' method='post'>";
         echo "<table summary='Form' align='center'>";
         echo "<tr>";
@@ -69,27 +69,27 @@ switch ($_REQUEST['action'])
         echo "<td><input type='text' name='name' size='35' maxlength='255' value='' /></td>";
         echo "</tr>\n<tr>";
 
-        echo "<th>{$strDescription}:<br />(For Internal Use, not displayed)</th>";
+        echo "<th>{$strDescription}:<br />({$strInternalUseNotDisplayed})</th>";
         echo "<td><textarea name='description' cols='80' rows='6'>";
         echo "</textarea></td>";
         echo "</tr>\n<tr>";
 
-        echo "<th>Introduction:<br />(Simple HTML Allowed)</th>";
+        echo "<th>{$strIntroduction}:<br />($strSimpleHTMLallowed)</th>";
         echo "<td><textarea name='introduction' cols='80' rows='10'>";
         echo "</textarea></td>";
         echo "</tr>\n<tr>";
 
-        echo "<th>Closing Thanks:<br />(Simple HTML Allowed)</th>";
+        echo "<th>{$strClosingThanks}:<br />($strSimpleHTMLallowed)</th>";
         echo "<td><textarea name='thanks' cols='80' rows='10'>";
         echo "</textarea></td>";
         echo "</tr>\n";
 
         // If there are no reponses to this feedback form, allow questions to be modified also
         echo "<tr>";
-        echo "<th>Questions:</th>";
+        echo "<th>{$strQuestions}:</th>";
         echo "<td>";
         //echo "<p><a href='add_feedback_question.php?fid=$formid'>Add Question</a><br />Save the main form first</p>";
-        echo "<p>Save the main form first</p>";
+        echo "<p>{$strSaveTheMainFormFirst}t</p>";
         echo "</td></tr>\n";
         echo "<tr>";
         echo "<td><input type='hidden' name='formid' value='{$formid}' />";
@@ -120,7 +120,7 @@ switch ($_REQUEST['action'])
                 echo "<table summary='Form' align='center'>";
                 echo "<tr>";
 
-                echo "<th>Form ID:</th>";
+                echo "<th>{$strID}:</th>";
                 echo "<td><strong>{$form->id}</strong></td>";
                 echo "</tr>\n<tr>";
 
@@ -128,24 +128,24 @@ switch ($_REQUEST['action'])
                 echo "<td><input type='text' name='name' size='35' maxlength='255' value=\"{$form->name}\" /></td>";
                 echo "</tr>\n<tr>";
 
-                echo "<th>{$strDescription}:<br />(For Staff Use, not displayed)</th>";
+                echo "<th>{$strDescription}:<br />({$strInternalUseNotDisplayed})</th>";
                 echo "<td><textarea name='description' cols='80' rows='6'>";
                 echo $form->description."</textarea></td>";
                 echo "</tr>\n<tr>";
 
-                echo "<th>Introduction:<br />(Simple HTML Allowed)</th>";
+                echo "<th>{$strIntroduction}:<br />({$strSimpleHTMLallowed})</th>";
                 echo "<td><textarea name='introduction' cols='80' rows='10'>";
                 echo $form->introduction."</textarea></td>";
                 echo "</tr>\n<tr>";
 
-                echo "<th>Closing Thanks:<br />(Simple HTML Allowed)</th>";
+                echo "<th>{$strClosingThanks}:<br />($strSimpleHTMLallowed)</th>";
                 echo "<td><textarea name='thanks' cols='80' rows='10'>";
                 echo $form->thanks."</textarea></td>";
                 echo "</tr>\n";
 
                 // If there are no reponses to this feedback form, allow questions to be modified also
                 echo "<tr>";
-                echo "<th>Questions:</th>";
+                echo "<th>{$strQuestions}:</th>";
                 echo "<td>";
 
                 // echo "<tr><th>Q</th><th>Question</th><th>Text</th></tr>\n<tr><th>Type</th><th>Reqd</th><th>Options</th></tr>\n";
@@ -164,13 +164,13 @@ switch ($_REQUEST['action'])
                         echo "</tr>\n<tr>";
                         echo "<td>{$question->type}</td>";
                         echo "<td colspan='2'>";
-                        if ($question->required=='true') echo "<strong>Required</strong> ";
+                        if ($question->required=='true') echo "<strong>{$strRequired}</strong> ";
                         echo "<samp>{$question->options}</samp></td>";
                         echo "</tr>";
                     }
                     echo "</table>";
                 }
-                echo "<p><a href='add_feedback_question.php?fid=$formid'>Add Question</a><br />Save the main form first</p>";
+                echo "<p><a href='add_feedback_question.php?fid=$formid'>{$strAdd}</a><br />Save the main form first</p>";
                 echo "</td></tr>\n";
                 echo "<tr>";
                 echo "<td><input type='hidden' name='formid' value='{$formid}' />";
@@ -181,7 +181,7 @@ switch ($_REQUEST['action'])
                 echo "</form>";
             }
         }
-        else echo "<p class='error'>No feedback form found</p>";
+        else echo "<p class='error'>{$strNoRecords}</p>";
         include ('htmlfooter.inc.php');
     break;
 }
