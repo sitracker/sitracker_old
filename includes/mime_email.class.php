@@ -318,6 +318,7 @@ class mime_email
 	// $time = $time_end - $time_start;
 	// echo "<h3>echo *HEADERPARSE Start: $time_start   End: $time_end    Diff: $time</h3>";
 
+        unset($rawemail);
     }
 
 
@@ -347,7 +348,7 @@ class mime_email
 			//
 			$this->parseBoundary($this->contenttypebound, $rawemail);
 		}
-
+        unset($rawemail);
 	}
 
 	# parse given Boundary Marker, this has to be a function because for example a html email
@@ -514,6 +515,7 @@ class mime_email
 		//echo "<h3>echo *LOOP Start: $time_start   End: $time_end    Diff: $time</h3>";
 
 		if ($newboundary != '' and $newboundary != "ThisIsAUniqueLineFromMarcLogemann") $this->parseBoundary($newboundary, $rawemail);
+    unset($rawemail);      
 	}
 
 
