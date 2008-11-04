@@ -227,6 +227,7 @@ switch ($_REQUEST['mode'])
     default:
         $refresh = 60;
         include ('htmlheader.inc.php');
+        
         echo "<h2>{$strScheduler}".help_link('Scheduler')."</h2>";
         echo "<h3>".ldate($CONFIG['dateformat_datetime'], $GLOBALS['now'], FALSE)."</h3>";
         $sql = "SELECT * FROM `{$dbScheduler}` ORDER BY action";
@@ -363,6 +364,23 @@ switch ($_REQUEST['mode'])
                 else $shade = 'shade1';
             }
             echo "</table>\n";
+
+            // Debug time issues
+            if ($CONFIG['debug'])
+            {
+                echo "<h2>Debug Time Issues</h2>";
+                echo "<div style='width: 60%; border: 1px dashed red; margin: auto; padding: 5px;'>";
+                echo "<p>Timezone: {$CONFIG['timezone']}<br />";
+                echo "User UTC offset: {$_SESSION['utcoffset']}<br />";
+                echo "Date: ".date('r')."<br />";
+                echo "Date now: ".date('r', $GLOBALS['now'])."<br />";
+                echo "LDate: ".ldate('r')."<br />";
+                echo "LDate now (system): ".ldate('r', $GLOBALS['now'], FALSE)."<br />";
+                echo "LDate now (utc): ".ldate('r', $GLOBALS['now'], TRUE)."<br />";
+                echo "</p></div>";
+
+            }
+
 
             // TODO add a check to see if any of the above actions are long overdue, if they are
             // print a message explaining how to set up cron/scheduling
