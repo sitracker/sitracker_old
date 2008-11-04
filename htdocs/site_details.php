@@ -72,17 +72,17 @@ while ($siterow = mysql_fetch_array($siteresult))
     echo "<tr><td colspan='2'>&nbsp;</td></tr>";
     echo "<tr><th>{$strIncidents}:</th>";
     echo "<td>".site_count_incidents($id)." <a href=\"contact_support.php?id=".$siterow['id']."&amp;mode=site\">{$strSeeHere}</a></td></tr>";
-    echo "<tr><th>{$strBillableIncidents}</th><td><a href='transactions.php?site={$siterow['id']}'>{$strSeeHere}</a></td></tr>";
+    echo "<tr><th>{$strBillableIncidents}:</th><td><a href='transactions.php?site={$siterow['id']}'>{$strSeeHere}</a></td></tr>";
     echo "<tr><th>{$strActivities}:</th><td>".open_activities_for_site($siterow['id'])." <a href='tasks.php?siteid={$siterow['id']}'>{$strSeeHere}</a></td></tr>";
-    echo "<tr><th>{$strInventory}</th>";
+    echo "<tr><th>{$strInventory}:</th>";
     echo "<td>".site_count_inventory_items($id);
     echo " <a href='inventory.php?site={$id}'>{$strSeeHere}</a></td></tr>";
     $billableunits = billable_units_site($siterow['id'], $now-2678400); // Last 31 days
     if ($billableunits > 0)
     {
-        echo "<tr><th>Units used in last 31 days:</th><td>{$billableunits}</td></tr>"; // More appropriate label
+        echo "<tr><th>".sprintf($strUnitsUsedLastXdays, 31).":</th><td>{$billableunits}</td></tr>"; // More appropriate label
     }
-    echo "<tr><th>Site Incident Pool:</th><td>{$siterow['freesupport']} Incidents remaining</td></tr>"; // FIXME i18n
+    echo "<tr><th>{$strIncidentPool}:</th><td>".sprintf($strRemaining, $siterow['freesupport'])."</td></tr>"; // FIXME i18n
     echo "<tr><th>{$strSalesperson}:</th><td>";
     if ($siterow['owner'] >= 1)
     {

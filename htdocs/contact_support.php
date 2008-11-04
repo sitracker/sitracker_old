@@ -59,7 +59,7 @@ else
 $result = mysql_query($sql);
 if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
-echo "<h3>All Incidents</h3>";
+echo "<h3>{$strAllIncidents}</h3>";
 
 echo "<table align='center'>";
 echo "<tr>";
@@ -72,7 +72,7 @@ echo "<th>{$strEngineer}</th>";
 echo "<th>{$strOpened}</th>";
 echo "<th>{$strClosed}</th>";
 echo "<th>{$strDuration}</th>";
-echo "<th>SLA</th>"; // FIXME i18n SLA
+echo "<th>{$strSLA}</th>";
 echo "</tr>";
 $shade = 'shade1';
 $totalduration = 0;
@@ -125,9 +125,9 @@ while ($row=mysql_fetch_object($result))
         {
             if ($history['targetmet'] == FALSE) $targetmet = FALSE;
         }
-        if ($targetmet == TRUE) echo "Met";
-        else { $countslaexceeded++; echo "Exceeded"; }
-    } else echo "No SLA";
+        if ($targetmet == TRUE) echo $strMet;
+        else { $countslaexceeded++; echo $strExceeded; }
+    } else echo $strNoSLA;
     echo "</td>";
 
     if (!array_key_exists($row->product, $productlist)) $productlist[$row->product] = 1;
@@ -146,7 +146,7 @@ while ($row=mysql_fetch_object($result))
 echo "</table>\n";
 if (mysql_num_rows($result)>=1 && $countclosed >= 1)
 {
-    echo "<p align='center'>Average incident duration: ".format_seconds($totalduration/$countclosed)."</p>";
+    echo "<p align='center'>{$strAverageIncidentDuration}: ".format_seconds($totalduration/$countclosed)."</p>";
 }
 echo "<p class='contextmenu' align='center'>{$strDisplay}: ";
 echo "<a href=\"{$_SERVER['PHP_SELF']}?id=$id&amp;mode=$mode&amp;status=open\">{$strShowOpenIncidents}</a> | ";
@@ -186,7 +186,7 @@ if ($countproducts >= 1 OR $contactcontacts >= 1)
         $data = implode('|',$productlist);
         $keys = array_keys($productlist);
         $legends = implode('|', $productlegends);
-        $title = urlencode('Incidents by Product');
+        $title = urlencode("{$strIncidents}: {$strByProduct}");
         //$data="1,2,3";
         echo "<div style='text-align:center;'>";
         echo "<img src='chart.php?type=pie&data=$data&legends=$legends&title=$title' />";
@@ -196,7 +196,7 @@ if ($countproducts >= 1 OR $contactcontacts >= 1)
         $data = implode('|',$softwarelist);
         $keys = array_keys($softwarelist);
         $legends = implode('|', $softwarelegends);
-        $title = urlencode('Incidents by Skill');
+        $title = urlencode("{$strIncidents}: {$strBySkill}");
         //$data="1,2,3";
         echo "<div style='text-align:center;'>";
         echo "<img src='chart.php?type=pie&data=$data&legends=$legends&title=$title' />";
@@ -209,7 +209,7 @@ if ($countproducts >= 1 OR $contactcontacts >= 1)
             $data = implode('|',$contactlist);
             $keys = array_keys($contactlist);
             $legends = implode('|', $contactlegends);
-            $title = urlencode('Incidents by Contact');
+            $title = urlencode("{$strIncidents}: {$strByContact}");
             //$data="1,2,3";
             echo "<div style='text-align:center;'>";
             echo "<img src='chart.php?type=pie&data=$data&legends=$legends&title=$title' />";
@@ -222,8 +222,8 @@ if ($countproducts >= 1 OR $contactcontacts >= 1)
         $internalpercent = number_format(($countinternalincidents / $countincidents * 100),1);
         $data = "$countinternalincidents|$countextincidents";
         $keys = "a|b";
-        $legends = "Not Escalated ({$internalpercent}%)|Escalated ({$externalpercent}%)";
-        $title = urlencode('Incidents by Escalation');
+        $legends = "{$strNotEscalated} ({$internalpercent}%)|{$strEscalated} ({$externalpercent}%)";
+        $title = urlencode("{$strIncidents}: {$strByEscalation}");
         echo "<div style='text-align:center;'>";
         echo "<img src='chart.php?type=pie&data=$data&legends=$legends&title=$title' />";
         echo "</div>";
@@ -234,8 +234,8 @@ if ($countproducts >= 1 OR $contactcontacts >= 1)
         $exceededpercent = number_format(($countslaexceeded / $countincidents * 100),1);
         $data = "$countslamet|$countslaexceeded";
         $keys = "a|b";
-        $legends = "SLA Met ({$metpercent}%)|SLA Exceeded ({$exceededpercent}%)";
-        $title = urlencode('Incident Service Level Performance');
+        $legends = "{$strMet} ({$metpercent}%)|{$strExceeded} ({$exceededpercent}%)";
+        $title = urlencode($strSLAPerformance);
         echo "<div style='text-align:center;'>";
         echo "<img src='chart.php?type=pie&data=$data&legends=$legends&title=$title' />";
         echo "</div>";
