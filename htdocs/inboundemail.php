@@ -147,8 +147,16 @@ if ($emails > 0)
 
         //fix for ISO-8859-1 subjects
         $decoded_email->subject = subjectdecode($decoded_email->subject);
-        // Extract Incident ID etc.
-        if (preg_match('/\[(\d{1,5})\]/',$decoded_email->subject,$m)) $incidentid = $m[1];
+        
+	// Extract Incident ID
+	if ($CONFIG['incident_number_type'] == 2)
+	{
+            if (preg_match('/\[(\d{7,10})\]/',$decoded_email->subject,$m)) $incidentid = $m[1];
+	}
+	else
+	{
+            if (preg_match('/\[(\d{1,5})\]/',$decoded_email->subject,$m)) $incidentid = $m[1];
+	}
         $customer_visible = 'No';
 
         $part = 1;

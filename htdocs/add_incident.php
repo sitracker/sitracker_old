@@ -691,14 +691,33 @@ elseif ($action == 'assign')
                 $priority = $highestpriority;
             }
 
-            $sql  = "INSERT INTO `{$dbIncidents}` (title, owner, contact, priority, servicelevel, status, type, maintenanceid, ";
+	    // Find next incident number
+	    if ($CONFIG['incident_number_type'] == 2)
+	    {
+                $sql = "SELECT COUNT(id) AS count FROM `{$dbIncidents}` ";
+                $sql .= "WHERE opened > '$todayrecent'";
+                $result = mysql_query($sql);
+                $row = mysql_fetch_object($result);
+                $today_count = $row->count + 1;
+		$date = date("ymd");
+		$next_id = $date . $today_count;
+	    }
+	    else
+            {
+	    	$sql = "SELECT COUNT(id) as count FROM `{$dbIncidents}`";
+                $result = mysql_query($sql);
+                $row = mysql_fetch_object($result);
+                $next_id = $row->count + 1;
+	    }
+
+            $sql  = "INSERT INTO `{$dbIncidents}` (id, title, owner, contact, priority, servicelevel, status, type, maintenanceid, ";
             $sql .= "product, softwareid, productversion, productservicepacks, opened, lastupdated, timeofnextaction) ";
-            $sql .= "VALUES ('$incidenttitle', '".$sit[2]."', '$contactid', '$priority', '$servicelevel', '1', 'Support', '$maintid', ";
+            $sql .= "VALUES ('{$next_id}', '$incidenttitle', '".$sit[2]."', '$contactid', '$priority', '$servicelevel', '1', 'Support', '$maintid', ";
             $sql .= "'$productid', '$software', '$productversion', '$productservicepacks', '$now', '$now', '$timeofnextaction')";
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
-            $incidentid = mysql_insert_id();
+            $incidentid = $next_id;
             $_SESSION['incidentid'] = $incidentid;
 
             // Save productinfo if there is some

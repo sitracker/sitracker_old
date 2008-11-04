@@ -49,6 +49,10 @@ $CONFIG['support_email'] = 'support@localhost';
 $CONFIG['sales_email'] = 'sales@localhost';
 $CONFIG['support_manager_email'] = 'support_manager@localhost';
 
+// Incident number style
+// 1 = incremental, 2 = YYMMDD + incremental incidents per day
+$CONFIG['incident_number_type'] = 1;
+
 // These are the settings for the account to download incoming mail from, settings POP/IMAP or MTA (for piping message in)
 $CONFIG['enable_inbound_mail'] = 'POP/IMAP';
 $CONFIG['email_username'] = '';
@@ -242,7 +246,7 @@ $CONFIG['portal_site_incidents'] = TRUE; //users in the portal can view site inc
 $CONFIG['portal_usernames_can_be_changed'] = TRUE; //portal usernames can be changed by the users
 
 // The interface style to use for the portal
-$CONFIG['portal_interface_style'] = 16;
+$CONFIG['portal_interface_style'] = 8;
 
 // incidents are automatically assigned based on a lottery weighted towards who
 // are less busy, assumes everyone set to accepting is an engineer and willing to take incidents

@@ -2460,6 +2460,9 @@ INSERT INTO `$dbNoticeTemplates` (`name`, `type`, `description`, `text`, `linkte
 INSERT INTO `$dbEmailTemplates` (`name`, `type`, `description`, `tofield`, `fromfield`, `replytofield`, `ccfield`, `bccfield`, `subjectfield`, `body`, `customervisibility`, `storeinlog`, `created`, `createdby`, `modified`, `modifiedby`) VALUES
 ('EMAIL_INCIDENT_UPDATED_CUSTOMER', 'user', 'Sent to a customer when an engineer updated an incident', '{contactemail}', '{supportemail}', '{supportemail}', '', '', '{applicationshortname} [{incidentid}] - {incidenttitle} updated', 'Hi {contactfirstname},\r\n\r\nYour incident [{incidentid}] - {incidentid} has been updated, please log into the portal to view the update and respond.\r\n \r\nDO NOT respond to this e-mail directly, use the portal for your responses.\r\n\r\nLog into the portal at: {applicationurl}, where you can also reset your details if you do not know them.\r\n\r\nRegards,\r\n{signature}\r\n\r\n{globalsignature}', 'hide', 'No', NULL, NULL, NULL, NULL);
 
+-- KMH 2008-11-04
+ALTER TABLE `{$dbIncidents}` CHANGE `id` `id` INT( 11 ) NOT NULL;  
+ALTER TABLE `{$dbIncidents}` CHANGE `id` `id` VARCHAR( 11 ) NOT NULL;
 ";
 // Important: When making changes to the schema you must add SQL to make the alterations
 // to existing databases in $upgrade_schema[] *AND* you must also change $schema[] for
