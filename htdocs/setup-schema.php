@@ -2462,7 +2462,7 @@ INSERT INTO `$dbEmailTemplates` (`name`, `type`, `description`, `tofield`, `from
 
 
 INSERT INTO `$dbNoticeTemplates` (`name`, `type`, `description`, `text`, `linktext`, `link`, `durability`, `refid`) VALUES('NOTICE_SCHEDULER_TASK_FAILED', 3, 'strNoticeSchedulerTaskFailedDesc', 'strNoticeSchedulerTaskFailed', 'strScheduler', '{applicationurl}scheduler.php', 'sticky', '');
-INSERT INTO `$dbTriggers` (triggerid, userid, action, template, parameters, checks) VALUES('TRIGGER_SCHEDULER_TASK_FAILED', 1, 'ACTION_NOTICE', 'NOTICE_TASK_DUE', '', '');
+INSERT INTO `$dbTriggers` (triggerid, userid, action, template, parameters, checks) VALUES('TRIGGER_SCHEDULER_TASK_FAILED', 1, 'ACTION_NOTICE', 'NOTICE_SCHEDULER_TASK_FAILED', '', '{schedulertask} == \'CheckIncomingMail\');
 
 
 ";
