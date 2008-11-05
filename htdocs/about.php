@@ -81,7 +81,7 @@ Copyright &copy; 2004-2006 The Dojo Foundation. Licensed under the BSD license.<
 <p align='center'>MagpieRSS 0.72 by <a href='http://magpierss.sourceforge.net/'>Kellan Elliott-McCrea</a><br />
 Copyright &copy; Kellan Elliott-McCrea. Licensed under the GPLv2.</p>
 
-<p align='center'>Prototype JavaScript framework 1.6.0.2 by <a href='http://www.prototypejs.org/'>Sam Stephenson</a><br />
+<p align='center'>Prototype JavaScript framework 1.6.0.3 by <a href='http://www.prototypejs.org/'>Sam Stephenson</a><br />
 Copyright &copy; 2005-2008 Sam Stephenson. Licensed under an MIT style license.</p>
 
 <p align='center'>script.aculo.us by <a href='http://script.aculo.us'>Thomas Fuchs</a><br />
