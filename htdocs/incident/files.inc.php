@@ -42,7 +42,7 @@ if ($_FILES['attachment']['name'] != '')
         $fileid =  mysql_insert_id();
 
         //create update
-        $updatetext = "File attached [[att={$fileid}]]{$_FILES['attachment']['name']}[[/att]]";
+        $updatetext = $SYSLANG['strFileUploaded'].": [[att={$fileid}]]{$_FILES['attachment']['name']}[[/att]]";
         $currentowner = incident_owner($incidentid);
         $currentstatus = incident_status($incidentid);
         $sql = "INSERT INTO `{$dbUpdates}` (incidentid, userid, `type`, `currentowner`, `currentstatus`, ";
@@ -52,12 +52,13 @@ if ($_FILES['attachment']['name'] != '')
         mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
         $updateid = mysql_insert_id();
-
-        // Add the updateid to the attachment path
-        $incident_attachment_fspath .= "{$fsdelim}u{$updateid}";
-
+        
+        $incident_attachment_fspath = $CONFIG['attachment_fspath']. $fsdelim . 
+            $incidentid . $fsdelim;
+        
         // make incident attachment dir if it doesn't exist
-        $newfilename = $incident_attachment_fspath.$fsdelim.$_FILES['attachment']['name'];
+        $newfilename = $incident_attachment_fspath . $fsdelim . $fileid . 
+            "-".$_FILES['attachment']['name'];
         $umask = umask(0000);
         $mk = TRUE;
         if (!file_exists($incident_attachment_fspath))
@@ -65,7 +66,7 @@ if ($_FILES['attachment']['name'] != '')
             $mk = mkdir($incident_attachment_fspath, 0770, TRUE);
             if (!$mk)
             {
-                trigger_error('Failed creating incident attachment directory: '.$incident_attachment_fspath .$id, E_USER_WARNING);
+                trigger_error('Failed creating incident attachment directory: '.$incident_attachment_fspath, E_USER_WARNING);
             }
         }
         // Move the uploaded file from the temp directory into the incidents attachment dir
@@ -264,7 +265,7 @@ function draw_file_row($file, $fsdelim, $incidentid, $path)
 if (file_exists($incident_attachment_fspath))
 {
     $dirarray=array();
-    echo "<form name='filelistform' action='{$_SERVER['PHP_SELF']}' method='post' onsubmit=\"return confirm_action('Are you sure?'\">";
+    echo "<form name='filelistform' action='{$_SERVER['PHP_SELF']}' method='post' onsubmit=\"return confirm_action('{$strAreYouSure}'\">";
     //echo "<input type='submit' name='test' value='List' />";
     echo "<input type='hidden' name='id' value='{$incidentid}' />";
     echo "<input type='hidden' name='tab' value='{$selectedtab}' />";
@@ -289,12 +290,11 @@ if (file_exists($incident_attachment_fspath))
         if (count($rfilearray) >= 1)
         {
             $headhtml = "<div class='detailhead'>\n";
-            $headhtml .= icon('folder', 16, $strRootDirectory)." /";
+            $headhtml .= icon('folder', 16, $strRootDirectory)." {$strFiles}";
             $headhtml .= "</div>\n";
             echo $headhtml;
             echo "<div class='detailentry'>\n";
 
-            echo "<p><em>Root of Incident {$incidentid}</em></p>\n";
             echo "<table>\n";
             foreach ($rfilearray AS $rfile)
             {
@@ -321,7 +321,7 @@ if (file_exists($incident_attachment_fspath))
                 $result = mysql_query($sql);
                 if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
                 $update = mysql_fetch_object($result);
-                $dirprettyname = date('l jS M Y @ g:ia',$update->timestamp) . " by ".user_realname($update->userid);
+                $dirprettyname = date('l jS M Y @ g:ia',$update->timestamp) . " $strby ".user_realname($update->userid);
                 $updatetext = cleanvar($update->bodytext);
                 $updatetype = $update->type;
             }
