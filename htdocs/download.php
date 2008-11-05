@@ -29,7 +29,6 @@ $sql = "SELECT *, u.id AS updateid
         AND l.direction='left'
         AND l.linkcolref=f.id
         ORDER BY f.filedate DESC";
-echo $sql;
 $result = mysql_query($sql);
 $fileobj = mysql_fetch_object($result);
 $incidentid = cleanvar(intval($fileobj->incidentid));
@@ -66,6 +65,8 @@ if (!file_exists($file_fspath))
     header('Status: 404 Not Found',1,404);
     echo "<h3>404 File Not Found</h3>";
     if ($CONFIG['debug'] == TRUE) echo "<p>Filename: {$file_fspath}</p>";
+        echo $file_fspath;
+
     exit;
 }
 elseif ($access == TRUE)
@@ -74,10 +75,21 @@ elseif ($access == TRUE)
     $fp = fopen($file_fspath, 'r');
     if ($fp && ($file_size !=-1))
     {
-        header("Content-Type: ".mime_content_type($filename)."\r\n");
-        header("Content-Length: {$file_size}\r\n");
-        header("Content-Disposition-Type: attachment\r\n");
-        header("Content-Disposition: filename={$filename}\r\n");
+        if (file_exists($file_fspath))
+        {
+            header("Content-Type: ".mime_content_type($file_fspath)."\r\n");
+            header("Content-Length: {$file_size}\r\n");
+            header("Content-Disposition-Type: attachment\r\n");
+            header("Content-Disposition: filename={$file_fspath}\r\n");
+        }
+        elseif(file_exists($old_style))
+        {
+            header("Content-Type: ".mime_content_type($old_style)."\r\n");
+            header("Content-Length: {$file_size}\r\n");
+            header("Content-Disposition-Type: attachment\r\n");
+            header("Content-Disposition: filename={$old_style}\r\n");
+        }
+        
         $buffer = '';
         while (!feof($fp))
         {

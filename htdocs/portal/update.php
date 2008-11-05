@@ -92,6 +92,11 @@ else
     $sql .= "VALUES('{$id}', '0', 'webupdate', '1', '{$updatebody}', '{$now}', 'show')";
     mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+    else
+    {
+        $updateid = mysql_insert_id();
+    }
+
 
     //upload file, here because we need updateid
     if ($_FILES['attachment']['name'] != '')

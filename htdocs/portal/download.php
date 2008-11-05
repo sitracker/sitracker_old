@@ -68,7 +68,6 @@ if (!file_exists($file_fspath) AND !file_exists($old_style))
     header('Status: 403 Not Found',1,403);
     echo "<h3>404 File Not Found</h3>";
     echo "<p>{$file}</p>";
-        echo $file_fspath;
     exit;
 }
 elseif ($access == TRUE)
