@@ -227,29 +227,42 @@ elseif ($action == "edit")
         echo "</td><tr>";
 
         echo "<tr><th>{$strTemplate}: <sup class='red'>*</sup></th><td><input maxlength='100' name='name' size='40' value=\"{$template->name}\" /></td></tr>\n";
-        echo "<tr><th>{$strDescription}: <sup class='red'>*</sup></th><td><textarea name='description' cols='50' rows='5' onfocus=\"clearFocusElement(this);\">{$template->description}</textarea></td></tr>\n";
+        echo "<tr><th>{$strDescription}: <sup class='red'>*</sup></th>";
+		echo "<td><textarea name='description' cols='50' rows='5' onfocus=\"clearFocusElement(this);\"";
+		if (substr_compare($template->description, 'str', 1, 3))
+		{
+			echo " readonly='readonly' ";
+			$template->description = $SYSLANG[$template->description];
+		}
+		echo ">{$template->description}</textarea></td></tr>\n";
         switch ($templatetype)
         {
             case 'email':
                 echo "<tr><th colspan='2'>{$strEmail}</th></tr>";
                 echo "<tr><td colspan='2'>{$strTemplatesShouldNotBeginWith}</td></tr>";
-                echo "<tr><th>{$strTo}: <sup class='red'>*</sup></th>";
+                echo "<tr><th>{$strTo} <sup class='red'>*</sup></th>";
                 echo "<td><input id='tofield' maxlength='100' name='tofield' size='40' value=\"{$template->tofield}\" onfocus=\"recordFocusElement(this);\" /></td></tr>\n";
-                echo "<tr><th>{$strFrom}: <sup class='red'>*</sup></th>";
+                echo "<tr><th>{$strFrom} <sup class='red'>*</sup></th>";
                 echo "<td><input id='fromfield' maxlength='100' name='fromfield' size='40' value=\"{$template->fromfield}\" onfocus=\"recordFocusElement(this);\" /></td></tr>\n";
-                echo "<tr><th>{$strReplyTo}: <sup class='red'>*</sup></th>";
+                echo "<tr><th>{$strReplyTo} <sup class='red'>*</sup></th>";
                 echo "<td><input id='replytofield' maxlength='100' name='replytofield' size='40' value=\"{$template->replytofield}\" onfocus=\"recordFocusElement(this);\" /></td></tr>\n";
-                echo "<tr><th>{$strCC}:</th>";
+                echo "<tr><th>{$strCC}</th>";
                 echo "<td><input id='ccfield' maxlength='100' name='ccfield' size='40' value=\"{$template->ccfield}\" onfocus=\"recordFocusElement(this);\" /></td></tr>\n";
-                echo "<tr><th>{$strBCC}:</th>";
+                echo "<tr><th>{$strBCC}</th>";
                 echo "<td><input id='bccfield' maxlength='100' name='bccfield' size='40' value=\"{$template->bccfield}\" onfocus=\"recordFocusElement(this);\" /></td></tr>\n";
-                echo "<tr><th>{$strSubject}:</th>";
+                echo "<tr><th>{$strSubject}</th>";
                 echo "<td><input id='subject' maxlength='255' name='subjectfield' size='60' value=\"{$template->subjectfield}\" onfocus=\"recordFocusElement(this);\" /></td></tr>\n";
                 break;
 
             case 'notice':
                 echo "<tr><th>{$strLinkText}</th>";
-                echo "<td><input id='linktext' maxlength='50' name='linktext' size='50' value=\"{$template->linktext}\" onfocus=\"recordFocusElement(this);\" /></td></tr>\n";
+                echo "<td><input id='linktext' maxlength='50' name='linktext' size='50' ";
+        		if (substr_compare($template->linktext, 'str', 1, 3))
+				{
+					echo " readonly='readonly' ";
+					$template->linktext = $SYSLANG[$template->linktext];
+				}
+                echo "value=\"{$template->linktext}\" onfocus=\"recordFocusElement(this);\" /></td></tr>\n";
                 echo "<tr><th>{$strLink}</th>";
                 echo "<td><input id='link' maxlength='100' name='link' size='50' value=\"{$template->link}\"  onfocus=\"recordFocusElement(this);\" /></td></tr>\n";
                 echo "<tr><th>{$strDurability}</th>";
@@ -269,7 +282,7 @@ elseif ($action == "edit")
                 echo "</option></select>";
         }
 
-        if ($trigaction AND $template->type != $triggerarray[$trigaction->triggerid]['type']) echo "<p class='warning'>Trigger type mismatch</p>";
+        //if ($trigaction AND $template->type != $triggerarray[$trigaction->triggerid]['type']) echo "<p class='warning'>Trigger type mismatch</p>";
         echo "</td></tr>\n";
 
 
@@ -278,7 +291,13 @@ elseif ($action == "edit")
         echo "<tr><th>{$strText}</th>";
         echo "<td>";
         if ($templatetype=='notice') echo bbcode_toolbar('bodytext');
-        echo "<textarea id='bodytext' name='bodytext' rows='20' cols='50' onfocus=\"recordFocusElement(this);\">{$body}</textarea></td>";
+        echo "<textarea id='bodytext' name='bodytext' rows='20' cols='50' onfocus=\"recordFocusElement(this);\"";
+		if (substr_compare($body, 'str', 1, 3))
+		{
+			echo " readonly='readonly' ";
+			$body = $SYSLANG[$body];
+		}
+        echo ">{$body}</textarea></td>";
 
         if ($template->type=='incident')
         {
@@ -310,7 +329,7 @@ elseif ($action == "edit")
         echo "</form>";
         echo "</div>";
 
-            // FIXME i18n email templates
+        // FIXME i18n email templates
         // Show a list of available template variables.  Only variables that have 'requires' matching the 'required'
         // that the trigger provides is shown
         echo "<div id='templatevariables' style='display:none;'>";
