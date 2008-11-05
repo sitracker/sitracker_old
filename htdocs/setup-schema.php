@@ -2445,7 +2445,7 @@ CREATE TABLE IF NOT EXISTS `{$dbInventory}` (
 
 -- KMH 2008-08-28
 INSERT INTO `{$dbEmailTemplates}` (`name`, `type`, `description`, `tofield`, `fromfield`, `replytofield`, `ccfield`, `bccfield`, `subjectfield`, `body`, `customervisibility`, `storeinlog`, `created`, `createdby`, `modified`, `modifiedby`) VALUES('EMAIL_SERVICE_LEVEL', 'system', 'Sent to the site\'s salesperson when the value drops below a certain limit', '{salespersonemail}', '{supportemail}', '{supportemail}', NULL , NULL , '{sitename}\'s service credit low', 'Hi, {sitename}\'s total service credit is now standing at {serviceremainingstring}.\r\n\r\nRegards\r\n{applicationname}\r\n\r\n-- \r\n{todaysdate} - {applicationshortname} {applicationversion}\r\n{globalsignature}\r\n{triggersfooter}', 'show', 'No', NULL , NULL , NULL , NULL);
-INSERT INTO `{$dbTriggers}` ('triggerid', 'userid', 'action', 'template', 'parameters', 'checks') VALUES('TRIGGER_SERVICE_LIMIT', 0, 'ACTION_EMAIL', 'EMAIL_SERVICE_LEVEL', '', '{serviceremaining} <= 0.2')
+INSERT INTO `{$dbTriggers}` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_SERVICE_LIMIT', 0, 'ACTION_EMAIL', 'EMAIL_SERVICE_LEVEL', '', '{serviceremaining} <= 0.2')
 
 -- KMH 2008-10-08
 INSERT INTO `{$dbScheduler}` (`action`, `params`, `paramslabel`, `description`, `status`, `start`, `end`, `interval`, `lastran`, `success`) VALUES ('CheckIncomingMail', '', NULL, 'Check incoming support mailbox.', 'enabled', '2008-01-01 00:00:00', '0000-00-00 00:00:00', 60, '0000-00-00 00:00:00', 1);
@@ -2459,6 +2459,11 @@ INSERT INTO `$dbNoticeTemplates` (`name`, `type`, `description`, `text`, `linkte
 
 INSERT INTO `$dbEmailTemplates` (`name`, `type`, `description`, `tofield`, `fromfield`, `replytofield`, `ccfield`, `bccfield`, `subjectfield`, `body`, `customervisibility`, `storeinlog`, `created`, `createdby`, `modified`, `modifiedby`) VALUES
 ('EMAIL_INCIDENT_UPDATED_CUSTOMER', 'user', 'Sent to a customer when an engineer updated an incident', '{contactemail}', '{supportemail}', '{supportemail}', '', '', '{applicationshortname} [{incidentid}] - {incidenttitle} updated', 'Hi {contactfirstname},\r\n\r\nYour incident [{incidentid}] - {incidentid} has been updated, please log into the portal to view the update and respond.\r\n \r\nDO NOT respond to this e-mail directly, use the portal for your responses.\r\n\r\nLog into the portal at: {applicationurl}, where you can also reset your details if you do not know them.\r\n\r\nRegards,\r\n{signature}\r\n\r\n{globalsignature}', 'hide', 'No', NULL, NULL, NULL, NULL);
+
+
+INSERT INTO `$dbNoticeTemplates` (`name`, `type`, `description`, `text`, `linktext`, `link`, `durability`, `refid`) VALUES('NOTICE_SCHEDULER_TASK_FAILED', 3, 'strNoticeSchedulerTaskFailedDesc', 'strNoticeSchedulerTaskFailed', 'strScheduler', '{applicationurl}scheduler.php', 'sticky', '');
+INSERT INTO `$dbTriggers` (triggerid, userid, action, template, parameters, checks) VALUES('TRIGGER_SCHEDULER_TASK_FAILED', 1, 'ACTION_NOTICE', 'NOTICE_TASK_DUE', '', '');
+
 
 ";
 // Important: When making changes to the schema you must add SQL to make the alterations
