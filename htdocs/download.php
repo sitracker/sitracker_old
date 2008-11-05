@@ -29,7 +29,7 @@ $sql = "SELECT *, u.id AS updateid
         AND l.direction='left'
         AND l.linkcolref=f.id
         ORDER BY f.filedate DESC";
-
+echo $sql;
 $result = mysql_query($sql);
 $fileobj = mysql_fetch_object($result);
 $incidentid = cleanvar(intval($fileobj->incidentid));
@@ -59,7 +59,7 @@ else
 {
     $file_fspath = "{$CONFIG['attachment_fspath']}{$incidentid}{$fsdelim}{$id}-{$filename}";
 }
-
+echo $file_fspath;
 if (!file_exists($file_fspath))
 {
     header('HTTP/1.1 404 Not Found');
