@@ -178,7 +178,9 @@ function draw_file_row($file, $fsdelim, $incidentid, $path)
     $filename = $filepathparts[$parts-1];
     $filedir = $filepathparts[$parts-2];
     $preview = ''; // reset the preview
-
+    $filenameparts = explode("-", $filename);
+    $newfilename = cleanvar($filenameparts[1]);
+    
     if ($filedir != $incidentid)
     {
         // files are in a subdirectory
@@ -217,6 +219,22 @@ function draw_file_row($file, $fsdelim, $incidentid, $path)
     // FIXME url
 
     $url = "download.php?id=$fileid";
+    
+    if (is_numeric($filenameparts[0]))
+    {
+        $sql = "SELECT *, f.id AS fileid FROM `{$GLOBALS['dbLinks']}` AS l, ";
+        $sql .= "`{$GLOBALS['dbFiles']}` as f, ";
+        $sql .= "`{$GLOBALS['dbUpdates']}` as u ";
+        $sql .= "WHERE f.filename = '{$newfilename}' ";
+        $sql .= "AND u.incidentid = '{$incidentid}' ";
+        $sql .= "AND l.origcolref = u.id ";
+        $sql .= "AND l.linkcolref = f.id";
+        echo $sql;
+        $result = mysql_query($sql);
+        $row = mysql_fetch_object($result);
+        $url = "download.php?id={$row->fileid}";
+        $filename = $filenameparts[1];
+    }
 
     $html = "<tr>";
     $html .= "<td align='right' width='5%'>";
@@ -341,7 +359,6 @@ if (file_exists($incident_attachment_fspath))
                 foreach ($filearray AS $file)
                 {
                     echo draw_file_row($file, $fsdelim, $incidentid, $dirname);
-
                 }
 
                 if (!empty($updatetext) AND
