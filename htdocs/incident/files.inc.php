@@ -229,7 +229,6 @@ function draw_file_row($file, $fsdelim, $incidentid, $path)
         $sql .= "AND u.incidentid = '{$incidentid}' ";
         $sql .= "AND l.origcolref = u.id ";
         $sql .= "AND l.linkcolref = f.id";
-        echo $sql;
         $result = mysql_query($sql);
         $row = mysql_fetch_object($result);
         $url = "download.php?id={$row->fileid}";
