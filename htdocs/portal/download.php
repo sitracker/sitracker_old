@@ -22,7 +22,7 @@ require ('portalauth.inc.php');
 // External variables
 $id = cleanvar(intval($_GET['id']));
 
-$sql = "SELECT *, u.id AS updateid
+$sql = "SELECT *, u.id AS updateid, f.id AS fileid
         FROM `{$dbFiles}` AS f, `{$dbLinks}` AS l, `{$dbUpdates}` AS u
         WHERE l.linktype='5'
         AND l.origcolref=u.id
@@ -36,6 +36,7 @@ $fileobj = mysql_fetch_object($result);
 $incidentid = cleanvar(intval($fileobj->incidentid));
 $updateid = cleanvar(intval($fileobj->updateid));
 $filename = cleanvar($fileobj->filename);
+$fileid = $fileobj->fileid;
 $visibility = $fileobj->category;
 
 $access = FALSE;
@@ -48,7 +49,7 @@ else
     $access = FALSE;
 }
 
-$file_fspath = "{$CONFIG['attachment_fspath']}{$incidentid}{$fsdelim}u{$updateid}{$fsdelim}{$filename}";
+$file_fspath = "{$CONFIG['attachment_fspath']}{$incidentid}{$fsdelim}{$fileid}-{$filename}";
 
 if (!file_exists($file_fspath))
 {
@@ -63,25 +64,14 @@ elseif ($access == TRUE)
 {
     $file_size = filesize($file_fspath);
     $fp = fopen($file_fspath, 'r');
-    $file_ext = substr($file_fspath, ((strlen($file_fspath)-1 - strrpos($file_fspath, '.')) * -1 ));
-
-    $display_mimetypes['jpg'] = 'image/jpeg';
-    $display_mimetypes['txt'] = 'text/plain';
+    
     if ($fp && ($file_size !=-1))
     {
-        if (array_key_exists($file_ext, $display_mimetypes))
-        {
-            header("Content-Type: {$display_mimetypes[$file_ext]}\r\n");
-            header("Content-Length: {$file_size}\r\n");
-            header("Content-Disposition: filename={$filename}\r\n");
-        }
-        else
-        {
-            header("Content-Type: application/octet-stream\r\n");
-            header("Content-Length: {$file_size}\r\n");
-            header("Content-Disposition-Type: attachment\r\n");
-            header("Content-Disposition: filename={$filename}\r\n");
-        }
+        header("Content-Type: ".mime_content_type($filename)."\r\n");
+        header("Content-Length: {$file_size}\r\n");
+        header("Content-Disposition-Type: attachment\r\n");
+        header("Content-Disposition: filename={$filename}\r\n");
+        
         $buffer = '';
         while (!feof($fp))
         {

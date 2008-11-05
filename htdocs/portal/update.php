@@ -49,7 +49,7 @@ if (empty($_POST['update']) AND empty($_FILES))
 else
 {
     $id = intval($_REQUEST['id']);
-    $usersql = "SELECT forenames, surname FROM `{$dbContacts}` WHERE id={$_SESSION['contactid']}";
+    $usersql = "SELECT forenames, surname FROM `{$dbContacts}` WHERE id='{$_SESSION['contactid']}'";
     $result = mysql_query($usersql);
     $user = mysql_fetch_object($result);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
@@ -92,10 +92,6 @@ else
     $sql .= "VALUES('{$id}', '0', 'webupdate', '1', '{$updatebody}', '{$now}', 'show')";
     mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-    else
-    {
-        $updateid = mysql_insert_id();
-    }
 
     //upload file, here because we need updateid
     if ($_FILES['attachment']['name'] != '')
@@ -106,20 +102,20 @@ else
 
         // make incident attachment dir if it doesn't exist
         $umask = umask(0000);
-        if (!file_exists("{$CONFIG['attachment_fspath']}{$id}{$fsdelim}u{$updateid}"))
+        if (!file_exists("{$CONFIG['attachment_fspath']}{$id}{$fsdelim}"))
         {
-            $mk = @mkdir("{$CONFIG['attachment_fspath']}{$id}{$fsdelim}u{$updateid}", 0770, TRUE);
+            $mk = @mkdir("{$CONFIG['attachment_fspath']}{$id}{$fsdelim}", 0770, TRUE);
             if (!$mk)
             {
                 $errors++;
                 $sql = "DELETE FROM `{$dbUpdates}` WHERE id='{$updateid}'";
                 mysql_query($sql);
                 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-                trigger_error("Failed creating incident attachment directory: {$CONFIG['attachment_fspath']}{$id}{$fsdelim}u{$updateid}", E_USER_WARNING);
+                trigger_error("Failed creating incident attachment directory: {$CONFIG['attachment_fspath']}{$id}{$fsdelim}", E_USER_WARNING);
             }
         }
         umask($umask);
-        $newfilename = "{$CONFIG['attachment_fspath']}{$id}{$delim}u{$updateid}{$fsdelim}{$_FILES['attachment']['name']}";
+        $newfilename = "{$CONFIG['attachment_fspath']}{$id}{$fsdelim}{$fileid}-{$_FILES['attachment']['name']}";
 
         // Move the uploaded file from the temp directory into the incidents attachment dir
         $mv = move_uploaded_file($_FILES['attachment']['tmp_name'], $newfilename);
