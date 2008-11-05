@@ -51,7 +51,18 @@ else
 
 $file_fspath = "{$CONFIG['attachment_fspath']}{$incidentid}{$fsdelim}{$fileid}-{$filename}";
 
-if (!file_exists($file_fspath))
+if ($incidentid == 0 OR empty($incidentid))
+{
+    $file_fspath = "{$CONFIG['attachment_fspath']}updates{$fsdelim}{$fileid}-{$filename}";
+    $old_style = "{$CONFIG['attachment_fspath']}updates{$fsdelim}{$filename}";
+}
+else
+{
+    $file_fspath = "{$CONFIG['attachment_fspath']}{$incidentid}{$fsdelim}{$fileid}-{$filename}";
+    $old_style = "{$CONFIG['attachment_fspath']}{$incidentid}{$fsdelim}u{$updateid}{$fsdelim}{$filename}";
+}
+
+if (!file_exists($file_fspath) AND !file_exists($old_style))
 {
     header('HTTP/1.1 404 Not Found');
     header('Status: 403 Not Found',1,403);
@@ -67,10 +78,20 @@ elseif ($access == TRUE)
     
     if ($fp && ($file_size !=-1))
     {
-        header("Content-Type: ".mime_content_type($filename)."\r\n");
-        header("Content-Length: {$file_size}\r\n");
-        header("Content-Disposition-Type: attachment\r\n");
-        header("Content-Disposition: filename={$filename}\r\n");
+        if (file_exists($file_fspath))
+        {
+            header("Content-Type: ".mime_content_type($filename)."\r\n");
+            header("Content-Length: {$file_size}\r\n");
+            header("Content-Disposition-Type: attachment\r\n");
+            header("Content-Disposition: filename={$filename}\r\n");
+        }
+        elseif(file_exists($old_style))
+        {
+            header("Content-Type: ".mime_content_type($old_style)."\r\n");
+            header("Content-Length: {$file_size}\r\n");
+            header("Content-Disposition-Type: attachment\r\n");
+            header("Content-Disposition: filename={$old_style}\r\n");
+        }
         
         $buffer = '';
         while (!feof($fp))
