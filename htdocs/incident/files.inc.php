@@ -218,7 +218,7 @@ function draw_file_row($file, $fsdelim, $incidentid, $path)
 
     // FIXME url
 
-    $url = "download.php?id=$fileid";
+    //$url = $path.$fsdelim.$filename;
     
     if (is_numeric($filenameparts[0]))
     {
@@ -289,7 +289,7 @@ if (file_exists($incident_attachment_fspath))
         if (count($rfilearray) >= 1)
         {
             $headhtml = "<div class='detailhead'>\n";
-            $headhtml .= icon('folder', 16, $strRootDirectory)." \\";
+            $headhtml .= icon('folder', 16, $strRootDirectory)." /";
             $headhtml .= "</div>\n";
             echo $headhtml;
             echo "<div class='detailentry'>\n";
