@@ -7630,6 +7630,11 @@ function schedule_action_done($doneaction, $success = TRUE)
 {
     global $now;
     global $dbScheduler;
+    
+    if ($success != TRUE)
+    {
+        trigger('TRIGGER_SCHEDULER_TASK_FAILED', array('schedulertask' => $doneaction));
+    }
 
     $nowdate = date('Y-m-d H:i:s', $now);
     $sql = "UPDATE `{$dbScheduler}` SET lastran = '$nowdate' ";

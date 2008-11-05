@@ -71,7 +71,7 @@ if (empty($_REQUEST['mode']))
     echo " value='yes' /> {$strShowActiveOnly}</label></td></tr>";
 
     echo "<tr><td colspan='2'>{$strOutput}: <select name='output'>";
-    echo "<option value='screen'>{$strScreen}</option>";
+    echo "<option value='table'>{$strScreen}</option>";
     // echo "<option value='printer'>Printer</option>";
     echo "<option value='csv'>{$strCSVfile}</option>";
     echo "</select>";

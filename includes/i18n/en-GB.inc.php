@@ -517,6 +517,7 @@ $strFileManagement = 'File Management';
 $strFilename = 'Filename';
 # e.g. computer files
 $strFiles = 'Files';
+$strFileUploaded = 'File uploaded';
 # e.g. File filename.txt (Text file 100 bytes) uploaded OK
 $strFileXUploadedOK = 'File %s (%s %d bytes) uploaded OK';
 $strFilter = 'Filter';
@@ -933,6 +934,8 @@ $strNoticeSitUpgradedDesc = 'Notifies of a system upgrade';
 $strNoticeSitUpgraded ='{applicationshortname} has been upgraded to {applicationversion}';
 $strNoticeTaskDue = 'Task {taskid} - {taskname} is now due';
 $strNoticeTaskDueDesc = 'Notifies of a due task.';
+$strNoticeSchedulerTaskFailed = 'Scheduler task {schedulertask} failed';
+$strNoticeSchedulerTaskFailedDesc = 'Notifies of a scheduler task failing';
 $strNoticeUserChangedStatusDesc = 'Notifies of an user\'s status change';
 $strNoticeUserChangedStatus = '{userrealname} has changed their status to {userstatus} and {useraccepting} incidents';
 $strNoticesBlurb = 'This page allows you to post a new global notice. BB code is allowed.';
@@ -1378,6 +1381,7 @@ $strTriggerNewIncidentAssignedDesc = 'Occurs when a new incident is assigned to 
 $strTriggerNewIncidentCreatedDesc = 'Occurs when a new incident has been created';
 $strTriggerNewSiteDesc = 'Occurs when a new site is added';
 $strTriggerNewUserDesc ='Occurs when a new user is added';
+$strTriggerSchedulerTaskFailedDesc = 'Occurs when a scheduled action fails';
 $strTriggerSitUpgradedDesc = 'Occurs when the system is upgraded';
 $strTriggerUserChangedStatusDesc = 'Occurs when one of your watched engineer changes status';
 $strTriggerUserResetPasswordDesc = 'Occurs when a user wants their password resetting';

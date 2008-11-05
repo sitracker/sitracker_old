@@ -129,6 +129,11 @@ array('name' => 'New user added',
       'required' => array('userid')
       );
 
+$triggerarray['TRIGGER_SCHEDULER_TASK_FAILED'] =
+array('name' => 'Scheduler action failed',
+      'description' => 'strTriggerSchedulerTaskFailedDesc',
+      'required' => array('schedulertask'));
+
 $triggerarray['TRIGGER_SIT_UPGRADED'] =
 array('name' => 'SiT! Upgraded',
       'description' => 'strTriggerSitUpgradedDesc',
@@ -493,6 +498,10 @@ array('description' => $strSalespersonAssignedToContactsSiteEmail,
       'replacement' => 'user_email(db_read_column(\'owner\', $GLOBALS[\'dbSites\'], maintenance_siteid($paramarray[\'contractid\]));'
       );
 
+$ttvararray['{schedulertask}'] =
+array('description' => 'The name of the scheduled task',
+      'replacement' => '$paramarray[\'schedulertask\'];');
+
 $ttvararray['{sendemail}'] =
 array('description' => 'Whether to send an opening email or not',
       'replacement' => '$paramarray[\'sendemail\'];'
@@ -507,7 +516,7 @@ array('description' => 'The amount of remaining service i.e. 34%',
 $ttvararray['{serviceremainingstring}'] =
 array('description' => 'The amount of remaining service i.e. 0.34',
       'requires' => 'maintid',
-      'replacement' => 'get_service_percentage($paramarray[\'contractid\']) * 100."%"'
+      'replacement' => '(get_service_percentage($paramarray[\'contractid\']) * 100)."%";'
      );
 
 $ttvararray['{signature}'] =
