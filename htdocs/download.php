@@ -21,7 +21,7 @@ require ('auth.inc.php');
 // External variables
 $id = cleanvar(intval($_GET['id']));
 
-$sql = "SELECT *, u.id AS updateid
+$sql = "SELECT *, u.id AS updateid, f.id AS fileid
         FROM `{$dbFiles}` AS f, `{$dbLinks}` AS l, `{$dbUpdates}` AS u
         WHERE l.linktype='5'
         AND l.origcolref=u.id
@@ -35,6 +35,7 @@ $incidentid = cleanvar(intval($fileobj->incidentid));
 $updateid = cleanvar(intval($fileobj->updateid));
 $filename = cleanvar($fileobj->filename);
 $visibility = $fileobj->category;
+$fileid = $fileobj->fileid;
 
 $access = FALSE;
 if ($visibility == 'public' AND (isset($sit[2]) OR isset($_SESSION['contactid'])))
@@ -52,62 +53,58 @@ else
 
 if ($incidentid == 0 OR empty($incidentid))
 {
-    $file_fspath = "{$CONFIG['attachment_fspath']}updates{$fsdelim}{$id}-{$filename}";
+    $file_fspath = "{$CONFIG['attachment_fspath']}updates{$fsdelim}{$fileid}-{$filename}";
+    $old_style = "{$CONFIG['attachment_fspath']}updates{$fsdelim}{$filename}";
 }
 else
 {
-    $file_fspath = "{$CONFIG['attachment_fspath']}{$incidentid}{$fsdelim}{$id}-{$filename}";
+    $file_fspath = "{$CONFIG['attachment_fspath']}{$incidentid}{$fsdelim}{$fileid}-{$filename}";
+    $old_style = "{$CONFIG['attachment_fspath']}{$incidentid}{$fsdelim}u{$updateid}{$fsdelim}{$filename}";
 }
 
-if (!file_exists($file_fspath))
+if (!file_exists($file_fspath) AND !file_exists($old_style))
 {
     header('HTTP/1.1 404 Not Found');
     header('Status: 404 Not Found',1,404);
     echo "<h3>404 File Not Found</h3>";
-    if ($CONFIG['debug'] == TRUE) echo "<p>Filename: {$file_fspath}</p>";
-        echo $file_fspath;
-
+    if ($CONFIG['debug'] == TRUE)
+    {
+        echo "<p>Path: $file_fspath<br />Old style path: $old_style</p>";
+    }
     exit;
 }
 elseif ($access == TRUE)
 {
-    $file_size = filesize($file_fspath);
-    $fp = fopen($file_fspath, 'r');
-    if ($fp && ($file_size !=-1))
+    if (file_exists($old_style)) $file_fspath = $old_style;
+
+    if (file_exists($file_fspath))
     {
-        if (file_exists($file_fspath))
+        $file_size = filesize($file_fspath);
+        $fp = fopen($file_fspath, 'r');
+        if ($fp && ($file_size !=-1))
         {
             header("Content-Type: ".mime_content_type($file_fspath)."\r\n");
             header("Content-Length: {$file_size}\r\n");
             header("Content-Disposition-Type: attachment\r\n");
             header("Content-Disposition: filename={$file_fspath}\r\n");
+            $buffer = '';
+            while (!feof($fp))
+            {
+                $buffer = fread($fp, 1024*1024);
+                print $buffer;
+            }
+            fclose($fp);
+            exit;
         }
-        elseif(file_exists($old_style))
+        else
         {
-            header("Content-Type: ".mime_content_type($old_style)."\r\n");
-            header("Content-Length: {$file_size}\r\n");
-            header("Content-Disposition-Type: attachment\r\n");
-            header("Content-Disposition: filename={$old_style}\r\n");
+            // Access Denied
+            header('HTTP/1.1 403 Forbidden');
+            header('Status: 403 Forbidden',1,403);
+            echo "<h3>403 Forbidden</h3>";
+            exit;
+
         }
-        
-        $buffer = '';
-        while (!feof($fp))
-        {
-            $buffer = fread($fp, 1024*1024);
-            print $buffer;
-        }
-        fclose($fp);
-        exit;
     }
 }
-else
-{
-    // Access Denied
-    header('HTTP/1.1 403 Forbidden');
-    header('Status: 403 Forbidden',1,403);
-    echo "<h3>403 Forbidden</h3>";
-    exit;
-}
-
-
 ?>
