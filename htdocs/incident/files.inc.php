@@ -321,7 +321,7 @@ if (file_exists($incident_attachment_fspath))
                 $result = mysql_query($sql);
                 if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
                 $update = mysql_fetch_object($result);
-                $dirprettyname = date('l jS M Y @ g:ia',$update->timestamp) . " $strby ".user_realname($update->userid);
+                $dirprettyname = ldate('l jS M Y @ g:ia',$update->timestamp) . " $strby ".user_realname($update->userid);
                 $updatetext = cleanvar($update->bodytext);
                 $updatetype = $update->type;
             }
