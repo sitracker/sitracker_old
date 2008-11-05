@@ -59,7 +59,7 @@ else
 {
     $file_fspath = "{$CONFIG['attachment_fspath']}{$incidentid}{$fsdelim}{$id}-{$filename}";
 }
-echo $file_fspath;
+
 if (!file_exists($file_fspath))
 {
     header('HTTP/1.1 404 Not Found');
