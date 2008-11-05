@@ -53,7 +53,12 @@ if ($_FILES['attachment']['name'] != '')
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
         $updateid = mysql_insert_id();
 
-        $newfilename = $incident_attachment_fspath.$fsdelim.$fileid."-".$_FILES['attachment']['name'];
+        // Add the updateid to the attachment path
+        $incident_attachment_fspath .= "{$fsdelim}u{$updateid}";
+
+        // make incident attachment dir if it doesn't exist
+        $newfilename = $incident_attachment_fspath.$fsdelim.$_FILES['attachment']['name'];
+        $umask = umask(0000);
         $mk = TRUE;
         if (!file_exists($incident_attachment_fspath))
         {
@@ -79,14 +84,14 @@ if ($_FILES['attachment']['name'] != '')
         echo "<div class='detailinfo'>\n";
         if ($mk AND $mv)
         {
-        	echo sprintf($strFileXUploadedOK,
-        				 "<strong>{$_FILES['attachment']['name']}</strong>",
-        				 "{$_FILES['attachment']['type']}",
-        				 "{$_FILES['attachment']['size']}");
+            echo sprintf($strFileXUploadedOK,
+                         "<strong>{$_FILES['attachment']['name']}</strong>",
+                         "{$_FILES['attachment']['type']}",
+                         "{$_FILES['attachment']['size']}");
         }
         else
         {
-        	echo "An error occurred while uploading <strong>{$_FILES['attachment']['name']}</strong>";
+            echo "An error occurred while uploading <strong>{$_FILES['attachment']['name']}</strong>";
         }
 
         // Debug
@@ -171,13 +176,21 @@ function draw_file_row($file, $fsdelim, $incidentid, $path)
     $filepathparts = explode($fsdelim, $file);
     $parts = count($filepathparts);
     $filename = $filepathparts[$parts-1];
-    $fileid = explode("-", $filename);
-    $fileid = $fileid[0];
     $filedir = $filepathparts[$parts-2];
     $preview = ''; // reset the preview
 
-    $url="{$CONFIG['attachment_webpath']}{$incidentid}/".str_replace('+','%20',urlencode($filename));
-    
+    if ($filedir != $incidentid)
+    {
+        // files are in a subdirectory
+        //$url="attachments/$id/".substr($filesarray[$c],strrpos($directory,$delim)+1,strlen($filesarray[$c])-strlen(urlencode($filename)).urlencode(filename));
+        $url = "{$CONFIG['attachment_webpath']}{$incidentid}/{$filedir}/".str_replace('+','%20',urlencode($filename));
+    }
+    else
+    {
+        // files are in the root of the incident attachment directory
+        // $url="attachments/".substr($filesarray[$c],strrpos($directory,$delim)+1,strlen($filesarray[$c])-strlen(urlencode($filename)).urlencode(filename));
+        $url="{$CONFIG['attachment_webpath']}{$incidentid}/".str_replace('+','%20',urlencode($filename));
+    }
     $filesize = filesize($file);
     $file_size = readable_file_size($filesize);
 
@@ -192,6 +205,14 @@ function draw_file_row($file, $fsdelim, $incidentid, $path)
         // At the moment we leave mime_type blank if we can't find mime_content_type
         $mime_type = '';
     }
+
+    $updateid = str_replace("u", "", $filedir);
+    $sql = "SELECT f.id FROM `{$GLOBALS['dbLinks']}`, `{$GLOBALS['dbFiles']}` AS f  ";
+    $sql .= "WHERE linktype = '5' AND origcolref='$updateid' ";
+    $sql .= "AND f.id = linkcolref AND f.filename='$filename'";
+    $result = mysql_query($sql);
+    $fileobj = mysql_fetch_object($result);
+    $fileid = $fileobj->id;
 
     // FIXME url
 
@@ -324,13 +345,13 @@ if (file_exists($incident_attachment_fspath))
                 }
 
                 if (!empty($updatetext) AND
-                	$updatetype == 'email' OR
-                	$updatetype == 'webupdate')
+                    $updatetype == 'email' OR
+                    $updatetype == 'webupdate')
                 {
-                	$updatetext = substr($updatetext, 0, 80)."...";
-	                echo "<span style='font-size:400%';>“</span>";
-	                echo bbcode($updatetext);
-	                echo "<span style='font-size:400%';>„</span>";
+                    $updatetext = substr($updatetext, 0, 80)."...";
+                    echo "<span style='font-size:400%';>“</span>";
+                    echo bbcode($updatetext);
+                    echo "<span style='font-size:400%';>„</span>";
                 }
                 echo "</table>\n";
                 echo "</div>";
