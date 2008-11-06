@@ -1,10 +1,113 @@
 Changes in v3.40 - Unreleased
--- 
-* Support for POP/IMAP retrieval (see config file)
-
-
-Changes in v3.35 - Unreleased
 -----------------------------------------------------------------------
+- 0000191: [inbound email] Incoming message too large notification (kieran) - resolved.
+- 0000202: [i18n] Hardcoded English text string - Viewing site - +Minor cosmetic signs missing (ivan) - resolved.
+- 0000203: [i18n] Hardcoded English text string - Viewing Site --> Incidents 'See here' (ivan) - resolved.
+- 0000200: [portal] Portal entitlement shows other sites' contracts (kieran) - resolved.
+- 0000132: [i18n] Browse pages use ABC navigation (ivan) - resolved.
+- 0000197: [triggers] Replace brackets in trigger rules (kieran) - resolved.
+- 0000187: [billing] Adding a new contract doesn't allow you to mark the service as FOC (paulh) - resolved.
+- 0000190: [inbound email] Deleting incoming mail gives an error (paulh) - resolved.
+- 0000184: [reports] Remove/fix incident_calendar.php (ivan) - resolved.
+- 0000119: [reports] Site Incidents report has no html output (kieran) - resolved.
+- 0000175: [triggers] Trigger for user email/notification when a call is updated (kieran) - resolved.
+- 0000178: [contracts] Contract details page shows 0 available contacts when it should say unlimited (kieran) - resolved.
+- 0000094: [triggers] Idea: TRIGGER_TASK_DUE (kieran) - resolved.
+- 0000186: [other] Add email template is still pre-triggers (kieran) - resolved.
+- 0000185: [triggers] Trigger each time an incident is updated by an engineeer (kieran) - resolved.
+- 0000142: [other] link and image bbcode doesn't work (paulh) - resolved.
+- 0000176: [portal] Sending password reset gives incorrect URL (paulh) - resolved.
+- 0000133: [incidents] Should be able to temp assign other incidents (paulh) - resolved.
+- 0000157: [billing] Duration on activities rounds down when it should round up (paulh) - resolved.
+- 0000154: [contracts] browse_contract.php shows incorrect product (ivan) - resolved.
+- 0000006: [inbound email] Inbound emails w/o incident no store attachments incorrectly (kieran) - resolved.
+- 0000013: [other] Email attachments (kieran) - resolved.
+- 0000135: [other] throw_error() is deprecated yet used lots (ivan) - resolved.
+- 0000143: [incidents] Incidents with activities should be active (paulh) - resolved.
+- 0000174: [incidents] locked incidents can still be created etc by someone else (paulh) - resolved.
+- 0000172: [billing] Optionally show FOC services with a 0 balance and initial in reports (paulh) - resolved.
+- 0000156: [incidents] Opening email should be optional (kieran) - resolved.
+- 0000166: [other] Duplicate sites in contact drop down (paulh) - resolved.
+- 0000165: [other] delete_maintenance_support_contact.php (paulh) - resolved.
+- 0000164: [other] Contacts can be linked against expired contracts (paulh) - resolved.
+- 0000153: [billing] Need to be able to mark services as free of charge (paulh) - resolved.
+- 0000152: [other] Holding queue notes should record who and when they where added (paulh) - resolved.
+- 0000151: [SLA's] SLA text could be better when SLA due (paulh) - resolved.
+- 0000005: [search] Search scores not helpful (kieran) - resolved.
+- 0000089: [scheduler] Schedule should be able to run on particular day of week/month/year (paulh) - resolved.
+- 0000081: [reports] Billing reports (paulh) - resolved.
+- 0000144: [inbound email] js function confirm_delete() in review_incoming_updates.php has unbalanced quotes (ivan) - resolved.
+- 0000140: [billing] CSV report uses $CONFIG['currency_symbol'] (paulh) - resolved.
+- 0000095: [incidents] Reassign 'more' link missing (ivan) - resolved.
+- 0000137: [other] Missing tick icon in skills matrix (ivan) - resolved.
+- 0000136: [other] Missing language icon in SiT theme (ivan) - resolved.
+- 0000131: [sites & contacts] browse_contacts should allow you to jump to edit (paulh) - resolved.
+- 0000120: [reports] Incidents By Skill report has no end date (paulh) - resolved.
+- 0000007: [authentication] Password reset useless (ivan) - resolved.
+
+
+Changes in v3.36 - Released 21 July 2008
+-----------------------------------------------------------------------
+*  Moved the app title into the middle of the masthead, cosmetic change only
+* Fixed bug which stopped you logging an incident if you only had one contract.
+* Set debug mode to FALSE (off) by default
+* We now don't show unlimited contracts as expired
+* Made add contact form properly forget it's session data
+* Fixed SQL in marketing report
+* Fixed missing upgrade SQL
+* Fixed incorrect i18n string name
+* Fixed hardcoded table names that broke the table prefix feature for some pages
+* Fixed SF#2014907 View users page not showing all users
+* Fixed SF#2013249 Missing 'Closing Status' values in dropdown
+* Fixed SF#2011757 Incident page offset broken
+* 0000118: [reports] SQL errors in year engineer export (paulh) - resolved.
+* 0000099: [contracts] Add incidents at sites with no support contract error (kieran) - resolved.
+* 0000121: [reports] QBE report can reveal sensitive information (ivan) - resolved.
+* 0000112: [contracts] Missing siteid links (kieran) - resolved.
+* 0000086: [triggers] triggersfooter not replaced (kieran) - resolved.
+* 0000100: [contracts] strtotime() error when editing contracts with no expiry (ivan) - resolved.
+* 0000091: [triggers] Missing trigger TRIGGER_REVIEW_DUE (ivan) - resolved.
+* 0000083: [other] URL to bugtracker is wrong (ivan) - resolved.
+* 0000040: [calendar] Set Public Holidays (ivan) - resolved.
+
+
+Changes in v3.35 - Released 5 July 2008
+-----------------------------------------------------------------------
+* This release introduces much speedier searching, and the search feature
+  now searches the whole of SiT in a single operation
+* The built-in portal now has been extended and now contains all the
+  features you would expect, including the ability for contacts to
+  view all the incidents logged for their site, and for admin contacts
+  to be able to manage all their contracts and supported contacts.
+* The dashboard has been improved and now dashlets can be editing
+  in-line and can refreshed, (automatically too) if needed.
+* added two new dashlets, one for monitoring the holding queue,
+  another for seeing who's away today.
+* Updated Theme and Icons
+* In addition the existing ability to restrict the number of supported
+  contacts, you can now specify "All site contacts"
+* The knowledge base editor has been completely re-written
+* SiT now has an easy to use built in scheduler, all you need to do is
+  ensure that auto.php is called periodically, via a cron
+* New in this release is a very powerful triggers system.
+* Consolidated Attachments: Previously, attachments weren't viewable
+  until the incident was logged.
+* Help Tips
+* You can now enable or disable major features, whole sections can be
+  added or removed
+* We now have usable German (de-DE) and French (fr-FR) translations
+  thanks to the hard work of Patrick Liebhardt and Gabriel Riam.
+* SF#1932409 Expiry date is blank on contract details page
+* SF#1954075 Incorrect incident status strings in Update Incident
+* SF#1933091 Missing months with ldate
+* SF#1958571 'Free' holidays are not actually free
+* SF#1958569 Incident SLA notices use a relative link
+* SF#1997088 Cake theme and menus
+* SF#1947138 Scheduler schema missing from new installs
+* SF#1950440 Related incidents notice doesn't update lastupdated
+* SF#1951642 Incident with next action time doesn't show in 'Other' queue
+* SF#1939390 Use checkboxes for boolean input
+* Group members away column of holiday approval page now works properly
 
 
 Changes in v3.32 - Released 26 March 2008
