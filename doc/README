@@ -4,9 +4,9 @@ This software may be used and distributed according to the terms
 of the GNU General Public License, incorporated herein by reference.
 --------------------------------------------------------------------
 
-            This is a temporary readme with only very basic
-            instructions, for more help please refer to
-            http://sourceforge.net/projects/sitracker/
+        This readme contains only very basic instructions,
+        for more help please refer to
+        http://sourceforge.net/projects/sitracker/
 
      README
 
@@ -126,15 +126,50 @@ parameters.
 
 Inbound email
 -------------
-SiT is perfectly usable without automatic inclusion of inbound email into the database.
-Not everybody will be able to use this feature because it currently requires access to
-an MTA on your server, shell access to the server and PHP compiled as a CGI binary.
+Although at the moment we are still treating incoming email as an experimental
+feature, used at your own risk, from v3.40 onwards we support both MTA piped
+emails and scheduled mail collection from a POP or IMAP mailbox.
 
-All that is required is to configure your MTA to pipe emails through the inbound_email.php
-script included with SiT.
+SiT is perfectly usable without automatic inclusion of inbound email into the
+database.
 
-Some helpful information regarding configuring your MTA to pipe emails to a PHP script
-is available here http://evolt.org/incoming_mail_and_php
+Either
+
+ a) Set the config variable $CONFIG['enable_inbound_mail'] to 'POP/IMAP' and then
+    set the following extra config variables with details of your account and server.
+
+        $CONFIG['email_username'] = '';
+        $CONFIG['email_password'] = '';
+        $CONFIG['email_address'] = '';
+        $CONFIG['email_server'] = '';
+
+    You must set this variable to either 'imap' or 'pop' depending on your mailbox
+    type.
+
+        $CONFIG['email_servertype'] = '';
+
+    If your server is listening on a non-standard port you can set it using:
+
+        $CONFIG['email_port'] = '';
+
+    Additionally, depending on your specific requirements you can also set the
+    following.
+
+        $CONFIG['email_options'] = '';
+
+    e.g. Gmail needs '/ssl', secure Groupwise needs /novalidate-cert etc.
+        see http://uk2.php.net/imap_open for examples
+
+    You must also configure Regular Scheduled Tasks (See above) for mail
+    to be collected.
+
+or
+
+ b) Set the config variable $CONFIG['enable_inbound_mail'] to 'MTA' and
+    configure your MTA to pipe emails through the inbound_email.php
+    script included with SiT.  Some helpful information regarding configuring your
+    MTA to pipe emails to a PHP script is available
+    here http://evolt.org/incoming_mail_and_php
 
 
 Creating Plugins

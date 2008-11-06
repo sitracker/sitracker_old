@@ -22,6 +22,14 @@ Further instructions and notes about specific upgrades follow, if you
 upgrading and skipping several versions listed below you should read
 everything carefully to make sure you've met all the requirements:
 
+Upgrading to 3.40
+-----------------
+From this version we no longer allow brackets "(" and ")" in trigger
+rules, if you have any brackets in your existing rules they will be
+stripped out. We don't believe this will cause any problems, if it does
+please create a bug report.
+
+
 Upgrading to 3.36
 -----------------
 No special actions are required, however you should be aware that
