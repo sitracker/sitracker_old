@@ -1348,6 +1348,7 @@ $strToChangePassword = 'To change your password, first enter your existing passw
 $strToday = 'Today';
 $strTodaysDate = 'Today\'s Date';
 $strTodaysStats = 'Today\'s Statistics';
+$strToIncidentID = 'To Incident ID';
 $strTotal = 'Total';
 # Totals capitalised
 $strTOTALS = 'TOTALS';

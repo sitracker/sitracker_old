@@ -36,7 +36,7 @@ if ($incidentid == '')
     ?>
     <div align='center'>
     <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method='post'>
-    To Incident ID: <input type="text" name="incidentid" value="<?php echo $incidentid; ?>" />
+    <?php echo $strToIncidentID; ?>: <input type="text" name="incidentid" value="<?php echo $incidentid; ?>" />
     <input type="submit" value="Move" /><br />
     <input type="hidden" name="updateid" value="<?php echo $updateid; ?>" />
     </form>
@@ -56,6 +56,7 @@ if ($incidentid == '')
         <tr><th>
         <?php
         // Header bar for each update
+        // FIXME this should be using a function or something, no point duplicating this code here. INL 7Nov08
         switch ($updates['type'])
         {
             case 'opening':
@@ -153,7 +154,7 @@ else
 
         $old_path = $CONFIG['attachment_fspath']. 'updates' . $fsdelim;
         $new_path = $CONFIG['attachment_fspath'] . $incidentid . $fsdelim;
-        
+
         //move attachments from updates to incident
         $sql = "SELECT linkcolref, filename FROM `{$dbLinks}` AS l, ";
         $sql .= "`{$dbFiles}` as f ";
@@ -184,7 +185,7 @@ else
                 }
             }
         }
-        
+
         if ($moved_attachments)
         {
             // retrieve the update body so that we can insert time headers
@@ -196,9 +197,9 @@ else
             $prettydate = ldate('r', $timestamp);
             // prepend 'moved' header to bodytext
             $body = sprintf($SYSLANG['strMovedFromXtoXbyX'], "<b>$oldincidentid</b>",
-                            "<b>$incidentid</b>", 
+                            "<b>$incidentid</b>",
                             "<b>".user_realname($sit[2])."</b>")."\n";
-            $body .= sprintf($SYSLANG['strOriginalMessageReceivedAt'], 
+            $body .= sprintf($SYSLANG['strOriginalMessageReceivedAt'],
                              "<b>$prettydate</b>")."\n";
             $body .= $SYSLANG['strStatus'] . " -&gt; <b>{$SYSLANG['strActive']}</b>\n";
             $bodytext = $body . $bodytext;
