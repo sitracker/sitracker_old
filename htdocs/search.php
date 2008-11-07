@@ -18,38 +18,6 @@ require ('functions.inc.php');
 require ('auth.inc.php');
 $q = cleanvar($_GET['q']);
 
-?>
-<script type='text/javascript'>
-//<![CDATA[
-var id = <?php echo $q; ?>;
-if (!isNaN(id))
-{
-    <?php
-        if (is_numeric($q))
-        {
-            $sql = "SELECT id FROM `{$dbIncidents}` WHERE id='$q'";
-            $result = mysql_query($sql);
-            if (mysql_num_rows($result) > 0)
-            {
-            ?>
-                window.location = 'incident_details.php?id=' + id + '&win=jump&return=<?php
-                if (!empty($_SERVER['HTTP_REFERER']))
-                {
-                    echo $_SERVER['HTTP_REFERER'];
-                }
-                else
-                {
-                    echo $_CONFIG['application_webpath'];
-                }
-                ?>';
-            <?php
-            }
-    }?>
-
-}
-//]]>
-</script>
-<?php
 $resultsperpage = 20;
 $domain = cleanvar($_GET['domain']);
 $sort = cleanvar($_GET['sort']);
@@ -113,6 +81,40 @@ function search_highlight($x,$var)
 
 
 include ('htmlheader.inc.php');
+
+?>
+<script type='text/javascript'>
+//<![CDATA[
+var id = <?php echo $q; ?>;
+if (!isNaN(id))
+{
+    <?php
+        if (is_numeric($q))
+        {
+            $sql = "SELECT id FROM `{$dbIncidents}` WHERE id='$q'";
+            $result = mysql_query($sql);
+            if (mysql_num_rows($result) > 0)
+            {
+            ?>
+                window.location = 'incident_details.php?id=' + id + '&win=jump&return=<?php
+                if (!empty($_SERVER['HTTP_REFERER']))
+                {
+                    echo $_SERVER['HTTP_REFERER'];
+                }
+                else
+                {
+                    echo $_CONFIG['application_webpath'];
+                }
+                ?>';
+            <?php
+            }
+    }?>
+
+}
+//]]>
+</script>
+<?php
+
 
 echo "<h2>".icon('search', 32)." {$strSearch} {$CONFIG['application_shortname']}</h2>";
 
