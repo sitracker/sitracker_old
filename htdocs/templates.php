@@ -217,10 +217,9 @@ elseif ($action == "edit")
         {
             echo $strOther;
         }
-        // FIXME Temporary, remove before release
         if ($template->type == 'user') $required = array('incidentid', 'userid');
         else $required = $triggerarray[$trigaction->triggerid]['required'];
-        if (!empty($required))
+        if (!empty($required) AND $CONFIG['debug'])
         {
             echo "<br />required: <code>".print_r($required, true)."</code><br />";
         }
