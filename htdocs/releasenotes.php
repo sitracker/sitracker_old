@@ -26,6 +26,10 @@ echo "<h2>Release Notes</h2>";
 
 echo "<div id='help'>";
 echo "<p>This release notes are user-based. For the latest and more detailed notes on this release please <a href='http://sitracker.sourceforge.net/ReleaseNotes'>see the SiT website</a>, a summary is shown below:</p>";
+// FIXME v3.40 Release notes
+echo "<h3><a name='3.40'>v3.40</a></h3>";
+echo "<div><p>Release notes for v3.40 are being prepared, you can help, please <a href='http://sitracker.sourceforge.net/ReleaseNotes340'>edit the page on the wiki</a>.</p></div>";
+
 echo "<h3><a name='3.35'>v3.35</a></h3>";
 echo "<div>
 <p><strong>Better Searching</strong><br />

@@ -22,7 +22,7 @@ include ('classes.inc.php');
 // Version number of the application, (numbers only)
 $application_version = '3.40';
 // Revision string, e.g. 'beta2' or 'svn' or ''
-$application_revision = 'svn';
+$application_revision = 'beta1';
 
 // Append SVN data for svn versions
 if ($application_revision == 'svn')
@@ -7630,7 +7630,7 @@ function schedule_action_done($doneaction, $success = TRUE)
 {
     global $now;
     global $dbScheduler;
-    
+
     if ($success != TRUE)
     {
         trigger('TRIGGER_SCHEDULER_TASK_FAILED', array('schedulertask' => $doneaction));
