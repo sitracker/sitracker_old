@@ -1,6 +1,6 @@
 <?php
 
-## Translation to Danish by Carsten Jensen aka Tomse Latest rev 4165
+## Translation to Danish by Carsten Jensen aka Tomse Latest rev 4170
 ## Translation started 14. Oct. 2008 
 
 $languagestring = 'Danish (DK)';
@@ -1351,6 +1351,7 @@ $strToChangePassword = 'For at ændre din adgangskode, skal du først indtaste d
 $strToday = 'I dag';
 $strTodaysDate = 'Dags dato';
 $strTodaysStats = 'Dagens statistikker';
+$strToIncidentID = 'Til hændelses ID';
 $strTotal = 'Total';
 # Totals capitalised
 $strTOTALS = 'I ALT';
