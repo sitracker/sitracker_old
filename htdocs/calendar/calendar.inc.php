@@ -394,7 +394,7 @@ function draw_chart($mode, $year, $month='', $day='', $groupid='', $userid='')
                         $html .= "<td align='center' class=\"$shade\"";
                         if (mktime(0,0,0,$month,$cday,$year)==mktime(0,0,0,date('m'),date('d'),date('Y'))) $html .= " style='background: #FFFF00;' title='Today'";
                         $html .= ">";
-                        $html .= substr(date('l',mktime(0,0,0,$month,$cday,$year)),0,$daywidth)."<br />";
+                        $html .= substr(ldate('l',mktime(0,0,0,$month,$cday,$year)),0,$daywidth)."<br />";
                         if ($mode == 'day')
                         {
                             $html .= date('dS F Y',mktime(0,0,0,$month,$cday,$year));
@@ -619,21 +619,23 @@ function draw_chart($mode, $year, $month='', $day='', $groupid='', $userid='')
     }
     else
     {
-        if ($numgroups < 1) $html .= "<p class='info'>Nothing to display</p>";
-        else $html .= "<p class='info'>Nothing to display, check user group membership.</p>";
+        if ($numgroups < 1) $html .= "<p class='info'>{$GLOBALS['strNothingToDisplay']}</p>";
+        else $html .= "<p class='info'>{$GLOBALS['strNothingToDisplay']}, check user group membership.</p>";
     }
     $html .= "</table>\n\n";
 
     // Legend
-    $html .= "<table align='center'><tr><td><strong>Legend</strong>:</td>";
+    $html .= "<table align='center'><tr><td><strong>{$strKey}</strong>:</td>";
     foreach ($GLOBALS['holidaytype'] AS $htype)
     {
         $html .= "<td>".substr($htype,0,1)." = {$htype}</td>";
     }
     $html .= "<td>PH = {$GLOBALS['strPublicHoliday']}</td>";
     $html .= "</tr>";
-    // FIXME holiday approval status
-    $html .= "<tr><td></td><td class='urgent'>declined</td><td class='review'>not approved</td><td class='idle'>approved</td><td class='notice'>approved free</td></tr>";
+    $html .= "<tr><td></td><td class='urgent'>{$GLOBALS['strDeclined']}</td>";
+    $html .= "<td class='review'>{$GLOBALS['strNotApproved']}</td>";
+    $html .= "<td class='idle'>{$GLOBALS['strApproved']}</td>";
+    $html .= "<td class='notice'>{$GLOBALS['strApprovedFree']}</td></tr>";
     $html .= "</table>\n\n";
 
     return $html;
@@ -664,7 +666,7 @@ function month_select($month, $year, $params = '')
             $html .= "<span style='font-size: 160%'>";
         }
 
-        $html .= "<a href='{$SERVER['PHP_SELF']}?display=month&amp;month=$cmonth&amp;year=$cyear$params'>".date('M y',mktime(0,0,0,$cmonth,1,$cyear))."</a>";
+        $html .= "<a href='{$SERVER['PHP_SELF']}?display=month&amp;month=$cmonth&amp;year=$cyear$params'>".ldate('M y',mktime(0,0,0,$cmonth,1,$cyear))."</a>";
         if (mktime(0,0,0,$cmonth,1,$cyear) == mktime(0,0,0,$month,1,$year))
         {
             $html .= "</span>";

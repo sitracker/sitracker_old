@@ -108,22 +108,37 @@ if ($numwaiting > 0)
             echo "<td>";
             if ($dates['length'] == 'pm' OR $dates['length'] == 'day')
             {
-                echo "<a href='add_holiday.php?type={$dates['type']}&amp;user=$user&amp;year=".date('Y',$dates['startdate'])."&amp;month=".date('m',$dates['startdate'])."&amp;day=".date('d',$dates['startdate'])."&amp;length=am' onclick=\"return window.confirm('".date('l jS F Y', $dates['startdate']).": {$strHolidayMorningOnlyConfirm}');\" title='{$strHolidayMorningOnly}'>{$strAM}</a> | ";
+                echo "<a href='add_holiday.php?type={$dates['type']}&amp;user=$user";
+                echo "&amp;year=".date('Y',$dates['startdate'])."&amp;month=";
+                echo date('m',$dates['startdate'])."&amp;day=";
+                echo date('d',$dates['startdate'])."&amp;length=am' ";
+                echo "onclick=\"return window.confirm('".ldate('l jS F Y', $dates['startdate']);
+                echo ": {$strHolidayMorningOnlyConfirm}');\" title='{$strHolidayMorningOnly}'>{$strAM}</a> | ";
             }
 
             if ($dates['length'] == 'am' OR $dates['length'] == 'day')
             {
-                echo "<a href='add_holiday.php?type={$dates['type']}&amp;user=$user&amp;year=".date('Y',$dates['startdate'])."&amp;month=".date('m',$dates['startdate'])."&amp;day=".date('d',$dates['startdate'])."&amp;length=pm' onclick=\"return window.confirm('".date('l jS F Y', $dates['startdate']).": {$strHolidayAfternoonOnlyConfirm}');\" title='{$strHolidayAfternoonOnly}'>{$strPM}</a> | ";
+                echo "<a href='add_holiday.php?type={$dates['type']}&amp;user=$user";
+                echo "&amp;year=".date('Y',$dates['startdate'])."&amp;month=";
+                echo date('m',$dates['startdate'])."&amp;day=";
+                echo date('d',$dates['startdate'])."&amp;length=pm' ";
+                echo "onclick=\"return window.confirm('".ldate('l jS F Y', $dates['startdate']);
+                echo ": {$strHolidayAfternoonOnlyConfirm}');\" title='{$strHolidayAfternoonOnly}'>{$strPM}</a> | ";
             }
 
             if ($dates['length'] == 'am' OR $dates['length'] == 'pm')
             {
-                echo "<a href='add_holiday.php?type={$dates['type']}&amp;user=$user&amp;year=".date('Y',$dates['startdate'])."&amp;month=".date('m',$dates['startdate'])."&amp;day=".date('d',$dates['startdate'])."&amp;length=day' onclick=\"return window.confirm('".date('l jS F Y', $dates['startdate']).": {$strHolidayFullDayConfirm}');\" title='{$strHolidayFullDay}'>{$strAllDay}</a> | ";
+                echo "<a href='add_holiday.php?type={$dates['type']}&amp;user=$user";
+                echo "&amp;year=".date('Y',$dates['startdate'])."&amp;month=";
+                echo date('m',$dates['startdate'])."&amp;day=";
+                echo date('d',$dates['startdate'])."&amp;length=day' ";
+                echo "onclick=\"return window.confirm('".ldate('l jS F Y', $dates['startdate']);
+                echo ": {$strHolidayFullDayConfirm}');\" title='{$strHolidayFullDay}'>{$strAllDay}</a> | ";
             }
 
             if ($sit[2] == $user)
             {
-                echo "<a href='add_holiday.php?year=".date('Y',$dates['startdate'])."&amp;month=".date('m',$dates['startdate'])."&amp;day=".date('d',$dates['startdate'])."&amp;user={$sit[2]}&amp;type={$dates['type']}&amp;length=0&amp;return=holidays' onclick=\"return window.confirm('".date('l jS F Y', $dates['startdate']).": {$strHolidayCancelConfirm}');\" title='{$strHolidayCancel}'>cancel</a>";
+                echo "<a href='add_holiday.php?year=".date('Y',$dates['startdate'])."&amp;month=".date('m',$dates['startdate'])."&amp;day=".date('d',$dates['startdate'])."&amp;user={$sit[2]}&amp;type={$dates['type']}&amp;length=0&amp;return=holidays' onclick=\"return window.confirm('".date('l jS F Y', $dates['startdate']).": {$strHolidayCancelConfirm}');\" title='{$strHolidayCancel}'>Cancel</a>";
             }
             echo "</td></tr>\n";
         }
