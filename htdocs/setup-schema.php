@@ -1359,7 +1359,7 @@ INSERT INTO `{$dbTriggers}` (`triggerid`, `userid`, `action`, `template`, `param
 INSERT INTO `{$dbTriggers}` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_INCIDENT_CLOSED', 0, 'ACTION_EMAIL', 'EMAIL_INCIDENT_CLOSURE', '', '( {notifycontact} == 1 ) AND ( {awaitingclosure} == 1 )');
 INSERT INTO `{$dbTriggers}` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_INCIDENT_CLOSED', 0, 'ACTION_EMAIL', 'EMAIL_EXTERNAL_INCIDENT_CLOSURE', '', '{notifyexternal} == 1');
 INSERT INTO `{$dbTriggers}` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_SERVICE_LIMIT' , 0, 'ACTION_EMAIL', 'EMAIL_SERVICE_LEVEL', '', '{serviceremaining} <= 0.2');
-INSERT INTO `{$dbTriggers}` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_SCHEDULER_TASK_FAILED', 1, 'ACTION_NOTICE', 'NOTICE_SCHEDULER_TASK_FAILED', '', '{schedulertask} == \'CheckIncomingMail\');
+INSERT INTO `{$dbTriggers}` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_SCHEDULER_TASK_FAILED', 1, 'ACTION_NOTICE', 'NOTICE_SCHEDULER_TASK_FAILED', '', '{schedulertask} == \'CheckIncomingMail\'');
 
 CREATE TABLE `{$dbUpdates}` (
   `id` int(11) NOT NULL auto_increment,
@@ -2417,7 +2417,7 @@ ALTER TABLE `{$dbEscalationPaths}` ADD `type` ENUM( 'internal', 'external' ) NOT
 
 -- PH 2008-08-17
 ALTER TABLE `{$dbTempIncoming}` ADD `reason_user` INT NOT NULL AFTER `reason` ,
-ADD `reason_time` DATETIME NOT NULL AFTER `reason_user` ;        
+ADD `reason_time` DATETIME NOT NULL AFTER `reason_user` ;
 
 -- PH 2008-08-18
 ALTER TABLE `{$dbService}` ADD `foc` ENUM( 'yes', 'no' ) NOT NULL DEFAULT 'no' COMMENT 'Free of charge (customer not charged)';

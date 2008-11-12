@@ -857,7 +857,7 @@ switch ($_REQUEST['action'])
                     }
                     else
                     {
-                        $html .= "<p class='error'>{$errors} Errors occurred while creating the schema, ";
+                        $html .= "<p class='error'><strong>Summary</strong>: {$errors} Error(s) occurred while creating the schema, ";
                         $html .= "please resolve the problems reported and then try running setup again.</p>";
                     }
                     echo $html;
@@ -1013,7 +1013,7 @@ switch ($_REQUEST['action'])
                             }
                             echo "<p>".mysql_num_rows($result)." incidents upgraded</p>";
                         }
-                        
+
                         if ($installed_version < 3.35)
                         {
                             if ($CONFIG['closure_delay'] > 0 AND $CONFIG['closure_delay'] != 554400)
@@ -1077,16 +1077,16 @@ switch ($_REQUEST['action'])
                                 }
                             }
                         }
-                        
+
                         if ($installed_version < 3.40)
                         {
                         	//remove any brackets from checks as per mantis 197
                         	$sql = "UPDATE `triggers` SET `checks` = REPLACE(`checks`, '(', ''); ";
                         	$sql .= "UPDATE `triggers` SET `checks` = REPLACE(`checks`, ')', '')";
                         	mysql_query($sql);
-                            if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);                        	
+                            if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
                         }
-                        
+
                         if ($installed_version == $application_version)
                         {
                             echo "<p>Everything is up to date</p>";
@@ -1096,7 +1096,7 @@ switch ($_REQUEST['action'])
                         {
                             $upgradeok = TRUE;
                             echo "<p>See the <code>doc/UPGRADE</code> file for further upgrade instructions and help.<br />";
-                            
+
                         }
 
                         if ($installed_version >= 3.24)
@@ -1215,10 +1215,7 @@ switch ($_REQUEST['action'])
                     echo "<h2>Checking installation...</h2>";
                     if ($cfg_file_writable)
                     {
-                        if (!@chmod($config_filename, 0640))
-                        {
-                            echo "<p class='warning'>Important: The file permissions on the configuration file <var>{$config_filename}</var> file allow it to be modified, we recommend you make this file read-only.</p>";
-                        }
+                        echo "<p class='warning'>Important: The file permissions on the configuration file <var>{$config_filename}</var> file allow it to be modified, we recommend you make this file read-only.</p>";
                     }
 
                     if ($CONFIG['attachment_fspath'] == '')
