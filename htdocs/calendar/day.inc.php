@@ -26,10 +26,10 @@ if (date('D',mktime(0,0,0,$month,$day,$year)) == 'Mon') $pdate = mktime(0,0,0,$m
 else $pdate = mktime(0,0,0,$month,$day-1,$year);
 if (date('D',mktime(0,0,0,$month,$day,$year)) == 'Fri') $ndate = mktime(0,0,0,$month,$day+3,$year);
 else $ndate = mktime(0,0,0,$month,$day+1,$year);
-echo "<h2>Day View</h2>";
+echo "<h2>Day View</h2>"; // FIXME i18n Mantis 225
 echo "<p align='center'>";
 echo "<a href='{$_SERVER['PHP_SELF']}?display=day&amp;year=".date('Y',$pdate)."&amp;month=".date('m',$pdate)."&amp;day=".date('d',$pdate)."{$gidurl}'>&lt;</a> ";
-echo date('l dS F Y',mktime(0,0,0,$month,$day,$year));
+echo ldate('l dS F Y',mktime(0,0,0,$month,$day,$year));
 echo " <a href='{$_SERVER['PHP_SELF']}?display=day&amp;year=".date('Y',$ndate)."&amp;month=".date('m',$ndate)."&amp;day=".date('d',$ndate)."{$gidurl}'>&gt;</a>";
 echo "</p>";
 

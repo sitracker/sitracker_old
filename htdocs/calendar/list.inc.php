@@ -47,7 +47,15 @@ if (mysql_num_rows($result))
         elseif ($dates['approvedby'] > 0 AND empty($dates['approved'])) echo " of ".user_realname($dates['approvedby']);
         echo "</td>";
         echo "<td>";
-        if ($approver==TRUE) echo "<a href='add_holiday.php?hid={$dates['holidayid']}&amp;year=".date('Y',$dates['startdate'])."&amp;month=".date('m',$dates['startdate'])."&amp;day=".date('d',$dates['startdate'])."&amp;user={$dates['userid']}&amp;type={$dates['type']}&amp;length=0&amp;return=list' onclick=\"return window.confirm('{$dates['realname']}: ".date('l jS F Y', $dates['startdate']).": Are you sure you want to delete this?');\">Delete</a>";
+        if ($approver==TRUE)
+        {
+            echo "<a href='add_holiday.php?hid={$dates['holidayid']}&amp;year=";
+            echo date('Y',$dates['startdate'])."&amp;month=".date('m',$dates['startdate']);
+            echo "&amp;day=".date('d',$dates['startdate'])."&amp;user={$dates['userid']}";
+            echo "&amp;type={$dates['type']}&amp;length=0&amp;return=list' ";
+            echo "onclick=\"return window.confirm('{$dates['realname']}: ".ldate('l jS F Y', $dates['startdate']);
+            echo ": {$strAreYouSureDelete}');\">{$strDelete}</a>";
+        }
         echo "</td></tr>\n";
         if ($shade=='shade1') $shade='shade2';
         else $shade='shade1';

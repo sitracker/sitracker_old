@@ -19,22 +19,20 @@ if (realpath(__FILE__) == realpath($_SERVER['SCRIPT_FILENAME']))
 // Display year calendar
 if ($type < 10)
 {
-    echo "<h2>";
-    // FIXME i18n apostrophe in name and Everybodys calendar
-    if ($user=='all' && $approver==TRUE) echo "Everybody";
+    echo "<h2>{$strCalendar}: ";
+    if ($user=='all' && $approver==TRUE) echo $strAll;
     else echo user_realname($user,TRUE);
-    echo "'s Calendar</h2>";
     if ($type==1) echo "<p align='center'>Used ".user_count_holidays($user, $type)." of ".user_holiday_entitlement($user)." days entitlement.<br />";
 
     echo appointment_type_dropdown($type, 'year');
 
-    $sql = "SELECT * from holidays WHERE userid='{$user}' AND approved=0 AND type='$type'";
+    $sql = "SELECT * FROM {$dbHolidays} WHERE userid='{$user}' AND approved=0 AND type='$type'";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
     if (mysql_num_rows($result))
     {
         echo "<table align='center'>";
-        echo "<tr class='shade2'><td><strong>Dates waiting for approval</strong>:</td></tr>"; // FIXME i18n waiting
+        echo "<tr class='shade2'><td><strong>{$strAwaitingApproval}</strong>:</td></tr>";
         echo "<tr class='shade1'><td>";
         while ($dates = mysql_fetch_array($result))
         {
@@ -45,8 +43,7 @@ if ($type < 10)
             echo "<br/>\n";
         }
         echo "</td></tr>\n";
-        // FIXME i18n send holiday request
-        echo "<tr class='shade1'><td><a href='holiday_request.php?type=$type'>Send holiday request</a></td></tr>";
+        echo "<tr class='shade1'><td><a href='holiday_request.php?type=$type'>{$strSendRequest}</a></td></tr>";
         echo "</table>";
     }
     mysql_free_result($result);
@@ -121,7 +118,7 @@ else
 echo "</p>\n";
 
 
-echo "<h2>{$strYear} View</h2>"; // FIXME i18n Year View
+echo "<h2>{$strYearView}</h2>";
 $pdate = mktime(0,0,0,$month,$day,$year-1);
 $ndate = mktime(0,0,0,$month,$day,$year+1);
 echo "<p align='center'>";

@@ -48,7 +48,7 @@ function draw_calendar($nmonth, $nyear)
         if ($monthTest != $monthOrig) { $lastday -= 1; }
     }
     while ($monthTest != $monthOrig);
-    $monthName = date('F',mktime(0,0,0,$nmonth,1,$nyear));
+    $monthName = ldate('F',mktime(0,0,0,$nmonth,1,$nyear));
 
     if ($CONFIG['debug'])
     {
@@ -397,7 +397,7 @@ function draw_chart($mode, $year, $month='', $day='', $groupid='', $userid='')
                         $html .= substr(ldate('l',mktime(0,0,0,$month,$cday,$year)),0,$daywidth)."<br />";
                         if ($mode == 'day')
                         {
-                            $html .= date('dS F Y',mktime(0,0,0,$month,$cday,$year));
+                            $html .= ldate('dS F Y',mktime(0,0,0,$month,$cday,$year));
                         }
                         else
                         {
