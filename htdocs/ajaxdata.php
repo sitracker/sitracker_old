@@ -17,7 +17,7 @@ require ('db_connect.inc.php');
 require ('functions.inc.php');
 
 // This page requires authentication
-// require ('auth.inc.php');
+require ('auth.inc.php');
 
 $action = $_REQUEST['action'];
 
@@ -52,6 +52,7 @@ switch ($action)
     case 'contexthelp':
         $context = cleanvar($_REQUEST['context']);
         $helpfile = "{$CONFIG['application_fspath']}htdocs/help/{$_SESSION['lang']}/{$context}.txt";
+        // Default back to english if language helpfile isn't found
         if (!file_exists($helpfile)) $helpfile = "{$CONFIG['application_fspath']}htdocs/help/en-GB/{$context}.txt";
         if (file_exists($helpfile))
         {
@@ -60,7 +61,7 @@ switch ($action)
             fclose($fp);
             echo nl2br($helptext);
         }
-        else echo "Error: Missing helpfile '{$context}.txt'";
+        else echo "Error: Missing helpfile '{$_SESSION['lang']}/{$context}.txt'";
     break;
 
     case 'dismiss_notice':
