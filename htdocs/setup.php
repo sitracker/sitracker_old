@@ -983,7 +983,7 @@ switch ($_REQUEST['action'])
                                 }
                                 else
                                 {
-                                    $html .= "<p class='error'>{$errors} Error(s) occurred while updating the schema, ";
+                                    $html .= "<p class='error'><strong>Summary</strong>: {$errors} Error(s) occurred while updating the schema, ";
                                     $html .= "please resolve the problems reported and then try running setup again.</p>";
                                 }
                                 echo $html;
