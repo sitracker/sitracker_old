@@ -634,7 +634,7 @@ if ($CONFIG['application_name'] == '' AND $CONFIG['application_shortname'] == ''
 {
     echo "<p class='error'>We couldn't find configuration defaults, this probably means your include_path is wrong. ";
     echo "Your current include path is <code>{$include_path}</code><br />";
-    echo "SiT! Requires it's libraries to be in the include path which is specified in your php.ini file, modify your php.ini and set the new include path ";
+    echo "SiT! Requires its libraries to be in the include path which is specified in your php.ini file, modify your php.ini and set the new include path ";
     if (file_exists('../includes'))
     {
         $curdir = getcwd();
