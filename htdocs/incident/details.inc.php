@@ -50,12 +50,13 @@ if ($incident->externalengineer != '')
     echo "<br />\n";
 }
 
-$sql = "SELECT * FROM links, inventory ";
+$sql = "SELECT * FROM {$dbLinks} AS l, {$dbInventory} AS i ";
 $sql .= "WHERE linktype = 7 ";
 $sql .= "AND origcolref = {$incidentid} ";
-$sql .= "AND inventory.id = linkcolref ";
+$sql .= "AND i.id = linkcolref ";
 $result = mysql_query($sql);
-if (@mysql_num_rows($result) > 0)
+if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
+if (mysql_num_rows($result) > 0)
 {
     $inventory = mysql_fetch_object($result);
     echo "<a href='inventory.php?view={$inventory->id}'>";
@@ -67,7 +68,7 @@ if (@mysql_num_rows($result) > 0)
     elseif (!empty($inventory->address))
     {
         echo " ({$inventory->address})";
-    }    
+    }
 }
 
 $tags = list_tags($id, TAG_INCIDENT, TRUE);
@@ -172,7 +173,7 @@ if ($incident->status != 2 AND $incident->status!=7)
         	echo " ".sprintf($strSLAXDueNow , $targettype);
         }
     }
-    
+
     if ($reviewremain > 0 && $reviewremain <= 2400)
     {
         // Only display if review is due in the next five days
