@@ -195,185 +195,192 @@ switch ($action)
         }
         echo "</p>";
 
-        echo "<div id='reassignlist'>";
-        echo "<table align='center'>";
-        echo "<tr>
-              <th colspan='2'>{$strReassignTo}:</th>
-              <th colspan='5'>{$strIncidentsinQueue}</th>
-              <th>{$strAccepting}</th>
-              </tr>";
-        echo "<tr>
-              <th>{$strName}</th>
-              <th>{$strStatus}</th>
-              <th align='center'>{$strActionNeeded} / {$strOther}</th>";
-        echo "<th align='center'>".priority_icon(4)."</th>";
-        echo "<th align='center'>".priority_icon(3)."</th>";
-        echo "<th align='center'>".priority_icon(2)."</th>";
-        echo "<th align='center'>".priority_icon(1)."</th>";
-        echo "<th></th></tr>\n";
-
-        if ($suggested > 0)
+        if ($countusers > 0)
         {
-            // Suggested user is shown as the first row
-            $sugsql = "SELECT * FROM `{$dbUsers}` WHERE id='$suggested' LIMIT 1";
-            $sugresult = mysql_query($sugsql);
-            if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
-            $suguser = mysql_fetch_object($sugresult);
-            echo "<tr class='idle'>";
-            echo "<td><label><input type='radio' name='userid' checked='checked' value='{$suguser->id}' /> ";
-            // Have a look if this user has skills with this software
-            $ssql = "SELECT softwareid FROM `{$dbUserSoftware}` WHERE userid={$suguser->id} AND softwareid={$incident->softwareid} ";
-            $sresult = mysql_query($ssql);
-            if (mysql_error()) trigger_error("MySQL Query Error".mysql_error(), E_USER_WARNING);
-            if (mysql_num_rows($sresult) >=1 )
-            {
-                echo "<strong>{$suguser->realname}</strong>";
-            }
-            else
-            {
-                echo $suguser->realname;
-            }
+            echo "<div id='reassignlist'>";
+            echo "<table align='center'>";
+            echo "<tr>
+                <th colspan='2'>{$strReassignTo}:</th>
+                <th colspan='5'>{$strIncidentsinQueue}</th>
+                <th>{$strAccepting}</th>
+                </tr>";
+            echo "<tr>
+                <th>{$strName}</th>
+                <th>{$strStatus}</th>
+                <th align='center'>{$strActionNeeded} / {$strOther}</th>";
+            echo "<th align='center'>".priority_icon(4)."</th>";
+            echo "<th align='center'>".priority_icon(3)."</th>";
+            echo "<th align='center'>".priority_icon(2)."</th>";
+            echo "<th align='center'>".priority_icon(1)."</th>";
+            echo "<th></th></tr>\n";
 
-            echo "</label></td>";
-            echo "<td>".user_online_icon($suguser->id).userstatus_name($suguser->status)."</td>";
-            $incpriority = user_incidents($suguser->id);
-            $countincidents = ($incpriority['1']+$incpriority['2']+$incpriority['3']+$incpriority['4']);
-
-            if ($countincidents >= 1)
+            if ($suggested > 0)
             {
-                $countactive = user_activeincidents($suguser->id);
-            }
-            else
-            {
-                $countactive = 0;
-            }
-
-            $countdiff = $countincidents-$countactive;
-            echo "<td align='center'>$countactive / {$countdiff}</td>";
-            echo "<td align='center'>".$incpriority['4']."</td>";
-            echo "<td align='center'>".$incpriority['3']."</td>";
-            echo "<td align='center'>".$incpriority['2']."</td>";
-            echo "<td align='center'>".$incpriority['1']."</td>";
-            echo "<td align='center'>";
-            echo $suguser->accepting=='Yes' ? $strYes : "<span class='error'>{$strNo}</span>";
-            echo "</td>";
-            echo "</tr>\n";
-        }
-
-        if ($countusers >= 1)
-        {
-            // Other users are shown in a optional section
-            if ($suggested > 0) echo "<tbody id='moreusers' style='display:none;'>";  // FIXME tbody
-            $shade = 'shade1';
-
-            while ($users = mysql_fetch_object($result))
-            {
-                echo "<tr class='$shade'>";
-                echo "<td><label><input type='radio' name='userid' value='{$users->id}' /> ";
-                // Have a look if this user has skills with this software
-                $ssql = "SELECT softwareid FROM `{$dbUserSoftware}` WHERE userid={$users->id} AND softwareid={$incident->softwareid} ";
-                $sresult = mysql_query($ssql);
+                // Suggested user is shown as the first row
+                $sugsql = "SELECT * FROM `{$dbUsers}` WHERE id='$suggested' LIMIT 1";
+                $sugresult = mysql_query($sugsql);
                 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
-                if (mysql_num_rows($sresult) >=1 ) echo "<strong>{$users->realname}</strong>";
-                else echo $users->realname;
+                $suguser = mysql_fetch_object($sugresult);
+                echo "<tr class='idle'>";
+                echo "<td><label><input type='radio' name='userid' checked='checked' value='{$suguser->id}' /> ";
+                // Have a look if this user has skills with this software
+                $ssql = "SELECT softwareid FROM `{$dbUserSoftware}` WHERE userid={$suguser->id} AND softwareid={$incident->softwareid} ";
+                $sresult = mysql_query($ssql);
+                if (mysql_error()) trigger_error("MySQL Query Error".mysql_error(), E_USER_WARNING);
+                if (mysql_num_rows($sresult) >=1 )
+                {
+                    echo "<strong>{$suguser->realname}</strong>";
+                }
+                else
+                {
+                    echo $suguser->realname;
+                }
+
                 echo "</label></td>";
-                echo "<td>".user_online_icon($users->id).userstatus_name($users->status)."</td>";
-                $incpriority = user_incidents($users->id);
+                echo "<td>".user_online_icon($suguser->id).userstatus_name($suguser->status)."</td>";
+                $incpriority = user_incidents($suguser->id);
                 $countincidents = ($incpriority['1']+$incpriority['2']+$incpriority['3']+$incpriority['4']);
 
-                if ($countincidents >= 1) $countactive = user_activeincidents($users->id);
-                else $countactive = 0;
-                $countdiff = $countincidents - $countactive;
+                if ($countincidents >= 1)
+                {
+                    $countactive = user_activeincidents($suguser->id);
+                }
+                else
+                {
+                    $countactive = 0;
+                }
+
+                $countdiff = $countincidents-$countactive;
                 echo "<td align='center'>$countactive / {$countdiff}</td>";
                 echo "<td align='center'>".$incpriority['4']."</td>";
                 echo "<td align='center'>".$incpriority['3']."</td>";
                 echo "<td align='center'>".$incpriority['2']."</td>";
                 echo "<td align='center'>".$incpriority['1']."</td>";
                 echo "<td align='center'>";
-                echo $users->accepting=='Yes' ? $strYes : "<span class='error'>{$strNo}</span>";
+                echo $suguser->accepting=='Yes' ? $strYes : "<span class='error'>{$strNo}</span>";
                 echo "</td>";
                 echo "</tr>\n";
-                if ($shade == 'shade1') $shade = 'shade2';
-                else $shade = 'shade1';
             }
-            if ($suggested > 0) echo "</tbody>";
-        }
-        echo "\n</table><br />\n";
-        if ($suggested > 0 AND $countusers >= 1)
-        {
-            echo "<p id='morelink'><a href=\"#\" onclick=\"$('moreusers').toggle();$('morelink').toggle();\">";
-            echo "{$countusers} {$strMore}</a></p>";
-        }
-        echo "</div>\n"; // reassignlist
 
-        echo "<table class='vertical'>";
+            if ($countusers >= 1)
+            {
+                // Other users are shown in a optional section
+                if ($suggested > 0) echo "<tbody id='moreusers' style='display:none;'>";  // FIXME tbody
+                $shade = 'shade1';
+
+                while ($users = mysql_fetch_object($result))
+                {
+                    echo "<tr class='$shade'>";
+                    echo "<td><label><input type='radio' name='userid' value='{$users->id}' /> ";
+                    // Have a look if this user has skills with this software
+                    $ssql = "SELECT softwareid FROM `{$dbUserSoftware}` WHERE userid={$users->id} AND softwareid={$incident->softwareid} ";
+                    $sresult = mysql_query($ssql);
+                    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
+                    if (mysql_num_rows($sresult) >=1 ) echo "<strong>{$users->realname}</strong>";
+                    else echo $users->realname;
+                    echo "</label></td>";
+                    echo "<td>".user_online_icon($users->id).userstatus_name($users->status)."</td>";
+                    $incpriority = user_incidents($users->id);
+                    $countincidents = ($incpriority['1']+$incpriority['2']+$incpriority['3']+$incpriority['4']);
+
+                    if ($countincidents >= 1) $countactive = user_activeincidents($users->id);
+                    else $countactive = 0;
+                    $countdiff = $countincidents - $countactive;
+                    echo "<td align='center'>$countactive / {$countdiff}</td>";
+                    echo "<td align='center'>".$incpriority['4']."</td>";
+                    echo "<td align='center'>".$incpriority['3']."</td>";
+                    echo "<td align='center'>".$incpriority['2']."</td>";
+                    echo "<td align='center'>".$incpriority['1']."</td>";
+                    echo "<td align='center'>";
+                    echo $users->accepting=='Yes' ? $strYes : "<span class='error'>{$strNo}</span>";
+                    echo "</td>";
+                    echo "</tr>\n";
+                    if ($shade == 'shade1') $shade = 'shade2';
+                    else $shade = 'shade1';
+                }
+                if ($suggested > 0) echo "</tbody>";
+            }
+            echo "\n</table><br />\n";
+            if ($suggested > 0 AND $countusers >= 1)
+            {
+                echo "<p id='morelink'><a href=\"#\" onclick=\"$('moreusers').toggle();$('morelink').toggle();\">";
+                echo "{$countusers} {$strMore}</a></p>";
+            }
+            echo "</div>\n"; // reassignlist
+
+            echo "<table class='vertical'>";
 
 
-//         if (empty($_REQUEST['backupid']) AND empty($_REQUEST['originalid']))
-//         {
-//         }
-//         elseif (!empty($originalid))
-//         {
-//             echo "<tr><th>{$strReassign}:</th>";
-//             echo "<td>Reassign to original engineer (".user_realname($originalid,TRUE).")";
-//             echo "<input type='hidden' name='permnewowner' value='{$originalid}' />";
-//             echo "<input type='hidden' name='permassign' value='{$originalid}' />";
-//             echo "</td></tr>\n";
-//         }
-//         elseif (!empty($backupid))
-//         {
-//             echo "<tr><th>{$strReassign}:</strong>:</th>";
-//             echo "<td>To Substitute Engineer (".user_realname($backupid,TRUE).")";
-//             echo "<input type='hidden' name='tempnewowner' value='{$backupid}' />";
-//             echo "<input type='hidden' name='tempassign' value='{$originalid}' />";
-//             echo "</td></tr>\n";
-//         }
+    //         if (empty($_REQUEST['backupid']) AND empty($_REQUEST['originalid']))
+    //         {
+    //         }
+    //         elseif (!empty($originalid))
+    //         {
+    //             echo "<tr><th>{$strReassign}:</th>";
+    //             echo "<td>Reassign to original engineer (".user_realname($originalid,TRUE).")";
+    //             echo "<input type='hidden' name='permnewowner' value='{$originalid}' />";
+    //             echo "<input type='hidden' name='permassign' value='{$originalid}' />";
+    //             echo "</td></tr>\n";
+    //         }
+    //         elseif (!empty($backupid))
+    //         {
+    //             echo "<tr><th>{$strReassign}:</strong>:</th>";
+    //             echo "<td>To Substitute Engineer (".user_realname($backupid,TRUE).")";
+    //             echo "<input type='hidden' name='tempnewowner' value='{$backupid}' />";
+    //             echo "<input type='hidden' name='tempassign' value='{$originalid}' />";
+    //             echo "</td></tr>\n";
+    //         }
 
-        echo "<tr><td colspan='2'><br />{$strReassignText}</td></tr>\n";
-        echo "<tr><th>{$strUpdate}:</th>";
-        echo "<td>";
-        echo "<textarea name='bodytext' wrap='soft' rows='10' cols='65'>";
-        if (!empty($reason)) echo $reason;
-        echo "</textarea>";
-        echo "</td></tr>\n";
-        if ($incident->towner > 0 AND ($sit[2] == $incident->owner OR $sit[2] == $incident->towner))
-        {
-            echo "<tr><th>{$strTemporaryOwner}:</th><td>";
-            echo "<label><input type='checkbox' name='temporary' value='yes' onchange=\"$('reassignlist').show();\" /> {$strChangeTemporaryOwner}</label>";
-            echo "<label><input type='checkbox' name='removetempowner' value='yes' onchange=\"$('reassignlist').hide();\" /> {$strRemoveTemporaryOwner}</label> ";
+            echo "<tr><td colspan='2'><br />{$strReassignText}</td></tr>\n";
+            echo "<tr><th>{$strUpdate}:</th>";
+            echo "<td>";
+            echo "<textarea name='bodytext' wrap='soft' rows='10' cols='65'>";
+            if (!empty($reason)) echo $reason;
+            echo "</textarea>";
             echo "</td></tr>\n";
-        }
-        elseif ($sit[2] != $incident->owner)
-        {
-            // $incident->towner < 1 AND 
-            echo "<tr><th>{$strTemporaryOwner}:</th><td>";
-            echo "<label><input type='checkbox' name='temporary' value='yes' onchange=\"$('reassignlist').toggle();\" /> ";
-            echo "{$strAssignTemporarily} to <strong>{$strYou}</strong> ({$_SESSION['realname']})</label><br />";
-            echo "<label><input type='checkbox' name='tempnewowner' value='yes'  /> ";
-            echo "{$strAssignTemporarily}</label>";
-            echo "</td></tr>";
+            if ($incident->towner > 0 AND ($sit[2] == $incident->owner OR $sit[2] == $incident->towner))
+            {
+                echo "<tr><th>{$strTemporaryOwner}:</th><td>";
+                echo "<label><input type='checkbox' name='temporary' value='yes' onchange=\"$('reassignlist').show();\" /> {$strChangeTemporaryOwner}</label>";
+                echo "<label><input type='checkbox' name='removetempowner' value='yes' onchange=\"$('reassignlist').hide();\" /> {$strRemoveTemporaryOwner}</label> ";
+                echo "</td></tr>\n";
+            }
+            elseif ($sit[2] != $incident->owner)
+            {
+                // $incident->towner < 1 AND
+                echo "<tr><th>{$strTemporaryOwner}:</th><td>";
+                echo "<label><input type='checkbox' name='temporary' value='yes' onchange=\"$('reassignlist').toggle();\" /> ";
+                echo "{$strAssignTemporarily} to <strong>{$strYou}</strong> ({$_SESSION['realname']})</label><br />";
+                echo "<label><input type='checkbox' name='tempnewowner' value='yes'  /> ";
+                echo "{$strAssignTemporarily}</label>";
+                echo "</td></tr>";
+            }
+            else
+            {
+                echo "<tr><th>{$strTemporaryOwner}:</th><td><label><input type='checkbox' name='temporary' value='yes' ";
+                if ($sit[2] != $incident->owner AND $sit[2] != $incident->towner)
+                {
+                    echo "disabled='disabled' ";
+                }
+                echo "/> ";
+                if ($incident->towner > 0) echo "{$strChangeTemporaryOwner}";
+                else echo "{$strAssignTemporarily}";
+                echo "</label></td></tr>\n";
+            }
+            echo "<tr><th>{$strVisibility}:</th><td><label>";
+            echo "<input type='checkbox' name='cust_vis' value='yes' /> {$strVisibleToCustomer}</label></td></tr>\n";
+
+            echo "<tr><th>{$strNewIncidentStatus}:</th>";
+            echo "<td>".incidentstatus_drop_down("newstatus", $incident->status)."</td></tr>\n";
+            echo "</table>\n\n";
+            echo "<input type='hidden' name='action' value='save' />";
+            echo "<p align='center'><input name='submit' type='submit' value=\"{$strReassign}\" /></p>";
+            echo "</form>\n";
         }
         else
         {
-            echo "<tr><th>{$strTemporaryOwner}:</th><td><label><input type='checkbox' name='temporary' value='yes' ";
-            if ($sit[2] != $incident->owner AND $sit[2] != $incident->towner)
-            {
-                echo "disabled='disabled' ";
-            }
-            echo "/> ";
-            if ($incident->towner > 0) echo "{$strChangeTemporaryOwner}";
-            else echo "{$strAssignTemporarily}";
-            echo "</label></td></tr>\n";
+            echo "<p class='warning'>{$strNoRecords}</p>";  // FIXME 3.41 better message here
         }
-        echo "<tr><th>{$strVisibility}:</th><td><label>";
-        echo "<input type='checkbox' name='cust_vis' value='yes' /> {$strVisibleToCustomer}</label></td></tr>\n";
-
-        echo "<tr><th>{$strNewIncidentStatus}:</th>";
-        echo "<td>".incidentstatus_drop_down("newstatus", $incident->status)."</td></tr>\n";
-        echo "</table>\n\n";
-        echo "<input type='hidden' name='action' value='save' />";
-        echo "<p align='center'><input name='submit' type='submit' value=\"{$strReassign}\" /></p>";
-        echo "</form>\n";
         include ('incident_html_bottom.inc.php');
 }
 
