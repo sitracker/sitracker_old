@@ -5616,7 +5616,7 @@ function suggest_reassign_userid($incidentid, $exceptuserid = 0)
         }
         else
         {
-            $sql = "SELECT id AS userid, status, lastseen FROM `{$dbUsers}` WHERE status > 0 AND users.accepting='Yes' ";
+            $sql = "SELECT id AS userid, status, lastseen FROM `{$dbUsers}` WHERE status > 0 AND u.accepting='Yes' ";
             if ($exceptuserid > 0) $sql .= "AND id != '$exceptuserid' ";
         }
         $result = mysql_query($sql);
