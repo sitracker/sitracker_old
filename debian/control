@@ -1,0 +1,14 @@
+Source: sit
+Section: web
+Priority: optional
+Maintainer: Kieran Hogg <kieran.hogg@googlemail.com>
+Standards-Version: 3.8.0
+Build-Depends: debhelper (>= 5)
+Homepage: http://sitracker.sourceforge.net
+
+Package: sit
+Architecture: all
+Depends: apache2 | apache-ssl | apache-perl | apache | httpd, php5 | php5-cgi | libapache-mod-php5 | libapache2-mod-php5, debconf, php5-mysql, libjs-scriptaculous, libjs-prototype, mysql-server-5.0 | mysql-server, libphp-phpmailer 
+Recommends: php5-gd, php5-imap, phpmyadmin | mysql-client-5.0
+Description: web-based application for tracking technical support calls/emails
+ Support Incident Tracker (or SiT!) is a web-based application which uses PHP and MySQL for tracking technical support calls/emails. Manage contacts, sites, technical support contracts and support incidents in one place. Send emails directly from SiT!, attach files and record every communication in the incident log. SiT is aware of Service Level Agreements and incidents are flagged if they stray outside of them.

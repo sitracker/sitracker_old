@@ -111,31 +111,28 @@ mkdir -p "$PUBDIR"
 tar -czf "$RELNAME.orig.tar.gz" $SITDIR
 
 # build a .deb package
+cd $SITDIR
+echo "Creating Ubuntu .deb..."
+mv debian/changelog.debian /tmp/
+mv debian/changelog.ubuntu debian/changelog
+rm -r tools/
+rm htdocs/scripts/prototype/prototype.js
+rm htdocs/scripts/scriptaculous/scriptaculous.js
+dch
+echo "Upload to PPA repo? y/n"
+read -e PPA
+if [ $PPA -ne "n" ]; then
+	debuild -S -sa
+	dput sit-ppa ../sit_$SITVER-0ubuntu1_source.changes
+	echo "Package uploaded"
+fi
+echo "Building Ubuntu package..."
+debuild
 
-sed -i 's/!SITVERSION!/'$SITVER'/g' $TMPDIR/$SITDIR/DEBIAN/control
-sed -i 's/!SITSIZE!/'$SITSIZE'/g' $TMPDIR/$SITDIR/DEBIAN/control
-
-mkdir -p /tmp/sit.$$/deb/etc/
-mkdir -p /tmp/sit.$$/deb/usr/share/sit/
-
-cp -r $TMPDIR/$SITDIR/attachments /tmp/sit.$$/deb/usr/share/sit/
-cp -r $TMPDIR/$SITDIR/dashboard /tmp/sit.$$/deb/usr/share/sit/
-cp -r $TMPDIR/$SITDIR/doc /tmp/sit.$$/deb/usr/share/sit/
-cp -r $TMPDIR/$SITDIR/htdocs /tmp/sit.$$/deb/usr/share/sit/
-cp -r $TMPDIR/$SITDIR/includes /tmp/sit.$$/deb/usr/share/sit/
-cp -r $TMPDIR/$SITDIR/index.php /tmp/sit.$$/deb/usr/share/sit/
-cp -r $TMPDIR/$SITDIR/plugins /tmp/sit.$$/deb/usr/share/sit/
-cp -r $TMPDIR/$SITDIR/README /tmp/sit.$$/deb/usr/share/sit/
-cp -r $TMPDIR/$SITDIR/DEBIAN /tmp/sit.$$/deb/
-cp -r $TMPDIR/$SITDIR/conf/etc /tmp/sit.$$/deb/
-
-echo "SUDO is required for changing file ownership in order to make a debian package"
-sudo chown -R root:root /tmp/sit.$$/deb/usr
-sudo chown -R root:root /tmp/sit.$$/deb/etc
-chmod 755 /tmp/sit.$$/deb/DEBIAN/post*
-
-# Make a debian package
-dpkg -b /tmp/sit.$$/deb/ $PUBDIR/$SITDIR.deb
+echo "Building Debian package..."
+mv /tmp/changelog.debian debian/changelog
+dch
+debuild
 
 # Make a tar.gz package
 cp $TMPDIR/$RELNAME.orig.tar.gz $PUBDIR/$RELNAME.tar.gz

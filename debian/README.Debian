@@ -1,0 +1,20 @@
+Gallery2 for Debian
+-------------------
+
+Gallery2 depends on a web server with php 4 or 5 enabled. For apache,
+apache-perl, apache-ssl, or apache2, Gallery2 can be configured correctly.
+In the case of web server other than apache, apache-perl, apache-ssl, or
+apache2, you are left to configure this urls/paths:
+
+/gallery2 -> /usr/share/gallery2
+
+Gallery2 also requires an SQL database.  The Debian gallery2 package can
+automatically configure MySQL.  If you are using Postgresql or Oracle, you
+will need to configure the database yourself.
+
+As of version 2.0.3-2 of the gallery2 package, the default gallery2 alias
+in /etc/gallery2/apache.conf has been disabled to prevent the alias from
+affecting every virtual host.  Feel free to re-enable the alias if
+necessary.
+
+# vim:set ai et sts=2 sw=2 tw=75:

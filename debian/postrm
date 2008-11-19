@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/rm -e
 # postrm script for sit
 
 if [ -d /etc/apache2/conf.d ] && [ ! -e /etc/apache2/conf.d/sit.conf ]; then
@@ -6,7 +6,9 @@ if [ -d /etc/apache2/conf.d ] && [ ! -e /etc/apache2/conf.d/sit.conf ]; then
 fi
 
 if [ -x /usr/sbin/invoke-rc.d ]; then
-    /usr/sbin/invoke-rc.d apache2 reload
+	invoke-rc.d apache2 restart
 else
-    /etc/init.d/apache2 reload
+	/etc/init.d/apache2 restart
 fi
+
+#DEBHELPER#
