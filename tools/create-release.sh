@@ -118,7 +118,7 @@ mv debian/changelog.ubuntu debian/changelog
 rm -r tools/
 rm htdocs/scripts/prototype/prototype.js
 rm htdocs/scripts/scriptaculous/scriptaculous.js
-dch
+dch -i
 echo "Upload to PPA repo? y/n"
 read -e PPA
 if [ $PPA -ne "n" ]; then
@@ -131,7 +131,7 @@ debuild
 
 echo "Building Debian package..."
 mv /tmp/changelog.debian debian/changelog
-dch
+dch -i
 debuild
 
 # Make a tar.gz package
