@@ -113,15 +113,14 @@ tar -czf "$RELNAME.orig.tar.gz" $SITDIR
 # build a .deb package
 cd $SITDIR
 echo "Creating Ubuntu .deb..."
-mv debian/changelog.debian /tmp/
 mv debian/changelog.ubuntu debian/changelog
 rm -r tools/
-rm htdocs/scripts/prototype/prototype.js
-rm htdocs/scripts/scriptaculous/scriptaculous.js
+rm htdocs/scripts/prototype/*
+rm htdocs/scripts/scriptaculous/*
 dch -i
 echo "Upload to PPA repo? y/n"
 read -e PPA
-if [ $PPA -ne "n" ]; then
+if [ $PPA != "n" ]; then
 	debuild -S -sa
 	dput sit-ppa ../sit_$SITVER-0ubuntu1_source.changes
 	echo "Package uploaded"
@@ -130,7 +129,7 @@ echo "Building Ubuntu package..."
 debuild
 
 echo "Building Debian package..."
-mv /tmp/changelog.debian debian/changelog
+mv /debian/changelog.debian debian/changelog
 dch -i
 debuild
 
