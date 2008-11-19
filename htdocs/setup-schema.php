@@ -717,7 +717,7 @@ INSERT INTO `$dbNoticeTemplates` (`name`, `type`, `description`, `text`, `linkte
 INSERT INTO `$dbNoticeTemplates` (`name`, `type`, `description`, `text`, `linktext`, `link`, `durability`, `refid`) VALUES('NOTICE_NEW_CONTRACT', 3, 'strNoticeNewContractDesc', 'strNoticeNewContract', 'strViewContract', '{applicationurl}contract_details.php?id={contractid}', 'sticky', '{contractid}');
 INSERT INTO `$dbNoticeTemplates` (`name`, `type`, `description`, `text`, `linktext`, `link`, `durability`, `refid`) VALUES('NOTICE_NEW_SITE', 3, 'strNoticeNewSiteDesc', 'strNoticeNewSite', 'strViewSite', '{applicationurl}site_details.php?id={siteid}', 'sticky', '{siteid}');
 INSERT INTO `$dbNoticeTemplates` (`name`, `type`, `description`, `text`, `linktext`, `link`, `durability`, `refid`) VALUES('NOTICE_TASK_DUE', 3, 'strNoticeTaskDueDesc', 'strNoticeTaskDue', 'strViewTask', '{applicationurl}view_task.php?id={taskid}', 'sticky', '{taskid}');
-INSERT INTO `$dbNoticeTemplates` (`name`, `type`, `description`, `text`, `linktext`, `link`, `durability`, `refid`) VALUES('NOTICE_SCHEDULER_TASK_FAILED', 3, 'strNoticeSchedulerTaskFailedDesc', 'strNoticeSchedulerTaskFailed', 'strScheduler', '{applicationurl}scheduler.php', 'sticky', '');
+INSERT INTO `$dbNoticeTemplates` (`name`, `type`, `description`, `text`, `linktext`, `link`, `durability`, `refid`) VALUES('NOTICE_SCHEDULER_TASK_FAILED', 3, 'strNoticeSchedulerTaskFailedDesc', 'strNoticeSchedulerTaskFailed', '', '', 'sticky', '');
 
 CREATE TABLE `{$dbPermissions}` (
   `id` int(5) NOT NULL auto_increment,
@@ -2463,7 +2463,7 @@ INSERT INTO `$dbEmailTemplates` (`name`, `type`, `description`, `tofield`, `from
 ('EMAIL_INCIDENT_UPDATED_CUSTOMER', 'user', 'Sent to a customer when an engineer updated an incident', '{contactemail}', '{supportemail}', '{supportemail}', '', '', '{applicationshortname} [{incidentid}] - {incidenttitle} updated', 'Hi {contactfirstname},\r\n\r\nYour incident [{incidentid}] - {incidentid} has been updated, please log into the portal to view the update and respond.\r\n \r\nDO NOT respond to this e-mail directly, use the portal for your responses.\r\n\r\nLog into the portal at: {applicationurl}, where you can also reset your details if you do not know them.\r\n\r\nRegards,\r\n{signature}\r\n\r\n{globalsignature}', 'hide', 'No', NULL, NULL, NULL, NULL);
 
 -- KMH 2008-11-05
-INSERT INTO `$dbNoticeTemplates` (`name`, `type`, `description`, `text`, `linktext`, `link`, `durability`, `refid`) VALUES('NOTICE_SCHEDULER_TASK_FAILED', 3, 'strNoticeSchedulerTaskFailedDesc', 'strNoticeSchedulerTaskFailed', 'strScheduler', '{applicationurl}scheduler.php', 'sticky', '');
+INSERT INTO `$dbNoticeTemplates` (`name`, `type`, `description`, `text`, `linktext`, `link`, `durability`, `refid`) VALUES('NOTICE_SCHEDULER_TASK_FAILED', 3, 'strNoticeSchedulerTaskFailedDesc', 'strNoticeSchedulerTaskFailed', '', '', 'sticky', '');
 INSERT INTO `$dbTriggers` (triggerid, userid, action, template, parameters, checks) VALUES('TRIGGER_SCHEDULER_TASK_FAILED', 1, 'ACTION_NOTICE', 'NOTICE_SCHEDULER_TASK_FAILED', '', '{schedulertask} == \'CheckIncomingMail\'');
 
 
