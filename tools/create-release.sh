@@ -11,6 +11,7 @@
 ##          Kieran Hogg <kieran_hogg[at]users.sourceforge.net>
 # Requirements:
 #    svn        svn2cl     wget
+#    dch    debuild     dput    bzr
 
 TMPDIR=/tmp/sit.$$/build
 PUBDIR=/tmp/sit.$$/packages
@@ -56,9 +57,10 @@ svn2cl --revision HEAD:$LASTRELREV --group-by-day --include-rev --authors "doc/A
 SITVER=$(grep ^\$application_version.= includes/functions.inc.php|awk -F "'|'" '{print $2}')
 
 # Now prepend the version number to the changlog
-echo -e "sit ($SITVER) unstable; urgency=low\n\n" > "DEBIAN/changelog"
-cat "$TMPDIR/changelog" >> "DEBIAN/changelog"
-rm "$TMPDIR/changelog"
+echo -e "sit ($SITVER) unstable; urgency=low\n\n" > "$TMPDIR/changelog"
+# next two lines commented out by Ivan 28Nov08
+# cat "$TMPDIR/changelog" >> "DEBIAN/changelog"
+# rm "$TMPDIR/changelog"
 
 # Now find out if this is a proper release
 SITREV=$(grep ^\$application_revision.= includes/functions.inc.php|awk -F "'|'" '{print $2}')
@@ -110,7 +112,7 @@ mkdir -p "$PUBDIR"
 # Create a source tar file
 tar -czf "$RELNAME.orig.tar.gz" $SITDIR
 
-echo "Create .deb files? y/n"
+echo "Create .deb files? [y]/n"
 read -e DEB
 if [$DEB != "n" ]; then
 	# build a .deb package
@@ -121,7 +123,7 @@ if [$DEB != "n" ]; then
 	rm htdocs/scripts/prototype/*
 	rm htdocs/scripts/scriptaculous/*
 	dch -i
-	echo "Upload to PPA repo? y/n"
+	echo "Upload to PPA repo? [y]/n"
 	read -e PPA
 	if [ $PPA != "n" ]; then
 		debuild -S -sa
