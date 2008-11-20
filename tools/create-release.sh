@@ -110,29 +110,32 @@ mkdir -p "$PUBDIR"
 # Create a source tar file
 tar -czf "$RELNAME.orig.tar.gz" $SITDIR
 
-# build a .deb package
-cd $SITDIR
-echo "Creating Ubuntu .deb..."
-mv debian/changelog.ubuntu debian/changelog
-rm -r tools/
-rm htdocs/scripts/prototype/*
-rm htdocs/scripts/scriptaculous/*
-dch -i
-echo "Upload to PPA repo? y/n"
-read -e PPA
-if [ $PPA != "n" ]; then
-	debuild -S -sa
-	dput sit-ppa ../sit_$SITVER-0ubuntu1_source.changes
-	echo "Package uploaded"
+echo "Create .deb files? y/n"
+read -e DEB
+if [$DEB != "n" ]; then
+	# build a .deb package
+	cd $SITDIR
+	echo "Creating Ubuntu .deb..."
+	mv debian/changelog.ubuntu debian/changelog
+	rm -r tools/
+	rm htdocs/scripts/prototype/*
+	rm htdocs/scripts/scriptaculous/*
+	dch -i
+	echo "Upload to PPA repo? y/n"
+	read -e PPA
+	if [ $PPA != "n" ]; then
+		debuild -S -sa
+		dput sit-ppa ../sit_$SITVER-0ubuntu1_source.changes
+		echo "Package uploaded"
+	fi
+	echo "Building Ubuntu package..."
+	debuild
+
+	echo "Building Debian package..."
+	mv /debian/changelog.debian debian/changelog
+	dch -i
+	debuild
 fi
-echo "Building Ubuntu package..."
-debuild
-
-echo "Building Debian package..."
-mv /debian/changelog.debian debian/changelog
-dch -i
-debuild
-
 # Make a tar.gz package
 cp $TMPDIR/$RELNAME.orig.tar.gz $PUBDIR/$RELNAME.tar.gz
 
