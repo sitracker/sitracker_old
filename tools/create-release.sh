@@ -135,6 +135,7 @@ if [$DEB != "n" ]; then
 	mv /debian/changelog.debian debian/changelog
 	dch -i
 	debuild
+	echo "Please copy and commit the new debian/changelog.ubuntu and debian/changelog files"
 fi
 # Make a tar.gz package
 cp $TMPDIR/$RELNAME.orig.tar.gz $PUBDIR/$RELNAME.tar.gz
