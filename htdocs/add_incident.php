@@ -52,7 +52,11 @@ function to_row($contactrow)
     }
     else
     {
-        $str .=  "<td><a href=\"{$_SERVER['PHP_SELF']}?action=incidentform&amp;type=support&amp;contactid=".$contactrow['contactid']."&amp;maintid=".$contactrow['maintenanceid']."&amp;producttext=".urlencode($contactrow['productname'])."&amp;productid=".$contactrow['productid']."&amp;updateid=$updateid&amp;siteid=".$contactrow['siteid']."&amp;win={$win}\" onclick=\"return confirm_support();\">{$GLOBALS['strAddIncident']}</a> ";
+        $str .=  "<td><a href=\"{$_SERVER['PHP_SELF']}?action=incidentform&amp;type=support&amp;";
+        $str .= "contactid=".$contactrow['contactid']."&amp;maintid=".$contactrow['maintid'];
+        $str .= "&amp;producttext=".urlencode($contactrow['productname'])."&amp;productid=";
+        $str .= $contactrow['productid']."&amp;updateid=$updateid&amp;siteid=".$contactrow['siteid'];
+        $str .= "&amp;win={$win}\" onclick=\"return confirm_support();\">{$GLOBALS['strAddIncident']}</a> ";
         if ($contactrow['incident_quantity'] == 0)
         {
             $str .=  "({$GLOBALS['strUnlimited']})";
@@ -152,7 +156,8 @@ elseif ($action=='findcontact')
     $contactsql .= "OR s.name LIKE '%$search_string%') ";
 
     $sql  = "SELECT p.name AS productname, p.id AS productid, c.surname AS surname, ";
-    $sql .= "m.id AS maintid, m.incident_quantity, m.incidents_used, m.expirydate, m.term, s.name AS name ";
+    $sql .= "m.id AS maintid, m.incident_quantity, m.incidents_used, m.expirydate, m.term, s.name AS name, ";
+    $sql .= "c.id AS contactid, s.id AS siteid ";
     $sql .= "FROM `{$dbSupportContacts}` AS sc, `{$dbContacts}` AS c, `{$dbMaintenance}` AS m, `{$dbProducts}` AS p, `{$dbSites}` AS s ";
     $sql .= "WHERE m.product = p.id ";
     $sql .= "AND m.site = s.id ";
@@ -162,12 +167,13 @@ elseif ($action=='findcontact')
     {
          $sql .= $contactsql;
     }
-
     $sql .= "UNION SELECT p.name AS productname, p.id AS productid, c.surname AS surname, ";
-    $sql .= "m.id AS maintid, m.incident_quantity, m.incidents_used, m.expirydate, m.term, s.name AS name ";
+    $sql .= "m.id AS maintid, m.incident_quantity, m.incidents_used, m.expirydate, m.term, s.name AS name, ";
+    $sql .= "c.id AS contactid, s.id AS siteid ";
     $sql .= "FROM `{$dbContacts}` AS c, `{$dbMaintenance}` AS m, `{$dbProducts}` AS p, `{$dbSites}` AS s ";
     $sql .= "WHERE m.product = p.id ";
     $sql .= "AND m.site = s.id ";
+    $sql .= "AND m.site = c.siteid ";
     $sql .= "AND m.allcontactssupported='yes' ";
     if (empty($contactid))
     {
