@@ -121,7 +121,7 @@ elseif ($action == "edit" && isset($contact))
         echo country_drop_down('country', $contactrow['country'], $extraattributes);
         echo "</td></tr>\n";
         echo "<tr><th>{$strNotifyContact}:</th><td>";
-        echo contact_site_drop_down('notify_contactid', $contactrow['notify_contactid'], $contactrow['siteid'], $contact);
+        echo contact_site_drop_down('notify_contactid', $contactrow['notify_contactid'], $contactrow['siteid'], $contact, TRUE, TRUE);
         echo "</td></tr>\n";
         echo "<tr><th>{$strNotes}:</th><td>";
         echo "<textarea rows='5' cols='60' name='notes'>{$contactrow['notes']}</textarea></td></tr>\n";
@@ -197,11 +197,11 @@ else if ($action == "update")
     if ($errors == 0)
     {
         // update contact
-        if ($dataprotection_email != '') $dataprotection_email = 'Yes'; 
+        if ($dataprotection_email != '') $dataprotection_email = 'Yes';
         else $dataprotection_email = 'No';
-        if ($dataprotection_phone  != '') $dataprotection_phone = 'Yes'; 
+        if ($dataprotection_phone  != '') $dataprotection_phone = 'Yes';
         else $dataprotection_phone = 'No';
-        if ($dataprotection_address  != '') $dataprotection_address = 'Yes'; 
+        if ($dataprotection_address  != '') $dataprotection_address = 'Yes';
         else $dataprotection_address = 'No';
 
         if ($active == 'true') $activeStr = 'true';
