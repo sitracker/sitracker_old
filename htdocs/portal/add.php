@@ -33,11 +33,18 @@ if (!$_REQUEST['action'])
     $sql .= "(m.incident_quantity - m.incidents_used) AS availableincidents ";
     $sql .= "FROM `{$dbSupportContacts}` AS s, `{$dbMaintenance}` AS m, `{$dbProducts}` AS p ";
     $sql .= "WHERE m.product=p.id ";
-    $sql .= "AND ((s.contactid='{$_SESSION['contactid']}' AND s.maintenanceid=m.id) ";
-    $sql .= "OR m.allcontactssupported='yes') ";
+    $sql .= "AND s.contactid='{$_SESSION['contactid']}' AND s.maintenanceid=m.id ";
+    $sql .= "AND m.id='{$contractid}' ";
+
+    $sql .= "UNION SELECT *, p.id AS productid, m.id AS id, ";
+    $sql .= "(m.incident_quantity - m.incidents_used) AS availableincidents ";
+    $sql .= "FROM `{$dbSupportContacts}` AS s, `{$dbMaintenance}` AS m, `{$dbProducts}` AS p ";
+    $sql .= "WHERE m.product=p.id ";
+    $sql .= "AND m.allcontactssupported='yes' ";
     $sql .= "AND m.id='{$contractid}'";
 
     $checkcontract = mysql_query($sql);
+    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
     $contract = mysql_fetch_object($checkcontract);
     $productid = $contract->productid;
     echo "<h2>".icon('add', 32, $strAddIncident)." {$strAddIncident}</h2>";
