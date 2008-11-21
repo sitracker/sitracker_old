@@ -1,5 +1,10 @@
-Changes in v3.40 - Unreleased
+Changes in v3.40 - Released 21 November 2008
 -----------------------------------------------------------------------
+- 0000238: [contracts] Contracts from other sites do not show in a supported contacts' list (ivan) - resolved.
+- 0000224: [triggers] Scheduler link in 'Schedule Task Failed' trigger incorrect (kieran) - resolved.
+- 0000045: [other] Easier setup/upgrades (ivan) - resolved.
+- 0000209: [setup] Upgrade schema fails 3.35 to 3.40 (ivan) - resolved.
+- 0000217: [i18n] Hardcoded help text - My Profile (ivan) - resolved.
 - 0000191: [inbound email] Incoming message too large notification (kieran) - resolved.
 - 0000202: [i18n] Hardcoded English text string - Viewing site - +Minor cosmetic signs missing (ivan) - resolved.
 - 0000203: [i18n] Hardcoded English text string - Viewing Site --> Incidents 'See here' (ivan) - resolved.
@@ -44,7 +49,6 @@ Changes in v3.40 - Unreleased
 - 0000131: [sites & contacts] browse_contacts should allow you to jump to edit (paulh) - resolved.
 - 0000120: [reports] Incidents By Skill report has no end date (paulh) - resolved.
 - 0000007: [authentication] Password reset useless (ivan) - resolved.
-
 
 Changes in v3.36 - Released 21 July 2008
 -----------------------------------------------------------------------
