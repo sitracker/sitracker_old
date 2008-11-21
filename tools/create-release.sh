@@ -114,7 +114,7 @@ tar -czf "$RELNAME.orig.tar.gz" $SITDIR
 
 echo "Create .deb files? [y]/n"
 read -e DEB
-if [$DEB != "n" ]; then
+if [ $DEB != "n" ]; then
 	# build a .deb package
 	cd $SITDIR
 	echo "Creating Ubuntu .deb..."
