@@ -24,9 +24,9 @@ function to_row($contactrow)
 {
     global $now, $updateid, $CONFIG;
     $str = '';
-    if ($contactrow['expirydate'] < $now OR
-        $contactrow['term'] == 'yes' AND
-        $contactrow['expirydate'] != -1)
+    if (($contactrow['expirydate'] < $now
+        OR $contactrow['term'] == 'yes')
+        AND $contactrow['expirydate'] != -1)
     {
         $class = 'expired';
     }
@@ -146,41 +146,34 @@ elseif ($action=='findcontact')
         header("Location: {$_SERVER['PHP_SELF']}");
         exit;
     }
-    $sql  = "SELECT *, p.name AS productname, p.id AS productid, c.surname AS surname, ";
-    $sql .= "m.id AS maintid, m.incident_quantity, m.incidents_used ";
+    // Filter by contact
+    $contactsql .= "AND (c.surname LIKE '%$search_string%' OR c.forenames LIKE '%$search_string%' ";
+    $contactsql .= "OR SOUNDEX('$search_string') = SOUNDEX(CONCAT_WS(' ', c.forenames, c.surname)) ";
+    $contactsql .= "OR s.name LIKE '%$search_string%') ";
+
+    $sql  = "SELECT p.name AS productname, p.id AS productid, c.surname AS surname, ";
+    $sql .= "m.id AS maintid, m.incident_quantity, m.incidents_used, m.expirydate, m.term, s.name AS name ";
     $sql .= "FROM `{$dbSupportContacts}` AS sc, `{$dbContacts}` AS c, `{$dbMaintenance}` AS m, `{$dbProducts}` AS p, `{$dbSites}` AS s ";
     $sql .= "WHERE m.product = p.id ";
     $sql .= "AND m.site = s.id ";
     $sql .= "AND sc.contactid = c.id ";
     $sql .= "AND sc.maintenanceid = m.id ";
-
-    $altsql  = "SELECT *, p.name AS productname, p.id AS productid, c.surname AS surname, ";
-    $altsql .= "m.id AS maintenanceid, m.incident_quantity, m.incidents_used, c.id AS contactid ";
-    $altsql .= "FROM `{$dbContacts}` AS c, `{$dbMaintenance}` AS m, `{$dbProducts}` AS p, `{$dbSites}` AS s ";
-    $altsql .= "WHERE m.product = p.id ";
-    $altsql .= "AND m.site = s.id ";
-    $altsql .= "AND c.siteid = m.site ";
-    $altsql .= "AND m.allcontactssupported='yes' ";
-
     if (empty($contactid))
     {
-        $newsql = "AND (c.surname LIKE '%$search_string%' OR c.forenames LIKE '%$search_string%' ";
-        $newsql .= "OR SOUNDEX('$search_string') = SOUNDEX((CONCAT_WS(' ', c.forenames, c.surname))) ";
-        $newsql .= "OR s.name LIKE '%$search_string%') ";
-
-        $sql .= $newsql;
-        $altsql .= $newsql;
+         $sql .= $contactsql;
     }
-    else
+
+    $sql .= "UNION SELECT p.name AS productname, p.id AS productid, c.surname AS surname, ";
+    $sql .= "m.id AS maintid, m.incident_quantity, m.incidents_used, m.expirydate, m.term, s.name AS name ";
+    $sql .= "FROM `{$dbContacts}` AS c, `{$dbMaintenance}` AS m, `{$dbProducts}` AS p, `{$dbSites}` AS s ";
+    $sql .= "WHERE m.product = p.id ";
+    $sql .= "AND m.site = s.id ";
+    $sql .= "AND m.allcontactssupported='yes' ";
+    if (empty($contactid))
     {
-        $sql .= "AND sc.contactid = '$contactid' ";
-        $altsql .= "AND c.id = '$contactid' ";
+        $sql .= $contactsql;
     }
 
-    $sql .= "ORDER by c.forenames, c.surname, productname, expirydate ";
-    $altsql .= "ORDER by c.forenames, c.surname, productname, expirydate ";
-
-    $altresult = mysql_query($altsql);
     $result=mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
     if (mysql_num_rows($result)>0)
@@ -304,49 +297,6 @@ elseif ($action=='findcontact')
             echo "<h3>No matching contacts found</h3>";
             echo "<p align='center'><a href=\"add_contact.php\">{$strAddContact}</a></p>";
         }
-        echo "<p align='center'><a href=\"{$_SERVER['PHP_SELF']}?updateid={$updateid}&amp;win={$win}\">{$strSearchAgain}</a></p>";
-        include ('htmlfooter.inc.php');
-    }
-    elseif (mysql_num_rows($altresult) > 0)
-    {
-        include ('htmlheader.inc.php');
-        ?>
-        <script type="text/javascript">
-        function confirm_support()
-        {
-            return window.confirm("<?php echo $strContractAreYouSure; ?>");
-        }
-
-        function confirm_free()
-        {
-            return window.confirm("<?php echo $strSiteAreYouSure; ?>");
-        }
-        </script>
-        <?php
-        echo "<h2>{$strAddIncident} - {$strSelect} {$strContract} / {$strContact}</h2>";
-        echo "<h3>".icon('contract', 32, $strContract)." ";
-        echo "{$strContracts}</h3>";
-        echo "<p align='center'>".sprintf($strListShowsContracts, $strAddIncident).".</p>";
-
-        $headers = "<tr><th>&nbsp;</th><th>{$strName}</th><th>{$strSite}</th><th>{$strContract}</th><th>{$strServiceLevel}</th><th>{$strExpiryDate}</th></tr>";
-
-        while ($contactrow = mysql_fetch_array($altresult))
-        {
-            $str_prefered .= to_row($contactrow);
-        }
-
-        echo "<h3>{$strPreferred}</h3>";
-        echo "<table align='center'>";
-        echo $headers;
-        echo $str_prefered;
-        echo "</table>\n";
-
-
-        if (empty($str_prefered))
-        {
-            echo "<p class='error'>{$strNothingToDisplay}</p>";
-        }
-
         echo "<p align='center'><a href=\"{$_SERVER['PHP_SELF']}?updateid={$updateid}&amp;win={$win}\">{$strSearchAgain}</a></p>";
         include ('htmlfooter.inc.php');
     }
