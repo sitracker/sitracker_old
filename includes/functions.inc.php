@@ -1308,19 +1308,22 @@ function incident_sla_history($incidentid)
     * Takes an array and makes an HTML selection box
     * @author Ivan Lucas
 */
-function array_drop_down($array, $name, $setting='', $enablefield='', $usekey = FALSE)
+function array_drop_down($array, $name, $setting='', $enablefield='', $usekey = '')
 {
     $html = "<select name='$name' id='$name' $enablefield>\n";
 
-    if ((array_key_exists($setting, $array) AND
-        in_array((string)$setting, $array) == FALSE) OR
-        $usekey == TRUE)
+    if ($usekey == '')
     {
-        $usekey = TRUE;
-    }
-    else
-    {
-        $usekey = FALSE;
+        if ((array_key_exists($setting, $array) AND
+            in_array((string)$setting, $array) == FALSE) OR
+            $usekey == TRUE)
+        {
+            $usekey = TRUE;
+        }
+        else
+        {
+            $usekey = FALSE;
+        }
     }
 
     foreach ($array AS $key => $value)
