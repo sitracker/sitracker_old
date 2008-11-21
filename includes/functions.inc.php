@@ -9782,20 +9782,30 @@ function user_contracts_table($userid, $mode = 'internal')
 {
     global $now, $CONFIG, $sit;
     if ((!empty($sit[2]) AND user_permission($sit[2], 30)
-    OR ($_SESSION['usertype'] == 'admin'))) // view supported products
+        OR ($_SESSION['usertype'] == 'admin'))) // view supported products
     {
         $html .= "<h4>".icon('contract', 16)." {$GLOBALS['strContracts']}:</h4>";
+        // Contracts we're explicit supported contact for
         $sql  = "SELECT sc.maintenanceid AS maintenanceid, m.product, p.name AS productname, ";
         $sql .= "m.expirydate, m.term ";
-        $sql .= "FROM `{$GLOBALS['dbSupportContacts']}` AS sc, ";
+        $sql .= "FROM `{$GLOBALS['dbContacts']}` AS c, ";
+        $sql .= "`{$GLOBALS['dbSupportContacts']}` AS sc, ";
         $sql .= "`{$GLOBALS['dbMaintenance']}` AS m, ";
-        $sql .= "`{$GLOBALS['dbProducts']}` AS p, ";
-        $sql .= "`{$GLOBALS['dbContacts']}` AS c ";
-        $sql .= "WHERE ((sc.maintenanceid=m.id AND sc.contactid='$userid') ";
-        $sql .= "OR m.allcontactssupported = 'yes') ";
+        $sql .= "`{$GLOBALS['dbProducts']}` AS p ";
+        $sql .= "WHERE c.id = '{$userid}' ";
+        $sql .= "AND (sc.maintenanceid=m.id AND sc.contactid='$userid') ";
         $sql .= "AND m.product=p.id  ";
-        $sql .= "AND c.id = '{$userid}' ";
-        $sql .= "AND m.site = c.siteid ";
+        // Contracts we're an 'all supported' on
+        $sql .= "UNION ";
+        $sql .= "SELECT m.id AS maintenanceid, m.product, p.name AS productname, ";
+        $sql .= "m.expirydate, m.term ";
+        $sql .= "FROM `{$GLOBALS['dbContacts']}` AS c, ";
+        $sql .= "`{$GLOBALS['dbMaintenance']}` AS m, ";
+        $sql .= "`{$GLOBALS['dbProducts']}` AS p ";
+        $sql .= "WHERE c.id = '{$userid}' AND c.siteid = m.site ";
+        $sql .= "AND m.allcontactssupported = 'yes' ";
+        $sql .= "AND m.product=p.id  ";
+
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
         if (mysql_num_rows($result)>0)
