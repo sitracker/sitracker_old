@@ -105,7 +105,7 @@ if (cleanvar($_REQUEST['action']) == 'update')
         $updatesql .= "county='$county', country='$country', postcode='$postcode', ";
         $updatesql .= "phone='$phone', mobile='$mobile', fax='$fax', email='$email'";
         if ($newpass != '')
-            $updatesql .= ", password=MD5($newpass) ";
+            $updatesql .= ", password=MD5('$newpass') ";
         $updatesql .= "WHERE id='{$id}'";
         mysql_query($updatesql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
