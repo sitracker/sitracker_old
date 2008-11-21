@@ -193,14 +193,14 @@ elseif ($CONFIG['portal'] == TRUE)
         $_SESSION['contracts'] = array_merge((array)$admincontracts, (array)$contactcontracts, (array)$allcontracts);
 
         //get entitlement
-        $sql = "SELECT DISTINCT m.*, p.name, ";
+        $sql = "SELECT m.*, p.name, ";
         $sql .= "(m.incident_quantity - m.incidents_used) AS availableincidents ";
         $sql .= "FROM `{$dbSupportContacts}` AS sc, `{$dbMaintenance}` AS m, `{$dbProducts}` AS p ";
         $sql .= "WHERE m.product=p.id ";
         $sql .= "AND sc.contactid='{$_SESSION['contactid']}' AND sc.maintenanceid=m.id ";
         $sql .= "AND (expirydate > (UNIX_TIMESTAMP(NOW()) - 15778463) OR expirydate = -1) ";
-        $sql .= "AND m.site = {$_SESSION['siteid']} ";
-        $sql .= "UNION SELECT DISTINCT m.*, p.name, ";
+//         $sql .= "AND m.site = {$_SESSION['siteid']} ";
+        $sql .= "UNION SELECT m.*, p.name, ";
         $sql .= "(m.incident_quantity - m.incidents_used) AS availableincidents ";
         $sql .= "FROM `{$dbSupportContacts}` AS sc, `{$dbMaintenance}` AS m, `{$dbProducts}` AS p ";
         $sql .= "WHERE m.product=p.id ";
