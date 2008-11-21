@@ -145,7 +145,7 @@ if ($action == "edit")
 
         echo "<tr><th>{$strIncidentPool}:</th>";
         $incident_pools = explode(',', "Unlimited,{$CONFIG['incident_pools']}");
-        echo "<td>".array_drop_down($incident_pools,'incident_poolid',$maint['incident_quantity'])."</td></tr>";
+        echo "<td>".array_drop_down($incident_pools,'incident_poolid',$maint['incident_quantity'],TRUE,FALSE)."</td></tr>";
 
         echo "<tr><th>{$strProductOnly}:</th>";
         echo "<td><input name='productonly' type='checkbox' value='yes' onclick='set_terminated();' ";
