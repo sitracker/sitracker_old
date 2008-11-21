@@ -203,6 +203,7 @@ while ($update = mysql_fetch_object($result))
     */
     $updatebody = preg_replace("/href=\"(?!http[s]?:\/\/)/", "href=\"http://", $updatebody);
     $updatebody = bbcode($updatebody);
+    $updatebody = emoticons($updatebody);
     $updatebody = preg_replace("!([\n\t ]+)(http[s]?:/{2}[\w\.]{2,}[/\w\-\.\?\&\=\#\$\%|;|\[|\]~:]*)!e", "'\\1<a href=\"\\2\" title=\"\\2\">'.(strlen('\\2')>=70 ? substr('\\2',0,70).'...':'\\2').'</a>'", $updatebody);
 
     // Make KB article references into a hyperlink

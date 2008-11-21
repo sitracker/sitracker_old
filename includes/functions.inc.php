@@ -10979,6 +10979,45 @@ function alpha_index($baseurl = '#')
     return $html;
 }
 
+/**
+    * Converts emoticon text to HTML
+    * @author Kieran Hogg
+    * @param $text string. Text with smileys in it
+    * @returns string HTML
+*/
+function emoticons($text)
+{
+    global $CONFIG;
+    $smiley_url = "http://{$_SERVER['HTTP_HOST']}{$CONFIG['application_webpath']}images/icons/emoticons/";
+    $smiley_regex = array(0 => "/\:[-]?\)/s",
+                          1 => "/\:[-]?\(/s",
+                          2 => "/\;[-]?\)/s",
+                          3 => "/\:[-]?[pP]/s",
+                          4 => "/\:[-]?@/s",
+                          5 => "/\:[-]?[Oo]/s",
+                          6 => "/\:[-]?\\$/s",
+                          7 => "/\\([Yy]\)/s",
+                          8 => "/\\([Nn]\)/s",
+                          9 => "/\\([Bb]\)/s"
+                          );
+
+    $smiley_replace = array(0 => "<img src='{$smiley_url}smile.png' alt='$1' title='$1' />",
+                            1 => "<img src='{$smiley_url}sad.png' alt='$1' title='$1' />",
+                            2 => "<img src='{$smiley_url}wink.png' alt='$1' title='$1' />",
+                            3 => "<img src='{$smiley_url}tongue.png' alt='$1' title='$1' />",
+                            4 => "<img src='{$smiley_url}angry.png' alt='$1' title='$1' />",
+                            5 => "<img src='{$smiley_url}omg.png' alt='$1' title='$1' />",
+                            6 => "<img src='{$smiley_url}embarassed.png' alt='$1' title='$1' />",
+                            7 => "<img src='{$smiley_url}thumbs_up.png' alt='$1' title='$1' />",
+                            8 => "<img src='{$smiley_url}thumbs_down.png' alt='$1' title='$1' />",
+                            9 => "<img src='{$smiley_url}beer.png' alt='$1' title='$1' />"
+                            );
+
+    $html = preg_replace($smiley_regex, $smiley_replace, $text);
+    return $html;
+}
+
+
 
 /*
  * DEPRECATED THOUGH STILL CALLED
