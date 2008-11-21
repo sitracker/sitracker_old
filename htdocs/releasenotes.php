@@ -25,10 +25,22 @@ include_once('htmlheader.inc.php');
 echo "<h2>Release Notes</h2>";
 
 echo "<div id='help'>";
-echo "<p>This release notes are user-based. For the latest and more detailed notes on this release please <a href='http://sitracker.sourceforge.net/ReleaseNotes'>see the SiT website</a>, a summary is shown below:</p>";
-// FIXME v3.40 Release notes
+echo "<h4>This is a summary of the full release notes showing only the most important changes, for more detailed notes and the latest information on this release please <a href='http://sitracker.sourceforge.net/ReleaseNotes'>see the SiT website</a>:</h4>";
+
 echo "<h3><a name='3.40'>v3.40</a></h3>";
-echo "<div><p>Release notes for v3.40 are being prepared, you can help, please <a href='http://sitracker.sourceforge.net/ReleaseNotes340'>edit the page on the wiki</a>.</p></div>";
+echo "<div>";
+
+echo "<ul>
+<li>New Danish (da-DK) Translation by Carsten Jensen</li>
+<li>Portuguese (pt-PT) Translation by José Tomás</li>
+<li>Updated Spanish (es-ES) Translation by Carlos Perez</li>
+<li>Ability to receive incoming mail from a POP or IMAP email account</li>
+<li>Gravatar support</li>
+<li>Billing - highly customisable framework for charging based on incidents and time worked on incidents</li>
+<li>Inventory - a cataloguing system for collecting information on remote access and/or assets (servers, PCs etc)</li>
+<li>The help menu now has a link to 'Get Help Online' which takes the user to the Documentation page of the wiki, this was done to make it easier for users to find the latest help and also to make it easier for contributors to expand the documentation and translate it into other languages.</li>
+</ul>";
+echo "</div>";
 
 echo "<h3><a name='3.35'>v3.35</a></h3>";
 echo "<div>
