@@ -36,7 +36,15 @@ if (sizeof($_SESSION['entitlement']) >= 1)
     foreach ($_SESSION['entitlement'] AS $contract)
     {
         echo "<tr class='$shade'>";
-        echo "<td><a href='contracts.php?id={$contract->id}'>{$contract->id}</a></td>";
+        echo "<td>";
+        // Only show link to contract details if the contract belongs to our site
+        // Since we can be supported by contracts that aren't our site
+        if ($contract->site == $_SESSION['siteid'])
+        {
+            echo "<a href='contracts.php?id={$contract->id}'>{$contract->id}</a>";
+        }
+        else echo $contract->id;
+        echo "</td>";
         echo "<td>{$contract->name}</td>";
         echo "<td>";
         if ($contract->incident_quantity == 0)

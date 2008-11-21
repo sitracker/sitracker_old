@@ -8286,7 +8286,8 @@ function contract_details($id, $mode='internal')
     $sql .= "WHERE s.id = m.site ";
     $sql .= "AND m.id='{$id}' ";
     $sql .= "AND m.reseller = r.id ";
-    $sql .= "AND (m.licence_type IS NULL OR m.licence_type = lt.id)";
+    $sql .= "AND (m.licence_type IS NULL OR m.licence_type = lt.id) ";
+    if ($mode == 'external') $sql .= "AND m.site = '{$_SESSION['siteid']}'";
 
     $maintresult = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
@@ -8415,11 +8416,7 @@ function contract_details($id, $mode='internal')
     }
     $html .= "<h3>{$GLOBALS['strContacts']}</h3>";
 
-    if (mysql_num_rows($maintresult) < 1)
-    {
-        trigger_error("{$GLOBALS[strNoContractsFound]}: {$id}", E_USER_WARNING);
-    }
-    else
+    if (mysql_num_rows($maintresult) > 0)
     {
         if ($maintrow['allcontactssupported'] == 'yes')
         {
@@ -8474,70 +8471,70 @@ function contract_details($id, $mode='internal')
                     $html .= "<p class='info'>{$GLOBALS[strNoRecords]}<p>";
                 }
         }
-    }
-
-    if ($maintrow['allcontactssupported'] != 'yes')
-    {
-        $html .= "<p align='center'>";
-        $html .= sprintf($GLOBALS['strUsedNofN'],
-                        "<strong>".$numberofcontacts."</strong>",
-                        "<strong>".$allowedcontacts."</strong>");
-        $html .= "</p>";
-
-        if ($numberofcontacts < $allowedcontacts OR $allowedcontacts == 0 AND $mode == 'internal')
+        if ($maintrow['allcontactssupported'] != 'yes')
         {
-            $html .= "<p align='center'><a href='add_contact_support_contract.php?maintid={$id}&amp;siteid={$maintrow['site']}&amp;context=maintenance'>";
-            $html .= "{$GLOBALS[strAddContact]}</a></p>";
+            $html .= "<p align='center'>";
+            $html .= sprintf($GLOBALS['strUsedNofN'],
+                            "<strong>".$numberofcontacts."</strong>",
+                            "<strong>".$allowedcontacts."</strong>");
+            $html .= "</p>";
+
+            if ($numberofcontacts < $allowedcontacts OR $allowedcontacts == 0 AND $mode == 'internal')
+            {
+                $html .= "<p align='center'><a href='add_contact_support_contract.php?maintid={$id}&amp;siteid={$maintrow['site']}&amp;context=maintenance'>";
+                $html .= "{$GLOBALS[strAddContact]}</a></p>";
+            }
+            else
+            {
+                $html .= "<h3>{$GLOBALS['strAddContact']}</h3>";
+                $html .= "<form action='{$_SERVER['PHP_SELF']}?id={$id}&amp;action=";
+                $html .= "add' method='post' >";
+                $html .= "<p align='center'>{$GLOBLAS['strAddNewSupportedContact']} ";
+                $html .= contact_site_drop_down('contactid',
+                                                'contactid',
+                                                maintenance_siteid($id),
+                                                supported_contacts($id));
+                $html .= help_link('NewSupportedContact');
+                $html .= " <input type='submit' value='{$GLOBALS['strAdd']}' /></p></form>";
+            }
+
+            $html .= "<p align='center'><a href='addcontact.php'>";
+            $html .= "{$GLOBALS['strAddNewSiteContact']}</a></p>";
+        }
+
+        $html .= "<br />";
+        $html .= "<h3>{$GLOBALS[strSkillsSupportedUnderContract]}:</h3>";
+        // supported software
+        $sql = "SELECT * FROM `{$GLOBALS[dbSoftwareProducts]}` AS sp, `{$GLOBALS[dbSoftware]}` AS s ";
+        $sql .= "WHERE sp.softwareid = s.id AND productid='{$maintrow['product']}' ";
+        $result = mysql_query($sql);
+        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
+
+        if (mysql_num_rows($result)>0)
+        {
+            $html .="<table align='center'>";
+            while ($software=mysql_fetch_array($result))
+            {
+                $html .= "<tr><td> ".icon('skill', 16)." ";
+                if ($software->lifetime_end > 0 AND $software->lifetime_end < $now)
+                {
+                    $html .= "<span class='deleted'>";
+                }
+                $html .= $software['name'];
+                if ($software->lifetime_end > 0 AND $software->lifetime_end < $now)
+                {
+                    $html .= "</span>";
+                }
+                $html .= "</td></tr>\n";
+            }
+            $html .= "</table>\n";
         }
         else
         {
-            $html .= "<h3>{$GLOBALS['strAddContact']}</h3>";
-            $html .= "<form action='{$_SERVER['PHP_SELF']}?id={$id}&amp;action=";
-            $html .= "add' method='post' >";
-            $html .= "<p align='center'>{$GLOBLAS['strAddNewSupportedContact']} ";
-            $html .= contact_site_drop_down('contactid',
-                                            'contactid',
-                                            maintenance_siteid($id),
-                                            supported_contacts($id));
-            $html .= help_link('NewSupportedContact');
-            $html .= " <input type='submit' value='{$GLOBALS['strAdd']}' /></p></form>";
+            $html .= "<p align='center'>{$GLOBALS[strNone]} / {$GLOBALS[strUnknown]}<p>";
         }
-
-        $html .= "<p align='center'><a href='addcontact.php'>";
-        $html .= "{$GLOBALS['strAddNewSiteContact']}</a></p>";
     }
-
-    $html .= "<br />";
-    $html .= "<h3>{$GLOBALS[strSkillsSupportedUnderContract]}:</h3>";
-    // supported software
-    $sql = "SELECT * FROM `{$GLOBALS[dbSoftwareProducts]}` AS sp, `{$GLOBALS[dbSoftware]}` AS s ";
-    $sql .= "WHERE sp.softwareid = s.id AND productid='{$maintrow['product']}' ";
-    $result = mysql_query($sql);
-    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
-
-    if (mysql_num_rows($result)>0)
-    {
-        $html .="<table align='center'>";
-        while ($software=mysql_fetch_array($result))
-        {
-            $html .= "<tr><td> ".icon('skill', 16)." ";
-            if ($software->lifetime_end > 0 AND $software->lifetime_end < $now)
-            {
-                $html .= "<span class='deleted'>";
-            }
-            $html .= $software['name'];
-            if ($software->lifetime_end > 0 AND $software->lifetime_end < $now)
-            {
-                $html .= "</span>";
-            }
-            $html .= "</td></tr>\n";
-        }
-        $html .= "</table>\n";
-    }
-    else
-    {
-        $html .= "<p align='center'>{$GLOBALS[strNone]} / {$GLOBALS[strUnknown]}<p>";
-    }
+    else $html = "<p align='center'>{$GLOBALS[strNothingToDisplay]}</p>";
 
     return $html;
 }
