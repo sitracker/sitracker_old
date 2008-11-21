@@ -8497,9 +8497,11 @@ function contract_details($id, $mode='internal')
                 $html .= help_link('NewSupportedContact');
                 $html .= " <input type='submit' value='{$GLOBALS['strAdd']}' /></p></form>";
             }
-
-            $html .= "<p align='center'><a href='addcontact.php'>";
-            $html .= "{$GLOBALS['strAddNewSiteContact']}</a></p>";
+            if ($mode == 'external')
+            {
+                $html .= "<p align='center'><a href='addcontact.php'>";
+                $html .= "{$GLOBALS['strAddNewSiteContact']}</a></p>";
+            }
         }
 
         $html .= "<br />";
