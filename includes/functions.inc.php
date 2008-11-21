@@ -3439,7 +3439,7 @@ function maintenance_drop_down($name, $id, $excludes = '', $return = FALSE, $sho
 
     if ($showonlyactive)
     {
-    	$sql .= "AND m.expirydate > {$now} ";
+    	$sql .= "AND (m.expirydate > {$now} OR m.expirydate = -1) ";
     }
 
     $sql .= "ORDER BY s.name ASC";
