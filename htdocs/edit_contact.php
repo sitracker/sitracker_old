@@ -54,7 +54,7 @@ elseif ($action == "edit" && isset($contact))
         echo "<p align='center'>".sprintf($strMandatoryMarked, "<sup class='red'>*</sup>")."</p>";
         echo "<table align='center' class='vertical'>";
         echo "<tr><th>{$strName}: <sup class='red'>*</sup><br />{$strTitle}, {$strForenames}, {$strSurname}</th>";
-        echo "<td><input maxlength='50' name='courtesytitle' title='Courtesy Title (Mr, Mrs, Miss, Dr. etc.)' size='7' value='{$contactrow['salutation']}' />\n"; // i18n courtesy title
+        echo "<td><input maxlength='50' name='courtesytitle' title='Courtesy Title (Mr, Mrs, Miss, Dr. etc.)' size='7' value='{$contactrow['courtesytitle']}' />\n"; // i18n courtesy title
         echo "<input maxlength='100' name='forenames' size='15' title='Firstnames (or initials)' value='{$contactrow['forenames']}' />\n";
         echo "<input maxlength='100' name='surname' size='20' title='{$strSurname}' value='{$contactrow['surname']}' />";
         echo "</td></tr>\n";
