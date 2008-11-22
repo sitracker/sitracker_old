@@ -138,7 +138,7 @@ if ($numwaiting > 0)
 
             if ($sit[2] == $user)
             {
-                echo "<a href='add_holiday.php?year=".date('Y',$dates['startdate'])."&amp;month=".date('m',$dates['startdate'])."&amp;day=".date('d',$dates['startdate'])."&amp;user={$sit[2]}&amp;type={$dates['type']}&amp;length=0&amp;return=holidays' onclick=\"return window.confirm('".date('l jS F Y', $dates['startdate']).": {$strHolidayCancelConfirm}');\" title='{$strHolidayCancel}'>Cancel</a>";
+                echo "<a href='add_holiday.php?year=".date('Y',$dates['startdate'])."&amp;month=".date('m',$dates['startdate'])."&amp;day=".date('d',$dates['startdate'])."&amp;user={$sit[2]}&amp;type={$dates['type']}&amp;length=0&amp;return=holidays' onclick=\"return window.confirm('".date('l jS F Y', $dates['startdate']).": {$strHolidayCancelConfirm}');\" title='{$strHolidayCancel}'>{$strCancel}</a>";
             }
             echo "</td></tr>\n";
         }
