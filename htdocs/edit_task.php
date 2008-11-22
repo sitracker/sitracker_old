@@ -219,7 +219,7 @@ switch ($action)
                 $updatehtml .= "[/b]\n".mysql_escape_string($notesarray[$i]->bodytext)."\n\n";
             }
 
-            $updatehtml .= sprintf($SYSLANG['strActivityCompleted'], $enddate);
+            $updatehtml .= sprintf($SYSLANG['strActivityCompleted'], $enddate, $duration);
 
             //create update
             $sql = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, ";
