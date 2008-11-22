@@ -1434,9 +1434,10 @@ function contact_drop_down($name, $id, $showsite = FALSE, $required = FALSE)
     * @param $siteid int. (optional) Filter list to show contacts from this siteID only
     * @param $exclude int|array (optional) Do not show this contactID in the list, accepts an int or array of ints
     * @param $showsite bool (optional) Suffix the name with the site name
+    * @param $allownone bool (optional) Allow 'none' to be selected (blank value)
     * @returns string.  HTML select
 */
-function contact_site_drop_down($name, $id, $siteid='', $exclude='', $showsite=TRUE)
+function contact_site_drop_down($name, $id, $siteid='', $exclude='', $showsite=TRUE, $allownone=FALSE)
 {
     global $dbContacts, $dbSites;
     $sql  = "SELECT c.id AS contactid, forenames, surname, siteid, s.name AS sitename ";
@@ -1463,6 +1464,7 @@ function contact_site_drop_down($name, $id, $siteid='', $exclude='', $showsite=T
     $html = "<select name='$name'>";
     if (mysql_num_rows($result) > 0)
     {
+        if ($allownone) $html .= "<option value='' selected='selected'>{$GLOBALS['strNone']}</option>";
         while ($contacts = mysql_fetch_object($result))
         {
             $html .= "<option ";
