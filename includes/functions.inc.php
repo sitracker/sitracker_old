@@ -1434,10 +1434,9 @@ function contact_drop_down($name, $id, $showsite = FALSE, $required = FALSE)
     * @param $siteid int. (optional) Filter list to show contacts from this siteID only
     * @param $exclude int|array (optional) Do not show this contactID in the list, accepts an int or array of ints
     * @param $showsite bool (optional) Suffix the name with the site name
-    * @param $allownone bool (optional) Allow 'none' to be selected (blank value)
     * @returns string.  HTML select
 */
-function contact_site_drop_down($name, $id, $siteid='', $exclude='', $showsite=TRUE, $allownone=FALSE)
+function contact_site_drop_down($name, $id, $siteid='', $exclude='', $showsite=TRUE)
 {
     global $dbContacts, $dbSites;
     $sql  = "SELECT c.id AS contactid, forenames, surname, siteid, s.name AS sitename ";
@@ -1464,7 +1463,6 @@ function contact_site_drop_down($name, $id, $siteid='', $exclude='', $showsite=T
     $html = "<select name='$name'>";
     if (mysql_num_rows($result) > 0)
     {
-        if ($allownone) $html .= "<option value='' selected='selected'>{$GLOBALS['strNone']}</option>";
         while ($contacts = mysql_fetch_object($result))
         {
             $html .= "<option ";
@@ -5952,41 +5950,41 @@ function external_escalation($escalated, $incid)
 function bbcode($text)
 {
     global $CONFIG;
-    $bbcode_regex = array(0 => "/\[b\](.*?)\[\/b\]/s",
-                         1 => "/\[i\](.*?)\[\/i\]/s",
-                         2 => "/\[u\](.*?)\[\/u\]/s",
-                         3 => "/\[quote\](.*?)\[\/quote\]/s",
-                         4 => "/\[size=(.+?)\](.+?)\[\/size\]/is",
+    $bbcode_regex = array("/\[b\](.*?)\[\/b\]/s",
+                         "/\[i\](.*?)\[\/i\]/s",
+                         "/\[u\](.*?)\[\/u\]/s",
+                         "/\[quote\](.*?)\[\/quote\]/s",
+                         "/\[size=(.+?)\](.+?)\[\/size\]/is",
                          //5 => "/\[url\](.*?)\[\/url\]/s",
-                         6 => "/\[size=(.+?)\](.+?)\[\/size\]/is",
-                         7 => "/\[img\](.*?)\[\/img\]/s",
-                         8 => "/\[size=(.+?)\](.+?)\[\/size\]/is",
-                         9 => "/\[color\](.*?)\[\/color\]/s",
-                         10 => "/\[size=(.+?)\](.+?)\[\/size\]/is",
-                         11 => "/\[size\](.*?)\[\/size\]/s",
-                         12 => "/\[code\](.*?)\[\/code\]/s",
-                         13 => "/\[hr\]/s",
-                         14 => "/\[s\](.*?)\[\/s\]/s",
-                         15 => "/\[\[att\=(.*?)]](.*?)\[\[\/att]]/s",
-                        16 => "/\[url=(.+?)\](.+?)\[\/url\]/is");
+                         "/\[size=(.+?)\](.+?)\[\/size\]/is",
+                         "/\[img\](.*?)\[\/img\]/s",
+                         "/\[size=(.+?)\](.+?)\[\/size\]/is",
+                         "/\[color\](.*?)\[\/color\]/s",
+                         "/\[size=(.+?)\](.+?)\[\/size\]/is",
+                         "/\[size\](.*?)\[\/size\]/s",
+                         "/\[code\](.*?)\[\/code\]/s",
+                         "/\[hr\]/s",
+                         "/\[s\](.*?)\[\/s\]/s",
+                         "/\[\[att\=(.*?)]](.*?)\[\[\/att]]/s",
+                         "/\[url=(.+?)\](.+?)\[\/url\]/is");
 
-    $bbcode_replace = array(0 => "<strong>$1</strong>",
-                             1 => "<em>$1</em>",
-                             2 => "<u>$1</u>",
-                             3 => "<blockquote><p>$1</p></blockquote>",
-                             4 => "<blockquote cite=\"$1\"><p>$1 said:<br />$2</p></blockquote>",
+    $bbcode_replace = array("<strong>$1</strong>",
+                            "<em>$1</em>",
+                            "<u>$1</u>",
+                            "<blockquote><p>$1</p></blockquote>",
+                            "<blockquote cite=\"$1\"><p>$1 said:<br />$2</p></blockquote>",
                              //5 => '<a href="$1" title="$1">$1</a>',
-                             6 => "<a href=\"$1\" title=\"$1\">$2</a>",
-                             7 => "<img src=\"$1\" alt=\"User submitted image\" />",
-                             8 => "<span style=\"color:$1\">$2</span>",
-                             9 => "<span style=\"color:red;\">$1</span>",
-                             10 => "<span style=\"font-size:$1\">$2</span>",
-                             11 => "<span style=\"font-size:large\">$1</span>",
-                             12 => "<code>$1</code>",
-                             13 => "<hr />",
-                             14 => "<span style=\"text-decoration:line-through\">$1</span>",
-                             15 => "<a href=\"{$_SERVER['HTTP_HOST']}{$CONFIG['application_webpath']}download.php?id=$1\">$2</a>",
-                            16 => "<a href=\"$1\">$2</a>");
+                            "<a href=\"$1\" title=\"$1\">$2</a>",
+                            "<img src=\"$1\" alt=\"User submitted image\" />",
+                            "<span style=\"color:$1\">$2</span>",
+                            "<span style=\"color:red;\">$1</span>",
+                            "<span style=\"font-size:$1\">$2</span>",
+                            "<span style=\"font-size:large\">$1</span>",
+                            "<code>$1</code>",
+                            "<hr />",
+                            "<span style=\"text-decoration:line-through\">$1</span>",
+                            "<a href=\"{$_SERVER['HTTP_HOST']}{$CONFIG['application_webpath']}download.php?id=$1\">$2</a>",
+                            "<a href=\"$1\">$2</a>");
 
     $html = preg_replace($bbcode_regex, $bbcode_replace, $text);
     return $html;
@@ -10989,28 +10987,28 @@ function emoticons($text)
 {
     global $CONFIG;
     $smiley_url = "http://{$_SERVER['HTTP_HOST']}{$CONFIG['application_webpath']}images/icons/emoticons/";
-    $smiley_regex = array(0 => "/\:[-]?\)/s",
-                          1 => "/\:[-]?\(/s",
-                          2 => "/\;[-]?\)/s",
-                          3 => "/\:[-]?[pP]/s",
-                          4 => "/\:[-]?@/s",
-                          5 => "/\:[-]?[Oo]/s",
-                          6 => "/\:[-]?\\$/s",
-                          7 => "/\\([Yy]\)/s",
-                          8 => "/\\([Nn]\)/s",
-                          9 => "/\\([Bb]\)/s"
+    $smiley_regex = array("/\:[-]?\)/s",
+                          "/\:[-]?\(/s",
+                          "/\;[-]?\)/s",
+                          "/\:[-]?[pP]/s",
+                          "/\:[-]?@/s",
+                          "/\:[-]?[Oo]/s",
+                          "/\:[-]?\\$/s",
+                          "/\\([Yy]\)/s",
+                          "/\\([Nn]\)/s",
+                          "/\\([Bb]\)/s"
                           );
 
-    $smiley_replace = array(0 => "<img src='{$smiley_url}smile.png' alt='$1' title='$1' />",
-                            1 => "<img src='{$smiley_url}sad.png' alt='$1' title='$1' />",
-                            2 => "<img src='{$smiley_url}wink.png' alt='$1' title='$1' />",
-                            3 => "<img src='{$smiley_url}tongue.png' alt='$1' title='$1' />",
-                            4 => "<img src='{$smiley_url}angry.png' alt='$1' title='$1' />",
-                            5 => "<img src='{$smiley_url}omg.png' alt='$1' title='$1' />",
-                            6 => "<img src='{$smiley_url}embarassed.png' alt='$1' title='$1' />",
-                            7 => "<img src='{$smiley_url}thumbs_up.png' alt='$1' title='$1' />",
-                            8 => "<img src='{$smiley_url}thumbs_down.png' alt='$1' title='$1' />",
-                            9 => "<img src='{$smiley_url}beer.png' alt='$1' title='$1' />"
+    $smiley_replace = array("<img src='{$smiley_url}smile.png' alt='$1' title='$1' />",
+                            "<img src='{$smiley_url}sad.png' alt='$1' title='$1' />",
+                            "<img src='{$smiley_url}wink.png' alt='$1' title='$1' />",
+                            "<img src='{$smiley_url}tongue.png' alt='$1' title='$1' />",
+                            "<img src='{$smiley_url}angry.png' alt='$1' title='$1' />",
+                            "<img src='{$smiley_url}omg.png' alt='$1' title='$1' />",
+                            "<img src='{$smiley_url}embarassed.png' alt='$1' title='$1' />",
+                            "<img src='{$smiley_url}thumbs_up.png' alt='$1' title='$1' />",
+                            "<img src='{$smiley_url}thumbs_down.png' alt='$1' title='$1' />",
+                            "<img src='{$smiley_url}beer.png' alt='$1' title='$1' />"
                             );
 
     $html = preg_replace($smiley_regex, $smiley_replace, $text);
