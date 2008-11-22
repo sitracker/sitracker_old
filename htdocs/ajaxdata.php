@@ -196,7 +196,20 @@ switch ($action)
         }
         break;
         
-        default : break;
+    case 'storedashboard':
+        $id = $_REQUEST['id'];
+        $val = $_REQUEST['val'];
+        
+        if ($id == $_SESSION['userid'])
+        {
+            //check you're changing your own
+            $sql = "UPDATE `{$dbUsers}` SET dashboard = '$val' WHERE id = '$id'";
+            $contactresult = mysql_query($sql);
+            if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+        }
+        break;
+        
+    default : break;
 }
 
 

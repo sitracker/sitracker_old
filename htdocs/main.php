@@ -209,7 +209,7 @@ echo "<a href=\"javascript:save_layout();\" id='savelayout' title='Save Dashboar
         }
 
 
-        xmlhttp.open("GET", "storedashboard.php?id="+<?php echo $_SESSION['userid']; ?>+"&val="+escape(toPass), true);
+        xmlhttp.open("GET", "ajaxdata.php?action=storedashboard&id="+<?php echo $_SESSION['userid']; ?>+"&val="+escape(toPass), true);
 
         xmlhttp.onreadystatechange=function() {
             //remove this in the future after testing
