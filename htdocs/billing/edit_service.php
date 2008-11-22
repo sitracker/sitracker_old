@@ -271,19 +271,21 @@ switch ($mode)
             echo "<tr><th>{$strEdit}</th><td>{$sourceservice}</td></tr>";
             echo "<tr><th></th><td>";
             echo "<input type='radio' name='mode' id='edit' value='edit' checked='checked' onclick=\"$('transfersection').hide();\" /> {$strEdit} ";
-            echo "<input type='radio' name='mode' id='transfer' value='transfer' onclick=\"$('transfersection').show();\" /> Transfer ";
-            echo "</td></tr>";
-            echo "<tbody  style='display:none' id='transfersection' ><tr><th>Destination Account:</th>";
-            echo "<td>";
-
-
+            
             // Only allow transfers on the same contractid
             $sql = "SELECT * FROM `{$dbService}` WHERE contractid = '{$contractid}' AND serviceid != {$sourceservice}";
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
-
+            
             if (mysql_numrows($result) > 0)
             {
+                
+                echo "<input type='radio' name='mode' id='transfer' value='transfer' onclick=\"$('transfersection').show();\" /> Transfer ";
+                echo "</td></tr>";
+                echo "<tbody  style='display:none' id='transfersection' ><tr><th>Destination Account:</th>";
+                echo "<td>";
+
+            
                 echo "<select name='destinationservice'>\n";
 
                 while ($obj = mysql_fetch_object($result))
@@ -292,12 +294,15 @@ switch ($mode)
                 }
 
                 echo "</select>\n";
+                echo "</td></tr></tbody>\n";
+            }
+            else
+            {
+	                echo "</td></tr>";
             }
 
-            echo "</td></tr></tbody>\n";
-
-            echo "<tr><th>{$strAmountToEditBy}</th><td><input type='textbox' name='amount' id='amount' /></td></tr>";
-            echo "<tr><th>{$strReason}</th><td><input type='textbox' name='reason' id='reason' /></td></tr>";
+            echo "<tr><th>{$strAmountToEditBy}</th><td><input type='text' name='amount' id='amount' /></td></tr>";
+            echo "<tr><th>{$strReason}</th><td><input type='text' name='reason' id='reason' /></td></tr>";
 
             echo "</table>";
             echo "<p align='center'><input type='submit' name='runreport' value='Do' /></p>";

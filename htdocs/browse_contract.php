@@ -44,7 +44,7 @@ echo "{$title}</h2>";
 echo "<table summary='alphamenu' align='center'><tr><td align='center'>";
 echo "<form action='{$_SERVER['PHP_SELF']}' method='get'>";
 echo "{$strBrowseContractsBySite}:"; // <!--<input type="text" name="search_string" />-->
-echo "<input dojoType='ComboBox' dataUrl='autocomplete.php?action=sites' style='width: 300px;' name='search_string' />";
+echo "<input dojoType='ComboBox' dataUrl='ajaxdata.php?action=sites' style='width: 300px;' name='search_string' />";
 echo "<label><input type='checkbox' name='activeonly' value='yes' ";
 if ($activeonly=='yes') echo "checked='checked' ";
 echo "/> {$strShowActiveOnly}</label>";

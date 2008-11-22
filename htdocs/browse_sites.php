@@ -92,7 +92,7 @@ echo "{$strBrowseSites}</h2>";
     <!-- <p>Browse sites: <input type="text" name="search_string" /><input type="submit" value="go" /></p>-->
     <?php
     echo "<p>{$strBrowseSites}: ";
-    // dojoType='ComboBox' dataUrl='autocomplete.php?action=sites'
+    // dojoType='ComboBox' dataUrl='ajaxdata.php?action=sites'
     echo "<input style='width: 300px;' name='search_string' onkeyup=\"autocomplete(this, 'comboresults');\" />";
     echo "<input name='submit' type='submit' value='{$strGo}' /></p>";
     echo "</form>\n";

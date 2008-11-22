@@ -9,8 +9,6 @@
 //
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
-// TODO Merge autocomplete.php into here?
-
 @include ('set_include_path.inc.php');
 $permission = 0; // not required
 require ('db_connect.inc.php');
@@ -19,7 +17,8 @@ require ('functions.inc.php');
 // This page requires authentication
 require ('auth.inc.php');
 
-$action = $_REQUEST['action'];
+$action = cleanvar($_REQUEST['action']);
+$selected = cleanvar($_REQUEST['selected']);
 
 if ($_SESSION['auth'] == TRUE)
 {
@@ -108,8 +107,96 @@ switch ($action)
 
     case 'autocomplete_sitecontact':
     break;
+    
+    case 'tags':
+        $sql = "SELECT DISTINCT t.name FROM `{$dbSetTags}` AS st, `{$dbTags}` AS t WHERE st.tagid = t.tagid GROUP BY t.name";
+        $result = mysql_query($sql);
+        if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+        if (mysql_num_rows($result) > 0)
+        {
+            while ($obj = mysql_fetch_object($result))
+            {
+                $str .= "[".$obj->name."],";
+            }
+        }
+        echo "[".substr($str,0,-1)."]";
+        break;
+    
+    case 'contact' :
+        $sql = "SELECT DISTINCT forenames, surname FROM `{$dbContacts}` WHERE active='true'";
+        $result = mysql_query($sql);
+        if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+        if (mysql_num_rows($result) > 0)
+        {
+            while ($obj = mysql_fetch_object($result))
+            {
+                $str .= "[\"".$obj->surname."\"],";
+                $str .= "[\"".$obj->forenames." ".$obj->surname."\"],";
+            }
+        }
+        echo "[".substr($str,0,-1)."]";
+        break;
+        
+    case 'sites':
+        $sql = "SELECT DISTINCT name FROM `{$dbSites}` WHERE active='true'";
+        $result = mysql_query($sql);
+        if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+        if (mysql_num_rows($result) > 0)
+        {
+            while ($obj = mysql_fetch_object($result))
+            {
+                $str .= "[\"".$obj->name."\"],";
+            }
+        }
+        echo "[".substr($str,0,-1)."]";
+        break;
 
-    default : break;
+    case 'slas':
+        $sql = "SELECT DISTINCT tag FROM `{$dbServiceLevels}`";
+        $result = mysql_query($sql);
+        if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+        while ($obj = mysql_fetch_object($result))
+        {
+            $strIsSelected = '';
+            if ($obj->tag == $selected)
+            {
+                $strIsSelected = "selected='selected'";
+            }
+            echo "<option value='{$obj->tag}' $strIsSelected>{$obj->tag}</option>";
+        }
+        break;
+        
+    case 'products':
+        $sql = "SELECT id, name FROM `{$dbProducts}` ORDER BY name ASC";
+        $result = mysql_query($sql);
+        if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+        while ($obj = mysql_fetch_object($result))
+        {
+            $strIsSelected = '';
+            if ($obj->id == $selected)
+            {
+                $strIsSelected = "selected='selected'";
+            }
+            echo "<option value='{$obj->id}' $strIsSelected>{$obj->name}</option>";
+        }
+        break;
+        
+    case 'skills':
+        $sql = "SELECT id, name FROM `{$dbSoftware}` ORDER BY name ASC";
+        $result = mysql_query($sql);
+        if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+        while ($obj = mysql_fetch_object($result))
+        {
+            $strIsSelected = '';
+            if ($obj->id == $selected)
+            {
+                $strIsSelected = "selected='selected'";
+            }
+            echo "<option value='{$obj->id}' $strIsSelected>{$obj->name}</option>";
+        }
+        break;
+        
+        default : break;
 }
 
 

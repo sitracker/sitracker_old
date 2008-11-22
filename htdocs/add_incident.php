@@ -123,7 +123,7 @@ if (empty($action) OR $action=='showform')
         echo icon('contact', 16);
         echo "</label></th><td>";
         //echo "<input type='text' name='search_string' size='30' value='{$query}' />\n";
-        echo "<input dojoType='ComboBox' value='{$query}' dataUrl='autocomplete.php?action=contact' style='width: 300px;' name='search_string' id='search_string' />";
+        echo "<input dojoType='ComboBox' value='{$query}' dataUrl='ajaxdata.php?action=contact' style='width: 300px;' name='search_string' id='search_string' />";
         echo "<input type='hidden' name='win' value='{$win}' />";
         echo "<input name='submit' type='submit' value='{$strFindContact}' />";
         echo "</td></tr>";
@@ -138,12 +138,12 @@ if (empty($action) OR $action=='showform')
     }
     include ('htmlfooter.inc.php');
 }
-elseif ($action=='findcontact')
+elseif ($action == 'findcontact')
 {
     //  Search for the contact specified in the maintenance contracts and display a list of choices
     // This Page Is Valid XHTML 1.0 Transitional! 27Oct05
 
-    $search_string=mysql_real_escape_string(urldecode($_REQUEST['search_string']));
+    $search_string = mysql_real_escape_string(urldecode($_REQUEST['search_string']));
     // check for blank or very short search field - otherwise this would find too many results
     if (empty($contactid) && strlen($search_string) < 2)
     {

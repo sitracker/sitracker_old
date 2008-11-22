@@ -90,7 +90,7 @@ echo "<td align='center'>";
     <!-- <input type="text" name="search_string" />-->
     <?php
     echo "<p>{$strBrowseContacts}: "; ?>
-    <input dojoType='ComboBox' dataUrl='autocomplete.php?action=contact' style='width: 300px;' name='search_string' />
+    <input dojoType='ComboBox' dataUrl='ajaxdata.php?action=contact' style='width: 300px;' name='search_string' />
     <?php echo "<input name='submit' type='submit' value=\"{$strGo}\" /></p>";
     echo "</form>\n";
         if ($displayinactive=="true")
