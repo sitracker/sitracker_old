@@ -83,9 +83,9 @@ if (!empty($filterby))
 echo "<form action='{$_SERVER['PHP_SELF']}' method='post' id='filterform'><p align='center'>\n";
 echo "{$strFilter}:\n";
 echo "<input type='radio' name='filterby' value='none' checked='checked' onclick=\"hide_filter(true);\" {$nonChecked} />{$strNone} \n";
-echo "<input type='radio' name='filterby' value='sla' onclick=\"get_and_display('../get_bits_and_pieces.inc.php?toget=slas', 'filter'); hide_filter(false);\" {$slaChecked} />{$strBySLA} \n";
-echo "<input type='radio' name='filterby' value='softwareid' onclick=\"get_and_display('../get_bits_and_pieces.inc.php?toget=skills', 'filter'); hide_filter(false);\" {$softwareChecked} />{$strBySkill} \n";
-echo "<input type='radio' name='filterby' value='product' onclick=\"get_and_display('../get_bits_and_pieces.inc.php?toget=products', 'filter'); hide_filter(false);\" {$productCheck} />{$strByProduct} \n";
+echo "<input type='radio' name='filterby' value='sla' onclick=\"get_and_display('../ajaxdata.php?action=slas', 'filter'); hide_filter(false);\" {$slaChecked} />{$strBySLA} \n";
+echo "<input type='radio' name='filterby' value='softwareid' onclick=\"get_and_display('../ajaxdata.php?action=skills', 'filter'); hide_filter(false);\" {$softwareChecked} />{$strBySkill} \n";
+echo "<input type='radio' name='filterby' value='product' onclick=\"get_and_display('../ajaxdata.php?action=products', 'filter'); hide_filter(false);\" {$productCheck} />{$strByProduct} \n";
 echo "<br />\n";
 echo "<select id='filter' name='filter'>\n";
 echo "<option />";
@@ -97,13 +97,13 @@ if (!empty($filterby))
     switch ($filterby)
     {
         case 'sla':
-            echo "get_and_display('../get_bits_and_pieces.inc.php?toget=slas&selected={$filter}', 'filter'); hide_filter(false);";
+            echo "get_and_display('../ajaxdata.php?actiont=slas&selected={$filter}', 'filter'); hide_filter(false);";
             break;
         case 'softwareid':
-            echo "get_and_display('../get_bits_and_pieces.inc.php?toget=skills&selected={$filter}', 'filter'); hide_filter(false);";
+            echo "get_and_display('../ajaxdata.php?action=skills&selected={$filter}', 'filter'); hide_filter(false);";
             break;
         case 'product':
-            echo "get_and_display('../get_bits_and_pieces.inc.php?toget=products&selected={$filter}', 'filter'); hide_filter(false);";
+            echo "get_and_display('../ajaxdata.php?action=products&selected={$filter}', 'filter'); hide_filter(false);";
             break;
         default:
             echo "hide_filter(true);";
