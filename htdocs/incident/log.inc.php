@@ -423,7 +423,15 @@ while ($update = mysql_fetch_object($result))
             if ($update->duration != 0)
             {
                 $inminutes = ceil($update->duration/60); // Always round up
-                echo  "{$strDuration}: {$inminutes} {$strMinutes}<br />";
+                echo  "{$strDuration}: {$inminutes} {$strMinutes}";
+                
+                // Permision to adjust durations is 81
+                if ($CONFIG['allow_duration_adjustment'] AND user_permission($sit[2], 81))
+                {
+                    echo " <a href='billing/edit_activity_duration.php?mode=showform&amp;incidentid={$incidentid}&amp;updateid={$update->id}'>{$strEdit}</a>";
+                }
+                
+                echo "<br />";
             }
 
             if (!empty($update->nextaction))

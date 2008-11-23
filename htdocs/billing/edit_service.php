@@ -243,7 +243,7 @@ switch ($mode)
 
             if ($sucess)
             {
-                html_redirect("{$CONFIG['application_webpath']}contract_details.php?id={$contractid}", TRUE, 'Sucessfully udpated');
+                html_redirect("{$CONFIG['application_webpath']}contract_details.php?id={$contractid}", TRUE, 'Sucessfully updated');
             }
             else
             {
@@ -263,7 +263,7 @@ switch ($mode)
         else
         {
             include ('htmlheader.inc.php');
-            echo "<h2>One time balance editor</h2>";
+            echo "<h2>{$strOneTimeBillingEditor}</h2>";
 
             echo "<form name='serviceform' action='{$_SERVER['PHP_SELF']}' method='post' onsubmit='return confirm_submit(\"{$strAreYouSureMakeTheseChanges}\");'>";
 
@@ -280,12 +280,11 @@ switch ($mode)
             if (mysql_numrows($result) > 0)
             {
                 
-                echo "<input type='radio' name='mode' id='transfer' value='transfer' onclick=\"$('transfersection').show();\" /> Transfer ";
+                echo "<input type='radio' name='mode' id='transfer' value='transfer' onclick=\"$('transfersection').show();\" /> {$strTransfer} ";
                 echo "</td></tr>";
-                echo "<tbody  style='display:none' id='transfersection' ><tr><th>Destination Account:</th>";
+                echo "<tbody  style='display:none' id='transfersection' ><tr><th>{$strDestinationService}</th>";
                 echo "<td>";
 
-            
                 echo "<select name='destinationservice'>\n";
 
                 while ($obj = mysql_fetch_object($result))
@@ -305,7 +304,7 @@ switch ($mode)
             echo "<tr><th>{$strReason}</th><td><input type='text' name='reason' id='reason' /></td></tr>";
 
             echo "</table>";
-            echo "<p align='center'><input type='submit' name='runreport' value='Do' /></p>";
+            echo "<p align='center'><input type='submit' name='runreport' value='{$strTransfer}' /></p>";
 
             echo "<input type='hidden' name='sourceservice' value='{$sourceservice}' />";
             echo "<input type='hidden' name='contractid' value='{$contractid}' />";
@@ -326,11 +325,11 @@ switch ($mode)
             $status = update_contract_balance($contractid, $reason, $amount, $sourceservice);
             if ($status)
             {
-                html_redirect("{$CONFIG['application_webpath']}contract_details.php?id={$contractid}", TRUE, 'Balance sucessfully udpated');
+                html_redirect("{$CONFIG['application_webpath']}contract_details.php?id={$contractid}", TRUE, 'Balance sucessfully udpated'); // FIXME i18n
             }
             else
             {
-                html_redirect("{$CONFIG['application_webpath']}contract_details.php?id={$contractid}", FALSE, 'Balance NOT udpated');
+                html_redirect("{$CONFIG['application_webpath']}contract_details.php?id={$contractid}", FALSE, 'Balance NOT udpated'); // FIXME i18n
             }
         }
         break;
@@ -342,15 +341,15 @@ switch ($mode)
         }
         else
         {
-            $status = update_contract_balance($contractid, $reason, ($amount*-1), $sourceservice);
+            $status = update_contract_balance($contractid, $reason, ($amount * -1), $sourceservice);
             if ($status)
             {
                 $status = update_contract_balance($contractid, $reason, $amount, $destinationservice);
-                if ($status) html_redirect("{$CONFIG['application_webpath']}contract_details.php?id={$contractid}", TRUE, 'Transfer sucessful');
-                else html_redirect("{$CONFIG['application_webpath']}contract_details.php?id={$contractid}", FALSE, 'Transfer failed');
+                if ($status) html_redirect("{$CONFIG['application_webpath']}contract_details.php?id={$contractid}", TRUE, $strTransferSucessful);
+                else html_redirect("{$CONFIG['application_webpath']}contract_details.php?id={$contractid}", FALSE, $strTransferFailed);
                 exit;
             }
-            html_redirect('main.php', FALSE, 'Transfer failed');
+            html_redirect('main.php', FALSE, $strTransferFailed);
             exit;
         }
         break;
