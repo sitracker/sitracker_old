@@ -35,11 +35,16 @@ else
     // Conversions for when register_globals=off
     // We've migrated away from using cookies and now use sessions
     $sit[0] = $_SESSION['username'];
-    $sit[1] = 'obsolete'; // FIXME Check $sit[1] is unused then remove
     $sit[2] = $_SESSION['userid'];
     // Load session language if it is set and different to the default language
-    if (!empty($_SESSION['lang']) AND $_SESSION['lang'] != $CONFIG['default_i18n']) include ("i18n/{$_SESSION['lang']}.inc.php");
-    elseif (empty($_SESSION['lang'])) $_SESSION['lang'] = $CONFIG['default_i18n'];
+    if (!empty($_SESSION['lang']) AND $_SESSION['lang'] != $CONFIG['default_i18n'])
+    {
+        include ("i18n/{$_SESSION['lang']}.inc.php");
+    }
+    elseif (empty($_SESSION['lang']))
+    {
+    	$_SESSION['lang'] = $CONFIG['default_i18n'];
+    }
     include ('strings.inc.php');
 }
 

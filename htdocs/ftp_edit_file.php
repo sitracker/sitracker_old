@@ -11,6 +11,7 @@
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
 // This Page Is Valid XHTML 1.0 Transitional!   4Nov05
+// FIXME i18n whole page
 
 @include ('set_include_path.inc.php');
 $permission=44; // Publish Files to FTP site
@@ -35,40 +36,50 @@ switch ($mode)
         $sql = "SELECT * FROM `{$dbFiles}` WHERE id='{$id}'";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
-        $frow = mysql_fetch_array($result);
+        $obj = mysql_fetch_object($result);
 
         // calculate filesize
         $j = 0;
         $ext = array($strBytes, $strKBytes, $strMBytes, $strGBytes, $strTBytes);
-        $pretty_file_size = $frow['size'];
+        $pretty_file_size = $obj->size;
         while ($pretty_file_size >= pow(1024,$j)) ++$j;
         $pretty_file_size = round($pretty_file_size / pow(1024,$j-1) * 100) / 100 . ' ' . $ext[$j-1];
 
-        echo "<h2>$title</h2>";
+        echo "<h2>{$title}</h2>";
         echo "<form action='{$_SERVER['PHP_SELF']}' method='post'>";
         echo "<table summary='edit file details' align='center' width='60%' class='vertical'>";
-        echo "<tr><th>File:</th><td>";
-        echo "<img src='".getattachmenticon($frow['filename'])."' alt='{$frow['filename']} ({$pretty_file_size})' border='0' />";
+        echo "<tr><th>File:</th><td>"; // FIXME i18n
+        echo "<img src='".getattachmenticon($obj->filename)."' alt='{$obj->filename} ({$pretty_file_size})' border='0' />";
         echo "<strong>{$frow['filename']}</strong> ({$pretty_file_size})</td></tr>";
-        if ($frow['path'] == '') $ftp_path=$CONFIG['ftp_path']; else $ftp_path=$CONFIG['ftp_path'].substr($frow['path'],1).'/';
+        if ($obj->path == '')
+        {
+            $ftp_path = $CONFIG['ftp_path'];
+        }
+        else
+        {
+            $ftp_path=$CONFIG['ftp_path'].substr($obj->path,1).'/';
+        }
 
-        echo "<tr><th>Location:</th><td><a href=\"ftp://{$CONFIG['ftp_hostname']}{$ftp_path}{$frow['filename']}\"><code>";
-        echo "ftp://{$CONFIG['ftp_hostname']}{$ftp_path}{$frow['filename']}</code></a></td></tr>\n";
+        echo "<tr><th>Location:</th><td><a href=\"ftp://{$CONFIG['ftp_hostname']}{$ftp_path}{$obj->filename}\"><code>";
+        echo "ftp://{$CONFIG['ftp_hostname']}{$ftp_path}{$obj->filename}</code></a></td></tr>\n";
         echo "<tr><th>Title:</th><td>";
-        echo "<input type='text' size='40' name='shortdescription' value='".$frow['shortdescription']."' />";
+        echo "<input type='text' size='40' name='shortdescription' value='{$obj->shortdescription}' />";
         echo "</td></tr>\n";
         echo "<tr><th>Web Category:</th><td>";
-        echo "<input type='text' size='40' name='webcategory' value='".$frow['webcategory']."' />";
+        echo "<input type='text' size='40' name='webcategory' value='{$obj->webcategory}' />";
         echo "</td></tr>\n";
         echo "<tr><th>{$strDescription}:</th><td>";
-        echo "<textarea rows='6' cols='40' name='longdescription'>{$frow['longdescription']}</textarea>";
+        echo "<textarea rows='6' cols='40' name='longdescription'>{$obj->longdescription}</textarea>";
         echo "</td></tr>\n";
         echo "<tr><th>File Version:</th><td>";
-        echo "<input type='text' size='40' name='fileversion' value='{$frow['fileversion']}' />";
+        echo "<input type='text' size='40' name='fileversion' value='{$obj->fileversion}' />";
         echo "</td></tr>\n";
-        echo "<tr><th>File Date:</th><td>".ldate('D jS M Y @ g:i A',$frow['filedate'])." <strong>by</strong> ".user_realname($frow['userid'],TRUE). "</td></tr>\n";
+        echo "<tr><th>File Date:</th><td>".ldate('D jS M Y @ g:i A',$obj->filedate)." <strong>by</strong> ".user_realname($obj->userid,TRUE). "</td></tr>\n";
 
-        if ($frow['expiry']>0) echo "<tr><th>Expiry:</th><td>".ldate('D jS M Y @ g:i A',$frow['expiry'])." </td></tr>\n";
+        if ($obj->expiry>0)
+        {
+            echo "<tr><th>{$strExpiryDate}</th><td>".ldate('D jS M Y @ g:i A',$obj->expiry)." </td></tr>\n";
+        }
 
         echo "</table>\n\n";
         echo "<input type='hidden' name='id' value='{$id}' />";
@@ -79,10 +90,10 @@ switch ($mode)
     break;
 
     case 'save':
-        $shortdescription=mysql_real_escape_string($_REQUEST['shortdescription']);
-        $longdescription=mysql_real_escape_string($_REQUEST['longdescription']);
-        $fileversion=mysql_real_escape_string($_REQUEST['fileversion']);
-        $webcategory=mysql_real_escape_string($_REQUEST['webcategory']);
+        $shortdescription = mysql_real_escape_string($_REQUEST['shortdescription']);
+        $longdescription = mysql_real_escape_string($_REQUEST['longdescription']);
+        $fileversion = mysql_real_escape_string($_REQUEST['fileversion']);
+        $webcategory = mysql_real_escape_string($_REQUEST['webcategory']);
         $sql = "UPDATE `{$dbFiles}` SET ";
         $sql .= "shortdescription='$shortdescription', longdescription='$longdescription', fileversion='$fileversion', ";
         $sql .= "webcategory='$webcategory', published='yes'";

@@ -34,6 +34,7 @@ $csssql = "SELECT cssurl, iconset FROM `{$dbInterfaceStyles}` WHERE id='{$stylei
 $cssresult = mysql_query($csssql);
 if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 else list($cssurl, $iconset) = mysql_fetch_row($cssresult);
+
 if (empty($iconset)) $iconset = 'sit';
 unset($styleid);
 echo "<script src='{$CONFIG['application_webpath']}scripts/prototype/prototype.js' type='text/javascript'></script>\n";
@@ -46,14 +47,12 @@ $lastseensql = "UPDATE LOW_PRIORITY `{$dbUsers}` SET lastseen=NOW() WHERE id='{$
 mysql_query($lastseensql);
 if (mysql_error()) trigger_error(mysql_error(), E_USER_WARNING);
 
-
 // FIXME put here some js to set action field then post form
-?>
-<script type="text/javascript" src="helptip.js"></script>
-</head>
-<body onload="self.focus()">
 
-<?php
+echo "<script type=\"text/javascript\" src=\"helptip.js\"></script>";
+echo "</head>";
+echo "<body onload=\"self.focus()\">";
+
 $incidentid = $id;
 // Retrieve incident
 // extract incident details
@@ -132,20 +131,25 @@ $target = incident_get_next_target($incidentid);
 $working_day_mins = ($CONFIG['end_working_day'] - $CONFIG['start_working_day']) / 60;
 switch ($target->type)
 {
-    case 'initialresponse': $slatarget=$servicelevel->initial_response_mins; break;
-    case 'probdef': $slatarget=$servicelevel->prob_determ_mins; break;
-    case 'actionplan': $slatarget=$servicelevel->action_plan_mins; break;
-    case 'solution': $slatarget=($servicelevel->resolution_days * $working_day_mins); break;
-    default: $slaremain=0; $slatarget=0;
+    case 'initialresponse': 
+        $slatarget = $servicelevel->initial_response_mins; break;
+    case 'probdef': 
+        $slatarget = $servicelevel->prob_determ_mins; break;
+    case 'actionplan': 
+        $slatarget = $servicelevel->action_plan_mins; break;
+    case 'solution': 
+        $slatarget = ($servicelevel->resolution_days * $working_day_mins); break;
+    default: 
+        $slaremain=0; $slatarget=0;
 }
 
-if ($slatarget >0)
+if ($slatarget > 0)
 {
     $slaremain = ($slatarget - $target->since);
 }
 else
 {
-    $slaremain=0;
+    $slaremain = 0;
 }
 
 $targettype = target_type_name($target->type);
@@ -207,28 +211,28 @@ if ($menu != 'hide')
     }
     elseif (incident_status($id) != 2)
     {
-        echo "<a class='barlink' href='update_incident.php?id={$id}&amp;popup={$popup}' accesskey='U'>{$strUpdate}</a> | ";
-        echo "<a class='barlink' href='javascript:close_window({$id});' accesskey='C'>{$strClose}</a> | ";
-        echo "<a class='barlink' href='reassign_incident.php?id={$id}&amp;popup={$popup}' accesskey='R'>{$strReassign}</a> | ";
-        echo "<a class='barlink' href='edit_incident.php?id={$id}&amp;popup={$popup}' accesskey='T'>{$strEdit}</a> | ";
-        echo "<a class='barlink' href='incident_service_levels.php?id={$id}&amp;popup={$popup}' accesskey='S'>{$strService}</a> | ";
-        echo "<a class='barlink' href='incident_relationships.php?id={$id}&amp;tab=relationships' accesskey='L'>{$strRelations}</a> | ";
+        echo "<a class='barlink' href='{$CONFIG['application_webpath']}update_incident.php?id={$id}&amp;popup={$popup}' accesskey='U'>{$strUpdate}</a> | ";
+        echo "<a class='barlink' href='{$CONFIG['application_webpath']}javascript:close_window({$id});' accesskey='C'>{$strClose}</a> | ";
+        echo "<a class='barlink' href='{$CONFIG['application_webpath']}reassign_incident.php?id={$id}&amp;popup={$popup}' accesskey='R'>{$strReassign}</a> | ";
+        echo "<a class='barlink' href='{$CONFIG['application_webpath']}edit_incident.php?id={$id}&amp;popup={$popup}' accesskey='T'>{$strEdit}</a> | ";
+        echo "<a class='barlink' href='{$CONFIG['application_webpath']}incident_service_levels.php?id={$id}&amp;popup={$popup}' accesskey='S'>{$strService}</a> | ";
+        echo "<a class='barlink' href='{$CONFIG['application_webpath']}incident_relationships.php?id={$id}&amp;tab=relationships' accesskey='L'>{$strRelations}</a> | ";
         echo "<a class='barlink' href='javascript:email_window({$id})' accesskey='E'>{$strEmail}</a> | ";
-        echo "<a class='barlink' href='incident_attachments.php?id={$id}&amp;popup={$popup}' accesskey='F'>{$strFiles}</a> | ";
-        if ($servicelevel->timed =='yes') echo "<a class='barlink' href='tasks.php?incident={$id}'>{$strActivities}</a> | ";
-        echo "<a class='barlink' href='incident_details.php?id={$id}&amp;popup={$popup}' accesskey='D'>{$strDetailsAndLog}</a> | ";
+        echo "<a class='barlink' href='{$CONFIG['application_webpath']}incident_attachments.php?id={$id}&amp;popup={$popup}' accesskey='F'>{$strFiles}</a> | ";
+        if ($servicelevel->timed == 'yes') echo "<a class='barlink' href='{$CONFIG['application_webpath']}tasks.php?incident={$id}'>{$strActivities}</a> | ";
+        echo "<a class='barlink' href='{$CONFIG['application_webpath']}incident_details.php?id={$id}&amp;popup={$popup}' accesskey='D'>{$strDetailsAndLog}</a> | ";
 
         echo "<a class='barlink' href='javascript:help_window({$permission});'>{$strHelpChar}</a>";
         if (!empty($_REQUEST['popup'])) echo " | <a class=barlink href='javascript:window.close();'>{$strCloseWindow}</a>";
     }
     else
     {
-        echo "<a class='barlink' href='reopen_incident.php?id={$id}&amp;popup={$popup}'>{$strReopen}</a> | ";
-        echo "<a class='barlink' href='incident_service_levels.php?id={$id}&amp;popup={$poup}' accesskey='S'>{$strService}</a> | ";
-        echo "<a class='barlink' href='incident_relationships.php?id={$id}&amp;tab=relationships'>{$strRelations}</a> | ";
-        echo "<a class='barlink' href='incident_attachments.php?id={$id}&amp;popup={$popup}' accesskey='F'>{$strFiles}</a> | ";
-        if ($servicelevel->timed =='yes') echo "<a class='barlink' href='tasks.php?incident={$id}'>{$strActivities}</a> | ";
-        echo "<a class='barlink' href='incident_details.php?id={$id}&amp;popup={$popup}' accesskey='D'>{$strDetailsAndLog}</a> | ";
+        echo "<a class='barlink' href='{$CONFIG['application_webpath']}reopen_incident.php?id={$id}&amp;popup={$popup}'>{$strReopen}</a> | ";
+        echo "<a class='barlink' href='{$CONFIG['application_webpath']}incident_service_levels.php?id={$id}&amp;popup={$poup}' accesskey='S'>{$strService}</a> | ";
+        echo "<a class='barlink' href='{$CONFIG['application_webpath']}incident_relationships.php?id={$id}&amp;tab=relationships'>{$strRelations}</a> | ";
+        echo "<a class='barlink' href='{$CONFIG['application_webpath']}incident_attachments.php?id={$id}&amp;popup={$popup}' accesskey='F'>{$strFiles}</a> | ";
+        if ($servicelevel->timed == 'yes') echo "<a class='barlink' href='{$CONFIG['application_webpath']}tasks.php?incident={$id}'>{$strActivities}</a> | ";
+        echo "<a class='barlink' href='{$CONFIG['application_webpath']}incident_details.php?id={$id}&amp;popup={$popup}' accesskey='D'>{$strDetailsAndLog}</a> | ";
         echo "<a class='barlink' href='javascript:help_window({$permission});'>{$strHelpChar}</a>";
         if (!empty($_REQUEST['popup'])) echo " | <a class='barlink' href='javascript:window.close();'>{$strCloseWindow}</a>";
     }

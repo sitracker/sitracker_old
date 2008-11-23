@@ -308,7 +308,6 @@ function permission_name($permissionid)
     * @param $softwareid integer
     * @returns string. Skill/Software Name
     * @note Software was renamed skills for v3.30
-    * @todo FIXME i18n
 */
 function software_name($softwareid)
 {
@@ -331,7 +330,7 @@ function software_name($softwareid)
     }
     else
     {
-        $name = $GLOBALS['StrUnknown'];
+        $name = $GLOBALS['strUnknown'];
     }
 
     return $name;
@@ -361,8 +360,8 @@ function user_id($username, $password)
     }
     else
     {
-        $user = mysql_fetch_array($result);
-        $userid=$user['id'];
+        $user = mysql_fetch_object($result);
+        $userid = $user->id;
     }
     return $userid;
 }
@@ -616,9 +615,9 @@ function user_incidents($id)
 
     if (mysql_num_rows($result) > 0)
     {
-        while ($count = mysql_fetch_array($result))
+        while ($obj = mysql_fetch_object($result))
         {
-            $arr[$count['priority']] = $count['num'];
+            $arr[$obj->priority] = $obj->num;
         }
     }
     return $arr;
@@ -675,11 +674,11 @@ function user_holiday($userid, $type= 0, $year, $month, $day, $length = FALSE)
             $approved = $holiday->approved;
             $approvedby = $holiday->approvedby;
             // hmm... not sure these next lines are required.
-            if ($length=='am' && $totallength == 0) $totallength = 'am';
-            if ($length=='pm' && $totallength == 0) $totallength = 'pm';
-            if ($length=='am' && $totallength == 'pm') $totallength = 'day';
-            if ($length=='pm' && $totallength == 'am') $totallength = 'day';
-            if ($length=='day') $totallength = 'day';
+            if ($length == 'am' && $totallength == 0) $totallength = 'am';
+            if ($length == 'pm' && $totallength == 0) $totallength = 'pm';
+            if ($length == 'am' && $totallength == 'pm') $totallength = 'day';
+            if ($length == 'pm' && $totallength == 'am') $totallength = 'day';
+            if ($length == 'day') $totallength = 'day';
         }
         return array($type, $totallength, $approved, $approvedby);
     }
@@ -765,8 +764,8 @@ function contact_realname($id)
     }
     else
     {
-        $contact = mysql_fetch_array($result);
-        $realname = $contact['forenames'].' '.$contact['surname'];
+        $contact = mysql_fetch_object($result);
+        $realname = "{$contact->forenames} {$contact->surname}";
         mysql_free_result($result);
         return $realname;
     }
@@ -1168,7 +1167,7 @@ function incident_productinfo_html($incidentid)
 {
     global $dbProductInfo, $dbIncidentProductInfo, $strNoProductInfo;
 
-    // extract appropriate product info
+    // TODO extract appropriate product info rather than *
     $sql  = "SELECT *, TRIM(incidentproductinfo.information) AS info FROM `{$dbProductInfo}` AS p, {$dbIncidentProductInfo}` ipi ";
     $sql .= "WHERE incidentid = $incidentid AND productinfoid = p.id AND TRIM(p.information) !='' ";
     $result = mysql_query($sql);
@@ -1181,12 +1180,12 @@ function incident_productinfo_html($incidentid)
     else
     {
         // generate HTML
-        while ($productinfo = mysql_fetch_array($result))
+        while ($productinfo = mysql_fetch_object($result))
         {
-            if (!empty($productinfo['info']))
+            if (!empty($productinfo->info))
             {
-                $html = "<tr><th>{$productinfo['moreinformation']}:</th><td>";
-                $html .= urlencode($productinfo['info']);
+                $html = "<tr><th>{$productinfo->moreinformation}:</th><td>";
+                $html .= urlencode($productinfo->info);
                 $html .= "</td></tr>\n";
             }
         }
@@ -1392,28 +1391,28 @@ function contact_drop_down($name, $id, $showsite = FALSE, $required = FALSE)
     }
 
     $prevsite=0;
-    while ($contacts = mysql_fetch_array($result))
+    while ($contacts = mysql_fetch_object($result))
     {
-        if ($showsite AND $prevsite != $contacts['siteid'] AND $prevsite != 0)
+        if ($showsite AND $prevsite != $contacts->siteid AND $prevsite != 0)
         {
             $html .= "</optgroup>\n";
         }
 
-        if ($showsite AND $prevsite != $contacts['siteid'])
+        if ($showsite AND $prevsite != $contacts->siteid)
         {
-            $html .= "<optgroup label='".htmlentities($contacts['sitename'], ENT_COMPAT, 'UTF-8').", ".htmlentities($contacts['department'], ENT_COMPAT, $GLOBALS['i18ncharset'])."'>";
+            $html .= "<optgroup label='".htmlentities($contacts->sitename, ENT_COMPAT, 'UTF-8').", ".htmlentities($contacts->department, ENT_COMPAT, $GLOBALS['i18ncharset'])."'>";
         }
 
-        $realname=$contacts['forenames'].' '.$contacts['surname'];
+        $realname = "{$contacts->forenames} {$contacts->surname}";
         $html .= "<option ";
-        if ($contacts['contactid'] == $id)
+        if ($contacts->contactid == $id)
         {
             $html .= "selected='selected' ";
         }
-        $html .= "value='{$contacts['contactid']}'>{$realname}";
+        $html .= "value='{$contacts->contactid}'>{$realname}";
         $html .= "</option>\n";
 
-        $prevsite = $contacts['siteid'];
+        $prevsite = $contacts->siteid;
     }
     if ($showsite)
     {
@@ -1522,14 +1521,14 @@ function product_drop_down($name, $id, $required = FALSE)
         $html .= "<option selected='selected' value='0'></option>\n";
     }
 
-    while ($products = mysql_fetch_array($result))
+    while ($products = mysql_fetch_object($result))
     {
-        $html .= "<option value='{$products['id']}'";
-        if ($products['id'] == $id)
+        $html .= "<option value='{$products->id}'";
+        if ($products->id == $id)
         {
             $html .= " selected='selected'";
         }
-        $html .= ">{$products['name']}</option>\n";
+        $html .= ">{$products->name}</option>\n";
     }
     $html .= "</select>\n";
     return $html;
@@ -1561,15 +1560,15 @@ function software_drop_down($name, $id)
         $html .= "<option selected='selected' value='0'></option>\n";
     }
 
-    while ($software = mysql_fetch_array($result))
+    while ($software = mysql_fetch_object($result))
     {
-        $html .= "<option value='{$software['id']}'";
-        if ($software['id'] == $id)
+        $html .= "<option value='{$software->id}'";
+        if ($software->id == $id)
         {
             $html .= " selected='selected'";
         }
 
-        $html .= ">{$software['name']}";
+        $html .= ">{$software->name}";
         $lifetime_start = mysql2date($software->lifetime_start);
         $lifetime_end = mysql2date($software->lifetime_end);
         if ($lifetime_end > 0 AND $lifetime_end < $now)
@@ -1615,14 +1614,14 @@ function softwareproduct_drop_down($name, $id, $productid, $visibility='internal
             $html .= "<option selected='selected' value=''>{$GLOBALS['strUnknown']}</option>\n";
         }
 
-        while ($software = mysql_fetch_array($result))
+        while ($software = mysql_fetch_object($result))
         {
             $html .= "<option";
-            if ($software['id'] == $id)
+            if ($software->id == $id)
             {
                 $html .= " selected='selected'";
             }
-            $html .= " value='{$software['id']}'>{$software['name']}</option>\n";
+            $html .= " value='{$software->id}'>{$software->name}</option>\n";
         }
         $html .= "</select>\n";
     }
@@ -1654,14 +1653,14 @@ function vendor_drop_down($name, $id)
         $html .= "<option selected='selected' value='0'></option>\n";
     }
 
-    while ($row = mysql_fetch_array($result))
+    while ($row = mysql_fetch_object($result))
     {
         $html .= "<option";
-        if ($row['id'] == $id)
+        if ($row->id == $id)
         {
             $html .= " selected='selected'";
         }
-        $html .= " value='{$row['id']}'>{$row['name']}</option>\n";
+        $html .= " value='{$row->id}'>{$row->name}</option>\n";
     }
     $html .= "</select>";
 
@@ -1689,15 +1688,15 @@ function sitetype_drop_down($name, $id)
         $html .= "<option selected='selected' value='0'></option>\n";
     }
 
-    while ($row = mysql_fetch_array($result))
+    while ($obj = mysql_fetch_object($result))
     {
         $html .= "<option ";
-        if ($row['typeid'] == $id)
+        if ($obj->typeid == $id)
         {
             $html .="selected='selected' ";
         }
 
-        $html .= "value='{$row['typeid']}'>{$row['typename']}</option>\n";
+        $html .= "value='{$obj->typeid}'>{$obj->typename}</option>\n";
     }
     $html .= "</select>";
     return $html;
@@ -1733,16 +1732,16 @@ function supported_product_drop_down($name, $contactid, $productid)
         $html .= "<option selected='selected' value='0'></option>\n";
     }
 
-    while ($products = mysql_fetch_array($result))
+    while ($products = mysql_fetch_objecy($result))
     {
-        $remainingstring = sprintf($strXIncidentsLeft, incidents_remaining($products["incidentpoolid"]));
+        $remainingstring = sprintf($strXIncidentsLeft, incidents_remaining($products->incidentpoolid));
         $html .= "<option ";
-        if ($productid == $products['productid'])
+        if ($productid == $products->productid)
         {
             $html .= "selected='selected' ";
         }
-        $html .= "value='{$products['productid']}'>";
-        $html .= servicelevel_name($products['servicelevelid'])." ".$products['productname'].", Exp:".date($CONFIG['dateformat_shortdate'], $products["expirydate"]).", $remainingstring";
+        $html .= "value='{$products->productid}'>";
+        $html .= servicelevel_name($products->servicelevelid)." ".$products->productname.", Exp:".date($CONFIG['dateformat_shortdate'], $products->expirydate).", $remainingstring";
         $html .= "</option>\n";
     }
     $html .= "</select>\n";
@@ -1782,33 +1781,33 @@ function user_drop_down($name, $id, $accepting = TRUE, $exclude = FALSE, $attrib
         $html .= "<option selected='selected' value='0'></option>\n";
     }
 
-    while ($users = mysql_fetch_array($result))
+    while ($users = mysql_fetch_object($result))
     {
         $show = TRUE;
         if ($exclude != FALSE)
         {
             if (is_array($exclude))
             {
-                if (!in_array($users['id'], $exclude)) $show = TRUE;
+                if (!in_array($users->id, $exclude)) $show = TRUE;
                 else $show = FALSE;
             }
             else
             {
-                if ($exclude!=$users['id']) $show = TRUE;
+                if ($exclude!=$users->id) $show = TRUE;
                 else $show = FALSE;
             }
         }
         if ($show == TRUE)
         {
             $html .= "<option ";
-            if ($users["id"] == $id) $html .= "selected='selected' ";
+            if ($users->id == $id) $html .= "selected='selected' ";
             if ($users['accepting'] == 'No' AND $accepting == TRUE)
             {
                 $html .= " class='expired' ";
             }
 
-            $html .= "value='{$users['id']}'>";
-            $html .= "{$users['realname']}";
+            $html .= "value='{$users->id}'>";
+            $html .= "{$users->realname}";
             if ($users['accepting'] == 'No' AND $accepting == TRUE)
             {
                 $html .= ", {$GLOBALS['strNotAccepting']}";
@@ -1853,7 +1852,7 @@ function role_drop_down($name, $id)
     while ($role = mysql_fetch_object($result))
     {
         $html .= "<option value='{$role->id}'";
-        if ($role->id==$id)
+        if ($role->id == $id)
         {
             $html .= " selected='selected'";
         }
@@ -1957,15 +1956,15 @@ function interfacestyle_drop_down($name, $id)
         $html .= "<option selected='selected' value='0'></option>\n";
     }
 
-    while ($styles = mysql_fetch_array($result))
+    while ($styles = mysql_fetch_object($result))
     {
         $html .= "<option ";
-        if ($styles["id"] == $id)
+        if ($styles->id == $id)
         {
             $html .= "selected='selected'";
         }
 
-        $html .= " value=\"{$styles["id"]}\">{$styles["name"]}</option>\n";
+        $html .= " value=\"{$styles->id}\">{$styles->name}</option>\n";
     }
     $html .= "</select>\n";
     return $html;
@@ -2035,16 +2034,16 @@ function incidentstatus_drop_down($name, $id, $disabled = FALSE)
     }
     $html .= ">";
     // if ($id == 0) $html .= "<option selected='selected' value='0'></option>\n";
-    while ($statuses = mysql_fetch_array($result))
+    while ($statuses = mysql_fetch_object($result))
     {
         $html .= "<option ";
-        if ($statuses['id'] == $id)
+        if ($statuses->id == $id)
         {
             $html .= "selected='selected' ";
         }
 
-        $html .= "value='{$statuses['id']}'";
-        $html .= ">{$GLOBALS[$statuses['name']]}</option>\n";
+        $html .= "value='{$statuses->id}'";
+        $html .= ">{$GLOBALS[$statuses->name]}</option>\n";
     }
     $html .= "</select>\n";
     return $html;
@@ -2077,17 +2076,17 @@ function closingstatus_drop_down($name, $id, $required = FALSE)
         $html .= "<option selected='selected' value='0'></option>\n";
     }
 
-    while ($statuses = mysql_fetch_array($result))
+    while ($statuses = mysql_fetch_object($result))
     {
         $html .= "<option ";
-        if ($statuses["id"] == $id)
+        if ($statuses->id == $id)
         {
             $html .= "selected='selected' ";
         }
-        $html .= "value='{$statuses["id"]}'>";
-        if (isset($GLOBALS[$statuses['name']]))
+        $html .= "value='{$statuses->id}'>";
+        if (isset($GLOBALS[$statuses->name]))
         {
-            $html .= $GLOBALS[$statuses['name']];
+            $html .= $GLOBALS[$statuses->name];
         }
         else
         {
@@ -2123,17 +2122,17 @@ function userstatus_drop_down($name, $id, $userdisable = FALSE)
         $html .= "<option class='disable' selected='selected' value='0'>ACCOUNT DISABLED</option>\n";
     }
 
-    while ($statuses = mysql_fetch_array($result))
+    while ($statuses = mysql_fetch_object($result))
     {
         if ($statuses["id"] > 0)
         {
             $html .= "<option ";
-            if ($statuses["id"] == $id)
+            if ($statuses->id == $id)
             {
                 $html .= "selected='selected' ";
             }
-            $html .= "value='{$statuses["id"]}'>";
-            $html .= "{$GLOBALS[$statuses["name"]]}</option>\n";
+            $html .= "value='{$statuses->id}'>";
+            $html .= "{$GLOBALS[$statuses->name]}</option>\n";
         }
     }
     $html .= "</select>\n";
@@ -2162,19 +2161,19 @@ function userstatus_bardrop_down($name, $id)
     $html .= "(this.options[this.selectedIndex].value != 'null') { ";
     $html .= "window.open(this.options[this.selectedIndex].value,'_top') }\">";
     $html .= "\n";
-    while ($statuses = mysql_fetch_array($result))
+    while ($statuses = mysql_fetch_object($result))
     {
-        if ($statuses["id"] > 0)
+        if ($statuses->id > 0)
         {
             $html .= "<option ";
-            if ($statuses["id"] == $id)
+            if ($statuses->id == $id)
             {
                 $html .= "selected='selected' ";
             }
 
             $html .= "value='set_user_status.php?mode=setstatus&amp;";
-            $html .= "userstatus={$statuses['id']}'>";
-            $html .= "{$GLOBALS[$statuses['name']]}</option>\n";
+            $html .= "userstatus={$statuses->id}'>";
+            $html .= "{$GLOBALS[$statuses->name]}</option>\n";
         }
     }
     $html .= "<option value='set_user_status.php?mode=setaccepting";
@@ -2211,19 +2210,19 @@ function emailtemplate_drop_down($name, $id, $type)
         $html .= "<option selected='selected' value='0'></option>\n";
     }
 
-    while ($template = mysql_fetch_array($result))
+    while ($template = mysql_fetch_object($result))
     {
         $html .= "<option ";
-        if (!empty($template['description']))
+        if (!empty($template->description))
         {
-            $html .= "title='{$template['description']}' ";
+            $html .= "title='{$template->description}' ";
         }
 
-        if ($template["id"] == $id)
+        if ($template->id == $id)
         {
             $html .= "selected='selected' ";
         }
-        $html .= "value='{$template['id']}'>{$template['name']}</option>";
+        $html .= "value='{$template->id}'>{$template->name}</option>";
         $html .= "\n";
     }
     $html .= "</select>\n";
@@ -2335,14 +2334,14 @@ function escalation_path_drop_down($name, $id)
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     $html = "<select name='{$name}' id='{$name}' >";
     $html .= "<option selected='selected' value='0'>{$GLOBALS['strNone']}</option>\n";
-    while ($path = mysql_fetch_array($result))
+    while ($path = mysql_fetch_object($result))
     {
-        $html .= "<option value='{$path['id']}'";
-        if ($path['id']==$id)
+        $html .= "<option value='{$path->id}'";
+        if ($path->id ==$id)
         {
             $html .= " selected='selected'";
         }
-        $html .= ">{$path['name']}</option>\n";
+        $html .= ">{$path->name}</option>\n";
     }
     $html .= "</select>\n";
 
@@ -3454,16 +3453,16 @@ function maintenance_drop_down($name, $id, $excludes = '', $return = FALSE, $sho
         $html .= "<option selected='selected' value='0'></option>\n";
     }
 
-    while ($maintenance = mysql_fetch_array($result))
+    while ($maintenance = mysql_fetch_object($result))
     {
-        if (!is_array($excludes) OR (is_array($excludes) AND !in_array($maintenance['id'], $excludes)))
+        if (!is_array($excludes) OR (is_array($excludes) AND !in_array($maintenance->id, $excludes)))
         {
             $html .= "<option ";
-            if ($maintenance["id"] == $id)
+            if ($maintenance->id == $id)
             {
                 $html .= "selected='selected' ";
             }
-            $html .= "value='{$maintenance['id']}'>{$maintenance['sitename']} | {$maintenance['productname']}</option>";
+            $html .= "value='{$maintenance->id}'>{$maintenance->sitename} | {$maintenance->productname}</option>";
             $html .= "\n";
             $results++;
         }
@@ -3508,15 +3507,15 @@ function reseller_drop_down($name, $id)
         echo "<option value='0'></option>\n";
     }
 
-    while ($resellers = mysql_fetch_array($result))
+    while ($resellers = mysql_fetch_object($result))
     {
         echo "<option ";
-        if ($resellers["id"] == $id)
+        if ($resellers->id == $id)
         {
             echo "selected='selected' ";
         }
 
-        echo "value='{$resellers['id']}'>{$resellers['name']}</option>";
+        echo "value='{$resellers->id}'>{$resellers->name}</option>";
         echo "\n";
     }
 
@@ -3541,15 +3540,15 @@ function licence_type_drop_down($name, $id)
         echo "<option selected='selected' value='0'></option>\n";
     }
 
-    while ($licencetypes = mysql_fetch_array($result))
+    while ($licencetypes = mysql_fetch_object($result))
     {
         echo "<option ";
-        if ($licencetypes["id"] == $id)
+        if ($licencetypes->id == $id)
         {
             echo "selected='selected' ";
         }
 
-        echo "value='{$licencetypes['id']}'>{$licencetypes['name']}</option>";
+        echo "value='{$licencetypes->id}'>{$licencetypes->name}</option>";
         echo "\n";
     }
 
@@ -8517,14 +8516,14 @@ function contract_details($id, $mode='internal')
         if (mysql_num_rows($result)>0)
         {
             $html .="<table align='center'>";
-            while ($software=mysql_fetch_array($result))
+            while ($software = mysql_fetch_object($result))
             {
                 $html .= "<tr><td> ".icon('skill', 16)." ";
                 if ($software->lifetime_end > 0 AND $software->lifetime_end < $now)
                 {
                     $html .= "<span class='deleted'>";
                 }
-                $html .= $software['name'];
+                $html .= $software->name;
                 if ($software->lifetime_end > 0 AND $software->lifetime_end < $now)
                 {
                     $html .= "</span>";

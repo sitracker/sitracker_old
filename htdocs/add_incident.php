@@ -113,12 +113,10 @@ if (empty($action) OR $action=='showform')
     echo "<h2>".icon('add', 32)." {$strAddIncident} - {$strFindContact}</h2>";
     if (empty($siteid))
     {
-        ?>
-        <form action="<?php echo $_SERVER['PHP_SELF'] ?>?action=findcontact" method="post">
-        <input type="hidden" name="context" value="<?php echo $context ?>" />
-        <input type="hidden" name="updateid" value="<?php echo $updateid ?>" />
-        <table class='vertical'>
-        <?php
+        echo "<form action='{$_SERVER['PHP_SELF']}?action=findcontact' method='post'>";
+        echo "<input type='hidden' name='context' value='{$context}' />";
+        echo "<input type='hidden' name='updateid' value='{$updateid}' />";
+        echo "<table class='vertical'>";
         echo "<tr><th><label for='search_string'>{$strContact} ";
         echo icon('contact', 16);
         echo "</label></th><td>";
@@ -134,7 +132,8 @@ if (empty($action) OR $action=='showform')
     }
     else
     {
-        echo "<p align='center'>{$strContact} $contactid</p>";
+        echo "<p align='center'>{$strContact} {$contactid}</p>";
+        
     }
     include ('htmlfooter.inc.php');
 }

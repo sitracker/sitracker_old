@@ -397,26 +397,26 @@ else
             }
 
             //notify related inicdents this has been closed
-            $sql = "SELECT distinct (relatedid) FROM `{$dbRelatedIncidents}` AS r, `{$dbIncidents}` AS i WHERE incidentid = '$id' ";
+            $sql = "SELECT distinct (relatedid) AS relateid FROM `{$dbRelatedIncidents}` AS r, `{$dbIncidents}` AS i WHERE incidentid = '$id' ";
             $sql .= "AND i.id = r.relatedid AND i.status != 2";
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
 
             $relatedincidents;
 
-            while ($a = mysql_fetch_array($result))
+            while ($a = mysql_fetch_object($result))
             {
-                $relatedincidents[] = $a[0];
+                $relatedincidents[] = $a->relateid;
             }
 
-            $sql = "SELECT distinct (incidentid) FROM `{$dbRelatedIncidents}` AS r, `{$dbIncidents}` AS i WHERE relatedid = '$id' ";
+            $sql = "SELECT distinct (incidentid) AS relateid FROM `{$dbRelatedIncidents}` AS r, `{$dbIncidents}` AS i WHERE relatedid = '$id' ";
             $sql .= "AND i.id = r.incidentid AND i.status != 2";
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
 
-            while ($a = mysql_fetch_array($result))
+            while ($a = mysql_fetch_object($result))
             {
-                $relatedincidents[] = $a[0];
+                $relatedincidents[] = $a->relateid;
             }
             if (is_array($relatedincidents))
             {

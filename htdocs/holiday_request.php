@@ -108,7 +108,7 @@ function display_holiday_table($result)
     echo "</table>\n";
 }
 
-if (empty($user)) $user=$sit[2];
+if (empty($user)) $user = $sit[2];
 if (!$sent)
 {
     // check to see if this user has approve permission
@@ -126,12 +126,12 @@ if (!$sent)
     }
     echo " - {$strHolidayRequests}</h2>";
 
-    if ($approver==TRUE AND $mode!='approval' AND $user==$sit[2])
+    if ($approver == TRUE AND $mode != 'approval' AND $user == $sit[2])
     {
         echo "<p align='center'><a href='holiday_request.php?user=all&amp;mode=approval'>{$strApproveHolidays}</a></p>";
     }
 
-    if ($approver==TRUE AND $mode=='approval' AND $user!='all')
+    if ($approver == TRUE AND $mode == 'approval' AND $user != 'all')
     {
         echo "<p align='center'><a href='holiday_request.php?user=all&amp;mode=approval'>{$strShowAll}</a></p>";
     }
@@ -145,7 +145,6 @@ if (!$sent)
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
     if (mysql_num_rows($result) > 0)
     {
-
         display_holiday_table($result);
 
         if ($mode == 'approval')
@@ -242,7 +241,7 @@ else
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
         if (mysql_num_rows($result)>0)
         {
-            while ($holiday=mysql_fetch_object($result))
+            while ($holiday = mysql_fetch_object($result))
             {
                 $holidaylist .= ldate('l j F Y', $holiday->startdate).", ";
                 if ($holiday->length == 'am') $holidaylist .= $strMorning;

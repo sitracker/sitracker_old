@@ -281,4 +281,6 @@ $CONFIG['inventory_types']['vnc'] = 'VNC';
 $CONFIG['inventory_types']['webex'] = 'Webex';
 $CONFIG['inventory_types']['workstation'] = 'Workstation/PC';
 
+// Whether it should be possible to adjust a duration of individual activities 
+$CONFIG['allow_duration_adjustment'] = FALSE;
 ?>

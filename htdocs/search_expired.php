@@ -28,12 +28,12 @@ $output = cleanvar($_REQUEST['output']);
 if (empty($expired))
 {
     include ('htmlheader.inc.php');
-    ?>
-    <h2>Search Expired Contracts</h2>
-    <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="get">
-    <p>Show Contracts Expired Within <input maxlength='4' name="expired" size='3' type="text" /> Days</p>
-    <p><input checked='checked' name="show" type='radio' value="terminated"> Terminated <input name="show" type='radio' value="nonterminated" /> Non-terminated</p>
-    <?php
+    
+    echo "<h2>Search Expired Contracts</h2>";
+    echo "<form action='{$_SERVER['PHP_SELF']}' method='get' >";
+    echo "<p>Show Contracts Expired Within <input maxlength='4' name='expired' size='3' type='text'' /> Days</p>";
+    echo "<p><input checked='checked' name='show' type='radio' value='terminated> Terminated <input name='show' type='radio' value='nonterminated'' /> Non-terminated</p>";
+    
     echo "<p align='center'>{$strOutput}: ";
     echo "<select name='output'>";
     echo "<option value='screen'>{$strScreen}</option>";
@@ -113,9 +113,9 @@ else
                 </script>
                 <?php
                 echo "<h2>$pagetitle</h2>";
-                ?>
-                <h3>Search yielded <?php echo mysql_num_rows($result) ?> result(s)</h3>
-                <?php
+
+                echo "<h3>Search yielded ".mysql_num_rows($result)." result(s)</h3>";
+
                 echo "<table align='center'>
                 <tr>
                 <th>{$strContract}</th>
@@ -130,31 +130,36 @@ else
                 <th>{$strNotes}</th>
                 </tr>\n";
                 // FIXME check data protection fields for email and telephone
-                $shade = 0;
-                while ($results = mysql_fetch_array($result))
+                $shade = 'shade1';
+                while ($results = mysql_fetch_object($result))
                 {
-                    // define class for table row shading
-                    if ($shade) $class = "shade1";
-                    else $class = "shade2";
-                    ?>
-                    <tr>
-                    <td align='center' class='<?php echo $class ?>' width='50'><a href="contract_details.php?id=<?php echo $results["maintid"] ?>"><?php echo $results["maintid"] ?></a></td>
-                    <td align='center' class='<?php echo $class ?>' width='100'><?php echo $results["site"] ?></td>
-                    <td align='center' class='<?php echo $class ?>' width='100'><?php echo $results["product"] ?></td>
-                    <td align='center' class='<?php echo $class ?>' width='100'><?php echo $results["reseller"] ?></td>
-                    <td align='center' class='<?php echo $class ?>' width='75'><?php echo $results["licence_quantity"] ?> <?php echo $results["licence_type"] ?></td>
-                    <td align='center' class='<?php echo $class ?>' width='100'><?php echo ldate($CONFIG['dateformat_date'], $results["expirydate"]); ?></td>
-                    <td align='center' class='<?php echo $class ?>' width='100'><a href="javascript: contact_details_window(<?php echo $results['admincontact']?>)"><?php echo $results['admincontactforenames'].' '.$results['admincontactsurname'] ?></a></td>
-                    <?php
-                    echo "<td class='{$class}'>{$results['admincontactphone']}</td>";
-                    echo "<td class='{$class}'>{$results['admincontactemail']}</td>";
-                    ?>
-                    <td align='center' class='<?php echo $class; ?>' width='150'><?php if ($results["notes"] == '') echo "&nbsp;"; else echo nl2br($results["notes"]); ?></td>
-                    </tr>
-                    <?php
+                    echo "<tr>";
+                    echo "<td align='center' class='{$shade}' width='50'><a href='contract_details.php?id={$results->maintid}'>{$results->maintid}</a></td>";
+                    echo "<td align='center' class='{$shade}' width='100'>{$results->site}</td>";
+                    echo "<td align='center' class='{$shade}' width='100'>{$results->product}</td>";
+                    echo "<td align='center' class='{$shade}' width='100'>{$results->reseller}</td>";
+
+                    echo "<td align='center' class='{$shade}' width='75'>{$results->licence_quantity} {$results->licence_type}</td>";
+                    echo "<td align='center' class='{$shade}' width='100'>".ldate($CONFIG['dateformat_date'], $results->expirydate)."</td>";
+                    echo "<td align='center' class='{$shade}' width='100'><a href=\"javascript: contact_details_window({$results->admincontact})\">{$results->admincontactforenames} {$results->admincontactsurname}</a></td>";
+
+                    echo "<td class='{$shade}'>{$results->admincontactphone}</td>";
+                    echo "<td class='{$shade}'>{$results->admincontactemail}</td>";
+                    
+                    echo "<td align='center' class='{$shade}' width='150'>";
+                    if ($results->notes == '')
+                    {
+                        echo "&nbsp;";
+                    }
+                    else
+                    {
+                        echo nl2br($results->notes);
+                    }
+                    
+                    echo "</td></tr>";
                     // invert shade
-                    if ($shade == 1) $shade = 0;
-                    else $shade = 1;
+                    if ($shade == 'shade1;') $shade = 'shade2';
+                    else $shade = 'shade1';
                 }
                 echo "</table>\n";
                 echo "<p align='center'><a href='search.php?query={$search_string}&amp;context=maintenance'>{$strSearchAgain}</a></p>\n";
@@ -165,15 +170,15 @@ else
                 $csvfieldheaders="{$strContract},{$strSite},{$strProduct},{$strReseller},{$strLicense},{$strExpiryDate},{$strAdminContact},{$strTelephone},{$strEmail},{$strNotes}\n";
                 while ($row = mysql_fetch_object($result))
                 {
-                    $csv.= "{$row->maintid},{$row->site},{$row->product},{$row->reseller},{$row->license_quantity} {$row->licence_type},";
-                    $csv.= date($CONFIG['dateformat_date'], $row->expirydate);
-                    $csv.= ",{$row->admincontactforenames} {$row->admincontactsurname},{$row->admincontactphone},{$row->admincontactemail},";
-                    $notes=nl2br($row->notes);
-                    $notes=str_replace(","," ",$notes);
-                    $notes=str_replace("\n"," ",$notes);
-                    $notes=str_replace("\r"," ",$notes);
-                    $notes=str_replace("<br />"," ",$notes);
-                    $csv.= "{$notes}\n";
+                    $csv .= "{$row->maintid},{$row->site},{$row->product},{$row->reseller},{$row->license_quantity} {$row->licence_type},";
+                    $csv .= date($CONFIG['dateformat_date'], $row->expirydate);
+                    $csv .= ",{$row->admincontactforenames} {$row->admincontactsurname},{$row->admincontactphone},{$row->admincontactemail},";
+                    $notes = nl2br($row->notes);
+                    $notes = str_replace(","," ",$notes);
+                    $notes = str_replace("\n"," ",$notes);
+                    $notes = str_replace("\r"," ",$notes);
+                    $notes = str_replace("<br />"," ",$notes);
+                    $csv .= "{$notes}\n";
                 }
                 // --- CSV File HTTP Header
                 header("Content-type: text/csv\r\n");

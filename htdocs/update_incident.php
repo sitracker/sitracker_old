@@ -15,8 +15,6 @@ require ('functions.inc.php');
 
 $disable_priority = TRUE;
 
-// 19 Nov 04 - Fixed bug where currentstatus wasn't updated or inserted - ilucas
-
 // This page requires authentication
 require ('auth.inc.php');
 
@@ -24,7 +22,7 @@ require ('auth.inc.php');
 // $bodytext = cleanvar($_REQUEST['bodytext'],FALSE,FALSE);
 $bodytext = cleanvar($_REQUEST['bodytext'], FALSE, TRUE);
 $id = cleanvar($_REQUEST['id']);
-$incidentid=$id;
+$incidentid = $id;
 $action = cleanvar($_REQUEST['action']);
 
 include ('incident/update.inc.php');

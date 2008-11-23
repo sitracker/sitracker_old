@@ -29,7 +29,7 @@ if ($username != '')
     $errmsg .= "\n";
     if (!empty($CONFIG['access_logfile']))
     {
-        $errlog=error_log($errmsg, 3, "{$CONFIG['access_logfile']}");
+        $errlog = error_log($errmsg, 3, "{$CONFIG['access_logfile']}");
         if (!$errlog) echo "Fatal error logging this problem<br />";
     }
     unset($errdate);
@@ -50,7 +50,7 @@ echo "<p align='center' class='error'>Sorry, you do not have permission to the f
 echo "<ul>";
 foreach ($refused AS $id)
 {
-    echo "<li>$id: ".permission_name($id)."</li>\n";
+    echo "<li>{$id}: ".permission_name($id)."</li>\n";
     journal(CFG_LOGGING_MIN, 'Access Failure', "Access to ".permission_name($id)." ($id) was denied", CFG_JOURNAL_OTHER, $id);
 }
 echo "</ul>";

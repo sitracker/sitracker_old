@@ -70,16 +70,16 @@ if (!$_REQUEST['action'])
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
     if (mysql_num_rows($result)  > 0)
     {
-        while ($productinforow = mysql_fetch_array($result))
+        while ($productinforow = mysql_fetch_object($result))
         {
-            echo "<tr><th>{$productinforow['information']}";
+            echo "<tr><th>{$productinforow->information}";
             echo "</th>";
             echo "<td>";
-            if ($productinforow['moreinformation'] != '')
+            if ($productinforow->moreinformation != '')
             {
-                echo $productinforow['moreinformation']."<br />\n";
+                echo $productinforow->moreinformation."<br />\n";
             }
-            $pinfo = "pinfo{$productinforow['id']}";
+            $pinfo = "pinfo{$productinforow->id}";
             echo "<input maxlength='100' name='{$pinfo}' ";
             echo "class='required' size='40' type='text' ";
             echo "value='{$_SESSION['formdata']['portaladdincident'][$pinfo]}' />";

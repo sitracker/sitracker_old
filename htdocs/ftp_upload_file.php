@@ -8,9 +8,9 @@
 // of the GNU General Public License, incorporated herein by reference.
 //
 // FIXME needs i18n
-// TODO HTML to PHP
 
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
+
 @include ('set_include_path.inc.php');
 $permission = 44; // ftp publishing
 require ('db_connect.inc.php');
@@ -31,24 +31,24 @@ if (empty($action))
     include ('htmlheader.inc.php');
  
     echo "<h2>Upload Public File</h2>";
-    ?>
-    <p align='center'>IMPORTANT: Files published here are <strong>public</strong> and available to all ftp users.</p>
-    <form name="publishform" action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post" enctype="multipart/form-data">
-    <table class='vertical'>
-    <tr><th>File <small>(&lt;<?php echo readable_file_size($max_filesize); ?>)</small>:</th>
-    <td class='shade2'><input type="hidden" name="MAX_FILE_SIZE" value="<?php echo $max_filesize; ?>" />
-    <input type="file" name="file" size="40" /></td></tr>
+    
+    echo "<p align='center'>IMPORTANT: Files published here are <strong>public</strong> and available to all ftp users.</p>";
+    echo "<form name='publishform' action='{$_SERVER['PHP_SELF']}' method='post' enctype='multipart/form-data'>";
+    echo "<table class='vertical'>";
+    echo "<tr><th>File <small>(&lt;".readable_file_size($max_filesize).")</small>:</th>";
+    echo "<td class='shade2'><input type='hidden' name='MAX_FILE_SIZE' value='{$max_filesize}' />";
+    echo "<input type='file' name='file' size='40'' /></td></tr>";
 
-    <tr><th>Title:</th><td><input type="text" name="shortdescription" maxlength="255" size="40" /></td></tr>
-    <tr><th>Description:</th><td><textarea name="longdescription" cols="40" rows="3"></textarea></td></tr>
-    <tr><th>File Version:</th><td><input type="text" name="fileversion" maxlength="50" size="10" /></td></tr>
-    <tr><th>Expire:</th><td>
-    <input type="radio" name="expiry_none" value="time" /> In <em>x</em> days, hours, minutes<br />&nbsp;&nbsp;&nbsp;
-    <input maxlength="3" name="expiry_days" value="<?php echo $na_days ?>" onclick="window.document.publishform.expiry_none[0].checked = true;" size="3" /> Days&nbsp;
-    <input maxlength="2" name="expiry_hours" value="<?php echo $na_hours ?>" onclick="window.document.publishform.expiry_none[0].checked = true;" size="3" /> Hours&nbsp;
-    <input maxlength="2" name="expiry_minutes" value="<?php echo $na_minutes ?>" onclick="window.document.publishform.expiry_none[0].checked = true;" size="3" /> Minutes<br />
-    <input type="radio" name="expiry_none" value="date" />On specified Date<br />&nbsp;&nbsp;&nbsp;
-    <?php
+    echo "<tr><th>Title:</th><td><input type='text' name='shortdescription' maxlength='255' size='40' /></td></tr>";
+    echo "<tr><th>Description:</th><td><textarea name='longdescription' cols='40' rows='3'></textarea></td></tr>";
+    echo "<tr><th>File Version:</th><td><input type='text' name='fileversion' maxlength='50' size='10' /></td></tr>";
+    echo "<tr><th>Expire:</th><td>";
+    echo "<input type='radio' name='expiry_none' value='time'' /> In <em>x</em> days, hours, minutes<br />&nbsp;&nbsp;&nbsp;";
+    echo "<input maxlength='3' name='expiry_days' value='{$na_days}' onclick=\"window.document.publishform.expiry_none[0].checked = true;\" size='3'' /> Days&nbsp;";
+    echo "<input maxlength='2' name='expiry_hours' value='{$na_hours}' onclick=\"window.document.publishform.expiry_none[0].checked = true;\" size='3'' /> Hours&nbsp;";
+    echo "<input maxlength='2' name='expiry_minutes' value='{$na_minutes}' onclick=\"window.document.publishform.expiry_none[0].checked = true;\" size='3'' /> Minutes<br />";
+    echo "<input type='radio' name='expiry_none' value='date'' />On specified Date<br />&nbsp;&nbsp;&nbsp;";
+
     // Print Listboxes for a date selection
     echo "<select name='day' onclick=\"window.document.publishform.expiry_none[1].checked = true;\">";
     

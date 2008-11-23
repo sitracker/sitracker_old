@@ -77,8 +77,8 @@ switch ($action)
             {
                 echo "<tr class='{$shade}'><td><a href=\"{$_SERVER['PHP_SELF']}?action=edit&amp;vendorid={$row->id}&amp;vendorname=".urlencode($row->name)."\">{$row->name}</a></td></tr>\n";
 
-                if ($shade=='shade1') $shade='shade2';
-                else $shade='shade1';
+                if ($shade == 'shade1') $shade = 'shade2';
+                else $shade = 'shade1';
             }
             echo "</table>";
         }

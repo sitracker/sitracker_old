@@ -471,10 +471,14 @@ function autocomplete(elem, id)
         suggestDiv = $(id);
     }
 
-    if (elem.value == '')  { suggestDiv.innerHTML = 'empty'; }
-    else { suggestDiv.innerHTML = 'Code Not finished yet'; }
-
-
+    if (elem.value == '') 
+    {
+    	suggestDiv.innerHTML = 'empty';
+    }
+    else
+    {
+    	suggestDiv.innerHTML = 'Code Not finished yet';
+    }
 
     var x = elem.offsetLeft;
     var y = elem.offsetTop + elem.offsetHeight;

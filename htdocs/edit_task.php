@@ -67,7 +67,7 @@ switch ($action)
             $enddate = '';
         }
 
-        if ($completion==100 AND $enddate == '') $enddate = $now;
+        if ($completion == 100 AND $enddate == '') $enddate = $now;
         $value = cleanvar($_REQUEST['value']);
         $distribution = cleanvar($_REQUEST['distribution']);
         $old_name = cleanvar($_REQUEST['old_name']);
@@ -79,7 +79,7 @@ switch ($action)
         $old_enddate = cleanvar($_REQUEST['old_enddate']);
         $old_value = cleanvar($_REQUEST['old_value']);
         $old_distribution = cleanvar($_REQUEST['old_distribution']);
-        if ($distribution=='public') $tags = cleanvar($_POST['tags']);
+        if ($distribution == 'public') $tags = cleanvar($_POST['tags']);
         else $tags='';
 
         // Validate input

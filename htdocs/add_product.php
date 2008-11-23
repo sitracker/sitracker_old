@@ -100,7 +100,7 @@ else
         if (!$result) echo "<p class='error'>Addition of Product Failed\n";
         else
         {
-            $id=mysql_insert_id();
+            $id = mysql_insert_id();
             journal(CFG_LOGGING_NORMAL, 'Product Added', "Product $id was added", CFG_JOURNAL_PRODUCTS, $id);
 
             html_redirect("products.php");

@@ -67,8 +67,8 @@ if ($submit_value == "go")
     if (mysql_num_rows($result) == 1)
     {
             //go straight to the site
-            $row = mysql_fetch_array($result);
-            $url = "site_details.php?id=".$row["id"];
+            $obj = mysql_fetch_object($result);
+            $url = "site_details.php?id=".$obj->id;
             header("Location: $url");
     }
 }
@@ -84,38 +84,33 @@ if ($search_string=='') $search_string='a';
 <?php*/
 echo "<h2>".icon('site', 32)." ";
 echo "{$strBrowseSites}</h2>";
-?>
-<table summary="alphamenu" align="center">
-<tr>
-<td align="center">
-    <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="get">
-    <!-- <p>Browse sites: <input type="text" name="search_string" /><input type="submit" value="go" /></p>-->
-    <?php
-    echo "<p>{$strBrowseSites}: ";
-    // dojoType='ComboBox' dataUrl='ajaxdata.php?action=sites'
-    echo "<input style='width: 300px;' name='search_string' onkeyup=\"autocomplete(this, 'comboresults');\" />";
-    echo "<input name='submit' type='submit' value='{$strGo}' /></p>";
-    echo "</form>\n";
-    if ($displayinactive=="true")
-    {
-        echo "<a href='".$_SERVER['PHP_SELF']."?displayinactive=false";
-        if (!empty($search_string)) echo "&amp;search_string={$search_string}&amp;owner={$owner}";
-        echo "'>{$strShowActiveOnly}</a>";
-        $inactivestring="displayinactive=true";
-    }
-    else
-    {
-        echo "<a href='".$_SERVER['PHP_SELF']."?displayinactive=true";
-        if (!empty($search_string)) echo "&amp;search_string={$search_string}&amp;owner={$owner}";
-        echo "'>{$strShowAll}</a>";
-        $inactivestring="displayinactive=false";
-    }
-    ?>
-</td>
-</tr>
-<tr>
-<td valign="middle">
-<?php
+
+echo "<table summary='alphamenu' align='center'>";
+echo "<tr>";
+echo "<td align='center'>";
+echo "<form action='{$_SERVER['PHP_SELF']}' method='get'>";
+
+echo "<p>{$strBrowseSites}: ";
+// dojoType='ComboBox' dataUrl='ajaxdata.php?action=sites'
+echo "<input style='width: 300px;' name='search_string' onkeyup=\"autocomplete(this, 'comboresults');\" />";
+echo "<input name='submit' type='submit' value='{$strGo}' /></p>";
+echo "</form>\n";
+if ($displayinactive=="true")
+{
+    echo "<a href='".$_SERVER['PHP_SELF']."?displayinactive=false";
+    if (!empty($search_string)) echo "&amp;search_string={$search_string}&amp;owner={$owner}";
+    echo "'>{$strShowActiveOnly}</a>";
+    $inactivestring="displayinactive=true";
+}
+else
+{
+    echo "<a href='".$_SERVER['PHP_SELF']."?displayinactive=true";
+    if (!empty($search_string)) echo "&amp;search_string={$search_string}&amp;owner={$owner}";
+    echo "'>{$strShowAll}</a>";
+    $inactivestring="displayinactive=false";
+}  
+echo "</td></tr>";
+echo "<tr><td valign='middle'>";
 echo "<a href='add_site.php'>{$strAddSite}</a> | ";
 echo alpha_index("{$_SERVER['PHP_SELF']}?search_string=");
 echo "<a href='{$_SERVER['PHP_SELF']}?search_string=*&amp;{$inactivestring}'>{$strAll}</a>\n";
@@ -124,11 +119,9 @@ $siteresult = mysql_query($sitesql);
 if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 list($ownedsites) = mysql_fetch_row($siteresult);
 if ($ownedsites > 0) echo " | <a href='browse_sites.php?owner={$sit[2]}' title='Sites'>{$strMine}</a> ";
-?>
-    </td>
-</tr>
-</table>
 
+echo "</td></tr></table>";
+?>
 <script type="text/javascript">
 //<![CDATA[
     function site_details_window(siteid)
@@ -143,7 +136,7 @@ if ($ownedsites > 0) echo " | <a href='browse_sites.php?owner={$sit[2]}' title='
 if ($search_string == '')
 {
         $errors = 1;
-        echo "<p class='error'>You must enter a search string</p>\n";
+        echo "<p class='error'>You must enter a search string</p>\n"; // FIXME i18n
 }
 
 // search for criteria
@@ -198,7 +191,7 @@ if ($errors == 0)
     {
         echo "<p align='center'>Sorry, unable to find any sites ";
         if ($owner > 0) echo " owned by <strong>".user_realname($owner)."</strong></p>\n";
-        elseif ($search_string=='0') echo " matching <strong><em>Number</em></strong>";
+        elseif ($search_string == '0') echo " matching <strong><em>Number</em></strong>";
         else echo "matching <strong>'$search_string</strong>'</p>\n";
     }
     else
@@ -228,15 +221,15 @@ if ($errors == 0)
         echo "<th>{$strActions}</th>";
         echo "</tr>";
         $shade = 'shade1';
-        while ($results = mysql_fetch_array($result))
+        while ($results = mysql_fetch_object($result))
         {
             // define class for table row shading
-            if ($results['active'] == 'false') $shade='expired';
+            if ($results->active == 'false') $shade = 'expired';
             echo "<tr class='{$shade}'>";
-            echo "<td align='center'>{$results['id']}</td>";
-            echo "<td><a href='site_details.php?id={$results['id']}&amp;action=show'>{$results['name']}</a></td>";
-            echo "<td>".nl2br($results["department"])."</td>";
-            echo "<td><a href='edit_site.php?action=edit&amp;site={$results['id']}'>{$strEdit}</a></td>";
+            echo "<td align='center'>{$results->id}</td>";
+            echo "<td><a href='site_details.php?id={$results->id}&amp;action=show'>{$results->name}</a></td>";
+            echo "<td>".nl2br($results->department)."</td>";
+            echo "<td><a href='edit_site.php?action=edit&amp;site={$results->id}'>{$strEdit}</a></td>";
             echo "</tr>";
             // invert shade
             if ($shade == 'shade1') $shade = 'shade2';

@@ -41,7 +41,7 @@ $gresult = mysql_query($gsql);
 if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 while ($group = mysql_fetch_object($gresult))
 {
-    $grouparr[$group->id]=$group->name;
+    $grouparr[$group->id] = $group->name;
 }
 $numgroups = count($grouparr);
 if ($numgroups >= 1)
@@ -51,7 +51,7 @@ if ($numgroups >= 1)
     echo "<option value='{$_SERVER['PHP_SELF']}?gid=all";
     if (empty($legacy)) echo "'";
     else echo "&amp;legacy=yes'";
-    if ($filtergroup=='all') echo " selected='selected'";
+    if ($filtergroup == 'all') echo " selected='selected'";
     echo ">{$strAll}</option>\n";
     foreach ($grouparr AS $groupid => $groupname)
     {
@@ -75,8 +75,8 @@ $sql .= "FROM `{$dbUserSoftware}` AS us RIGHT JOIN `{$dbSoftware}` AS s ON (us.s
 $sql .= "LEFT JOIN `{$dbUsers}` AS u ON us.userid = u.id ";
 $sql .= " WHERE (u.status <> 0 OR u.status IS NULL) ";
 if (empty($legacy)) $sql .= "AND (s.lifetime_end > NOW() OR s.lifetime_end = '0000-00-00' OR s.lifetime_end is NULL) ";
-if ($numgroups >= 1 AND $filtergroup=='0') $sql .= "AND (u.groupid='0' OR u.groupid='' OR u.groupid IS NULL) ";
-elseif ($numgroups < 1 OR $filtergroup=='all') { $sql .= "AND 1=1 "; }
+if ($numgroups >= 1 AND $filtergroup == '0') $sql .= "AND (u.groupid='0' OR u.groupid='' OR u.groupid IS NULL) ";
+elseif ($numgroups < 1 OR $filtergroup == 'all') { $sql .= "AND 1=1 "; }
 else $sql .= "AND (u.groupid='{$filtergroup}' OR u.groupid IS NULL)";
 $sql .= " GROUP BY u.id ORDER BY u.realname";
 
@@ -92,7 +92,7 @@ if ($countusers > 0)
         if (($row->realname != NULL) AND ($row->realname != ''))
         {
             $users[$row->id] = $row->realname;
-            $counting[$row->realname]=0;
+            $counting[$row->realname] = 0;
         }
         else
         {
@@ -100,15 +100,28 @@ if ($countusers > 0)
         }
     }
     mysql_data_seek($usersresult, 0);
-$sql = "SELECT u.id, u.realname, s.name ";
-$sql .= "FROM `{$dbUserSoftware}` AS us RIGHT JOIN `{$dbSoftware}` AS s ON (us.softwareid = s.id) ";
-$sql .= "LEFT JOIN `{$dbUsers}` AS u ON us.userid = u.id ";
-$sql .= " WHERE (u.status <> 0 OR u.status IS NULL) ";
-if (empty($legacy)) $sql .= "AND (s.lifetime_end > NOW() OR s.lifetime_end = '0000-00-00' OR s.lifetime_end is NULL) ";
-if ($numgroups >= 1 AND $filtergroup=='0') $sql .= "AND (u.groupid='0' OR u.groupid='' OR u.groupid IS NULL) ";
-    elseif ($numgroups < 1 OR $filtergroup=='all') { $sql .= "AND 1=1 "; }
-else $sql .= "AND (u.groupid='{$filtergroup}' OR u.groupid IS NULL)";
-$sql .= " ORDER BY s.name, u.id";
+    $sql = "SELECT u.id, u.realname, s.name ";
+    $sql .= "FROM `{$dbUserSoftware}` AS us RIGHT JOIN `{$dbSoftware}` AS s ON (us.softwareid = s.id) ";
+    $sql .= "LEFT JOIN `{$dbUsers}` AS u ON us.userid = u.id ";
+    $sql .= " WHERE (u.status <> 0 OR u.status IS NULL) ";
+    if (empty($legacy))
+    {
+        $sql .= "AND (s.lifetime_end > NOW() OR s.lifetime_end = '0000-00-00' OR s.lifetime_end is NULL) ";
+    }
+    
+    if ($numgroups >= 1 AND $filtergroup == '0')
+    {
+    	$sql .= "AND (u.groupid='0' OR u.groupid='' OR u.groupid IS NULL) ";
+    }
+    elseif ($numgroups < 1 OR $filtergroup=='all')
+    {
+        $sql .= "AND 1=1 ";
+    }
+    else
+    {
+        $sql .= "AND (u.groupid='{$filtergroup}' OR u.groupid IS NULL)";
+    }
+    $sql .= " ORDER BY s.name, u.id";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
@@ -120,13 +133,19 @@ if ($countskills > 0 AND $countusers > 0)
     $previous = '';
     while ($row = mysql_fetch_object($result))
     {
-        if (($row->realname != NULL) AND ($row->realname != '')) $skills[$row->name][$row->realname] = $row->realname;
+        if (($row->realname != NULL) AND ($row->realname != ''))
+        {
+            $skills[$row->name][$row->realname] = $row->realname;
+        }
     }
     mysql_data_seek($result, 0);
     echo "<table align='center' class='vertical'>";
-    $shade='shade1';
+    $shade = 'shade1';
     echo "<thead><tr><td>{$strSkill}</td>";
-    foreach ($users AS $u) echo "<th>$u</th>";
+    foreach ($users AS $u)
+    {
+        echo "<th>$u</th>";
+    }
     echo "<th>{$strTotal}</th>";
     echo "</tr></thead>\n";
     $previous = '';
@@ -160,19 +179,25 @@ if ($countskills > 0 AND $countusers > 0)
             echo "<td align='center' class='$shade'><strong>$count</strong></td>";
             echo "</tr>\n";
             $started = true;
-            if ($shade=='shade1') $shade='shade2';
-            else $shade='shade1';
+            if ($shade == 'shade1') $shade = 'shade2';
+            else $shade = 'shade1';
         }
         mysql_data_seek($usersresult, 0);
         //echo $row->realname." ";
         $previous = $row->name;
     }
     echo "<tr><th align='right'>{$strTotal}</th>";
-    foreach ($counting AS $c) echo "<td align='center'><strong>{$c}</strong></td>";
+    foreach ($counting AS $c)
+    {
+        echo "<td align='center'><strong>{$c}</strong></td>";
+    }
     echo "</tr>\n";
     echo "</table>";
 }
-else echo "<p align='center'>{$strNothingToDisplay}</p>";
+else
+{
+    echo "<p align='center'>{$strNothingToDisplay}</p>";
+}
 
 include ('htmlfooter.inc.php');
 

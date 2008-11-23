@@ -8,7 +8,6 @@
 // of the GNU General Public License, incorporated herein by reference.
 //
 
-// TODO HTML to PHP
 
 @include ('set_include_path.inc.php');
 $permission = 8; // Update Incidents
@@ -31,17 +30,16 @@ if ($incidentid == '')
     if ($error == '1')
     {
         echo "<p class='error'>Error assigning that incident update. Probable cause is ";
-        echo "that no incident exists with that ID or it has been closed.</p>";
+        echo "that no incident exists with that ID or it has been closed.</p>"; //FIXME i18n
     }
-    ?>
-    <div align='center'>
-    <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method='post'>
-    <?php echo $strToIncidentID; ?>: <input type="text" name="incidentid" value="<?php echo $incidentid; ?>" />
-    <input type="submit" value="Move" /><br />
-    <input type="hidden" name="updateid" value="<?php echo $updateid; ?>" />
-    </form>
-    </div>
-    <?php
+    
+    echo "<div align='center'>";
+    echo "<form action='{$_SERVER['PHP_SELF']}' method='post'>";
+    echo "{$strToIncidentID}: <input type='text' name='incidentid' value='{$incidentid}' />";
+    echo "<input type='submit' value='Move' /><br />"; //FIXME i18n
+    echo "<input type='hidden' name='updateid' value='{$updateid}' />";
+    echo "</form>";
+    echo "</div>";
 
     $sql  = "SELECT * FROM `{$dbUpdates}` WHERE id='$updateid' ";
     $result = mysql_query($sql);
@@ -50,11 +48,10 @@ if ($incidentid == '')
     while ($updates = mysql_fetch_array($result))
     {
         $update_timestamp_string = ldate($CONFIG['dateformat_datetime'], $updates["timestamp"]);
-        ?>
-        <br />
-        <table align='center' width="95%">
-        <tr><th>
-        <?php
+        echo "<br />";
+        echo "<table align='center' width='95%'>";
+        echo "<tr><th>";
+
         // Header bar for each update
         // FIXME this should be using a function or something, no point duplicating this code here. INL 7Nov08
         switch ($updates['type'])
@@ -130,14 +127,14 @@ if ($incidentid == '')
         }
         if ($updates['nextaction']!='') echo " Next Action: <strong>".$updates['nextaction'].'</strong>';
 
-        echo " - ".$update_timestamp_string."</th></tr>";
+        echo " - {$update_timestamp_string}</th></tr>";
         echo "<tr><td class='shade2' width='100%'>";
         $updatecounter++;
         echo parse_updatebody($updates['bodytext']);
-        ?>
-        </td></tr>
-        </table>
-        <?php
+
+        echo "</td></tr>";
+        echo "</table>";
+
         include ('htmlfooter.inc.php');
     }
 }

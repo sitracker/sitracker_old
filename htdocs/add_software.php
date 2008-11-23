@@ -125,7 +125,7 @@ else
 
         if (!$result)
         {
-            echo "<p class='error'>Addition of Skill Failed\n"; // FIXME i18n
+            echo "<p class='error'>Addition of Skill Failed</p>"; // FIXME i18n
         }
         else
         {

@@ -165,7 +165,7 @@ elseif ($action == "add")
     // add site if no errors
     if ($errors == 0)
     {
-        if ($owner=='') $owner=0;
+        if ($owner == '') $owner = 0;
         $sql  = "INSERT INTO `{$dbSites}` (name, department, address1, address2, city, county, country, postcode, telephone, fax, email, websiteurl, notes, typeid, owner) ";
         $sql .= "VALUES ('$name', '$department' ,'$address1', '$address2', '$city', '$county', '$country', '$postcode', ";
         $sql .= "'$telephone', '$fax', '$email', '$websiteurl', '$notes', '$typeid','$owner')";

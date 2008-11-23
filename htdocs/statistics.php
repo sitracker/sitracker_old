@@ -178,7 +178,7 @@ function stats_period_row($desc, $start, $end)
     }
     else
     {
-        $busyness=$count['updates'];
+        $busyness = $count['updates'];
     }
 
     if ($count['users'] > 0 && $count['emailtx'] > 0)
@@ -211,8 +211,8 @@ function stats_period_row($desc, $start, $end)
     $html .= "<td>{$count['higherpriority']}</td>";
     $html .= "<td>".percent_bar($activity)."</td>";
     $html .= "</tr>\n";
-    if ($shade=='shade1') $shade='shade2';
-    else $shade='shade1';
+    if ($shade == 'shade1') $shade = 'shade2';
+    else $shade = 'shade1';
     return $html;
 }
 
@@ -276,15 +276,15 @@ function give_overview()
     if (mysql_num_rows($result) > 1)
     {
         echo "<h2>By Group</h2><table class='vertical' align='center'>";
-        while ($groups = mysql_fetch_array($result))
+        while ($groups = mysql_fetch_object($result))
         {
-            $sqlGroups = "SELECT COUNT(i.id), istatus.name ";
+            $sqlGroups = "SELECT COUNT(i.id) AS count, istatus.name ";
             $sqlGroups .= "FROM `{$GLOBALS['dbIncidents']}` AS i, `{$GLOBALS['dbIncidentStatus']}` AS istatus, `{$GLOBALS['dbUsers']}` AS u, `{$GLOBALS['dbGroups']}` AS g ";
             $sqlGroups .= "WHERE i.status = istatus.id AND closed = 0 AND i.owner = u.id ";
-            $sqlGroups .= "AND u.groupid = {$groups['groupid']} ";
+            $sqlGroups .= "AND u.groupid = {$groups->groupid} ";
             $sqlGroups .= "GROUP BY i.status";
 
-	    $resultGroups = mysql_query($sqlGroups);
+	       $resultGroups = mysql_query($sqlGroups);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
 
             if (mysql_num_rows($resultGroups) > 0)
@@ -292,12 +292,12 @@ function give_overview()
                 $openCallsGroup = 0;
                 echo "<td style='vertical-align:top' align='center'><strong>{$groups['name']}</strong>";
                 echo "<table class='vertical' align='center'>";
-                while ($rowGroup = mysql_fetch_array($resultGroups))
+                while ($rowGroup = mysql_fetch_object($resultGroups))
                 {
-                    echo "<tr><th>{$rowGroup['name']}</th><td class='shade2' align='left'>";
+                    echo "<tr><th>{$rowGroup->name}</th><td class='shade2' align='left'>";
                     //FIXME - HACK, no idea why this is needed
-		    $amount = $rowGroup['COUNT(i.id)'] / 8;
-		    echo "{$amount}</td></tr>";
+        		    $amount = $rowGroup->count / 8;
+        		    echo "{$amount}</td></tr>";
 
                     //if (strpos(strtolower($rowGroup['name']), "clos") === false)
                     //{
@@ -340,7 +340,7 @@ function give_overview()
             $sqlVendor .= "GROUP BY incidents.status";
             */
 
-            $sqlVendor = "SELECT COUNT(i.id), istatus.name FROM `{$GLOBALS['dbIncidents']}` AS i, `{$GLOBALS['dbIncidentStatus']}` AS istatus, `{$GLOBALS['dbSoftware']}` AS s ";
+            $sqlVendor = "SELECT COUNT(i.id) AS count, istatus.name FROM `{$GLOBALS['dbIncidents']}` AS i, `{$GLOBALS['dbIncidentStatus']}` AS istatus, `{$GLOBALS['dbSoftware']}` AS s ";
             $sqlVendor .= "WHERE i.status = istatus.id AND closed = 0 AND i.softwareid = s.id ";
             $sqlVendor .= "AND s.vendorid = {$vendors['vendorid']} ";
             $sqlVendor .= "GROUP BY i.status";
@@ -353,14 +353,14 @@ function give_overview()
                 $openCallsVendor = 0;
                 echo "<td style='vertical-align:top' align='center'><strong>{$vendors['name']}</strong>";
                 echo "<table class='vertical' align='center'>";
-                while ($rowVendor = mysql_fetch_array($resultVendor))
+                while ($rowVendor = mysql_fetch_object($resultVendor))
                 {
-                    echo "<tr><th>{$rowVendor['name']}</th><td class='shade2' align='left'>";
-                    echo "{$rowVendor['COUNT(i.id)']}</td></tr>";
+                    echo "<tr><th>{$rowVendor->name}</th><td class='shade2' align='left'>";
+                    echo "{$rowVendor->count}</td></tr>";
 
-                    if (strpos(strtolower($rowVendor['name']), "clos") === false)
+                    if (strpos(strtolower($rowVendor->name), "clos") === false)
                     {
-                        $openCallsVendor += $rowVendor['COUNT(i.id)'];
+                        $openCallsVendor += $rowVendor->count;
                     }
                 }
                 echo "<tr><th>{$GLOBALS['strTotalOpen']}</th>";
@@ -382,24 +382,24 @@ function give_overview()
     if ($todaysincidents > 0)
     {
         $string .= "<table align='center' width='50%'><tr><td colspan='2'>{$GLOBALS['strAssignedAsFollows']}</td></tr>";
-        $sql = "SELECT COUNT(i.id), realname, u.id AS owner FROM `{$GLOBALS['dbIncidents']}` AS i, `{$GLOBALS['dbUsers']}` AS u WHERE opened > '{$todayrecent}' AND i.owner = u.id GROUP BY owner DESC";
+        $sql = "SELECT COUNT(i.id) AS count, realname, u.id AS owner FROM `{$GLOBALS['dbIncidents']}` AS i, `{$GLOBALS['dbUsers']}` AS u WHERE opened > '{$todayrecent}' AND i.owner = u.id GROUP BY owner DESC";
 
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
-        while ($row = mysql_fetch_array($result))
+        while ($row = mysql_fetch_objct($result))
         {
             $sql = "SELECT id, title FROM `{$GLOBALS['dbIncidents']}` WHERE opened > '{$todayrecent}' AND owner = '{$row['owner']}'";
 
-            $string .= "<tr><th>{$row['COUNT(i.id)']}</th>";
+            $string .= "<tr><th>{$row->count}</th>";
             $string .= "<td class='shade2' align='left'>";
-            $string .= "<a href='incidents.php?user={$row['owner']}&amp;queue=1&amp;type=support'>{$row['realname']}</a> ";
+            $string .= "<a href='incidents.php?user={$row->owner}&amp;queue=1&amp;type=support'>{$row->realname}</a> ";
 
             $iresult = mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
 
-            while ($irow = mysql_fetch_array($iresult))
+            while ($irow = mysql_fetch_object($iresult))
             {
-                $string .= "<small><a href=\"javascript:incident_details_window('{$irow['id']}', 'incident{$irow['id']}')\"  title='{$irow['title']}'>[{$irow['id']}]</a></small> ";
+                $string .= "<small><a href=\"javascript:incident_details_window('{$irow->id}', 'incident{$irow->id}')\"  title='{$irow->title}'>[{$irow->id}]</a></small> ";
             }
 
             $string .= "</td></tr>";
@@ -414,10 +414,10 @@ function give_overview()
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     list($todaysclosed) = mysql_fetch_row($result);
 
-    $string .= "<h4>$todaysclosed Incidents Closed Today</h4>";
+    $string .= "<h4>{$todaysclosed} Incidents Closed Today</h4>";
     if ($todaysclosed > 0)
     {
-        $sql = "SELECT COUNT(i.id), realname, u.id AS owner FROM `{$GLOBALS['dbIncidents']}` AS i ";
+        $sql = "SELECT COUNT(i.id) AS count, realname, u.id AS owner FROM `{$GLOBALS['dbIncidents']}` AS i ";
         $sql .= "LEFT JOIN `{$GLOBALS['dbUsers']}` AS u ON i.owner = u.id WHERE closed > '{$todayrecent}' ";
         $sql .= "GROUP BY owner";
         $result = mysql_query($sql);
@@ -427,24 +427,24 @@ function give_overview()
         $string .= "<tr><th>ID</th><th>Title</th>";
         $string .= "<th>Owner</th><th>Closing Status</th></tr>\n";
 
-        while ($row = mysql_fetch_array($result))
+        while ($row = mysql_fetch_object($result))
         {
-            $string .= "<tr><th colspan='4' align='left'>".$row['COUNT(i.id)']." ClosedBy {$row['realname']}</th></tr>\n";
+            $string .= "<tr><th colspan='4' align='left'>{$row->count} Closed By {$row->realname}</th></tr>\n";
 
             $sql = "SELECT i.id, i.title, cs.name ";
             $sql .= "FROM `{$GLOBALS['dbIncidents']}` AS i, `{$GLOBALS['dbClosingStatus']}` AS cs ";
             $sql .= "WHERE i.closingstatus = cs.id AND closed > '{$todayrecent}' ";
-            $sql .= "AND i.owner = '{$row['owner']}' ";
+            $sql .= "AND i.owner = '{$row->owner}' ";
             $sql .= "ORDER BY closed";
 
             $iresult = mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
-            while ($irow = mysql_fetch_array($iresult))
+            while ($irow = mysql_fetch_object($iresult))
             {
-                $string .= "<tr><th><a href=\"javascript:incident_details_window('{$irow['id']}', 'incident{$irow['id']}')\" title='[{$irow['id']}] - {$irow['title']}'>{$irow['id']}</a></th>";
-                $string .= "<td class='shade2' align='left'>{$irow['title']}</td>";
-                $string .= "<td class='shade2' align='left'>{$row['realname']}</td>";
-                $string .= "<td class='shade2'>{$irow['name']}</td></tr>\n";
+                $string .= "<tr><th><a href=\"javascript:incident_details_window('{$irow->id}', 'incident{$irow->id}')\" title='[{$irow->id}] - {$irow->title}'>{$irow->id}</a></th>";
+                $string .= "<td class='shade2' align='left'>{$irow->title}</td>";
+                $string .= "<td class='shade2' align='left'>{$row->realname}</td>";
+                $string .= "<td class='shade2'>{$irow->name}</td></tr>\n";
             }
         }
         $string .= "</table>\n\n";

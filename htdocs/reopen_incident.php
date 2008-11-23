@@ -48,18 +48,17 @@ if ($allow_reopen == 'yes')
     {
         // No submit detected show update form
         $incident_title=incident_title($id);
-        $title = 'Reopen: '.$id . " - " . $incident_title;
+        $title = 'Reopen: '.$id . " - " . $incident_title;  // FIXME i18n
         include ('incident_html_top.inc.php');
-        ?>
-        <h2>Reopen Incident</h2>
-        <form action="<?php echo $_SERVER['PHP_SELF'] ?>?id=<?php echo $id ?>" method="post">
-        <table class='vertical'>
-        <tr><th>Update:</th><td><textarea name="bodytext" rows='20' cols='60'></textarea></td></tr>
-        <tr><th>Status:</th><td><?php echo incidentstatus_drop_down("newstatus", 1); ?></td></tr>
-        </table>
-        <p><input name="submit" type="submit" value="Reopen Incident" /></p>
-        </form>
-        <?php
+
+        echo "<h2>{$strReopenIncident}</h2>";
+        echo "<form action='{$_SERVER['PHP_SELF']}?id={$id}' method='post'>";
+        echo "<table class='vertical'>";
+        echo "<tr><th>{$strUpdate}</th><td><textarea name='bodytext' rows='20' cols='60'></textarea></td></tr>";
+        echo "<tr><th>{$strStatus}</th><td>".incidentstatus_drop_down("newstatus", 1)."</td></tr>";
+        echo "</table>";
+        echo "<p><input name='submit' type='submit' value='{$strReopenIncident}' /></p>";
+        echo "</form>";
         include ('incident_html_bottom.inc.php');
     }
     else

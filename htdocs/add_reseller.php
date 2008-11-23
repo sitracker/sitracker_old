@@ -59,7 +59,7 @@ switch ($action)
             else
             {
                 // show success message
-                $id=mysql_insert_id();
+                $id = mysql_insert_id();
                 journal(CFG_LOGGING_NORMAL, 'Reseller Added', "Reseller $id Added", CFG_JOURNAL_MAINTENANCE, $id);
                 clear_form_errors('formerrors');
 

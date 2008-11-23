@@ -90,7 +90,7 @@ switch ($type)
             else $user=$sit[2]; // force to current user if username not found
         }
         $sql = $selectsql . "WHERE contact = c.id AND i.priority = pr.id ";
-        if ($user!='all') $sql .= "AND (owner='$user' OR towner='$user') ";
+        if ($user != 'all') $sql .= "AND (owner='$user' OR towner='$user') ";
         if (!empty($softwareid)) $sql .= "AND softwareid='$softwareid' ";
 
         if (!empty($maintexclude)) $sql .= "AND i.maintenanceid != '{$maintexclude}' ";
@@ -113,7 +113,7 @@ switch ($type)
                 $sql .= "AND (status!='2') ";  // not closed
                 // the "1=2" obviously false else expression is to prevent records from showing unless the IF condition is true
                 $sql .= "AND ((timeofnextaction > 0 AND timeofnextaction < $now) OR ";
-                if ($user!='all') $sql .= "(status='5' AND towner=$user) OR ";
+                if ($user != 'all') $sql .= "(status='5' AND towner=$user) OR ";
                 $sql .= "(IF ((status >= 5 AND status <=8), ($now - lastupdated) > ({$CONFIG['regular_contact_days']} * 86400), 1=2 ) ";  // awaiting
                 $sql .= "OR IF (status='1' OR status='3' OR status='4', 1=1 , 1=2) ";  // active, research, left message - show all
                 $sql .= ") AND timeofnextaction < $now ) ";
@@ -225,7 +225,7 @@ switch ($type)
         }
         else echo "<p class='info'>{$strNoIncidents}</p>";
 
-        if ($user=='all') echo "<p align='center'>".sprintf($strNumOfIncidents, $rowcount)."</p>";
+        if ($user == 'all') echo "<p align='center'>".sprintf($strNumOfIncidents, $rowcount)."</p>";
 
 
         // *********************************************************
