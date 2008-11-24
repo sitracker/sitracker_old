@@ -356,6 +356,7 @@ $strDatesNotRequested = 'Dates Not Requested';
 $strDatesNotYetApproved = 'Dates not yet approved';
 $strDay = 'Day';
 $strDays = 'Days';
+$strDayView = 'Day View';
 $strdaysother = 'days other leave';
 $strdayssick = 'days sick leave';
 $strdaystraining = 'days training';
