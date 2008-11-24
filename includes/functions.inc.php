@@ -1801,14 +1801,14 @@ function user_drop_down($name, $id, $accepting = TRUE, $exclude = FALSE, $attrib
         {
             $html .= "<option ";
             if ($users->id == $id) $html .= "selected='selected' ";
-            if ($users['accepting'] == 'No' AND $accepting == TRUE)
+            if ($users->accepting == 'No' AND $accepting == TRUE)
             {
                 $html .= " class='expired' ";
             }
 
             $html .= "value='{$users->id}'>";
             $html .= "{$users->realname}";
-            if ($users['accepting'] == 'No' AND $accepting == TRUE)
+            if ($users->accepting == 'No' AND $accepting == TRUE)
             {
                 $html .= ", {$GLOBALS['strNotAccepting']}";
             }
