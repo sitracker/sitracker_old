@@ -1,4 +1,4 @@
-#!/bin/rm -e
+#!/bin/sh -e
 # postrm script for sit
 
 if [ -d /etc/apache2/conf.d ] && [ ! -e /etc/apache2/conf.d/sit.conf ]; then
