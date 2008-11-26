@@ -30,7 +30,7 @@ trigger('TRIGGER_INCIDENT_NEARING_SLA', array('incidentid' => 1, 'incidenttitle'
 
 echo "<h2>Boom!</h2>";
 
-echo "<p align='center'><a href='browse_journal.php'>Browse Journal</a></p>";
+echo "<p align='center'><a href='browse_journal.php'>{$strBrowseJournal}</a></p>";
 
 include ('htmlfooter.inc.php');
 ?>

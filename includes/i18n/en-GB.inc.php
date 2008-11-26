@@ -1143,6 +1143,7 @@ $strRole = 'Role';
 $strRolePermissions = 'Role Permissions';
 $strRSSAtomURL = 'RSS/Atom Feed URL';
 $strRules = 'Rules';
+$strRulesNotDefinable = 'Rules are not definable for this trigger action';
 $strRunReport = 'Run Report';
 
 $strSalesperson = 'Salesperson';
@@ -1268,6 +1269,7 @@ $strSoftware = 'Software';
 $strSoftwareVersion = 'Software Version';
 $strSolution = 'Solution';
 $strSolvedProblem = 'Solved Problem';
+$strSomeOfTheseIdentifiers = 'Some of these identifiers might not be available once you add a trigger';
 $strSort = 'Sort';
 $strSortAscending = 'Sort Ascending';
 $strSortDescending = 'Sort Decending';
@@ -1333,6 +1335,8 @@ $strTemplateVariables = 'Template Variables';
 $strTemporarilyAssignedto = 'Temporarily assigned to %s by %s';
 $strTemporaryOwner = 'Temporary Owner';
 $strTerminated = 'Terminated';
+# As in 'Click to test triggers'
+$strTestTriggers = 'Test Triggers';
 $strText = 'Text';
 #English suffix for most numbers - 5th, 6th, 7th
 $strth = 'th';

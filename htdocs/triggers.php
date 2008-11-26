@@ -232,7 +232,7 @@ switch ($_REQUEST['mode'])
         }
         else
         {
-            echo "Rules are not definable for this trigger action"; // FIXME i18n
+            echo "{$strRulesNotDefinable}";
         }
         echo "</div>";
         echo "<input type='hidden' name='mode' value='save' />";
@@ -403,7 +403,7 @@ switch ($_REQUEST['mode'])
             }
         }
         echo "</table>";
-        echo "<p align='center'><a href='triggertest.php'>Test Triggers</a></p>";
+        echo "<p align='center'><a href='triggertest.php'>{$strTestTriggers}</a></p>";
         include ('htmlfooter.inc.php');
 }
 ?>

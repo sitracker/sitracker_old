@@ -311,12 +311,14 @@ else
         {
             echo "<h2>".icon('task', 32)." ";
             echo sprintf($strXsTasks, user_realname($sit[2]))."</h2>";
-            echo "<p align='center'><a href='{$_SERVER['PHP_SELF']}?user=all&amp;show={$show}&amp;sort={$sort}&amp;order={$order}'>{$strShowAll}</a></p>";
+            echo "<p align='center'><a href='{$_SERVER['PHP_SELF']}?user=all&amp;";
+            echo "show={$show}&amp;sort={$sort}&amp;order={$order}'>{$strShowAll}</a></p>";
         }
         else
         {
             echo "<h2>".icon('task', 32)." {$strAllTasks}</h2>";
-            echo "<p align='center'><a href='{$_SERVER['PHP_SELF']}?show={$show}&amp;sort={$sort}&amp;order={$order}'>{$strShowMine}</a></p>";
+            echo "<p align='center'><a href='{$_SERVER['PHP_SELF']}?show={$show}";
+            echo "&amp;sort={$sort}&amp;order={$order}'>{$strShowMine}</a></p>";
         }
     }
     else
@@ -325,33 +327,38 @@ else
         {
             echo "<h2>".icon('task', 32)." ";
             echo sprintf($strXsTasks, user_realname($sit[2]))."</h2>";
-            echo "<p align='center'><a href='{$_SERVER['PHP_SELF']}?show=incidents&amp;user=all'>{$strShowAll}</a></p>";
+            echo "<p align='center'><a href='{$_SERVER['PHP_SELF']}?show=incidents";
+            echo "&amp;user=all'>{$strShowAll}</a></p>";
         }
         else
         {
             echo "<h2>".icon('task', 32)." {$strAllActivities}</h2>";
 
-            echo "<p align='center'><a href='{$_SERVER['PHP_SELF']}?show=incidents'>{$strShowMine}</a></p>";
+            echo "<p align='center'><a href='{$_SERVER['PHP_SELF']}?show=incidents'>";
+            echo "{$strShowMine}</a></p>";
         }
     }
 
     // show drop down select for task view options
     echo "<form action='{$_SERVER['PHP_SELF']}' style='text-align: center;'>";
-    echo "{$strView}: <select class='dropdown' name='queue' onchange='window.location.href=this.options[this.selectedIndex].value'>\n";
+    echo "{$strView}: <select class='dropdown' name='queue' ";
+    echo "onchange='window.location.href=this.options[this.selectedIndex].value'>\n";
     echo "<option ";
     if ($show == '' OR $show == 'active')
     {
         echo "selected='selected' ";
     }
 
-    echo "value='{$_SERVER['PHP_SELF']}?user=$user&amp;show=active&amp;sort=$sort&amp;order=$order'>{$strActive}</option>\n";
+    echo "value='{$_SERVER['PHP_SELF']}?user=$user&amp;show=active";
+    echo "&amp;sort=$sort&amp;order=$order'>{$strActive}</option>\n";
     echo "<option ";
     if ($show == 'completed')
     {
         echo "selected='selected' ";
     }
 
-    echo "value='{$_SERVER['PHP_SELF']}?user=$user&amp;show=completed&amp;sort=$sort&amp;order=$order'>{$strCompleted}</option>\n";
+    echo "value='{$_SERVER['PHP_SELF']}?user=$user&amp;show=completed";
+    echo "&amp;sort=$sort&amp;order=$order'>{$strCompleted}</option>\n";
 
     echo "</select>\n";
     echo "</form><br />";
@@ -365,11 +372,13 @@ else
 
     if ($show=='' OR $show=='active' )
     {
-        $sql .= "(completion < 100 OR completion='' OR completion IS NULL)  AND (distribution = 'public' OR distribution = 'private') ";
+        $sql .= "(completion < 100 OR completion='' OR completion IS NULL) ";
+        $sql .= "AND (distribution = 'public' OR distribution = 'private') ";
     }
     elseif ($show == 'completed')
     {
-        $sql .= " (completion = 100) AND (distribution = 'public' OR distribution = 'private') ";
+        $sql .= " (completion = 100) AND (distribution = 'public' ";
+        $sql .= "OR distribution = 'private') ";
     }
     elseif ($show == 'incidents')
     {
@@ -377,7 +386,8 @@ else
 
         if (empty($incidentid))
         {
-            $sql .= "AND (completion < 100 OR completion='' OR completion IS NULL) ";
+            $sql .= "AND (completion < 100 OR completion='' ";
+            $sql .= "OR completion IS NULL) ";
         }
     }
     else
@@ -411,7 +421,8 @@ else
     }
     else
     {
-        $sql .= "ORDER BY IF(duedate,duedate,99999999) ASC, duedate ASC, startdate DESC, priority DESC, completion ASC";
+        $sql .= "ORDER BY IF(duedate,duedate,99999999) ASC, duedate ASC, ";
+        $sql .= "startdate DESC, priority DESC, completion ASC";
     }
 
     $result = mysql_query($sql);
@@ -443,7 +454,8 @@ if (mysql_num_rows($result) >=1 )
 
         if ($user == $sit[2])
         {
-            echo colheader('distribution', icon('private', 16, $strPrivate), $sort, $order, $filter);
+            echo colheader('distribution', icon('private', 16, $strPrivate),
+                           $sort, $order, $filter);
         }
         else
         {
@@ -490,12 +502,14 @@ if (mysql_num_rows($result) >=1 )
         echo "<tr class='$shade'>";
         if ($mode != 'incident' AND $show != 'incidents')
         {
-            echo "<td align='center'><input type='checkbox' name='selected[]' value='{$task->id}' /></td>";
+            echo "<td align='center'><input type='checkbox' name='selected[]' ";
+            echo "value='{$task->id}' /></td>";
         }
         else if (empty($incidentid))
         {
             $sqlIncident = "SELECT DISTINCT origcolref, linkcolref, incidents.title ";
-            $sqlIncident .= "FROM `{$dbLinks}` AS l, `{$dbLinkTypes}` AS lt, `{$dbIncidents}` AS i ";
+            $sqlIncident .= "FROM `{$dbLinks}` AS l, `{$dbLinkTypes}` AS lt, ";
+            $sqlIncident .= "`{$dbIncidents}` AS i ";
             $sqlIncident .= "WHERE l.linktype=4 ";
             $sqlIncident .= "AND l.origcolref={$task->id} ";
             $sqlIncident .= "AND l.direction='left' ";
@@ -506,7 +520,8 @@ if (mysql_num_rows($result) >=1 )
             if ($obj = mysql_fetch_object($resultIncident))
             {
                 $incidentidL = $obj->linkcolref;
-                echo "<a href=\"javascript:incident_details_window('{$obj->linkcolref}','incident{$obj->linkcolref}')\" class='info'>";
+                echo "<a href=\"javascript:incident_details_window('{$obj->linkcolref}'
+                      ,'incident{$obj->linkcolref}')\" class='info'>";
                 echo $obj->linkcolref;
                 echo "</a>";
                 $incidentTitle = $obj->title;
@@ -528,7 +543,8 @@ if (mysql_num_rows($result) >=1 )
         {
             if ($enddate == '0')
             {
-                echo "<td><a href='view_task.php?id={$task->id}&amp;mode=incident&amp;incident={$id}' class='info'>";
+                echo "<td><a href='view_task.php?id={$task->id}&amp;mode=incident
+                      &amp;incident={$id}' class='info'>";
                 echo icon('timer', 16)." {$task->id}</a></td>";
             }
             else
@@ -607,7 +623,7 @@ if (mysql_num_rows($result) >=1 )
         else
         {
              $billing = make_incident_billing_array($incidentid);
-            
+
             echo "<td>".format_date_friendly($startdate)."</td>";
             if ($enddate == '0')
             {
@@ -620,17 +636,17 @@ if (mysql_num_rows($result) >=1 )
 
                 echo "$strNotCompleted</td>";
                 $duration = $now - $startdate;
-                                
+
                 //echo "<td id='duration{$task->id}'><em><div id='duration{$task->id}'>".format_seconds($duration)."</div></em></td>";
                 echo "<td id='duration{$task->id}'>".format_seconds($duration)."</td>";
             }
             else
             {
                 $duration = $enddate - $startdate;
-                
+
                 $a = $duration % ($billing[-1]['customerperiod']);
                 $duration += ($billing[-1]['customerperiod'] - $a);
-                
+
                 echo "<td>".format_date_friendly($enddate)."</td>";
                 echo "<td>".format_seconds($duration)."</td>";
                 $closedduration += $duration;

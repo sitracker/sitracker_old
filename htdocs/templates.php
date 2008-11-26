@@ -227,13 +227,13 @@ elseif ($action == "edit")
 
         echo "<tr><th>{$strTemplate}: <sup class='red'>*</sup></th><td><input maxlength='100' name='name' size='40' value=\"{$template->name}\" /></td></tr>\n";
         echo "<tr><th>{$strDescription}: <sup class='red'>*</sup></th>";
-		echo "<td><textarea name='description' cols='50' rows='5' onfocus=\"clearFocusElement(this);\"";
-		if (substr_compare($template->description, 'str', 1, 3))
-		{
-			echo " readonly='readonly' ";
-			$template->description = $SYSLANG[$template->description];
-		}
-		echo ">{$template->description}</textarea></td></tr>\n";
+        echo "<td><textarea name='description' cols='50' rows='5' onfocus=\"clearFocusElement(this);\"";
+        if (substr_compare($template->description, 'str', 1, 3))
+        {
+            echo " readonly='readonly' ";
+            $template->description = $SYSLANG[$template->description];
+        }
+        echo ">{$template->description}</textarea></td></tr>\n";
         switch ($templatetype)
         {
             case 'email':
@@ -256,11 +256,11 @@ elseif ($action == "edit")
             case 'notice':
                 echo "<tr><th>{$strLinkText}</th>";
                 echo "<td><input id='linktext' maxlength='50' name='linktext' size='50' ";
-        		if (substr_compare($template->linktext, 'str', 1, 3))
-				{
-					echo " readonly='readonly' ";
-					$template->linktext = $SYSLANG[$template->linktext];
-				}
+                if (substr_compare($template->linktext, 'str', 1, 3))
+                {
+                    echo " readonly='readonly' ";
+                    $template->linktext = $SYSLANG[$template->linktext];
+                }
                 echo "value=\"{$template->linktext}\" onfocus=\"recordFocusElement(this);\" /></td></tr>\n";
                 echo "<tr><th>{$strLink}</th>";
                 echo "<td><input id='link' maxlength='100' name='link' size='50' value=\"{$template->link}\"  onfocus=\"recordFocusElement(this);\" /></td></tr>\n";
@@ -291,11 +291,11 @@ elseif ($action == "edit")
         echo "<td>";
         if ($templatetype=='notice') echo bbcode_toolbar('bodytext');
         echo "<textarea id='bodytext' name='bodytext' rows='20' cols='50' onfocus=\"recordFocusElement(this);\"";
-		if (substr_compare($body, 'str', 1, 3))
-		{
-			echo " readonly='readonly' ";
-			$body = $SYSLANG[$body];
-		}
+        if (substr_compare($body, 'str', 1, 3))
+        {
+            echo " readonly='readonly' ";
+            $body = $SYSLANG[$body];
+        }
         echo ">{$body}</textarea></td>";
 
         if ($template->type=='incident')
@@ -334,7 +334,7 @@ elseif ($action == "edit")
         echo "<div id='templatevariables' style='display:none;'>";
         echo "<h4>{$strTemplateVariables}</h4>";
         echo "<p align='center'>{$strFollowingSpecialIdentifiers}</p>";
-        if (!is_array($required)) echo "<p class='info'>Some of these identifiers might not be available once you add a trigger</p>";
+        if (!is_array($required)) echo "<p class='info'>{$strSomeOfTheseIdentifiers}</p>";
 
         echo "<dl>";
         foreach ($ttvararray AS $identifier => $ttvar)
