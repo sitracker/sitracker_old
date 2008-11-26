@@ -164,29 +164,29 @@ else
 
     if ($CONFIG['portal_usernames_can_be_changed'])
     {
-        echo "<tr><th>{$strUsername}: </th><td><input class='required' name='username' value='{$user->username}' />";
-        echo "<span class='required'><span>{$strRequired}</span></td></tr>";
+        echo "<tr><th>{$strUsername}</th><td><input class='required' name='username' value='{$user->username}' />";
+        echo " <span class='required'><span>{$strRequired}</span></td></tr>";
         echo "<input name='oldusername' value='{$user->username}' type='hidden' />";
 
     }
-    echo "<tr><th>{$strForenames}: </th><td><input class='required' name='forenames' value='{$user->forenames}' />";
-        echo "<span class='required'><span>{$strRequired}</span></td></tr>";
-    echo "<tr><th>{$strSurname}: </th><td><input class='required' name='surname' value='{$user->surname}' />";
-        echo "<span class='required'><span>{$strRequired}</span></td></tr>";
-    echo "<tr><th>{$strDepartment}: </th><td><input name='department' value='{$user->department}' /></td></tr>";
-    echo "<tr><th>{$strAddress1}: </th><td><input name='address1' value='{$user->address1}' /></td></tr>";
-    echo "<tr><th>{$strAddress2}: </th><td><input name='address2' value='{$user->address2}' /></td></tr>";
-    echo "<tr><th>{$strCounty}: </th><td><input name='county' value='{$user->county}' /></td></tr>";
-    echo "<tr><th>{$strCountry}: </th><td><input name='country' value='{$user->country}' /></td></tr>";
-    echo "<tr><th>{$strPostcode}: </th><td><input name='postcode' value='{$user->postcode}' /></td></tr>";
-    echo "<tr><th>{$strTelephone}: </th><td><input class='required' name='phone' value='{$user->phone}' />";
-        echo "<span class='required'><span>{$strRequired}</span></td></tr>";
-    echo "<tr><th>{$strMobile}: </th><td><input name='mobile' value='{$user->mobile}' /></td></tr>";
-    echo "<tr><th>{$strFax}: </th><td><input name='fax' value='{$user->fax}' /></td></tr>";
-    echo "<tr><th>{$strEmail}: </th><td><input class='required' name='email' value='{$user->email}' />";
-        echo "<span class='required'><span>{$strRequired}</span></td></tr>";
-    echo "<tr><th>{$strNewPassword}: </th><td><input name='newpassword' value='' type='password' /></td></tr>";
-    echo "<tr><th>{$strRepeat}: </th><td><input name='newpassword2' value='' type='password' /></td></tr>";
+    echo "<tr><th>{$strForenames}</th><td><input class='required' name='forenames' value='{$user->forenames}' />";
+        echo " <span class='required'><span>{$strRequired}</span></td></tr>";
+    echo "<tr><th>{$strSurname}</th><td><input class='required' name='surname' value='{$user->surname}' />";
+        echo " <span class='required'><span>{$strRequired}</span></td></tr>";
+    echo "<tr><th>{$strDepartment}</th><td><input name='department' value='{$user->department}' /></td></tr>";
+    echo "<tr><th>{$strAddress1}</th><td><input name='address1' value='{$user->address1}' /></td></tr>";
+    echo "<tr><th>{$strAddress2}</th><td><input name='address2' value='{$user->address2}' /></td></tr>";
+    echo "<tr><th>{$strCounty}</th><td><input name='county' value='{$user->county}' /></td></tr>";
+    echo "<tr><th>{$strCountry}</th><td><input name='country' value='{$user->country}' /></td></tr>";
+    echo "<tr><th>{$strPostcode}</th><td><input name='postcode' value='{$user->postcode}' /></td></tr>";
+    echo "<tr><th>{$strTelephone}</th><td><input class='required' name='phone' value='{$user->phone}' />";
+        echo " <span class='required'><span>{$strRequired}</span></td></tr>";
+    echo "<tr><th>{$strMobile}</th><td><input name='mobile' value='{$user->mobile}' /></td></tr>";
+    echo "<tr><th>{$strFax}</th><td><input name='fax' value='{$user->fax}' /></td></tr>";
+    echo "<tr><th>{$strEmail}</th><td><input class='required' name='email' value='{$user->email}' />";
+        echo " <span class='required'><span>{$strRequired}</span></td></tr>";
+    echo "<tr><th>{$strNewPassword}</th><td><input name='newpassword' value='' type='password' /></td></tr>";
+    echo "<tr><th>{$strRepeat}</th><td><input name='newpassword2' value='' type='password' /></td></tr>";
     echo "</table>";
     echo "<p align='center'><input type='submit' value='{$strUpdate}' /></p></form>";
 
