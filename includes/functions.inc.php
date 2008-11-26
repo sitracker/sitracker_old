@@ -3423,10 +3423,11 @@ function site_name($id)
 
 /**
  * prints the HTML for a drop down list of maintenance contracts
- * @param $name name of the drop down box
- * @param $id
- * @param $return Whether to return to HTML or echo
- * @param $showonlyactive True show only active (with a future expiry date), false shows all
+ * @param $name string. name of the drop down box
+ * @param $id int. the contract id to preselect
+ * @param $excludes array. Hide contracts with ID's in this array
+ * @param $return bool. Whether to return to HTML or echo
+ * @param $showonlyactive bool. True show only active (with a future expiry date), false shows all
  *
  */
 function maintenance_drop_down($name, $id, $excludes = '', $return = FALSE, $showonlyactive = FALSE)
@@ -3442,7 +3443,6 @@ function maintenance_drop_down($name, $id, $excludes = '', $return = FALSE, $sho
     {
     	$sql .= "AND (m.expirydate > {$now} OR m.expirydate = -1) ";
     }
-
     $sql .= "ORDER BY s.name ASC";
     $result = mysql_query($sql);
     $results = 0;
