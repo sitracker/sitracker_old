@@ -321,7 +321,18 @@ else
         if ($wait == 'yes')
         {
             // mark incident as awaiting closure
-            $timeofnextaction = $now + $CONFIG['closure_delay'];
+            $sql = "SELECT params FROM `{$dbScheduler}` WHERE action = 'CloseIncidents' LIMIT 1";
+            $result = mysql_query($sql);
+            if (mysql_error())
+            {
+                trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
+                $closure_delay = 554400;
+            }
+            else
+            {
+                list($closure_delay) = mysql_fetch_row($result);
+            }
+            $timeofnextaction = $now + $closure_delay;
             $sql = "UPDATE `{$dbIncidents}` SET status='7', lastupdated='$now', timeofnextaction='$timeofnextaction' WHERE id='$id'";
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
