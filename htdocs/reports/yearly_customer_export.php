@@ -32,7 +32,7 @@ if (empty($_REQUEST['mode']))
     echo "<p align='center'>This report lists the incidents that each site has logged over the past twelve months.</p>";
     echo "<form action='{$_SERVER['PHP_SELF']}' method='post'>";
     echo "<table summary='Site Selection Table' class='vertical'>";
-    echo "<tr><th colspan='2' align='center'>Include</th></tr>";
+    echo "<tr><th colspan='2' align='center'>{$strInclude}</th></tr>";
     echo "<tr><td align='center' colspan='2'>";
     $sql = "SELECT * FROM `{$dbSites}` ORDER BY name";
     $result = mysql_query($sql);
@@ -47,8 +47,8 @@ if (empty($_REQUEST['mode']))
     echo "</tr>\n";
     echo "<tr><th align='right'>{$strOutput}:</th>";
     echo "<td width='400'>";
-    echo "<input type='checkbox' name='showsitetotals' value='yes' /> Add a line after each site showing totals<br />";
-    echo "<input type='checkbox' name='showtotals' value='yes' /> Add a line to the bottom of the report showing totals<br /><br />";
+    echo "<label><input type='checkbox' name='showsitetotals' value='yes' /> Add a line after each site showing totals</label><br />";
+    echo "<label><input type='checkbox' name='showtotals' value='yes' /> Add a line to the bottom of the report showing totals</label><br /><br />";
     echo "<select name='output'>";
     echo "<option value='screen'>{$strScreen}</option>";
     echo "<option value='csv'>{$strCSVfile}</option>";

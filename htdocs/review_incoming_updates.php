@@ -89,7 +89,7 @@ function generate_row($update)
 
     $span = sprintf($GLOBALS['strByX'], user_realname($update['reason_user']))."<br />";
     $span .= sprintf($GLOBALS['strOnxAtY'], ldate($CONFIG['dateformat_date'], mysql2date($update['reason_time'])), ldate($CONFIG['dateformat_time'], mysql2date($update['reason_time'])));
-    
+
     $html_row .= "<td align='center' width='20%'><a class='info'>{$update['reason']}<span>{$span}</span></a></td>";
     $html_row .= "<td align='center' width='20%'>";
     if (($update['locked'] != $sit[2]) && ($update['locked'] > 0))
@@ -100,11 +100,14 @@ function generate_row($update)
     {
         if ($update['locked'] == $sit[2])
         {
-            $html_row.="<a href='{$_SERVER['PHP_SELF']}?unlock={$update['tempid']}' title='Unlock this update so it can be modified by someone else'> {$GLOBALS['strUnlock']}</a> | ";
+            $html_row .="<a href='{$_SERVER['PHP_SELF']}?unlock={$update['tempid']}'";
+            $html_row.= " title='Unlock this update so it can be modified by someone else'> {$GLOBALS['strUnlock']}</a> | ";
         }
         else
         {
-            $html_row.= "<a href=\"javascript:incident_details_window('{$update['tempid']}','incomingview');\" id='update{$update['id']}' class='info' title='View and lock this held e-mail'>{$GLOBALS['strView']}</a> | ";
+            $html_row .= "<a href=\"javascript:incident_details_window('{$update['tempid']}'";
+            $html_row .= ",'incomingview');\" id='update{$update['id']}' class='info'";
+            $html_row .= " title='View and lock this held e-mail'>{$GLOBALS['strView']}</a> | ";
         }
         $html_row.= "<a href='delete_update.php?updateid=".$update['id']."&amp;tempid=".$update['tempid']."&amp;timestamp=".$update['timestamp']."' title='Remove this item permanently' onclick=\"return confirm_action('{$GLOBALS['strAreYouSureDelete']}');\"> {$GLOBALS['strDelete']}</a>";
     }
@@ -284,10 +287,13 @@ if (mysql_num_rows($resultnew) >= 1)
         $html .= "<td>".contact_realname($new->contact)."</td>";
         $html .= "<td>".product_name($new->product)." / ".software_name($new->softwareid)."<br />";
         $html .= "[{$new->id}] <a href=\"javascript:incident_details_window('{$new->id}','holdingview');\" class='info'>{$new->title}<span>{$update_body}</span></a></td>";
-        $html .= "<td style='text-align:center;'>Unassigned</td>";
+        $html .= "<td style='text-align:center;'>{$strUnassigned}</td>";
         $html .= "<td style='text-align:center;'>";
-        $html .= "<a href= \"javascript:incident_details_window('{$new->id}','holdingview');\" title='View this incident'>View</a> | ";
-        $html .= "<a href= \"javascript:wt_winpopup('reassign_incident.php?id={$new->id}&amp;reason=Initial%20assignment%20to%20engineer&amp;popup=yes','mini');\" title='Assign this incident'>Assign</a></td>";
+        $html .= "<a href= \"javascript:incident_details_window('{$new->id}',";
+        $html .= "'holdingview');\" title='View this incident'>{$strView}</a> | ";
+        $html .= "<a href= \"javascript:wt_winpopup('reassign_incident.php?id=";
+        $html .= "{$new->id}&amp;reason=Initial%20assignment%20to%20engineer";
+        $html .= "&amp;popup=yes','mini');\" title='Assign this incident'>{$strAssign}</a></td>";
         $html .= "</tr>";
         $incidentqueuerows[$update_timestamp] = $html;
     }
@@ -341,7 +347,7 @@ if (is_array($incidentqueuerows))
 {
     if (sizeof($incidentqueuerows) > 0)
     {
-        echo "<h2>".icon('support', 32)." Unassigned Incidents</h2>";
+        echo "<h2>".icon('support', 32)." {$strUnassignedIncidents}</h2>";
 
         echo "<table align='center' style='width: 95%'>";
         echo "<th>{$strDate}</th>";
@@ -386,7 +392,7 @@ if ($spamcount > 0)
 
     if (is_array($spam_array))
     {
-        echo "<p align='center'><a href={$_SERVER['PHP_SELF']}?delete_all_spam=".implode(',',$spam_array).'>{$strDeleteAllSpam}</a></p>';
+        echo "<p align='center'><a href={$_SERVER['PHP_SELF']}?delete_all_spam=".implode(',',$spam_array).">{$strDeleteAllSpam}</a></p>";
     }
 
     echo "<br /><br />"; //gap
