@@ -1483,7 +1483,7 @@ CREATE TABLE `{$dbUsers}` (
   `username` varchar(50) default NULL,
   `password` varchar(50) default NULL,
   `realname` varchar(50) default NULL,
-  `roleid` int(5) NOT NULL default '1',
+  `roleid` int(5) NOT NULL default '3',
   `groupid` int(5) default NULL,
   `title` varchar(50) default NULL,
   `signature` text,
@@ -2473,6 +2473,9 @@ $upgrade_schema[341] = "
 -- PH 2008-11-22
 INSERT INTO `{$dbPermissions}` (`id` ,`name`) VALUES ('81', 'Adjust durations on activities');
 INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (1, 81, 'true');
+
+-- KH 2008-11-26
+ALTER TABLE `{$dbUsers}` CHANGE `roleid` `roleid` INT( 5 ) NOT NULL DEFAULT '3'; 
 
 ";
 // Important: When making changes to the schema you must add SQL to make the alterations
