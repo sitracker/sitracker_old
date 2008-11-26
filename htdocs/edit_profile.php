@@ -297,9 +297,9 @@ elseif ($mode=='save')
         // verify password fields
         if ($newpassword1 == $newpassword2 && strtoupper(md5($password)) == strtoupper(user_password($edituserid)))
         {
-            $password = strtoupper(md5($password));
-            $newpassword1 = strtoupper(md5($newpassword1));
-            $newpassword2 = strtoupper(md5($newpassword2));
+            $password = md5($password);
+            $newpassword1 = md5($newpassword1);
+            $newpassword2 = md5($newpassword2);
             $sql = "UPDATE `{$dbUsers}` SET password='$newpassword1' WHERE id='{$edituserid}'";
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
@@ -308,7 +308,7 @@ elseif ($mode=='save')
             {
                 trigger_error("!Error password change failed - new password: {$newpassword1}", E_USER_WARNING);
             }
-            $confirm_message = "<h2>Password Changed</h2>\n<p align='center'>You should log out and log back in again</p>\n<p align='center'>Please wait while you are redirected.</p>"; // FIXME i18n
+            $confirm_message = "<h2>{$strPasswordReset}</h2>\n<p align='center'>{$strPleaseWaitRedirect}.</p>"; // FIXME i18n
         }
         else
         {
