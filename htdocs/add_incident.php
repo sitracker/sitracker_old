@@ -133,7 +133,7 @@ if (empty($action) OR $action=='showform')
     else
     {
         echo "<p align='center'>{$strContact} {$contactid}</p>";
-        
+
     }
     include ('htmlfooter.inc.php');
 }
@@ -164,7 +164,7 @@ elseif ($action == 'findcontact')
     $sql .= "AND sc.maintenanceid = m.id ";
     if (empty($contactid))
     {
-         $sql .= $contactsql;
+        $sql .= $contactsql;
     }
     $sql .= "UNION SELECT p.name AS productname, p.id AS productid, c.surname AS surname, ";
     $sql .= "m.id AS maintid, m.incident_quantity, m.incidents_used, m.expirydate, m.term, s.name AS name, ";
@@ -278,7 +278,7 @@ elseif ($action == 'findcontact')
                 {
                     $html .=  "<td><a href=\"{$_SERVER['PHP_SELF']}?action=incidentform&amp;type=free&amp;contactid=".$contactrow['contactid']."&amp;updateid=$updateid&amp;win={$win}\" onclick=\"return confirm_free();\">";
                     $html .=  "{$strAddSiteSupportIncident}</a> (".sprintf($strRemaining,$site_incident_pool).")</td>";
-                	$customermatches++;
+                    $customermatches++;
                 }
                 else
                 {
@@ -293,7 +293,7 @@ elseif ($action == 'findcontact')
 
             if ($customermatches > 0)
             {
-            	echo $html;
+                echo $html;
             }
             unset($html, $customermatches);
         }
@@ -350,7 +350,7 @@ elseif ($action == 'findcontact')
                 }
                 else
                 {
-                	$html .= "<td class='expired'>{$strZeroRemaining}</td>";
+                    $html .= "<td class='expired'>{$strZeroRemaining}</td>";
                 }
                 $html .= '<td>'.$contactrow['forenames'].' '.$contactrow['surname'].'</td>';
                 $html .= '<td>'.site_name($contactrow['siteid']).'</td>';
@@ -360,7 +360,7 @@ elseif ($action == 'findcontact')
 
             if ($customermatches > 0)
             {
-	           	echo $html;
+                echo $html;
             }
 
             echo "<p align='center'><a href='add_contact.php'>{$strAddContact}</a></p>\n";
@@ -407,83 +407,101 @@ elseif ($action=='incidentform')
 
     if (!empty($updateid))
     {
-    	echo "<input type='hidden' name='updateid' value='$updateid' />";
+        echo "<input type='hidden' name='updateid' value='$updateid' />";
     }
-
-    echo "<table align='center' class='vertical' width='60%'>";
-    echo "<tr><th>{$strName}<br /><a href='edit_contact.php?action=edit&amp;";
-    echo "contact={$contactid}'>{$strEdit}</a></th><td><h3>".icon('contact', 32);
-    echo " ".contact_realname($contactid)."</h3></td></tr>";
-    echo "<tr><th>{$strEmail}</th><td>".contact_email($contactid)."</td></tr>";
-    echo "<tr><th>{$strTelephone}</th><td>".contact_phone($contactid)."</td></tr>";
+    echo "<table align='center' class='vertical' width='90%'>";
+    echo "<tr><th rowspan='2'>{$strName}<br /><a href='edit_contact.php?action=edit&amp;";
+    echo "contact={$contactid}'>{$strEdit}</a></th><td colspan='1' rowspan='2'><h3>".icon('contact', 32);
+    echo " ".contact_realname($contactid)."</h3></td>";
+    echo "<th>{$strEmail}</th><td>".contact_email($contactid)."</td></tr>";
+    echo "<th>{$strTelephone}</th><td>".contact_phone($contactid)."</td>";
     if ($type == 'free')
     {
-        echo "<tr><th>{$strServiceLevel}</th><td>".serviceleveltag_drop_down('servicelevel',$CONFIG['default_service_level'], TRUE)."</td></tr>";
-        echo "<tr><th>{$strSkill}</th><td>".software_drop_down('software', 0)."</td></tr>";
+        echo "<th>{$strServiceLevel}</th><td>".serviceleveltag_drop_down('servicelevel',$CONFIG['default_service_level'], TRUE)."</td>";
+        echo "<th>{$strSkill}</th><td>".software_drop_down('software', 0)."</td></tr>";
     }
     else
     {
-        echo "<tr><th>{$strContract}</th><td>{$maintid} - ".strip_tags($producttext)."</td></tr>";
-        echo "<tr><th>{$strSkill}</th><td>".softwareproduct_drop_down('software', 1, $productid)."</td></tr>";
-    }
-    
-    if (site_count_inventory_items($siteid) > 0)
-    {
-        $items_array[0] = '';
-        $sql = "SELECT * FROM `{$dbInventory}` ";
-        $sql .= "WHERE contactid='{$contactid}' ";
-        $result = mysql_query($sql);
-        while ($items = mysql_fetch_object($result))
-        {
-            $var = $items->name;
-            if (!empty($items->identifier))
-            {
-                $var .= " ({$items->identifier})";
-            }
-            elseif (!empty($items->address))
-            {
-                $var .= " ({$items->address})";
-            }
-            $items_array[$items->id] = $var;
-        }
-        echo "<tr><th>{$strInventoryItems}</th>";
-        echo "<td>".array_drop_down($items_array, 'inventory', '', '', TRUE)."</td></tr>";
+        echo "<tr><th>{$strContract}</th><td>{$maintid} - ".strip_tags($producttext)."</td>";
+        echo "<th>{$strSkill}</th><td>".softwareproduct_drop_down('software', 1, $productid)."</td></tr>";
     }
 
-    plugin_do('new_incident_form');
-    echo "<tr><th>{$strVersion}</th><td><input maxlength='50' name='productversion' size='40' type='text' /></td></tr>\n";
-    echo "<tr><th>{$strServicePacksApplied}</th><td><input maxlength='100' name='productservicepacks' size='40' type='text' /></td></tr>\n";
-    echo "<tr><td colspan='2'>&nbsp;</td></tr>";
+    echo "<tr><td colspan='4'>&nbsp;</td></tr>";
     if (empty($updateid))
     {
         echo "<tr><th>{$strIncidentTitle}</th>";
-        echo "<td><input class='required' maxlength='150' name='incidenttitle'";        echo " size='40' type='text' />";
+        echo "<td colspan='3'><input class='required' maxlength='350' name='incidenttitle'";
+        echo " size='140' type='text' />";
         echo " <span class='required'>{$strRequired}</span></td></tr>\n";
-        echo "<tr><th>{$strProblemDescription}:".help_link('ProblemDescriptionEngineer')."<br /></th>";
-        echo "<td><textarea name='probdesc' rows='5' cols='60'></textarea></td></tr>\n";
+
+        if (site_count_inventory_items($siteid) > 0)
+        {
+            $items_array[0] = '';
+            $sql = "SELECT * FROM `{$dbInventory}` ";
+            $sql .= "WHERE contactid='{$contactid}' ";
+            $result = mysql_query($sql);
+            while ($items = mysql_fetch_object($result))
+            {
+                $var = $items->name;
+                if (!empty($items->identifier))
+                {
+                    $var .= " ({$items->identifier})";
+                }
+                elseif (!empty($items->address))
+                {
+                    $var .= " ({$items->address})";
+                }
+                $items_array[$items->id] = $var;
+            }
+            echo "<tr><th>{$strInventoryItems}</th>";
+            echo "<td colspan='3'>".array_drop_down($items_array, 'inventory', '', '', TRUE)."</td></tr>";
+        }
+
         // Insert pre-defined per-product questions from the database, these should be required fields
         // These 'productinfo' questions don't have a GUI as of 27Oct05
         $sql = "SELECT * FROM `{$dbProductInfo}` WHERE productid='$productid'";
         $result = mysql_query($sql);
-        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
+        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+
         while ($productinforow = mysql_fetch_array($result))
         {
             echo "<tr><th>{$productinforow['information']}";
             echo "</th>";
-            echo "<td>";
+            echo "<td colspan='1'>";
             if ($productinforow['moreinformation'] != '')
             {
                 echo $productinforow['moreinformation']."<br />\n";
             }
-            echo "<input class='required' maxlength='100' ";
-	    echo "name='pinfo{$productinforow['id']}' size='40' type='text' />";            echo " <span class='required'>{$strRequired}</span></td></tr>\n";
+            echo "<input class='required' maxlength='50' ";
+            echo "name='pinfo{$productinforow['id']}' size='70' type='text' />";
+            echo " <span class='required'>{$strRequired}</span></td>\n";
+            // next pointer value for the second column, but check if no more values left and if true
+            // just put an empty cell - Nicdev007
+            ($productinforow = mysql_fetch_array($result));
+            if ($productinforow['information'] != '')
+            {
+                echo "<th>{$productinforow['information']}";
+                echo "</th>";
+                echo "<td colspan='1'>";
+                if ($productinforow['moreinformation'] != '')
+                {
+                    echo $productinforow['moreinformation']."<br />\n";
+                }
+                echo "<input class='required' maxlength='50' ";
+                echo "name='pinfo{$productinforow['id']}' size='70' type='text' />";
+                echo " <span class='required'>{$strRequired}</span></td></tr>\n";
+            }
+            echo "<th></th>";
+            echo "<td></td>";
         }
-        echo "<tr><th>{$strWorkAroundsAttempted}".help_link('WorkAroundsAttemptedEngineer')."</th>";
-        echo "<td><textarea name='workarounds' rows='5' cols='60'></textarea></td></tr>\n";
-        echo "<tr><th>{$strProblemReproduction}".help_link('ProblemReproductionEngineer')."</th>";
-        echo "<td><textarea name='probreproduction' rows='5' cols='60'></textarea></td></tr>\n";
-        echo "<tr><th>{$strCustomerImpact}".help_link('CustomerImpactEngineer')."</th>";
-        echo "<td><textarea name='custimpact' rows='5' cols='60'></textarea></td></tr>\n";
+        echo "<tr><th width='10%'>{$strProblemDescription}:".help_link('ProblemDescriptionEngineer')."<br /></th>";
+        echo "<td width='40%'><textarea name='probdesc' rows='4' cols='60'></textarea></td>\n";
+        echo "<th width='10%'>{$strProblemReproduction}".help_link('ProblemReproductionEngineer')."</th>";
+        echo "<td width='40%'><textarea name='probreproduction' rows='4' cols='60'></textarea></td></tr>\n";
+        echo "<tr><th width='10%'>{$strWorkAroundsAttempted}".help_link('WorkAroundsAttemptedEngineer')."</th>";
+        echo "<td width='40%'><textarea name='workarounds' rows='4' cols='60'></textarea></td>\n";
+        echo "<th width='10%'>{$strCustomerImpact}".help_link('CustomerImpactEngineer')."</th>";
+        echo "<td width='40%'><textarea name='custimpact' rows='4' cols='60'></textarea></td></tr>\n";
     }
     else
     {
@@ -508,18 +526,20 @@ elseif ($action=='incidentform')
         echo "<td>".parse_updatebody($mailed_body_text)."</td></tr>\n";
         echo "<tr><td class='shade1' colspan=2>&nbsp;</td></tr>\n";
     }
-    echo "<tr><th>{$strNextAction}</th>";
-    echo "<td>";
+    echo "<tr><th rowspan='2'>{$strNextAction}</th>";
+    echo "<td rowspan='2'>";
     echo "<input type='text' name='nextaction' maxlength='50' size='30' value='Initial Response' /><br /><br />";
     echo show_next_action();
-    echo "</td></tr>";
-    echo "<tr><th>{$strVisibleToCustomer}".help_link('VisibleToCustomer')."</th>\n";
-    echo "<td><label><input name='cust_vis' type='checkbox' checked='checked' /> {$strVisibleToCustomer}</label>";
-    echo "</td></tr>\n";
-    echo "<tr><th>{$strSendOpeningEmail}</th>\n";
-    echo "<td><label for='send_email'><input name='send_email' ";
-    echo "type='checkbox' checked='checked' />";
-    echo "{$strSendOpeningEmailDesc}</label></td></tr>\n";
+    echo "</td>";
+    if (empty($updateid))
+    {
+        echo "<th>{$strVisibleToCustomer}</th>\n";
+        echo "<td><label><input name='cust_vis' type='checkbox' checked='checked' /> {$strVisibleToCustomer}</label>";
+        echo help_link('VisibleToCustomer')."<br />";
+        echo "<label><input name='send_email' type='checkbox' checked='checked' /> ";
+        echo "{$strSendOpeningEmailDesc}</label>";
+        echo "</td></tr>\n";
+    }
     echo "<tr><th>{$strPriority}</th><td>".priority_drop_down("priority", 1, 4, FALSE)." </td></tr>";
     echo "</table>\n";
     echo "<input type='hidden' name='win' value='{$win}' />";
@@ -557,14 +577,14 @@ elseif ($action == 'assign')
         $send_email = cleanvar($_REQUEST['send_email']);
         $inventory = cleanvar($_REQUEST['inventory']);
 
-	if ($send_email == 'on')
+    if ($send_email == 'on')
         {
-	    $send_email = 1;
-	}
-	else
-	{
-	     $send_email = 0;
-	}
+        $send_email = 1;
+    }
+    else
+    {
+        $send_email = 0;
+    }
 
         // check form input
         $errors = 0;
