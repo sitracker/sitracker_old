@@ -38,7 +38,7 @@ if (empty($action) || $action == "showform")
     {
         echo "<tr><th>{$strContract} ".icon('contract', 16)."</th>";
         echo "<td width='400'>";
-        maintenance_drop_down("maintid", 0, '', FALSE, TRUE);
+        maintenance_drop_down("maintid", 0, '', '', FALSE, TRUE);
         echo "</td></tr>";
     }
     else

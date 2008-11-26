@@ -3425,12 +3425,13 @@ function site_name($id)
  * prints the HTML for a drop down list of maintenance contracts
  * @param $name string. name of the drop down box
  * @param $id int. the contract id to preselect
+ * @param $siteid int. Show records from this SiteID only, blank for all sites
  * @param $excludes array. Hide contracts with ID's in this array
  * @param $return bool. Whether to return to HTML or echo
  * @param $showonlyactive bool. True show only active (with a future expiry date), false shows all
  *
  */
-function maintenance_drop_down($name, $id, $excludes = '', $return = FALSE, $showonlyactive = FALSE)
+function maintenance_drop_down($name, $id, $siteid = '', $excludes = '', $return = FALSE, $showonlyactive = FALSE)
 {
     global $GLOBALS, $now;
     // TODO make maintenance_drop_down a hierarchical selection box sites/contracts
@@ -3438,6 +3439,7 @@ function maintenance_drop_down($name, $id, $excludes = '', $return = FALSE, $sho
     $sql  = "SELECT s.name AS sitename, p.name AS productname, m.id AS id ";
     $sql .= "FROM `{$GLOBALS['dbMaintenance']}` AS m, `{$GLOBALS['dbSites']}` AS s, `{$GLOBALS['dbProducts']}` AS p ";
     $sql .= "WHERE site = s.id AND product = p.id ";
+    if (!empty($siteid)) $sql .= "AND s.id = {$siteid} ";
 
     if ($showonlyactive)
     {
@@ -3448,7 +3450,7 @@ function maintenance_drop_down($name, $id, $excludes = '', $return = FALSE, $sho
     $results = 0;
     // print HTML
     $html .= "<select name='{$name}'>";
-    if ($id == 0)
+    if ($id == 0 AND $results > 0)
     {
         $html .= "<option selected='selected' value='0'></option>\n";
     }
