@@ -22,6 +22,13 @@ Further instructions and notes about specific upgrades follow, if you
 upgrading and skipping several versions listed below you should read
 everything carefully to make sure you've met all the requirements:
 
+Upgrading to 3.41
+-----------------
+We fixed an incorrect permission on the control panel->notices page
+this previously required "View your tasks (69)" permission instead of
+the correct "Post System Notices (78)" permission.
+
+
 Upgrading to 3.40
 -----------------
 From this version we no longer allow brackets "(" and ")" in trigger
