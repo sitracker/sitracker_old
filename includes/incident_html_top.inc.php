@@ -212,7 +212,7 @@ if ($menu != 'hide')
     elseif (incident_status($id) != 2)
     {
         echo "<a class='barlink' href='{$CONFIG['application_webpath']}update_incident.php?id={$id}&amp;popup={$popup}' accesskey='U'>{$strUpdate}</a> | ";
-        echo "<a class='barlink' href='{$CONFIG['application_webpath']}javascript:close_window({$id});' accesskey='C'>{$strClose}</a> | ";
+        echo "<a class='barlink' href='javascript:close_window({$id});' accesskey='C'>{$strClose}</a> | ";
         echo "<a class='barlink' href='{$CONFIG['application_webpath']}reassign_incident.php?id={$id}&amp;popup={$popup}' accesskey='R'>{$strReassign}</a> | ";
         echo "<a class='barlink' href='{$CONFIG['application_webpath']}edit_incident.php?id={$id}&amp;popup={$popup}' accesskey='T'>{$strEdit}</a> | ";
         echo "<a class='barlink' href='{$CONFIG['application_webpath']}incident_service_levels.php?id={$id}&amp;popup={$popup}' accesskey='S'>{$strService}</a> | ";
