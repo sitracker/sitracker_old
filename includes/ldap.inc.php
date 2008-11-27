@@ -315,9 +315,11 @@ function authenticateLDAP($username, $password)
         eval("\${$key} = \"{$value}\";");  
     }
 
-    // Default role, group, 
+    // Defaults
     $default_role = $CONFIG["ldap_default_user_role"];
     $default_status = $CONFIG["ldap_default_user_status"]; 
+    $default_style = $CONFIG['default_interface_style'];
+    $default_lang = $CONFIG['default_i18n'];
 
     $md5password = md5($password);
 
@@ -326,9 +328,10 @@ function authenticateLDAP($username, $password)
 
     // Create User
     $sql  = "INSERT INTO `{$dbUsers}` (username, password, realname, title, roleid, status, ";
-    $sql .= "email, phone, mobile, fax) ";
+    $sql .= "email, phone, mobile, fax, var_style, var_i18n ) ";
     $sql .= "VALUES ('$username', '$md5password', '$realname', '$jobtitle', ";
-    $sql .= "$default_role, $default_status, '$email', '$phone', '$mobile', '$fax')";
+    $sql .= "$default_role, $default_status, '$email', '$phone', '$mobile', '$fax', ";
+    $sql .= "$default_style, $default_lang)";
 
     $result = mysql_query($sql);
 
