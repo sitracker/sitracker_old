@@ -2185,7 +2185,7 @@ function userstatus_drop_down($name, $id, $userdisable = FALSE)
 
     while ($statuses = mysql_fetch_object($result))
     {
-        if ($statuses["id"] > 0)
+        if ($statuses->id > 0)
         {
             $html .= "<option ";
             if ($statuses->id == $id)
