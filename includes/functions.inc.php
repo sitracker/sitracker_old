@@ -261,13 +261,13 @@ function authenticate($username, $password)
     $use_ldap = $CONFIG['use_ldap'];
 
     // SQL Auth
-    if (authenticateSQL($username, $password) )
+    if (authenticateSQL($username, $password) == 1)
     {
         if ( $use_ldap )
         {
             ldapSyncUser($username, $password);
-            return 1;
         }
+        return 1;
     }
 
     // LDAP Auth
