@@ -18,11 +18,14 @@
 // use SQL joins.
 
 include ('classes.inc.php');
+include ('ldap.inc.php');
 
 // Version number of the application, (numbers only)
 $application_version = '3.41';
 // Revision string, e.g. 'beta2' or 'svn' or ''
 $application_revision = 'svn';
+
+$ldap_conn = "";
 
 // Append SVN data for svn versions
 if ($application_revision == 'svn')
@@ -34,8 +37,8 @@ if ($application_revision == 'svn')
 
 // Clean PHP_SELF server variable to avoid potential XSS security issue
 $_SERVER['PHP_SELF'] = substr($_SERVER['PHP_SELF'], 0,
-                              (strlen($_SERVER['PHP_SELF'])
-                              - @strlen($_SERVER['PATH_INFO'])));
+                            (strlen($_SERVER['PHP_SELF'])
+                            - @strlen($_SERVER['PATH_INFO'])));
 // Report all PHP errors
 error_reporting(E_ALL);
 $oldeh = set_error_handler("sit_error_handler");
@@ -201,19 +204,21 @@ function stripslashes_array($data)
     }
 }
 
-
 /**
     * Authenticate a user with a username/password pair
     * @author Ivan Lucas
     * @param $username string. A username
-    * @param $password string. An MD5 password
-    * @return an integer to indicate whether the user should be allowed to continue
-    * @retval 0 the credentials were wrong or the user was not found. the user should not be allowed to continue
+    * @param $password string. A password (non-md5)
+    * @return an integer to indicate whether the user authenticated against the database
+    * @retval 0 the credentials were wrong or the user was not found.
     * @retval 1 to indicate user is authenticated and allowed to continue.
+
 */
-function authenticate($username, $password)
+function authenticateSQL($username, $password)
 {
     global $dbUsers;
+
+    $password = md5($password);
     if ($_SESSION['auth'] == TRUE)
     {
         // Already logged in
@@ -238,6 +243,62 @@ function authenticate($username, $password)
         journal(4,'User Authenticated',"$username authenticated from ".getenv('REMOTE_ADDR'),1,0);
         return 1;
     }
+}
+
+
+/**
+    * Authenticate a user 
+    * @author Lea Anthony
+    * @param $username String. Username
+    * @param $password String. Password 
+    * @return an integer to indicate whether the user authenticated against any authentication backends
+    * @retval 0 the credentials were wrong or the user was not found.
+    * @retval 1 to indicate user is authenticated and allowed to continue.
+*/
+function authenticate($username, $password)
+{
+    global $CONFIG, $dbUsers;
+    $use_ldap = $CONFIG['use_ldap'];
+
+    // SQL Auth
+    if (authenticateSQL($username, $password) )
+    {
+        if ( $use_ldap )
+        {
+            ldapSyncUser($username, $password);
+            return 1;
+        }
+    }
+
+    // LDAP Auth
+    if ( $use_ldap )
+    {
+        return authenticateLDAP($username, $password);
+    }
+
+    return 0;
+}
+
+
+/**
+    * See if a customer exists in the database
+    * @author Lea Anthony
+    * @param $username String. Username of customer
+*/
+function customerExistsInDB($username)
+{
+    global $dbContacts;
+    $exists = 0;
+    $sql  = "SELECT id FROM `{$dbContacts}` WHERE username='$username'";
+    $result = mysql_query($sql);
+    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+
+    while( $res = mysql_fetch_array($result) )
+    {
+        $exists = 1;
+    }
+
+    return $exists;
 }
 
 
@@ -2713,14 +2774,14 @@ function format_seconds($seconds, $showseconds = FALSE)
 
         if ($years > 0)
         {
-        	if ($years == 1)
-        	{
-        		$return_string .= $str1Year.' ';
-        	}
-        	else
-        	{
-            	$return_string .= sprintf($strXYears, $years).' ';
-        	}
+            if ($years == 1)
+            {
+                $return_string .= $str1Year.' ';
+            }
+            else
+            {
+                $return_string .= sprintf($strXYears, $years).' ';
+            }
         }
 
         if ($months > 0 AND $years < 2)
@@ -2975,12 +3036,12 @@ function calculate_time_of_next_action($days, $hours, $minutes)
 
 
 /**
- * @param $name String name of select
- * @param $id Int The ID which should be choosed
- * @param $collapse Boolean Only show the tag rather than tag + priority
- * @param $select String additional parameter to the select clause e.g. onchange code
- * @return String HTML of the SLA drop down
- */
+* @param $name String name of select
+* @param $id Int The ID which should be choosed
+* @param $collapse Boolean Only show the tag rather than tag + priority
+* @param $select String additional parameter to the select clause e.g. onchange code
+* @return String HTML of the SLA drop down
+*/
 function servicelevel_drop_down($name, $id, $collapse = FALSE, $select = '')
 {
     global $dbServiceLevels;
@@ -3422,15 +3483,15 @@ function site_name($id)
 
 
 /**
- * prints the HTML for a drop down list of maintenance contracts
- * @param $name string. name of the drop down box
- * @param $id int. the contract id to preselect
- * @param $siteid int. Show records from this SiteID only, blank for all sites
- * @param $excludes array. Hide contracts with ID's in this array
- * @param $return bool. Whether to return to HTML or echo
- * @param $showonlyactive bool. True show only active (with a future expiry date), false shows all
- *
- */
+* prints the HTML for a drop down list of maintenance contracts
+* @param $name string. name of the drop down box
+* @param $id int. the contract id to preselect
+* @param $siteid int. Show records from this SiteID only, blank for all sites
+* @param $excludes array. Hide contracts with ID's in this array
+* @param $return bool. Whether to return to HTML or echo
+* @param $showonlyactive bool. True show only active (with a future expiry date), false shows all
+*
+*/
 function maintenance_drop_down($name, $id, $siteid = '', $excludes = '', $return = FALSE, $showonlyactive = FALSE)
 {
     global $GLOBALS, $now;
@@ -3443,7 +3504,7 @@ function maintenance_drop_down($name, $id, $siteid = '', $excludes = '', $return
 
     if ($showonlyactive)
     {
-    	$sql .= "AND (m.expirydate > {$now} OR m.expirydate = -1) ";
+        $sql .= "AND (m.expirydate > {$now} OR m.expirydate = -1) ";
     }
     $sql .= "ORDER BY s.name ASC";
     $result = mysql_query($sql);
@@ -4285,9 +4346,9 @@ function holidaytype_drop_down($name, $id)
 
 
 /**
-  * @author Paul Heaney
-  * @param $userid - userid to find group for
-  * @return A int of the groupid
+* @author Paul Heaney
+* @param $userid - userid to find group for
+* @return A int of the groupid
 */
 function user_group_id($userid)
 {
@@ -4302,12 +4363,12 @@ function user_group_id($userid)
 
 
 /**
-  * check to see if any fellow group members have holiday on the date specified
-  * @author Ivan Lucas
-  * @param $userid int - user ID
-  * @param $date int - UNIX Timestamp
-  * @param $length string - 'day', 'pm' or 'am'
-  * @return HTML space seperated list of users that are away on the date specified
+* check to see if any fellow group members have holiday on the date specified
+* @author Ivan Lucas
+* @param $userid int - user ID
+* @param $date int - UNIX Timestamp
+* @param $length string - 'day', 'pm' or 'am'
+* @return HTML space seperated list of users that are away on the date specified
 */
 function check_group_holiday($userid, $date, $length='day')
 {
@@ -4344,14 +4405,14 @@ function check_group_holiday($userid, $date, $length='day')
 
 
 /**
-  * Print a listbox of countries
-  * @author Ivan Lucas
-  * @param $name string - HTML select 'name' attribute
-  * @param $country string - Country to pre-select (default to config file setting)
-  * @param $extraattributes string - Extra attributes to put on the select tag
-  * @return HTML
-  * @note if the $country given is not in the list, an editable input box is given instead of a select box
-  * @todo TODO i18n country list (How do we do this?)
+* Print a listbox of countries
+* @author Ivan Lucas
+* @param $name string - HTML select 'name' attribute
+* @param $country string - Country to pre-select (default to config file setting)
+* @param $extraattributes string - Extra attributes to put on the select tag
+* @return HTML
+* @note if the $country given is not in the list, an editable input box is given instead of a select box
+* @todo TODO i18n country list (How do we do this?)
 */
 function country_drop_down($name, $country, $extraattributes='')
 {
@@ -5037,7 +5098,7 @@ function calculate_working_time($t1, $t2, $publicholidays)
     }
 
     return $timeworked;
- */
+*/
 }
 
 
@@ -5200,8 +5261,8 @@ function leading_zero($length,$number)
 
 
 /**
- * @param $lang string takes either 'user' or 'system' as to which language to use
- **/
+* @param $lang string takes either 'user' or 'system' as to which language to use
+**/
 function readable_date($date, $lang = 'user')
 {
     global $SYSLANG;
@@ -5877,15 +5938,15 @@ function file_permissions_info($perms)
     * @returns variable
 */
 function cleanvar($vars, $striphtml = TRUE, $transentities = TRUE,
-                  $mysqlescape = TRUE, $disallowedchars = array(),
-                  $replacechars = array())
+                $mysqlescape = TRUE, $disallowedchars = array(),
+                $replacechars = array())
 {
     if (is_array($vars))
     {
         foreach ($vars as $key => $singlevar)
         {
             $var[$key] = cleanvar($singlevar, $striphtml, $transentities, $mysqlescape,
-                     $disallowedchars, $replacechars);
+                    $disallowedchars, $replacechars);
         }
     }
     else
@@ -5954,39 +6015,39 @@ function bbcode($text)
 {
     global $CONFIG;
     $bbcode_regex = array(0 => "/\[b\](.*?)\[\/b\]/s",
-                         1 => "/\[i\](.*?)\[\/i\]/s",
-                         2 => "/\[u\](.*?)\[\/u\]/s",
-                         3 => "/\[quote\](.*?)\[\/quote\]/s",
-                         4 => "/\[size=(.+?)\](.+?)\[\/size\]/is",
-                         //5 => "/\[url\](.*?)\[\/url\]/s",
-                         6 => "/\[size=(.+?)\](.+?)\[\/size\]/is",
-                         7 => "/\[img\](.*?)\[\/img\]/s",
-                         8 => "/\[size=(.+?)\](.+?)\[\/size\]/is",
-                         9 => "/\[color\](.*?)\[\/color\]/s",
-                         10 => "/\[size=(.+?)\](.+?)\[\/size\]/is",
-                         11 => "/\[size\](.*?)\[\/size\]/s",
-                         12 => "/\[code\](.*?)\[\/code\]/s",
-                         13 => "/\[hr\]/s",
-                         14 => "/\[s\](.*?)\[\/s\]/s",
-                         15 => "/\[\[att\=(.*?)]](.*?)\[\[\/att]]/s",
+                        1 => "/\[i\](.*?)\[\/i\]/s",
+                        2 => "/\[u\](.*?)\[\/u\]/s",
+                        3 => "/\[quote\](.*?)\[\/quote\]/s",
+                        4 => "/\[size=(.+?)\](.+?)\[\/size\]/is",
+                        //5 => "/\[url\](.*?)\[\/url\]/s",
+                        6 => "/\[size=(.+?)\](.+?)\[\/size\]/is",
+                        7 => "/\[img\](.*?)\[\/img\]/s",
+                        8 => "/\[size=(.+?)\](.+?)\[\/size\]/is",
+                        9 => "/\[color\](.*?)\[\/color\]/s",
+                        10 => "/\[size=(.+?)\](.+?)\[\/size\]/is",
+                        11 => "/\[size\](.*?)\[\/size\]/s",
+                        12 => "/\[code\](.*?)\[\/code\]/s",
+                        13 => "/\[hr\]/s",
+                        14 => "/\[s\](.*?)\[\/s\]/s",
+                        15 => "/\[\[att\=(.*?)]](.*?)\[\[\/att]]/s",
                         16 => "/\[url=(.+?)\](.+?)\[\/url\]/is");
 
     $bbcode_replace = array(0 => "<strong>$1</strong>",
-                             1 => "<em>$1</em>",
-                             2 => "<u>$1</u>",
-                             3 => "<blockquote><p>$1</p></blockquote>",
-                             4 => "<blockquote cite=\"$1\"><p>$1 said:<br />$2</p></blockquote>",
-                             //5 => '<a href="$1" title="$1">$1</a>',
-                             6 => "<a href=\"$1\" title=\"$1\">$2</a>",
-                             7 => "<img src=\"$1\" alt=\"User submitted image\" />",
-                             8 => "<span style=\"color:$1\">$2</span>",
-                             9 => "<span style=\"color:red;\">$1</span>",
-                             10 => "<span style=\"font-size:$1\">$2</span>",
-                             11 => "<span style=\"font-size:large\">$1</span>",
-                             12 => "<code>$1</code>",
-                             13 => "<hr />",
-                             14 => "<span style=\"text-decoration:line-through\">$1</span>",
-                             15 => "<a href=\"{$_SERVER['HTTP_HOST']}{$CONFIG['application_webpath']}download.php?id=$1\">$2</a>",
+                            1 => "<em>$1</em>",
+                            2 => "<u>$1</u>",
+                            3 => "<blockquote><p>$1</p></blockquote>",
+                            4 => "<blockquote cite=\"$1\"><p>$1 said:<br />$2</p></blockquote>",
+                            //5 => '<a href="$1" title="$1">$1</a>',
+                            6 => "<a href=\"$1\" title=\"$1\">$2</a>",
+                            7 => "<img src=\"$1\" alt=\"User submitted image\" />",
+                            8 => "<span style=\"color:$1\">$2</span>",
+                            9 => "<span style=\"color:red;\">$1</span>",
+                            10 => "<span style=\"font-size:$1\">$2</span>",
+                            11 => "<span style=\"font-size:large\">$1</span>",
+                            12 => "<code>$1</code>",
+                            13 => "<hr />",
+                            14 => "<span style=\"text-decoration:line-through\">$1</span>",
+                            15 => "<a href=\"{$_SERVER['HTTP_HOST']}{$CONFIG['application_webpath']}download.php?id=$1\">$2</a>",
                             16 => "<a href=\"$1\">$2</a>");
 
     $html = preg_replace($bbcode_regex, $bbcode_replace, $text);
@@ -7122,7 +7183,7 @@ function string_find_all($haystack, $needle, $limit=0)
     $positions = array();
     $currentoffset = 0;
 
-	$offset = 0;
+    $offset = 0;
     $count = 0;
     while (($pos = stripos($haystack, $needle, $offset)) !== false && ($count < $limit || $limit == 0))
     {
@@ -7602,11 +7663,11 @@ function schedule_actions_due()
 
 
 /**
- * Marks a schedule action as started
- * @author Paul Heaney
- * @param $action string Name of scheduled action
- * @return boolean Success of update
- */
+* Marks a schedule action as started
+* @author Paul Heaney
+* @param $action string Name of scheduled action
+* @return boolean Success of update
+*/
 function schedule_action_started($action)
 {
     global $now;
@@ -7668,8 +7729,8 @@ function get_incident_billing_details($incidentid)
 {
     global $dbUpdates;
     /*
-     $array[owner][] = array(owner, starttime, duration)
-     */
+    $array[owner][] = array(owner, starttime, duration)
+    */
     $sql = "SELECT * FROM `{$dbUpdates}` WHERE incidentid = {$incidentid} AND duration IS NOT NULL";
     $result = mysql_query($sql);
     if (mysql_error())
@@ -7770,9 +7831,9 @@ function group_billing_periods(&$count, $countType, $activity, $period)
 }
 
 /**
-  * @author Paul Heaney
-  * @note  based on periods
- */
+* @author Paul Heaney
+* @note  based on periods
+*/
 function make_incident_billing_array($incidentid, $totals=TRUE)
 {
     $billing = get_incident_billing_details($incidentid);
@@ -7910,10 +7971,10 @@ function make_incident_billing_array($incidentid, $totals=TRUE)
 }
 
 /**
- *Function to make an array with the number of units at each billable multiplier, broken down by engineer
- * @author Paul Heaney
- *
- */
+*Function to make an array with the number of units at each billable multiplier, broken down by engineer
+* @author Paul Heaney
+*
+*/
 function get_incident_billable_breakdown_array($incidentid)
 {
     $billable = make_incident_billing_array($incidentid, FALSE);
@@ -8394,15 +8455,15 @@ function contract_details($id, $mode='internal')
 
     if ($mode == 'internal')
     {
-	    $html .= "<tr><th>{$GLOBALS['strService']}</th><td>";
-	    $html .= contract_service_table($id);
-	    $html .= "</td></tr>\n";
+        $html .= "<tr><th>{$GLOBALS['strService']}</th><td>";
+        $html .= contract_service_table($id);
+        $html .= "</td></tr>\n";
 
-	    // FIXME not sure if this should be here
-	    $html .= "<tr><th>{$GLOBALS['strBalance']}</th><td>{$CONFIG['currency_symbol']}".number_format(get_contract_balance($id), 2);
-	    $multiplier = get_billable_multiplier(strtolower(date('D', $now)), date('G', $now));
-	    $html .= " (&cong;".contract_unit_balance($id)." units)";
-	    $html .= "</td></tr>";
+        // FIXME not sure if this should be here
+        $html .= "<tr><th>{$GLOBALS['strBalance']}</th><td>{$CONFIG['currency_symbol']}".number_format(get_contract_balance($id), 2);
+        $multiplier = get_billable_multiplier(strtolower(date('D', $now)), date('G', $now));
+        $html .= " (&cong;".contract_unit_balance($id)." units)";
+        $html .= "</td></tr>";
     }
 
     if ($maintrow['maintnotes'] != '' AND $mode == 'internal')
@@ -8723,7 +8784,7 @@ function group_user_selector($title, $level="engineer", $groupid)
 */
 function show_next_action()
 {
-	global $now;
+    global $now;
     $html = "{$GLOBALS['strPlaceIncidentInWaitingQueue']}<br />";
 
     $oldtimeofnextaction = incident_timeofnextaction($id); //FIXME $id never populated
@@ -9145,7 +9206,7 @@ function show_edit_site($site, $mode='internal')
 */
 function show_add_contact($siteid = 0, $mode = 'internal')
 {
-	global $CONFIG;
+    global $CONFIG;
     $html = show_form_errors('add_contact');
     clear_form_errors('add_contact');
     $html .= "<h2>".icon('contact', 32)." ";
@@ -9563,6 +9624,15 @@ function contract_site($maintid)
     }
 }
 
+/**
+* Adds a new user
+* @author Lea Anthony
+* @todo Needs completing 27Nov08
+*/
+function add_new_user($username, $password, $realname, $roleid, $groupid, $title, $email, $phone, $mobile, $fax, $status, $var_style, $holiday_entitlement)
+{
+}
+
 
 /**
 * Sets up default triggers for new users or upgraded users
@@ -9656,9 +9726,9 @@ function site_salesperson($siteid)
 
 
 /**
- * Function to return currently running SiT! version
- * @return String - Currently running application version
- */
+* Function to return currently running SiT! version
+* @return String - Currently running application version
+*/
 function application_version_string()
 {
     global $application_version_string;
@@ -9667,10 +9737,10 @@ function application_version_string()
 
 
 /**
- * Returns the currently running schema version
- * @author Paul Heaney
- * @return String - currently running schema version
- */
+* Returns the currently running schema version
+* @author Paul Heaney
+* @return String - currently running schema version
+*/
 function database_schema_version()
 {
     $return = '';
@@ -9957,9 +10027,9 @@ function plugin_do($context, $optparams = FALSE)
 
 
 /**
-  * @author Paul Heaney
-  * @param dayofweek string.    'mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun' or 'holiday'
- */
+* @author Paul Heaney
+* @param dayofweek string.    'mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun' or 'holiday'
+*/
 function get_billable_multiplier($dayofweek, $hour, $billingmatrix = 1)
 {
     $sql = "SELECT `{$dayofweek}` AS rate FROM {$GLOBALS['dbBillingMatrix']} WHERE hour = {$hour} AND id = {$billingmatrix}";
@@ -9984,11 +10054,11 @@ function get_billable_multiplier($dayofweek, $hour, $billingmatrix = 1)
 
 
 /**
-  * @author Paul Heaney
-  * @param $contractid  The Contract ID
-  * @param $date  UNIX timestamp. The function will look for service that is current as of this timestamp
-  * @return mixed.     Service ID, or -1 if not found, or FALSE on error
- */
+* @author Paul Heaney
+* @param $contractid  The Contract ID
+* @param $date  UNIX timestamp. The function will look for service that is current as of this timestamp
+* @return mixed.     Service ID, or -1 if not found, or FALSE on error
+*/
 function get_serviceid($contractid, $date = '')
 {
     global $now, $CONFIG;
@@ -10000,7 +10070,7 @@ function get_serviceid($contractid, $date = '')
 
     if (!$CONFIG['billing_allow_incident_approval_against_overdrawn_service'])
     {
-    	$sql .= "AND balance > 0 ";
+        $sql .= "AND balance > 0 ";
     }
 
     $sql .= "ORDER BY priority DESC, enddate, balance ASC LIMIT 1";
@@ -10024,50 +10094,50 @@ function get_serviceid($contractid, $date = '')
 
 
 /**
- * Function to find the most applicable unit rate for a particular contract
- * @param $contractid - The contract id
- * @param $date UNIX timestamp. The function will look for service that is current as of this timestamp
- * @return int th eunit rate, -1 if non found
-  * @author Paul Heaney
- */
+* Function to find the most applicable unit rate for a particular contract
+* @param $contractid - The contract id
+* @param $date UNIX timestamp. The function will look for service that is current as of this timestamp
+* @return int th eunit rate, -1 if non found
+* @author Paul Heaney
+*/
 function get_unit_rate($contractid, $date='')
 {
     $serviceid = get_serviceid($contractid, $date);
 
-	if ($serviceid != -1)
-	{
-	    $sql = "SELECT unitrate FROM `{$GLOBALS['dbService']}` AS p WHERE serviceid = {$serviceid}";
+    if ($serviceid != -1)
+    {
+        $sql = "SELECT unitrate FROM `{$GLOBALS['dbService']}` AS p WHERE serviceid = {$serviceid}";
 
-	    $result = mysql_query($sql);
-	    if (mysql_error())
-	    {
-	        trigger_error(mysql_error(),E_USER_WARNING);
-	        return FALSE;
-	    }
+        $result = mysql_query($sql);
+        if (mysql_error())
+        {
+            trigger_error(mysql_error(),E_USER_WARNING);
+            return FALSE;
+        }
 
-	    $unitrate = -1;
+        $unitrate = -1;
 
-	    if (mysql_num_rows($result) > 0)
-	    {
-	        $obj = mysql_fetch_object($result);
-	        $unitrate = $obj->unitrate;
-	    }
-	}
-	else
-	{
-		$unitrate = -1;
-	}
+        if (mysql_num_rows($result) > 0)
+        {
+            $obj = mysql_fetch_object($result);
+            $unitrate = $obj->unitrate;
+        }
+    }
+    else
+    {
+        $unitrate = -1;
+    }
 
     return $unitrate;
 }
 
 
 /**
- * Function passed a day, month and year to identify if this day is defined as a public holiday
- * @author Paul Heaney
- * FIXME this is horribily inefficient, we should load a table ONCE with all the public holidays
-         and then just check that with this function
- */
+* Function passed a day, month and year to identify if this day is defined as a public holiday
+* @author Paul Heaney
+* FIXME this is horribily inefficient, we should load a table ONCE with all the public holidays
+        and then just check that with this function
+*/
 function is_day_bank_holiday($day, $month, $year)
 {
     global $dbHolidays;
@@ -10089,9 +10159,9 @@ function is_day_bank_holiday($day, $month, $year)
 
 
 /**
- * Function to get an array of all billing multipliers for a billing matrix
- * @author Paul Heaney
- */
+* Function to get an array of all billing multipliers for a billing matrix
+* @author Paul Heaney
+*/
 function get_all_available_multipliers($matrixid=1)
 {
     $days = array('mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun', 'holiday');
@@ -10119,10 +10189,10 @@ function get_all_available_multipliers($matrixid=1)
 
 
 /**
- * Function to identofy if incident has been approved for billing
- * @returns TRUE for approved, FALSE otherwise
- * @author Paul Heaney
- */
+* Function to identofy if incident has been approved for billing
+* @returns TRUE for approved, FALSE otherwise
+* @author Paul Heaney
+*/
 function is_billable_incident_approved($incidentid)
 {
     global $dbLinks, $dbLinkTypes;
@@ -10147,7 +10217,7 @@ function is_billable_incident_approved($incidentid)
     * @param $includenonapproved boolean. Include incidents which have not been approved
     * @note The balance is a sum of all the current service that have remaining balance
     * @todo FIXME add a param that makes this optionally show the incident pool balance
-      in the case of non-timed type contracts
+    in the case of non-timed type contracts
 */
 function get_contract_balance($contractid, $includenonapproved = FALSE)
 {
@@ -10227,7 +10297,7 @@ function total_awaiting_approval($contractid)
     * @param $contractid int. Contract ID of the contract to credit
     * @param $description string. A useful description of the transaction
     * @param $amount. float. The amount to credit or debit to the contract balance
-                      positive for credit and negative for debit
+                    positive for credit and negative for debit
     * @param $serviceid    int.    optional serviceid to use. This is calculated if ommitted.
     * @return boolean - status of the balance update
     * @note The actual service to credit will be calculated automatically if not specified
@@ -10289,10 +10359,10 @@ function update_contract_balance($contractid, $description, $amount, $serviceid=
 
 
 /**
- * Function to approve an incident, this adds a transaction and confirms the 'bill' is correct.
- * @author Paul Heaney
- * @param incidentid ID of the incident to approve
- */
+* Function to approve an incident, this adds a transaction and confirms the 'bill' is correct.
+* @author Paul Heaney
+* @param incidentid ID of the incident to approve
+*/
 function approve_incident($incidentid)
 {
     global $dbLinks, $sit, $CONFIG, $strUnits;
@@ -10435,7 +10505,7 @@ function contract_service_table($contractid)
 
             if ($service->foc == 'yes')
             {
-            	$span .= "<strong>{$GLOBALS['strFreeOfCharge']}</strong>";
+                $span .= "<strong>{$GLOBALS['strFreeOfCharge']}</strong>";
             }
 
             if (!empty($span))
@@ -10491,10 +10561,10 @@ function contract_unit_balance($contractid, $includenonapproved = FALSE)
 
 
 /**
- * Returns if the contact has a timed contract or if the site does in the case of the contact not.
- * @author Paul Heaney
- * @return either NO_BILLABLE_CONTRACT, CONTACT_HAS_BILLABLE_CONTRACT or SITE_HAS_BILLABLE_CONTRACT the latter is if the site has a billable contract by the contact isn't a named contact
- */
+* Returns if the contact has a timed contract or if the site does in the case of the contact not.
+* @author Paul Heaney
+* @return either NO_BILLABLE_CONTRACT, CONTACT_HAS_BILLABLE_CONTRACT or SITE_HAS_BILLABLE_CONTRACT the latter is if the site has a billable contract by the contact isn't a named contact
+*/
 function does_contact_have_billable_contract($contactid)
 {
     global $now;
@@ -10536,11 +10606,11 @@ function does_contact_have_billable_contract($contactid)
 
 
 /**
- * Gets the billable contract ID for a contact, if multiple exist then the first one is choosen
- * @author Paul Heaney
- * @param int $contactid - The contact ID you want to find the contract for
- * @return int the ID of the contract, -1 if not found
- */
+* Gets the billable contract ID for a contact, if multiple exist then the first one is choosen
+* @author Paul Heaney
+* @param int $contactid - The contact ID you want to find the contract for
+* @return int the ID of the contract, -1 if not found
+*/
 function get_billable_contract_id($contactid)
 {
     global $now;
@@ -10566,218 +10636,218 @@ function get_billable_contract_id($contactid)
 
 
 /**
- * Function to display/generate the transactions table
- * @author Paul Heaney
- * @param int $serviceid - The service ID to show transactons for
- * @param Date $startdate - Date in format yyyy-mm-dd when you want to start the report from
- * @param Date $enddate - Date in  format yyyy-mm-dd when you want to end the report, empty means today
- * @param int[] $sites - Array of sites to report on
- * @param String $display either csv or html
- * @param boolean $sitebreakdown - Breakdown per site
- * @param boolean showfoc - Show free of charge as well (defaults to true);
- * @return String -either HTML or CSV
- */
+* Function to display/generate the transactions table
+* @author Paul Heaney
+* @param int $serviceid - The service ID to show transactons for
+* @param Date $startdate - Date in format yyyy-mm-dd when you want to start the report from
+* @param Date $enddate - Date in  format yyyy-mm-dd when you want to end the report, empty means today
+* @param int[] $sites - Array of sites to report on
+* @param String $display either csv or html
+* @param boolean $sitebreakdown - Breakdown per site
+* @param boolean showfoc - Show free of charge as well (defaults to true);
+* @return String -either HTML or CSV
+*/
 function transactions_report($serviceid, $startdate, $enddate, $sites, $display, $sitebreakdown=TRUE, $showfoc=TRUE, $focaszero=FALSE)
 {
-	global $CONFIG;
+    global $CONFIG;
 
     $csv_currency = html_entity_decode($CONFIG['currency_symbol'], ENT_NOQUOTES, "ISO-8859-15"); // Note using -15 as -1 doesnt support euro
 
-	$sql = "SELECT DISTINCT t.*, m.site FROM `{$GLOBALS['dbTransactions']}` AS t, `{$GLOBALS['dbService']}` AS p, ";
-	$sql .= "`{$GLOBALS['dbMaintenance']}` AS m, `{$GLOBALS['dbServiceLevels']}` AS sl, `{$GLOBALS['dbSites']}` AS s ";
-	$sql .= "WHERE t.serviceid = p.serviceid AND p.contractid = m.id "; // AND t.date <= '{$enddateorig}' ";
-	$sql .= "AND m.servicelevelid = sl.id AND sl.timed = 'yes' AND m.site = s.id ";
-	//// $sql .= "AND t.date > p.lastbilled AND m.site = {$objsite->site} ";
-	if ($serviceid > 0) $sql .= "AND t.serviceid = {$serviceid} ";
-	if (!empty($startdate)) $sql .= "AND t.date >= '{$startdate}' ";
-	if (!empty($enddate)) $sql .= "AND t.date <= '{$enddate}' ";
+    $sql = "SELECT DISTINCT t.*, m.site FROM `{$GLOBALS['dbTransactions']}` AS t, `{$GLOBALS['dbService']}` AS p, ";
+    $sql .= "`{$GLOBALS['dbMaintenance']}` AS m, `{$GLOBALS['dbServiceLevels']}` AS sl, `{$GLOBALS['dbSites']}` AS s ";
+    $sql .= "WHERE t.serviceid = p.serviceid AND p.contractid = m.id "; // AND t.date <= '{$enddateorig}' ";
+    $sql .= "AND m.servicelevelid = sl.id AND sl.timed = 'yes' AND m.site = s.id ";
+    //// $sql .= "AND t.date > p.lastbilled AND m.site = {$objsite->site} ";
+    if ($serviceid > 0) $sql .= "AND t.serviceid = {$serviceid} ";
+    if (!empty($startdate)) $sql .= "AND t.date >= '{$startdate}' ";
+    if (!empty($enddate)) $sql .= "AND t.date <= '{$enddate}' ";
 
     if (!showfoc) $sql .= "AND s.foc = 'no' ";
 
-	if (!empty($sites))
-	{
-	    $sitestr = '';
+    if (!empty($sites))
+    {
+        $sitestr = '';
 
-	    foreach ($sites AS $s)
-	    {
-	        if (empty($sitestr)) $sitestr .= "m.site = {$s} ";
-	        else $sitestr .= "OR m.site = {$s} ";
-	    }
+        foreach ($sites AS $s)
+        {
+            if (empty($sitestr)) $sitestr .= "m.site = {$s} ";
+            else $sitestr .= "OR m.site = {$s} ";
+        }
 
-	    $sql .= "AND {$sitestr} ";
-	}
+        $sql .= "AND {$sitestr} ";
+    }
 
-	if (!empty($site)) $sql .= "AND m.site = {$site} ";
+    if (!empty($site)) $sql .= "AND m.site = {$site} ";
 
-	$sql .= "ORDER BY s.name ";
+    $sql .= "ORDER BY s.name ";
 
-	$result = mysql_query($sql);
-	if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
+    $result = mysql_query($sql);
+    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
 
-	if (mysql_num_rows($result) > 0)
-	{
-	    $shade = 'shade1';
+    if (mysql_num_rows($result) > 0)
+    {
+        $shade = 'shade1';
 
-	    $total = 0;
-	    $totalcredit = 0;
-	    $totaldebit = 0;
+        $total = 0;
+        $totalcredit = 0;
+        $totaldebit = 0;
 
-	    while ($transaction = mysql_fetch_object($result))
-	    {
-	        if ($display == 'html')
-	        {
-	            $str = "<tr class='$shade'>";
-	            $str .= "<td>{$transaction->date}</td>";
-	            $str .= "<td>{$transaction->transactionid}</td>";
-	            $str .= "<td>{$transaction->serviceid}</td>";
-	            $str .= "<td>".site_name($transaction->site)."</td>";
-	            $str .= "<td>{$transaction->description}</td>";
-	        }
-	        elseif ($display == 'csv')
-	        {
-	            $str = "\"{$transaction->date}\",";
-	            $str .= "\"{$transaction->transactionid}\",";
-	            $str .= "\"{$transaction->serviceid}\",\"";
-	            $str .= site_name($transaction->site)."\",";
-	            $str .= "\"".html_entity_decode($transaction->description)."\",";
-	        }
+        while ($transaction = mysql_fetch_object($result))
+        {
+            if ($display == 'html')
+            {
+                $str = "<tr class='$shade'>";
+                $str .= "<td>{$transaction->date}</td>";
+                $str .= "<td>{$transaction->transactionid}</td>";
+                $str .= "<td>{$transaction->serviceid}</td>";
+                $str .= "<td>".site_name($transaction->site)."</td>";
+                $str .= "<td>{$transaction->description}</td>";
+            }
+            elseif ($display == 'csv')
+            {
+                $str = "\"{$transaction->date}\",";
+                $str .= "\"{$transaction->transactionid}\",";
+                $str .= "\"{$transaction->serviceid}\",\"";
+                $str .= site_name($transaction->site)."\",";
+                $str .= "\"".html_entity_decode($transaction->description)."\",";
+            }
 
             if ($focaszero)
             {
-            	$transaction->amount = 0;
+                $transaction->amount = 0;
             }
 
-	        $total += $transaction->amount;
-	        if ($transaction->amount < 0)
-	        {
-	            $totaldebit += $transaction->amount;
-	            if ($display == 'html')
-	            {
-	                $str .= "<td></td><td>{$CONFIG['currency_symbol']}".number_format($transaction->amount, 2)."</td>";
-	            }
-	            elseif ($display == 'csv')
-	            {
-	                $str .= ",\"{$csv_currency}".number_format($transaction->amount, 2)."\",";
-	            }
-	        }
-	        else
-	        {
-	            $totalcredit += $transaction->amount;
-	            if ($display == 'html')
-	            {
-	                $str .= "<td>{$CONFIG['currency_symbol']}".number_format($transaction->amount, 2)."</td><td></td>";
-	            }
-	            elseif ($display == 'csv')
-	            {
-	                $str .= "\"{$csv_currency}".number_format($transaction->amount, 2)."\",,";
-	            }
-	        }
+            $total += $transaction->amount;
+            if ($transaction->amount < 0)
+            {
+                $totaldebit += $transaction->amount;
+                if ($display == 'html')
+                {
+                    $str .= "<td></td><td>{$CONFIG['currency_symbol']}".number_format($transaction->amount, 2)."</td>";
+                }
+                elseif ($display == 'csv')
+                {
+                    $str .= ",\"{$csv_currency}".number_format($transaction->amount, 2)."\",";
+                }
+            }
+            else
+            {
+                $totalcredit += $transaction->amount;
+                if ($display == 'html')
+                {
+                    $str .= "<td>{$CONFIG['currency_symbol']}".number_format($transaction->amount, 2)."</td><td></td>";
+                }
+                elseif ($display == 'csv')
+                {
+                    $str .= "\"{$csv_currency}".number_format($transaction->amount, 2)."\",,";
+                }
+            }
 
-	        if ($display == 'html') $str .= "</tr>";
-	        elseif ($display == 'csv') $str .= "\n";
+            if ($display == 'html') $str .= "</tr>";
+            elseif ($display == 'csv') $str .= "\n";
 
-	        if ($sitebreakdown == TRUE)
-	        {
-	            $table[$transaction->site]['site'] = site_name($transaction->site);
-	            $table[$transaction->site]['str'] .= $str;
-	            if ($transaction->amount < 0)
-	            {
-	                $table[$transaction->site]['debit'] += $transaction->amount;
-	            }
-	            else
-	            {
-	                $table[$transaction->site]['credit'] += $transaction->amount;
-	            }
-	        }
-	        else
-	        {
-	            $table .= $str;
-	        }
-	    }
+            if ($sitebreakdown == TRUE)
+            {
+                $table[$transaction->site]['site'] = site_name($transaction->site);
+                $table[$transaction->site]['str'] .= $str;
+                if ($transaction->amount < 0)
+                {
+                    $table[$transaction->site]['debit'] += $transaction->amount;
+                }
+                else
+                {
+                    $table[$transaction->site]['credit'] += $transaction->amount;
+                }
+            }
+            else
+            {
+                $table .= $str;
+            }
+        }
 
-	    if ($sitebreakdown == TRUE)
-	    {
-	        foreach ($table AS $e)
-	        {
-	            if ($display == 'html')
-	            {
-	                $text .= "<h3>{$e['site']}</h3>";
-	                $text .= "<table align='center'  width='60%'>";
-	                //echo "<tr><th colspan='7'>{$e['site']}</th></tr>";
-	                $text .= "<tr><th>{$GLOBALS['strDate']}</th><th>{$GLOBALS['strID']}</th><th>{$GLOBALS['strServiceID']}</th>";
-	                $text .= "<th>{$GLOBALS['strSite']}</th><th>{$GLOBALS['strDescription']}</th><th>{$GLOBALS['strCredit']}</th><th>{$GLOBALS['strDebit']}</th></tr>";
-	                $text .= $e['str'];
-	                $text .= "<tr><td colspan='5' align='right'>{$GLOBALS['strTotal']}</td>";
-	                $text .= "<td>{$CONFIG['currency_symbol']}".number_format($e['credit'], 2)."</td>";
-	                $text .= "<td>{$CONFIG['currency_symbol']}".number_format($e['debit'], 2)."</td></tr>";
-	                $text .= "</table>";
-	            }
-	            elseif ($display == 'csv')
-	            {
-	                $text .= "\"{$e['site']}\"\n\n";
-	                $text .= "\"{$GLOBALS['strDate']}\",\"{$GLOBALS['strID']}\",\"{$GLOBALS['strServiceID']}\",";
-	                $text .= "\"{$GLOBALS['strSite']}\",\"{$GLOBALS['strDescription']}\",\"{$GLOBALS['strCredit']}\",\"{$GLOBALS['strDebit']}\"\n";
-	                $text .= $e['str'];
-	                $text .= ",,,,{$GLOBALS['strTotal']},";
-	                $text .= "\"{$csv_currency}".number_format($e['credit'], 2)."\",\"";
-	                $text .="{$csv_currency}".number_format($e['debit'], 2)."\"\n";
-	            }
-	        }
-	    }
-	    else
-	    {
-	        if ($display == 'html')
-	        {
-	            $text .= "<table align='center'>";
-	            $text .= "<tr><th>{$GLOBALS['strDate']}</th><th>{$GLOBALS['strID']}</th><th>{$GLOBALS['strServiceID']}</th>";
-	            $text .= "<th>{$GLOBALS['strSite']}</th>";
-	            $text .= "<th>{$GLOBALS['strDescription']}</th><th>{$GLOBALS['strCredit']}</th><th>{$GLOBALS['strDebit']}</th></tr>";
-	            $text .= $table;
-	            $text .= "<tr><td colspan='5' align='right'>{$strTOTALS}</td>";
-	            $text .= "<td>{$CONFIG['currency_symbol']}".number_format($totalcredit, 2)."</td>";
-	            $text .= "<td>{$CONFIG['currency_symbol']}".number_format($totaldebit, 2)."</td></tr>";
-	            $text .= "</table>";
-	        }
-	        elseif ($display == 'csv')
-	        {
-	            $text .= "\"{$GLOBALS['strDate']}\",\"{$GLOBALS['strID']}\",\"{$GLOBALS['strServiceID']}\",";
-	            $text .= "\"{$GLOBALS['strSite']}\",";
-	            $text .= "\"{$GLOBALS['strDescription']}\",\"{$GLOBALS['strCredit']}\",\"{$GLOBALS['strDebit']}\"\n";
-	            $text .= $table;
-	            $text .= ",,,,{$GLOBALS['strTOTALS']},";
-	            $text .= "\"{$csv_currency}".number_format($totalcredit, 2)."\",\"";
-	            $text .= "{$csv_currency}".number_format($totaldebit, 2)."\"\n";
-	        }
-	    }
+        if ($sitebreakdown == TRUE)
+        {
+            foreach ($table AS $e)
+            {
+                if ($display == 'html')
+                {
+                    $text .= "<h3>{$e['site']}</h3>";
+                    $text .= "<table align='center'  width='60%'>";
+                    //echo "<tr><th colspan='7'>{$e['site']}</th></tr>";
+                    $text .= "<tr><th>{$GLOBALS['strDate']}</th><th>{$GLOBALS['strID']}</th><th>{$GLOBALS['strServiceID']}</th>";
+                    $text .= "<th>{$GLOBALS['strSite']}</th><th>{$GLOBALS['strDescription']}</th><th>{$GLOBALS['strCredit']}</th><th>{$GLOBALS['strDebit']}</th></tr>";
+                    $text .= $e['str'];
+                    $text .= "<tr><td colspan='5' align='right'>{$GLOBALS['strTotal']}</td>";
+                    $text .= "<td>{$CONFIG['currency_symbol']}".number_format($e['credit'], 2)."</td>";
+                    $text .= "<td>{$CONFIG['currency_symbol']}".number_format($e['debit'], 2)."</td></tr>";
+                    $text .= "</table>";
+                }
+                elseif ($display == 'csv')
+                {
+                    $text .= "\"{$e['site']}\"\n\n";
+                    $text .= "\"{$GLOBALS['strDate']}\",\"{$GLOBALS['strID']}\",\"{$GLOBALS['strServiceID']}\",";
+                    $text .= "\"{$GLOBALS['strSite']}\",\"{$GLOBALS['strDescription']}\",\"{$GLOBALS['strCredit']}\",\"{$GLOBALS['strDebit']}\"\n";
+                    $text .= $e['str'];
+                    $text .= ",,,,{$GLOBALS['strTotal']},";
+                    $text .= "\"{$csv_currency}".number_format($e['credit'], 2)."\",\"";
+                    $text .="{$csv_currency}".number_format($e['debit'], 2)."\"\n";
+                }
+            }
+        }
+        else
+        {
+            if ($display == 'html')
+            {
+                $text .= "<table align='center'>";
+                $text .= "<tr><th>{$GLOBALS['strDate']}</th><th>{$GLOBALS['strID']}</th><th>{$GLOBALS['strServiceID']}</th>";
+                $text .= "<th>{$GLOBALS['strSite']}</th>";
+                $text .= "<th>{$GLOBALS['strDescription']}</th><th>{$GLOBALS['strCredit']}</th><th>{$GLOBALS['strDebit']}</th></tr>";
+                $text .= $table;
+                $text .= "<tr><td colspan='5' align='right'>{$strTOTALS}</td>";
+                $text .= "<td>{$CONFIG['currency_symbol']}".number_format($totalcredit, 2)."</td>";
+                $text .= "<td>{$CONFIG['currency_symbol']}".number_format($totaldebit, 2)."</td></tr>";
+                $text .= "</table>";
+            }
+            elseif ($display == 'csv')
+            {
+                $text .= "\"{$GLOBALS['strDate']}\",\"{$GLOBALS['strID']}\",\"{$GLOBALS['strServiceID']}\",";
+                $text .= "\"{$GLOBALS['strSite']}\",";
+                $text .= "\"{$GLOBALS['strDescription']}\",\"{$GLOBALS['strCredit']}\",\"{$GLOBALS['strDebit']}\"\n";
+                $text .= $table;
+                $text .= ",,,,{$GLOBALS['strTOTALS']},";
+                $text .= "\"{$csv_currency}".number_format($totalcredit, 2)."\",\"";
+                $text .= "{$csv_currency}".number_format($totaldebit, 2)."\"\n";
+            }
+        }
 
 
-	    if ($shade == 'shade1') $shade = 'shade2';
-	    else $shade = 'shade1';
-	}
-	else
-	{
-	    if ($display == 'html')
-	    {
-	        $text = "<p align='center'>{$GLOBALS['strNoTransactionsMatchYourSearch']}</p>";
-	    }
-	    elseif ($display == 'csv')
-	    {
-	        $text = $GLOBALS['strNoTransactionsMatchYourSearch']."\n";
-	    }
-	}
+        if ($shade == 'shade1') $shade = 'shade2';
+        else $shade = 'shade1';
+    }
+    else
+    {
+        if ($display == 'html')
+        {
+            $text = "<p align='center'>{$GLOBALS['strNoTransactionsMatchYourSearch']}</p>";
+        }
+        elseif ($display == 'csv')
+        {
+            $text = $GLOBALS['strNoTransactionsMatchYourSearch']."\n";
+        }
+    }
 
-	return $text;
+    return $text;
 }
 
 
 /**
- * Outputs a table or csv file based on csv-based array
- * @author Kieran Hogg
- * @param array $data Array of data, see @note for format
- * @param string $ouput Whether to show a table or create a csv file
- * @return string $html The html to produce the output
- * @note format: $array[] = 'Colheader1,Colheader2'; $array[] = 'data1,data2';
- */
+* Outputs a table or csv file based on csv-based array
+* @author Kieran Hogg
+* @param array $data Array of data, see @note for format
+* @param string $ouput Whether to show a table or create a csv file
+* @return string $html The html to produce the output
+* @note format: $array[] = 'Colheader1,Colheader2'; $array[] = 'data1,data2';
+*/
 function create_report($data, $output = 'table', $filename = 'report.csv')
 {
     if ($output == 'table')
@@ -10829,10 +10899,10 @@ function create_report($data, $output = 'table', $filename = 'report.csv')
 
 
 /**
- * Postpones a task's due date 24 hours
- * @author Kieran Hogg
- * @param int $taskid The ID of the task to postpone
- */
+* Postpones a task's due date 24 hours
+* @author Kieran Hogg
+* @param int $taskid The ID of the task to postpone
+*/
 function postpone_task($taskid)
 {
     global $dbTasks;
@@ -10855,19 +10925,19 @@ function postpone_task($taskid)
 
 
 /**
- * Returns HTML for a gravatar (Globally recognised avatar)
- * @author Ivan Lucas
- * @param string $email - Email address
- * @param int $size - Size in pixels
- * @returns string - HTML img tag
- */
+* Returns HTML for a gravatar (Globally recognised avatar)
+* @author Ivan Lucas
+* @param string $email - Email address
+* @param int $size - Size in pixels
+* @returns string - HTML img tag
+*/
 function gravatar($email, $size)
 {
     global $CONFIG, $iconset;
     $default = $CONFIG['default_gravatar'];
 
     $grav_url = "http://www.gravatar.com/avatar.php?
-                 gravatar_id=".md5(strtolower($email)).
+                gravatar_id=".md5(strtolower($email)).
                 "&default=".urlencode($CONFIG['default_gravatar']).
                 "&size=".$size;
 
@@ -10878,11 +10948,11 @@ function gravatar($email, $size)
 
 
 /**
- * Returns the percentage remaining for ALL services on a contract
- * @author Kieran Hogg
- * @param string $mainid - contract ID
- * @returns mixed - percentage between 0 and 1 if services, FALSE if not
- */
+* Returns the percentage remaining for ALL services on a contract
+* @author Kieran Hogg
+* @param string $mainid - contract ID
+* @returns mixed - percentage between 0 and 1 if services, FALSE if not
+*/
 function get_service_percentage($maintid)
 {
     global $dbService;
@@ -10908,25 +10978,25 @@ function get_service_percentage($maintid)
 
 
 /**
- * UTF8 substr() replacement
- * @author Anon / Public Domain
- * @note see http://www.php.net/manual/en/function.substr.php#57899
- */
+* UTF8 substr() replacement
+* @author Anon / Public Domain
+* @note see http://www.php.net/manual/en/function.substr.php#57899
+*/
 function utf8_substr($str, $from, $len)
 {
     # utf8 substr
     # www.yeap.lv
     return preg_replace('#^(?:[\x00-\x7F]|[\xC0-\xFF][\x80-\xBF]+){0,'.$from.'}'.
-                       '((?:[\x00-\x7F]|[\xC0-\xFF][\x80-\xBF]+){0,'.$len.'}).*#s',
-                       '$1',$str);
+                    '((?:[\x00-\x7F]|[\xC0-\xFF][\x80-\xBF]+){0,'.$len.'}).*#s',
+                    '$1',$str);
 }
 
 
 /**
- * UTF8 strlen() replacement
- * @author anpaza at mail dot ru / Public Domain
- * @note see http://www.php.net/manual/en/function.strlen.php#59258
- */
+* UTF8 strlen() replacement
+* @author anpaza at mail dot ru / Public Domain
+* @note see http://www.php.net/manual/en/function.strlen.php#59258
+*/
 function utf8_strlen($str)
 {
     $i = 0;
@@ -10956,11 +11026,11 @@ function utf8_strlen($str)
 
 
 /**
- * HTML for an alphabetical index of links
- * @author Ivan Lucas
- * @param string $baseurl start of a URL, the letter will be appended to this
- * @returns HTML
- */
+* HTML for an alphabetical index of links
+* @author Ivan Lucas
+* @param string $baseurl start of a URL, the letter will be appended to this
+* @returns HTML
+*/
 function alpha_index($baseurl = '#')
 {
     global $i18nAlphabet;
@@ -10991,17 +11061,17 @@ function emoticons($text)
     global $CONFIG;
     $smiley_url = "http://{$_SERVER['HTTP_HOST']}{$CONFIG['application_webpath']}images/emoticons/";
     $smiley_regex = array(0 => "/\:[-]?\)/s",
-                          1 => "/\:[-]?\(/s",
-                          2 => "/\;[-]?\)/s",
-                          3 => "/\:[-]?[pP]/s",
-                          4 => "/\:[-]?@/s",
-                          5 => "/\:[-]?[Oo]/s",
-                          6 => "/\:[-]?\\$/s",
-                          7 => "/\\([Yy]\)/s",
-                          8 => "/\\([Nn]\)/s",
-                          9 => "/\\([Bb]\)/s",
-						  10 => "/\:[-]?[dD]/s"
-                          );
+                        1 => "/\:[-]?\(/s",
+                        2 => "/\;[-]?\)/s",
+                        3 => "/\:[-]?[pP]/s",
+                        4 => "/\:[-]?@/s",
+                        5 => "/\:[-]?[Oo]/s",
+                        6 => "/\:[-]?\\$/s",
+                        7 => "/\\([Yy]\)/s",
+                        8 => "/\\([Nn]\)/s",
+                        9 => "/\\([Bb]\)/s",
+                        10 => "/\:[-]?[dD]/s"
+                        );
 
     $smiley_replace = array(0 => "<img src='{$smiley_url}smile.png' alt='$1' title='$1' />",
                             1 => "<img src='{$smiley_url}sad.png' alt='$1' title='$1' />",
@@ -11013,7 +11083,7 @@ function emoticons($text)
                             7 => "<img src='{$smiley_url}thumbs_up.png' alt='$1' title='$1' />",
                             8 => "<img src='{$smiley_url}thumbs_down.png' alt='$1' title='$1' />",
                             9 => "<img src='{$smiley_url}beer.png' alt='$1' title='$1' />",
-							10 => "<img src='{$smiley_url}teeth.png' alt='$1' title='$1' />"
+                            10 => "<img src='{$smiley_url}teeth.png' alt='$1' title='$1' />"
                             );
 
     $html = preg_replace($smiley_regex, $smiley_replace, $text);
@@ -11023,10 +11093,10 @@ function emoticons($text)
 
 
 /*
- * DEPRECATED THOUGH STILL CALLED
- *
- * The following are deprecated and had been emoved though have been readded as they are still called by code which will be released in 3.4 following this they will be removed
- */
+* DEPRECATED THOUGH STILL CALLED
+*
+* The following are deprecated and had been emoved though have been readded as they are still called by code which will be released in 3.4 following this they will be removed
+*/
 
 function emailtype_to($id)
 {
@@ -11048,7 +11118,7 @@ function emailtype_replyto($id)
 
 function emailtype_cc($id)
 {
-   return db_read_column('ccfield', 'emailtype', $id);
+return db_read_column('ccfield', 'emailtype', $id);
 }
 
 
@@ -11080,8 +11150,8 @@ function emailtype_storeinlog($id)
 }
 
 /*
- * END DEPRECATED
- */
+* END DEPRECATED
+*/
 
 // ** Place no more function defs below this **
 
@@ -11094,7 +11164,7 @@ if (!extension_loaded('mysql')) trigger_error('SiT requires the php/mysql module
 if (!extension_loaded('imap') AND $CONFIG['enable_inbound_mail'] == 'POP/IMAP')
 {
     trigger_error('SiT requires the php IMAP module to recieve incoming mail.'
-                  .' If you really don\'t need this, you can set \$CONFIG[\'enable_inbound_mail\'] to false');
+                .' If you really don\'t need this, you can set \$CONFIG[\'enable_inbound_mail\'] to false');
 }
 if (version_compare(PHP_VERSION, "5.0.0", "<")) trigger_error('INFO: You are running an older PHP version, some features may not work properly.', E_USER_NOTICE);
 if (@ini_get('register_globals') == 1 OR strtolower(@ini_get('register_globals')) == 'on')

@@ -47,10 +47,12 @@ if (empty($_REQUEST['username']) AND empty($_REQUEST['password']) AND $language 
     }
     header ("Location: index.php");
 }
-elseif (authenticate($username, $password) == 1)
+elseif (authenticate($username, $_REQUEST['password']) == 1)
 {
     // Valid user
     $_SESSION['auth'] = TRUE;
+
+    $password = md5($_REQUEST['password']);
 
     // Retrieve users profile
     $sql = "SELECT * FROM `{$dbUsers}` WHERE username='$username' AND password='$password' LIMIT 1";
@@ -145,8 +147,13 @@ elseif (authenticate($username, $password) == 1)
 elseif ($CONFIG['portal'] == TRUE)
 {
     // Invalid user and portal enabled
-    // Have a look if this is a contact trying to login
+
+    // Have a look if this is a contact trying to login 
     $portalpassword = cleanvar($_REQUEST['password']);
+
+    // Have a look if this is a contact trying to login via ldap
+    authenticateLDAPCustomer($username, $portalpassword );
+
     //we need plaintext and md5 as contacts created pre 3.35 will be in plaintext
     $sql = "SELECT * FROM `{$dbContacts}` WHERE username='{$username}' AND (password='{$portalpassword}' OR password=MD5('{$portalpassword}')) LIMIT 1";
     $result = mysql_query($sql);
