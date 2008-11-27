@@ -17,14 +17,14 @@ session_start();
 if (!isset($accesslevel))
 {
     include 'portalheader.inc.php';
-    echo "<p class='error'>\$accesslevel not set</p>";
+    echo "<p class='error'>{$strPermissionDenied}: \$accesslevel not set</p>";
     include 'htmlfooter.inc.php';
     exit;
 }
 elseif ($accesslevel == 'admin' AND $_SESSION['usertype'] != 'admin')
 {
     include 'portalheader.inc.php';
-    echo "<p class='error'>Permission denied</p>";
+    echo "<p class='error'>{$strPermissionDenied}</p>";
     include 'htmlfooter.inc.php';
     exit;
 }

@@ -20,7 +20,7 @@ include 'portalheader.inc.php';
 $showclosed = cleanvar($_REQUEST['showclosed']);
 $site = cleanvar($_REQUEST['site']);
 
-if ($CONFIG['debug']) $dbg .= "Entitlement: ".print_r($_SESSION['entitlement'],true);
+if ($CONFIG['debug']) $dbg .= "Sess: ".print_r($_SESSION,true);
 
 function portal_incident_table($sql)
 {

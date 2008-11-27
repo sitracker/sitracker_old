@@ -13,26 +13,43 @@
 require 'db_connect.inc.php';
 require 'functions.inc.php';
 
-if (!isset($_GET['id']))
+if ($_SESSION['usertype'] == 'admin')
+{
+    if (empty($_REQUEST['id']))
+    {
+        $accesslevel = 'any';
+    }
+    else
+    {
+        $accesslevel = 'admin';
+    }
+}
+else
 {
     $accesslevel = 'any';
-}
-elseif (isset($_GET['id']) AND $_GET['id'] != $_SESSION['contactid'])
-{
-    $accesslevel = 'admin';
 }
 
 include 'portalauth.inc.php';
 include 'portalheader.inc.php';
 
-if (!isset($_GET['id']))
+
+if ($_SESSION['usertype'] == 'admin')
 {
-    $id = $_SESSION['contactid'];
+    if (empty($_REQUEST['id']))
+    {
+        $id = $_SESSION['contactid'];
+    }
+    else
+    {
+        $id = intval($_REQUEST['id']);
+    }
 }
 else
 {
-    $id = intval($_GET['id']);
+    $id = $_SESSION['contactid'];
 }
+
+
 
 if (!empty($_SESSION['formerrors']['portalcontactdetails']))
 {
@@ -43,7 +60,7 @@ if (!empty($_SESSION['formerrors']['portalcontactdetails']))
 //if new details posted
 if (cleanvar($_REQUEST['action']) == 'update')
 {
-    if ($CONFIG['portal_usernames_can_be_changed'] AND contact)
+    if ($CONFIG['portal_usernames_can_be_changed'])
     {
         $username = cleanvar($_REQUEST['username']);
         $oldusername = cleanvar($_REQUEST['oldusername']);
@@ -105,11 +122,16 @@ if (cleanvar($_REQUEST['action']) == 'update')
         $updatesql .= "county='$county', country='$country', postcode='$postcode', ";
         $updatesql .= "phone='$phone', mobile='$mobile', fax='$fax', email='$email'";
         if ($newpass != '')
+        {
             $updatesql .= ", password=MD5('$newpass') ";
+        }
         $updatesql .= "WHERE id='{$id}'";
         mysql_query($updatesql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-        if ($_SESSION['contactid'] != $id) html_redirect($_SERVER['PHP_SELF']."?id={$id}");
+        if ($_SESSION['contactid'] != $id)
+        {
+            html_redirect($_SERVER['PHP_SELF']."?id={$id}");
+        }
         else html_redirect($_SERVER['PHP_SELF']);
     }
     else
@@ -164,30 +186,32 @@ else
     if ($CONFIG['portal_usernames_can_be_changed'])
     {
         echo "<tr><th>{$strUsername}</th><td><input class='required' name='username' value='{$user->username}' />";
-        echo " <span class='required'><span>{$strRequired}</span></td></tr>";
+        echo " <span class='required'><span>{$strRequired}</span></td></tr>\n";
         echo "<input name='oldusername' value='{$user->username}' type='hidden' />";
 
     }
     echo "<tr><th>{$strForenames}</th><td><input class='required' name='forenames' value='{$user->forenames}' />";
-        echo " <span class='required'><span>{$strRequired}</span></td></tr>";
+        echo " <span class='required'><span>{$strRequired}</span></td></tr>\n";
     echo "<tr><th>{$strSurname}</th><td><input class='required' name='surname' value='{$user->surname}' />";
-        echo " <span class='required'><span>{$strRequired}</span></td></tr>";
-    echo "<tr><th>{$strDepartment}</th><td><input name='department' value='{$user->department}' /></td></tr>";
-    echo "<tr><th>{$strAddress1}</th><td><input name='address1' value='{$user->address1}' /></td></tr>";
-    echo "<tr><th>{$strAddress2}</th><td><input name='address2' value='{$user->address2}' /></td></tr>";
-    echo "<tr><th>{$strCounty}</th><td><input name='county' value='{$user->county}' /></td></tr>";
-    echo "<tr><th>{$strCountry}</th><td><input name='country' value='{$user->country}' /></td></tr>";
-    echo "<tr><th>{$strPostcode}</th><td><input name='postcode' value='{$user->postcode}' /></td></tr>";
+        echo " <span class='required'><span>{$strRequired}</span></td></tr>\n";
+    echo "<tr><th>{$strDepartment}</th><td><input name='department' value='{$user->department}' /></td></tr>\n";
+    echo "<tr><th>{$strAddress1}</th><td><input name='address1' value='{$user->address1}' /></td></tr>\n";
+    echo "<tr><th>{$strAddress2}</th><td><input name='address2' value='{$user->address2}' /></td></tr>\n";
+    echo "<tr><th>{$strCounty}</th><td><input name='county' value='{$user->county}' /></td></tr>\n";
+    echo "<tr><th>{$strCountry}</th><td><input name='country' value='{$user->country}' /></td></tr>\n";
+    echo "<tr><th>{$strPostcode}</th><td><input name='postcode' value='{$user->postcode}' /></td></tr>\n";
     echo "<tr><th>{$strTelephone}</th><td><input class='required' name='phone' value='{$user->phone}' />";
-        echo " <span class='required'><span>{$strRequired}</span></td></tr>";
-    echo "<tr><th>{$strMobile}</th><td><input name='mobile' value='{$user->mobile}' /></td></tr>";
-    echo "<tr><th>{$strFax}</th><td><input name='fax' value='{$user->fax}' /></td></tr>";
+        echo " <span class='required'><span>{$strRequired}</span></td></tr>\n";
+    echo "<tr><th>{$strMobile}</th><td><input name='mobile' value='{$user->mobile}' /></td></tr>\n";
+    echo "<tr><th>{$strFax}</th><td><input name='fax' value='{$user->fax}' /></td></tr>\n";
     echo "<tr><th>{$strEmail}</th><td><input class='required' name='email' value='{$user->email}' />";
-        echo " <span class='required'><span>{$strRequired}</span></td></tr>";
-    echo "<tr><th>{$strNewPassword}</th><td><input name='newpassword' value='' type='password' /></td></tr>";
-    echo "<tr><th>{$strRepeat}</th><td><input name='newpassword2' value='' type='password' /></td></tr>";
+        echo " <span class='required'><span>{$strRequired}</span></td></tr>\n";
+    echo "<tr><th>{$strNewPassword}</th><td><input name='newpassword' value='' type='password' /></td></tr>\n";
+    echo "<tr><th>{$strRepeat}</th><td><input name='newpassword2' value='' type='password' /></td></tr>\n";
     echo "</table>";
-    echo "<p align='center'><input type='submit' value='{$strUpdate}' /></p></form>";
+    echo "<p align='center'>";
+    echo "<input type='hidden' name='id' value='{$id}' />";
+    echo "<input type='submit' value='{$strUpdate}' /></p></form>";
 
     echo "<br />".user_contracts_table($id, 'external');
     echo "<h4>{$strAssociateContactWithContract}</h4>";

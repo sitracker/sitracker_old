@@ -821,6 +821,7 @@ $strMySubstitutes = 'My Substitutes';
 $strMyTriggers = 'My Triggers';
 
 $strName = 'Name';
+$strNamedContacts = 'Named Contacts';
 #English suffix for second - 2nd
 $strnd = 'nd';
 $strNeedsSubstitueEngineers = '%s need substitute engineers to be defined';

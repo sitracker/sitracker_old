@@ -135,7 +135,7 @@ if ($CONFIG['portal_site_incidents'])
 	            {
 	            	echo " selected='selected'";
 	            }
-	            echo ">Named Contacts</option>";
+	            echo ">{$strNamedContacts}</option>";
 	            echo "<option value='all'";
                     if ($row->var_incident_visible_all == 'yes')
 	            {
