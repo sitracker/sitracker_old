@@ -152,7 +152,7 @@ elseif ($CONFIG['portal'] == TRUE)
     $portalpassword = cleanvar($_REQUEST['password']);
 
     // Have a look if this is a contact trying to login via ldap
-    authenticateLDAPCustomer($username, $portalpassword );
+    if ($CONFIG['use_ldap']) authenticateLDAPCustomer($username, $portalpassword );
 
     //we need plaintext and md5 as contacts created pre 3.35 will be in plaintext
     $sql = "SELECT * FROM `{$dbContacts}` WHERE username='{$username}' AND (password='{$portalpassword}' OR password=MD5('{$portalpassword}')) LIMIT 1";
