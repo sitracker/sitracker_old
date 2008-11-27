@@ -16,7 +16,7 @@
     // can uncomment the following line and set it here.
 
 
-// $include_path = '/var/www/sit/includes';
+$include_path = '/var/www/sit/includes';
 
     // Or for Windows users
 
@@ -31,7 +31,6 @@
 // ====================================================================
 if (!empty($include_path))
 {
-    $delim = (strstr($_SERVER['SCRIPT_FILENAME'],"/")) ? ":" : ";";
-    ini_set('include_path',ini_get('include_path')."{$delim}{$include_path}");
+    set_include_path(get_include_path() . PATH_SEPARATOR . $include_path);
 }
 ?>
