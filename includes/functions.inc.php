@@ -247,10 +247,10 @@ function authenticateSQL($username, $password)
 
 
 /**
-    * Authenticate a user 
+    * Authenticate a user
     * @author Lea Anthony
     * @param $username String. Username
-    * @param $password String. Password 
+    * @param $password String. Password
     * @return an integer to indicate whether the user authenticated against any authentication backends
     * @retval 0 the credentials were wrong or the user was not found.
     * @retval 1 to indicate user is authenticated and allowed to continue.
@@ -8272,7 +8272,12 @@ function contract_software()
 function help_link($context)
 {
     global $strHelpChar;
-    $html = "<span class='helplink'>[<a href='#' tabindex='-1' onmouseover=\"contexthelp(this, '$context');return false;\">{$strHelpChar}<span></span></a>]</span>";
+    $html = "<span class='helplink'>[<a href='#' tabindex='-1' onmouseover=\"";
+    $html .= "contexthelp(this, '$context'";
+    if ($_SESSION['portalauth'] == TRUE) $html .= ",'portal'";
+    else $html .= ",'standard'";
+    $html .= ");return false;\">{$strHelpChar}<span>";
+    $html .= "</span></a>]</span>";
 
     return $html;
 }

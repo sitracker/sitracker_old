@@ -338,7 +338,7 @@ function addservice_showbilling(form)
 {
     /*var a = $('billtype');
     alert("A: "+a.value);*/
-    
+
     var typeValue = Form.getInputs(form,'radio','billtype').find(function(radio) { return radio.checked; }).value;
     // alert("B: "+typeValue);
     if (typeValue == 'billperunit' || typeValue == 'billperincident')
@@ -390,7 +390,7 @@ function findPos(obj) {
     return [curleft,curtop];
 }
 
-function contexthelp(elem, context)
+function contexthelp(elem, context, auth)
 {
     var epos = findPos(elem);
     span = elem.getElementsByTagName('span');
@@ -419,7 +419,7 @@ function contexthelp(elem, context)
     }
     if (span.innerHTML == '')
     {
-        new Ajax.Request(application_webpath + 'ajaxdata.php?action=contexthelp&context=' + context + '&rand=' + get_random(),
+        new Ajax.Request(application_webpath + 'ajaxdata.php?action=contexthelp&context=' + context + '&rand=' + get_random() + '&auth=' + auth,
         //new Ajax.Request('ajaxdata.php?action=contexthelp&context=' + context + '&rand=' + get_random(),
             {
                 method:'get',
@@ -471,7 +471,7 @@ function autocomplete(elem, id)
         suggestDiv = $(id);
     }
 
-    if (elem.value == '') 
+    if (elem.value == '')
     {
     	suggestDiv.innerHTML = 'empty';
     }

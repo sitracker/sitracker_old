@@ -15,8 +15,17 @@ require ('db_connect.inc.php');
 require ('functions.inc.php');
 
 // This page requires authentication
-require ('auth.inc.php');
-
+if ($_REQUEST['action'] == 'contexthelp' AND $_REQUEST['auth'] == 'portal')
+{
+    // Special exception for contexthelp, use the portal authentication for
+    // portal help tips
+    $accesslevel = 'any';
+    require('portalauth.inc.php');
+}
+else
+{
+    require ('auth.inc.php');
+}
 $action = cleanvar($_REQUEST['action']);
 $selected = cleanvar($_REQUEST['selected']);
 
@@ -107,7 +116,7 @@ switch ($action)
 
     case 'autocomplete_sitecontact':
     break;
-    
+
     case 'tags':
         $sql = "SELECT DISTINCT t.name FROM `{$dbSetTags}` AS st, `{$dbTags}` AS t WHERE st.tagid = t.tagid GROUP BY t.name";
         $result = mysql_query($sql);
@@ -121,7 +130,7 @@ switch ($action)
         }
         echo "[".substr($str,0,-1)."]";
         break;
-    
+
     case 'contact' :
         $sql = "SELECT DISTINCT forenames, surname FROM `{$dbContacts}` WHERE active='true'";
         $result = mysql_query($sql);
@@ -136,7 +145,7 @@ switch ($action)
         }
         echo "[".substr($str,0,-1)."]";
         break;
-        
+
     case 'sites':
         $sql = "SELECT DISTINCT name FROM `{$dbSites}` WHERE active='true'";
         $result = mysql_query($sql);
@@ -165,7 +174,7 @@ switch ($action)
             echo "<option value='{$obj->tag}' $strIsSelected>{$obj->tag}</option>";
         }
         break;
-        
+
     case 'products':
         $sql = "SELECT id, name FROM `{$dbProducts}` ORDER BY name ASC";
         $result = mysql_query($sql);
@@ -180,7 +189,7 @@ switch ($action)
             echo "<option value='{$obj->id}' $strIsSelected>{$obj->name}</option>";
         }
         break;
-        
+
     case 'skills':
         $sql = "SELECT id, name FROM `{$dbSoftware}` ORDER BY name ASC";
         $result = mysql_query($sql);
@@ -195,11 +204,11 @@ switch ($action)
             echo "<option value='{$obj->id}' $strIsSelected>{$obj->name}</option>";
         }
         break;
-        
+
     case 'storedashboard':
         $id = $_REQUEST['id'];
         $val = $_REQUEST['val'];
-        
+
         if ($id == $_SESSION['userid'])
         {
             //check you're changing your own
@@ -208,7 +217,7 @@ switch ($action)
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
         }
         break;
-        
+
     default : break;
 }
 
