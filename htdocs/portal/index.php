@@ -130,9 +130,10 @@ else
 
 echo portal_incident_table($sql);
 echo "<p align='center'>";
-if ($numcontracts == 1)
+if (sizeof($_SESSION['entitlement']) == 1)
 {
     //only one contract
+    $contractid = $_SESSION['entitlement'][0]->id;
     echo "<a href='add.php?contractid={$contractid}'>";
 }
 else
