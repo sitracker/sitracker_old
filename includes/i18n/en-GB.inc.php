@@ -280,6 +280,7 @@ $strClosureRequested = 'Closure Requested';
 $strClosureRequestForIncident = 'Closure request for Incident';
 $strCode = 'Code';
 $strCollapseData = 'Collapse Data';
+$strConfiguration = 'Configuration';
 $strConfirmNewPassword = 'Confirm New Password';
 # noun, he is a contact
 $strContact = 'Contact';
