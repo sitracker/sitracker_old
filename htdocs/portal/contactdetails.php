@@ -49,7 +49,9 @@ else
     $id = $_SESSION['contactid'];
 }
 
-
+// External variables
+$using_ldap = $CONFIG["use_ldap"];
+$attrmap = $CONFIG['ldap_attr_map'];
 
 if (!empty($_SESSION['formerrors']['portalcontactdetails']))
 {
@@ -183,31 +185,92 @@ else
     echo "<form action='$_SERVER[PHP_SELF]?action=update' method='post'>";
     echo "<table align='center' class='vertical'>";
 
-    if ($CONFIG['portal_usernames_can_be_changed'])
+    if ($CONFIG['portal_usernames_can_be_changed'] && !$using_ldap )
     {
-        echo "<tr><th>{$strUsername}</th><td><input class='required' name='username' value='{$user->username}' />";
+        echo "<tr><th>{$strUsername}</th><td>";
+        echo "<input class='required' name='username' value='{$user->username}' />";
         echo " <span class='required'><span>{$strRequired}</span></td></tr>\n";
         echo "<input name='oldusername' value='{$user->username}' type='hidden' />";
 
     }
-    echo "<tr><th>{$strForenames}</th><td><input class='required' name='forenames' value='{$user->forenames}' />";
-        echo " <span class='required'><span>{$strRequired}</span></td></tr>\n";
-    echo "<tr><th>{$strSurname}</th><td><input class='required' name='surname' value='{$user->surname}' />";
-        echo " <span class='required'><span>{$strRequired}</span></td></tr>\n";
+    echo "<tr><th>{$strForenames}</th><td>";
+
+
+    if ( $using_ldap && array_key_exists("forenames",$attrmap) ) 
+    {
+        echo "<input type='hidden' name='forenames' value='{$user->forenames}' />".$user->forenames;
+    }
+    else   
+    {
+        echo "<input class='required' name='forenames' value='{$user->forenames}' />";
+        echo " <span class='required'><span>{$strRequired}</span>";
+    }
+    echo "</td></tr>\n";
+    echo "<tr><th>{$strSurname}</th><td>";
+    if ( $using_ldap && array_key_exists("surname",$attrmap) ) 
+    {
+        echo "<input type='hidden'  name='surname' value='{$user->surname}' />".$user->surname;
+    }
+    else
+    {
+        echo "<input class='required' name='surname' value='{$user->surname}' />";
+        echo " <span class='required'><span>{$strRequired}</span>";
+    }
+    echo "</td></tr>\n";
     echo "<tr><th>{$strDepartment}</th><td><input name='department' value='{$user->department}' /></td></tr>\n";
     echo "<tr><th>{$strAddress1}</th><td><input name='address1' value='{$user->address1}' /></td></tr>\n";
     echo "<tr><th>{$strAddress2}</th><td><input name='address2' value='{$user->address2}' /></td></tr>\n";
     echo "<tr><th>{$strCounty}</th><td><input name='county' value='{$user->county}' /></td></tr>\n";
     echo "<tr><th>{$strCountry}</th><td><input name='country' value='{$user->country}' /></td></tr>\n";
     echo "<tr><th>{$strPostcode}</th><td><input name='postcode' value='{$user->postcode}' /></td></tr>\n";
-    echo "<tr><th>{$strTelephone}</th><td><input class='required' name='phone' value='{$user->phone}' />";
-        echo " <span class='required'><span>{$strRequired}</span></td></tr>\n";
-    echo "<tr><th>{$strMobile}</th><td><input name='mobile' value='{$user->mobile}' /></td></tr>\n";
-    echo "<tr><th>{$strFax}</th><td><input name='fax' value='{$user->fax}' /></td></tr>\n";
-    echo "<tr><th>{$strEmail}</th><td><input class='required' name='email' value='{$user->email}' />";
-        echo " <span class='required'><span>{$strRequired}</span></td></tr>\n";
-    echo "<tr><th>{$strNewPassword}</th><td><input name='newpassword' value='' type='password' /></td></tr>\n";
-    echo "<tr><th>{$strRepeat}</th><td><input name='newpassword2' value='' type='password' /></td></tr>\n";
+    echo "<tr><th>{$strTelephone}</th><td>";
+    if ( $using_ldap && array_key_exists("phone",$attrmap) ) 
+    {
+        echo "<input type='hidden' name='phone' value='{$user->phone}' />".$user->phone;
+    }
+    else
+    {
+        echo "<input class='required' name='phone' value='{$user->phone}' />";
+        echo " <span class='required'><span>{$strRequired}</span>";
+    }
+    echo "</td></tr>\n";
+    echo "<tr><th>{$strMobile}</th><td>";
+    if ( $using_ldap && array_key_exists("mobile",$attrmap) ) 
+    {
+        echo "<input type='hidden' name='mobile' value='{$user->mobile}' />".$user->mobile;
+    }
+    else
+    {
+        echo "<input name='mobile' value='{$user->mobile}' /></td></tr>\n";
+    }
+    echo "</td></tr>\n";
+    echo "<tr><th>{$strFax}</th><td>";
+    if ( $using_ldap && array_key_exists("fax",$attrmap) )
+    {
+        echo "<input type='hidden' name='fax' value='{$user->fax}' />".$user->fax;
+    }
+    else
+    {
+        echo "<input name='fax' value='{$user->fax}' />";
+    }
+
+    echo "<tr><th>{$strEmail}</th><td>";
+    if ( $using_ldap && array_key_exists("email",$attrmap) ) 
+    {
+        echo "<input type='hidden' name='email' value='{$user->email}' />.$user->email";
+    }
+    else
+    {
+        echo "<input class='required' name='email' value='{$user->email}' />";
+        echo " <span class='required'><span>{$strRequired}</span>";
+    }
+    echo "</td></tr>\n";
+
+    if ( !$using_ldap )
+    {
+        echo "<tr><th>{$strNewPassword}</th><td><input name='newpassword' value='' type='password' /></td></tr>\n";
+        echo "<tr><th>{$strRepeat}</th><td><input name='newpassword2' value='' type='password' /></td></tr>\n";
+    }
     echo "</table>";
     echo "<p align='center'>";
     echo "<input type='hidden' name='id' value='{$id}' />";
