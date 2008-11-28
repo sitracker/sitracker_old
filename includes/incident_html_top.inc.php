@@ -192,7 +192,7 @@ if ($menu != 'hide')
 {
     if ($_REQUEST['win'] == 'incomingview')
     {
-        $insql = "SELECT emailfrom, contactid, updateid, ti.id, timestamp, ti.locked 
+        $insql = "SELECT emailfrom, `from`, contactid, updateid, ti.id, timestamp, ti.locked
                 FROM `{$dbTempIncoming}` AS ti, `{$dbUpdates}` AS u
                 WHERE ti.id = '{$id}'
                 AND ti.updateid = u.id";
@@ -204,7 +204,7 @@ if ($menu != 'hide')
             {
                 echo "<a class='barlink' href='unlock_update.php?id={$id}'>{$strUnlock}</a> | ";
                 echo "<a class='barlink' href=\"javascript:window.location='move_update.php?updateid={$inupdate->updateid}&amp;win=incomingview'\" >{$strAssign}</a> | ";
-                echo "<a class='barlink' href=\"javascript:window.opener.location='add_incident.php?action=findcontact&amp;incomingid={$id}&amp;search_string={$inupdate->emailfrom}&amp;contactid={$inupdate->contactid}&amp;win=incomingcreate'; window.close();\">{$strCreate}</a> | ";
+                echo "<a class='barlink' href=\"javascript:window.opener.location='add_incident.php?action=findcontact&amp;incomingid={$id}&amp;search_string={$inupdate->emailfrom}&amp;from={$inupdate->from}&amp;contactid={$inupdate->contactid}&amp;win=incomingcreate'; window.close();\">{$strCreate}</a> | ";
                 echo "<a class='barlink' href=\"javascript:window.opener.location='delete_update.php?updateid={$inupdate->updateid}&amp;tempid={$inupdate->id}&amp;timestamp={$inupdate->timestamp}'; window.close(); \">{$strDelete}</a>";
             }
         }
