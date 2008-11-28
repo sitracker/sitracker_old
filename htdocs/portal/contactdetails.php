@@ -257,7 +257,7 @@ else
     echo "<tr><th>{$strEmail}</th><td>";
     if ( $using_ldap && array_key_exists("email",$attrmap) ) 
     {
-        echo "<input type='hidden' name='email' value='{$user->email}' />.$user->email";
+        echo "<input type='hidden' name='email' value='{$user->email}' />$user->email";
     }
     else
     {
