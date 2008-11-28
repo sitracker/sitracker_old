@@ -98,6 +98,13 @@ INSERT INTO `{$dbClosingStatus}` VALUES (9, 'strUnsolved');
 INSERT INTO `{$dbClosingStatus}` VALUES (10, 'strEscalated');
 
 
+CREATE TABLE IF NOT EXISTS `{$dbConfig}` (
+  `config` varchar(255) NOT NULL,
+  `value` varchar(255) default NULL,
+  PRIMARY KEY  (`config`)
+) TYPE=MyISAM COMMENT='SiT configuration';
+
+
 CREATE TABLE `{$dbContacts}` (
 `id` int(11) NOT NULL auto_increment,
   `notify_contactid` int(11) NOT NULL default '0',
@@ -2478,7 +2485,7 @@ INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES 
 ALTER TABLE `{$dbUsers}` CHANGE `roleid` `roleid` INT( 5 ) NOT NULL DEFAULT '3'; 
 
 -- INL 2008-11-28
-CREATE TABLE IF NOT EXISTS `config` (
+CREATE TABLE IF NOT EXISTS `{$dbConfig}` (
   `config` varchar(255) NOT NULL,
   `value` varchar(255) default NULL,
   PRIMARY KEY  (`config`)
