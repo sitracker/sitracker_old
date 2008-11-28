@@ -298,7 +298,11 @@ $CONFIG['ldap_dn_base'] = "ou=Users,dc=example,dc=com";
 $CONFIG['ldap_user_attr'] = "uid"; 
 
 // Mapping between SIT and ldap attributes. Do not change the keys only the values.
-$CONFIG['ldap_attr_map'] = array("realname" => "cn", "jobtitle" => "title", "email" => "mail", "phone" => "phone", "forenames" => "givenname", "surname" => "surname");
+// Valid key values are: realname, forenames, jobtitle, email, mobile, fax, phone
+
+$CONFIG['ldap_attr_map'] = array("realname" => "cn", "jobtitle" => "title", 
+                                 "email" => "mail", "phone" => "phone", 
+                                 "forenames" => "givenname", "surname" => "surname");
 
 // Default user values
 // LDAP user status (1 = In Office)
