@@ -20,6 +20,9 @@ require ('auth.inc.php');
 // External variables
 $mode = $_REQUEST['mode'];
 $edituserpermission = user_permission($sit[2],23); // edit user
+$using_ldap = $CONFIG['use_ldap'];
+$attrmap = $CONFIG['ldap_attr_map'];
+
 if (empty($_REQUEST['userid']) OR $_REQUEST['userid'] == 'current' OR $edituserpermission == FALSE)
 {
     $edituserid = mysql_real_escape_string($sit[2]);
@@ -72,13 +75,23 @@ if (empty($mode))
     }
 
     echo "</tr>";
-    echo "<tr><th>{$strRealName}</th>";
-    echo "<td><input class='required' maxlength='50' name='realname' size='30'";
-    echo " type='text' value=\"".$user->realname."\" />";
-    echo " <span class='required'>{$strRequired}</span></td></tr>\n";
+    echo "<tr><th>{$strRealName}</th><td>";
+    if ( $using_ldap && array_key_exists("realname",$attrmap) ) { 
+        echo "<input name='realname' type='hidden' value='".$user->realname."'/>".$user->realname; 
+    } else {
+        echo "<input class='required' maxlength='50' name='realname' size='30'";
+        echo " type='text' value=\"".$user->realname."\" />";
+        echo " <span class='required'>{$strRequired}</span>";
+    }
+    echo "</td></tr>\n";
     echo "<tr><th>{$strJobTitle}</th>";
-    echo "<td><input maxlength='50' name='jobtitle' size='30' type='text' ";
-    echo "value=\"".$user->title."\" /></td></tr>\n";
+    echo "<td>";
+    if ( $using_ldap && array_key_exists("jobtitle",$attrmap) ) { echo $user->title; }
+    else {
+        echo "<input maxlength='50' name='jobtitle' size='30' type='text' ";
+        echo "value=\"".$user->title."\" />";
+    }
+    echo "</td></tr>\n";
     echo "<tr><th>{$strQualifications} ".help_link('QualificationsTip')."</th>";
     echo "<td><input maxlength='100' size='100' name='qualifications' value='".$user->qualifications."' /></td></tr>\n";
     echo "<tr><th>{$strEmailSignature} ".help_link('EmailSignatureTip')."</th>";
@@ -143,12 +156,33 @@ if (empty($mode))
     echo "<td><textarea name='message' rows='4' cols='40'>".strip_tags($user->message)."</textarea></td></tr>\n";
     echo "<tr><th colspan='2'>{$strContactDetails}</th></tr>";
     echo "<tr id='email'><th>{$strEmail}</th>";
-    echo "<td><input class='required' maxlength='50' name='email' size='30' ";
-    echo "type='text' value='".strip_tags($user->email)."' />";
-    echo " <span class='required'>{$strRequired}</span></td></tr>";
-    echo "<tr id='phone'><th>{$strTelephone}</th><td><input maxlength='50' name='phone' size='30' type='text' value='".strip_tags($user->phone)."' /></td></tr>";
-    echo "<tr><th>{$strFax}</th><td><input maxlength='50' name='fax' size='30' type='text' value='".strip_tags($user->fax)."' /></td></tr>";
-    echo "<tr><th>{$strMobile}</th><td><input maxlength='50' name='mobile' size='30' type='text' value='".user_mobile($edituserid)."' /></td></tr>";
+    echo "<td>";
+    if ( $using_ldap && array_key_exists("email",$attrmap) ) { 
+        echo "<input name='email' type='hidden'value='".strip_tags($user->email)."' />".$user->email; 
+    } else {
+        echo "<td><input class='required' maxlength='50' name='email' size='30' ";
+        echo "type='text' value='".strip_tags($user->email)."' />";
+        echo " <span class='required'>{$strRequired}</span></td>/tr>";
+    }
+    echo "</td></tr>";
+    echo "<tr id='phone'><th>{$strTelephone}</th><td>";
+    if ( $using_ldap && array_key_exists("phone",$attrmap) ) { echo $user->phone; }
+    else {
+        echo "<input maxlength='50' name='phone' size='30' type='text' value='".strip_tags($user->phone)."' />";
+    }
+    echo "</td></tr>";
+    echo "<tr><th>{$strFax}</th><td>";
+    if ( $using_ldap && array_key_exists("fax",$attrmap) ) { echo $user->fax; }
+    else {
+        echo "<input maxlength='50' name='fax' size='30' type='text' value='".strip_tags($user->fax)."' />";
+    }
+    echo "</td></tr>";
+    echo "<tr><th>{$strMobile}</th><td>";
+    if ( $using_ldap && array_key_exists("mobile",$attrmap) ) { echo $user->mobile; }
+    else {
+        echo "<input maxlength='50' name='mobile' size='30' type='text' value='".user_mobile($edituserid)."' />";
+    }
+    echo "</td></tr>";
     echo "<tr><th>AIM ".icon('aim', 16, 'AIM')."</th>";
     echo "<td><input maxlength=\"50\" name=\"aim\" size=\"30\" type=\"text\" value=\"".strip_tags($user->aim)."\" /></td></tr>";
     echo "<tr><th>ICQ ".icon('icq', 16, 'ICQ')."</th>";
@@ -218,13 +252,16 @@ if (empty($mode))
 
     plugin_do('edit_profile_form');
 
-    if ($CONFIG['trusted_server'] == FALSE AND $edituserid == $sit[2])
-    {
-        echo "<tr class='password'><th colspan='2'>{$strChangePassword}</th></tr>";
-        echo "<tr class='password'><th>&nbsp;</th><td>{$strToChangePassword}</td></tr>";
-        echo "<tr class='password'><th>{$strOldPassword}</th><td><input maxlength='50' name='oldpassword' size='30' type='password' /></td></tr>";
-        echo "<tr class='password'><th>{$strNewPassword}</th><td><input maxlength='50' name='newpassword1' size='30' type='password' /></td></tr>";
-        echo "<tr class='password'><th>{$strConfirmNewPassword}</th><td><input maxlength='50' name='newpassword2' size='30' type='password' /></td></tr>";
+    // Do not allow password change if using LDAP
+    if ( !$using_ldap ) {
+        if ($CONFIG['trusted_server'] == FALSE AND $edituserid == $sit[2])
+        {
+            echo "<tr class='password'><th colspan='2'>{$strChangePassword}</th></tr>";
+            echo "<tr class='password'><th>&nbsp;</th><td>{$strToChangePassword}</td></tr>";
+            echo "<tr class='password'><th>{$strOldPassword}</th><td><input maxlength='50' name='oldpassword' size='30' type='password' /></td></tr>";
+            echo "<tr class='password'><th>{$strNewPassword}</th><td><input maxlength='50' name='newpassword1' size='30' type='password' /></td></tr>";
+            echo "<tr class='password'><th>{$strConfirmNewPassword}</th><td><input maxlength='50' name='newpassword2' size='30' type='password' /></td></tr>";
+        }
     }
     echo "</table>\n";
     echo "<input type='hidden' name='userid' value='{$edituserid}' />";
