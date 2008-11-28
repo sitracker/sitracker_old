@@ -13,6 +13,7 @@
 $dbBillingMatrix = "{$CONFIG['db_tableprefix']}billingmatrix";
 $dbBillingPeriods = "{$CONFIG['db_tableprefix']}billing_periods";
 $dbClosingStatus = "{$CONFIG['db_tableprefix']}closingstatus";
+$dbConfig = "{$CONFIG['db_tableprefix']}config";
 $dbContacts = "{$CONFIG['db_tableprefix']}contacts";
 $dbDashboard = "{$CONFIG['db_tableprefix']}dashboard";
 $dbDashboardRSS = "{$CONFIG['db_tableprefix']}dashboard_rss";

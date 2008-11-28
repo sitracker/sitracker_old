@@ -2477,6 +2477,13 @@ INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES 
 -- KH 2008-11-26
 ALTER TABLE `{$dbUsers}` CHANGE `roleid` `roleid` INT( 5 ) NOT NULL DEFAULT '3'; 
 
+-- INL 2008-11-28
+CREATE TABLE IF NOT EXISTS `config` (
+  `config` varchar(255) NOT NULL,
+  `value` varchar(255) default NULL,
+  PRIMARY KEY  (`config`)
+) TYPE=MyISAM COMMENT='SiT configuration';
+
 ";
 // Important: When making changes to the schema you must add SQL to make the alterations
 // to existing databases in $upgrade_schema[] *AND* you must also change $schema[] for

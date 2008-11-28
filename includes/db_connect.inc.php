@@ -73,7 +73,20 @@ if (mysql_error())
         exit;
     }
 }
-
 // Soft table names
 require ('tablenames.inc.php');
+
+// Read database config
+
+$sql = "SELECT * FROM `{$dbConfig}`";
+$result = mysql_query($sql);
+if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+if (mysql_num_rows($result) > 0)
+{
+    while ($conf = mysql_fetch_object($result))
+    {
+        $CONFIG[$conf->config] = $conf->value;
+    }
+}
+
 ?>
