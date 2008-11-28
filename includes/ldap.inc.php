@@ -419,6 +419,9 @@ function ldapCreateUser($details)
     $default_style = $CONFIG['default_interface_style'];
     $default_lang = $CONFIG['default_i18n'];
 
+    // Get user type
+    $usertype = ldapGetUserType($username);
+
     // Create User
     $sql  = "INSERT INTO `{$dbUsers}` (username, password, realname, title, roleid, status, ";
     $sql .= "email, phone, mobile, fax, var_style, var_i18n ) ";
