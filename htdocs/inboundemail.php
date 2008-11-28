@@ -20,10 +20,8 @@ if (realpath(__FILE__) == realpath($_SERVER['SCRIPT_FILENAME']))
     include ('strings.inc.php');
     require ('functions.inc.php');
 }
-else
-{
     global $CONFIG, $dbFiles, $dbUpdates, $dbTempIncoming, $dbIncidents, $now;
-}
+
 
 //FIXME
 $fsdelim = (strstr($CONFIG['attachment_fspath'],"/")) ? "/" : "\\";
@@ -133,7 +131,22 @@ if ($emails > 0)
             $rawemail = explode("\n", $rawemail);
             if ($mailbox->servertype == 'imap')
             {
-                $mailbox->deleteEmail($i + 1);
+				if ($CONFIG['debug'])
+				{
+					echo 'Archive folder set to: '.$CONFIG['email_archive_folder'];
+				}
+				if (!empty($CONFIG['email_archive_folder']))
+				{
+					if ($CONFIG['debug'])
+					{
+						echo 'Archiving email\n';
+					}
+					$mailbox->archiveEmail($i + 1);
+				}
+				else
+				{
+                	$mailbox->deleteEmail($i + 1);
+				}
             }
         }
         // Create and populate the email object

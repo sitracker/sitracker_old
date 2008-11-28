@@ -112,5 +112,13 @@ class fetchSitMail
     {
         return imap_utf7_encode($text);
     }
+
+	function archiveEmail($id)
+	{
+		global $CONFIG;
+		if ($CONFIG['debug']) echo "Moving mail to {$CONFIG['email_archive_folder']} folder";
+		imap_mail_move($this->mailbox, $id, $CONFIG['email_archive_folder']) OR
+			trigger_error(imap_lasterror(), E_USER_ERROR);
+	}
 }
 ?>
