@@ -20,8 +20,10 @@ if (realpath(__FILE__) == realpath($_SERVER['SCRIPT_FILENAME']))
     include ('strings.inc.php');
     require ('functions.inc.php');
 }
+else
+{
     global $CONFIG, $dbFiles, $dbUpdates, $dbTempIncoming, $dbIncidents, $now;
-
+}
 
 //FIXME
 $fsdelim = (strstr($CONFIG['attachment_fspath'],"/")) ? "/" : "\\";
