@@ -13,8 +13,10 @@ $ldap_conn = "";
 
 // Defines
 define ('LDAP_INVALID_USER',0);
-define ('LDAP_USERTYPE_USER',1);
-define ('LDAP_USERTYPE_CUSTOMER',2);
+define ('LDAP_USERTYPE_ADMIN',1);
+define ('LDAP_USERTYPE_MANAGER',2);
+define ('LDAP_USERTYPE_USER',3);
+define ('LDAP_USERTYPE_CUSTOMER',4);
 
 // Time settings
 $now = time();
@@ -95,6 +97,52 @@ function ldapSearch($dn, $query)
 }
 
 /**
+    * Test if the given username is in the admin ldap group
+    * @author Lea Anthony
+    * @param $username String. Username
+    * @return an integer to indicate whether the username is in the group
+    * @retval 0 int. The username is not in the group
+    * @retval 1 int. The username in in the group
+*/
+function ldapIsAdmin($username)
+{
+    // Is user?
+    global $CONFIG;
+
+    $dn = $CONFIG["ldap_admin_group"];
+    $attr = $CONFIG["ldap_admin_group_attr"];
+    $query = "($attr=$username)";
+
+    $info = ldapSearch($dn, $query);
+    if(  $info["count"] == 1 ) return TRUE;
+
+    return FALSE;
+}
+
+/**
+    * Test if the given username is in the managers ldap group
+    * @author Lea Anthony
+    * @param $username String. Username
+    * @return an integer to indicate whether the username is in the group
+    * @retval 0 int. The username is not in the group
+    * @retval 1 int. The username in in the group
+*/
+function ldapIsManager($username)
+{
+    // Is user?
+    global $CONFIG;
+
+    $dn = $CONFIG["ldap_manager_group"];
+    $attr = $CONFIG["ldap_manager_group_attr"];
+    $query = "($attr=$username)";
+
+    $info = ldapSearch($dn, $query);
+    if(  $info["count"] == 1 ) return TRUE;
+
+    return FALSE;
+}
+
+/**
     * Test if the given username is in the user ldap group
     * @author Lea Anthony
     * @param $username String. Username
@@ -145,9 +193,11 @@ function ldapIsCustomer($username)
     * @author Lea Anthony
     * @param $username String. Username
     * @return an integer to indicate what group the user is in
-    * @retval 0 (LDAP_INVALID_USER) int. the username is not valid
-    * @retval 1 (LDAP_USERTYPE_USER) int. the username in in the users group
-    * @retval 2 (LDAP_USERTYPE_CUSTOMER) int. the username in in the customers group
+    * @retval LDAP_INVALID_USER int. the username is not valid
+    * @retval LDAP_USERTYPE_CUSTOMER int. the username in in the customers group
+    * @retval LDAP_USERTYPE_USER int. the username in in the users group
+    * @retval LDAP_USERTYPE_MANAGER int. the username in in the managers group
+    * @retval LDAP_USERTYPE_ADMIN int. the username in in the admin group
 */
 function ldapGetUserType($username)
 {
@@ -155,7 +205,9 @@ function ldapGetUserType($username)
 
     $result = LDAP_INVALID_USER;
 
-    if( ldapIsUser($username) ) $result = LDAP_USERTYPE_USER;
+    if( ldapIsAdmin($username) ) $result = LDAP_USERTYPE_ADMIN;
+    elseif( ldapIsManager($username) ) $result = LDAP_USERTYPE_MANAGER;
+    elseif( ldapIsUser($username) ) $result = LDAP_USERTYPE_USER;
     elseif( ldapIsCustomer($username) ) $result = LDAP_USERTYPE_CUSTOMER;
 
     return $result;
@@ -196,7 +248,7 @@ function ldapOpen()
     global $CONFIG, $ldap_conn;
     $host = $CONFIG['ldap_host'];
     $ldap_conn = ldap_connect($host)
-                or trigger_errror("Could not connect to server", E_USER_ERROR);
+                 or trigger_errror("Could not connect to server", E_USER_ERROR);
 //     $r = ldap_bind($ldap_conn);
 
     return $ldap_conn;
@@ -305,7 +357,10 @@ function authenticateLDAP($username, $password)
     if( ! ldapUserPassValid($username,$password) ) return 0;
 
     // Get user type - if it's not a user then return
-    if( ldapGetUserType($username) != LDAP_USERTYPE_USER ) return 0;
+    $usertype = ldapGetUserType($username);
+    if( $usertype != LDAP_USERTYPE_USER &&
+        $usertype != LDAP_USERTYPE_MANAGER &&
+        $usertype != LDAP_USERTYPE_ADMIN ) return 0;
 
     // Get User Details
     $u = ldapGetUserDetails($username);
@@ -316,7 +371,6 @@ function authenticateLDAP($username, $password)
     }
 
     // Defaults
-    $default_role = $CONFIG["ldap_default_user_role"];
     $default_status = $CONFIG["ldap_default_user_status"]; 
     $default_style = $CONFIG['default_interface_style'];
     $default_lang = $CONFIG['default_i18n'];
@@ -330,8 +384,8 @@ function authenticateLDAP($username, $password)
     $sql  = "INSERT INTO `{$dbUsers}` (username, password, realname, title, roleid, status, ";
     $sql .= "email, phone, mobile, fax, var_style, var_i18n ) ";
     $sql .= "VALUES ('$username', '$md5password', '$realname', '$jobtitle', ";
-    $sql .= "$default_role, $default_status, '$email', '$phone', '$mobile', '$fax', ";
-    $sql .= "$default_style, $default_lang)";
+    $sql .= "$usertype, $default_status, '$email', '$phone', '$mobile', '$fax', ";
+    $sql .= "$default_style, '$default_lang')";
 
     $result = mysql_query($sql);
 
