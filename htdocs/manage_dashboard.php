@@ -70,7 +70,7 @@ switch ($_REQUEST['action'])
 
         $path = "{$CONFIG['application_fspath']}dashboard/";
 
-        $dir_handle = @opendir($path) or die("Unable to open dashboard directory $path");
+        $dir_handle = @opendir($path) or trigger_error("Unable to open dashboard directory $path", E_USER_ERROR);
 
         while ($file = readdir($dir_handle))
         {

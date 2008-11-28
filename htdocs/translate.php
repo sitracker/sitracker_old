@@ -216,7 +216,7 @@ elseif ($_REQUEST['mode'] == "save")
 }
 else
 {
-    die('Invalid mode');
+    trigger_error('Invalid mode', E_USER_ERROR);
 }
 include ('htmlfooter.inc.php');
 ?>

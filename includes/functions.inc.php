@@ -9846,7 +9846,7 @@ function populate_syslang()
     }
     else
     {
-        die("File specified in \$CONFIG['default_i18n'] can't be found");
+        trigger_error("File specified in \$CONFIG['default_i18n'] can't be found", E_USER_ERROR);
     }
 }
 

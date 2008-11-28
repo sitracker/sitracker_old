@@ -40,7 +40,7 @@ class fetchSitMail
     {
         $this->mailbox = imap_open($this->server, $this->username,
                                    $this->password, 'CL_EXPUNGE') OR
-            die(imap_last_error())."\n";
+            trigger_error(imap_last_error(), E_USER_ERROR)."\n";
     }
     
     function getNumUnreadEmails()
@@ -105,7 +105,7 @@ class fetchSitMail
     
     function deleteEmail($id)
     {
-        imap_delete($this->mailbox, $id) OR die(imap_lasterror());
+        imap_delete($this->mailbox, $id) OR trigger_error(imap_lasterror(), E_USER_ERROR);
     }
         
     function iso8859Decode($text)
