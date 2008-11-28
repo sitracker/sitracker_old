@@ -35,13 +35,7 @@ $now = time();
 */
 function authenticateLDAPCustomer($username, $password)
 {
-    global $CONFIG, $dbUsers, $dbContacts, $dbUserPermissions, $dbPermissions, $ldap_conn, $now;
-
-    if( customerExistsInDB($username) ) 
-    {
-        ldapSyncCustomer($username, $password);
-        return;
-    }
+    global $CONFIG;
 
     // If the user/password are not valid then return gracefully
     if( ! ldapUserPassValid($username,$password) ) return 0;
@@ -50,22 +44,38 @@ function authenticateLDAPCustomer($username, $password)
     if( ldapGetUserType($username) != LDAP_USERTYPE_CUSTOMER ) return 0;
 
     // Get User Details
-    $u = ldapGetUserDetails($username);
+    $details = ldapGetUserDetails($username);
+
+    // Customer
+    $details["department"] = "";
+    $details["siteid"] = $CONFIG["ldap_default_customer_siteid"];
+    $details["address1"] = "";
+    $details["md5password"] = md5($password);
+
+    if( customerExistsInDB($username) ) 
+    {
+        ldapUpdateContact($details);
+    }
+    else
+    {
+        ldapCreateContact($details);
+    }
+}
+
+/**
+    * Creates the Contact Record in the database
+    * @author Lea Anthony
+    * @param $details Array. The details of the user
+*/
+function ldapCreateContact($details)
+{
+    global $CONFIG, $dbContacts, $now;
 
     // Create vars for the userdetails
-    foreach ($u as $key=>$value) 
+    foreach ($details as $key=>$value) 
     {
         eval("\${$key} = \"{$value}\";");  
     }
-
-    // Customer
-    $department = "";
-    $siteid = $CONFIG["ldap_default_customer_siteid"];
-    $address1 = "";
-    $md5password = md5($password);
-
-    // TODO: Contact creation should be in it's own function and 
-    //       shared between the whole codebase
 
     $sql  = "INSERT INTO `{$dbContacts}` (username, password, forenames, ";
     $sql .= "surname, jobtitle, email, phone, mobile, fax, department, ";
@@ -73,11 +83,43 @@ function authenticateLDAPCustomer($username, $password)
     $sql .= "VALUES ('$username', '$md5password', '$forenames', '$surname', ";
     $sql .= "'$jobtitle', '$email', '$phone', '$mobile', '$fax', ";
     $sql .= "'$department', $siteid, '$now', '$now', '$address1')";
-    
+
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
+    return 1;
 }
+
+/**
+    * Updates the Contact Record in the database
+    * @author Lea Anthony
+    * @param $details Array. The details of the user
+*/
+function ldapUpdateContact($details)
+{
+    global $CONFIG, $dbContacts, $now;
+
+    // Create vars for the userdetails
+    foreach ($details as $key=>$value) 
+    {
+        eval("\${$key} = \"{$value}\";");  
+    }
+
+    // TODO: Check DB for existing attributes that are NOT mapped and
+    //       use them if the ldap versions are blank
+
+    $sql  = "UPDATE `{$dbContacts}` SET password='$md5password', ";
+    $sql .= "forenames='$forenames', surname='$surname', jobtitle='$jobtitle', ";
+    $sql .= "email='$email', phone='$phone', mobile='$mobile', fax='$fax', ";
+    $sql .= "department='$department', siteid=$siteid, timestamp_modified='$now', ";
+    $sql .= "address1='$address1' where username='$username'";
+
+    $result = mysql_query($sql);
+    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+
+    return 1;
+}
+
 
 /**
     * Performs a search on the LDAP tree
@@ -219,29 +261,6 @@ function ldapGetUserType($username)
 
 
 /**
-    * Updates the user record in the database with details from LDAP
-    * @author Lea Anthony
-    * @param $username String. Username
-    * @param $password String. Password
-*/
-function ldapSyncUser($username, $password) 
-{
-    // TODO: Update the DB record with the user details
-}
-
-
-/**
-    * Updates the customer record in the database with details from LDAP
-    * @author Lea Anthony
-    * @param $username String. Username
-    * @param $password String. Password
-*/
-function ldapSyncCustomer($username, $password) 
-{
-    // TODO: Update the DB record with the customer details
-}
-
-/**
     * Opens a connection to the LDAP host
     * @author Lea Anthony
     * @return the handle of the opened connection
@@ -311,6 +330,8 @@ function ldapGetUserDetails($username)
         $r[$attr] = "" );
     }
 
+    $r["username"] = $username;
+
     return $r;
 }
 
@@ -370,10 +391,25 @@ function authenticateLDAP($username, $password)
         $usertype != LDAP_USERTYPE_ADMIN ) return 0;
 
     // Get User Details
-    $u = ldapGetUserDetails($username);
+    $details = ldapGetUserDetails($username);
+
+    $details["md5password"] = md5($password);
+
+    return ldapCreateUser($details);
+}
+
+/**
+    * Creates the User Record in the database
+    * @author Lea Anthony
+    * @param $details Array. The details of the user
+*/
+function ldapCreateUser($details)
+{
+    global $CONFIG, $dbUsers, $dbContacts, $dbUserPermissions, 
+        $dbPermissions, $ldap_conn, $now;
 
     // Create vars for the userdetails
-    foreach ($u as $key=>$value) 
+    foreach ($details as $key=>$value) 
     {
         eval("\${$key} = \"{$value}\";");  
     }
@@ -382,11 +418,6 @@ function authenticateLDAP($username, $password)
     $default_status = $CONFIG["ldap_default_user_status"]; 
     $default_style = $CONFIG['default_interface_style'];
     $default_lang = $CONFIG['default_i18n'];
-
-    $md5password = md5($password);
-
-    // TODO: User creation should be in it's own function and 
-    //       shared between the whole codebase
 
     // Create User
     $sql  = "INSERT INTO `{$dbUsers}` (username, password, realname, title, roleid, status, ";
@@ -419,6 +450,56 @@ function authenticateLDAP($username, $password)
     return 1;
 }
 
+/**
+    * Updates the user record in the database with details from LDAP
+    * @author Lea Anthony
+    * @param $username String. Username
+    * @param $password String. Password
+*/
+function ldapSyncUser($username, $password) 
+{
+    global $CONFIG, $dbUsers, $dbContacts, $dbUserPermissions, 
+        $dbPermissions, $ldap_conn, $now;
+
+    // Get User Details
+    $details = ldapGetUserDetails($username);
+
+    $details["md5password"] = md5($password);
+
+    return ldapUpdateUser($details);
+}
+
+/**
+    * Updates the User Record in the database
+    * @author Lea Anthony
+    * @param $details Array. The details of the user
+*/
+function ldapUpdateUser($details)
+{
+    global $CONFIG, $dbUsers, $now;
+
+    // Create vars for the userdetails
+    foreach ($details as $key=>$value) 
+    {
+        eval("\${$key} = \"{$value}\";");  
+    }
+
+    // Get user type
+    $usertype = ldapGetUserType($username);
+
+
+    // TODO: Check DB for existing attributes that are NOT mapped and
+    //       use them if the ldap versions are blank
+
+    $sql  = "UPDATE `{$dbUsers}` SET password='$md5password', realname='$realname', ";
+    $sql .= "title='$jobtitle', roleid=$usertype, email='$email', phone='$phone', ";
+    $sql .= "mobile='$mobile', fax='$fax' where username='$username'";
+
+    $result = mysql_query($sql);
+    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+
+    return 1;
+}
 
 
 ?>
