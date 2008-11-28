@@ -100,7 +100,7 @@ INSERT INTO `{$dbClosingStatus}` VALUES (10, 'strEscalated');
 
 CREATE TABLE IF NOT EXISTS `{$dbConfig}` (
   `config` varchar(255) NOT NULL,
-  `value` varchar(255) default NULL,
+  `value` text,
   PRIMARY KEY  (`config`)
 ) TYPE=MyISAM COMMENT='SiT configuration';
 
@@ -2487,7 +2487,7 @@ ALTER TABLE `{$dbUsers}` CHANGE `roleid` `roleid` INT( 5 ) NOT NULL DEFAULT '3';
 -- INL 2008-11-28
 CREATE TABLE IF NOT EXISTS `{$dbConfig}` (
   `config` varchar(255) NOT NULL,
-  `value` varchar(255) default NULL,
+  `value` text,
   PRIMARY KEY  (`config`)
 ) TYPE=MyISAM COMMENT='SiT configuration';
 

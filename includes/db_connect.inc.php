@@ -76,8 +76,7 @@ if (mysql_error())
 // Soft table names
 require ('tablenames.inc.php');
 
-// Read database config
-
+// Read config from database (this overrides any config in the config files
 $sql = "SELECT * FROM `{$dbConfig}`";
 $result = mysql_query($sql);
 if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
