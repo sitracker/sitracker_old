@@ -37,7 +37,8 @@ function authenticateLDAPCustomer($username, $password)
 {
     global $CONFIG, $dbUsers, $dbContacts, $dbUserPermissions, $dbPermissions, $ldap_conn, $now;
 
-    if( customerExistsInDB($username) ) {
+    if( customerExistsInDB($username) ) 
+    {
         ldapSyncCustomer($username, $password);
         return;
     }
@@ -52,7 +53,8 @@ function authenticateLDAPCustomer($username, $password)
     $u = ldapGetUserDetails($username);
 
     // Create vars for the userdetails
-    foreach ($u as $key=>$value) {
+    foreach ($u as $key=>$value) 
+    {
         eval("\${$key} = \"{$value}\";");  
     }
 
@@ -71,6 +73,7 @@ function authenticateLDAPCustomer($username, $password)
     $sql .= "VALUES ('$username', '$md5password', '$forenames', '$surname', ";
     $sql .= "'$jobtitle', '$email', '$phone', '$mobile', '$fax', ";
     $sql .= "'$department', $siteid, '$now', '$now', '$address1')";
+    
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
@@ -221,7 +224,8 @@ function ldapGetUserType($username)
     * @param $username String. Username
     * @param $password String. Password
 */
-function ldapSyncUser($username, $password) {
+function ldapSyncUser($username, $password) 
+{
     // TODO: Update the DB record with the user details
 }
 
@@ -232,7 +236,8 @@ function ldapSyncUser($username, $password) {
     * @param $username String. Username
     * @param $password String. Password
 */
-function ldapSyncCustomer($username, $password) {
+function ldapSyncCustomer($username, $password) 
+{
     // TODO: Update the DB record with the customer details
 }
 
@@ -263,7 +268,8 @@ function ldapClose()
 {
     global $ldap_conn;
 
-    if( $ldap_conn != 0 ) {
+    if( $ldap_conn != 0 ) 
+    {
         ldap_close($ldap_conn);
         $ldap_conn = 0;
     }
@@ -296,9 +302,10 @@ function ldapGetUserDetails($username)
     $r = array();
 
     $attributes = array("realname","forenames","jobtitle","email","mobile",
-                        "fax","phone");
+                        "surname", "fax","phone");
 
-    foreach ( $attributes as $attr ) {
+    foreach ( $attributes as $attr ) 
+    {
         $mapattr = $CONFIG['ldap_attr_map'][$attr];
         ( isset($mapattr) ? $r[$attr] = $info[0][$mapattr][0] : 
         $r[$attr] = "" );
@@ -366,7 +373,8 @@ function authenticateLDAP($username, $password)
     $u = ldapGetUserDetails($username);
 
     // Create vars for the userdetails
-    foreach ($u as $key=>$value) {
+    foreach ($u as $key=>$value) 
+    {
         eval("\${$key} = \"{$value}\";");  
     }
 
