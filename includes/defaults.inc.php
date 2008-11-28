@@ -285,6 +285,7 @@ $CONFIG['inventory_types']['workstation'] = 'Workstation/PC';
 $CONFIG['allow_duration_adjustment'] = FALSE;
 
 // LDAP Config
+
 // Set to TRUE for LDAP authentication, or FALSE for standard database authentication
 $CONFIG['use_ldap'] = FALSE;
 
@@ -300,8 +301,6 @@ $CONFIG['ldap_user_attr'] = "uid";
 $CONFIG['ldap_attr_map'] = array("realname" => "cn", "jobtitle" => "title", "email" => "mail", "phone" => "phone", "forenames" => "givenname", "surname" => "surname");
 
 // Default user values
-// LDAP user role (1 = Admin, 2=Manager, 3=User)
-$CONFIG['ldap_default_user_role'] = 3;
 // LDAP user status (1 = In Office)
 $CONFIG['ldap_default_user_status'] = 1; 
 
@@ -309,9 +308,19 @@ $CONFIG['ldap_default_user_status'] = 1;
 $CONFIG["ldap_user_group"] = "cn=situsers,ou=Groups,dc=example,dc=com";
 $CONFIG["ldap_user_group_attr"] = "memberUid";
 
+// LDAP group for SIT admins
+$CONFIG["ldap_admin_group"] = "cn=sitadmins,ou=Groups,dc=example,dc=com";
+$CONFIG["ldap_admin_group_attr"] = "memberUid";
+
+// LDAP group for SIT managers
+$CONFIG["ldap_manager_group"] = "cn=sitmanagers,ou=Groups,dc=example,dc=com";
+$CONFIG["ldap_manager_group_attr"] = "memberUid";
+
 // Customer Group and default role
 $CONFIG["ldap_customer_group"] = "cn=sitcustomers,ou=Groups,dc=example,dc=com";
 $CONFIG["ldap_customer_group_attr"] = "memberUid";
+
+// Default Customer values
 // 1 is the example site in the default install
 $CONFIG["ldap_default_customer_siteid"] = 1; 
 
