@@ -76,9 +76,12 @@ if (empty($mode))
 
     echo "</tr>";
     echo "<tr><th>{$strRealName}</th><td>";
-    if ( $using_ldap && array_key_exists("realname",$attrmap) ) { 
+    if ( $using_ldap && array_key_exists("realname",$attrmap) ) 
+    { 
         echo "<input name='realname' type='hidden' value='".$user->realname."'/>".$user->realname; 
-    } else {
+    } 
+    else 
+    {
         echo "<input class='required' maxlength='50' name='realname' size='30'";
         echo " type='text' value=\"".$user->realname."\" />";
         echo " <span class='required'>{$strRequired}</span>";
@@ -86,8 +89,12 @@ if (empty($mode))
     echo "</td></tr>\n";
     echo "<tr><th>{$strJobTitle}</th>";
     echo "<td>";
-    if ( $using_ldap && array_key_exists("jobtitle",$attrmap) ) { echo $user->title; }
-    else {
+    if ( $using_ldap && array_key_exists("jobtitle",$attrmap) ) 
+    { 
+        echo $user->title; 
+    }
+    else 
+    {
         echo "<input maxlength='50' name='jobtitle' size='30' type='text' ";
         echo "value=\"".$user->title."\" />";
     }
@@ -157,29 +164,44 @@ if (empty($mode))
     echo "<tr><th colspan='2'>{$strContactDetails}</th></tr>";
     echo "<tr id='email'><th>{$strEmail}</th>";
     echo "<td>";
-    if ( $using_ldap && array_key_exists("email",$attrmap) ) { 
+    if ( $using_ldap && array_key_exists("email",$attrmap) ) 
+    { 
         echo "<input name='email' type='hidden'value='".strip_tags($user->email)."' />".$user->email; 
-    } else {
+    } 
+    else 
+    {
         echo "<td><input class='required' maxlength='50' name='email' size='30' ";
         echo "type='text' value='".strip_tags($user->email)."' />";
         echo " <span class='required'>{$strRequired}</span></td>/tr>";
     }
     echo "</td></tr>";
     echo "<tr id='phone'><th>{$strTelephone}</th><td>";
-    if ( $using_ldap && array_key_exists("phone",$attrmap) ) { echo $user->phone; }
-    else {
+    if ( $using_ldap && array_key_exists("phone",$attrmap) ) 
+    { 
+        echo $user->phone; 
+    }
+    else 
+    {
         echo "<input maxlength='50' name='phone' size='30' type='text' value='".strip_tags($user->phone)."' />";
     }
     echo "</td></tr>";
     echo "<tr><th>{$strFax}</th><td>";
-    if ( $using_ldap && array_key_exists("fax",$attrmap) ) { echo $user->fax; }
-    else {
+    if ( $using_ldap && array_key_exists("fax",$attrmap) ) 
+    { 
+        echo $user->fax; 
+    }
+    else 
+    {
         echo "<input maxlength='50' name='fax' size='30' type='text' value='".strip_tags($user->fax)."' />";
     }
     echo "</td></tr>";
     echo "<tr><th>{$strMobile}</th><td>";
-    if ( $using_ldap && array_key_exists("mobile",$attrmap) ) { echo $user->mobile; }
-    else {
+    if ( $using_ldap && array_key_exists("mobile",$attrmap) ) 
+    { 
+        echo $user->mobile; 
+    }
+    else 
+    {
         echo "<input maxlength='50' name='mobile' size='30' type='text' value='".user_mobile($edituserid)."' />";
     }
     echo "</td></tr>";
@@ -253,7 +275,8 @@ if (empty($mode))
     plugin_do('edit_profile_form');
 
     // Do not allow password change if using LDAP
-    if ( !$using_ldap ) {
+    if ( !$using_ldap ) 
+    {
         if ($CONFIG['trusted_server'] == FALSE AND $edituserid == $sit[2])
         {
             echo "<tr class='password'><th colspan='2'>{$strChangePassword}</th></tr>";
