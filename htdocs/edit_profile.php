@@ -170,9 +170,9 @@ if (empty($mode))
     } 
     else 
     {
-        echo "<td><input class='required' maxlength='50' name='email' size='30' ";
+        echo "<input class='required' maxlength='50' name='email' size='30' ";
         echo "type='text' value='".strip_tags($user->email)."' />";
-        echo " <span class='required'>{$strRequired}</span></td>/tr>";
+        echo " <span class='required'>{$strRequired}</span>";
     }
     echo "</td></tr>";
     echo "<tr id='phone'><th>{$strTelephone}</th><td>";
