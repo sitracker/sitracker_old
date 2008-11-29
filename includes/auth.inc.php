@@ -53,7 +53,6 @@ if (!is_array($permission))
     $permission = array($permission);
 }
     
-// FIXME 3.40 KMH things here a bug around here somewhere PH
 // Valid user, check permissions
 if (user_permission($userid, $permission) == FALSE)
 {
