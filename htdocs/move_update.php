@@ -19,14 +19,16 @@ require ('auth.inc.php');
 // External variables
 $incidentid = cleanvar($_REQUEST['incidentid']);
 $updateid = cleanvar($_REQUEST['updateid']);
+$id = cleanvar($_REQUEST['id']);
 $error = cleanvar($_REQUEST['error']);
 $send_email = cleanvar($_REQUEST['send_email']);
 
 if ($incidentid == '')
 {
     $title = $strMoveUpdate;
-    include 'incident_html_top.inc.php';
-    echo "<h2>$title</h2>";
+    include ('incident_html_top.inc.php');
+    $incidentid = cleanvar($_REQUEST['incidentid']); // Need to do this here again as incident_html_top changes this to $id which we need above so the menu works
+    echo "<h2>{$title}</h2>";
     if ($error == '1')
     {
         echo "<p class='error'>Error assigning that incident update. Probable cause is ";
@@ -36,8 +38,10 @@ if ($incidentid == '')
     echo "<div align='center'>";
     echo "<form action='{$_SERVER['PHP_SELF']}' method='post'>";
     echo "{$strToIncidentID}: <input type='text' name='incidentid' value='{$incidentid}' />";
-    echo "<input type='submit' value='Move' /><br />"; //FIXME i18n
+    echo "<input type='submit' value='{$strMoveUpdate}' /><br />";
     echo "<input type='hidden' name='updateid' value='{$updateid}' />";
+    echo "<input type='hidden' name='id' value='{$id}' />";
+    echo "<input type='hidden' name='win' value='incomingview' />";
     echo "</form>";
     echo "</div>";
 
@@ -63,7 +67,7 @@ if ($incidentid == '')
 
             case 'reassigning':
                 echo "Reassigned by <strong>".user_realname($updates['userid'],TRUE)."</strong>";
-                if ($updates['currentowner']!=0)  // only say who it was assigned to if the currentowner field is filled in
+                if ($updates['currentowner'] != 0)  // only say who it was assigned to if the currentowner field is filled in
                 {
                     echo " To <strong>".user_realname($updates['currentowner'],TRUE)."</strong>";
                 }
@@ -219,7 +223,7 @@ else
     else
     {
         // no open incident with this number.  Return to form.
-        header("Location: {$_SERVER['PHP_SELF']}?updateid=$updateid&error=1");
+        header("Location: {$_SERVER['PHP_SELF']}?id={$id}&updateid=$updateid&error=1&win=incomingview");
         exit;
     }
 }
