@@ -22,7 +22,8 @@ require ('auth.inc.php');
 
 function to_row($contactrow)
 {
-    global $now, $updateid, $CONFIG;
+    global $now, $updateid, $CONFIG, $dbg;
+
     $str = '';
     if (($contactrow['expirydate'] < $now
         OR $contactrow['term'] == 'yes')
@@ -156,7 +157,7 @@ elseif ($action == 'findcontact')
 
     $sql  = "SELECT p.name AS productname, p.id AS productid, c.surname AS surname, ";
     $sql .= "m.id AS maintid, m.incident_quantity, m.incidents_used, m.expirydate, m.term, s.name AS name, ";
-    $sql .= "c.id AS contactid, s.id AS siteid ";
+    $sql .= "c.id AS contactid, s.id AS siteid, c.forenames ";
     $sql .= "FROM `{$dbSupportContacts}` AS sc, `{$dbContacts}` AS c, `{$dbMaintenance}` AS m, `{$dbProducts}` AS p, `{$dbSites}` AS s ";
     $sql .= "WHERE m.product = p.id ";
     $sql .= "AND m.site = s.id ";
@@ -168,7 +169,7 @@ elseif ($action == 'findcontact')
     }
     $sql .= "UNION SELECT p.name AS productname, p.id AS productid, c.surname AS surname, ";
     $sql .= "m.id AS maintid, m.incident_quantity, m.incidents_used, m.expirydate, m.term, s.name AS name, ";
-    $sql .= "c.id AS contactid, s.id AS siteid ";
+    $sql .= "c.id AS contactid, s.id AS siteid, c.forenames ";
     $sql .= "FROM `{$dbContacts}` AS c, `{$dbMaintenance}` AS m, `{$dbProducts}` AS p, `{$dbSites}` AS s ";
     $sql .= "WHERE m.product = p.id ";
     $sql .= "AND m.site = s.id ";
@@ -204,12 +205,15 @@ elseif ($action == 'findcontact')
         $str_prefered = '';
         $str_alternative = '';
 
-        $headers = "<tr><th>&nbsp;</th><th>{$strName}</th><th>{$strSite}</th><th>{$strContract}</th><th>{$strServiceLevel}</th><th>{$strExpiryDate}</th></tr>";
+        $headers = "<tr><th>&nbsp;</th><th>{$strName}</th><th>{$strSite}</th>";
+        $headers .= "<th>{$strContract}</th><th>{$strServiceLevel}</th>";
+        $headers .= "<th>{$strExpiryDate}</th></tr>";
 
         while ($contactrow = mysql_fetch_array($result))
         {
             if (empty($CONFIG['preferred_maintenance']) OR
-                in_array(servicelevel_id2tag($contactrow['servicelevelid']), $CONFIG['preferred_maintenance']))
+                in_array(servicelevel_id2tag($contactrow['servicelevelid']), 
+                                             $CONFIG['preferred_maintenance']))
             {
                 $str_prefered .= to_row($contactrow);
             }
@@ -221,7 +225,10 @@ elseif ($action == 'findcontact')
 
         if (!empty($str_prefered))
         {
-            echo "<h3>{$strPreferred}</h3>";
+            if (!empty($str_alternative))
+            {
+                echo "<h3>{$strPreferred}</h3>";
+            }
             echo "<table align='center'>";
             echo $headers;
             echo $str_prefered;
@@ -273,11 +280,16 @@ elseif ($action == 'findcontact')
             while ($contactrow = mysql_fetch_array($result))
             {
                 $html .=  "<tr class='shade2'>";
-                $site_incident_pool = db_read_column('freesupport', $dbSites, $contactrow['siteid']);
+                $site_incident_pool = db_read_column('freesupport', $dbSites, 
+                                                     $contactrow['siteid']);
                 if ($site_incident_pool > 0)
                 {
-                    $html .=  "<td><a href=\"{$_SERVER['PHP_SELF']}?action=incidentform&amp;type=free&amp;contactid=".$contactrow['contactid']."&amp;updateid=$updateid&amp;win={$win}\" onclick=\"return confirm_free();\">";
-                    $html .=  "{$strAddSiteSupportIncident}</a> (".sprintf($strRemaining,$site_incident_pool).")</td>";
+                    $html .=  "<td><a href=\"{$_SERVER['PHP_SELF']}?action=";
+                    $html .= "incidentform&amp;type=free&amp;contactid=";
+                    $html .= $contactrow['contactid']."&amp;updateid=$updateid";
+                    $html .= "&amp;win={$win}\" onclick=\"return confirm_free();\">";
+                    $html .=  "{$strAddSiteSupportIncident}</a> (";
+                    $html .= sprintf($strRemaining,$site_incident_pool).")</td>";
                     $customermatches++;
                 }
                 else
