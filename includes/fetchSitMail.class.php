@@ -17,7 +17,7 @@ class fetchSitMail
         {
             if (empty($port))
             {
-                $port = '110';
+                $port = '143';
             }
             $connectionString = "{{$server}:{$port}/imap{$options}}INBOX";
         }
@@ -25,7 +25,7 @@ class fetchSitMail
         {
             if (empty($port))
             {
-                $port = '143';                
+                $port = '110';                
             }
             $connectionString = "{{$server}:{$port}/pop3{$options}}INBOX";
         }

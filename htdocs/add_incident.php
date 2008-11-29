@@ -409,30 +409,30 @@ elseif ($action=='incidentform')
     {
         echo "<input type='hidden' name='updateid' value='$updateid' />";
     }
-    echo "<table align='center' class='vertical' width='90%'>";
-    echo "<tr><th rowspan='2'>{$strName}<br /><a href='edit_contact.php?action=edit&amp;";
-    echo "contact={$contactid}'>{$strEdit}</a></th><td colspan='1' rowspan='2'><h3>".icon('contact', 32);
-    echo " ".contact_realname($contactid)."</h3></td>";
-    echo "<th>{$strEmail}</th><td>".contact_email($contactid)."</td></tr>";
-    echo "<th>{$strTelephone}</th><td>".contact_phone($contactid)."</td>";
-    if ($type == 'free')
-    {
-        echo "<th>{$strServiceLevel}</th><td>".serviceleveltag_drop_down('servicelevel',$CONFIG['default_service_level'], TRUE)."</td>";
-        echo "<th>{$strSkill}</th><td>".software_drop_down('software', 0)."</td></tr>";
-    }
-    else
-    {
-        echo "<tr><th>{$strContract}</th><td>{$maintid} - ".strip_tags($producttext)."</td>";
-        echo "<th>{$strSkill}</th><td>".softwareproduct_drop_down('software', 1, $productid)."</td></tr>";
-    }
 
-    echo "<tr><td colspan='4'>&nbsp;</td></tr>";
+    echo "<h3>".icon('contact', 32);
+    echo " ".contact_realname($contactid)." <small>(<a href='edit_contact.php?action=edit&amp;";
+    echo "contact={$contactid}'>{$strEdit}</a>)</small></h3>";
+    echo "<p align='center'><strong>".contact_email($contactid)."<br />";
+    echo contact_phone($contactid)."</strong></p>";
+    echo "<table align='center' class='vertical' width='70%'>";
+
     if (empty($updateid))
     {
-        echo "<tr><th>{$strIncidentTitle}</th>";
-        echo "<td colspan='3'><input class='required' maxlength='350' name='incidenttitle'";
-        echo " size='140' type='text' />";
-        echo " <span class='required'>{$strRequired}</span></td></tr>\n";
+        echo "<tr><td colspan='2'><label for='incidenttitle'><strong>{$strIncidentTitle}</strong></label><br />";
+        echo "<input class='required' maxlength='200' name='incidenttitle'";
+        echo " size='50' type='text' />";
+        echo " <span class='required'>{$strRequired}</span></td>\n";
+        if ($type == 'free')
+        {
+            echo "<th>{$strServiceLevel}</th><td>".serviceleveltag_drop_down('servicelevel',$CONFIG['default_service_level'], TRUE)."</td>";
+            echo "<th>{$strSkill}</th><td>".software_drop_down('software', 0)."</td></tr>";
+        }
+        else
+        {
+            echo "<td colspan='2'><strong>{$strContract}</strong>: ".strip_tags($producttext)."<br />";
+            echo "<label for='software'><strong>{$strSkill}</strong></label>: ".softwareproduct_drop_down('software', 1, $productid)."</td></tr>";
+        }
 
         if (site_count_inventory_items($siteid) > 0)
         {
@@ -465,7 +465,7 @@ elseif ($action=='incidentform')
 
         while ($productinforow = mysql_fetch_array($result))
         {
-            echo "<tr><th>{$productinforow['information']}";
+            echo "<tr>{$productinforow['information']}";
             echo "</th>";
             echo "<td colspan='1'>";
             if ($productinforow['moreinformation'] != '')
@@ -477,7 +477,7 @@ elseif ($action=='incidentform')
             echo " <span class='required'>{$strRequired}</span></td>\n";
             // next pointer value for the second column, but check if no more values left and if true
             // just put an empty cell - Nicdev007
-            ($productinforow = mysql_fetch_array($result));
+            //($productinforow = mysql_fetch_array($result));
             if ($productinforow['information'] != '')
             {
                 echo "<th>{$productinforow['information']}";
@@ -494,14 +494,14 @@ elseif ($action=='incidentform')
             echo "<th></th>";
             echo "<td></td>";
         }
-        echo "<tr><th width='10%'>{$strProblemDescription}:".help_link('ProblemDescriptionEngineer')."<br /></th>";
-        echo "<td width='40%'><textarea name='probdesc' rows='4' cols='60'></textarea></td>\n";
-        echo "<th width='10%'>{$strProblemReproduction}".help_link('ProblemReproductionEngineer')."</th>";
-        echo "<td width='40%'><textarea name='probreproduction' rows='4' cols='60'></textarea></td></tr>\n";
-        echo "<tr><th width='10%'>{$strWorkAroundsAttempted}".help_link('WorkAroundsAttemptedEngineer')."</th>";
-        echo "<td width='40%'><textarea name='workarounds' rows='4' cols='60'></textarea></td>\n";
-        echo "<th width='10%'>{$strCustomerImpact}".help_link('CustomerImpactEngineer')."</th>";
-        echo "<td width='40%'><textarea name='custimpact' rows='4' cols='60'></textarea></td></tr>\n";
+        echo "<tr><td colspan='2'><strong>{$strProblemDescription}</strong>".help_link('ProblemDescriptionEngineer')."<br />";
+        echo "<textarea name='probdesc' rows='2' cols='60' onkeyup='resizeTextarea(this);'></textarea></td>\n";
+        echo "<td colspan='2'><strong>{$strProblemReproduction}</strong>".help_link('ProblemReproductionEngineer')."<br />";
+        echo "<textarea name='probreproduction' rows='2' cols='60' onkeyup='resizeTextarea(this);'></textarea></td></tr>\n";
+        echo "<td colspan='2'><strong>{$strWorkAroundsAttempted}</strong>".help_link('WorkAroundsAttemptedEngineer')."<br />";
+        echo "<textarea name='workarounds' rows='2' cols='60' onkeyup='resizeTextarea(this);'></textarea></td>\n";
+        echo "<td colspan='2'><strong>{$strCustomerImpact}</strong>".help_link('CustomerImpactEngineer')."<br />";
+        echo "<textarea name='custimpact' rows='2' cols='60' onkeyup='resizeTextarea(this);'></textarea></td></tr>\n";
     }
     else
     {
@@ -526,21 +526,19 @@ elseif ($action=='incidentform')
         echo "<td>".parse_updatebody($mailed_body_text)."</td></tr>\n";
         echo "<tr><td class='shade1' colspan=2>&nbsp;</td></tr>\n";
     }
-    echo "<tr><th rowspan='2'>{$strNextAction}</th>";
-    echo "<td rowspan='2'>";
-    echo "<input type='text' name='nextaction' maxlength='50' size='30' value='Initial Response' /><br /><br />";
-    echo show_next_action();
-    echo "</td>";
+    echo "<tr><td colspan='2'><strong>{$strNextAction}</strong><br />";
+//     echo "<input type='text' name='nextaction' maxlength='50' size='30' value='Initial Response' /><br /><br />";
+     echo show_next_action();
+     echo "</td>";
     if (empty($updateid))
     {
-        echo "<th>{$strVisibleToCustomer}</th>\n";
-        echo "<td><label><input name='cust_vis' type='checkbox' checked='checked' /> {$strVisibleToCustomer}</label>";
+        echo "<td colspan='2'><label for='cust_vis'><strong>{$strVisibleToCustomer}</strong></label><br />\n";
+        echo "<label><input name='cust_vis' type='checkbox' checked='checked' /> {$strVisibleToCustomer}</label>";
         echo help_link('VisibleToCustomer')."<br />";
         echo "<label><input name='send_email' type='checkbox' checked='checked' /> ";
-        echo "{$strSendOpeningEmailDesc}</label>";
-        echo "</td></tr>\n";
+        echo "{$strSendOpeningEmailDesc}</label><br />";
     }
-    echo "<tr><th>{$strPriority}</th><td>".priority_drop_down("priority", 1, 4, FALSE)." </td></tr>";
+    echo "<strong>{$strPriority}</strong><br />".priority_drop_down("priority", 1, 4, FALSE)." </td></tr>";
     echo "</table>\n";
     echo "<input type='hidden' name='win' value='{$win}' />";
     echo "<p align='center'><input name='submit' type='submit' value='{$strAddIncident}' /></p>";
