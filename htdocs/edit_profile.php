@@ -37,15 +37,13 @@ if (empty($mode))
 {
     include ('htmlheader.inc.php');
 
-    $sql = "SELECT * FROM `{$dbUsers}` WHERE id='{$edituserid}' LIMIT 1";
+    $sql = "SELECT u.*, r.rolename FROM `{$dbUsers}` AS u, `{$dbRoles}` AS r  ";
+    $sql .= "WHERE u.id='{$edituserid}' AND u.roleid = u.id LIMIT 1";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
 
     if (mysql_num_rows($result) < 1) trigger_error("No such user ".strip_tags($edituserid),E_USER_WARNING);
     $user = mysql_fetch_object($result);
-
-    // FIXME This form should use one SQL query really, not call all these functions to lookup each field
-    // Need to change this sometime.
 
     echo "<h2>".icon('user', 32)." ";
     echo sprintf($strEditProfileFor, $user->realname)."</h2>";
@@ -67,7 +65,7 @@ if (empty($mode))
     echo "<tr><th>{$strRole}</th>";
     if ($edituserid == $sit[2] OR $edituserid == 1)
     {
-        echo "<td>".db_read_column('rolename', $dbRoles, $user->roleid)."</td>";
+        echo "<td>{$user->rolename}</td>";
     }
     else
     {
@@ -78,12 +76,12 @@ if (empty($mode))
     echo "<tr><th>{$strRealName}</th><td>";
     if ( $using_ldap && array_key_exists("realname",$attrmap) ) 
     { 
-        echo "<input name='realname' type='hidden' value='".$user->realname."'/>".$user->realname; 
+        echo "<input name='realname' type='hidden' value=\"{$user->realname}\" '/>{$user->realname}"; 
     } 
     else 
     {
         echo "<input class='required' maxlength='50' name='realname' size='30'";
-        echo " type='text' value=\"".$user->realname."\" />";
+        echo " type='text' value=\"{$user->realname}\" />";
         echo " <span class='required'>{$strRequired}</span>";
     }
     echo "</td></tr>\n";
@@ -96,23 +94,23 @@ if (empty($mode))
     else 
     {
         echo "<input maxlength='50' name='jobtitle' size='30' type='text' ";
-        echo "value=\"".$user->title."\" />";
+        echo "value=\"{$user->title}\" />";
     }
     echo "</td></tr>\n";
     echo "<tr><th>{$strQualifications} ".help_link('QualificationsTip')."</th>";
-    echo "<td><input maxlength='100' size='100' name='qualifications' value='".$user->qualifications."' /></td></tr>\n";
+    echo "<td><input maxlength='100' size='100' name='qualifications' value='{$user->qualifications}' /></td></tr>\n";
     echo "<tr><th>{$strEmailSignature} ".help_link('EmailSignatureTip')."</th>";
     echo "<td><textarea name='signature' rows='4' cols='40'>".strip_tags($user->signature)."</textarea></td></tr>\n";
     $entitlement = user_holiday_entitlement($edituserid);
     if ($edituserpermission && $edituserid!=$sit[2])
     {
         echo "<tr><th>{$strHolidayEntitlement}</th><td>";
-        echo "<input type='text' name='holiday_entitlement' value='$entitlement' size='2' /> {$strDays}";
+        echo "<input type='text' name='holiday_entitlement' value='{$entitlement}' size='2' /> {$strDays}";
         echo "</td></tr>";
     }
     elseif ($entitlement > 0)
     {
-        $holidaystaken=user_count_holidays($edituserid, 1);
+        $holidaystaken = user_count_holidays($edituserid, 1);
         echo "<tr><th>{$strHolidayEntitlement}</th><td>";
         echo "{$entitlement} {$strdays}, ";
         echo "{$holidaystaken} {$strtaken}, ";
@@ -139,7 +137,7 @@ if (empty($mode))
     }
     else
     {
-        echo "{$strNotSet}";
+        echo $strNotSet;
     }
     echo "</td></tr>";
     echo "<tr><th colspan='2'>{$strWorkStatus}</th></tr>";
@@ -166,7 +164,7 @@ if (empty($mode))
     echo "<td>";
     if ( $using_ldap && array_key_exists("email",$attrmap) ) 
     { 
-        echo "<input name='email' type='hidden'value='".strip_tags($user->email)."' />".$user->email; 
+        echo "<input name='email' type='hidden'value='".strip_tags($user->email)."' />{$user->email}"; 
     } 
     else 
     {
@@ -202,7 +200,7 @@ if (empty($mode))
     }
     else 
     {
-        echo "<input maxlength='50' name='mobile' size='30' type='text' value='".user_mobile($edituserid)."' />";
+        echo "<input maxlength='50' name='mobile' size='30' type='text' value='{$user->mobile}' />";
     }
     echo "</td></tr>";
     echo "<tr><th>AIM ".icon('aim', 16, 'AIM')."</th>";
@@ -228,11 +226,11 @@ if (empty($mode))
     {
         if ($langcode == $selectedlang)
         {
-            echo "<option value='$langcode' selected='selected'>$language</option>\n";
+            echo "<option value='{$langcode}' selected='selected'>{$language}</option>\n";
         }
         else
         {
-            echo "<option value='$langcode'>$language</option>\n";
+            echo "<option value='{$langcode}'>{$language}</option>\n";
         }
     }
     echo "</select>";
