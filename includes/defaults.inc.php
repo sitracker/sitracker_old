@@ -328,4 +328,6 @@ $CONFIG["ldap_customer_group_attr"] = "memberUid";
 // 1 is the example site in the default install
 $CONFIG["ldap_default_customer_siteid"] = 1; 
 
+//If true, portal users create incidents, if FALSE, they just create emails
+$CONFIG['portal_creates_incidents'] = TRUE;
 ?>

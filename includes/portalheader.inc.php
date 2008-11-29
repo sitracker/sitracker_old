@@ -135,10 +135,15 @@ $filter = array('page' => $page);
 echo "<div id='menu'>\n";
 echo "<ul id='menuList'>\n";
 echo "<li><a href='index.php'>{$strIncidents}</a></li>";
-if (sizeof($_SESSION['entitlement']) == 1)
+if (sizeof($_SESSION['entitlement']) == 1 OR !$CONFIG['portal_creates_incidents'])
 {
     $contractid = $_SESSION['entitlement'][0]->id;
-    echo "<li><a href='add.php?contractid={$contractid}'>{$strAddIncident}</a></li>";
+    echo "<li><a href='add.php";
+	if ($CONFIG['portal_creates_incidents'])
+	{
+		echo "?contractid={$contractid}";
+	}
+	echo "'>{$strAddIncident}</a></li>";
 }
 else
 {

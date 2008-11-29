@@ -130,7 +130,12 @@ else
 
 echo portal_incident_table($sql);
 echo "<p align='center'>";
-if (sizeof($_SESSION['entitlement']) == 1)
+
+if (!$CONFIG['portal_creates_incidents'])
+{
+    echo "<a href='add.php'>";	
+}
+elseif (sizeof($_SESSION['entitlement']) == 1)
 {
     //only one contract
     $contractid = $_SESSION['entitlement'][0]->id;
@@ -141,7 +146,7 @@ else
     echo "<a href='entitlement.php'>";
 }
 
-echo icon('add', 16, $strAddIncident)." {$strAddIncident}</a></p>";
+echo icon('add', 16, $AddIncidentstrAddIncident)." {$strAddIncident}</a></p>";
 
 //find list of other incidents we're allowed to see
 $otherincidents = array();

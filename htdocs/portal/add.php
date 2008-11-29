@@ -29,37 +29,43 @@ if (!empty($_SESSION['formerrors']['portaladdincident']))
 
 if (!$_REQUEST['action'])
 {
-    $sql = "SELECT *, p.id AS productid, m.id AS id, ";
-    $sql .= "(m.incident_quantity - m.incidents_used) AS availableincidents ";
-    $sql .= "FROM `{$dbSupportContacts}` AS s, `{$dbMaintenance}` AS m, `{$dbProducts}` AS p ";
-    $sql .= "WHERE m.product=p.id ";
-    $sql .= "AND s.contactid='{$_SESSION['contactid']}' AND s.maintenanceid=m.id ";
-    $sql .= "AND m.id='{$contractid}' ";
-
-    $sql .= "UNION SELECT *, p.id AS productid, m.id AS id, ";
-    $sql .= "(m.incident_quantity - m.incidents_used) AS availableincidents ";
-    $sql .= "FROM `{$dbSupportContacts}` AS s, `{$dbMaintenance}` AS m, `{$dbProducts}` AS p ";
-    $sql .= "WHERE m.product=p.id ";
-    $sql .= "AND m.allcontactssupported='yes' ";
-    $sql .= "AND m.id='{$contractid}'";
-
-    $checkcontract = mysql_query($sql);
-    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
-    $contract = mysql_fetch_object($checkcontract);
-    $productid = $contract->productid;
-    echo "<h2>".icon('add', 32, $strAddIncident)." {$strAddIncident}</h2>";
-
-    if (mysql_num_rows($checkcontract) == 0)
-    {
-        echo "<p class='error'>{$strPermissionDenied}</p>";
-       	include 'htmlfooter.inc.php';
-       	exit;
-    }
-
+	echo "<h2>".icon('add', 32, $strAddIncident)." {$strAddIncident}</h2>";
+	if ($CONFIG['portal_creates_incidents'])
+	{
+		//check we are allowed to log against this contract
+	    $sql = "SELECT *, p.id AS productid, m.id AS id, ";
+	    $sql .= "(m.incident_quantity - m.incidents_used) AS availableincidents ";
+	    $sql .= "FROM `{$dbSupportContacts}` AS s, `{$dbMaintenance}` AS m, `{$dbProducts}` AS p ";
+	    $sql .= "WHERE m.product=p.id ";
+	    $sql .= "AND s.contactid='{$_SESSION['contactid']}' AND s.maintenanceid=m.id ";
+	    $sql .= "AND m.id='{$contractid}' ";
+	
+	    $sql .= "UNION SELECT *, p.id AS productid, m.id AS id, ";
+	    $sql .= "(m.incident_quantity - m.incidents_used) AS availableincidents ";
+	    $sql .= "FROM `{$dbSupportContacts}` AS s, `{$dbMaintenance}` AS m, `{$dbProducts}` AS p ";
+	    $sql .= "WHERE m.product=p.id ";
+	    $sql .= "AND m.allcontactssupported='yes' ";
+	    $sql .= "AND m.id='{$contractid}'";
+	
+	    $checkcontract = mysql_query($sql);
+	    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
+	    $contract = mysql_fetch_object($checkcontract);
+	    $productid = $contract->productid;
+	
+	    if (mysql_num_rows($checkcontract) == 0)
+	    {
+	        echo "<p class='error'>{$strPermissionDenied}</p>";
+	       	include 'htmlfooter.inc.php';
+	       	exit;
+	    }
+	}
     echo "<form action='{$_SERVER[PHP_SELF]}?page=add&amp;action=submit' method='post'>";
     echo "<table align='center' width='50%' class='vertical'>";
-    echo "<tr><th>{$strArea}:</th><td class='shade1'>".softwareproduct_drop_down('software', 0, $productid, 'external')."<br />";
-    echo $strNotSettingArea."</td></tr>";
+    if ($CONFIG['portal_creates_incidents'])
+    {
+	    echo "<tr><th>{$strArea}:</th><td class='shade1'>".softwareproduct_drop_down('software', 0, $productid, 'external')."<br />";
+	    echo $strNotSettingArea."</td></tr>";
+	}
     echo "<tr><th>{$strTitle}:</th><td class='shade1'>";
     echo "<input class='required' maxlength='100' name='title' size='40' type='text' ";
     echo "value='{$_SESSION['formdata']['portaladdincident']['title']}' />";
@@ -110,8 +116,6 @@ else //submit
     $contactid = $_SESSION['contactid'];
     $contractid = cleanvar($_REQUEST['contractid']);
     $software = cleanvar($_REQUEST['software']);
-    $softwareversion = cleanvar($_REQUEST['version']);
-    $softwareservicepacks = cleanvar($_REQUEST['productservicepacks']);
     $incidenttitle = cleanvar($_REQUEST['title']);
     $probdesc = cleanvar($_REQUEST['probdesc']);
     $workarounds = cleanvar($_REQUEST['workarounds']);
@@ -159,82 +163,89 @@ else //submit
         {
             $updatetext .= "[b]{$SYSLANG['strProblemDescription']}[/b]\n{$probdesc}\n\n";
         }
-
-        //create new incident
-        $sql  = "INSERT INTO `{$dbIncidents}` (title, owner, contact, priority, servicelevel, status, type, maintenanceid, ";
-        $sql .= "product, softwareid, productversion, productservicepacks, opened, lastupdated) ";
-        $sql .= "VALUES ('{$incidenttitle}', '0', '{$contactid}', '1', '{$servicelevel}', '1', 'Support', '{$contractid}', ";
-        $sql .= "'{$productid}', '{$software}', '{$softwareversion}', '{$softwareservicepacks}', '{$now}', '{$now}')";
-        $result = mysql_query($sql);
-        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-
-        $incidentid = mysql_insert_id();
-        $_SESSION['incidentid'] = $incidentid;
-
-
-        // Save productinfo if there is some
-        $sql = "SELECT * FROM `{$dbProductInfo}` WHERE productid='{$productid}'";
-        $result = mysql_query($sql);
-        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
-        if (mysql_num_rows($result) > 0)
-        {
-            while ($productinforow = mysql_fetch_object($result))
-            {
-                $var = "pinfo{$productinforow->id}";
-                $pinfo = cleanvar($_POST[$var]);
-                $pisql = "INSERT INTO `{$dbIncidentProductInfo}` (incidentid, productinfoid, information) ";
-                $pisql .= "VALUES ('{$incidentid}', '{$productinforow->id}', '{$pinfo}')";
-                mysql_query($pisql);
-                if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-            }
-        }
-
-        // Create a new update
-        $sql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, bodytext, timestamp, currentowner, ";
-        $sql .= "currentstatus, customervisibility) ";
-        $sql .= "VALUES ('{$incidentid}', '0', 'opening', '{$updatetext}', '{$now}', '', ";
-        $sql .= "'1', 'show')";
-        $result = mysql_query($sql);
-        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-
-        // get the service level
-        // find out when the initial response should be according to the service level
-        if (empty($servicelevel) OR $servicelevel == 0)
-        {
-            // FIXME: for now we use id but in future use tag, once maintenance uses tag
-            $servicelevel = maintenance_servicelevel($contractid);
-            $sql = "SELECT * FROM `{$dbServiceLevels}` WHERE id='{$servicelevel}' AND priority='{$priority}' ";
-        }
-        else
-        {
-            $sql = "SELECT * FROM `{$dbServiceLevels}` WHERE tag='{$servicelevel}' AND priority='{$priority}' ";
-        }
-
-        $result = mysql_query($sql);
-        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
-        $level = mysql_fetch_object($result);
-
-        $targetval = $level->initial_response_mins * 60;
-        $initialresponse = $now + $targetval;
-
-        // Insert the first SLA update, this indicates the start of an incident
-        // This insert could possibly be merged with another of the 'updates' records, but for now we keep it seperate for clarity
-        $sql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, timestamp, currentowner, currentstatus, customervisibility, sla, bodytext) ";
-        $sql .= "VALUES ('{$incidentid}', '0', 'slamet', '{$now}', '0', '1', 'hide', 'opened','The incident is open and awaiting action.')";
-        mysql_query($sql);
-        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-
-        // Insert the first Review update, this indicates the review period of an incident has started
-        // This insert could possibly be merged with another of the 'updates' records, but for now we keep it seperate for clarity
-        $sql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, timestamp, currentowner, currentstatus, customervisibility, sla, bodytext) ";
-        $sql .= "VALUES ('{$incidentid}', '0', 'reviewmet', '{$now}', '0', '1', 'hide', 'opened','')";
-        mysql_query($sql);
-        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-
-        trigger('TRIGGER_INCIDENT_CREATED', array('incidentid' => $incidentid));
-        $_SESSION['formdata']['portaladdincident'] = NULL;
-        $_SESSION['formerrors']['portaladdincident'] = NULL;
-        html_redirect("index.php", TRUE, $strIncidentAdded);
+        
+		if ($CONFIG['portal_creates_incidents'])
+		{
+			$inc_id = create_incident($incidenttitle, $contactid, $servicelevel, 
+			                          $contractid, $productid, $software);
+		    $_SESSION['incidentid'] = $inc_id;
+	
+	        // Save productinfo if there is some
+	        $sql = "SELECT * FROM `{$dbProductInfo}` WHERE productid='{$productid}'";
+	        $result = mysql_query($sql);
+	        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
+	        if (mysql_num_rows($result) > 0)
+	        {
+	            while ($productinforow = mysql_fetch_object($result))
+	            {
+	                $var = "pinfo{$productinforow->id}";
+	                $pinfo = cleanvar($_POST[$var]);
+	                $pisql = "INSERT INTO `{$dbIncidentProductInfo}` (incidentid, productinfoid, information) ";
+	                $pisql .= "VALUES ('{$incidentid}', '{$productinforow->id}', '{$pinfo}')";
+	                mysql_query($pisql);
+	                if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+	            }
+	        }
+		}
+		else
+		{
+			$incidentid = 0;
+		}
+		
+		$update_id = new_update($incidentid, $updatetext, 'opening');
+		
+		if ($CONFIG['portal_creates_incidents'])
+		{
+	        // get the service level
+	        // find out when the initial response should be according to the service level
+	        if (empty($servicelevel) OR $servicelevel == 0)
+	        {
+	            // FIXME: for now we use id but in future use tag, once maintenance uses tag
+	            $servicelevel = maintenance_servicelevel($contractid);
+	            $sql = "SELECT * FROM `{$dbServiceLevels}` WHERE id='{$servicelevel}' AND priority='{$priority}' ";
+	        }
+	        else
+	        {
+	            $sql = "SELECT * FROM `{$dbServiceLevels}` WHERE tag='{$servicelevel}' AND priority='{$priority}' ";
+	        }
+	
+	        $result = mysql_query($sql);
+	        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
+	        $level = mysql_fetch_object($result);
+	
+	        $targetval = $level->initial_response_mins * 60;
+	        $initialresponse = $now + $targetval;
+	
+	        // Insert the first SLA update, this indicates the start of an incident
+	        // This insert could possibly be merged with another of the 'updates' records, but for now we keep it seperate for clarity
+	        $sql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, timestamp, currentowner, currentstatus, customervisibility, sla, bodytext) ";
+	        $sql .= "VALUES ('{$incidentid}', '0', 'slamet', '{$now}', '0', '1', 'hide', 'opened','The incident is open and awaiting action.')";
+	        mysql_query($sql);
+	        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+	
+	        // Insert the first Review update, this indicates the review period of an incident has started
+	        // This insert could possibly be merged with another of the 'updates' records, but for now we keep it seperate for clarity
+	        $sql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, timestamp, currentowner, currentstatus, customervisibility, sla, bodytext) ";
+	        $sql .= "VALUES ('{$incidentid}', '0', 'reviewmet', '{$now}', '0', '1', 'hide', 'opened','')";
+	        mysql_query($sql);
+	        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+	
+	        trigger('TRIGGER_INCIDENT_CREATED', array('incidentid' => $incidentid));
+	        $_SESSION['formdata']['portaladdincident'] = NULL;
+	        $_SESSION['formerrors']['portaladdincident'] = NULL;
+	        html_redirect("index.php", TRUE, $strIncidentAdded);
+    	}
+    	else
+    	{
+    		$contact_id = intval($_SESSION['contactid']);
+			$contact_name = contact_realname($_SESSION['contactid']);
+			$contact_email = contact_email($_SESSION['contactid']);
+			create_temp_incoming($update_id, $contact_name, $incidenttitle,
+			                     $contact_email, $_SESSION['contactid']);
+        	$_SESSION['formdata']['portaladdincident'] = NULL;
+	        $_SESSION['formerrors']['portaladdincident'] = NULL;
+    		html_redirect("index.php", TRUE, $strRequestSent);
+    	}
         exit;
     }
     else

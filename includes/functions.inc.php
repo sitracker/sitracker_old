@@ -11096,6 +11096,139 @@ function emoticons($text)
 }
 
 
+/**
+ * Creates a new incident
+ * @param string $title The title of the incident
+ * @param int $contact The ID of the incident contact
+ * @param int $servicelevel The ID of the servicelevel to log the incident under
+ * @param int $contract The ID of the contract to log the incident under
+ * @param int $product The ID of the product the incident refers to
+ * @param int $skill The ID of the skill the incident refers to
+ * @param int $priority (Optional) Priority of the incident (Default: 1 = Low)
+ * @param int $owner (Optional) Owner of the incident (Default: 0 = SiT)
+ * @param int $status (Optional) Incident status (Default: 1 = Active)
+ * @param string $productversion (Optional) Product version field
+ * @param string $productservicepacks (Optional) Product service packs field
+ * @param int $opened (Optional) Timestamp when incident was opened (Default: now)
+ * @param int $lastupdated (Optional) Timestamp when incident was updated (Default: now)
+ * @return int|bool Returns FALSE on failure, an incident ID on success
+ * @author Kieran Hogg
+ */
+function create_incident($title, $contact, $servicelevel, $contract, 
+                             $product, $software, $priority = 1, $owner = 0, 
+                             $status = 1, $productversion = '',
+                             $productservicepacks = '', $opened = '',
+                             $lastupdated = '')
+{
+	global $now;
+	if (empty($opened))
+	{
+		$opened = $now;
+	}
+	
+	if (empty($lastupdated))
+	{
+		$lastupdated = $now;
+	}
+    $sql  = "INSERT INTO `{$dbIncidents}` (title, owner, contact, priority, ";
+    $sql .= "servicelevel, status, maintenanceid, product, softwareid, ";
+    $sql .= "productversion, productservicepacks, opened, lastupdated) ";
+    $sql .= "VALUES ('{$title}', '{$owner}', '{$contact}', '{$priority}', ";
+	$sql .= "'{$servicelevel}', '{$status}', '{$contract}', ";
+    $sql .= "'{$product}', '{$software}', '{$productversion}', ";
+	$sql .= "'{$productservicepacks}', '{$opened}', '{$lastupdated}')";
+    $result = mysql_query($sql);
+    if (mysql_error())
+    {
+        trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+        return FALSE;
+    }
+    else
+    {
+        return mysql_insert_id();
+    }
+}
+
+
+/**
+ * Inserts a new update
+ * @param int $incidentid ID of the incident to add the update to
+ * @param string $text The text of the update
+ * @param enum $type (Optional) Update type (Default: 'default'), types:
+ * 'default', 'editing', 'opening', 'email', 'reassigning', 'closing', 
+ * 'reopening', 'auto', 'phonecallout', 'phonecallin', 'research', 'webupdate',
+ * 'emailout', 'emailin', 'externalinfo', 'probdef', 'solution', 'actionplan',
+ * 'slamet', 'reviewmet', 'tempassigning', 'auto_chase_email', 
+ * 'auto_chase_phone', 'auto_chase_manager', 'auto_chased_phone', 
+ * 'auto_chased_manager', 'auto_chase_managers_manager', 
+ * 'customerclosurerequest', 'fromtask'
+ * @param int $userid (Optional) ID of the user doing the updating (Default: 0)
+ * @param int $currentowner (Optional) ID of the current incident owner
+ * @param int $currentstatus (Optional) Current incident status (Default: 1 = active)
+ * @param enum $visibility (Optional) Whether to 'show' or 'hide' in the portal (Default: 'show')
+ * @author Kieran Hogg
+ */
+function new_update($incidentid, $text, $type = 'default', $userid = 0, $currentowner = '', 
+                    $currentstatus = 1, $visibility = 'show')
+{
+	global $now;
+	
+    $sql  = "INSERT INTO `{$GLOBALS['dbUpdates']}` (incidentid, userid, ";
+    $sql .= "type, bodytext, timestamp, currentowner, currentstatus, ";
+    $sql .= "customervisibility) VALUES ('{$incidentid}', '{$userid}', ";
+	$sql .= "'{$type}', '{$text}', '{$now}', '{$currentowner}', ";
+	$sql .= "'{$currentstatus}', '{$visibility}')";
+    $result = mysql_query($sql);
+    if (mysql_error())
+    {
+    	trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+    	return FALSE;
+    }
+    else
+    {
+    	return mysql_insert_id();
+    }
+}
+
+
+/**
+ * Create a new holding queue item
+ * @param int $updateid ID of the associated update entry
+ * @param string $from Name of the from field
+ * @param string $subject Subject of the item
+ * @param string $emailfrom Email address the item is from
+ * @param int $contactid (Optional) Contact ID of the sender
+ * @param int $incidentid (Optional) Associated incident ID
+ * @param int $locked (Optional) 1 if the item is locked, 0 if not
+ * @param time $lockeduntil (Optional) MySQL timestamp of lock expiration
+ * @param string $reason (Optional) Reason the item is in the holding queue
+ * @param id $reason_user (Optional) The user ID who set the reason
+ * @param time $reason_time (Optional) MySQL timestamp of when the reason was set
+ * @autho Kieran Hogg
+ */
+function create_temp_incoming($updateid, $from, $subject, $emailfrom, 
+                              $contactid = '', $incidentid = 0, $locked = '', 
+                              $lockeduntil = '', $reason = '', 
+                              $reason_user = '', $reason_time = '')
+{
+	global $dbTempIncoming;
+	$sql = "INSERT INTO `{$dbTempIncoming}`(updateid, `from`, subject, ";
+	$sql .= "emailfrom, contactid, incidentid, locked, lockeduntil, ";
+	$sql .= "reason, reason_user, reason_time) VALUES('{$updateid}', ";
+	$sql .= "'{$from}', '{$subject}', '{$emailfrom}', '{$contactid}', ";
+	$sql .= "'{$incidentid}', '{$locked}', '{$lockeduntil}', '{$reason}', ";
+	$sql .= "'{$reason_user}', '{$reason_time}')";
+	$result = mysql_query($sql);
+    if (mysql_error())
+    {
+    	trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+    	return FALSE;
+    }
+    else
+    {
+    	return mysql_insert_id();
+    }
+}
 
 /*
 * DEPRECATED THOUGH STILL CALLED
