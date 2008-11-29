@@ -56,23 +56,23 @@ switch ($mode)
                 // Some error checking
                 if (mysql_affected_rows() < 1)
                 {
-                	//html_redirect("{$CONFIG['application_webpath']}incident_details.php?id={$incidentid}", FALSE, 'Failed to update the duration'); // FIXME i18n
+                	html_redirect("{$CONFIG['application_webpath']}incident_details.php?id={$incidentid}", FALSE, $strFailedToUpdateDuration);
                 }
                 else
                 {
-                	//html_redirect("{$CONFIG['application_webpath']}incident_details.php?id={$incidentid}", TRUE, 'Duration updated sucessfully'); // FIXME i18n
+                	html_redirect("{$CONFIG['application_webpath']}incident_details.php?id={$incidentid}", TRUE, $strDurationUpdated);
                 }
             }
             else
             {
             	// The value we've been passed isn't whats in the DB
-                html_redirect("{$CONFIG['application_webpath']}incident_details.php?id={$incidentid}", FALSE, 'Duration passed doesn\'t match the update record'); // FIXME i18n
+                html_redirect("{$CONFIG['application_webpath']}incident_details.php?id={$incidentid}", FALSE, $strDurationMismatch);
             }
         }
         else
         {
         	// No matching incident found (updateID and a duration with a value)
-            html_redirect("{$CONFIG['application_webpath']}incident_details.php?id={$incidentid}", FALSE, 'No duration on activity'); // FIXME i18n
+            html_redirect("{$CONFIG['application_webpath']}incident_details.php?id={$incidentid}", FALSE, $strNoDurationOnActivity);
         }
         
         break;

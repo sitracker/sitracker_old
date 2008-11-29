@@ -410,6 +410,9 @@ $strDueNow = 'Due Now';
 $strDuplicate = 'Duplicate';
 $strDurability = 'Durability';
 $strDuration = 'Duration';
+# When the passed duration is not the same as the entry in the database
+$strDurationMismatch = 'Duration mismatch';
+$strDurationUpdated = 'Duration updated';
 
 # verb, i.e. to change
 $strEdit = 'Edit';
@@ -499,6 +502,7 @@ $strExternalInfo = 'External Information';
 $strExternalInfoAddedBy = 'External Information added by %s';
 
 $strFailed = 'Failed';
+$strFailedToUpdateDuration = 'Failed to update duration';
 $strFAILED = 'FAILED';
 $strFatalError = 'Fatal Error';
 $strFax = 'Fax';
@@ -859,6 +863,7 @@ $strNoContactsForSite = 'There are no contacts associated with this site';
 $strNoContractsForSite = 'There are no contracts associated with this site';
 $strNoContractsFound = 'No Contracts Found';
 $strNoDashletsInstalled = 'There are no dashlets installed, please ask your administrator to install some';
+$strNoDurationOnActivity = 'No duration on activity';
 $strNoEmail = 'No Email';
 $strNoEmailSet = 'You have no email address set, you must set one now';
 $strNoFeedbackFormsDefined = 'No Feedback Forms Defined';
