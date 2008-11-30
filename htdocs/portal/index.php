@@ -146,7 +146,7 @@ else
     echo "<a href='entitlement.php'>";
 }
 
-echo icon('add', 16, $AddIncidentstrAddIncident)." {$strAddIncident}</a></p>";
+echo icon('add', 16, $strAddIncident)." {$strAddIncident}</a></p>";
 
 //find list of other incidents we're allowed to see
 $otherincidents = array();
