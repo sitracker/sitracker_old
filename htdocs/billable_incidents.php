@@ -387,7 +387,7 @@ elseif ($mode == 'approvalpage')
                         }
                         else
                         {
-                            $line .= "<a href='{$_SERVER['PHP_SELF']}?mode=approve&amp;incidentid={$obj->id}&amp;startdate={$startdateorig}&amp;enddate={$enddateorig}'>{$strApprove}</a> | ";
+                            $line .= "<a href='{$_SERVER['PHP_SELF']}?mode=approve&amp;incidentid={$obj->id}&amp;startdate={$startdateorig}&amp;enddate={$enddateorig}&amp;showonlyapproved={$showonlyapproved}'>{$strApprove}</a> | ";
                             $line .= "<a href='billing/update_incident_balance.php?incidentid={$obj->id}'>{$strAdjust}</a>";
                             $sitetotalawaitingapproval += $cost;
 
@@ -623,11 +623,11 @@ elseif ($mode == 'approve')
     
     if ($status)
     {
-        html_redirect("{$_SERVER['PHP_SELF']}?mode=approvalpage&amp;startdate={$startdateorig}&amp;enddate={$enddateorig}");
+        html_redirect("{$_SERVER['PHP_SELF']}?mode=approvalpage&amp;startdate={$startdateorig}&amp;enddate={$enddateorig}&amp;showonlyapproved={$showonlyapproved}");
     }
     else
     {
-        html_redirect("{$_SERVER['PHP_SELF']}?mode=approvalpage&amp;startdate={$startdateorig}&amp;enddate={$enddateorig}", FALSE, "Error approving incident"); // FIXME i18n
+        html_redirect("{$_SERVER['PHP_SELF']}?mode=approvalpage&amp;startdate={$startdateorig}&amp;enddate={$enddateorig}&amp;showonlyapproved={$showonlyapproved}", FALSE, "Error approving incident"); // FIXME i18n
     }
 }
 

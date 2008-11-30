@@ -199,7 +199,7 @@ function draw_file_row($file, $fsdelim, $incidentid, $path)
 
     if (function_exists('mime_content_type'))
     {
-        // FIXME mime_content_type requires php > 4.3 and is deprecated
+        // FIXME mime_content_type is deprecated
         $mime_type = mime_content_type($file);
     }
     else

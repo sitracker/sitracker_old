@@ -718,7 +718,7 @@ elseif ($action == 'assign')
             if (!empty($updateid))
             {
                 // Assign existing update to new incident if we have one
-                $sql="UPDATE `{$dbUpdates}` SET incidentid='$incidentid', userid='".$sit[2]."' WHERE id='$updateid'";
+                $sql="UPDATE `{$dbUpdates}` SET incidentid='{$incidentid}', userid='{$sit[2]}' WHERE id={'$updateid}'";
                 $result = mysql_query($sql);
                 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
                 // + move any attachments we may have received
