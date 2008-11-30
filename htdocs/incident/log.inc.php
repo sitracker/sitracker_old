@@ -151,6 +151,8 @@ foreach ($keeptags AS $keeptag)
 
 echo log_nav_bar();
 $count = 0;
+$billable_incident_approved = is_billable_incident_approved($incidentid);
+
 while ($update = mysql_fetch_object($result))
 {
 
@@ -426,7 +428,7 @@ while ($update = mysql_fetch_object($result))
                 echo  "{$strDuration}: {$inminutes} {$strMinutes}";
                 
                 // Permision to adjust durations is 81
-                if ($CONFIG['allow_duration_adjustment'] AND user_permission($sit[2], 81))
+                if ($CONFIG['allow_duration_adjustment'] AND user_permission($sit[2], 81) AND !$billable_incident_approved)
                 {
                     echo " <a href='billing/edit_activity_duration.php?mode=showform&amp;incidentid={$incidentid}&amp;updateid={$update->id}'>{$strEdit}</a>";
                 }

@@ -295,7 +295,7 @@ elseif ($mode == 'approvalpage')
                 while ($obj = mysql_fetch_object($result))
                 {
                     $a = make_incident_billing_array($obj->id);
-
+                    $unapprovable = FALSE;
                     unset($billtotalsincident);
 
                     if ($a[-1]['totalcustomerperiods'] > 0)

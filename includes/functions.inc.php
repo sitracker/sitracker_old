@@ -10194,7 +10194,7 @@ function get_all_available_multipliers($matrixid=1)
 
 
 /**
-* Function to identofy if incident has been approved for billing
+* Function to identify if incident has been approved for billing
 * @returns TRUE for approved, FALSE otherwise
 * @author Paul Heaney
 */
