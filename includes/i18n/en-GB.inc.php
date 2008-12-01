@@ -1330,6 +1330,7 @@ $strSupportManagersEmailAddress = 'Technical Support managers email address';
 $strSupportedContacts = 'Supported Contacts';
 $strSurname = 'Surname';
 $strSymptoms = 'Symptoms';
+$strSystemActions = 'System Actions';
 
 $strTable = 'Table';
 $strTag = 'Tag';
