@@ -29,30 +29,6 @@ if (empty($action) OR $action == "showform")
 {
     include ('htmlheader.inc.php');
 
-    ?>
-    <script type="text/javascript">
-    <!--
-    function enableBillingPeriod()
-    {
-        if ($('timed').checked==true)
-        {
-            $('engineerBillingPeriod').show();
-            $('customerBillingPeriod').show();
-            $('limit').show();
-            $('allow_reopen').checked=false;
-            $('allow_reopen').disable();
-        }
-        else
-        {
-            $('engineerBillingPeriod').hide();
-            $('customerBillingPeriod').hide();
-            $('allow_reopen').enable();
-            $('limit').hide();
-        }
-    }
-    --></script>
-    <?php
-
     echo "<h2>".icon('sla', 32)." {$title}</h2>";
     echo "<p align='center'>{$tag} ".priority_name($priority)."</p>";
 

@@ -588,7 +588,7 @@ elseif ($action == 'assign')
         $inventory = cleanvar($_REQUEST['inventory']);
 
     if ($send_email == 'on')
-        {
+    {
         $send_email = 1;
     }
     else

@@ -27,50 +27,89 @@ if (empty($action) OR $action == "showform")
 {
     $title = $strAddServiceLevel;
     include ('htmlheader.inc.php');
+    
+    echo show_form_errors('add_servicelevel');
+    clear_form_errors('add_servicelevel');
+
+    if (empty($_SESSION['formdata']['add_servicelevel']['low_initial_response_mins'])) $_SESSION['formdata']['add_servicelevel']['low_initial_response_mins'] = 320;
+    if (empty($_SESSION['formdata']['add_servicelevel']['low_prob_determ_mins'])) $_SESSION['formdata']['add_servicelevel']['low_prob_determ_mins'] = 380;
+    if (empty($_SESSION['formdata']['add_servicelevel']['low_action_plan_mins'])) $_SESSION['formdata']['add_servicelevel']['low_action_plan_mins'] = 960;
+    if (empty($_SESSION['formdata']['add_servicelevel']['low_resolution_days'])) $_SESSION['formdata']['add_servicelevel']['low_resolution_days'] = 14;
+    if (empty($_SESSION['formdata']['add_servicelevel']['low_review_days'])) $_SESSION['formdata']['add_servicelevel']['low_review_days'] = 28;
+    
+    if (empty($_SESSION['formdata']['add_servicelevel']['med_initial_response_mins'])) $_SESSION['formdata']['add_servicelevel']['med_initial_response_mins'] = 240;
+    if (empty($_SESSION['formdata']['add_servicelevel']['med_prob_determ_mins'])) $_SESSION['formdata']['add_servicelevel']['med_prob_determ_mins'] = 320;
+    if (empty($_SESSION['formdata']['add_servicelevel']['med_action_plan_mins'])) $_SESSION['formdata']['add_servicelevel']['med_action_plan_mins'] = 960;
+    if (empty($_SESSION['formdata']['add_servicelevel']['med_resolution_days'])) $_SESSION['formdata']['add_servicelevel']['med_resolution_days'] = 10;
+    if (empty($_SESSION['formdata']['add_servicelevel']['med_review_days'])) $_SESSION['formdata']['add_servicelevel']['med_review_days'] = 20;
+    
+    if (empty($_SESSION['formdata']['add_servicelevel']['hi_initial_response_mins'])) $_SESSION['formdata']['add_servicelevel']['hi_initial_response_mins'] = 120;
+    if (empty($_SESSION['formdata']['add_servicelevel']['hi_prob_determ_mins'])) $_SESSION['formdata']['add_servicelevel']['hi_prob_determ_mins'] = 180;
+    if (empty($_SESSION['formdata']['add_servicelevel']['hi_action_plan_mins'])) $_SESSION['formdata']['add_servicelevel']['hi_action_plan_mins'] = 480;
+    if (empty($_SESSION['formdata']['add_servicelevel']['hi_resolution_days'])) $_SESSION['formdata']['add_servicelevel']['hi_resolution_days'] = 7;
+    if (empty($_SESSION['formdata']['add_servicelevel']['hi_review_days'])) $_SESSION['formdata']['add_servicelevel']['hi_review_days'] = 14;
+    
+    if (empty($_SESSION['formdata']['add_servicelevel']['crit_initial_response_mins'])) $_SESSION['formdata']['add_servicelevel']['crit_initial_response_mins'] = 60;
+    if (empty($_SESSION['formdata']['add_servicelevel']['crit_prob_determ_mins'])) $_SESSION['formdata']['add_servicelevel']['crit_prob_determ_mins'] = 120;
+    if (empty($_SESSION['formdata']['add_servicelevel']['crit_action_plan_mins'])) $_SESSION['formdata']['add_servicelevel']['crit_action_plan_mins'] = 240;
+    if (empty($_SESSION['formdata']['add_servicelevel']['crit_resolution_days'])) $_SESSION['formdata']['add_servicelevel']['crit_resolution_days'] = 3;
+    if (empty($_SESSION['formdata']['add_servicelevel']['crit_review_days'])) $_SESSION['formdata']['add_servicelevel']['crit_review_days'] = 6;
+
+    if (empty($_SESSION['formdata']['add_servicelevel']['engineerPeriod'])) $_SESSION['formdata']['add_servicelevel']['engineerPeriod'] = 60;
+    if (empty($_SESSION['formdata']['add_servicelevel']['customerPeriod'])) $_SESSION['formdata']['add_servicelevel']['customerPeriod'] = 120;
+
+    if (!empty($_SESSION['formdata']['add_servicelevel']['timed'])) $timedchecked = 'CHECKED';
+
     echo "<h2>".icon('sla', 32)." ";
-    echo "$title</h2>";
+    echo "{$title}</h2>";
     echo "<form name='add_servicelevel' action='{$_SERVER['PHP_SELF']}' method='post'>";
 
-    echo "<p align='center'>{$strTag}: <input type='text' name='tag' value='' /></p>";
+    echo "<p align='center'>{$strTag}: <input type='text' name='tag' value='{$_SESSION['formdata']['add_servicelevel']['tag']}' /></p>";
 
-    echo "<p align='center'>{$strTimed}: <input type='checkbox' name='timed' value='yes' />";
-	echo help_link('ServiceLevelTimed');"</p>";
+    echo "<table align='center'>";
+    echo "<tr><th>{$strTimed}</th><td class='shade1'><input type='checkbox' id='timed' name='timed' value='yes' onchange='enableBillingPeriod();' {$timedchecked} />".help_link('ServiceLevelTimed')."</td></tr>";
+    echo "<tr><th>{$strAllowIncidentReopen}</th><td class='shade2'>".html_checkbox('allow_reopen', $sla->allow_reopen, TRUE)."</td></tr>\n";
+    echo "<tr id='engineerBillingPeriod'><th>{$strBillingEngineerPeriod}</th><td class='shade1'><input type='text' size='5' name='engineerPeriod' maxlength='5' value='{$_SESSION['formdata']['add_servicelevel']['engineerPeriod']}' /> {$strMinutes}</td></tr>";
+    echo "<tr id='customerBillingPeriod'><th>{$strBillingCustomerPeriod}</th><td  class='shade2'><input type='text' size='5' name='customerPeriod' maxlength='5' value='{$_SESSION['formdata']['add_servicelevel']['customerPeriod']}' /> {$strMinutes}</td></tr>";
+    echo "<tr id='limit'><th>{$strLimit}</th><td  class='shade1' >{$CONFIG['currency_symbol']} <input type='text' size='5' name='limit' maxlength='5' value='{$_SESSION['formdata']['add_servicelevel']['limit']}' /></td></tr>";
+    echo "</table>";
+    echo "<script type='text/javascript'>enableBillingPeriod();</script>";
 
     echo "<table align='center'>";
     echo "<tr><th>{$strPriority}</th><th>{$strInitialResponse}</th>";
     echo "<th>{$strProblemDefinition}</th><th>{$strActionPlan}</th><th>{$strResolutionReprioritisation}</th>";
     echo "<th>{$strReview}</th></tr>";
-    echo "<tr>";
+    echo "<tr class='shade1'>";
     echo "<td>{$strLow}</td>";
-    echo "<td><input type='text' size='5' name='low_initial_response_mins' maxlength='5' value='320' /> $strMinutes</td>";
-    echo "<td><input type='text' size='5' name='low_prob_determ_mins' maxlength='5' value='380' /> $strMinutes</td>";
-    echo "<td><input type='text' size='5' name='low_action_plan_mins' maxlength='5' value='960' /> $strMinutes</td>";
-    echo "<td><input type='text' size='5' name='low_resolution_days' maxlength='3' value='14' /> $strDays</td>";
-    echo "<td><input type='text' size='5' name='low_review_days' maxlength='3' value='28' /> $strDays</td>";
+    echo "<td><input type='text' size='5' name='low_initial_response_mins' maxlength='5' value='{$_SESSION['formdata']['add_servicelevel']['low_initial_response_mins']}' /> $strMinutes</td>";
+    echo "<td><input type='text' size='5' name='low_prob_determ_mins' maxlength='5' value='{$_SESSION['formdata']['add_servicelevel']['low_prob_determ_mins']}' /> $strMinutes</td>";
+    echo "<td><input type='text' size='5' name='low_action_plan_mins' maxlength='5' value='{$_SESSION['formdata']['add_servicelevel']['low_action_plan_mins'] }' /> $strMinutes</td>";
+    echo "<td><input type='text' size='5' name='low_resolution_days' maxlength='3' value='{$_SESSION['formdata']['add_servicelevel']['low_resolution_days']}' /> $strDays</td>";
+    echo "<td><input type='text' size='5' name='low_review_days' maxlength='3' value='{$_SESSION['formdata']['add_servicelevel']['low_review_days']}' /> $strDays</td>";
     echo "</tr>\n";
-    echo "<tr>";
+    echo "<tr class='shade2'>";
     echo "<td>{$strMedium}</td>";
-    echo "<td><input type='text' size='5' name='med_initial_response_mins' maxlength='5' value='240' /> $strMinutes</td>";
-    echo "<td><input type='text' size='5' name='med_prob_determ_mins' maxlength='5' value='320' /> $strMinutes</td>";
-    echo "<td><input type='text' size='5' name='med_action_plan_mins' maxlength='5' value='960' /> $strMinutes</td>";
-    echo "<td><input type='text' size='5' name='med_resolution_days' maxlength='3' value='10' /> $strDays</td>";
-    echo "<td><input type='text' size='5' name='med_review_days' maxlength='3' value='20' /> $strDays</td>";
+    echo "<td><input type='text' size='5' name='med_initial_response_mins' maxlength='5' value='{$_SESSION['formdata']['add_servicelevel']['med_initial_response_mins']}' /> $strMinutes</td>";
+    echo "<td><input type='text' size='5' name='med_prob_determ_mins' maxlength='5' value='{$_SESSION['formdata']['add_servicelevel']['med_prob_determ_mins']}' /> $strMinutes</td>";
+    echo "<td><input type='text' size='5' name='med_action_plan_mins' maxlength='5' value='{$_SESSION['formdata']['add_servicelevel']['med_action_plan_mins']}' /> $strMinutes</td>";
+    echo "<td><input type='text' size='5' name='med_resolution_days' maxlength='3' value='{$_SESSION['formdata']['add_servicelevel']['med_resolution_days']}' /> $strDays</td>";
+    echo "<td><input type='text' size='5' name='med_review_days' maxlength='3' value='{$_SESSION['formdata']['add_servicelevel']['med_review_days']}' /> $strDays</td>";
     echo "</tr>\n";
-    echo "<tr>";
+    echo "<tr class='shade1'>";
     echo "<td>{$strHigh}</td>";
-    echo "<td><input type='text' size='5' name='hi_initial_response_mins' maxlength='5' value='120' /> $strMinutes</td>";
-    echo "<td><input type='text' size='5' name='hi_prob_determ_mins' maxlength='5' value='180' /> $strMinutes</td>";
-    echo "<td><input type='text' size='5' name='hi_action_plan_mins' maxlength='5' value='480' /> $strMinutes</td>";
-    echo "<td><input type='text' size='5' name='hi_resolution_days' maxlength='3' value='7' /> $strDays</td>";
-    echo "<td><input type='text' size='5' name='hi_review_days' maxlength='3' value='14' /> $strDays</td>";
+    echo "<td><input type='text' size='5' name='hi_initial_response_mins' maxlength='5' value='{$_SESSION['formdata']['add_servicelevel']['hi_initial_response_mins']}' /> $strMinutes</td>";
+    echo "<td><input type='text' size='5' name='hi_prob_determ_mins' maxlength='5' value='{$_SESSION['formdata']['add_servicelevel']['hi_prob_determ_mins']}' /> $strMinutes</td>";
+    echo "<td><input type='text' size='5' name='hi_action_plan_mins' maxlength='5' value='{$_SESSION['formdata']['add_servicelevel']['hi_action_plan_mins']}' /> $strMinutes</td>";
+    echo "<td><input type='text' size='5' name='hi_resolution_days' maxlength='3' value='{$_SESSION['formdata']['add_servicelevel']['hi_resolution_days']}' /> $strDays</td>";
+    echo "<td><input type='text' size='5' name='hi_review_days' maxlength='3' value='{$_SESSION['formdata']['add_servicelevel']['hi_review_days']}' /> $strDays</td>";
     echo "</tr>\n";
-    echo "<tr>";
+    echo "<tr class='shade2'>";
     echo "<td>{$strCritical}</td>";
-    echo "<td><input type='text' size='5' name='crit_initial_response_mins' maxlength='5' value='60' /> $strMinutes</td>";
-    echo "<td><input type='text' size='5' name='crit_prob_determ_mins' maxlength='5' value='120' /> $strMinutes</td>";
-    echo "<td><input type='text' size='5' name='crit_action_plan_mins' maxlength='5' value='240' /> $strMinutes</td>";
-    echo "<td><input type='text' size='5' name='crit_resolution_days' maxlength='3' value='3' /> $strDays</td>";
-    echo "<td><input type='text' size='5' name='crit_review_days' maxlength='3' value='6' /> $strDays</td>";
+    echo "<td><input type='text' size='5' name='crit_initial_response_mins' maxlength='5' value='{$_SESSION['formdata']['add_servicelevel']['crit_initial_response_mins']}' /> $strMinutes</td>";
+    echo "<td><input type='text' size='5' name='crit_prob_determ_mins' maxlength='5' value='{$_SESSION['formdata']['add_servicelevel']['crit_prob_determ_mins']}' /> $strMinutes</td>";
+    echo "<td><input type='text' size='5' name='crit_action_plan_mins' maxlength='5' value='{$_SESSION['formdata']['add_servicelevel']['crit_action_plan_mins']}' /> $strMinutes</td>";
+    echo "<td><input type='text' size='5' name='crit_resolution_days' maxlength='3' value='{$_SESSION['formdata']['add_servicelevel']['crit_resolution_days']}' /> $strDays</td>";
+    echo "<td><input type='text' size='5' name='crit_review_days' maxlength='3' value='{$_SESSION['formdata']['add_servicelevel']['crit_review_days']}' /> $strDays</td>";
     echo "</tr>\n";
     echo "</table>";
 
@@ -78,6 +117,8 @@ if (empty($action) OR $action == "showform")
     echo "<p align='center'><input type='submit' value='{$strSave}' /></p>";
     echo "</form>";
     include ('htmlfooter.inc.php');
+    
+    clear_form_data('add_servicelevel');
 }
 elseif ($action == "edit")
 {
@@ -86,7 +127,7 @@ elseif ($action == "edit")
     $low_initial_response_mins = mysql_real_escape_string($_POST['low_initial_response_mins']);
     $low_prob_determ_mins = mysql_real_escape_string($_POST['low_prob_determ_mins']);
     $low_action_plan_mins = mysql_real_escape_string($_POST['low_action_plan_mins']);
-    $low_resolution_ays = mysql_real_escape_string($_POST['low_resolution_days']);
+    $low_resolution_days = mysql_real_escape_string($_POST['low_resolution_days']);
     $low_review_days = mysql_real_escape_string($_POST['low_review_days']);
     $med_initial_response_mins = mysql_real_escape_string($_POST['med_initial_response_mins']);
     $med_prob_determ_mins = mysql_real_escape_string($_POST['med_prob_determ_mins']);
@@ -104,8 +145,13 @@ elseif ($action == "edit")
     $crit_resolution_days = mysql_real_escape_string($_POST['crit_resolution_days']);
     $crit_review_days = mysql_real_escape_string($_POST['crit_review_days']);
 
+    $engineerPeriod = cleanvar($_POST['engineerPeriod']);
+    $customerPeriod = cleanvar($_POST['customerPeriod']);
     $timed = cleanvar($_POST['timed']);
-    $allow_reopen = 'no';
+    $allow_reopen = cleanvar($_POST['allow_reopen']);
+    if ($allow_reopen != 'yes') $allow_reopen = 'no';
+    $limit = cleanvar($_POST['limit']);
+    if ($limit == '') $limit = 0;
     
     if (empty($timed))
     {
@@ -113,79 +159,111 @@ elseif ($action == "edit")
         $allow_reopen = 'yes';  
     }
 
+    $_SESSION['formdata']['add_servicelevel'] = cleanvar($_POST, TRUE, FALSE, FALSE,
+                                                     array("@"), array("'" => '"'));
+
     // Check input
-    $errors=0;
-    if (empty($tag)) $errors++;
+    $errors = 0;
+    if (empty($tag))
+    {
+        $errors++;
+        $_SESSION['formerrors']['add_servicelevel']['tag'] = 'You must enter an tag';
+    }
+    
+    if (empty($engineerPeriod) AND $timed == 'yes')
+    {
+    	$errors++;
+        $_SESSION['formerrors']['add_servicelevel']['engineerPeriod'] = 'You must enter an engineer period';
+    }
+    
+    if (empty($customerPeriod) AND $timed == 'yes')
+    {
+        $errors++;
+        $_SESSION['formerrors']['add_servicelevel']['customerPeriod'] = 'You must enter an customer period';
+    }
+    
     if ($errors >= 1)
     {
-        echo "<p class='error'>Invalid input. Please go back and check you filled all fields correctly.</p>"; // FIMXE i18m
+        // show error message if errors
+        include ('htmlheader.inc.php');
+        html_redirect("add_service_level.php", FALSE);
+    }
+    else
+    {
+        // FIXME as temporary measure until we've completely stopped using ID's, fill in the id field
+        // Find highest ID number used, and set the new ID to be one more
+        $sql = "SELECT id FROM `{$dbServiceLevels}` ORDER BY id DESC LIMIT 1";
+        $result = mysql_query($sql);
+        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
+        list($newslid) = mysql_fetch_row($result);
+        $newslid++;
+    
+        // Insert low
+        $sql = "INSERT INTO `{$dbServiceLevels}` (id, tag, priority, initial_response_mins, prob_determ_mins, action_plan_mins, resolution_days, review_days, timed, allow_reopen) VALUES (";
+        $sql .= "'$newslid', '$tag', '1', ";
+        $sql .= "'$low_initial_response_mins', ";
+        $sql .= "'$low_prob_determ_mins', ";
+        $sql .= "'$low_action_plan_mins', ";
+        $sql .= "'$low_resolution_days', ";
+        $sql .= "'$low_review_days', ";
+        $sql .= "'{$timed}', ";
+        $sql .= "'{$allow_reopen}')";
+        mysql_query($sql);
+        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+        if (mysql_affected_rows() == 0) trigger_error("INSERT affected zero rows",E_USER_WARNING);
+    
+        // Insert medium
+        $sql = "INSERT INTO `{$dbServiceLevels}` (id, tag, priority, initial_response_mins, prob_determ_mins, action_plan_mins, resolution_days, review_days, timed, allow_reopen) VALUES (";
+        $sql .= "'$newslid', '$tag', '2', ";
+        $sql .= "'$med_initial_response_mins', ";
+        $sql .= "'$med_prob_determ_mins', ";
+        $sql .= "'$med_action_plan_mins', ";
+        $sql .= "'$med_resolution_days', ";
+        $sql .= "'$med_review_days', ";
+        $sql .= "'{$timed}', ";
+        $sql .= "'{$allow_reopen}')";
+        mysql_query($sql);
+        if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+        if (mysql_affected_rows() == 0) trigger_error("INSERT affected zero rows",E_USER_WARNING);
+    
+        // Insert high
+        $sql = "INSERT INTO `{$dbServiceLevels}` (id, tag, priority, initial_response_mins, prob_determ_mins, action_plan_mins, resolution_days, review_days, timed, allow_reopen) VALUES (";
+        $sql .= "'$newslid', '$tag', '3', ";
+        $sql .= "'$hi_initial_response_mins', ";
+        $sql .= "'$hi_prob_determ_mins', ";
+        $sql .= "'$hi_action_plan_mins', ";
+        $sql .= "'$hi_resolution_days', ";
+        $sql .= "'$hi_review_days', ";
+        $sql .= "'{$timed}', ";
+        $sql .= "'{$allow_reopen}')";
+        mysql_query($sql);
+        if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+        if (mysql_affected_rows() == 0) trigger_error("INSERT affected zero rows",E_USER_WARNING);
+    
+        // Insert critical
+        $sql = "INSERT INTO `{$dbServiceLevels}` (id, tag, priority, initial_response_mins, prob_determ_mins, action_plan_mins, resolution_days, review_days, timed, allow_reopen) VALUES (";
+        $sql .= "'$newslid', '$tag', '4', ";
+        $sql .= "'$crit_initial_response_mins', ";
+        $sql .= "'$crit_prob_determ_mins', ";
+        $sql .= "'$crit_action_plan_mins', ";
+        $sql .= "'$crit_resolution_days', ";
+        $sql .= "'$crit_review_days', ";
+        $sql .= "'{$timed}', ";
+        $sql .= "'{$allow_reopen}')";
+        mysql_query($sql);
+        if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+        if (mysql_affected_rows() == 0) trigger_error("INSERT affected zero rows",E_USER_WARNING);
+    
+        for ($i = 1; $i <=4; $i++)
+        {
+            $sql = "INSERT INTO `{$dbBillingPeriods}` (servicelevelid, priority, tag, customerperiod, engineerperiod, `limit`) ";
+            $sql .= "VALUES ('{$newslid}', '{$i}', '{$tag}', '{$customerPeriod}', '{$engineerPeriod}', '{$limit}')";
+            $result = mysql_query($sql);
+            if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+        }
+    
+        header("Location: service_levels.php");
         exit;
     }
-    // FIXME as temporary measure until we've completely stopped using ID's, fill in the id field
-    // Find highest ID number used, and set the new ID to be one more
-    $sql = "SELECT id FROM `{$dbServiceLevels}` ORDER BY id DESC LIMIT 1";
-    $result = mysql_query($sql);
-    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
-    list($newslid) = mysql_fetch_row($result);
-    $newslid++;
-
-    // Insert low
-    $sql = "INSERT INTO `{$dbServiceLevels}` (id, tag, priority, initial_response_mins, prob_determ_mins, action_plan_mins, resolution_days, review_days, timed, allow_reopen) VALUES (";
-    $sql .= "'$newslid', '$tag', '1', ";
-    $sql .= "'$low_initial_response_mins', ";
-    $sql .= "'$low_prob_determ_mins', ";
-    $sql .= "'$low_action_plan_mins', ";
-    $sql .= "'$low_resolution_days', ";
-    $sql .= "'$low_review_days', ";
-    $sql .= "'{$timed}', ";
-    $sql .= "'{$allow_reopen}')";
-    mysql_query($sql);
-    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-    if (mysql_affected_rows() == 0) trigger_error("INSERT affected zero rows",E_USER_WARNING);
-
-    // Insert medium
-    $sql = "INSERT INTO `{$dbServiceLevels}` (id, tag, priority, initial_response_mins, prob_determ_mins, action_plan_mins, resolution_days, review_days, timed, allow_reopen) VALUES (";
-    $sql .= "'$newslid', '$tag', '2', ";
-    $sql .= "'$med_initial_response_mins', ";
-    $sql .= "'$med_prob_determ_mins', ";
-    $sql .= "'$med_action_plan_mins', ";
-    $sql .= "'$med_resolution_days', ";
-    $sql .= "'$med_review_days', ";
-    $sql .= "'{$timed}', ";
-    $sql .= "'{$allow_reopen}')";
-    mysql_query($sql);
-    if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
-    if (mysql_affected_rows() == 0) trigger_error("INSERT affected zero rows",E_USER_WARNING);
-
-    // Insert high
-    $sql = "INSERT INTO `{$dbServiceLevels}` (id, tag, priority, initial_response_mins, prob_determ_mins, action_plan_mins, resolution_days, review_days, timed, allow_reopen) VALUES (";
-    $sql .= "'$newslid', '$tag', '3', ";
-    $sql .= "'$hi_initial_response_mins', ";
-    $sql .= "'$hi_prob_determ_mins', ";
-    $sql .= "'$hi_action_plan_mins', ";
-    $sql .= "'$hi_resolution_days', ";
-    $sql .= "'$hi_review_days', ";
-    $sql .= "'{$timed}', ";
-    $sql .= "'{$allow_reopen}')";
-    mysql_query($sql);
-    if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
-    if (mysql_affected_rows() == 0) trigger_error("INSERT affected zero rows",E_USER_WARNING);
-
-    // Insert critical
-    $sql = "INSERT INTO `{$dbServiceLevels}` (id, tag, priority, initial_response_mins, prob_determ_mins, action_plan_mins, resolution_days, review_days, timed, allow_reopen) VALUES (";
-    $sql .= "'$newslid', '$tag', '4', ";
-    $sql .= "'$crit_initial_response_mins', ";
-    $sql .= "'$crit_prob_determ_mins', ";
-    $sql .= "'$crit_action_plan_mins', ";
-    $sql .= "'$crit_resolution_days', ";
-    $sql .= "'$crit_review_days', ";
-    $sql .= "'{$timed}', ";
-    $sql .= "'{$allow_reopen}')";
-    mysql_query($sql);
-    if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
-    if (mysql_affected_rows() == 0) trigger_error("INSERT affected zero rows",E_USER_WARNING);
-
-    header("Location: service_levels.php");
-    exit;
 }
 ?>
