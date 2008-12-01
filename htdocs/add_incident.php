@@ -212,7 +212,7 @@ elseif ($action == 'findcontact')
         while ($contactrow = mysql_fetch_array($result))
         {
             if (empty($CONFIG['preferred_maintenance']) OR
-                in_array(servicelevel_id2tag($contactrow['servicelevelid']), 
+                in_array(servicelevel_id2tag($contactrow['servicelevelid']),
                                              $CONFIG['preferred_maintenance']))
             {
                 $str_prefered .= to_row($contactrow);
@@ -280,7 +280,7 @@ elseif ($action == 'findcontact')
             while ($contactrow = mysql_fetch_array($result))
             {
                 $html .=  "<tr class='shade2'>";
-                $site_incident_pool = db_read_column('freesupport', $dbSites, 
+                $site_incident_pool = db_read_column('freesupport', $dbSites,
                                                      $contactrow['siteid']);
                 if ($site_incident_pool > 0)
                 {
@@ -718,7 +718,7 @@ elseif ($action == 'assign')
             if (!empty($updateid))
             {
                 // Assign existing update to new incident if we have one
-                $sql="UPDATE `{$dbUpdates}` SET incidentid='{$incidentid}', userid='{$sit[2]}' WHERE id={'$updateid}'";
+                $sql = "UPDATE `{$dbUpdates}` SET incidentid='{$incidentid}', userid='{$sit[2]}' WHERE id='{$updateid}'";
                 $result = mysql_query($sql);
                 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
                 // + move any attachments we may have received
