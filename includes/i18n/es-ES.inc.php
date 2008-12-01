@@ -832,7 +832,6 @@ $strParameters = 'Parámetros';
 $strPassword = 'Contraseña';
 $strPasswordReset = 'Resetear contraseña';
 $strPasswordsDoNotMatch = 'Las contraseñas no coinciden';
-$strPasswordWasResetToX = 'La contraseña fue reseteada a: \'%s\' (sans-quotes)';
 $strPastXDays = 'Pasados %s días';
 $strPastXMonths = 'Pasados %s meses';
 $strPeriod = 'Periodo';

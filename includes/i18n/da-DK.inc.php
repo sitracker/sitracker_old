@@ -995,7 +995,6 @@ $strParameters = 'Parametre';
 $strPassword = 'Adgangskode';
 $strPasswordReset = 'Adgangskode nulstillet';
 $strPasswordsDoNotMatch = 'Adgangskoderne passer ikke';
-$strPasswordWasResetToX = 'Adgangskoden var nulstillet til: \'%s\' (sans-quotes)';
 $strPastXDays = 'Seneste %s dage';
 $strPastXMonths = 'Seneste %s måneder';
 $strPeriod = 'Periode';

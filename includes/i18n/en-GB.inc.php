@@ -1009,7 +1009,6 @@ $strParameters = 'Parameters';
 $strPassword = 'Password';
 $strPasswordReset = 'Password reset';
 $strPasswordsDoNotMatch = 'Passwords do not match';
-$strPasswordWasResetToX = 'Password was reset to: \'%s\' (sans-quotes)';
 $strPastXDays = 'Past %s days';
 $strPastXMonths = 'Past %s months';
 $strPeriod = 'Period';

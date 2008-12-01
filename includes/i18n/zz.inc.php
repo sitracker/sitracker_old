@@ -934,7 +934,6 @@ $strParameters = 'strParameters';
 $strPassword = 'strPassword';
 $strPasswordReset = 'strPasswordReset';
 $strPasswordsDoNotMatch = 'strPasswordsDoNotMatch';
-$strPasswordWasResetToX = 'strPasswordWasResetToX';
 $strPastXDays = 'strPastXDays';
 $strPastXMonths = 'strPastXMonths';
 $strPeriod = 'strPeriod';
