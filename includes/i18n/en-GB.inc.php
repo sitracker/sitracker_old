@@ -343,8 +343,9 @@ $strCustomerHasBeenCalledToChase = 'Customer has been called to chase';
 $strCustomerImpact = 'Customer Impact';
 $strCustomerImpactCustomerText = 'How many users are affected by this issue? Is this an issue of downtime or a minor niggle? Does the issue prevent people from working?';
 $strCustomerRequestedClosure = 'Customer Requested Incident Closure';
-$strDailyRate = 'Daily Rate';
 $strCustomers = 'Customers';
+
+$strDailyRate = 'Daily Rate';
 # i.e. place for widgets
 $strDashboard = 'Dashboard';
 $strDashboardComponentDoesntExist = 'Dashboard component %s doesn\'t exist';
@@ -372,6 +373,7 @@ $strDefault = 'Default';
 $strDefaultSubstitute = 'Default Substitute';
 $strDefineSubstituteEngineersFor = 'Define Substitute Engineers For %s';
 $strDelete = 'Delete';
+$strDeleteSite = 'Delete Site';
 $strDeleteAllSpam = 'Delete all mail from spam queue';
 $strDeleted = 'Deleted';
 $strDeleteTask = 'Delete Task';
@@ -732,7 +734,7 @@ $strLinks = 'Links';
 $strLimit = 'Limit';
 $strLimitTo = 'Limit to';
 $strList = 'List';
-$strListsAllTheCustomersProducts = "Lists all the customers products regardless of selections made above";
+$strListsAllTheCustomersProducts = 'Lists all the customers products regardless of selections made above';
 $strListProducts = 'List Products';
 $strListShowsContacts = 'This list shows contacts that matched your search, if site-support is available you can add incidents for the site';
 $strListShowsContracts = 'This list shows contracts, i.e. supported contacts and the products they are supported for. Click on the appropriate \'%s\' link to begin adding the incident';
@@ -770,7 +772,7 @@ $strMarkComplete = 'Mark Complete';
 $strMarkedComplete = 'Marked Complete';
 $strMarkedforclosureby = 'Marked for closure by %s';
 $strMarketingMailshot = 'Marketing Mailshot';
-$strMarketingMailshotDesc = "This report is a list of details for all customers that currently (or previously) have contracts for the products you selected but none of the products excluded";
+$strMarketingMailshotDesc = 'This report is a list of details for all customers that currently (or previously) have contracts for the products you selected but none of the products excluded';
 $strMarkForClosure = 'Mark for Closure';
 $strMaxResults = 'A maximum of %d results are displayed, your search might have returned more.';
 # Short for May (these happen to be the same in english)

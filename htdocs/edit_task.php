@@ -235,6 +235,14 @@ switch ($action)
                 die();
             }
 
+            $sql = "UPDATE `{$dbIncidents}` SET lastupdated = '{$now}', status = 1 WHERE id = {$incident}";
+            $result = mysql_query($sql);
+            if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+            if (mysql_affected_rows() != 1)
+            {
+            	trigger_error("No rows affected while updating incident",E_USER_ERROR);
+            }
+            
             mark_task_completed($id, TRUE);
         }
         else
@@ -274,9 +282,9 @@ switch ($action)
         {
             while ($task = mysql_fetch_object($result))
             {
-                $startdate=mysql2date($task->startdate);
-                $duedate=mysql2date($task->duedate);
-                $enddate=mysql2date($task->enddate);
+                $startdate = mysql2date($task->startdate);
+                $duedate = mysql2date($task->duedate);
+                $enddate = mysql2date($task->enddate);
                 echo "<form id='edittask' action='{$_SERVER['PHP_SELF']}' method='post'>";
                 echo "<table class='vertical'>";
                 echo "<tr><th>{$strTitle}</th>";
@@ -341,7 +349,6 @@ switch ($action)
             }
         }
         else echo "<p class='error'>No matching task found</p>";
-
 
         echo "<p align='center'><a href='tasks.php'>{$strTaskList}</a></p>";
         include ('htmlfooter.inc.php');
