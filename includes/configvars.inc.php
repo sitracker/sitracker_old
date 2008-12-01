@@ -33,7 +33,8 @@ $CFGCAT['system'] = array('demo', 'debug', 'bugtracker_name', 'bugtracker_url',
                           'changelogfile','creditsfile',
                           'error_logfile',
                           'error_notavailable_url',
-                          'licensefile');
+                          'licensefile',
+                          'session_name');
 
 $CFGCAT['locale'] = array('home_country',
                           'timezone',
@@ -46,7 +47,9 @@ $CFGCAT['locale'] = array('home_country',
                           'dateformat_time',
                           'default_i18n');
 
-$CFGCAT['sla'] = array('end_working_day','notice_threshold');
+$CFGCAT['sla'] = array('end_working_day',
+                       'notice_threshold',
+                       'regular_contact_days');
 
 
 $CFGCAT['theming'] = array('default_interface_style', 'default_css_url', 'default_gravatar');
@@ -67,7 +70,8 @@ $CFGCAT['incidents'] = array('auto_assign_incidents',
                              'free_support_limit',
                              'hide_closed_incidents_older_than',
                              'incident_pools',
-                             'preferred_maintenance');
+                             'preferred_maintenance',
+                             'record_lock_delay');
 
 
 $CFGCAT['inboundemail'] = array('enable_inbound_mail',
@@ -79,7 +83,8 @@ $CFGCAT['inboundemail'] = array('enable_inbound_mail',
                          'email_servertype',
                          'email_username',
                          'mailin_spool_path',
-                         'max_incoming_email_perday'
+                         'max_incoming_email_perday',
+                         'spam_email_subject'
                          );
 
 $CFGCAT['feedback'] = array('feedback_enabled',
@@ -91,7 +96,7 @@ $CFGCAT['kb'] = array('kb_enabled',
                       'kb_disclaimer_html',
                       'kb_id_prefix');
 
-// $CFGCAT['outboundemail'] = array(      );
+$CFGCAT['outboundemail'] = array('sales_email');
 $CFGCAT['journal'] = array('journal_loglevel', 'journal_purge_after');
 
 $CFGCAT['other'] = array('main_dictionary_file', 'enable_spellchecker','custom_dictionary_file');
