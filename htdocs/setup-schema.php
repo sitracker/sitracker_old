@@ -2482,7 +2482,7 @@ INSERT INTO `{$dbPermissions}` (`id` ,`name`) VALUES ('81', 'Adjust durations on
 INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (1, 81, 'true');
 
 -- KH 2008-11-26
-ALTER TABLE `{$dbUsers}` CHANGE `roleid` `roleid` INT( 5 ) NOT NULL DEFAULT '3'; 
+ALTER TABLE `{$dbUsers}` CHANGE `roleid` `roleid` INT( 5 ) NOT NULL DEFAULT '3';
 
 -- INL 2008-11-28
 CREATE TABLE IF NOT EXISTS `{$dbConfig}` (

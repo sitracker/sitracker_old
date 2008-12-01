@@ -14,6 +14,11 @@
 // TODO we need some sort of hierarchy for the config categories
 // as this is way too many
 
+$CFGTAB['application'] = array('appmain', 'theming', 'system', 'other');
+$CFGTAB['email'] = array('inboundemail', 'outboundemail');
+$CFGTAB['features'] = array('incidents', 'portal', 'ftp', 'kb', 'sla', 'holidays', 'feedback');
+$CFGTAB['system'] = array('paths', 'locale', 'journal');
+
 $CFGCAT['paths'] = array('application_fspath',
                          'application_webpath',
                          'access_logfile',
@@ -21,7 +26,7 @@ $CFGCAT['paths'] = array('application_fspath',
                          'attachment_webpath');
 
 
-$CFGCAT['application'] = array('application_name',
+$CFGCAT['appmain'] = array('application_name',
                                'application_shortname',
                                'application_uriprefix',
                                'logout_url',
@@ -100,6 +105,9 @@ $CFGCAT['outboundemail'] = array('sales_email');
 $CFGCAT['journal'] = array('journal_loglevel', 'journal_purge_after');
 
 $CFGCAT['other'] = array('main_dictionary_file', 'enable_spellchecker','custom_dictionary_file');
+
+
+
 
 // Descriptions of all the config variables
 $CFGVAR['access_logfile']['help'] = "This file must be writable of course";

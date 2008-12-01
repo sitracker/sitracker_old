@@ -19,6 +19,7 @@ require ('auth.inc.php');
 
 // External variables
 $selcat = cleanvar($_REQUEST['cat']);
+$seltab = cleanvar($_REQUEST['tab']);
 
 include ('htmlheader.inc.php');
 
@@ -29,11 +30,27 @@ echo " {$CONFIG['application_shortname']} {$strConfiguration}</h2>";
 
 echo "<div class='tabcontainer'>";
 echo "<ul>";
-foreach ($CFGCAT AS $cat => $catvar)
+foreach ($CFGTAB AS $tab => $cat)
 {
+    if (empty($seltab)) $seltab = 'application';
+    echo "<li";
+    if ($seltab == $tab) echo " class='active'";
+    echo "><a href='{$_SERVER['PHP_SELF']}?tab={$tab}'>{$tab}</a></li>";
+}
+echo "</ul>";
+echo "</div>";
+
+echo "<div style='clear: both;'></div>";
+
+
+echo "<div class='tabcontainer'>";
+echo "<ul>";
+foreach ($CFGTAB[$seltab] AS $cat)
+{
+    if (empty($selcat)) $selcat = $CFGTAB[$seltab][0];
     echo "<li";
     if ($selcat == $cat) echo " class='active'";
-    echo "><a href='{$_SERVER['PHP_SELF']}?cat={$cat}'>{$cat}</a></li>";
+    echo "><a href='{$_SERVER['PHP_SELF']}?tab={$seltab}&amp;cat={$cat}'>{$cat}</a></li>";
 }
 echo "</ul>";
 echo "</div>";
