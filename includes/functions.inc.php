@@ -11324,6 +11324,10 @@ function cfgVarInput($setupvar, $showvarnames = FALSE)
             $html .= "</select>";
         break;
 
+        case 'interfacestyleselect':
+            $html .= interfacestyle_drop_down($setupvar, $value);
+        break;
+
         case 'text':
         default:
             if (strlen($CONFIG[$setupvar]) < 65)

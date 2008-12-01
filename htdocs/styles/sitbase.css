@@ -651,9 +651,16 @@ div.tabcontainer { display: block; border: red;  }
   color: #fff;
 }
 
+.smalltabs { clear: both; }
+.smalltabs  ul li a {
+  height: 15px;
+  font-size: 90%;
+}
+
 .configvar p
 {
     text-align: left;
     margin-top: 0.1em;
     margin-bottom: 0.2em;
 }
+

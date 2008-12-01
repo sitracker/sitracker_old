@@ -40,10 +40,10 @@ foreach ($CFGTAB AS $tab => $cat)
 echo "</ul>";
 echo "</div>";
 
-echo "<div style='clear: both;'></div>";
+// echo "<div style='clear: both;'></div>";
 
 
-echo "<div class='tabcontainer'>";
+echo "<div class='tabcontainer smalltabs'>";
 echo "<ul>";
 foreach ($CFGTAB[$seltab] AS $cat)
 {
@@ -64,7 +64,7 @@ if (!empty($selcat))
 {
     foreach ($CFGCAT[$selcat] AS $catvar)
     {
-        echo cfgVarInput($catvar);
+        echo cfgVarInput($catvar, $CONFIG['debug']);
     }
 
 }
