@@ -17,6 +17,9 @@ require ('functions.inc.php');
 // This page requires authentication
 require ('auth.inc.php');
 
+// External variables
+$selcat = cleanvar($_REQUEST['cat']);
+
 include ('htmlheader.inc.php');
 
 require('configvars.inc.php');
@@ -24,15 +27,22 @@ require('configvars.inc.php');
 echo "<h2>".icon('settings', 32, $strConfiguration);
 echo " {$CONFIG['application_shortname']} {$strConfiguration}</h2>";
 
+echo "<div class='tabcontainer'>";
 echo "<ul>";
 foreach ($CFGCAT AS $cat => $catvar)
 {
-    echo "<li><a href='{$_SERVER['PHP_SELF']}?cat={$cat}'>{$cat}</a></li>";
+    echo "<li";
+    if ($selcat == $cat) echo " class='active'";
+    echo "><a href='{$_SERVER['PHP_SELF']}?cat={$cat}'>{$cat}</a></li>";
 }
 echo "</ul>";
+echo "</div>";
 
-$selcat = cleanvar($_REQUEST['cat']);
+echo "<div style='clear: both;'></div>";
 
+echo "<form action='{$_SERVER['PHP_SELF']}' method='post'>";
+echo "<fieldset>";
+echo "<legend>{$selcat}</legend>";
 if (!empty($selcat))
 {
     foreach ($CFGCAT[$selcat] AS $catvar)
@@ -41,6 +51,9 @@ if (!empty($selcat))
     }
 
 }
+echo "</fieldset>";
+echo "<input type='hidden' name='cat' value='{$selcat}' />";
+echo "<p><input type='reset' value=\"{$strReset}\" /> <input type='submit' value=\"{$strSave}\" /></p>";
 
 
 include ('htmlfooter.inc.php');

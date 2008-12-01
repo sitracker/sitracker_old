@@ -593,3 +593,67 @@ div.portalfileicon
     background: #AFAFAF;
     width: 0px; /* default */
 }
+
+.configvar h4
+{
+    text-align: left;
+    margin-bottom: 0px;
+}
+
+div.tabcontainer { display: block; border: red;  }
+
+.tabcontainer ul
+{
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+  text-align: center;
+}
+.tabcontainer ul li
+{
+  display: block;
+  float: left;
+  text-align: center;
+  padding: 0;
+  margin: 0;
+}
+
+.tabcontainer ul li a
+{
+  background: #fff;
+  width: 78px;
+  height: 18px;
+  border: 1px solid #185594;
+  padding: 0;
+  margin: 0 0 10px 0;
+  color: #000;
+  text-decoration: none;
+  display: block;
+  text-align: center;
+}
+
+.tabcontainer ul li a:hover
+{
+  color: #185594;
+  background: #EEF6FF;
+}
+
+.tabcontainer a:active
+{
+  background: #185594;
+  color: #fff;
+}
+
+.tabcontainer li.active a
+{
+  background: #185594;
+  border: 1px solid #185594;
+  color: #fff;
+}
+
+.configvar p
+{
+    text-align: left;
+    margin-top: 0.1em;
+    margin-bottom: 0.2em;
+}

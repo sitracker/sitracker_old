@@ -11114,29 +11114,29 @@ function emoticons($text)
  * @return int|bool Returns FALSE on failure, an incident ID on success
  * @author Kieran Hogg
  */
-function create_incident($title, $contact, $servicelevel, $contract, 
-                             $product, $software, $priority = 1, $owner = 0, 
+function create_incident($title, $contact, $servicelevel, $contract,
+                             $product, $software, $priority = 1, $owner = 0,
                              $status = 1, $productversion = '',
                              $productservicepacks = '', $opened = '',
                              $lastupdated = '')
 {
-	global $now;
-	if (empty($opened))
-	{
-		$opened = $now;
-	}
-	
-	if (empty($lastupdated))
-	{
-		$lastupdated = $now;
-	}
+    global $now;
+    if (empty($opened))
+    {
+        $opened = $now;
+    }
+
+    if (empty($lastupdated))
+    {
+        $lastupdated = $now;
+    }
     $sql  = "INSERT INTO `{$dbIncidents}` (title, owner, contact, priority, ";
     $sql .= "servicelevel, status, maintenanceid, product, softwareid, ";
     $sql .= "productversion, productservicepacks, opened, lastupdated) ";
     $sql .= "VALUES ('{$title}', '{$owner}', '{$contact}', '{$priority}', ";
-	$sql .= "'{$servicelevel}', '{$status}', '{$contract}', ";
+    $sql .= "'{$servicelevel}', '{$status}', '{$contract}', ";
     $sql .= "'{$product}', '{$software}', '{$productversion}', ";
-	$sql .= "'{$productservicepacks}', '{$opened}', '{$lastupdated}')";
+    $sql .= "'{$productservicepacks}', '{$opened}', '{$lastupdated}')";
     $result = mysql_query($sql);
     if (mysql_error())
     {
@@ -11155,12 +11155,12 @@ function create_incident($title, $contact, $servicelevel, $contract,
  * @param int $incidentid ID of the incident to add the update to
  * @param string $text The text of the update
  * @param enum $type (Optional) Update type (Default: 'default'), types:
- * 'default', 'editing', 'opening', 'email', 'reassigning', 'closing', 
+ * 'default', 'editing', 'opening', 'email', 'reassigning', 'closing',
  * 'reopening', 'auto', 'phonecallout', 'phonecallin', 'research', 'webupdate',
  * 'emailout', 'emailin', 'externalinfo', 'probdef', 'solution', 'actionplan',
- * 'slamet', 'reviewmet', 'tempassigning', 'auto_chase_email', 
- * 'auto_chase_phone', 'auto_chase_manager', 'auto_chased_phone', 
- * 'auto_chased_manager', 'auto_chase_managers_manager', 
+ * 'slamet', 'reviewmet', 'tempassigning', 'auto_chase_email',
+ * 'auto_chase_phone', 'auto_chase_manager', 'auto_chased_phone',
+ * 'auto_chased_manager', 'auto_chase_managers_manager',
  * 'customerclosurerequest', 'fromtask'
  * @param int $userid (Optional) ID of the user doing the updating (Default: 0)
  * @param int $currentowner (Optional) ID of the current incident owner
@@ -11168,25 +11168,25 @@ function create_incident($title, $contact, $servicelevel, $contract,
  * @param enum $visibility (Optional) Whether to 'show' or 'hide' in the portal (Default: 'show')
  * @author Kieran Hogg
  */
-function new_update($incidentid, $text, $type = 'default', $userid = 0, $currentowner = '', 
+function new_update($incidentid, $text, $type = 'default', $userid = 0, $currentowner = '',
                     $currentstatus = 1, $visibility = 'show')
 {
-	global $now;
-	
+    global $now;
+
     $sql  = "INSERT INTO `{$GLOBALS['dbUpdates']}` (incidentid, userid, ";
     $sql .= "type, bodytext, timestamp, currentowner, currentstatus, ";
     $sql .= "customervisibility) VALUES ('{$incidentid}', '{$userid}', ";
-	$sql .= "'{$type}', '{$text}', '{$now}', '{$currentowner}', ";
-	$sql .= "'{$currentstatus}', '{$visibility}')";
+    $sql .= "'{$type}', '{$text}', '{$now}', '{$currentowner}', ";
+    $sql .= "'{$currentstatus}', '{$visibility}')";
     $result = mysql_query($sql);
     if (mysql_error())
     {
-    	trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-    	return FALSE;
+        trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+        return FALSE;
     }
     else
     {
-    	return mysql_insert_id();
+        return mysql_insert_id();
     }
 }
 
@@ -11204,36 +11204,153 @@ function new_update($incidentid, $text, $type = 'default', $userid = 0, $current
  * @param string $reason (Optional) Reason the item is in the holding queue
  * @param id $reason_user (Optional) The user ID who set the reason
  * @param time $reason_time (Optional) MySQL timestamp of when the reason was set
- * @autho Kieran Hogg
+ * @author Kieran Hogg
  */
-function create_temp_incoming($updateid, $from, $subject, $emailfrom, 
-                              $contactid = '', $incidentid = 0, $locked = '', 
-                              $lockeduntil = '', $reason = '', 
+function create_temp_incoming($updateid, $from, $subject, $emailfrom,
+                              $contactid = '', $incidentid = 0, $locked = '',
+                              $lockeduntil = '', $reason = '',
                               $reason_user = '', $reason_time = '')
 {
-	global $dbTempIncoming;
-	$sql = "INSERT INTO `{$dbTempIncoming}`(updateid, `from`, subject, ";
-	$sql .= "emailfrom, contactid, incidentid, locked, lockeduntil, ";
-	$sql .= "reason, reason_user, reason_time) VALUES('{$updateid}', ";
-	$sql .= "'{$from}', '{$subject}', '{$emailfrom}', '{$contactid}', ";
-	$sql .= "'{$incidentid}', '{$locked}', '{$lockeduntil}', '{$reason}', ";
-	$sql .= "'{$reason_user}', '{$reason_time}')";
-	$result = mysql_query($sql);
+    global $dbTempIncoming;
+    $sql = "INSERT INTO `{$dbTempIncoming}`(updateid, `from`, subject, ";
+    $sql .= "emailfrom, contactid, incidentid, locked, lockeduntil, ";
+    $sql .= "reason, reason_user, reason_time) VALUES('{$updateid}', ";
+    $sql .= "'{$from}', '{$subject}', '{$emailfrom}', '{$contactid}', ";
+    $sql .= "'{$incidentid}', '{$locked}', '{$lockeduntil}', '{$reason}', ";
+    $sql .= "'{$reason_user}', '{$reason_time}')";
+    $result = mysql_query($sql);
     if (mysql_error())
     {
-    	trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-    	return FALSE;
+        trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+        return FALSE;
     }
     else
     {
-    	return mysql_insert_id();
+        return mysql_insert_id();
     }
 }
+
+
+
+/**
+ * Detect whether an array is associative
+ * @param array $array
+ * @note From http://uk.php.net/manual/en/function.is-array.php#77744
+**/
+function is_assoc($array)
+{
+    return is_array($array) && count($array) !== array_reduce(array_keys($array), 'is_assoc_callback', 0);
+}
+
+
+/**
+ * Detect whether an array is associative
+ * @param various $a
+ * @param various $b
+ * @note Callback function, Called by is_assoc()
+         From http://uk.php.net/manual/en/function.is-array.php#77744
+**/
+function is_assoc_callback($a, $b)
+{
+    return $a === $b ? $a + 1 : 0;
+}
+
+
+
+/**
+ * HTML for a config variable input box
+ * @param string $setupvar The setup variable key name
+ * @param bool $showvarnames Whether to display the config variable name
+ * @todo  TODO, this code was ripped out of setup.php, need to make setup.php use this
+                INL 28Nov08
+ * @author Ivan Lucas
+**/
+function cfgVarInput($setupvar, $showvarnames = FALSE)
+{
+    global $CONFIG, $CFGVAR;
+    $html .= "<div class='configvar'>";
+    if ($CFGVAR[$setupvar]['title']!='') $title = $CFGVAR[$setupvar]['title'];
+    else $title = $setupvar;
+    $html .= "<h4>{$title}</h4>";
+    if ($CFGVAR[$setupvar]['help']!='') $html .= "<p class='helptip'>{$CFGVAR[$setupvar]['help']}</p>\n";
+
+    if ($showvarnames) $html .= "<var>\$CONFIG['$setupvar']</var> = ";
+
+    $value = '';
+    if (!$cfg_file_exists OR ($cfg_file_exists AND $cfg_file_writable))
+    {
+        $value = $CONFIG[$setupvar];
+        if (is_bool($value))
+        {
+            if ($value==TRUE) $value='TRUE';
+            else $value='FALSE';
+        }
+        elseif (is_array($value))
+        {
+            if (is_assoc($value))
+            {
+                $value = "array(".implode_assoc('=>',',',$value).")";
+            }
+            else
+            {
+                $value="array(".implode(',',$value).")";
+            }
+        }
+        if ($setupvar=='db_password' AND $_REQUEST['action']!='reconfigure') $value='';
+    }
+    switch ($CFGVAR[$setupvar]['type'])
+    {
+        case 'select':
+            $html .= "<select name='$setupvar'>";
+            if (empty($CFGVAR[$setupvar]['options'])) $CFGVAR[$setupvar]['options'] = "TRUE|FALSE";
+            $options = explode('|', $CFGVAR[$setupvar]['options']);
+            foreach ($options AS $option)
+            {
+                $html .= "<option value=\"{$option}\"";
+                if ($option == $value) $html .= " selected='selected'";
+                $html .= ">{$option}</option>\n";
+            }
+            $html .= "</select>";
+        break;
+
+        case 'percent':
+            $html .= "<select name='$setupvar'>";
+            for($i = 0; $i <= 100; $i++)
+            {
+                $html .= "<option value=\"{$i}\"";
+                if ($i == $value) $html .= " selected='selected'";
+                $html .= ">{$i}</option>\n";
+            }
+            $html .= "</select>";
+        break;
+
+        case 'text':
+        default:
+            if (strlen($CONFIG[$setupvar]) < 65)
+            {
+                $html .= "<input type='text' name='$setupvar' size='60' value=\"{$value}\" />";
+            }
+            else
+            {
+                $html .= "<textarea name='$setupvar' cols='60' rows='10'>{$value}</textarea>";
+            }
+    }
+    if ($setupvar=='db_password' AND $_REQUEST['action']!='reconfigure' AND $value != '') $html .= "<p class='info'>The current password setting is not shown</p>";
+    $html .= "</div>";
+    $html .= "<br />\n";
+    if ($c==1) $c==2; else $c=1;
+
+    return $html;
+}
+
+
 
 /*
 * DEPRECATED THOUGH STILL CALLED
 *
-* The following are deprecated and had been emoved though have been readded as they are still called by code which will be released in 3.4 following this they will be removed
+* The following are deprecated and had been removed though have been re-added as
+* they are still called by code which will be released in 3.4 following this they
+* will be removed
 */
 
 function emailtype_to($id)
