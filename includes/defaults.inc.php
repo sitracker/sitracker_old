@@ -328,6 +328,10 @@ $CONFIG["ldap_customer_group_attr"] = "memberUid";
 // 1 is the example site in the default install
 $CONFIG["ldap_default_customer_siteid"] = 1; 
 
+// This attempts to create the customer record automatically using LDAP
+// when creating an incident from an email in the holding queue.
+$CONFIG["ldap_autocreate_customer"] = TRUE;
+
 //If true, portal users create incidents, if FALSE, they just create emails
 $CONFIG['portal_creates_incidents'] = TRUE;
 ?>
