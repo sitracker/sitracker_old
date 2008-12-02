@@ -640,7 +640,7 @@ $strHolidayType = 'Holiday Type';
 $strHomeURL = 'Home URL';
 $strHours = 'Hours';
 
-# i.e. short for identifica$strIncidentAssignedtion; unique number
+# i.e. short for identification; unique number
 $strID = 'ID';
 $strImportant = 'Important';
 $strInactive = 'Inactive';
