@@ -7494,10 +7494,10 @@ function ldate($format, $date = '', $utc = TRUE)
 }
 
 /**
-    * Returns the number of open activities/timed tasks for an incident
+    * Returns an array of open activities/timed tasks for an incident
     * @author Paul Heaney
     * @param $incidentid int. Incident ID you want
-    * @returns int. Number of open activities for the incident (0 if non)
+    * @returns array - with the task id
 */
 function open_activities_for_incident($incientid)
 {
@@ -7529,11 +7529,15 @@ function open_activities_for_incident($incientid)
         }
         $result = mysql_query($sql);
 
-        $num = mysql_num_rows($result);
+        // $num = mysql_num_rows($result);
+        while ($obj = mysql_fetch_object($result))
+        {
+        	$num[] = $obj->id;
+        }
     }
     else
     {
-        $num = 0;
+        $num = null;
     }
 
     return $num;
@@ -7563,7 +7567,7 @@ function open_activities_for_site($siteid)
 
         while ($obj = mysql_fetch_object($result))
         {
-            $openactivites += open_activities_for_incident($obj->id);
+            $openactivites += count(open_activities_for_incident($obj->id));
         }
     }
 

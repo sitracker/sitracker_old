@@ -34,8 +34,8 @@ echo "<a href=\"mailto:{$incident->email}\">{$incident->email}</a><br />\n";
 if ($incident->ccemail != '') echo "CC: <a href=\"mailto:{$incident->ccemail}\">{$incident->ccemail}</a><br />\n";
 if ($incident->phone!='' OR $incident->phone!='')
 {
-    if ($incident->phone!='') echo "{$strTel}: {$incident->phone}";
-    if ($incident->mobile!='') echo " {$strMob}: {$incident->mobile}";
+    if ($incident->phone != '') echo "{$strTel}: {$incident->phone}";
+    if ($incident->mobile != '') echo " {$strMob}: {$incident->mobile}";
     echo "<br />\n";
 }
 if ($incident->externalid != '' OR $incident->escalationpath > 0)
@@ -127,7 +127,8 @@ switch (does_contact_have_billable_contract($incident->contactid))
         break;
 }
 
-if (open_activities_for_incident($incidentid) > 0)
+$num_open_activities = open_activities_for_incident($incidentid);
+if (count($num_open_activities) > 0)
 {
     echo "<a href='tasks.php?incident={$incidentid}' class='info'>";
     echo icon('timer', 16, $strOpenActivities);
@@ -185,6 +186,34 @@ if ($incident->status != 2 AND $incident->status!=7)
         if ($slaremain <> 0) echo "<br />"; // only need a line sometimes
         echo $strReviewDueNow;
     }
+    
+    if ($servicelevel->timed == 'yes')
+    {
+        echo "<br />";
+        switch (count($num_open_activities))
+        {
+        	case 0: //start
+                echo "<a href='add_task.php?incident={$id}'>{$strStartNewActivity}</a>";
+                break;
+            case 1: //stop
+                echo "<a href='view_task.php?id={$num_open_activities[0]}&amp;mode=incident&amp;incident={$id}'>{$strViewActivity}</a> | ";
+                $sql = "SELECT * FROM `{$dbNotes}` WHERE link='10' AND refid='{$id}'";
+                $result = mysql_query($sql);
+                if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+                if (mysql_num_rows($result) >= 1)
+                {
+                    echo "<a href='edit_task.php?id={$num_open_activities[0]}&amp;action=markcomplete&amp;incident={$id}'>{$strStopActivity}</a>";
+                }
+                else
+                {
+                    // Notes needed before closure
+                	echo $strActivityContainsNoNotes;
+                }
+                break;
+            default:  //greyed out
+                echo "<a href='tasks.php?incident={$id}'>{$strMultipleActivitiesRunning}</a>";
+        }
+    }
 }
 echo "</td>";
 echo "</tr>\n";
@@ -200,15 +229,15 @@ if (mysql_num_rows($rresult) >= 1)
     {
         if ($related->relatedid == $id)
         {
-            if ($related->relation == 'child') $linktitle='Child';
-            else $linktitle='Sibling';
+            if ($related->relation == 'child') $linktitle = 'Child';
+            else $linktitle = 'Sibling';
             $linktitle .= ": ".incident_title($related->incidentid);
             echo "<a href='incident_details.php?id={$related->incidentid}' title='$linktitle'>{$related->incidentid}</a> ";
         }
         else
         {
-            if ($related->relation == 'child') $linktitle='Parent';
-            else $linktitle='Sibling';
+            if ($related->relation == 'child') $linktitle = 'Parent';
+            else $linktitle = 'Sibling';
             $linktitle .= ": ".incident_title($related->relatedid);
             echo "<a href='incident_details.php?id={$related->relatedid}' title='$linktitle'>{$related->relatedid}</a> ";
         }

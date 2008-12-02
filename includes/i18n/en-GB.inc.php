@@ -845,6 +845,7 @@ $strMoreContactsThanContractSupports = 'There are more contacts linked than this
 $strMorning = 'Morning';
 $strMoveUpdate = 'Move Update';
 $strMovedFromXtoXbyX = 'Moved from %s -&gt; %s by %s';
+$strMultipleActivitiesRunning = 'Multiple Activities Running';
 $strMustCompleteActivitiesBeforeClosure = 'You must complete all activities for the incident before closure.';
 $strMustEnterEmail = 'You must enter an email address';
 $strMustEnterName = 'You must enter a name';
@@ -1338,6 +1339,7 @@ $strStatus = 'Status';
 $strStatusSummary = 'Status Summary';
 # i.e. permanent
 $strSticky = 'Sticky';
+$strStopActivity = 'Stop Activity';
 $strStoreInLog = 'Store details in the Incident Log';
 $strSubject = 'Subject';
 $strSubstitute = 'Substitute';

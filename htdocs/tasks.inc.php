@@ -492,7 +492,7 @@ if (mysql_num_rows($result) >=1 )
         echo colheader('action', $strAction);
     }
     echo "</tr>\n";
-    $shade='shade1';
+    $shade = 'shade1';
     while ($task = mysql_fetch_object($result))
     {
         $duedate = mysql2date($task->duedate);
@@ -543,8 +543,7 @@ if (mysql_num_rows($result) >=1 )
         {
             if ($enddate == '0')
             {
-                echo "<td><a href='view_task.php?id={$task->id}&amp;mode=incident
-                      &amp;incident={$id}' class='info'>";
+                echo "<td><a href='view_task.php?id={$task->id}&amp;mode=incident&amp;incident={$id}' class='info'>";
                 echo icon('timer', 16)." {$task->id}</a></td>";
             }
             else
