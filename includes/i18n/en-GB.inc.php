@@ -1207,7 +1207,7 @@ $strSaveAsCSV = 'Save as CSV';
 $strSaveDashbaordLayout = 'Save Dashboard Layout';
 $strSaveTheMainFormFirst = 'Save the main form before adding questions';
 $strScheduler = 'Scheduler';
-$strSchedulerActionFailed = 'Scheduer Action Failed';
+$strSchedulerActionFailed = 'Scheduler Action Failed';
 # Database structure version
 $strSchemaVersion = 'Schema Version';
 $strScore = 'Score';
