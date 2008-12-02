@@ -168,7 +168,7 @@ if ($emails > 0)
         {
        		$incidentid = $m[1];
         }
-        
+
         $customer_visible = 'No';
         $part = 1;
 
@@ -324,7 +324,7 @@ if ($emails > 0)
         }
         //** END WRITE ATTACHMENTS **//
 
-        //** BEING UPDATE INCIDENT **//
+        //** BEGIN UPDATE INCIDENT **//
         $headertext = '';
         // Build up header text to append to the incident log
         if (!empty($decoded_email->from))
@@ -381,7 +381,7 @@ if ($emails > 0)
 
             //new call
             $sql = "INSERT INTO `{$dbTempIncoming}` (updateid, incidentid, `from`, emailfrom, subject, reason, contactid) ";
-            $sql.= "VALUES ('{$updateid}', '0', '{$decoded_email->from_email}', '{$decoded_email->from_name}', '".mysql_real_escape_string($decoded_email->subject)."', '{$SYSLANG['strPossibleNewIncident']}', '{$contactid}' )";
+            $sql.= "VALUES ('{$updateid}', '0', '{$decoded_email->from_email}', '".mysql_real_escape_string($decoded_email->from_name)."', '".mysql_real_escape_string($decoded_email->subject)."', '{$SYSLANG['strPossibleNewIncident']}', '{$contactid}' )";
             mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
             trigger('TRIGGER_INCIDENT_UPDATED_EXTERNAL', array('incident' => $incidentid));
