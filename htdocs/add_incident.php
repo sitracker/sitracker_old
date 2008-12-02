@@ -93,6 +93,7 @@ $query = cleanvar($_REQUEST['query']);
 $siteid = cleanvar($_REQUEST['siteid']);
 $contactid = cleanvar($_REQUEST['contactid']);
 $search_string = cleanvar($_REQUEST['search_string']);
+$from = cleanvar($_REQUEST['from']);
 $type = cleanvar($_REQUEST['type']);
 $maintid = cleanvar($_REQUEST['maintid']);
 $productid = cleanvar($_REQUEST['productid']);
@@ -142,6 +143,17 @@ elseif ($action == 'findcontact')
 {
     //  Search for the contact specified in the maintenance contracts and display a list of choices
     // This Page Is Valid XHTML 1.0 Transitional! 27Oct05
+
+    // Are we using LDAP?
+    if ( $CONFIG["use_ldap"] )
+    {
+        // Do we want to autocreate the customer from LDAP?
+        if ( $CONFIG["ldap_autocreate_customer"] )
+        {
+            // Import the user from LDAP
+            ldapImportCustomerFromEmail($from);
+        }
+    }
 
     $search_string = mysql_real_escape_string(urldecode($_REQUEST['search_string']));
     // check for blank or very short search field - otherwise this would find too many results
@@ -719,6 +731,7 @@ elseif ($action == 'assign')
             {
                 // Assign existing update to new incident if we have one
                 $sql = "UPDATE `{$dbUpdates}` SET incidentid='{$incidentid}', userid='{$sit[2]}' WHERE id='{$updateid}'";
+
                 $result = mysql_query($sql);
                 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
                 // + move any attachments we may have received
