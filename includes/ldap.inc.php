@@ -77,6 +77,11 @@ function ldapCreateContact($details)
         eval("\${$key} = \"{$value}\";");  
     }
 
+    if ( !isset($siteid) ) 
+    {
+        $siteid = $CONFIG["ldap_default_customer_siteid"];
+    }
+
     $sql  = "INSERT INTO `{$dbContacts}` (username, password, forenames, ";
     $sql .= "surname, jobtitle, email, phone, mobile, fax, department, ";
     $sql .= "siteid, timestamp_added, timestamp_modified, address1) ";
@@ -330,6 +335,51 @@ function ldapGetUserDetails($username)
         $r[$attr] = "" );
     }
 
+    $r["username"] = $info[0][$user_attr][0];
+
+    return $r;
+}
+
+/**
+    * Gets the user details from LDAP for the given email
+    * @author Lea Anthony
+    * @param $username String. Email
+    * @return an array containing the user details
+*/
+function ldapGetCustomerDetailsFromEmail($email)
+{
+    // Get user details
+    global $CONFIG;
+
+    $dn_base = $CONFIG['ldap_dn_base'];
+    $user_attr = $CONFIG['ldap_user_attr'];
+
+    $query = "(mail=$email)";
+
+    $info = ldapSearch($dn_base, $query)
+            or trigger_error("Error in search query", E_USER_ERROR);
+
+    $userdata = $info[0];
+
+    // The Result is an array with the users details
+    $r = array();
+
+    $attributes = array("realname","forenames","jobtitle","email","mobile",
+                        "surname", "fax","phone");
+
+    foreach ( $attributes as $attr ) 
+    {
+        $mapattr = $CONFIG['ldap_attr_map'][$attr];
+        ( isset($mapattr) ? $r[$attr] = $userdata[$mapattr][0] : 
+        $r[$attr] = "" );
+    }
+
+    // Extract the username from the matched dn
+    $dn = $userdata['dn'];
+    $rep = $user_attr."=";
+    $dn = str_replace($rep,"",$dn);
+    $rep = ",".$dn_base;
+    $username = str_replace($rep,"",$dn);
     $r["username"] = $username;
 
     return $r;
@@ -504,5 +554,78 @@ function ldapUpdateUser($details)
     return 1;
 }
 
+/**
+    * Gets the details of a user from the database from their email
+    * @author Lea Anthony
+    * @param $email String. Email
+    * @return An array of the user data (if found)
+*/
+function getUserDetailsFromDBByEmail($email) 
+{
+    global $dbUsers;
+
+    $sql = "SELECT * FROM `{$dbUsers}` where email='$email'";
+
+    $result = mysql_query($sql);
+    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+
+
+    return mysql_fetch_array($result);
+
+}
+
+/**
+    * Gets the details of a contact from the database from their email
+    * @author Lea Anthony
+    * @param $email String. Email
+*/
+function getContactDetailsFromDBByEmail($email) 
+{
+    global $dbContacts;
+
+    $sql = "SELECT * FROM `{$dbContacts}` where email='$email'";
+
+    $result = mysql_query($sql);
+    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+
+    return mysql_fetch_array($result);
+
+}
+
+/**
+    * Checks that the email address given is a contact that has not yet
+    * been imported into the DB, then imports them.
+    * @author Lea Anthony
+    * @param $email String. Email
+    * @return An array of the user data (if found)
+*/
+function ldapImportCustomerFromEmail($email)
+{
+    global $dbContacts;
+
+    // Check if "customer" is actually a User
+    $r = getUserDetailsFromDBByEmail($email);
+
+    if( ! empty($r) )
+    {
+        // This is actually a User. Can users be customers?
+        return;
+    }
+
+    $r = getContactDetailsFromDBByEmail($email);
+
+    if( ! empty($r) )
+    {
+        // This contact already exists
+        return;
+    }
+
+    // Create user
+    $details = ldapGetCustomerDetailsFromEmail(email);
+
+
+    ldapCreateContact($details);
+
+}
 
 ?>
