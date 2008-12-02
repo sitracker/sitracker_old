@@ -1543,7 +1543,6 @@ $strVisibility = 'Visibility';
 $strWaiting = 'Waiting';
 $strWaitingForCustomer = 'Waiting for customer';
 $strWaitingForSupport = 'Waiting for support';
-$strWaitingHeldEmail = 'Waiting Held Email';
 $strWarning = 'Warning';
 $strWatchAddFailed = 'Failed to add watch incident';
 $strWatchAddSet = 'Add new set of watched incidents';
