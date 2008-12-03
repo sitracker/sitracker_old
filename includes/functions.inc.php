@@ -48,8 +48,7 @@ if (version_compare(PHP_VERSION, "5.1.0", ">="))
     date_default_timezone_set($CONFIG['timezone']);
 }
 
-// try to figure out what path delimeter is being used (for windows or unix)...
-$fsdelim = (strstr($_SERVER['SCRIPT_FILENAME'],"/")) ? "/" : "\\";
+$fsdelim = DIRECTORY_SEPARATOR;
 
 // Journal Logging
 // 0 = No logging
