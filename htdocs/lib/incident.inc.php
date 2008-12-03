@@ -7,6 +7,8 @@
 // This software may be used and distributed according to the terms
 // of the GNU General Public License, incorporated herein by reference.
 
+require_once('base.inc.php');
+
 function create_incident($title, $contact, $servicelevel, $contract,
                              $product, $software, $priority = 1, $owner = 0,
                              $status = 1, $productversion = '',
