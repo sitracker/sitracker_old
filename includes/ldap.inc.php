@@ -278,7 +278,19 @@ function ldapOpen()
     $host = $CONFIG['ldap_host'];
     $ldap_conn = ldap_connect($host)
                  or trigger_errror("Could not connect to server", E_USER_ERROR);
-//     $r = ldap_bind($ldap_conn);
+
+    $bind_user = $CONFIG["ldap_bind_user"];
+    $bind_pass = $CONFIG["ldap_bind_pass"];
+
+    if ( isset($bind_user) && strlen($bind_user) > 0 )
+    {
+        $r = ldap_bind($ldap_conn, $bind_user, $bind_pass);
+        if ( ! $r )
+        {
+            // Could not bind!
+            trigger_errror("Could not bind to LDAP server with credentials", E_USER_ERROR);
+        }
+    }
 
     return $ldap_conn;
 }
