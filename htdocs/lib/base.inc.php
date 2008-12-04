@@ -8,9 +8,9 @@
 // of the GNU General Public License, incorporated herein by reference.
 
 //**** Begin constant/variable definitions ****//
- 
+
 // Version number of the application, (numbers only)
-$application_version = '3.41';
+$application_version = '3.45';
 
 // Revision string, e.g. 'beta2' or 'svn' or ''
 $application_revision = 'svn';
