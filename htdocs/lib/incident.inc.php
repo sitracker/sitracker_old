@@ -9,6 +9,9 @@
 
 require_once('base.inc.php');
 
+/**
+    * @todo Document this function ;)
+*/
 function create_incident($title, $contact, $servicelevel, $contract,
                              $product, $software, $priority = 1, $owner = 0,
                              $status = 1, $productversion = '',
