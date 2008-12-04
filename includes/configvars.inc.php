@@ -104,7 +104,7 @@ $CFGCAT['kb'] = array('kb_enabled',
 $CFGCAT['outboundemail'] = array('sales_email');
 $CFGCAT['journal'] = array('journal_loglevel', 'journal_purge_after');
 
-$CFGCAT['other'] = array('main_dictionary_file', 'enable_spellchecker','custom_dictionary_file');
+$CFGCAT['other'] = array('enable_spellchecker', 'main_dictionary_file', 'custom_dictionary_file');
 
 
 
