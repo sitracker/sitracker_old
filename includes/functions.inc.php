@@ -9146,6 +9146,14 @@ function show_edit_site($site, $mode='internal')
 function show_add_contact($siteid = 0, $mode = 'internal')
 {
     global $CONFIG;
+    $returnpage = cleanvar($_REQUEST['return']);
+    if (!empty($_REQUEST['name']))
+    {
+        $name = explode(' ',cleanvar(urldecode($_REQUEST['name'])), 2);
+        $_SESSION['formdata']['add_contact']['forenames'] = ucfirst($name[0]);
+        $_SESSION['formdata']['add_contact']['surname'] = ucfirst($name[1]);
+    }
+
     $html = show_form_errors('add_contact');
     clear_form_errors('add_contact');
     $html .= "<h2>".icon('contact', 32)." ";
@@ -9282,6 +9290,7 @@ function show_add_contact($siteid = 0, $mode = 'internal')
     $html .= "<td><input type='checkbox' name='emaildetails' checked='checked'>";
     $html .= "<label for='emaildetails'>{$GLOBALS['strEmailContactLoginDetails']}</td></tr>";
     $html .= "</table>\n\n";
+    if (!empty($returnpage)) $html .= "<input type='hidden' name='return' value='{$returnpage}' />";
     $html .= "<p><input name='submit' type='submit' value=\"{$GLOBALS['strAddContact']}\" /></p>";
     $html .= "</form>\n";
 
@@ -9324,6 +9333,7 @@ function process_add_contact($mode = 'internal')
     $fax = cleanvar($_REQUEST['fax']);
     $department = cleanvar($_REQUEST['department']);
     $notes = cleanvar($_REQUEST['notes']);
+    $returnpage = cleanvar($_REQUEST['return']);
     $_SESSION['formdata']['add_contact'] = $_REQUEST;
 
     $errors = 0;
@@ -9440,7 +9450,12 @@ function process_add_contact($mode = 'internal')
                     trigger('TRIGGER_NEW_CONTACT', array('contactid' => $newid, 'prepassword' => $prepassword, 'userid' => $sit[2]));
                 }
 
-                if ($mode == 'internal')
+                if ($returnpage == 'addincident')
+                {
+                    html_redirect("add_incident.php?action=findcontact&contactid={$newid}");
+                    exit;
+                }
+                elseif ($mode == 'internal')
                 {
                     html_redirect("contact_details.php?id=$newid");
                     exit;

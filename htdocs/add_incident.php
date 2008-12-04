@@ -313,7 +313,7 @@ elseif ($action == 'findcontact')
                 $html .=  "</tr>\n";
             }
             $html .=  "</table>\n";
-            $html .= "<p align='center'><a href='add_contact.php'>{$strAddContact}</a></p>";
+            $html .= "<p align='center'><a href='add_contact.php?name=".urlencode($search_string)."&amp;return=addincident'>{$strAddContact}</a></p>";
 
             if ($customermatches > 0)
             {
@@ -324,7 +324,7 @@ elseif ($action == 'findcontact')
         else
         {
             echo "<h3>No matching contacts found</h3>";
-            echo "<p align='center'><a href=\"add_contact.php\">{$strAddContact}</a></p>";
+            echo "<p align='center'><a href=\"add_contact.php?name=".urlencode($search_string)."&amp;return=addincident\">{$strAddContact}</a></p>";
         }
         echo "<p align='center'><a href=\"{$_SERVER['PHP_SELF']}?updateid={$updateid}&amp;win={$win}\">{$strSearchAgain}</a></p>";
         include ('htmlfooter.inc.php');
@@ -369,7 +369,7 @@ elseif ($action == 'findcontact')
                 if ($site_incident_pool > 0)
                 {
                     $html .= "<td><a href=\"{$_SERVER['PHP_SELF']}?action=incidentform&amp;type=free&amp;contactid=".$contactrow['contactid']."&amp;updateid=$updateid&amp;win={$win}\" onclick=\"return confirm_free();\">";
-                    $html .= "Add Site Support Incident</a> ({$site_incident_pool})</td>";
+                    $html .= "Add Site Support Incident</a> ({$site_incident_pool})</td>"; // FIXME i18n Add Site Support Incident
                     $customermatches++;
                 }
                 else
@@ -387,12 +387,12 @@ elseif ($action == 'findcontact')
                 echo $html;
             }
 
-            echo "<p align='center'><a href='add_contact.php'>{$strAddContact}</a></p>\n";
+            echo "<p align='center'><a href='add_contact.php?name=".urlencode($search_string)."&amp;return=addincident'>{$strAddContact}</a></p>\n";
         }
         else
         {
             echo "<h3>No matching contacts found</h3>";
-            echo "<p align='center'><a href=\"add_contact.php\">{$strAddContact}</a></p>\n";
+            echo "<p align='center'><a href=\"add_contact.php?name=".urlencode($search_string)."&amp;return=addincident\">{$strAddContact}</a></p>\n";
         }
 
 
