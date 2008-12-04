@@ -285,6 +285,7 @@ function ldapOpen()
     // Set protocol version
     $protocol = $CONFIG["ldap_protocol"];        
     ldap_set_option($ldap_conn, LDAP_OPT_PROTOCOL_VERSION, $protocol);
+    ldap_set_option($ldap_conn, LDAP_OPT_REFERRALS,0);
 
     if ( $CONFIG["ldap_use_tls"] )
     {
