@@ -290,6 +290,9 @@ $CONFIG['allow_duration_adjustment'] = FALSE;
 $CONFIG['use_ldap'] = FALSE;
 
 $CONFIG['ldap_host'] = "";
+$CONFIG["ldap_bind_user"] = "";
+$CONFIG["ldap_bind_pass"] = "";
+
 
 // The LDAP Base DN for user lookups
 $CONFIG['ldap_dn_base'] = "ou=Users,dc=example,dc=com";
