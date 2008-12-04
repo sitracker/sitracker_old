@@ -282,6 +282,26 @@ function ldapOpen()
     $bind_user = $CONFIG["ldap_bind_user"];
     $bind_pass = $CONFIG["ldap_bind_pass"];
 
+    // Set protocol version
+    $protocol = $CONFIG["ldap_protocol"];        
+    ldap_set_option($ldap_conn, LDAP_OPT_PROTOCOL_VERSION, $protocol);
+
+    if ( $CONFIG["ldap_use_tls"] )
+    {
+        // Protocol V3 required for start_tls
+        if ( $protocol == 3 )
+        {
+            if ( !ldap_start_tls($ldap_conn) ) 
+            {
+                die("Ldap_start_tls failed");
+            }
+        }
+        else
+        {
+            die("Protocol v3 required for TLS");
+        } 
+    }
+
     if ( isset($bind_user) && strlen($bind_user) > 0 )
     {
         $r = ldap_bind($ldap_conn, $bind_user, $bind_pass);
