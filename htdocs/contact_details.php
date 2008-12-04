@@ -149,11 +149,15 @@ while ($contactrow = mysql_fetch_array($contactresult))
     echo nl2br($contactrow['notes'])."</td></tr>\n";
 
     echo "<tr><td colspan='2'>&nbsp;</td></tr>\n";
-    echo "<tr><th>{$strAccessDetails}</th>";
-    echo "<td>{$strUsername}: <code>{$contactrow['username']}</code>";
-    echo ", <a href='forgotpwd.php?action=sendpwd&amp;contactid=".urlencode($contactrow['id'])."'>{$strSendPassword}</a>";
-    // echo ", password: <code>".$contactrow['password']."</code>";  ## Passwords no longer controlled from SiT INL 23Nov04
-    echo "</td></tr>\n";
+    // Only show access details if portal is enabled
+    if ($CONFIG['portal'] == TRUE)
+    {
+        echo "<tr><th>{$strAccessDetails}</th>";
+        echo "<td>{$strUsername}: <code>{$contactrow['username']}</code>";
+        echo ", <a href='forgotpwd.php?action=sendpwd&amp;contactid=".urlencode($contactrow['id'])."'>{$strSendPassword}</a>";
+        // echo ", password: <code>".$contactrow['password']."</code>";  ## Passwords no longer controlled from SiT INL 23Nov04
+        echo "</td></tr>\n";
+    }
     echo "<tr><th>{$strIncidents}:</th><td>";
     $openincidents = contact_count_open_incidents($id);
     $totalincidents = contact_count_incidents($id);
@@ -199,20 +203,20 @@ while ($contactrow = mysql_fetch_array($contactresult))
         }
         echo "</td></tr>\n";
     }
-    
+
     if ($contactrow['timestamp_modified'] > 0)
     {
         echo "<tr><th>{$strLastUpdated}</th>";
         echo "<td>".ldate($CONFIG['dateformat_datetime'],$contactrow['timestamp_modified'])."</td></tr>\n";
     }
-    
+
     echo "<tr><th>{$strInventoryItems}</th>";
     echo "<td>".contact_count_inventory_items($id)." ";
     echo "<a href='inventory.php?site=".contact_siteid($id)."'>{$strSeeHere}";
     echo "</td></tr>";
     plugin_do('contact_details');
 
-   
+
     echo "</table>\n";
 
     echo "<p align='center'>";
