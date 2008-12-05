@@ -11275,7 +11275,7 @@ function cfgVarInput($setupvar, $showvarnames = FALSE)
                 if ($i == $value) $html .= " selected='selected'";
                 $html .= ">{$i}</option>\n";
             }
-            $html .= "</select>";
+            $html .= "</select>%";
         break;
 
         case 'interfacestyleselect':
@@ -11284,6 +11284,10 @@ function cfgVarInput($setupvar, $showvarnames = FALSE)
 
         case 'userselect':
             $html .= user_drop_down($setupvar, $value, FALSE, FALSE, '', TRUE);
+        break;
+
+        case 'number':
+            $html .= "<input type='text' name='$setupvar' size='7' value=\"{$value}\" />";
         break;
 
         case 'text':
@@ -11297,6 +11301,7 @@ function cfgVarInput($setupvar, $showvarnames = FALSE)
                 $html .= "<textarea name='$setupvar' cols='60' rows='10'>{$value}</textarea>";
             }
     }
+    if (!empty($CFGVAR[$setupvar]['unit'])) $html .= " {$CFGVAR[$setupvar]['unit']}";
     if ($setupvar=='db_password' AND $_REQUEST['action']!='reconfigure' AND $value != '') $html .= "<p class='info'>The current password setting is not shown</p>";
     $html .= "</div>";
     $html .= "<br />\n";
