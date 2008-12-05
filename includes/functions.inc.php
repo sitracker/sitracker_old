@@ -359,10 +359,11 @@ function user_id($username, $password)
 
 
 /**
-    * Return a users password
-    * @author Ivan Lucas
-    * @param id int. User ID
-    * @note this is an MD5 hash
+  * Return a users password
+  * @author Ivan Lucas
+  * @param int $id User ID
+  * @returns
+  * @note this is an MD5 hash
 */
 function user_password($id)
 {

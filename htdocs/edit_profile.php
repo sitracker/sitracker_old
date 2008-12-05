@@ -29,7 +29,10 @@ if (empty($_REQUEST['userid']) OR $_REQUEST['userid'] == 'current' OR $edituserp
 }
 else
 {
-    $edituserid = cleanvar($_REQUEST['userid']);
+    if (!empty($_REQUEST['userid']))
+    {
+        $edituserid = cleanvar($_REQUEST['userid']);
+    }
 }
 
 
@@ -74,11 +77,11 @@ if (empty($mode))
 
     echo "</tr>";
     echo "<tr><th>{$strRealName}</th><td>";
-    if ( $using_ldap && array_key_exists("realname",$attrmap) ) 
-    { 
-        echo "<input name='realname' type='hidden' value=\"{$user->realname}\" '/>{$user->realname}"; 
-    } 
-    else 
+    if ( $using_ldap && array_key_exists("realname",$attrmap) )
+    {
+        echo "<input name='realname' type='hidden' value=\"{$user->realname}\" '/>{$user->realname}";
+    }
+    else
     {
         echo "<input class='required' maxlength='50' name='realname' size='30'";
         echo " type='text' value=\"{$user->realname}\" />";
@@ -87,11 +90,11 @@ if (empty($mode))
     echo "</td></tr>\n";
     echo "<tr><th>{$strJobTitle}</th>";
     echo "<td>";
-    if ( $using_ldap && array_key_exists("jobtitle",$attrmap) ) 
-    { 
-        echo $user->title; 
+    if ( $using_ldap && array_key_exists("jobtitle",$attrmap) )
+    {
+        echo $user->title;
     }
-    else 
+    else
     {
         echo "<input maxlength='50' name='jobtitle' size='30' type='text' ";
         echo "value=\"{$user->title}\" />";
@@ -162,11 +165,11 @@ if (empty($mode))
     echo "<tr><th colspan='2'>{$strContactDetails}</th></tr>";
     echo "<tr id='email'><th>{$strEmail}</th>";
     echo "<td>";
-    if ( $using_ldap && array_key_exists("email",$attrmap) ) 
-    { 
-        echo "<input name='email' type='hidden'value='".strip_tags($user->email)."' />{$user->email}"; 
-    } 
-    else 
+    if ( $using_ldap && array_key_exists("email",$attrmap) )
+    {
+        echo "<input name='email' type='hidden'value='".strip_tags($user->email)."' />{$user->email}";
+    }
+    else
     {
         echo "<input class='required' maxlength='50' name='email' size='30' ";
         echo "type='text' value='".strip_tags($user->email)."' />";
@@ -174,31 +177,31 @@ if (empty($mode))
     }
     echo "</td></tr>";
     echo "<tr id='phone'><th>{$strTelephone}</th><td>";
-    if ( $using_ldap && array_key_exists("phone",$attrmap) ) 
-    { 
-        echo $user->phone; 
+    if ( $using_ldap && array_key_exists("phone",$attrmap) )
+    {
+        echo $user->phone;
     }
-    else 
+    else
     {
         echo "<input maxlength='50' name='phone' size='30' type='text' value='".strip_tags($user->phone)."' />";
     }
     echo "</td></tr>";
     echo "<tr><th>{$strFax}</th><td>";
-    if ( $using_ldap && array_key_exists("fax",$attrmap) ) 
-    { 
-        echo $user->fax; 
+    if ( $using_ldap && array_key_exists("fax",$attrmap) )
+    {
+        echo $user->fax;
     }
-    else 
+    else
     {
         echo "<input maxlength='50' name='fax' size='30' type='text' value='".strip_tags($user->fax)."' />";
     }
     echo "</td></tr>";
     echo "<tr><th>{$strMobile}</th><td>";
-    if ( $using_ldap && array_key_exists("mobile",$attrmap) ) 
-    { 
-        echo $user->mobile; 
+    if ( $using_ldap && array_key_exists("mobile",$attrmap) )
+    {
+        echo $user->mobile;
     }
-    else 
+    else
     {
         echo "<input maxlength='50' name='mobile' size='30' type='text' value='{$user->mobile}' />";
     }
@@ -273,7 +276,7 @@ if (empty($mode))
     plugin_do('edit_profile_form');
 
     // Do not allow password change if using LDAP
-    if ( !$using_ldap ) 
+    if ( !$using_ldap )
     {
         if ($CONFIG['trusted_server'] == FALSE AND $edituserid == $sit[2])
         {
@@ -326,11 +329,6 @@ elseif ($mode=='save')
     $newpassword1 = cleanvar($_POST['newpassword1']);
     $newpassword2 = cleanvar($_POST['newpassword2']);
 
-    if (!empty($_GET['userid']))
-        $userid = intval($_GET['userid']);
-    else
-        $userid = $sit[2];
-
     // Some extra checking here so that users can't edit other peoples profiles
     $edituserpermission = user_permission($sit[2],23); // edit user
     if ($edituserid != $sit[2] AND $edituserpermission == FALSE)
@@ -339,7 +337,7 @@ elseif ($mode=='save')
         exit;
     }
 
-    $sql = "SELECT * FROM `{$dbUsers}` AS u WHERE id = {$userid}";
+    $sql = "SELECT * FROM `{$dbUsers}` AS u WHERE id = {$edituserid}";
     // If users status is set to 0 (disabled) force 'accepting' to no
     if ($status==0) $accepting='No';
 
@@ -353,20 +351,16 @@ elseif ($mode=='save')
     if ($password != '' && $newpassword1 != '' && $newpassword2 != '')
     {
         // verify password fields
-        if ($newpassword1 == $newpassword2 && strtoupper(md5($password)) == strtoupper(user_password($edituserid)))
+        $password = md5($password);
+        if ($newpassword1 == $newpassword2 AND strcasecmp($password, user_password($edituserid)) == 0)
         {
-            $password = md5($password);
             $newpassword1 = md5($newpassword1);
             $newpassword2 = md5($newpassword2);
             $sql = "UPDATE `{$dbUsers}` SET password='$newpassword1' WHERE id='{$edituserid}'";
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
-            if (mysql_affected_rows() < 1)
-            {
-                trigger_error("!Error password change failed - new password: {$newpassword1}", E_USER_WARNING);
-            }
-            $confirm_message = "<h2>{$strPasswordReset}</h2>\n<p align='center'>{$strPleaseWaitRedirect}.</p>"; // FIXME i18n
+            $confirm_message = "<h2>{$strPasswordReset}</h2>";
         }
         else
         {
@@ -386,13 +380,7 @@ elseif ($mode=='save')
         $errors = 1;
         $error_string .= "<h5 class='error'>{$strMustEnterEmail}</h5>\n";
     }
-    else
-    {
-        //FIXME use triggers?
-        ////we updated our email, dimiss notice
-        //$sql = "DELETE FROM `{$dbUserNotices}` WHERE userid={$sit[2]} and noticeid=2";
-        //@mysql_query($sql);
-    }
+
     // Check email address is unique (discount disabled accounts)
     $sql = "SELECT COUNT(id) FROM `{$dbUsers}` WHERE status > 0 AND email='$email'";
     $result = mysql_query($sql);
@@ -415,7 +403,6 @@ elseif ($mode=='save')
             $collapse = 'false';
         }
 
-        //$oldstatus = user_status($userid);
         $oldstatus = $userdetails['status'];
 
         if (!empty($emailonreassign))
@@ -478,15 +465,17 @@ elseif ($mode=='save')
             plugin_do('save_profile_form');
 
             // password was not changed
-            if (!isset($confirm_message)) html_redirect($redirecturl);
+            if (isset($confirm_message)) html_redirect($redirecturl, TRUE, $confirm_message);
+            else html_redirect($redirecturl);
         }
     }
     else
     {
-        // print error string
+        html_redirect($redirecturl, FALSE, $error_string);
+/*        // print error string
         include ('htmlheader.inc.php');
         echo $error_string;
-        include ('htmlfooter.inc.php');
+        include ('htmlfooter.inc.php');*/
     }
 }
 elseif ($mode == 'savesessionlang')
