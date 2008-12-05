@@ -27,13 +27,13 @@ require_once('base.inc.php');
  * @return int|bool Returns FALSE on failure, an incident ID on success
  * @author Kieran Hogg
  */
-function create_incident($title, $contact, $servicelevel, $contract,
-                             $product, $software, $priority = 1, $owner = 0,
-                             $status = 1, $productversion = '',
-                             $productservicepacks = '', $opened = '',
-                             $lastupdated = '')
+function create_incident($title, $contact, $servicelevel, $contract, $product,
+                         $software, $priority = 1, $owner = 0, $status = 1, 
+                         $productversion = '', $productservicepacks = '', 
+                         $opened = '', $lastupdated = '')
 {
     global $now;
+    
     if (empty($opened))
     {
         $opened = $now;
@@ -43,6 +43,7 @@ function create_incident($title, $contact, $servicelevel, $contract,
     {
         $lastupdated = $now;
     }
+    
     $sql  = "INSERT INTO `{$dbIncidents}` (title, owner, contact, priority, ";
     $sql .= "servicelevel, status, maintenanceid, product, softwareid, ";
     $sql .= "productversion, productservicepacks, opened, lastupdated) ";
