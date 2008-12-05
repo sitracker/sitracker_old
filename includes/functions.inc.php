@@ -11306,6 +11306,25 @@ function cfgVarInput($setupvar, $showvarnames = FALSE)
 }
 
 
+/**
+ * Save configuration
+ * @param array $setupvars. An array of setup variables $setupvars['setting'] = 'foo';
+ * @todo  TODO, need to make setup.php use this  INL 5Dec08
+ * @author Ivan Lucas
+**/
+function cfgSave($setupvars)
+{
+    global $dbConfig;
+    foreach ($setupvars AS $key => $value)
+    {
+        $sql = "REPLACE INTO `{$dbConfig}` (`config`, `value`) VALUES ('{$key}', '{$value}')";
+        mysql_query($sql);
+        if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+    }
+    return TRUE;
+}
+
+
 
 /*
 * DEPRECATED THOUGH STILL CALLED
