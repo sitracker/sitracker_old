@@ -36,7 +36,7 @@ $xml .= "<pubDate>".date('r',$now)."</pubDate>";
 $xml .= "<lastBuildDate>".date('r',$now)."</lastBuildDate>";
 $xml .= '<docs>http://blogs.law.harvard.edu/tech/rss</docs>';
 $xml .= "<generator>{$CONFIG['application_name']} {$application_version_string}</generator>";
-$xml .= "<webMaster>{$CONFIG['support_manager_email']}</webMaster>";
+$xml .= "<webMaster>".user_email($CONFIG['support_manager'])."</webMaster>";
 
 while ($incident = mysql_fetch_object($result))
 {

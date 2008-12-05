@@ -104,7 +104,10 @@ $CFGCAT['kb'] = array('kb_enabled',
 $CFGCAT['outboundemail'] = array('sales_email');
 $CFGCAT['journal'] = array('journal_loglevel', 'journal_purge_after');
 
-$CFGCAT['other'] = array('enable_spellchecker', 'main_dictionary_file', 'custom_dictionary_file');
+$CFGCAT['other'] = array('enable_spellchecker',
+                         'main_dictionary_file',
+                         'custom_dictionary_file',
+                         'support_manager');
 
 
 
@@ -282,7 +285,8 @@ $CFGVAR['spam_forward']['title'] = 'Email address to forward spam messages thata
 $CFGVAR['start_working_day']['help'] = 'Seconds since midnight';
 $CFGVAR['start_working_day']['title'] = 'Time of the start of the working day (in seconds)';
 $CFGVAR['support_email']['title'] = 'Emails sent by SiT will come from this address';
-$CFGVAR['support_manager_email']['title'] = 'The email address of the person incharge of your support service';
+$CFGVAR['support_manager']['title'] = 'The user ID of the person who is in charge of your support service';
+$CFGVAR['support_manager']['type'] = 'userselect';
 $CFGVAR['tag_icons']['help'] = "Set up an array to use an icon for specified tags, format: array('tag' => 'icon', 'tag2' => 'icon2')";
 $CFGVAR['tag_icons']['title'] = "An array of tags and associated icons";
 $CFGVAR['tasks_enabled']['help'] = "TRUE for enabled, FALSE for disabled";

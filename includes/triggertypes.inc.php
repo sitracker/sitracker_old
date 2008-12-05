@@ -67,15 +67,15 @@ array('name' => $strIncidentReviewDue,
       'required' => array('incidentid', 'time'),
       'params' => array('incidentid'),
       );
-      
-$triggerarray['TRIGGER_INCIDENT_UPDATED_EXTERNAL'] = 
+
+$triggerarray['TRIGGER_INCIDENT_UPDATED_EXTERNAL'] =
 array('name' => $strIncidentUpdatedExternally,
       'description' => $strIncidentUpdatedExternallyDesc,
       'required' => array('incidentid'),
       'params' => array('incidentid')
       );
 
-$triggerarray['TRIGGER_INCIDENT_UPDATED_INTERNAL'] = 
+$triggerarray['TRIGGER_INCIDENT_UPDATED_INTERNAL'] =
 array('name' => $strIncidentUpdatedInternally,
       'description' => $strIncidentUpdatedInternallyDesc,
       'required' => array('incidentid', 'userid'),
@@ -140,7 +140,7 @@ array('name' => $strSitUpgraded,
       'required' => array('applicationversion'),
       'params' => array(),
       );
-      
+
 $triggerarray['TRIGGER_TASK_DUE'] =
 array('name' => $strTaskDue,
       'description' => $strTaskDueDesc,
@@ -585,10 +585,10 @@ array('description' => $strSupportEmailAddress,
 
 $ttvararray['{supportmanageremail}'] =
 array('description' => $strSupportManagersEmailAddress,
-      'replacement' => '$CONFIG[\'support_manager_email\'];'
+      'replacement' => 'user_email($CONFIG[\'support_manager\']);'
       );
-      
-$ttvararray['{taskid}'] = 
+
+$ttvararray['{taskid}'] =
 array('description' => 'ID of the task',
       'replacement' => '$paramarray[\'taskid\']');
 
@@ -629,7 +629,7 @@ $ttvararray['{userid}'][] =
 array('description' => 'UserID the trigger passes',
       'replacement' => '$paramarray[\'userid\'];'
       );
-      
+
 $ttvararray['{userid}'][] =
 array('description' => 'Owner of a task',
       'replacement' => 'task_owner($paramarray[\'taskid\']);',

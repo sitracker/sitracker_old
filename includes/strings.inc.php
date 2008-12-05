@@ -54,7 +54,9 @@ $hmenu[1020] = array (10=> array ( 'perm'=> 4, 'name'=> $strMyProfile, 'url'=>"{
 
 // TODO v3.40 set a permission for triggers
 if (!is_array($hmenu[1030])) $hmenu[1030] = array();
-$hmenu[1030] = array_merge(array (10=> array ( 'perm'=> 22, 'name'=> $strUsers, 'url'=>"{$CONFIG['application_webpath']}manage_users.php", 'submenu'=>"103010"),
+$hmenu[1030] = array_merge(array (
+                      05 => array ( 'perm'=> 22, 'name'=> $strConfigure, 'url'=>"{$CONFIG['application_webpath']}config.php"),
+                      10=> array ( 'perm'=> 22, 'name'=> $strUsers, 'url'=>"{$CONFIG['application_webpath']}manage_users.php", 'submenu'=>"103010"),
                       20=> array ( 'perm'=> 43, 'name'=> $strGlobalSignature, 'url'=>"{$CONFIG['application_webpath']}edit_global_signature.php"),
                       30=> array ( 'perm'=> 22, 'name'=> $strTemplates, 'url'=>"{$CONFIG['application_webpath']}templates.php"),
                       40=> array ( 'perm'=> 22, 'name'=> $strSetPublicHolidays, 'url'=>"{$CONFIG['application_webpath']}calendar.php?type=10&amp;display=year", 'enablevar' => 'holidays_enabled'),

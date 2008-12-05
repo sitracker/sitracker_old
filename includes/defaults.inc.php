@@ -47,7 +47,10 @@ $CONFIG['home_country'] = 'UNITED KINGDOM';
 
 $CONFIG['support_email'] = 'support@localhost';
 $CONFIG['sales_email'] = 'sales@localhost';
+// support_manager_email is obsolete as of v3.45, use support_manager instead
 $CONFIG['support_manager_email'] = 'support_manager@localhost';
+// The user ID of the person who is in charge of your support service
+$CONFIG['support_manager'] = 1;
 
 // Incident number style
 // 1 = incremental, 2 = YYMMDD + incremental incidents per day
@@ -259,7 +262,7 @@ $CONFIG['default_roleid'] = 3;
 // see www.gravatar.com to learn about gravatars
 $CONFIG['default_gravatar'] = 'identicon';
 
-// Default for whom the billing reports should be mailed to, multiple address can be seperared by commas 
+// Default for whom the billing reports should be mailed to, multiple address can be seperared by commas
 $CONFIG['billing_reports_email'] = 'admin@localhost';
 
 // Allow incidents to be approved against overdrawn services
@@ -281,7 +284,7 @@ $CONFIG['inventory_types']['vnc'] = 'VNC';
 $CONFIG['inventory_types']['webex'] = 'Webex';
 $CONFIG['inventory_types']['workstation'] = 'Workstation/PC';
 
-// Whether it should be possible to adjust a duration of individual activities 
+// Whether it should be possible to adjust a duration of individual activities
 $CONFIG['allow_duration_adjustment'] = FALSE;
 
 // LDAP Config
@@ -305,18 +308,18 @@ $CONFIG["ldap_use_tls"] = FALSE;
 $CONFIG['ldap_dn_base'] = "ou=Users,dc=example,dc=com";
 
 // The LDAP user attribute
-$CONFIG['ldap_user_attr'] = "uid"; 
+$CONFIG['ldap_user_attr'] = "uid";
 
 // Mapping between SIT and ldap attributes. Do not change the keys only the values.
 // Valid key values are: realname, forenames, jobtitle, email, mobile, fax, phone
 
-$CONFIG['ldap_attr_map'] = array("realname" => "cn", "jobtitle" => "title", 
-                                 "email" => "mail", "phone" => "phone", 
+$CONFIG['ldap_attr_map'] = array("realname" => "cn", "jobtitle" => "title",
+                                 "email" => "mail", "phone" => "phone",
                                  "forenames" => "givenname", "surname" => "surname");
 
 // Default user values
 // LDAP user status (1 = In Office)
-$CONFIG['ldap_default_user_status'] = 1; 
+$CONFIG['ldap_default_user_status'] = 1;
 
 // LDAP group for SIT users
 $CONFIG["ldap_user_group"] = "cn=situsers,ou=Groups,dc=example,dc=com";
@@ -336,7 +339,7 @@ $CONFIG["ldap_customer_group_attr"] = "memberUid";
 
 // Default Customer values
 // 1 is the example site in the default install
-$CONFIG["ldap_default_customer_siteid"] = 1; 
+$CONFIG["ldap_default_customer_siteid"] = 1;
 
 // This attempts to create the customer record automatically using LDAP
 // when creating an incident from an email in the holding queue.

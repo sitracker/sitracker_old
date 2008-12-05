@@ -2633,7 +2633,7 @@ function emailtype_replace_specials($string, $incidentid=0, $userid=0)
                     21 => $application_version_string,
                     22 => $CONFIG['support_email'],
                     23 => $CONFIG['sales_email'],
-                    24 => $CONFIG['support_manager_email'],
+                    24 => user_email($CONFIG['support_manager']),
                     25 => user_signature($userid),
                     26 => global_signature(),
                     27 => date("jS F Y"),
@@ -11280,6 +11280,10 @@ function cfgVarInput($setupvar, $showvarnames = FALSE)
 
         case 'interfacestyleselect':
             $html .= interfacestyle_drop_down($setupvar, $value);
+        break;
+
+        case 'userselect':
+            $html .= user_drop_down($setupvar, $value, FALSE, FALSE, '', TRUE);
         break;
 
         case 'text':
