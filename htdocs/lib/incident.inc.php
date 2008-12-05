@@ -10,8 +10,23 @@
 require_once('base.inc.php');
 
 /**
-    * @todo Document this function ;)
-*/
+ * Creates a new incident
+ * @param string $title The title of the incident
+ * @param int $contact The ID of the incident contact
+ * @param int $servicelevel The ID of the servicelevel to log the incident under
+ * @param int $contract The ID of the contract to log the incident under
+ * @param int $product The ID of the product the incident refers to
+ * @param int $skill The ID of the skill the incident refers to
+ * @param int $priority (Optional) Priority of the incident (Default: 1 = Low)
+ * @param int $owner (Optional) Owner of the incident (Default: 0 = SiT)
+ * @param int $status (Optional) Incident status (Default: 1 = Active)
+ * @param string $productversion (Optional) Product version field
+ * @param string $productservicepacks (Optional) Product service packs field
+ * @param int $opened (Optional) Timestamp when incident was opened (Default: now)
+ * @param int $lastupdated (Optional) Timestamp when incident was updated (Default: now)
+ * @return int|bool Returns FALSE on failure, an incident ID on success
+ * @author Kieran Hogg
+ */
 function create_incident($title, $contact, $servicelevel, $contract,
                              $product, $software, $priority = 1, $owner = 0,
                              $status = 1, $productversion = '',
