@@ -103,7 +103,7 @@ switch ($type)
         }
         else
         {
-            echo "{$strWatchingAll} ";
+            echo "{$strViewingAllIncidents} ";
         }
 
         switch ($queue)

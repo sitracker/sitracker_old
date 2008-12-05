@@ -1537,6 +1537,7 @@ $strViewSite = 'View Site';
 $strViewTask = 'View Task';
 $strViewTasks = 'View Tasks';
 $strViewUsers = 'View Users';
+$strViewingAllIncidents = 'Viewing All Incidents';
 $strVisibleToCustomer = 'Visible To Customer';
 $strVisibility = 'Visibility';
 
@@ -1549,7 +1550,6 @@ $strWatchAddSet = 'Add new set of watched incidents';
 $strWatchDeleteFailed = 'Delete watch failed';
 $strWatchIncidentsAdded = 'Watch Incidents added';
 $strWatchIncidentsRemovalSucceded = 'Watch incidents removal succeded';
-$strWatchingAll = 'Watching All';
 $strWebupdate = 'Web update';
 # Short for 'Wednesday'
 $strWed = 'Wed';
