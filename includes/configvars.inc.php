@@ -14,7 +14,7 @@
 // TODO we need some sort of hierarchy for the config categories
 // as this is way too many
 
-$CFGTAB['application'] = array('appmain', 'theming', 'system', 'other');
+$CFGTAB['application'] = array('appmain', 'theming', 'system', 'ldap', 'other');
 $CFGTAB['email'] = array('inboundemail', 'outboundemail');
 $CFGTAB['features'] = array('incidents', 'portal', 'ftp', 'kb', 'sla', 'holidays', 'feedback');
 $CFGTAB['system'] = array('paths', 'locale', 'journal');
@@ -53,11 +53,13 @@ $CFGCAT['locale'] = array('home_country',
                           'dateformat_time',
                           'default_i18n');
 
-$CFGCAT['sla'] = array('end_working_day',
+$CFGCAT['sla'] = array('start_working_day',
+                       'end_working_day',
                        'critical_threshold',
                        'urgent_threshold',
                        'notice_threshold',
-                       'regular_contact_days');
+                       'regular_contact_days',
+                       'working_days');
 
 
 $CFGCAT['theming'] = array('default_interface_style', 'default_css_url', 'default_gravatar');
@@ -98,6 +100,27 @@ $CFGCAT['feedback'] = array('feedback_enabled',
                             'feedback_form',
                             'feedback_max_score',
                             'no_feedback_contracts');
+
+$CFGCAT['ldap'] = array('use_ldap',
+                        'ldap_host',
+                        'ldap_protocol',
+                        'ldap_bind_user',
+                        'ldap_bind_pass',
+                        'ldap_use_tls',
+                        'ldap_dn_base',
+                        'ldap_user_attr',
+                        'ldap_attr_map',
+                        'ldap_default_user_status',
+                        'ldap_user_group',
+                        'ldap_user_group_attr',
+                        'ldap_admin_group',
+                        'ldap_admin_group_attr',
+                        'ldap_manager_group',
+                        'ldap_manager_group_attr',
+                        'ldap_customer_group',
+                        'ldap_customer_group_attr',
+                        'ldap_default_customer_siteid',
+                        'ldap_autocreate_customer');
 
 $CFGCAT['kb'] = array('kb_enabled',
                       'kb_disclaimer_html',
@@ -250,10 +273,12 @@ $CFGVAR['enable_spellchecker']['type'] = 'select';
 
 $CFGVAR['end_working_day']['help'] = 'Seconds since midnight';
 $CFGVAR['end_working_day']['title'] = 'Time of the end of the working day (in seconds)';
+$CFGVAR['end_working_day']['type'] = 'number';
+$CFGVAR['end_working_day']['unit'] = $strSeconds;
 
 $CFGVAR['error_logfile']['help'] = "This file must be writable of course";
-$CFGVAR['error_logfile']['title'] = "Path to a file to log error messages"
-;
+$CFGVAR['error_logfile']['title'] = "Path to a file to log error messages";
+
 $CFGVAR['error_notavailable_url']['title']="The URL to redirect too for pages that do not exist yet.";
 
 $CFGVAR['feedback_enabled']['help'] = "TRUE for enabled, FALSE for disabled";
@@ -313,6 +338,56 @@ $CFGVAR['kb_enabled']['type'] = 'select';
 
 $CFGVAR['kb_id_prefix']['help'] = 'inserted before the ID to give it uniqueness';
 $CFGVAR['kb_id_prefix']['title'] = 'Knowledgebase ID prefix';
+
+$CFGVAR['ldap_admin_group']['title'] = 'LDAP group for SIT admins';
+
+$CFGVAR['ldap_admin_group_attr']['title'] = 'LDAP group attribute for SIT admins';
+
+$CFGVAR['ldap_attr_map']['title'] = 'LDAP Attribute Map';
+$CFGVAR['ldap_attr_map']['help'] = 'Mapping between SIT and ldap attributes. Do not change the keys only the values Valid key values are: realname, forenames, jobtitle, email, mobile, fax, phone';
+
+$CFGVAR['ldap_autocreate_customer']['title'] = 'Auto create customer';
+$CFGVAR['ldap_autocreate_customer']['help'] = 'This attempts to create the customer record automatically using LDAP when creating an incident from an email in the holding queue.';
+$CFGVAR['ldap_autocreate_customer']['options'] = 'TRUE|FALSE';
+$CFGVAR['ldap_autocreate_customer']['type'] = 'select';
+
+$CFGVAR['ldap_bind_user']['title'] = 'The user for binding to the LDAP host';
+
+$CFGVAR['ldap_bind_pass']['title'] = 'The password for binding to the LDAP host';
+
+$CFGVAR['ldap_customer_group']['title'] = 'LDAP Customer Group';
+
+$CFGVAR['ldap_customer_group_attr']['title'] = 'LDAP Customer Group attribute';
+
+
+$CFGVAR['ldap_default_customer_siteid']['title'] = 'LDAP default customer site ID';
+$CFGVAR['ldap_default_customer_siteid']['type'] = 'number';
+// TODO site select
+
+$CFGVAR['ldap_default_user_status']['title'] = 'LDAP default user status';
+$CFGVAR['ldap_default_user_status']['type'] = 'number';
+// TODO user status select
+
+$CFGVAR['ldap_dn_base']['title'] = 'The LDAP Base DN for user lookups';
+
+$CFGVAR['ldap_host']['title'] = 'LDAP Host Name';
+
+$CFGVAR['ldap_manager_group']['title'] = 'LDAP group for SIT admins';
+
+$CFGVAR['ldap_manager_group_attr']['title'] = 'LDAP group attribute for SIT admins';
+
+$CFGVAR['ldap_protocol']['title'] = 'LDAP Protocol version to use';
+$CFGVAR['ldap_protocol']['type'] = 'number';
+
+$CFGVAR['ldap_use_tls']['title'] = 'TLS. TRUE = start TLS, FALSE = use unencrypted';
+$CFGVAR['ldap_use_tls']['options'] = 'TRUE|FALSE';
+$CFGVAR['ldap_use_tls']['type'] = 'select';
+
+$CFGVAR['ldap_user_attr']['title'] = 'The LDAP user attribute';
+
+$CFGVAR['ldap_user_group']['title'] = 'LDAP group for SIT users';
+
+$CFGVAR['ldap_user_group_attr']['title'] = 'LDAP group attribute for SIT users';
 
 $CFGVAR['licensefile']['title'] = 'Path to the License file';
 
@@ -383,6 +458,8 @@ $CFGVAR['spam_forward']['title'] = 'Email address to forward spam messages thata
 
 $CFGVAR['start_working_day']['help'] = 'Seconds since midnight';
 $CFGVAR['start_working_day']['title'] = 'Time of the start of the working day (in seconds)';
+$CFGVAR['start_working_day']['type'] = 'number';
+$CFGVAR['start_working_day']['unit'] = $strSeconds;
 
 $CFGVAR['support_email']['title'] = 'Emails sent by SiT will come from this address';
 
@@ -415,11 +492,14 @@ $CFGVAR['upload_max_filesize']['title'] = "The maximum file upload size (in byte
 $CFGVAR['upload_max_filesize']['type'] = 'number';
 $CFGVAR['upload_max_filesize']['unit'] = $strBytes;
 
+$CFGVAR['use_ldap']['title'] = "Set to TRUE for LDAP authentication, or FALSE for standard database authentication";
+$CFGVAR['use_ldap']['options'] = 'TRUE|FALSE';
+$CFGVAR['use_ldap']['type'] = 'select';
+
 $CFGVAR['urgent_threshold']['help'] = 'Enter a number between 0 and 100.';
 $CFGVAR['urgent_threshold']['title'] = 'Flag items as urgent when they are this percentage complete.';
 $CFGVAR['urgent_threshold']['type'] = 'percent';
 
 $CFGVAR['working_days']['title'] = 'Array containing working days (0=Sun, 1=Mon... 6=Sat)';
-
 
 ?>

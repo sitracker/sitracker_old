@@ -295,14 +295,14 @@ $CONFIG['use_ldap'] = FALSE;
 $CONFIG['ldap_host'] = "";
 
 // Ldap Protocol version to use
-$CONFIG["ldap_protocol"] = 3;
+$CONFIG['ldap_protocol'] = 3;
 
 // The credentials for binding to the ldap host
-$CONFIG["ldap_bind_user"] = "";
-$CONFIG["ldap_bind_pass"] = "";
+$CONFIG['ldap_bind_user'] = "";
+$CONFIG['ldap_bind_pass'] = "";
 
 // TLS. TRUE = start TLS, FALSE = use unencrypted
-$CONFIG["ldap_use_tls"] = FALSE;
+$CONFIG['ldap_use_tls'] = FALSE;
 
 // The LDAP Base DN for user lookups
 $CONFIG['ldap_dn_base'] = "ou=Users,dc=example,dc=com";
