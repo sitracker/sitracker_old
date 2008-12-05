@@ -39,7 +39,7 @@ $application_version_string = trim("v{$application_version} {$application_revisi
 if ($application_revision == 'svn')
 {
     // Add the svn revision number
-    preg_match('/([0-9]+)/','$LastChangedRevision: 4343 $',$revision);
+    preg_match('/([0-9]+)/','$LastChangedRevision$',$revision);
     $application_revision .= $revision[0];
 }
 
