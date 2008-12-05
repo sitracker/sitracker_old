@@ -35,6 +35,27 @@ Comments can also provide notes for future work, including:
     //             to be removed completely
 
 
+Use phpDoc (http://www.phpdoc.org/) format to document functions:
+e.g.
+
+/**
+ * A function to create foo's out of bar's
+ *
+ * long description long description long description long description
+ * long description long description long description long description
+ * long description long description long description long description
+ * long description long description long description long description
+ * @author Joe Public
+ * @param int $bar An existing bar
+ * @return int A brand new foo
+ */
+function foobar($bar)
+{
+    ...
+}
+
+
+
 Indenting
 ---------
 Tabstop is 4 spaces. No tabs, only spaces.
