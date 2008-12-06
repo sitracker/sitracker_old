@@ -18,6 +18,25 @@ require ('functions.inc.php');
 // This page requires authentication
 require ('auth.inc.php');
 
+function mime_type($file)
+{
+    if (function_exists("mime_content_type"))
+    {
+        return mime_content_type($file);
+    }
+    elseif (DIRECTORY_SEPARATOR == '/') 
+    {
+        //This only works on *nix, but better than failing
+        $file = escapeshellarg($file);
+        $mime = shell_exec("file -bi " . $file);
+        return $mime;
+    }
+    else
+    {
+        return 'application/octet-stream';
+    }
+}
+
 // External variables
 $id = cleanvar(intval($_GET['id']));
 
@@ -83,7 +102,7 @@ elseif ($access == TRUE)
         $fp = fopen($file_fspath, 'r');
         if ($fp && ($file_size !=-1))
         {
-            header("Content-Type: ".mime_content_type($file_fspath)."\r\n");
+            header("Content-Type: ".mime_type($file_fspath)."\r\n");
             header("Content-Length: {$file_size}\r\n");
             header("Content-Disposition-Type: attachment\r\n");
             header("Content-Disposition: filename={$file_fspath}\r\n");
