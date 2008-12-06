@@ -17,10 +17,26 @@
 // Most are legacy and can replaced by improving the pages that call them to
 // use SQL joins.
 
+@include ('set_include_path.inc.php');
 include ('classes.inc.php');
 include ('ldap.inc.php');
-include ('../htdocs/lib/base.inc.php');
+include ($lib_path . 'base.inc.php');
 
+// function stripslashes_array($data)
+// {
+//     if (is_array($data))
+//     {
+//         foreach ($data as $key => $value)
+//         {
+//             $data[$key] = stripslashes_array($value);
+//         }
+//         return $data;
+//     }
+//     else
+//     {
+//         return stripslashes($data);
+//     }
+// }
 $ldap_conn = "";
 
 if (version_compare(PHP_VERSION, "5.1.0", ">="))
@@ -3252,57 +3268,69 @@ function sit_error_handler($errno, $errstr, $errfile, $errline, $errcontext)
         if ($errno & $notices) $class = 'info';
         elseif ($errno & $warnings) $class = 'warning';
         else $class='error';
-        echo "<p class='{$class}'><strong>{$errortype[$errno]} [{$errno}]</strong><br />";
-        echo "{$errstr} in {$errfile} @ line {$errline}";
-        if ($CONFIG['debug'])
+        $backtrace = debug_backtrace();
+        if (php_sapi_name() != 'cli')
         {
-            $backtrace = debug_backtrace();
-            echo "<br /><strong>Backtrace</strong>:";
-            foreach ($backtrace AS $trace)
+            echo "<p class='{$class}'><strong>{$errortype[$errno]} [{$errno}]</strong><br />";
+            echo "{$errstr} in {$errfile} @ line {$errline}";
+            if ($CONFIG['debug'])
             {
-                if (!empty($trace['file']))
+                
+                echo "<br /><strong>Backtrace</strong>:";
+                foreach ($backtrace AS $trace)
                 {
-                    echo "<br />{$trace['file']} @ line {$trace['line']}";
-                    if (!empty($trace['function']))
+                    if (!empty($trace['file']))
                     {
-                        echo " {$trace['function']}() ";
-//                         foreach ($trace['args'] AS $arg)
-//                         {
-//                             echo "$arg &bull; ";
-//                         }
+                        echo "<br />{$trace['file']} @ line {$trace['line']}";
+                        if (!empty($trace['function']))
+                        {
+                            echo " {$trace['function']}() ";
+    //                         foreach ($trace['args'] AS $arg)
+    //                         {
+    //                             echo "$arg &bull; ";
+    //                         }
+                        }
                     }
                 }
-            }
-            if (!empty($CONFIG['error_logfile']) AND is_writable($CONFIG['error_logfile']))
-            {
-                $fp=fopen($CONFIG['error_logfile'], 'a+');
-                if ($errno != E_NOTICE)
+                if (!empty($CONFIG['error_logfile']) AND is_writable($CONFIG['error_logfile']))
                 {
-                    fwrite($fp, date('r')." {$errortype[$errno]} [{$errno}] {$errstr} (in line {$errline} of file {$errfile})\n");
+                    $fp=fopen($CONFIG['error_logfile'], 'a+');
+                    if ($errno != E_NOTICE)
+                    {
+                        fwrite($fp, date('r')." {$errortype[$errno]} [{$errno}] {$errstr} (in line {$errline} of file {$errfile})\n");
+                    }
+                    if ($errno==E_ERROR
+                        || $errno==E_USER_ERROR
+                        || $errno==E_CORE_ERROR
+                        || $errno==E_CORE_WARNING
+                        || $errno==E_COMPILE_ERROR
+                        || $errno==E_COMPILE_WARNING) fwrite($fp, "Context:\n".print_r($errcontext, TRUE)."\n----------\n\n");
+                    fclose($fp);
                 }
-                if ($errno==E_ERROR
-                    || $errno==E_USER_ERROR
-                    || $errno==E_CORE_ERROR
-                    || $errno==E_CORE_WARNING
-                    || $errno==E_COMPILE_ERROR
-                    || $errno==E_COMPILE_WARNING) fwrite($fp, "Context:\n".print_r($errcontext, TRUE)."\n----------\n\n");
-                fclose($fp);
+            }
+            echo "</p>";
+            // Tips, to help diagnose errors
+            if (strpos($errstr, 'Unknown column') !== FALSE OR
+                preg_match("/Table '(.*)' doesn't exist/", $errstr))
+            {
+                echo "<p class='tip'>The SiT schema may need updating to fix this problem.";
+                if (user_permission($sit[2], 22)) echo "Visit <a href='setup.php'>Setup</a>"; // Only show this to admin
+                echo "</p>";
+            }
+
+            if (strpos($errstr, 'You have an error in your SQL syntax') !== FALSE OR
+                strpos($errstr, 'Query Error Incorrect table name') !== FALSE)
+            {
+                echo "<p class='tip'>You may have found a bug in SiT, please <a href=\"{$CONFIG['bugtracker_url']}\">report it</a>.</p>";
             }
         }
-        echo "</p>";
-        // Tips, to help diagnose errors
-        if (strpos($errstr, 'Unknown column') !== FALSE OR
-            preg_match("/Table '(.*)' doesn't exist/", $errstr))
+        else
         {
-            echo "<p class='tip'>The SiT schema may need updating to fix this problem.";
-            if (user_permission($sit[2], 22)) echo "Visit <a href='setup.php'>Setup</a>"; // Only show this to admin
-            echo "</p>";
-        }
-
-        if (strpos($errstr, 'You have an error in your SQL syntax') !== FALSE OR
-            strpos($errstr, 'Query Error Incorrect table name') !== FALSE)
-        {
-            echo "<p class='tip'>You may have found a bug in SiT, please <a href=\"{$CONFIG['bugtracker_url']}\">report it</a>.</p>";
+            trigger("HIDDEN_ERROR", array('errortype' => $errortype[$errno],
+                                          'errorstring' => $errstr,
+                                          'errorfile' => $errfile,
+                                          'errorline' => $errline,
+                                          'backtrace' => $backtrace));
         }
     }
 }

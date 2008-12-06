@@ -11,51 +11,22 @@
 //       with the function in fetchSitMail.class.php
 // Note2: to be called from auto.php
 
-require ('mime_email.class.php');
+@include ('set_include_path.inc.php');
+require ($lib_path . 'mime_parser.inc.php');
+require ($lib_path . 'rfc822_addresses.inc.php');
 require ('fetchSitMail.class.php');
+
 if (realpath(__FILE__) == realpath($_SERVER['SCRIPT_FILENAME']))
 {
-    @include ('set_include_path.inc.php');
     require ('db_connect.inc.php');
     include ('strings.inc.php');
     require ('functions.inc.php');
+    require ($lib_path . 'base.inc.php');
 }
 else
 {
     global $CONFIG, $dbFiles, $dbUpdates, $dbTempIncoming, $dbIncidents, $now;
-}
-
-//FIXME
-$fsdelim = (strstr($CONFIG['attachment_fspath'],"/")) ? "/" : "\\";
-
-function subjectdecode($subject)
-{
-    if (ereg("=\?.{0,}\?[Bb]\?", $subject))
-    {
-        $subject = split("=\?.{0,}\?[Bb]\?", $subject);
-
-        foreach ($subject as $key => $value)
-        {
-            if (ereg("\?=",$value))
-            {
-                $arrTemp = split("\?=", $value);
-                $arrTemp[0] = base64_decode($arrTemp[0]);
-                $subject[$key ]= join("", $arrTemp);
-            }
-        }
-        $subject=join("",$subject);
-    }
-
-    if (ereg("=\?.{0,}\?Q\?",$subject))
-    {
-        $subject = imap_utf7_encode($subject);
-        $subject = quoted_printable_decode($subject);
-        $subject = ereg_replace("=\?.{0,}\?[Qq]\?", "", $subject);
-        $subject = ereg_replace("\?=", "", $subject);
-    }
-    //TODO does this break anything?
-    $subject = str_replace("_", " ", $subject);
-    return trim($subject);
+    $fsdelim = DIRECTORY_SEPARATOR;
 }
 
 //hack as we have no session
@@ -101,7 +72,7 @@ if ($CONFIG['enable_inbound_mail'] == 'MTA')
     $rawemail = '';
     while (!feof($fp))
     {
-        $rawemail[] = fgets($fp); // , 1024
+        $rawemail .= fgets($fp); // , 1024
     }
     fclose($fp);
     $emails = 1;
@@ -122,237 +93,224 @@ else
 {
     return FALSE;
 }
+
 if ($emails > 0)
 {
+    if ($CONFIG['debug'])
+    {
+        echo $emails." emails to fetch\n";
+        echo "Archive folder set to: '.{$CONFIG['email_archive_folder']}\n";
+    }
     for ($i = 0; $i < $emails; $i++)
     {
         if ($CONFIG['enable_inbound_mail'] == 'POP/IMAP')
         {
-            $rawemail = $mailbox->getMessageHeader($i + 1)."\n";
-            $rawemail .= $mailbox->messageBody($i + 1);
-            $rawemail = explode("\n", $rawemail);
+            $rawemail = $mailbox->getMessageHeader($i + 1);
+            $rawemail .= "\n".$mailbox->messageBody($i + 1);
+
             if ($mailbox->servertype == 'imap')
             {
-				if ($CONFIG['debug'])
-				{
-					echo 'Archive folder set to: '.$CONFIG['email_archive_folder'];
-				}
-				if (!empty($CONFIG['email_archive_folder']))
-				{
-					if ($CONFIG['debug'])
-					{
-						echo 'Archiving email\n';
-					}
-					$mailbox->archiveEmail($i + 1);
-				}
-				else
-				{
-                	$mailbox->deleteEmail($i + 1);
-				}
+                if (!empty($CONFIG['email_archive_folder']))
+                {
+                    if ($CONFIG['debug'])
+                    {
+                        echo "Archiving email\n";
+                    }
+                    $mailbox->archiveEmail($i + 1);
+                }
+                else
+                {
+                    $mailbox->deleteEmail($i + 1);
+                }
             }
         }
-        // Create and populate the email object
-        $email = new mime_email;
-        $email->set_emaildata($rawemail);
-        unset($rawemail);
+        
+        $mime = new mime_parser_class();
+        $mime->mbox = 0;
+        $mime->decode_bodies = 1;
+        $mime->ignore_syntax_errors = 1;
 
-        $decoded_email = $email->go_decode();
-        if ($CONFIG['debug']) $email->dump(false);
-        unset($email);
+        $parameters = array('Data'=>$rawemail);
 
-        //fix for ISO-8859-1 subjects
-        $decoded_email->subject = subjectdecode($decoded_email->subject);
+        $mime->Decode($parameters, $decoded);
+        $mime->Analyze($decoded[0], $results);
+        //echo "\n------------------------------\n";
+        //print_r($results);
 
-		// Extract Incident ID
-        if (preg_match('/\[(\d{1,5})\]/',$decoded_email->subject,$m))
+        $from_email = $results[From][0][address];
+        if (!empty($results[From][0][name]))
         {
-       		$incidentid = $m[1];
+            $from_name = $results[From][0][name];
+        }
+        $subject = $results[Subject];
+        $date = $results[Date];
+        $to = $cc = $from = "";
+        switch ($results[Type])
+        {
+            case 'html':
+                $from = $results[From][0][address];
+                
+                foreach ($results[To] as $var)
+                {
+                    $num = sizeof($results[To]);
+                    $cur = 1;
+                    if (!empty($var[name]))
+                    {
+                        $to .= $var[name]. " <".$var[address].">";
+                        if ($cur != $num) $cc .= ", ";
+                    }
+                    else
+                    {
+                        $to .= $var[address];
+                    }
+                }
+                
+                if (is_array($results[Cc]))
+                {
+                    foreach ($results[Cc] as $var)
+                    {
+                        $num = sizeof($results[Cc]);
+                        $cur = 1;
+                        if (!empty($var[name]))
+                        {
+                            $cc .= $var[name]. " <".$var[address].">";
+                            if ($cur != $num) $cc .= ", ";
+                        }
+                        else
+                        {
+                            $cc .= $var[address];
+                        }
+                    }
+                }
+
+                $message = $results[Alternative][0][Data];
+                break;
+                
+            case 'text':
+                foreach ($results[To] as $var)
+                {
+                    $num = sizeof($results[To]);
+                    $cur = 1;
+                    if (!empty($var[name]))
+                    {
+                        $to .= $var[name]. " <".$var[address].">";
+                        if ($cur != $num) $cc .= ", ";
+                    }
+                    else
+                    {
+                        $to .= $var[address];
+                    }
+                }
+                
+                if (is_array($results[Cc]))
+                {
+                    $num = sizeof($results[Cc]);
+                    $cur = 1;
+                    foreach ($results[Cc] as $var)
+                    {
+                        if (!empty($var[name]))
+                        {
+                            $cc .= $var[name]. " <".$var[address].">";
+                            if ($cur != $num) $cc .= ", ";
+                        }
+                        else
+                        {
+                            $cc .= $var[address];
+                        }
+                    }
+                }
+                $message = $results[Data];
+                break;
+            
+            default:
+                break;
+        }
+
+        // Extract Incident ID
+        if (preg_match('/\[(\d{1,5})\]/', $subject, $m))
+        {
+            $incidentid = $m[1];
         }
 
         $customer_visible = 'No';
         $part = 1;
-
-        //** BEGIN WRITE ATTACHMENTS **//
-        $attachment = array();
-
-        if (strcasecmp($decoded_email->contenttype, 'multipart/mixed') OR
-            strcasecmp($decoded_email->contenttype, 'multipart/alternative'))
+        //process attachments
+        if (!empty($incidentid))
         {
-            // This is a MIME message
-            foreach ($decoded_email->mime_block AS $block)
+            $fa_dir = $CONFIG['attachment_fspath'].$incidentid.$fsdelim;
+        }
+        else
+        {
+            $fa_dir = $CONFIG['attachment_fspath']."updates{$fsdelim}";
+        }
+
+        if (!file_exists($fa_dir))
+        {
+            if (!mkdir($fa_dir, 0775, TRUE)) trigger_error("Failed to create incident update attachment directory $fa_dir",E_USER_WARNING);
+        }
+        $attachments = array();
+        if (is_array($results[Attachments]))
+        {
+            foreach ($results[Attachments] as $attachment)
             {
-                if ($CONFIG['debug']) print_r($block);
-                // Do the decoding
-                switch ($block->mime_transferenc)
+                $data = $attachment[Data];
+                $filename = $attachment[FileName];
+                $filename = str_replace(' ', '_', $filename);  
+                if (empty($filename))
                 {
-                    case 'quoted-printable':
-                        $block->mime_content = quoted_printable_decode($block->mime_content);
-                    break;
-
-                    case 'base64':
-                        $block->mime_content = base64_decode($block->mime_content);
-                    break;
-
-                    default:
-                        // Do no decoding
+                    $filename = 'part'.$part;
+                    $part++;
                 }
-                // Extract any inline text into the incident log (if it's HTML strip the tags first)
-                if ($block->mime_contentdisposition == 'inline' OR $block->mime_contentdisposition == '')
+                $sql = "INSERT into `{$GLOBALS['dbFiles']}` ";             
+                $sql .= "( `id` ,`category` ,`filename` ,`size` ,`userid` ,`usertype` ,`shortdescription` ,`longdescription` ,`webcategory` ,`path` ,`downloads` ,`filedate` ,`expiry` ,`fileversion` ,`published` ,`createdby` ,`modified` ,`modifiedby` ) ";                                                             
+                $sql .= "VALUES('', '', '{$filename}', '0', '0', '', '', '', '', '', '', NOW(), '', '', '', '0', '', '')";                                 
+                mysql_query($sql);                                         
+                if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);                                                                              
+                $fileid = mysql_insert_id();                               
+                $attachments[] = array('filename' => $filename, 'fileid' => $fileid);
+                $filename = $fileid."-".$filename;
+
+                if (is_writable($fa_dir))
                 {
-                    switch (strtolower($block->mime_contenttype))
-                    {
-                        case 'text/plain':
-                            $message .= $block->mime_content;
-                        break;
-
-                        case 'text/html':
-                            // Only use HTML version if we have no text version
-                            if (empty($message)) $message = strip_tags($block->mime_content);
-                        break;
-
-                        default:
-                            $fsdelim = (strstr($CONFIG['attachment_fspath'],"/")) ? "/" : "\\";
-                            $filename = str_replace(' ','_',$block->mime_contentdispositionname);
-                            if (empty($filename)) $filename = "part{$part}";
-
-                            $sql = "INSERT into `{$GLOBALS['dbFiles']}` ";
-                            $sql .= "( `id` ,`category` ,`filename` ,`size` ,`userid` ,`usertype` ,`shortdescription` ,`longdescription` ,`webcategory` ,`path` ,`downloads` ,`filedate` ,`expiry` ,`fileversion` ,`published` ,`createdby` ,`modified` ,`modifiedby` ) ";
-                            $sql .= "VALUES('', '', '{$filename}', '0', '0', '', '', '', '', '', '', NOW(), '', '', '', '0', '', '')";
-                            mysql_query($sql);
-                            if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
-                            $fileid = mysql_insert_id();
-
-                            $attachment[] = array('filename' => $filename, 'fileid' => $fileid);
-                            $filename = $fileid."-".$filename;
-
-                            // Write the attachment
-                            if (!empty($incidentid))
-                            {
-                                $fa_dir = $CONFIG['attachment_fspath'].$incidentid.$fsdelim;
-                            }
-                            else
-                            {
-                                $fa_dir = $CONFIG['attachment_fspath']."updates{$fsdelim}";
-                            }
-
-                            if (!file_exists($fa_dir))
-                            {
-                                if (!mkdir($fa_dir, 0775, TRUE)) trigger_error("Failed to create incident update attachment directory $fa_dir",E_USER_WARNING);
-                            }
-
-                            if ($CONFIG['debug'])
-                            {
-                                echo "default:About to write to ".$fa_dir.$filename."\n";
-                            }
-
-                            if (is_writable($fa_dir)) //File doesn't exist yet .$filename
-                            {
-                                $fwp = fopen($fa_dir.$filename, 'a');
-                                // FIXME not actually writing content here yet
-                                //fwrite($fwp, "This is a test\n");
-                                fwrite($fwp, $block->mime_content);
-                                fclose($fwp);
-                            }
-                            elseif ($CONFIG['debug'])
-                            {
-                                echo "NOT WRITABLE $filename\n";
-                            }
-
-                            $sql = "INSERT INTO `{$GLOBALS['dbLinks']}` (`linktype`, `origcolref`, `linkcolref`, `direction`, `userid`) ";
-                            $sql .= "VALUES('5', '{$updateid}', '{$fileid}', 'left', '0') ";
-                            mysql_query($sql);
-                            if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
-                    }
+                    $fwp = fopen($fa_dir.$filename, 'a');
+                    fwrite($fwp, $data);
+                    fclose($fwp);
                 }
-                else
-                {
-                    //FIXME 3.41 functionise this and above without breaking globals etc
-                    $fsdelim = (strstr($CONFIG['attachment_fspath'],"/")) ? "/" : "\\";;
-
-                    $filename = str_replace(' ','_',$block->mime_contentdispositionname);
-                    if (empty($filename)) $filename = "part{$part}";
-
-                    $sql = "INSERT into `{$GLOBALS['dbFiles']}` ";
-                    $sql .= "( `id` ,`category` ,`filename` ,`size` ,`userid` ,`usertype` ,`shortdescription` ,`longdescription` ,`webcategory` ,`path` ,`downloads` ,`filedate` ,`expiry` ,`fileversion` ,`published` ,`createdby` ,`modified` ,`modifiedby` ) ";
-                    $sql .= "VALUES('', '', '{$filename}', '0', '0', '', '', '', '', '', '', NOW(), '', '', '', '0', '', '')";
-                    mysql_query($sql);
-                    if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
-                    $fileid = mysql_insert_id();
-
-                    $attachment[] = array('filename' => $filename, 'fileid' => $fileid);
-                    $filename = $fileid."-".$filename;
-
-                    // Write the attachment
-                    if (!empty($incidentid))
-                    {
-                        $fa_dir = $CONFIG['attachment_fspath'].$incidentid.$fsdelim;
-                    }
-                    else
-                    {
-                        $fa_dir = $CONFIG['attachment_fspath']."updates{$fsdelim}";
-                    }
-
-                    if (!file_exists($fa_dir))
-                    {
-                        if (!mkdir($fa_dir, 0775, TRUE)) trigger_error("Failed to create incident update attachment directory $fa_dir",E_USER_WARNING);
-                    }
-
-                    if ($CONFIG['debug'])
-                    {
-                        echo "else:About to write to ".$fa_dir.$filename."\n";
-                    }
-
-                    if (is_writable($fa_dir)) //File doesn't exist yet .$filename
-                    {
-                        $fwp = fopen($fa_dir.$filename, 'a');
-                        // FIXME not actually writing content here yet
-                        //fwrite($fwp, "This is a test\n");
-                        fwrite($fwp, $block->mime_content);
-                        fclose($fwp);
-                    }
-                    elseif ($CONFIG['debug'])
-                    {
-                        echo "NOT WRITABLE $filename\n";
-                    }
-
-                    $sql = "INSERT INTO `{$GLOBALS['dbLinks']}` (`linktype`, `origcolref`, `linkcolref`, `direction`, `userid`) ";
-                    $sql .= "VALUES('5', '{$updateid}', '{$fileid}', 'left', '0') ";
-                    mysql_query($sql);
-                    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
-                }
+                $sql = "INSERT INTO `{$GLOBALS['dbLinks']}` (`linktype`, `origcolref`, `linkcolref`, `direction`, `userid`) ";
+                $sql .= "VALUES('5', '{$updateid}', '{$fileid}', 'left', '0') ";
+                mysql_query($sql);
+                if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
             }
         }
-        //** END WRITE ATTACHMENTS **//
-
         //** BEGIN UPDATE INCIDENT **//
         $headertext = '';
         // Build up header text to append to the incident log
-        if (!empty($decoded_email->from))
+        if (!empty($from))
         {
-            $headertext = "From: [b]".htmlentities(mysql_real_escape_string($decoded_email->from), ENT_NOQUOTES)."[/b]\n";
+            $headertext = "From: [b]".htmlentities(mysql_real_escape_string($from), ENT_NOQUOTES)."[/b]\n";
         }
 
-        if (!empty($decoded_email->to))
+        if (!empty($to))
         {
-            $headertext .= "To: [b]".htmlentities(mysql_real_escape_string($decoded_email->to))."[/b]\n";
+            $headertext .= "To: [b]".htmlentities(mysql_real_escape_string($to))."[/b]\n";
         }
 
-        if (!empty($decoded_email->cc))
+        if (!empty($cc))
         {
-            $headertext .= "CC: [b]".htmlentities(mysql_real_escape_string($decoded_email->cc))."[/b]\n";
+            $headertext .= "CC: [b]".htmlentities(mysql_real_escape_string($cc))."[/b]\n";
         }
 
-        if (!empty($decoded_email->subject))
+        if (!empty($subject))
         {
-            $headertext .= "Subject: [b]".htmlentities(mysql_real_escape_string($decoded_email->subject))."[/b]\n";
+            $headertext .= "Subject: [b]".mysql_real_escape_string($subject)."[/b]\n";
         }
 
-        $count_attachments = count($attachment);
+        $count_attachments = count($attachments);
         if ($count_attachments >= 1)
         {
             $headertext .= $SYSLANG['strAttachments'].": [b]{$count_attachments}[/b] - ";
             $c = 1;
-            foreach ($attachment AS $att)
+            foreach ($attachments AS $att)
             {
                 $headertext .= "[[att={$att['fileid']}]]{$att['filename']}[[/att]]";
                 if ($c < $count_attachments) $headertext .= ", ";
@@ -363,7 +321,7 @@ if ($emails > 0)
         //** END UPDATE INCIDENT **//
 
         //** BEGIN UPDATE **//
-        if (empty($message)) $message = $decoded_email->emailtextplain;
+        if (empty($message)) $message = $emailtextplain;
         $bodytext = $headertext . "<hr>" . mysql_real_escape_string($message);
 
         // Strip excessive line breaks
@@ -381,7 +339,7 @@ if ($emails > 0)
 
             //new call
             $sql = "INSERT INTO `{$dbTempIncoming}` (updateid, incidentid, `from`, emailfrom, subject, reason, contactid) ";
-            $sql.= "VALUES ('{$updateid}', '0', '{$decoded_email->from_email}', '".mysql_real_escape_string($decoded_email->from_name)."', '".mysql_real_escape_string($decoded_email->subject)."', '{$SYSLANG['strPossibleNewIncident']}', '{$contactid}' )";
+            $sql.= "VALUES ('{$updateid}', '0', '{$from_email}', '".mysql_real_escape_string($from_name)."', '".mysql_real_escape_string($subject)."', '{$SYSLANG['strPossibleNewIncident']}', '{$contactid}' )";
             mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
             trigger('TRIGGER_INCIDENT_UPDATED_EXTERNAL', array('incident' => $incidentid));
@@ -442,7 +400,7 @@ if ($emails > 0)
                         //incident closed
                         $reason = sprintf($SYSLANG['strIncidentXIsClosed'], $oldincidentid);
                         $sql = "INSERT INTO `{$GLOBALS['dbTempIncoming']}` (updateid, incidentid, emailfrom, subject, reason, contactid) ";
-                        $sql.= "VALUES ('{$updateid}', '0', '{$decoded_email->from_name}', '".mysql_real_escape_string($decoded_email->subject)."', '{$reason}', '$contactid' )";
+                        $sql.= "VALUES ('{$updateid}', '0', '{$from_name}', '".mysql_real_escape_string($subject)."', '{$reason}', '$contactid' )";
                         mysql_query($sql);
                         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
                     }
@@ -450,7 +408,7 @@ if ($emails > 0)
                     {
                         //new call
                         $sql = "INSERT INTO `{$dbTempIncoming}` (updateid, incidentid, emailfrom, subject, reason, contactid) ";
-                        $sql.= "VALUES ('{$updateid}', '0', '{$decoded_email->from_name}', '".mysql_real_escape_string($decoded_email->subject)."', '{$SYSLANG['strPossibleNewIncident']}', '{$contactid}' )";
+                        $sql.= "VALUES ('{$updateid}', '0', '{$from_name}', '".mysql_real_escape_string($subject)."', '{$SYSLANG['strPossibleNewIncident']}', '{$contactid}' )";
                         mysql_query($sql);
                         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
                     }
@@ -475,9 +433,9 @@ if ($emails > 0)
 
         // We need to update the links table here as otherwise we have a blank
         //
-        foreach ($attachment AS $att)
+        foreach ($attachments AS $att)
         {
-            $sql = "UPDATE `{$GLOBALS['dbLinks']}` SET origcolref = '{$updateid}'";
+            $sql = "UPDATE `{$GLOBALS['dbLinks']}` SET origcolref = '{$updateid}' ";
             $sql .= "WHERE linkcolref = '{$att['fileid']}' ";
             $sql .= "AND linktype = 5 ";
             mysql_query($sql);
