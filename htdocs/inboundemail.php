@@ -134,22 +134,25 @@ if ($emails > 0)
 
         $mime->Decode($parameters, $decoded);
         $mime->Analyze($decoded[0], $results);
-        //echo "\n------------------------------\n";
-        //print_r($results);
+        $to = $cc = $from = "";
 
         $from_email = $results[From][0][address];
         if (!empty($results[From][0][name]))
         {
             $from_name = $results[From][0][name];
+            $from =  $from_name . " <". $from_email . ">";
         }
+        else
+        {
+            $from = $from_email;
+        }
+        
         $subject = $results[Subject];
         $date = $results[Date];
-        $to = $cc = $from = "";
+   
         switch ($results[Type])
         {
-            case 'html':
-                $from = $results[From][0][address];
-                
+            case 'html':                
                 foreach ($results[To] as $var)
                 {
                     $num = sizeof($results[To]);
@@ -321,7 +324,7 @@ if ($emails > 0)
         //** END UPDATE INCIDENT **//
 
         //** BEGIN UPDATE **//
-        if (empty($message)) $message = $emailtextplain;
+        $message = mb_convert_encoding($message, "UTF-8", strtoupper($results[Encoding]));
         $bodytext = $headertext . "<hr>" . mysql_real_escape_string($message);
 
         // Strip excessive line breaks
