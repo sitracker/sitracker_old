@@ -21,18 +21,21 @@ require ('auth.inc.php');
 
 include ('htmlheader.inc.php');
 
+echo "<div id='aboutsit'>";
+echo "<img src='images/sitlogo_270x100.png' width='270' height='100' alt='SiT! Support Incident Tracker' />";
+echo "<p align='center'>{$strVersion}: {$application_version} {$application_revision}</p>";
+
+
 echo "<table summary='by Ivan Lucas' align='center' width='50%'>\n";
-echo "<tr><td class='shade1' colspan='2'>{$strAbout} {$CONFIG['application_shortname']}&hellip;</td></tr>\n";
-echo "<tr><td class='shade2' colspan='2' style='text-align:center; padding-top: 10px;' >";
+// echo "<tr><td class='shade1' colspan='2'>{$strAbout} {$CONFIG['application_shortname']}&hellip;</td></tr>\n";
+// echo "<tr><td class='shade2' colspan='2' style='text-align:center; padding-top: 10px;' >";
 //background-image: url(images/sitting_man_logo64x64.png); ";
 //echo "background-repeat: no-repeat; background-position: 1% bottom;'>";
-echo "<img src='images/sitlogo_270x100.png' width='270' height='100' alt='SiT! Support Incident Tracker' />";
+
 //echo "<h2>{$CONFIG['application_name']}</h2>";
-echo "<p align='center'>";
-echo "{$strVersion}: {$application_version} {$application_revision}<br />";
 // Reenable when we have schema versions once again
 // echo "{$strSchemaVersion}: ".database_schema_version()."</p><br />";
-echo "</td></tr>\n";
+// echo "</td></tr>\n";
 echo "<tr><td class='shade1' colspan='2'>{$strCredits}:</td></tr>\n";
 $fp = fopen($CONFIG['creditsfile'], "r");
 
@@ -150,6 +153,8 @@ if ($CONFIG['kb_enabled'] == FALSE OR
 echo "</table>\n";
 
 plugin_do('about');
+
+echo "</div>";
 
 include ('htmlfooter.inc.php');
 ?>

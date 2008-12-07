@@ -48,6 +48,13 @@ td sup { color: #444; }
   position: relative;
 }
 
+#aboutsit
+{
+  text-align: center;
+}
+#aboutsit img { margin-left: auto; margin-right: auto; }
+
+
 #menu { border-bottom: 1px solid #203894; padding-bottom: 4px;}
 .menuitem li { padding-top: 3px; }
 
