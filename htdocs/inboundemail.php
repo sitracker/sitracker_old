@@ -134,9 +134,21 @@ if ($emails > 0)
 
         $mime->Decode($parameters, $decoded);
         $mime->Analyze($decoded[0], $results);
-        $to = $cc = $from = "";
+        $to = $cc = $from = $from_name = $from_email = "";
 
         $from_email = $results[From][0][address];
+        $sql = "SELECT id FROM `{$GLOBALS['dbContacts']}` ";
+        $sql .= "WHERE email = '{$from_email}'";
+        echo $sql;
+        if ($result = mysql_query($sql))
+        {
+            if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+            $row = mysql_fetch_object($result);
+            $contactid = $row->id;
+        }
+        
+        
+        
         if (!empty($results[From][0][name]))
         {
             $from_name = $results[From][0][name];
@@ -345,7 +357,9 @@ if ($emails > 0)
             $sql.= "VALUES ('{$updateid}', '0', '{$from_email}', '".mysql_real_escape_string($from_name)."', '".mysql_real_escape_string($subject)."', '{$SYSLANG['strPossibleNewIncident']}', '{$contactid}' )";
             mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
-            trigger('TRIGGER_INCIDENT_UPDATED_EXTERNAL', array('incident' => $incidentid));
+            $holdingemailid = mysql_insert_id();
+            trigger('TRIGGER_NEW_HELD_EMAIL', array('holdingemailid' => $holdingemailid));
+            
         }
         else
         {
@@ -416,8 +430,9 @@ if ($emails > 0)
                         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
                     }
                     $holdingemailid = mysql_insert_id();
-                    trigger('TRIGGER_NEW_HELD_EMAIL', array('holdingemailid' => $holdingemailid));
                 }
+                trigger('TRIGGER_INCIDENT_UPDATED_EXTERNAL', array('incident' => $incidentid));
+
             }
             else
             {

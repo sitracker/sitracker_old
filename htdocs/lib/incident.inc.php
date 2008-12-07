@@ -8,7 +8,7 @@
 // of the GNU General Public License, incorporated herein by reference.
 
 require_once('base.inc.php');
-
+require_once('contract.inc.php');
 /**
  * Creates a new incident
  * @param string $title The title of the incident
@@ -32,7 +32,7 @@ function create_incident($title, $contact, $servicelevel, $contract, $product,
                          $productversion = '', $productservicepacks = '', 
                          $opened = '', $lastupdated = '')
 {
-    global $now;
+    global $now, $dbIncidents;
     
     if (empty($opened))
     {
@@ -59,7 +59,94 @@ function create_incident($title, $contact, $servicelevel, $contract, $product,
     }
     else
     {
-        return mysql_insert_id();
+        $incident = mysql_insert_id();
+        return $incident;
+    }
+}
+
+
+/**
+ * Creates an incident based on an 'tempincoming' table entry
+ * @author Kieran Hogg
+ * @param int $incomingid the ID of the tempincoming entry
+ * @return int|bool returns either the ID of the contract or FALSE if none
+ */
+function create_incident_from_incoming($incomingid)
+{
+    global $dbTempIncoming, $dbMaintenance, $dbServiceLevels, 
+        $dbSoftwareProducts;
+    $rtn = TRUE;
+    
+    $incomingid = intval($incomingid);
+    $sql = "SELECT * FROM `{$dbTempIncoming}` ";
+    $sql .= "WHERE id = '{$incomingid}'";
+    $result = mysql_query($sql);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+    
+    $row = mysql_fetch_object($result);
+    $contact = $row->contactid;
+    $contract = guess_contract_id($contact);
+    if (!$contract)
+    {
+        // we have no contract to log against, update stays in incoming
+        return TRUE;
+    }
+    $subject = $row->subject;
+    $update = $row->updateid;
+    
+    $sql = "SELECT servicelevelid, tag, product, softwareid ";
+    $sql .= "FROM `{$dbMaintenance}` AS m, `{$dbServiceLevels}` AS s, ";
+    $sql .= "`{$dbSoftwareProducts}` AS sp ";
+    $sql .= "WHERE m.id = '{$contract}' ";
+    $sql .= "AND m.servicelevelid = s.id ";
+    $sql .= "AND m.product = sp.productid LIMIT 1";
+    $result = mysql_query($sql);
+    if (mysql_error())
+    {
+        trigger_error(mysql_error(),E_USER_ERROR);
+        $rtn = FALSE;
+    }    
+    
+    $row = mysql_fetch_object($result);
+    $sla = $row->tag;
+    $product = $row->product;
+    $software = $row->softwareid;
+    $incident = create_incident($subject, $contact, $row->tag, $contract, 
+                                $product, $software);
+    
+    if(!move_update_to_incident($update, $incident))
+    {
+        $rtn = FALSE;
+    }
+    
+    return $rtn;
+}
+
+
+/**
+ * Move an update to an incident
+ * @author Kieran Hogg
+ * @param int $update the ID of the update
+ * @param int $incident the ID of the incident
+ * @return bool returns TRUE on success, FALSE on failure
+ */
+function move_update_to_incident($update, $incident)
+{
+    global $dbUpdates;
+    $update = intval($update);
+    $incident = intval($incident);
+    
+    $sql = "UPDATE `{$dbUpdates}` SET incidentid = '{$incident}' ";
+    $sql .= "WHERE id = '{$update}'";
+    mysql_query($sql);
+    if (mysql_error())
+    {
+        trigger_error(mysql_error(),E_USER_ERROR);
+        return FALSE;
+    }
+    else
+    {
+        return TRUE;
     }
 }
 

@@ -1324,7 +1324,7 @@ CREATE TABLE IF NOT EXISTS `{$dbTriggers}` (
   `id` int(11) NOT NULL auto_increment,
   `triggerid` varchar(50) NOT NULL,
   `userid` tinyint(4) NOT NULL,
-  `action` enum('ACTION_NONE','ACTION_EMAIL','ACTION_NOTICE','ACTION_JOURNAL') NOT NULL default 'ACTION_NONE',
+  `action` enum('ACTION_NONE','ACTION_EMAIL','ACTION_NOTICE','ACTION_JOURNAL', 'ACTION_CREATE_INCIDENT') NOT NULL default 'ACTION_NONE',
   `template` varchar(255) default NULL,
   `parameters` varchar(255) default NULL,
   `checks` varchar(255) default NULL,
@@ -2489,6 +2489,9 @@ CREATE TABLE IF NOT EXISTS `{$dbConfig}` (
   `value` text,
   PRIMARY KEY  (`config`)
 ) TYPE=MyISAM COMMENT='SiT configuration';
+
+-- KH 2008-12-07
+ALTER TABLE `{$dbTriggers}` CHANGE `action` `action` ENUM( 'ACTION_NONE', 'ACTION_EMAIL', 'ACTION_NOTICE', 'ACTION_JOURNAL', 'ACTION_CREATE_INCIDENT' ) NOT NULL DEFAULT 'ACTION_NONE';
 
 ";
 // Important: When making changes to the schema you must add SQL to make the alterations

@@ -10,15 +10,16 @@
 // Author: Kieran Hogg <kieran_hogg[at]users.sourceforge.net>
 //         Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
+include ('../htdocs/set_include_path.inc.php');
+include ($lib_path . 'incident.inc.php');
 include ('mime.inc.php');
 include ('triggertypes.inc.php');
 
 //set up all the action types
-define ('ACTION_NONE', 1);
-define ('ACTION_NOTICE', 2);
-define ('ACTION_EMAIL', 3);
-define ('ACTION_JOURNAL', 4);
-plugin_do('trigger_actions');
+// define ('ACTION_NONE', 1);
+// define ('ACTION_NOTICE', 2);
+// define ('ACTION_EMAIL', 3);
+// define ('ACTION_JOURNAL', 4);
 
 $actionarray['ACTION_NONE'] =
 array('name' => $strNone,
@@ -26,13 +27,21 @@ array('name' => $strNone,
       );
 
 $actionarray['ACTION_NOTICE'] =
-array('name' => 'Notice',
+array('name' => $strNotice,
       'description' => $strCreateANotice
       );
 
 $actionarray['ACTION_EMAIL'] =
-array('name' => 'Email',
+array('name' => $strEmail,
       'description' => $strSendAnEmail
+      );
+      
+$actionarray['ACTION_CREATE_INCIDENT'] =
+array('name' => $strAddIncident,
+      'description' => $strAddsIncidentBasedOnEmail,
+      'requires' => array('updateid'),
+      'permission' => array(),
+      'type' => 'system'
       );
 
 $actionarray['ACTION_JOURNAL'] =
@@ -40,6 +49,7 @@ array('name' => 'Journal',
       'description' => $strLogTriggerInJournal
       );
 
+plugin_do('trigger_actions');
 
 /**
     * Master trigger function, creates a new trigger
@@ -165,6 +175,10 @@ function trigger_action($userid, $triggerid, $action, $paramarray, $template)
             $rtnvalue = create_trigger_notice($userid, '', $triggerid, $template,
                                   $paramarray);
             break;
+            
+        case "ACTION_CREATE_INCIDENT":
+            $rtnvalue = create_incident_from_incoming($paramarray['holdingemailid']);
+            break;
 
         case "ACTION_JOURNAL":
             if (is_array($paramarray))
@@ -178,7 +192,7 @@ function trigger_action($userid, $triggerid, $action, $paramarray, $template)
             {
                 $journalbody = '';
             }
-            $rtnvalue = journal(CFG_LOGGING_NORMAL, $triggerid, "Trigger Fired ({$journalbody})", 0, $userid);
+            $rtnvalue = journal(CFG_LOGGING_NORMAL, $triggerid, "Trigger Fired ({$journalbody})", 11, $userid);
 
         case "ACTION_NONE":
         //fallthrough
