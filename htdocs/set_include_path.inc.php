@@ -17,7 +17,7 @@
 
 
 $include_path = '/var/www/sit/includes';
-
+$lib_path = './lib/';
     // Or for Windows users
 
 // $include_path = 'c:\www\sit\includes';
