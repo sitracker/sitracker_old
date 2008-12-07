@@ -16,8 +16,8 @@
     // can uncomment the following line and set it here.
 
 
-$include_path = '/var/www/sit/includes';
-$lib_path = './lib/';
+// $include_path = '/var/www/sit/includes';
+
     // Or for Windows users
 
 // $include_path = 'c:\www\sit\includes';
