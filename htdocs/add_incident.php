@@ -70,7 +70,7 @@ function to_row($contactrow)
     $str .=  "</td>";
     $str .=  '<td>'.$contactrow['forenames'].' '.$contactrow['surname'].'</td>';
     $str .=  '<td>'.$contactrow['name'].'</td>';
-    $str .=  '<td><strong>'.$contactrow['maintid'].'</strong>&nbsp;'.$contactrow['productname'].'</td>';
+    $str .=  '<td>'.$contactrow['productname'].'</td>';
     $str .=  '<td>'.servicelevel_id2tag($contactrow['servicelevelid']).'</td>';
     if ($contactrow['expirydate'] == '-1')
     {
@@ -734,19 +734,40 @@ elseif ($action == 'assign')
 
                 $result = mysql_query($sql);
                 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-                // + move any attachments we may have received
-                $update_path = $CONFIG['attachment_fspath'] .'updates/'.$updateid;
-                if (file_exists($update_path))
-                {
-                    if (!file_exists($CONFIG['attachment_fspath'] ."$incidentid"))
-                    {
-                        $umask = umask(0000);
-                        mkdir($CONFIG['attachment_fspath'] ."$incidentid", 0770);
-                        umask($umask);
-                    }
-                    $move = rename($update_path, $CONFIG['attachment_fspath']."$incidentid/u{$updateid}/");
-                    if (!$move) trigger_error('!Error moving attachments folder');
-                }
+                
+		        $old_path = $CONFIG['attachment_fspath']. 'updates' . $fsdelim;
+		        $new_path = $CONFIG['attachment_fspath'] . $incidentid . $fsdelim;
+		
+		        //move attachments from updates to incident
+		        $sql = "SELECT linkcolref, filename FROM `{$dbLinks}` AS l, ";
+		        $sql .= "`{$dbFiles}` as f ";
+		        $sql .= "WHERE l.origcolref = '{$updateid}' ";
+		        $sql .= "AND l.linktype = 5 ";
+		        $sql .= "AND l.linkcolref = f.id";
+		        $result = mysql_query($sql);
+		        if ($result)
+		        {
+		            if (!file_exists($new_path))
+		            {
+		                $umask=umask(0000);
+		                @mkdir($new_path, 0770);
+		                umask($umask);
+		            }
+		            while ($row = mysql_fetch_object($result))
+		            {
+		                $filename = $row->linkcolref . "-" . $row->filename;
+		                $old_file = $old_path . $filename;
+		                if (file_exists($old_file))
+		                {
+		                    $rename = rename($old_file, $new_path . $filename);
+		                    if (!$rename)
+		                    {
+		                        trigger_error("Couldn't move file: {$file}", E_USER_WARNING);
+		                        $moved_attachments = FALSE;
+		                    }
+		                }
+		            }
+		        }
             }
             else
             {
