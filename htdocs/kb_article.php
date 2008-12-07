@@ -40,6 +40,7 @@ if (isset($_POST['submit']))
     $kbtitle = cleanvar($_POST['title']);
     $keywords = cleanvar($_POST['keywords']);
     $distribution = cleanvar($_POST['distribution']);
+    $sql = array();
 
     $_SESSION['formdata']['kb_add_article'] = $_POST;
 
