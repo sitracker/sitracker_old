@@ -29,22 +29,22 @@ if (empty($mode))
 {
     include ('htmlheader.inc.php');
 
-    echo "<h2>Billable Incidents Report<h2>"; // TODO/FIXME i18n
+    echo "<h2>{$strBillableIncidentsReport}<h2>";
 
     echo "<form action='{$_SERVER['PHP_SELF']}' method='post' id='billableincidents'>";
     echo "<table align='center'>";
-    echo "<tr><th>Start Date:</th>";
+    echo "<tr><th>{$strStartDate}:</th>";
     echo "<td><input type='text' name='startdate' id='startdate' size='10' /> ";
     echo date_picker('billableincidents.startdate');
     echo "</td></tr>\n";
-    echo "<tr><th>End Date:</th>";
+    echo "<tr><th>{$strEndDate}:</th>";
     echo "<td><input type='text' name='enddate' id='enddate' size='10' /> ";
     echo date_picker('billableincidents.enddate');
     echo "</td></tr>\n";
 
     echo "</table>";
 
-    echo "<p align='center'><input type='submit' name='runreport' value='Run Report' /></p>";
+    echo "<p align='center'><input type='submit' name='runreport' value='{$strRunReport}' /></p>";
     echo "<input type='hidden' name='mode' id='mode' value='report' />";
     echo "</form>";
 

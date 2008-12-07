@@ -19,7 +19,9 @@ $title = $strApproveTimesheets;
 require ('auth.inc.php');
 
 foreach (array('user', 'date', 'approve' ) as $var)
+{
     eval("\$$var=cleanvar(\$_REQUEST['$var']);");
+}
 
 if ($user == '')
 {
@@ -27,12 +29,18 @@ if ($user == '')
     echo "<h2>".icon('holiday', 32)." ";
     echo $strTimesheets;
     echo "</h2>";
-    $usql = "SELECT groupid FROM `{$dbUsers}` WHERE id = {$sit[2]}";
+    $usql = "SELECT u.groupid FROM `{$dbUsers}` AS u, `{$dbGroups}` AS g ";
+    $usql .= "WHERE u.id = {$sit[2]} AND u.groupid = g.id";
     $uresult = mysql_query($usql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
-    $mygroup = mysql_fetch_array($uresult);
+    $mygroup = mysql_fetch_object($uresult);
     $sql = "SELECT DISTINCT owner FROM `{$dbTasks}` AS t, `{$dbUsers}` AS u, `{$dbGroups}` AS g ";
-    $sql .= "WHERE completion = 1 AND distribution='event' AND u.groupid = {$mygroup['groupid']} AND ";
+    $sql .= "WHERE completion = 1 AND distribution='event' AND ";
+    if (mysql_num_rows($uresult) > 0)
+    {
+    	// User is in a group. only approve there groups
+    	$sql .= "u.groupid = {$mygroup->groupid} AND "; 
+    }
     $sql .= "u.id = t.owner ORDER BY owner";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
