@@ -570,10 +570,18 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
         <?php
 
         // move attachment to a safe place for processing later
-        if ($_FILES['attachment']['name']!='')       // Should be using this format throughout TPG 13/08/2002
+        if ($_FILES['attachment']['name'] != '')       // Should be using this format throughout TPG 13/08/2002
         {
-            if (!isset($filename)) $filename = $CONFIG['attachment_fspath'].$_FILES['attachment']['name'];
-            $mv = move_uploaded_file($_FILES['attachment']['tmp_name'], "$filename");    // Added tmp_name TPG 13/08/2002
+            $name = $_FILES['attachment']['name'];
+            $size = filesize($_FILES['attachment']['tmp_name']);
+            $sql = "INSERT INTO `{$dbFiles}`(filename, size, userid, usertype) ";
+            $sql .= "VALUES('{$name}', '{$size}', '{$sit[2]}', '1')";
+            mysql_query($sql);
+            $fileid = mysql_insert_id();
+            
+            $filename = $CONFIG['attachment_fspath'].$id.$fsdelim.$fileid."-".$name;
+
+            $mv = rename($_FILES['attachment']['tmp_name'], $filename);
             if (!mv) trigger_error("Problem moving attachment from temp directory: {$filename}", E_USER_WARNING);
             $attachmenttype = $_FILES['attachment']['type'];
         }
@@ -632,7 +640,7 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
 
                 // Check file size before sending
                 if (filesize($filename) > $CONFIG['upload_max_filesize'] || filesize($filename)==FALSE)
-                {
+                { 
                     trigger_error("User Error: Attachment too large or file upload error, filename: $filename,  perms: ".fileperms($filename).", size:",filesize($filename), E_USER_WARNING);
                     // throwing an error isn't the nicest thing to do for the user but there seems to be no way of
                     // checking file sizes at the client end before the attachment is uploaded. - INL
@@ -653,27 +661,27 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
             // actually send the email
             $mailok = $mime -> send_mail();
 
-            // after mail is sent, move the attachment to the incident file attachment directory / timestamp
-            if ($filename != '' && file_exists($filename) && $mailok == TRUE)
-            {
-                // make incident attachment dir if it doesn't exist
-                $umask = umask(0000);
-                if (!file_exists($CONFIG['attachment_fspath'] . "$id"))
-                {
-                    $mk = mkdir($CONFIG['attachment_fspath'] ."$id", 0770);
-                    trigger_error("Failed creating incident attachment directory after sending mail: {$CONFIG['attachment_fspath']} {$id}", E_USER_WARNING);
-                }
-                $mk = mkdir($CONFIG['attachment_fspath'] .$id . "/$now", 0770);
-                trigger_error("Failed creating incident attachment (timestamp) directory after sending mail: {$CONFIG['attachment_fspath']} {$id}/{$now}", E_USER_WARNING);
-                umask($umask);
-                // failes coz renaming file to a directory
-                $filename_parts_array = explode('/', $filename);
-                $filename_parts_count = count($filename_parts_array)-1;
-                $filename_end_part = $filename_parts_array[$filename_parts_count]; // end part of filename (actual name)
-                $rn = rename($filename, $CONFIG['attachment_fspath'] . $id . "/$now/" . $filename_end_part);
-                if (!rn) trigger_error("Failed moving attachment after sending mail: {$CONFIG['attachment_fspath']} {$id}/{$now}", E_USER_WARNING);
-                // unlink ($filename);  // used to delete the file - don't any more INL 6Nov01
-            }
+//             // after mail is sent, move the attachment to the incident file attachment directory / timestamp
+//             if ($filename != '' && file_exists($filename) && $mailok == TRUE)
+//             {
+//                 // make incident attachment dir if it doesn't exist
+//                 $umask = umask(0000);
+//                 if (!file_exists($CONFIG['attachment_fspath'] . "$id"))
+//                 {
+//                     $mk = mkdir($CONFIG['attachment_fspath'] ."$id", 0770);
+//                     trigger_error("Failed creating incident attachment directory after sending mail: {$CONFIG['attachment_fspath']} {$id}", E_USER_WARNING);
+//                 }
+//                 $mk = mkdir($CONFIG['attachment_fspath'] .$id . "/$now", 0770);
+//                 trigger_error("Failed creating incident attachment (timestamp) directory after sending mail: {$CONFIG['attachment_fspath']} {$id}/{$now}", E_USER_WARNING);
+//                 umask($umask);
+//                 // failes coz renaming file to a directory
+//                 $filename_parts_array = explode('/', $filename);
+//                 $filename_parts_count = count($filename_parts_array)-1;
+//                 $filename_end_part = $filename_parts_array[$filename_parts_count]; // end part of filename (actual name)
+//                 $rn = rename($filename, $CONFIG['attachment_fspath'] . $id . "/$now/" . $filename_end_part);
+//                 if (!rn) trigger_error("Failed moving attachment after sending mail: {$CONFIG['attachment_fspath']} {$id}/{$now}", E_USER_WARNING);
+//                 // unlink ($filename);  // used to delete the file - don't any more INL 6Nov01
+//             }
 
             if ($mailok == FALSE)
             {
@@ -754,7 +762,7 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
                 $updateheader .= "{$SYSLANG['strReplyTo']}: [b]{$replytofield}[/b]\n";
                 if ($ccfield != '' AND $ccfield != ",") $updateheader .=   "CC: [b]{$ccfield}[/b]\n";
                 if ($bccfield != '') $updateheader .= "BCC: [b]{$bccfield}[/b]\n";
-                if ($filename != '') $updateheader .= "{$SYSLANG['strAttachment']}: [b]".$filename_end_part."[/b]\n";
+                if ($filename != '') $updateheader .= "{$SYSLANG['strAttachment']}: [b][[att={$fileid}]]".$name."[[/att]][/b]\n";
                 $updateheader .= "{$SYSLANG['strSubject']}: [b]{$subjectfield}[/b]\n";
 
                 if (!empty($updateheader)) $updateheader .= "<hr>";
@@ -763,6 +771,12 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
 
                 $sql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, bodytext, type, timestamp, currentstatus,customervisibility) ";
                 $sql .= "VALUES ($id, $sit[2], '$updatebody', 'email', '$now', '$newincidentstatus', '{$emailtype->customervisibility}')";
+                mysql_query($sql);
+                if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+                $updateid = mysql_insert_id();
+                
+                $sql = "INSERT INTO `{$dbLinks}`(linktype, origcolref, linkcolref, direction, userid) ";
+                $sql .= "VALUES (5, '{$updateid}', '{$fileid}', 'left', '{$sit[2]}')";
                 mysql_query($sql);
                 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
