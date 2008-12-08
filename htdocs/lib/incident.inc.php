@@ -9,6 +9,8 @@
 
 require_once('base.inc.php');
 require_once('contract.inc.php');
+
+
 /**
  * Creates a new incident
  * @param string $title The title of the incident
@@ -28,12 +30,12 @@ require_once('contract.inc.php');
  * @author Kieran Hogg
  */
 function create_incident($title, $contact, $servicelevel, $contract, $product,
-                         $software, $priority = 1, $owner = 0, $status = 1, 
-                         $productversion = '', $productservicepacks = '', 
+                         $software, $priority = 1, $owner = 0, $status = 1,
+                         $productversion = '', $productservicepacks = '',
                          $opened = '', $lastupdated = '')
 {
     global $now, $dbIncidents;
-    
+
     if (empty($opened))
     {
         $opened = $now;
@@ -43,7 +45,7 @@ function create_incident($title, $contact, $servicelevel, $contract, $product,
     {
         $lastupdated = $now;
     }
-    
+
     $sql  = "INSERT INTO `{$dbIncidents}` (title, owner, contact, priority, ";
     $sql .= "servicelevel, status, maintenanceid, product, softwareid, ";
     $sql .= "productversion, productservicepacks, opened, lastupdated) ";
@@ -73,16 +75,16 @@ function create_incident($title, $contact, $servicelevel, $contract, $product,
  */
 function create_incident_from_incoming($incomingid)
 {
-    global $dbTempIncoming, $dbMaintenance, $dbServiceLevels, 
+    global $dbTempIncoming, $dbMaintenance, $dbServiceLevels,
         $dbSoftwareProducts;
     $rtn = TRUE;
-    
+
     $incomingid = intval($incomingid);
     $sql = "SELECT * FROM `{$dbTempIncoming}` ";
     $sql .= "WHERE id = '{$incomingid}'";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
-    
+
     $row = mysql_fetch_object($result);
     $contact = $row->contactid;
     $contract = guess_contract_id($contact);
@@ -93,7 +95,7 @@ function create_incident_from_incoming($incomingid)
     }
     $subject = $row->subject;
     $update = $row->updateid;
-    
+
     $sql = "SELECT servicelevelid, tag, product, softwareid ";
     $sql .= "FROM `{$dbMaintenance}` AS m, `{$dbServiceLevels}` AS s, ";
     $sql .= "`{$dbSoftwareProducts}` AS sp ";
@@ -105,20 +107,20 @@ function create_incident_from_incoming($incomingid)
     {
         trigger_error(mysql_error(),E_USER_ERROR);
         $rtn = FALSE;
-    }    
-    
+    }
+
     $row = mysql_fetch_object($result);
     $sla = $row->tag;
     $product = $row->product;
     $software = $row->softwareid;
-    $incident = create_incident($subject, $contact, $row->tag, $contract, 
+    $incident = create_incident($subject, $contact, $row->tag, $contract,
                                 $product, $software);
-    
+
     if(!move_update_to_incident($update, $incident))
     {
         $rtn = FALSE;
     }
-    
+
     return $rtn;
 }
 
@@ -135,7 +137,7 @@ function move_update_to_incident($update, $incident)
     global $dbUpdates;
     $update = intval($update);
     $incident = intval($incident);
-    
+
     $sql = "UPDATE `{$dbUpdates}` SET incidentid = '{$incident}' ";
     $sql .= "WHERE id = '{$update}'";
     mysql_query($sql);
