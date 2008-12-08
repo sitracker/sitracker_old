@@ -572,6 +572,17 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
         // move attachment to a safe place for processing later
         if ($_FILES['attachment']['name'] != '')       // Should be using this format throughout TPG 13/08/2002
         {
+            $umask = umask(0000);
+            $mk = TRUE;
+            if (!file_exists($CONFIG['attachment_fspath'].$id))
+            {
+                $mk = mkdir($CONFIG['attachment_fspath'].$id, 0770, TRUE);
+                if (!$mk)
+                {
+                    trigger_error('Failed creating incident attachment directory: '.$CONFIG['attachment_fspath'].$id, E_USER_WARNING);
+                }
+            }
+            
             $name = $_FILES['attachment']['name'];
             $size = filesize($_FILES['attachment']['tmp_name']);
             $sql = "INSERT INTO `{$dbFiles}`(filename, size, userid, usertype) ";
