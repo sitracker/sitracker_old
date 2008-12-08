@@ -147,7 +147,7 @@ if ($action == "showform" OR $action=='')
     {
         echo "value='{$_SESSION['formdata']['add_contract']['unitrate']}' ";
     }
-    echo "/>";  
+    echo "/>";
     echo " <span class='required'>{$strRequired}</span></td></tr>";
     echo "<tr id='incidentratesection' style='display:none'><th>{$strIncidentRate}</th>";
     echo "<td>{$CONFIG['currency_symbol']} ";
@@ -155,10 +155,10 @@ if ($action == "showform" OR $action=='')
     if ($_SESSION['formdata']['add_contract']['incidentrate'] != '')
     {
         echo "value='{$_SESSION['formdata']['add_contract']['incidentrate']}' ";
-    }    
+    }
     echo "/>";
     echo " <span class='required'>{$strRequired}</span></td></tr>";
-    
+
     echo "<tr>";
     echo "<th>{$strFreeOfCharge}</th>";
     echo "<td><input type='checkbox' id='foc' name='foc' value='yes' ";
@@ -167,7 +167,7 @@ if ($action == "showform" OR $action=='')
         echo "checked='checked''  ";
     }
     echo "/> {$strAboveMustBeCompletedToAllowDeductions}</td>";
-    
+
     echo "</tbody>";
 
     echo "<tr><th></th><td><a href=\"javascript:void(0);\" onclick=\"$('hidden').toggle();\">{$strMore}</a></td></tr>\n";
@@ -224,10 +224,10 @@ elseif ($action == "add")
     $enddate = strtotime($_REQUEST['expiry']);
     if ($enddate > 0) $enddate = date('Y-m-d',$enddate);
     else $enddate = date('Y-m-d',$now);
-    
+
     if ($_REQUEST['noexpiry'] == 'on')
     {
-        $expirydate = '-1';        
+        $expirydate = '-1';
     }
     else
     {

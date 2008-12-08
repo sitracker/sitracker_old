@@ -220,8 +220,26 @@ else if ($action == "update")
         if (empty($productonly)) $productonly='no';
         if ($productonly=='yes') $terminated='yes';
 
-        $sql  = "UPDATE `{$dbMaintenance}` SET reseller='$reseller', expirydate='$expirydate', licence_quantity='$licence_quantity', ";
-        $sql .= "licence_type='$licence_type', notes='$notes', admincontact=$admincontact, term='$terminated', servicelevelid='$servicelevelid', ";
+        if (empty($reseller) OR $reseller == 0)
+        {
+            $reseller = "NULL";
+        }
+        else
+        {
+            $reseller = "'{$reseller}'";
+        }
+
+        if (empty($licence_type) OR $licence_type == 0)
+        {
+            $licence_type = "NULL";
+        }
+        else
+        {
+            $licence_type = "'{$licence_type}'";
+        }
+        // NOTE above is so we can insert null so browse_contacts etc can see the contract rather than inserting 0
+        $sql  = "UPDATE `{$dbMaintenance}` SET reseller=$reseller, expirydate='$expirydate', licence_quantity='$licence_quantity', ";
+        $sql .= "licence_type=$licence_type, notes='$notes', admincontact=$admincontact, term='$terminated', servicelevelid='$servicelevelid', ";
         $sql .= "incident_quantity='$incident_quantity', ";
         $sql .= "incidentpoolid='$incidentpoolid', productonly='$productonly', ";
         $sql .= "supportedcontacts='$amount', allcontactssupported='$allcontacts'";
