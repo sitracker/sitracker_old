@@ -66,7 +66,8 @@ switch ($step)
         ?>
         <script type="text/javascript">
         <!--
-        function deleteOption(object) {
+        function deleteOption(object)
+        {
             var Current = object.updatetype.selectedIndex;
             object.updatetype.options[Current] = null;
         }
@@ -118,7 +119,7 @@ switch ($step)
 
             var defaultSelected = true;
             var selected = true;
-            var optionName = new Option('Action Plan', 'actionplan', defaultSelected, selected)
+            var optionName = new Option('Action Plan', 'actionplan', defaultSelected, selected);
             var length = object.updatetype.length;
             object.updatetype.options[length] = optionName;
             object.priority.value=object.storepriority.value;
@@ -139,7 +140,7 @@ switch ($step)
             // add new option
             var defaultSelected = true;
             var selected = true;
-            var optionName = new Option('Reprioritise', 'solution', defaultSelected, selected)
+            var optionName = new Option('Reprioritise', 'solution', defaultSelected, selected);
             var length = object.updatetype.length;
             object.updatetype.options[length] = optionName;
             object.priority.disabled=false;
@@ -159,7 +160,7 @@ switch ($step)
 
             var defaultSelected = true;
             var selected = true;
-            var optionName = new Option('Problem Definition', 'probdef', defaultSelected, selected)
+            var optionName = new Option('Problem Definition', 'probdef', defaultSelected, selected);
             var length = object.updatetype.length;
             object.updatetype.options[length] = optionName;
             object.priority.value=object.storepriority.value;
@@ -167,7 +168,8 @@ switch ($step)
             object.updatetype.disabled=true;
         }
 
-        function replaceOption(object) {
+        function replaceOption(object)
+        {
             var Current = object.updatetype.selectedIndex;
             object.updatetype.options[Current].text = object.currentText.value;
             object.updatetype.options[Current].value = object.currentText.value;
@@ -343,17 +345,25 @@ switch ($step)
         function save_content(){
             var xmlhttp=false;
 
-            if (!xmlhttp && typeof XMLHttpRequest!='undefined') {
-                try {
+            if (!xmlhttp && typeof XMLHttpRequest!='undefined')
+            {
+                try
+                {
                     xmlhttp = new XMLHttpRequest();
-                } catch (e) {
+                }
+                catch (e)
+                {
                     xmlhttp=false;
                 }
             }
-            if (!xmlhttp && window.createRequest) {
-                try {
+            if (!xmlhttp && window.createRequest)
+            {
+                try
+                {
                     xmlhttp = window.createRequest();
-                } catch (e) {
+                }
+                catch (e)
+                {
                     xmlhttp=false;
                 }
             }
@@ -382,9 +392,12 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
                              "&draftid="+draftid+"&meta="+meta+"&content="+
                              escape(toPass), true);
 
-                xmlhttp.onreadystatechange=function() {
-                    if (xmlhttp.readyState==4) {
-                        if (xmlhttp.responseText != ''){
+                xmlhttp.onreadystatechange=function()
+                {
+                    if (xmlhttp.readyState==4)
+                    {
+                        if (xmlhttp.responseText != '')
+                        {
                             if (draftid == -1)
                             {
                                 draftid = xmlhttp.responseText;
@@ -394,14 +407,15 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
                             var minutes = currentTime.getMinutes();
                             if (minutes < 10)
                             {
-                                minutes = "0"+minutes;
+                                minutes = "0" + minutes;
                             }
                             var seconds = currentTime.getSeconds();
                             if (seconds < 10)
                             {
-                                seconds = "0"+seconds;
+                                seconds = "0" + seconds;
                             }
-                            $('updatestr').innerHTML = "<?php echo icon('info', 16, $GLOBALS['strDraftLastSaved']) ?>": "+hours+":"+minutes+":"+seconds;
+                            //$('updatestr').innerHTML = "<?php echo icon('info', 16, $GLOBALS['strDraftLastSaved']) ?>" + hours + ':' + minutes + ':' + seconds;
+                            $('updatestr').innerHTML = hours + ':' + minutes + ':' + seconds;
                             $('draftid').value = draftid;
                         }
                     }
@@ -528,7 +542,7 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
         echo "<input type='hidden' id='draftid' name='draftid' value='{$draftid}' />";
         echo "<input name='submit2' type='submit' value='{$strSendEmail}' />";
         echo "</p>\n</form>\n";
-        
+
         include ('incident_html_bottom.inc.php');
     break;
 
@@ -582,14 +596,14 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
                     trigger_error('Failed creating incident attachment directory: '.$CONFIG['attachment_fspath'].$id, E_USER_WARNING);
                 }
             }
-            
+
             $name = $_FILES['attachment']['name'];
             $size = filesize($_FILES['attachment']['tmp_name']);
             $sql = "INSERT INTO `{$dbFiles}`(filename, size, userid, usertype) ";
             $sql .= "VALUES('{$name}', '{$size}', '{$sit[2]}', '1')";
             mysql_query($sql);
             $fileid = mysql_insert_id();
-            
+
             $filename = $CONFIG['attachment_fspath'].$id.$fsdelim.$fileid."-".$name;
 
             $mv = rename($_FILES['attachment']['tmp_name'], $filename);
@@ -601,7 +615,7 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
         {
             include ('../spellcheck_email.php');
             exit;
-        } 
+        }
 
         $errors = 0;
         // check to field
@@ -651,7 +665,7 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
 
                 // Check file size before sending
                 if (filesize($filename) > $CONFIG['upload_max_filesize'] || filesize($filename)==FALSE)
-                { 
+                {
                     trigger_error("User Error: Attachment too large or file upload error, filename: $filename,  perms: ".fileperms($filename).", size:",filesize($filename), E_USER_WARNING);
                     // throwing an error isn't the nicest thing to do for the user but there seems to be no way of
                     // checking file sizes at the client end before the attachment is uploaded. - INL
@@ -785,7 +799,7 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
                 mysql_query($sql);
                 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
                 $updateid = mysql_insert_id();
-                
+
                 $sql = "INSERT INTO `{$dbLinks}`(linktype, origcolref, linkcolref, direction, userid) ";
                 $sql .= "VALUES (5, '{$updateid}', '{$fileid}', 'left', '{$sit[2]}')";
                 mysql_query($sql);
