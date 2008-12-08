@@ -105,7 +105,7 @@ elseif ($access == TRUE)
             header("Content-Type: ".mime_type($file_fspath)."\r\n");
             header("Content-Length: {$file_size}\r\n");
             header("Content-Disposition-Type: attachment\r\n");
-            header("Content-Disposition: filename={$file_fspath}\r\n");
+            header("Content-Disposition: filename={$filename}\r\n");
             $buffer = '';
             while (!feof($fp))
             {
