@@ -3324,11 +3324,8 @@ function sit_error_handler($errno, $errstr, $errfile, $errline, $errcontext)
         }
         else
         {
-            trigger("HIDDEN_ERROR", array('errortype' => $errortype[$errno],
-                                          'errorstring' => $errstr,
-                                          'errorfile' => $errfile,
-                                          'errorline' => $errline,
-                                          'backtrace' => $backtrace));
+            debug_log("ERROR: {$errortype[$errno]} {$errstr} in {$errfile} at line {$errline}\n".
+                      "ERROR: Backtrace:\n{$backtrace}");
         }
     }
 }
@@ -11112,7 +11109,6 @@ function emoticons($text)
     return $html;
 }
 
-
 /**
  * Inserts a new update
  * @param int $incidentid ID of the incident to add the update to
@@ -11338,6 +11334,12 @@ function cfgSave($setupvars)
     return TRUE;
 }
 
+
+function holding_email_update_id($holding_email)
+{
+    $holding_email = intval($holding_email);
+    return db_read_column('updateid', 'tempincoming', $holding_email);
+}
 
 
 /*
