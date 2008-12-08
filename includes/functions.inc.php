@@ -105,6 +105,17 @@ define ("STATUS_CUSTOMER",8);
 define ("STATUS_UNSUPPORTED",9);
 define ("STATUS_UNASSIGNED",10);
 
+// User statuses
+define ('USERSTATUS_IN_OFFICE', 1);
+define ('USERSTATUS_NOT_IN_OFFICE', 2);
+define ('USERSTATUS_IN_MEETING', 3);
+define ('USERSTATUS_AT_LUNCH', 4);
+define ('USERSTATUS_ON_HOLIDAY', 5);
+define ('USERSTATUS_WORKING_FROM_HOME', 6);
+define ('USERSTATUS_ON_TRAINING_COURSE', 7);
+define ('USERSTATUS_ABSENT_SICK', 8);
+define ('USERSTATUS_WORKING_AWAY', 9);
+
 // BILLING
 define ('NO_BILLABLE_CONTRACT', 0);
 define ('CONTACT_HAS_BILLABLE_CONTRACT', 1);
@@ -3124,6 +3135,7 @@ function servicelevel_timed($sltag)
     * @author Ivan Lucas
     * @param $maintid Integer. Contract ID
     * @returns. Integer. Service Level ID
+    * @deprecated
     * @note Service level ID's are DEPRECATED service level tags should be used in favour of service level ID's
 */
 function maintenance_servicelevel($maintid)

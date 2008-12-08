@@ -252,7 +252,7 @@ function saction_TimeCalc()
                     trigger('TRIGGER_INCIDENT_NEARING_SLA', array('incidentid' => $incident['id'],
                                                                   'nextslatime' => $times['next_sla_time'],
                                                                   'nextsla' => $NextslaName));
-                                                                  
+
                     $sql = "UPDATE `{$dbIncidents}` SET slanotice='1' WHERE id='{$incident['id']}'";
                     mysql_query($sql);
                     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
@@ -286,59 +286,62 @@ function saction_SetUserStatus()
     {
         if ($huser->length == 'day'
             OR ($huser->length == 'am' AND date('H') < 12)
-            OR ($huser->length == 'pm' AND date('H') < 12))
+            OR ($huser->length == 'pm' AND date('H') > 12))
         {
             $currentstatus = user_status($huser->userid);
             $newstatus = $currentstatus;
             // Only enabled users
             if ($currentstatus > 0)
             {
-                if ($huser->type == 1 AND $currentstatus != 5) $newstatus = 5; // Holiday
-                if ($huser->type == 2 AND $currentstatus != 8) $newstatus = 8; // Sickness
-                if ($huser->type == 3 AND ($currentstatus != 6 AND $currentstatus != 9)) $newstatus = 9; // Work away
-                if ($huser->type == 4 AND $currentstatus != 7) $newstatus = 7; // Training
-                if ($huser->type == 5 AND ($currentstatus != 2 AND $currentstatus != 8)) $newstatus = 8; // Compassionate
+                if ($huser->type == HOL_HOLIDAY AND $currentstatus != USERSTATUS_ON_HOLIDAY) $newstatus = USERSTATUS_ON_HOLIDAY;
+                if ($huser->type == HOL_SICKNESS AND $currentstatus != USERSTATUS_ABSENT_SICK) $newstatus = USERSTATUS_ABSENT_SICK;
+                if ($huser->type == HOL_WORKING_AWAY AND
+                   ($currentstatus != USERSTATUS_WORKING_FROM_HOME AND
+                   $currentstatus != USERSTATUS_WORKING_AWAY)) $newstatus = USERSTATUS_WORKING_AWAY;
+                if ($huser->type == HOL_TRAINING AND $currentstatus != USERSTATUS_ON_TRAINING_COURSE) $newstatus = USERSTATUS_ON_TRAINING_COURSE;
+                if ($huser->type == HOL_FREE AND
+                   ($currentstatus != USERSTATUS_NOT_IN_OFFICE AND
+                   $currentstatus != USERSTATUS_ABSENT_SICK)) $newstatus = USERSTATUS_ABSENT_SICK; // Compassionate
             }
             if ($newstatus != $currentstatus)
             {
                 $accepting = '';
-                // FIXME these should be constants
                 switch ($newstatus)
                 {
-                    case 1: // in office
+                    case USERSTATUS_IN_OFFICE:
                         $accepting = 'Yes';
                     break;
 
-                    case 2: // Not in office
+                    case USERSTATUS_NOT_IN_OFFICE:
                         $accepting = 'No';
                     break;
 
-                    case 3: // In Meeting
+                    case USERSTATUS_IN_MEETING:
                         // don't change
                         $accepting = '';
                     break;
 
-                    case 4: // At Lunch
+                    case USERSTATUS_AT_LUNCH:
                         $accepting = '';
                     break;
 
-                    case 5: // On Holiday
+                    case USERSTATUS_ON_HOLIDAY:
                         $accepting = 'No';
                     break;
 
-                    case 6: // Working from home
+                    case USERSTATUS_WORKING_FROM_HOME:
                         $accepting = 'Yes';
                     break;
 
-                    case 7: // On training course
+                    case USERSTATUS_ON_TRAINING_COURSE:
                         $accepting = 'No';
                     break;
 
-                    case 8: // Absent Sick
+                    case USERSTATUS_ABSENT_SICK:
                         $accepting =' No';
                     break;
 
-                    case 9: // Working Away
+                    case USERSTATUS_WORKING_AWAY:
                         // don't change
                         $accepting = '';
                     break;
@@ -350,13 +353,13 @@ function saction_SetUserStatus()
                 if ($accepting != '') $usql .= ", accepting='{$accepting}'";
                 $usql .= " WHERE id='{$huser->userid}' LIMIT 1";
                 if ($accepting == 'No') incident_backup_switchover($huser->userid, 'no');
-                
+
                 if ($CONFIG['debug'])
                 {
                     echo user_realname($huser->userid).': '.userstatus_name($currentstatus).' -> '.userstatus_name($newstatus).$crlf;
                     echo $usql.$crlf;
                 }
-                
+
                 mysql_query($usql);
                 if (mysql_error())
                 {
@@ -367,7 +370,9 @@ function saction_SetUserStatus()
         }
     }
     // Find users who are set away but have no entry in the holiday calendar
-    $sql = "SELECT * FROM `{$dbUsers}` WHERE status=5 OR status=7 OR status=8 OR status=9 ";
+    $sql = "SELECT * FROM `{$dbUsers}` WHERE status=".USERSTATUS_ON_HOLIDAY." OR ";
+    $sql .= "status=".USERSTATUS_ON_TRAINING_COURSE." OR ";
+    $sql .= "status=".USERSTATUS_ABSENT_SICK." OR status=".USERSTATUS_WORKING_AWAY." ";
     $result = mysql_query($sql);
     if (mysql_error())
     {
@@ -603,7 +608,7 @@ function saction_PurgeExpiredFTPItems()
 
 /**
  *
- * @author Paul Heaney 
+ * @author Paul Heaney
 */
 function saction_MailPreviousMonthsTransactions()
 {
@@ -636,7 +641,7 @@ function saction_MailPreviousMonthsTransactions()
     $enddate = 	"{$currentyear}-{$lastmonth}-{$lastday}";
 
     $csv = transactions_report('', $startdate, $enddate, '', 'csv', TRUE);
-    
+
     $extra_headers = "Reply-To: {$CONFIG['support_email']}\nErrors-To: {$CONFIG['support_email']}\n"; // TODO should probably be different
     $extra_headers .= "X-Mailer: {$CONFIG['application_shortname']} {$application_version_string}/PHP " . phpversion() . "\n";
     $extra_headers .= "X-Originating-IP: {$_SERVER['REMOTE_ADDR']}\n";
@@ -674,7 +679,7 @@ function saction_CheckTasksDue()
     if ($result = mysql_query($sql))
     {
         $intervalobj = mysql_fetch_object($result);
-        
+
         // check the tasks due between now and in N minutes time,
         // where N is the time this action is run
         $format = "Y-m-d H:i:s";
