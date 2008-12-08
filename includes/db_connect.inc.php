@@ -84,6 +84,8 @@ if (mysql_num_rows($result) > 0)
 {
     while ($conf = mysql_fetch_object($result))
     {
+        if ($conf->value==='TRUE') $_POST[$setupvar] = TRUE;
+        if ($conf->value==='FALSE') $_POST[$setupvar] = FALSE;
         $CONFIG[$conf->config] = $conf->value;
     }
 }
