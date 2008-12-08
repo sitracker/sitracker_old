@@ -153,12 +153,11 @@ require ('triggers.inc.php');
 /**
     * Authenticate a user with a username/password pair
     * @author Ivan Lucas
-    * @param $username string. A username
-    * @param $password string. A password (non-md5)
+    * @param string $username. A username
+    * @param string $password. A password (non-md5)
     * @return an integer to indicate whether the user authenticated against the database
-    * @retval 0 the credentials were wrong or the user was not found.
-    * @retval 1 to indicate user is authenticated and allowed to continue.
-
+    * @retval int 0 the credentials were wrong or the user was not found.
+    * @retval int 1 to indicate user is authenticated and allowed to continue.
 */
 function authenticateSQL($username, $password)
 {
@@ -195,11 +194,11 @@ function authenticateSQL($username, $password)
 /**
     * Authenticate a user
     * @author Lea Anthony
-    * @param $username String. Username
-    * @param $password String. Password
+    * @param string $username. Username
+    * @param string $password. Password
     * @return an integer to indicate whether the user authenticated against any authentication backends
-    * @retval 0 the credentials were wrong or the user was not found.
-    * @retval 1 to indicate user is authenticated and allowed to continue.
+    * @retval int 0 the credentials were wrong or the user was not found.
+    * @retval int 1 to indicate user is authenticated and allowed to continue.
 */
 function authenticate($username, $password)
 {
@@ -229,7 +228,9 @@ function authenticate($username, $password)
 /**
     * See if a customer exists in the database
     * @author Lea Anthony
-    * @param $username String. Username of customer
+    * @param string $username. Username of customer
+    * @retval bool TRUE exists in db
+    * @retval bool FALSE does not exist in db
 */
 function customerExistsInDB($username)
 {
@@ -251,9 +252,9 @@ function customerExistsInDB($username)
 /**
     * Returns a specified column from a specified table in the database given an ID primary key
     * @author Ivan Lucas
-    * @param $column a database column as a string
-    * @param $table a database table as a string
-    * @param $id the primary key / id column
+    * @param string $column a database column
+    * @param string $table a database table
+    * @param int $id the primary key / id column
     * @return A column from the database
     * @note it's not always efficient to read a single column at a time, but when you only need
     *  one column, this is handy
@@ -272,8 +273,8 @@ function db_read_column($column, $table, $id)
 /**
     * Returns TRUE or FALSE to indicate whether a given user has a given permission
     * @author Ivan Lucas
-    * @param $userid integer. The userid to check
-    * @param $permission integer or array. The permission id to check, or an array of id's to check
+    * @param int $userid. The userid to check
+    * @param int $permission or array. The permission id to check, or an array of id's to check
     * @return boolean. TRUE if the user has the permission (or all the permissions in the array), otherwise FALSE
 */
 function user_permission($userid,$permission)
@@ -312,7 +313,7 @@ function permission_name($permissionid)
 /**
     * Get the name associated with software ID / skill ID
     * @author Ivan Lucas
-    * @param $softwareid integer
+    * @param int $softwareid
     * @returns string. Skill/Software Name
     * @note Software was renamed skills for v3.30
 */
@@ -347,11 +348,11 @@ function software_name($softwareid)
 /**
     * Returns an integer representing the id of the user identified by his/her username and password
     * @author Ivan Lucas
-    * @param $username string. A username
-    * @param $password string. An MD5 hashed password
+    * @param string $username. A username
+    * @param string $password. An MD5 hashed password
     * @return integer. the users ID or 0 if the user does not exist (username/password did not match)
-    * @retval 0 The user did not exist
-    * @retval >=1 The userid of the matching user
+    * @retval int 0 The user did not exist
+    * @retval int >=1 The userid of the matching user
     * @note Returns 0 if the given user does not exist
 */
 function user_id($username, $password)
