@@ -513,8 +513,8 @@ else
 
                 // Update the incident to say that a KB article was created, with the KB Article number
                 $update = "<b>Knowledge base article</b> created from this incident, see: {$CONFIG['kb_id_prefix']}".leading_zero(4,$docid);
-                $sql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, bodytext, timestamp, type) ";
-                $sql .= "VALUES ('$id', '$sit[2]', 'default', '$update', '$now', 'research')";
+                $sql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, bodytext, timestamp) ";
+                $sql .= "VALUES ('$id', '$sit[2]', 'default', '$update', '$now')";
                 $result = mysql_query($sql);
                 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
