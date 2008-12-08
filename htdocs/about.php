@@ -112,7 +112,7 @@ echo "<tr><td class='shade1' colspan='2'>{$strReleaseNotes}:</td></tr>";
 echo "<tr><td class='shade2' colspan='2'><p align='center'><a href='releasenotes.php'>{$strReleaseNotes}</a></p></td></tr>\n";
 echo "<tr><td class='shade1' colspan='2'>{$strPlugins}:</td></tr>";
 echo "<tr><td class='shade2' colspan='2'>";
-if (count($CONFIG['plugins']) >= 1)
+if (is_array($CONFIG['plugins']) AND count($CONFIG['plugins']) >= 1)
 {
     foreach ($CONFIG['plugins'] AS $plugin)
     {
