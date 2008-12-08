@@ -761,6 +761,7 @@ $strLastMonth = 'Last month';
 # Last time an action was executed
 $strLastRan = 'Last Ran';
 $strLastUpdated = 'Last Updated';
+$strLastWeek = 'Last week';
 $strLastYear = 'Last year';
 $strLength = 'Length';
 $strLicense = 'Licence';
@@ -1405,6 +1406,7 @@ $strThereAreXIncidentsInThisList = 'There are %s incidents in this list';
 $strTheInfoInThisArticle = 'The information in this article applies to';
 $strTheMoreInformation = 'The more information you can provide, the better';
 $strThisMonth = 'This month';
+$strThisWeek = 'This week';
 $strThisYear = 'This year';
 # Short for 'Thursday'
 $strThu = 'Thu';

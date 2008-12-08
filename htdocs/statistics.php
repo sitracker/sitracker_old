@@ -242,8 +242,8 @@ function give_overview()
     echo stats_period_row("<a href='{$_SERVER['PHP_SELF']}?mode=daybreakdown&offset=5'>".ldate('l',mktime(0,0,0,date('m'),date('d')-5,date('Y')))."</a>", mktime(0,0,0,date('m'),date('d')-5,date('Y')),mktime(23,59,59,date('m'),date('d')-5,date('Y')));
     echo stats_period_row("<a href='{$_SERVER['PHP_SELF']}?mode=daybreakdown&offset=6'>".ldate('l',mktime(0,0,0,date('m'),date('d')-6,date('Y')))."</a>", mktime(0,0,0,date('m'),date('d')-6,date('Y')),mktime(23,59,59,date('m'),date('d')-6,date('Y')));
     echo "<tr><td colspan='*'></td></tr>";
-    echo stats_period_row(sprintf($GLOBALS['strPastXDays'],7), mktime(0,0,0,date('m'),date('d')-6,date('Y')),mktime(23,59,59,date('m'),date('d'),date('Y')));
-    echo stats_period_row(sprintf($GLOBALS['strPreviousXDays'],7), mktime(0,0,0,date('m'),date('d')-13,date('Y')),mktime(23,59,59,date('m'),date('d')-7,date('Y')));
+    echo stats_period_row($GLOBALS['strThisWeek'], mktime(0,0,0,date('m'),date('d')-6,date('Y')),mktime(23,59,59,date('m'),date('d'),date('Y')));
+    echo stats_period_row($GLOBALS['strLastWeek'], mktime(0,0,0,date('m'),date('d')-13,date('Y')),mktime(23,59,59,date('m'),date('d')-7,date('Y')));
     echo "<tr><td colspan='*'></td></tr>";
 
     if ($mode == 'detail')
@@ -275,7 +275,7 @@ function give_overview()
 
     if (mysql_num_rows($result) > 1)
     {
-        echo "<h2>By Group</h2><table class='vertical' align='center'>";
+        echo "<h2>{$strByGroup}</h2><table class='vertical' align='center'>";
         while ($groups = mysql_fetch_object($result))
         {
             $sqlGroups = "SELECT COUNT(i.id) AS count, istatus.name ";
@@ -304,7 +304,7 @@ function give_overview()
                         $openCallsGroup += $amount;
                     //}
                 }
-                echo "<tr><th>Total Open</th>";
+                echo "<tr><th>{$strTotalOpen}</th>";
                 echo "<td class='shade2' align='left'><strong>{$openCallsGroup}</strong></td></tr></table></td>";
             }
         }
