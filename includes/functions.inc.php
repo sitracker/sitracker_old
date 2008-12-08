@@ -3332,17 +3332,6 @@ function sit_error_handler($errno, $errstr, $errfile, $errline, $errcontext)
 
 
 /**
-    * @author Ivan Lucas
-    * @deprecated Remove after 3.40 release
-    * @note DEPRECATED and replaced by sit_error_handler() / trigger_error()
-**/
-function throw_error($message, $details)
-{
-    trigger_error("{$message}: {$details}", E_USER_WARNING);
-}
-
-
-/**
   Write an entry to the configured error logfile
   * @author Ivan Lucas
   * @param string $logentry. A line, or lines to write to the log file

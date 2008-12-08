@@ -734,10 +734,10 @@ elseif ($action == 'assign')
 
                 $result = mysql_query($sql);
                 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-                
+
 		        $old_path = $CONFIG['attachment_fspath']. 'updates' . $fsdelim;
 		        $new_path = $CONFIG['attachment_fspath'] . $incidentid . $fsdelim;
-		
+
 		        //move attachments from updates to incident
 		        $sql = "SELECT linkcolref, filename FROM `{$dbLinks}` AS l, ";
 		        $sql .= "`{$dbFiles}` as f ";
@@ -948,7 +948,7 @@ elseif ($action == 'assign')
         }
         else
         {
-            throw_error('User input error:', $error_string);
+            trigger_error('User input error: '. $error_string, E_USER_ERROR);
         }
     }
     include ('htmlfooter.inc.php');
