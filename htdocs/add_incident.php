@@ -224,8 +224,9 @@ elseif ($action == 'findcontact')
         while ($contactrow = mysql_fetch_array($result))
         {
             if (empty($CONFIG['preferred_maintenance']) OR
+                (is_array($CONFIG['preferred_maintenance']) AND 
                 in_array(servicelevel_id2tag($contactrow['servicelevelid']),
-                                             $CONFIG['preferred_maintenance']))
+                                             $CONFIG['preferred_maintenance'])))
             {
                 $str_prefered .= to_row($contactrow);
             }
