@@ -139,7 +139,6 @@ if ($emails > 0)
         $from_email = $results[From][0][address];
         $sql = "SELECT id FROM `{$GLOBALS['dbContacts']}` ";
         $sql .= "WHERE email = '{$from_email}'";
-        echo $sql;
         if ($result = mysql_query($sql))
         {
             if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
