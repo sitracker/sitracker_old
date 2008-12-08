@@ -3364,7 +3364,7 @@ function debug_log($logentry)
             $fp = fopen($CONFIG['error_logfile'], 'a+');
             if ($fp)
             {
-                fwrite($fp, date('r').' '.$logentry);
+                fwrite($fp, date('r').' '.strip_tags($logentry));
                 fclose($fp);
             }
             else
