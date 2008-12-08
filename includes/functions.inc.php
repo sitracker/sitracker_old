@@ -3293,21 +3293,18 @@ function sit_error_handler($errno, $errstr, $errfile, $errline, $errcontext)
                         }
                     }
                 }
-                if (!empty($CONFIG['error_logfile']) AND is_writable($CONFIG['error_logfile']))
+                if ($errno != E_NOTICE)
                 {
-                    $fp=fopen($CONFIG['error_logfile'], 'a+');
-                    if ($errno != E_NOTICE)
-                    {
-                        fwrite($fp, date('r')." {$errortype[$errno]} [{$errno}] {$errstr} (in line {$errline} of file {$errfile})\n");
-                    }
-                    if ($errno==E_ERROR
-                        || $errno==E_USER_ERROR
-                        || $errno==E_CORE_ERROR
-                        || $errno==E_CORE_WARNING
-                        || $errno==E_COMPILE_ERROR
-                        || $errno==E_COMPILE_WARNING) fwrite($fp, "Context:\n".print_r($errcontext, TRUE)."\n----------\n\n");
-                    fclose($fp);
+                    $logentry = " {$errortype[$errno]} [{$errno}] {$errstr} (in line {$errline} of file {$errfile})\n";
                 }
+                if ($errno==E_ERROR
+                    || $errno==E_USER_ERROR
+                    || $errno==E_CORE_ERROR
+                    || $errno==E_CORE_WARNING
+                    || $errno==E_COMPILE_ERROR
+                    || $errno==E_COMPILE_WARNING) $logentry .= "Context:\n".print_r($errcontext, TRUE)."\n----------\n\n";
+
+                debug_log($logentry);
             }
             echo "</p>";
             // Tips, to help diagnose errors
@@ -3345,6 +3342,43 @@ function sit_error_handler($errno, $errstr, $errfile, $errline, $errcontext)
 function throw_error($message, $details)
 {
     trigger_error("{$message}: {$details}", E_USER_WARNING);
+}
+
+
+/**
+  Write an entry to the configured error logfile
+  * @author Ivan Lucas
+  * @param string $logentry. A line, or lines to write to the log file
+  * (with newlines \n)
+  * @retval bool TRUE log entry written
+  * @retval bool FALSE log entry not written
+*/
+function debug_log($logentry)
+{
+    global $CONFIG;
+
+    if (!empty($CONFIG['error_logfile']))
+    {
+        if (is_writable($CONFIG['error_logfile']))
+        {
+            $fp = fopen($CONFIG['error_logfile'], 'a+');
+            if ($fp)
+            {
+                fwrite($fp, date('r').' '.$logentry);
+                fclose($fp);
+            }
+            else
+            {
+                echo "<p class='error'>Could not log message to error_logfile</p>";
+                return FALSE;
+            }
+            return TRUE;
+        }
+    }
+    else
+    {
+        return FALSE;
+    }
 }
 
 
