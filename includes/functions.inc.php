@@ -3325,7 +3325,7 @@ function sit_error_handler($errno, $errstr, $errfile, $errline, $errcontext)
         else
         {
             debug_log("ERROR: {$errortype[$errno]} {$errstr} in {$errfile} at line {$errline}\n".
-                      "ERROR: Backtrace:\n{$backtrace}");
+                      "ERROR: Backtrace:\n{$backtrace}\n");
         }
     }
 }
