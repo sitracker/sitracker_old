@@ -23,7 +23,7 @@ require_once('contract.inc.php');
 function incident($incident)
 {
     global $dbIncidents;
-    
+
     $incident = intval($incident);
     $sql = "SELECT * FROM `{$dbIncidents}` WHERE id = '$incident'";
     $result = mysql_query($sql);
@@ -141,7 +141,7 @@ function create_incident_from_incoming($incomingid)
     {
         $rtn = FALSE;
     }
-    
+
     if ($CONFIG['auto_assign_incidents'])
     {
         $user = suggest_reassign_userid($incident);
@@ -195,7 +195,7 @@ function move_update_to_incident($update, $incident)
 function update($update)
 {
     global $dbUpdates;
-    
+
     $update = intval($update);
     $sql = "SELECT * FROM `{$dbUpdates}` WHERE id = '{$update}'";
     $result = mysql_query($sql);
@@ -208,11 +208,11 @@ function update($update)
 /**
     * Suggest the userid of a suitable person to handle the given incident
     * @author Ivan Lucas
-    * @param $incidentid integer. An incident ID to suggest a new owner for
-    * @param $exceptuserid integer. This user ID will not be suggested (e.g. the existing owner)
+    * @param int $incidentid. An incident ID to suggest a new owner for
+    * @param int $exceptuserid. This user ID will not be suggested (e.g. the existing owner)
     * @returns A user ID of the suggested new owner
-    * @retval FALSE failure.
-    * @retval integer The user ID of the suggested new owner
+    * @retval bool FALSE failure.
+    * @retval int The user ID of the suggested new owner
     * @note Users are chosen randomly in a weighted lottery depending on their
     * avilability and queue status
 */
