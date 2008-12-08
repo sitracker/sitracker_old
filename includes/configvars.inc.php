@@ -276,7 +276,7 @@ $CFGVAR['end_working_day']['title'] = 'Time of the end of the working day (in se
 $CFGVAR['end_working_day']['type'] = 'number';
 $CFGVAR['end_working_day']['unit'] = $strSeconds;
 
-$CFGVAR['error_logfile']['help'] = "This file must be writable of course";
+$CFGVAR['error_logfile']['help'] = "This file must already exist and be writable";
 $CFGVAR['error_logfile']['title'] = "Path to a file to log error messages";
 
 $CFGVAR['error_notavailable_url']['title']="The URL to redirect too for pages that do not exist yet.";
