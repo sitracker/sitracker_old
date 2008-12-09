@@ -23,17 +23,17 @@ $DEFAULTS = $CONFIG;
 @include ('/etc/webtrack.conf'); // for legacy systems
 @include ('/etc/sit.conf');
 
-// Some actions require authentication
-if ($_REQUEST['action'] == 'reconfigure')
-{
-    $permission = 22;
-    $_REQUEST['config'] = 'advanced'; // set advanced mode
-    require ('functions.inc.php');
-    require ('auth.inc.php');
-}
+// // Some actions require authentication
+// if ($_REQUEST['action'] == 'reconfigure')
+// {
+//     $permission = 22;
+//     $_REQUEST['config'] = 'advanced'; // set advanced mode
+//     require ('functions.inc.php');
+//     require ('auth.inc.php');
+// }
 
 // These are the required variables we want to configure during installation
-$SETUP = array('db_hostname','db_database','db_username','db_password','db_tableprefix','application_fspath','application_webpath', 'attachment_fspath', 'attachment_webpath', 'enable_inbound_mail', 'email_username', 'email_password', 'email_address', 'email_server', 'email_servertype', 'email_options', 'email_port');
+$SETUP = array('db_hostname','db_database','db_username','db_password','db_tableprefix','application_fspath','application_webpath', 'attachment_fspath', 'attachment_webpath');
 
 require('configvars.inc.php');
 
@@ -89,7 +89,7 @@ function setup_configure()
     {
         if ($numconfigfiles < 2)
         {
-            $html .= "<h2>Found an existing config file <var>{$config_filename}</var></h2>";
+            $html .= "<h4>Found an existing config file <var>{$config_filename}</var></h4>";
         }
         else
         {
@@ -112,7 +112,7 @@ function setup_configure()
         else
         {
             $html .= "<p class='error'>A config file already exists but it is not writable</p>";
-            $html .= "<p>For security we won't show your existing settings here unless the configuration file is writable.</p>";
+            $html .= "<p>For security we won't show your existing settings here unless we are able to write to the configuration file automatically.</p>";
         }
     }
     else $html .= "<h2>New Configuration</h2><p>Please complete this form to create a new configuration file for SiT!</p>";
@@ -312,6 +312,28 @@ function setup_exec_sql($sqlquerylist)
     return $errors;
 }
 
+
+function setup_createdb()
+{
+    global $CONFIG;
+    $sql = "CREATE DATABASE `{$CONFIG['db_database']}` DEFAULT CHARSET utf8";
+    if ($_REQUEST['action'] == 'createdatabase')
+    {
+        echo "<h2>Creating database...</h2>";
+        $result = mysql_query($sql);
+        if ($result)
+        {
+            echo "<p><strong>OK</strong> Database '{$CONFIG['db_database']}' created.</p>";
+            echo setup_button('', 'Next');
+        }
+        else
+        {
+            echo "<p class='error'>".mysql_error()."<br />The database could not be created automatically, ";
+            echo "you can create it manually by executing the SQL statement <br /><code>{$sql};</code></p>";
+        }
+    }
+}
+
 // Returns TRUE if an admin account exists, or false if not
 function setup_check_adminuser()
 {
@@ -320,6 +342,20 @@ function setup_check_adminuser()
     $result = @mysql_query($sql);
     if (mysql_num_rows($result) >= 1) return TRUE;
     else FALSE;
+}
+
+
+function setup_button($action, $label)
+{
+    $html = "\n<form action='{$_SERVER['PHP_SELF']}' method='post'>";
+    if (!empty($action))
+    {
+        $html .= "<input type='hidden' name='action' value=\"{$action}\" />";
+    }
+    $html .= "<input type='submit' value=\"{$label}\" />";
+    $html .= "</form>\n";
+
+    return $html;
 }
 
 
@@ -333,10 +369,11 @@ echo "<head>\n";
 echo "<meta http-equiv=\"Content-Type\" content=\"text/html;charset=UTF-8\" />\n";
 echo "<style type=\"text/css\">\n";
 echo "body { background-color: #FFF; font-family: Tahoma, Helvetica, sans-serif; font-size: 10pt;}\n";
-echo "h1,h2,h3,h4,h5 { background-color: #203894; padding: 0.1em; border: 1px solid #203894; color: #FFF; }\n";
+echo "h1,h2,h3,h4,h5 { color: #203894; padding: 0.1em; border: 1px solid #4D485B; }\n";
+if (file_exists('./images/sitlogo_270x100.png')) echo "body {background-image: url('images/sitlogo_270x100.png'); background-attachment:fixed; background-position: 98% 98%; background-repeat: no-repeat;}\n";
 echo "h4 {background-color: transparent; color: #000; border: 0px; margin: 2px 0px 3px 0px; }\n";
-echo "div.configvar1 {background-color: #F7FAFF; border: 1px solid black; margin-bottom: 10px; padding: 0px 5px 10px 5px;} ";
-echo "div.configvar2 {background-color: green; border: 1px solid black; margin-bottom: 10px;} ";
+echo "div.configvar1 {background-color: #F7FAFF; border: 1px solid #4D485B; margin-bottom: 10px; padding: 0px 5px 10px 5px; filter:alpha(opacity=75);  opacity: 0.75;  -moz-opacity:0.75; -moz-border-radius: 3px;} ";
+echo "div.configvar2 {background-color: green; border: 1px solid #4D485B; margin-bottom: 10px;} ";
 echo ".error {background-position: 3px 2px;
   background-repeat: no-repeat;
   padding: 3px 3px 3px 22px;
@@ -416,7 +453,7 @@ echo "pre {background:#FFF; border:#999; padding: 1em;}\n";
 echo "a.button { border: 1px outset #000; padding: 2px; background-color: #EFEFEF;} ";
 echo "a:link,a:visited { color: #000099; }\n";
 echo "a:hover { background: #99CCFF; }\n";
-echo "hr { background-color: #203894; margin-top: 3em; }\n";
+echo "hr { background-color: #4D485B; margin-top: 3em; }\n";
 echo "</style>\n";
 echo "<title>Support Incident Tracker Setup</title>\n";
 echo "</head>\n<body>\n";
@@ -541,7 +578,7 @@ switch ($_REQUEST['action'])
             echo "<p class='help'>Copy this text and paste it into a <var>config.inc.php</var> file in the includes directory or <var>sit.conf</var> in the <var>/etc</var> directory<br />";
             echo "Or change the permissions on the file so that it is writable and refresh this page to try again (if you do this remember to make it ";
             echo "read-only again afterwards)</p>";
-            echo "<div style='margin-left: 5%; margin-right: 5%; background-color: white; padding: 1em; border: 1px dashed #ccc; '>";
+            echo "<div id='configfile' style='margin-left: 5%; margin-right: 5%; background-color: #F7FAFF; padding: 1em; border: 1px dashed #ccc;filter:alpha(opacity=75);  opacity: 0.75;  -moz-opacity:0.75; -moz-border-radius: 3px; '>";
             highlight_string($newcfgfile);
             echo "</div>";
             echo "<p>After creating your <var>{$config_filename}</var> file click the 'Next' button below.</p>";
@@ -557,13 +594,72 @@ switch ($_REQUEST['action'])
                 echo "<p class='warning'>Important: The file permissions on the file <var>{$config_filename}</var> allow the file to be modified, we recommend you now make this file read-only.</p>";
             }
         }
-        echo "<p><a href='setup.php' class='button'>Next</a></p>";
+        echo setup_button('checkdbstate', 'Next');
     break;
 
     case 'reconfigure':
         echo "<h2>Reconfigure</h2>";
-        echo "<p>With this page administrators can set every available config file setting.  Please take care or you may break your SiT! installation.</p>";
+        echo "<p>Amend your existing SiT! configuration.  Please take care or you may break your SiT! installation.</p>";
         echo setup_configure();
+    break;
+
+    case 'checkdbstate':
+        // Connect to Database server
+        $db = @mysql_connect($CONFIG['db_hostname'], $CONFIG['db_username'], $CONFIG['db_password']);
+        if (@mysql_error())
+        {
+            echo setup_configure();
+        }
+        else
+        {
+            // Connected to database
+            // Select database
+            mysql_select_db($CONFIG['db_database'], $db);
+            if (mysql_error())
+            {
+                if (!empty($CONFIG['db_username']))
+                {
+                    echo "<p class='error'>".mysql_error()."<br />Could not select database";
+                    if ($CONFIG['db_database']!='')
+                    {
+                        echo " '{$CONFIG['db_database']}', check the database name you have configured matches the database in MySQL";
+                    }
+                    else
+                    {
+                        echo ", the database name was not configured, please set the <code>\$CONFIG['db_database'] config variable";
+                        $CONFIG['db_database'] = 'sit';
+                    }
+                    echo "</p>";
+                    echo setup_button('reconfigure', 'Reconfigure SiT!');
+                    //echo "<p><a href='{$_SERVER['PHP_SELF']}?action=reconfigure'>Reconfigure</a> SiT!</p>";
+                }
+                else
+                {
+                    // Username and Password are set, but the db could not be selected
+
+                }
+
+                // FIMXE INL temp removed
+//                 else
+//                 {
+//                     echo "<p class='help'>If this is the first time you have used SiT! you may need to create the database, ";
+//                     echo "if you have the necessary MySQL permissions you can create the database automatically.<br />";
+//                     echo "Alternatively you can create it manually by executing the SQL statement <br /><code>{$sql};</code></p";
+//                     echo "<p><a href='setup.php?action=createdatabase' class='button'>Create Database</a></p>";
+//                 }
+//                 //echo "<p>After creating the database run <a href='setup.php' class='button'>setup</a> again to create the database schema</p>";
+                if (empty($CONFIG['db_database']) OR empty($CONFIG['db_username']))
+                {
+                    echo "<p>You need to configure SiT to be able access the MySQL database.</p>";
+                    echo setup_configure();
+                }
+            }
+        }
+    break;
+
+
+    case 'createdb':
+        setup_createdb();
     break;
 
 
@@ -582,47 +678,40 @@ switch ($_REQUEST['action'])
             mysql_select_db($CONFIG['db_database'], $db);
             if (mysql_error())
             {
-            	if (!empty($CONFIG['db_username']) AND !empty($CONFIG['db_password']))
-            	{
-	                echo "<p class='error'>".mysql_error()."<br />Could not select database";
-	                if ($CONFIG['db_database']!='')
-	                {
-	                    echo " '{$CONFIG['db_database']}', check the database name,";
-	                }
-	                else
-	                {
-	                    echo ", the database name was not configured, please set the <code>\$CONFIG['db_database'] config variable";
-	                    $CONFIG['db_database'] = 'sit';
-	                }
-	                echo "</p>";
-            	}
-                $sql = "CREATE DATABASE `{$CONFIG['db_database']}` DEFAULT CHARSET utf8";
-                if ($_REQUEST['action'] == 'createdatabase')
+                if (!empty($CONFIG['db_username']))
                 {
-                    echo "<h2>Creating database...</h2>";
-                    $result = mysql_query($sql);
-                    if ($result)
+                    echo "<p class='error'>".mysql_error()."<br />Could not select database";
+                    if ($CONFIG['db_database']!='')
                     {
-                        echo "<p><strong>OK</strong> Database '{$CONFIG['db_database']}' created.</p>";
-                        echo "<p><a href='setup.php' class='button'>Next</a></p>";
+                        echo " '{$CONFIG['db_database']}', check the database name you have configured matches the database in MySQL";
                     }
                     else
                     {
-                        echo "<p class='error'>".mysql_error()."<br />The database could not be created automatically, ";
-                        echo "you can create it manually by executing the SQL statement <br /><code>{$sql};</code></p>";
+                        echo ", the database name was not configured, please set the <code>\$CONFIG['db_database'] config variable";
+                        $CONFIG['db_database'] = 'sit';
                     }
+                    echo "</p>";
+                    echo setup_button('reconfigure', 'Reconfigure SiT!');
+                    //echo "<p><a href='{$_SERVER['PHP_SELF']}?action=reconfigure'>Reconfigure</a> SiT!</p>";
                 }
                 else
                 {
-                    echo "<p class='help'>If this is the first time you have used SiT! you may need to create the database, ";
-                    echo "if you have the necessary MySQL permissions you can create the database automatically.<br />";
-                    echo "Alternatively you can create it manually by executing the SQL statement <br /><code>{$sql};</code></p";
-                    echo "<p><a href='setup.php?action=createdatabase' class='button'>Create Database</a></p>";
+                    // Username and Password are set, but the db could not be selected
+
                 }
-                //echo "<p>After creating the database run <a href='setup.php' class='button'>setup</a> again to create the database schema</p>";
+
+                // FIMXE INL temp removed
+//                 else
+//                 {
+//                     echo "<p class='help'>If this is the first time you have used SiT! you may need to create the database, ";
+//                     echo "if you have the necessary MySQL permissions you can create the database automatically.<br />";
+//                     echo "Alternatively you can create it manually by executing the SQL statement <br /><code>{$sql};</code></p";
+//                     echo "<p><a href='setup.php?action=createdatabase' class='button'>Create Database</a></p>";
+//                 }
+//                 //echo "<p>After creating the database run <a href='setup.php' class='button'>setup</a> again to create the database schema</p>";
                 if (empty($CONFIG['db_database']) OR empty($CONFIG['db_username']))
                 {
-                    echo "<p>You may need to make configuration changes in order for SiT to be able access MySQL.</p>";
+                    echo "<p>You need to configure SiT to be able access the MySQL database.</p>";
                     echo setup_configure();
                 }
             }
@@ -679,7 +768,7 @@ switch ($_REQUEST['action'])
                     echo "<p>If no errors were reported above you should continue and check the installation.</p>";
                     echo "<p>If there are errors, please log a bug <a href='http://sitracker.sourceforge.net/Bugs'>here</a>";
                     echo ", with the full error message.</p>";
-                    echo "<p><a href='setup.php?action=checkinstallcomplete' class='button'>Next</a></p>";
+                    echo setup_button('checkinstallcomplete', 'Next');
                 }
                 else
                 {
@@ -889,10 +978,10 @@ switch ($_REQUEST['action'])
 
                         if ($installed_version < 3.40)
                         {
-                        	//remove any brackets from checks as per mantis 197
-                        	$sql = "UPDATE `triggers` SET `checks` = REPLACE(`checks`, '(', ''); ";
-                        	$sql .= "UPDATE `triggers` SET `checks` = REPLACE(`checks`, ')', '')";
-                        	mysql_query($sql);
+                            //remove any brackets from checks as per mantis 197
+                            $sql = "UPDATE `triggers` SET `checks` = REPLACE(`checks`, '(', ''); ";
+                            $sql .= "UPDATE `triggers` SET `checks` = REPLACE(`checks`, ')', '')";
+                            mysql_query($sql);
                             if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
                         }
 
@@ -994,7 +1083,7 @@ switch ($_REQUEST['action'])
                         }
                         if ($installed_version < $application_version OR $schemaupgradeneeded == TRUE)
                         {
-                            echo "<p><a href='setup.php?action=upgrade' class='button'>Upgrade Schema</a></p><br />";
+                            echo setup_button('upgrade', 'Upgrade Schema');
                         }
                     }
 
@@ -1071,16 +1160,17 @@ switch ($_REQUEST['action'])
                         echo "<p>SiT! v".number_format($installed_version,2)." is installed and ready.<br /><br /> <a href='index.php' class='button'>Run SiT!</a></p>";
                         if ($_SESSION['userid'] == 1)
                         {
-                            echo "<br /><p>As administrator you can <a href='{$_SERVER['PHP_SELF']}?action=reconfigure'>reconfigure</a> SiT!</p>";
+                            echo "<br /><p>As administrator you can <a href='config.php'>reconfigure</a> SiT!</p>";
                         }
                     }
                 }
             }
         }
 }
-echo "<hr />";
-echo "<p><a href='http://sourceforge.net/projects/sitracker'>{$CONFIG['application_name']}</a> Setup</p>";
+echo "<div style='margin-top: 50px;'>";
+echo "<hr style='width: 50%; margin-left: 0px;'/>";
+echo "<p><a href='http://sourceforge.net/projects/sitracker'>{$CONFIG['application_name']}</a> Setup | <a href='http://sitracker.sourceforge.net/Installation'>Installation Help</a></p>";
 echo "<p></p>";
-
+echo "</div>";
 echo "\n</body>\n</html>";
 ?>
