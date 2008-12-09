@@ -410,7 +410,7 @@ while ($incidents = mysql_fetch_array($result))
     }
     echo "</tr>\n";
 }
-echo "</table><br /></br >\n\n";
+echo "</table><br /><br />\n\n";
 
 echo "<table class='incidentkey'><tr>";
 echo "<td class='shade1'>{$strOpen}</td>";
