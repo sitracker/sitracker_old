@@ -572,17 +572,6 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
         $chase_customer = cleanvar($_REQUEST['chase_customer']);
         $chase_manager = cleanvar($_REQUEST['chase_manager']);
 
-        ?>
-        <script type="text/javascript">
-        function confirm_close_window()
-        {
-            if (window.confirm('The email was sent successfully, click OK to close this window'))
-            window.opener.location='incident_details.php?id=<?php echo $id; ?>';
-            window.close();l_redirect('', TRUE, TRUE, "window.opener.location='incident_details.php?id=<?php echo $id; ?>"); ?>
-        }
-        </script>
-        <?php
-
         // move attachment to a safe place for processing later
         if ($_FILES['attachment']['name'] != '')       // Should be using this format throughout TPG 13/08/2002
         {
@@ -877,7 +866,18 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
 
                 journal(CFG_LOGGING_FULL, $SYSLANG['strEmailSent'], "{$SYSLANG['strSubject']}: $subjectfield, {$SYSLANG['strIncident']}: $id", CFG_JOURNAL_INCIDENTS, $id);
                 echo "<html>";
-                echo "<head></head>";
+                echo "<head>";
+                ?>
+                <script type="text/javascript">
+                function confirm_close_window()
+                {
+                    if (window.confirm('The email was sent successfully, click OK to close this window'))
+                    window.opener.location='incident_details.php?id=<?php echo $id; ?>';
+                    window.close();l_redirect('', TRUE, TRUE, "window.opener.location='incident_details.php?id=<?php echo $id; ?>");
+                }
+                </script>
+                <?php
+                echo "</head>";
                 echo "<body onload=\"confirm_close_window();\">";
                 echo "</body>";
                 echo "</html>";
