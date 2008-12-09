@@ -386,9 +386,9 @@ function give_overview()
 
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
-        while ($row = mysql_fetch_objct($result))
+        while ($row = mysql_fetch_object($result))
         {
-            $sql = "SELECT id, title FROM `{$GLOBALS['dbIncidents']}` WHERE opened > '{$todayrecent}' AND owner = '{$row['owner']}'";
+            $sql = "SELECT id, title FROM `{$GLOBALS['dbIncidents']}` WHERE opened > '{$todayrecent}' AND owner = '{$row->owner}'";
 
             $string .= "<tr><th>{$row->count}</th>";
             $string .= "<td class='shade2' align='left'>";
