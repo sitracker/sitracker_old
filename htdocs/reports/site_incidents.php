@@ -24,9 +24,6 @@ $enddate = cleanvar($_REQUEST['end']);
 $mode = $_REQUEST['mode'];
 $zerologged = $_REQUEST['zerologged'];
 
-if (empty($startdate)) $startdate = date('Y-m-d');
-if (empty($enddate)) $enddate = date('Y-m-d');
-
 if (empty($mode))
 {
     include ('htmlheader.inc.php');
@@ -58,45 +55,50 @@ if (empty($mode))
 }
 else
 {
-    // FIXME handle crash were dates are blank
-    $sql = "SELECT DISTINCT s.id, s.name AS name, r.name AS resel ";
+	if (empty($startdate)) $startdate = date('Y-m-d', mktime(0, 0, 0, date("m"), date("d"), date("Y")-1)); // 1 year ago
+	if (empty($enddate)) $enddate = date('Y-m-d');
+    
+    $sql = "SELECT DISTINCT s.id, s.name AS name, r.name AS resel, m.reseller ";
     $sql .= "FROM `{$dbSites}` AS s, `{$dbMaintenance}` AS m, `{$dbResellers}` AS r ";
     $sql.= "WHERE s.id = m.site AND r.id = m.reseller AND m.term <> 'yes' ORDER BY s.name";
+    // echo $sql;
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     if (mysql_num_rows($result) > 0)
     {
         while ($site = mysql_fetch_object($result))
         {
-            $sql = "SELECT count(i.id) AS incidentz, s.name AS site FROM `{$dbContacts}` AS c, `{$dbSites}` AS s, `{$dbIncidents}` AS i ";
-            //$sql.= "WHERE contacts.siteid=sites.id AND sites.id={$site->id} AND incidents.opened > ($now-60*60*24*365.25) AND incidents.contact=contacts.id ";
+            $sql = "SELECT count(i.id) AS incidentz, s.name AS site FROM `{$dbContacts}` AS c, `{$dbSites}` AS s, `{$dbIncidents}` AS i, `{$dbMaintenance}` AS m ";
             $sql.= "WHERE c.siteid = s.id AND s.id={$site->id} AND i.opened >".strtotime($startdate)." AND i.closed < ".strtotime($enddate)." AND i.contact = c.id ";
+            $sql .= "AND m.id = i.maintenanceid AND m.reseller = '{$site->reseller}' ";
             $sql.= "GROUP BY site";
-            //echo $sql;
+            // echo $sql;
             $sresult = mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
-            $details=mysql_fetch_object($sresult);
-            $count=1*($details->incidentz);
+            $details = mysql_fetch_object($sresult);
+            $count = $details->incidentz;
             if (!empty($zerologged))
             {
-                $csv .="$count,{$site->name},{$site->resel}\n";
+                $csv .= "$count,{$site->name},{$site->resel}\n";
             }
             else
             {
-                if ($count!=0) $csv .="$count,{$site->name},{$site->resel}\n";
+                if ($count != 0) $csv .="$count,{$site->name},{$site->resel}\n";
             }
         }
         $csv = "{$strIncidents}, {$strSite}, {$strReseller}\n".$csv;
         if ($_POST['mode'] == 'csv')
         {
-        	$csv = "START:,{$startdate}\nEND:,{$enddate}".$csv;
+        	$csv = "{$strStartDate}:,{$startdate}\n{$strEndDate}:,{$enddate}".$csv;
 			echo create_report($csv, 'csv', 'yearly_incidents.csv');    		
         }
         else
         {
-        	include 'htmlheader.inc.php';
+        	include ('htmlheader.inc.php');
         	echo "<h2>".icon('site', 32)." {$strSiteIncidents}</h2>";
+        	echo "<p align='center'>{$strStartDate}: {$startdate}. {$strEndDate}: {$enddate}</p>";
         	echo create_report($csv, 'table');
+        	include ('htmlfooter.inc.php');
         }
 
 
