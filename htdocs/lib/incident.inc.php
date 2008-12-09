@@ -97,7 +97,7 @@ function create_incident($title, $contact, $servicelevel, $contract, $product,
 function create_incident_from_incoming($incomingid)
 {
     global $dbTempIncoming, $dbMaintenance, $dbServiceLevels,
-        $dbSoftwareProducts;
+        $dbSoftwareProducts, $CONFIG;
     $rtn = TRUE;
 
     $incomingid = intval($incomingid);

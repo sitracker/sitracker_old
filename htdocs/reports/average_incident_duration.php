@@ -50,7 +50,7 @@ else
 
 /**
     * @author Ivan Lucas
-    * @todo TODO move to lib
+    * @todo TODO FIXME move to lib
 */
 function count_incident_stats($incidentid)
 {
@@ -67,7 +67,7 @@ function count_incident_stats($incidentid)
     * Returns number of closed incidents that were opened within the period giving
     * the average duration in minutes and the average worked time in minutes
     * @author Ivan Lucas
-    * @todo TODO move to lib
+    * @todo TODO FIXME move to lib
 */
 function average_incident_duration($start,$end,$states)
 {
@@ -81,18 +81,18 @@ function average_incident_duration($start,$end,$states)
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
-    $totalduration=0;
-    $totalworkingduration=0;
-    $countclosed=0;
-    $total_unique_owners=0;
-    while ($row=mysql_fetch_object($result))
+    $totalduration = 0;
+    $totalworkingduration = 0;
+    $countclosed = 0;
+    $total_unique_owners= 0;
+    while ($row = mysql_fetch_object($result))
     {
-        $working_time=calculate_incident_working_time($row->incidentid, $row->opened, $row->closed, $states);
+        $working_time = calculate_incident_working_time($row->incidentid, $row->opened, $row->closed, $states);
         if ($row->duration_closed > 0)
         {
-            $totalduration=$totalduration+$row->duration_closed;
+            $totalduration = $totalduration+$row->duration_closed;
             $totalworkingduration += $working_time;
-            $cio=count_incident_stats($row->incidentid);
+            $cio = count_incident_stats($row->incidentid);
             $total_unique_owners += $cio[0];
             $total_updates += $cio[1];
             $countclosed++;
@@ -115,7 +115,7 @@ list($firstdate) = mysql_fetch_row($result);
 
 $current_time = $firstdate;
 
-$data[] = "Period,# Incidents,Total Duration,Time,Users,# Updates,# Updates per incident";
+$data = "Period,# Incidents,Total Duration,Time,Users,# Updates,# Updates per incident<br />";
 while ($current_time < time())
 {
     $current_month = date('m', $current_time);
@@ -143,7 +143,7 @@ while ($current_time < time())
     $row .= $stats[3].",";
     $row .= $stats[4].",";
     $row .= $stats[5];
-    $data[] = $row;
+    $data = $data."\n".$row;
     $current_time = $next_time;
 }
 
@@ -154,7 +154,8 @@ if ($_REQUEST['output'] == 'csv')
 else
 {
     include ('htmlheader.inc.php');
-    echo "<h2>$title</h2>";
+    echo "<h2>{$title}</h2>";
+    echo "<p align='center'>{$strOnlyShowsClosedCalls}</p>";
     echo "<p align='center'>";
     echo "<a href='{$_SERVER['PHP_SELF']}?mode=all&amp;increment=$increment";
     echo "&amp;states=2,3,4,6,7,9'>{$strActive}</a> | ";
@@ -170,6 +171,5 @@ else
     echo "output=csv'>{$strSaveAsCSV}</a></p>";
     include ('htmlfooter.inc.php');
 }
-
 
 ?>
