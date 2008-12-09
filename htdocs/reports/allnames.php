@@ -12,6 +12,7 @@
 //  Email:    ivanlucas[at]users.sourceforge.net
 //  Comments: Names of all customers in alphabetical order, for duplicate finding
 
+// Report Type: House Keeping
 // FIXME Not on menu
 
 @include ('../set_include_path.inc.php');

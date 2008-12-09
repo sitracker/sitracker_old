@@ -8,6 +8,8 @@
 // of the GNU General Public License, incorporated herein by reference.
 //
 
+// Report Type: Billing
+
 // Author:  Paul Heaney Paul Heaney <paulheaney[at]users.sourceforge.net>
 
 @include ('../set_include_path.inc.php');

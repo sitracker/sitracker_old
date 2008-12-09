@@ -8,6 +8,8 @@
 // of the GNU General Public License, incorporated herein by reference.
 //
 
+// Report Type: Maintenance
+
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
 @include ('../set_include_path.inc.php');

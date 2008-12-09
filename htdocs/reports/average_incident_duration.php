@@ -8,10 +8,11 @@
 // of the GNU General Public License, incorporated herein by reference.
 //
 
+// ReportType: Incident stats, Management reports
+
 // Authors: Ivan Lucas <ivanlucas[at]users.sourceforge.net> & Tom Gerrard
 //
 // Comments: How long do we take to close incidents?
-// FIXME 3.40 this doesn't look like it gives correct values?
 
 @include ('../set_include_path.inc.php');
 set_time_limit(60);

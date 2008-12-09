@@ -1,5 +1,5 @@
 <?php
-// detailed_stats.php
+// detailed_stats.php - Report shows details of opened/closed incidents each day in period along with engineer break down and incident details
 //
 // SiT (Support Incident Tracker) - Support call tracking system
 // Copyright (C) 2000-2008 Salford Software Ltd. and Contributors
@@ -9,12 +9,15 @@
 //
 // Author: Paul Heaney <paulheaney[at]users.sourceforge.net>
 
+// FIXME not on menu
+// FIXME needs abit of tidying up
+// Report Type: Management report
+
 @include ('../set_include_path.inc.php');
 $permission = 67; // Run Reports
 $title='Incidents open/closed by period';
 require ('db_connect.inc.php');
 require ('functions.inc.php');
-
 
 // This page requires authentication
 require ('auth.inc.php');
@@ -25,7 +28,7 @@ $enddate = strtotime($_REQUEST['enddate']);
 
 if (empty($startdate))
 {
-    echo "<h2>$title</h2>";
+    echo "<h2>{$title}</h2>";
     echo "<form action='{$_SERVER['PHP_SELF']}' id='incidentsbysoftware' method='post'>";
     echo "<table class='vertical'>";
     echo "<tr><th>{$strStartDate}:</th>";
@@ -133,7 +136,7 @@ else
             {
                 echo "<tr>";
                 echo "<td>".user_realname($o['owner'])."</td><td>";
-                if ($o['closed']!=0) echo $o['closed'];
+                if ($o['closed'] != 0) echo $o['closed'];
                 else echo "0";
 
                 echo "</td><td>";

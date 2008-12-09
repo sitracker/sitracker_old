@@ -17,6 +17,7 @@
 
 
 // $include_path = '/var/www/sit/includes';
+$lib_path = '/home/paul/sit/htdocs/lib/';
 
     // Or for Windows users
 

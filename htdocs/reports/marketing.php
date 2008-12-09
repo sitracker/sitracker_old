@@ -8,6 +8,8 @@
 // of the GNU General Public License, incorporated herein by reference.
 //
 
+// Report Type: Marketting
+
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
 @include ('../set_include_path.inc.php');
@@ -18,20 +20,6 @@ require ('functions.inc.php');
 
 // This page requires authentication
 require ('auth.inc.php');
-
-// Temporary: put in place so that this 3.07 feature can be used under 3.06
-if (!function_exists('strip_comma'))
-{
-    function strip_comma($string)
-    {
-        // also strips Tabs, CR's and LF's
-        $string=str_replace(",", " ", $string);
-        $string=str_replace("\r", " ", $string);
-        $string=str_replace("\n", " ", $string);
-        $string=str_replace("\t", " ", $string);
-        return $string;
-    }
-}
 
 if (empty($_REQUEST['mode']))
 {
@@ -71,7 +59,7 @@ if (empty($_REQUEST['mode']))
     echo " value='yes' /> {$strShowActiveOnly}</label></td></tr>";
 
     echo "<tr><td colspan='2'>{$strOutput}: <select name='output'>";
-    echo "<option value='table'>{$strScreen}</option>";
+    echo "<option value='screen'>{$strScreen}</option>";
     // echo "<option value='printer'>Printer</option>";
     echo "<option value='csv'>{$strCSVfile}</option>";
     echo "</select>";
@@ -103,6 +91,7 @@ if (empty($_REQUEST['mode']))
 }
 elseif ($_REQUEST['mode'] == 'report')
 {
+	echo "REPORT";
     // don't include anything excluded
     if (is_array($_POST['inc']) && is_array($_POST['exc']))
     {
@@ -285,7 +274,7 @@ elseif ($_REQUEST['mode'] == 'report')
     $html .= "<p align='center'>".sprintf($strShowingXofX, $rowcount, $numrows)."</p>";
     //$html .= "<p align='center'>SQL Query used to produce this report:<br /><code>$sql</code></p>\n";
 
-    if ($_POST['output'] == 'screen')
+    if ($_REQUEST['output'] == 'screen')
     {
         include ('htmlheader.inc.php');
         echo "<h2>{$strMarketingMailshot}</h2>";
@@ -293,7 +282,7 @@ elseif ($_REQUEST['mode'] == 'report')
         echo $html;
         include ('htmlfooter.inc.php');
     }
-    elseif ($_POST['output'] == 'csv')
+    elseif ($_REQUEST['output'] == 'csv')
     {
         // --- CSV File HTTP Header
         header("Content-type: text/csv\r\n");

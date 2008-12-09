@@ -12,6 +12,7 @@
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 // Comments: Email Addresses of Customers
 
+// Report Type: House Keeping
 // FIXME Not on menu
 
 @include ('../set_include_path.inc.php');
@@ -40,7 +41,7 @@ $count = mysql_num_rows($result);
 echo "<strong>Found $count records</strong><br /><br />";
 if ($result)
 {
-    while (list($email)=mysql_fetch_row($result))
+    while (list($email) = mysql_fetch_row($result))
     {
         echo "$email";
         echo "<br />";

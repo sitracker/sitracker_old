@@ -93,7 +93,7 @@ if (empty($_REQUEST['mode']))
 elseif ($_REQUEST['mode'] == 'report')
 {
     if (is_array($_POST['exc']) && is_array($_POST['exc'])) $_POST['inc']=array_values(array_diff($_POST['inc'],$_POST['exc']));  // don't include anything excluded
-    $includecount=count($_POST['inc']);
+    $includecount = count($_POST['inc']);
     if ($includecount >= 1)
     {
         // $html .= "<strong>Include:</strong><br />";
@@ -143,70 +143,68 @@ elseif ($_REQUEST['mode'] == 'report')
     $html .= "<tr><th>{$strForenames}</th><th>{$strSurname}</th><th>{$strEmail}</th><th>{$strAddress1}</th>";
     $html .= "<th>{$strAddress2}</th><th>{$strCity}</th><th>{$strCounty}</th><th>{$strPostcode}</th><th>{$strCountry}</th><th>{$strTelephone}</th><th>{$strSite}</th><th>{$strProducts}</th></tr>";
     $csvfieldheaders .= "{$strForenames},{$strSurname},{$strEmail},{$strAddress1},{$strAddress2},{$strCity},{$strCounty},{$strPostcode},{$strCountry},{$strTelephone},{$strSite},{$strProducts}\r\n";
-    $rowcount=0;
+    $rowcount = 0;
     while ($row = mysql_fetch_object($result))
     {
-        if ($row->cemail!=$lastemail)
+        $html .= "<tr class='shade2'><td>{$row->forenames}</td><td>{$row->surname}</td>";
+        if ($row->dataprotection_email != 'Yes') $html .= "<td>{$row->cemail}</td>";
+        else $html .= "<td><em style='color: red';>{$strWithheld}</em></td>";
+        if ($row->dataprotection_address != 'Yes')
+    	{
+            $html .= "<td>{$row->address1}</td><td>{$row->address2}</td><td>{$row->city}</td><td>{$row->county}</td><td>{$row->postcode}</td><td>{$row->country}</td>";
+    	}
+        else
         {
-            $html .= "<tr class='shade2'><td>{$row->forenames}</td><td>{$row->surname}</td>";
-            if ($row->dataprotection_email!='Yes') $html .= "<td>{$row->cemail}</td>";
-            else $html .= "<td><em style='color: red';>{$strWithheld}</em></td>";
-            if ($row->dataprotection_address!='Yes')
-                $html .= "<td>{$row->address1}</td><td>{$row->address2}</td><td>{$row->city}</td><td>{$row->county}</td><td>{$row->postcode}</td><td>{$row->country}</td>";
-            else
-                $html .= "<td colspan='6'><em style='color: red';>{$strWithheld}</em></td>";
-            if ($row->dataprotection_phone!='Yes') $html .= "<td>{$row->phone}</td>";
-            else $html .= "<td><em style='color: red';>{$strWithheld}</em></td>";
-
-            $html .= "<td>{$row->site}</td>";
-
-            $psql = "SELECT * FROM `{$dbSupportContacts}` AS sc, `{$dbMaintenance}` AS m, `{$dbProducts}` AS p WHERE ";
-            $psql .= "sc.maintenanceid = m.id AND ";
-            $psql .= "m.product = p.id ";
-            $psql .= "AND sc.contactid = '$row->contactid' ";
-            $html .= "<td>";
-        // FIXME dataprotection_address csv
-
-            $csv .= strip_comma($row->forenames).','
-                . strip_comma($row->surname).',';
-            if ($row->dataprotection_email!='Yes') $csv .= strip_comma(strtolower($row->cemail)).',';
-            else $csv .= ',';
-
-            $csv  .= strip_comma($row->address1).','
-                . strip_comma($row->address2).','
-                . strip_comma($row->city).','
-                . strip_comma($row->county).','
-                . strip_comma($row->postcode).','
-                . strip_comma($row->country).',';
-
-            if ($row->dataprotection_phone!='Yes') $csv .= strip_comma(strtolower($row->phone)).',';
-            else $csv .= ',';
-
-            $csv .= strip_comma($row->site).',';
-
-            $presult = mysql_query($psql);
-            if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
-            $numproducts=mysql_num_rows($presult);
-            $productcount=1;
-
-            while ($product = mysql_fetch_object($presult))
-            {
-                $html .= strip_comma($product->name);
-                $csv .=  strip_comma($product->name);
-                if ($productcount < $numproducts) { $html .= " - "; $csv.=' - '; }
-                $productcount++;
-            }
-
-            $html .= "</td>";
-            // $html .= "<td>{$row->name}</td></tr>\n";
-            $csv .= strip_comma($row->name) ."\r\n";
-
-            $rowcount++;
+            $html .= "<td colspan='6'><em style='color: red';>{$strWithheld}</em></td>";
         }
-        $lastemail = $row->cemail;
+        if ($row->dataprotection_phone != 'Yes') $html .= "<td>{$row->phone}</td>";
+        else $html .= "<td><em style='color: red';>{$strWithheld}</em></td>";
+
+        $html .= "<td>{$row->site}</td>";
+
+        $psql = "SELECT * FROM `{$dbSupportContacts}` AS sc, `{$dbMaintenance}` AS m, `{$dbProducts}` AS p WHERE ";
+        $psql .= "sc.maintenanceid = m.id AND ";
+        $psql .= "m.product = p.id ";
+        $psql .= "AND sc.contactid = '$row->contactid' ";
+        $html .= "<td>";
+
+        $csv .= strip_comma($row->forenames).','  . strip_comma($row->surname).',';
+        if ($row->dataprotection_email != 'Yes') $csv .= strip_comma(strtolower($row->cemail)).',';
+        else $csv .= ',';
+
+        $csv  .= strip_comma($row->address1).','
+            . strip_comma($row->address2).','
+            . strip_comma($row->city).','
+            . strip_comma($row->county).','
+            . strip_comma($row->postcode).','
+            . strip_comma($row->country).',';
+
+        if ($row->dataprotection_phone!='Yes') $csv .= strip_comma(strtolower($row->phone)).',';
+        else $csv .= ',';
+
+        $csv .= strip_comma($row->site).',';
+
+        $presult = mysql_query($psql);
+        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
+        $numproducts=mysql_num_rows($presult);
+        $productcount=1;
+
+        while ($product = mysql_fetch_object($presult))
+        {
+            $html .= strip_comma($product->name);
+            $csv .=  strip_comma($product->name);
+            if ($productcount < $numproducts) { $html .= " - "; $csv.=' - '; }
+            $productcount++;
+        }
+
+        $html .= "</td>";
+        // $html .= "<td>{$row->name}</td></tr>\n";
+        $csv .= strip_comma($row->name) ."\r\n";
+
+        $rowcount++;
     }
     $html .= "</table>";
-    $html .= "<p align='center'>$rowcount Records</p>";
+    $html .= "<p align='center'>{$rowcount} Records</p>";
     $html .= "<p align='center'>SQL Query used to produce this report:<br /><code>$sql</code></p>\n";
 
     if ($_POST['output'] == 'screen')

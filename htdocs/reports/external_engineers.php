@@ -80,6 +80,7 @@ if (!empty($filterby))
      }
 }
 
+
 echo "<form action='{$_SERVER['PHP_SELF']}' method='post' id='filterform'><p align='center'>\n";
 echo "{$strFilter}:\n";
 echo "<input type='radio' name='filterby' value='none' checked='checked' onclick=\"hide_filter(true);\" {$nonChecked} />{$strNone} \n";

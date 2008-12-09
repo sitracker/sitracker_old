@@ -8,6 +8,8 @@
 // of the GNU General Public License, incorporated herein by reference.
 //
 
+// Report Type: Feedback
+
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
 @include ('../set_include_path.inc.php');
@@ -33,7 +35,7 @@ $rcount = 1;
 $msql = "SELECT *,  \n";
 $msql .= "fr.id AS reportid, \n";
 $msql .= "s.id AS softwareid, s.name AS softwarename ";
-$msql .= "FROM `{$dbFeedbackRespondents}` AS fr, `{$dbIncidents}`, `{$dbSoftware}` AS s ";
+$msql .= "FROM `{$dbFeedbackRespondents}` AS fr, `{$dbIncidents}` AS i, `{$dbSoftware}` AS s ";
 $msql .= "WHERE fr.incidentid = i.id \n";
 $msql .= "AND i.softwareid = s.id ";
 $msql .= "AND fr.incidentid > 0 \n";
@@ -42,8 +44,8 @@ $mresult = mysql_query($msql);
 if (mysql_error()) trigger_error(mysql_error(), E_USER_WARNING);
 while ($mrow = mysql_fetch_object($mresult))
 {
-    $totalresult=0;
-    $numquestions=0;
+    $totalresult = 0;
+    $numquestions = 0;
     $html = "<h3><a href='#?id={$mrow->softwareid}' title='Jump to software'>{$mrow->softwarename}</a></h3>";
     $qsql = "SELECT * FROM `{$dbFeedbackQuestions}` WHERE formid='{$formid}' AND type='rating' ORDER BY taborder";
     $qresult = mysql_query($qsql);
