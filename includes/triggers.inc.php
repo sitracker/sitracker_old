@@ -10,7 +10,7 @@
 // Author: Kieran Hogg <kieran_hogg[at]users.sourceforge.net>
 //         Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
-include ('../htdocs/set_include_path.inc.php');
+include ($CONFIG['application_fspath'] . '/htdocs/set_include_path.inc.php');
 include ($lib_path . 'incident.inc.php');
 include ('mime.inc.php');
 include ('triggertypes.inc.php');
