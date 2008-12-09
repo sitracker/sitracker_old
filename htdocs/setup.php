@@ -1123,7 +1123,8 @@ switch ($_REQUEST['action'])
                     elseif (file_exists($CONFIG['attachment_fspath']) == FALSE)
                     {
                         echo "<p class='error'>The attachment path that you have configured ({$CONFIG['attachment_fspath']}) does not exist, please create this directory or alter the \$CONFIG['attachment_fspath'] configuration variable to point to a directory that does exist.</p>";
-                        echo "<p>After fixing this problem, you must run <a href='{$_SERVER['PHP_SELF']}?checkinstallcomplete' class='button'>setup</a> again to create an admin account.</p>";
+                        echo "<p>After fixing this problem, you must check the installation again, once all problems are corrected, you will be prompted to create an admin account.</p>";
+                        echo setup_button('checkinstallcomplete', 'Check Installation');
                     }
                     elseif (is_writable($CONFIG['attachment_fspath']) == FALSE)
                     {
@@ -1157,7 +1158,11 @@ switch ($_REQUEST['action'])
                     }
                     else
                     {
-                        echo "<p>SiT! v".number_format($installed_version,2)." is installed and ready.<br /><br /> <a href='index.php' class='button'>Run SiT!</a></p>";
+                        echo "<p>SiT! v".number_format($installed_version,2)." is installed and ready.<br /><br />";
+                        echo "<form action='index.php' method='get'>";
+                        echo "<input type='submit' value=\"Run SiT!\" />";
+                        echo "</form>\n";
+
                         if ($_SESSION['userid'] == 1)
                         {
                             echo "<br /><p>As administrator you can <a href='config.php'>reconfigure</a> SiT!</p>";
