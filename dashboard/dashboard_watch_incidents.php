@@ -403,7 +403,11 @@ function dashboard_watch_incidents_edit($dashletid)
                                 break;
                         }
 
-                        echo "<tr class='$shade'><td>{$name}</td><td>".dashlet_link('watch_incidents', $dashletid, $GLOBALS['strRemove'], 'edit', array('editaction' => 'delete', 'id' => $obj->id));
+                        echo "<tr class='$shade'><td>{$name}</td><td>";
+                        echo dashlet_link('watch_incidents', $dashletid,
+                                          $GLOBALS['strRemove'], 'edit',
+                                          array('editaction' => 'delete',
+                                          'id' => $obj->id, 'type' => $i));
                         if ($shade == 'shade1') $shade = 'shade2';
                         else $shade = 'shade1';
                     }
