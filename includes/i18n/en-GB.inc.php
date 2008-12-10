@@ -1552,6 +1552,7 @@ $strWarning = 'Warning';
 $strWatchAddFailed = 'Failed to add watch incident';
 $strWatchAddSet = 'Add new set of watched incidents';
 $strWatchDeleteFailed = 'Delete watch failed';
+$strWatchIncidents = 'Watch Incidents';
 $strWatchIncidentsAdded = 'Watch Incidents added';
 $strWatchIncidentsRemovalSucceded = 'Watch incidents removal succeded';
 $strWebupdate = 'Web update';
