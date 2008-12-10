@@ -21,12 +21,38 @@ $title = $strSiteIncidents;
 
 $startdate = cleanvar($_REQUEST['start']);
 $enddate = cleanvar($_REQUEST['end']);
-$mode = $_REQUEST['mode'];
-$zerologged = $_REQUEST['zerologged'];
+$mode = cleanvar($_REQUEST['mode']);
+$zerologged = cleanvar($_REQUEST['zerologged']);
+$shownoprefferedcontractsonly = cleanvar($_REQUEST['shownoprefferedcontractsonly']);
+$showsitesloggedfewerthanxcalls = cleanvar($_REQUEST['showsitesloggedfewerthanxcalls']);
+$numberofcalls = cleanvar($_REQUEST['numberofcalls']);
+$showincidentdetails = cleanvar($_REQUEST['showincidentdetails']);
 
 if (empty($mode))
 {
     include ('htmlheader.inc.php');
+
+	?>
+	<script type='text/javascript'>
+	function checkBoxToggle()
+	{
+		if ($('showsitesloggedfewerthanxcalls').checked == true)
+		{
+			$('numberofcalls').show();
+			$('labelforxcalls').show();
+			$('zerologged').checked = true;
+			$('zerologged').disable();
+		}
+		else
+		{
+			$('numberofcalls').hide();
+			$('labelforxcalls').hide();
+			$('zerologged').checked = false;
+			$('zerologged').enable();			
+		}
+	}
+	</script>
+	<?php
 
     echo "<h2>{$title}</h2>";
 
@@ -40,7 +66,12 @@ if (empty($mode))
     echo "<input name='end' size='10' />";
     echo date_picker('date.end');
     echo "</td></tr>";
-    echo "<tr><td>Show sites that have logged no incidents</td><td><input type='checkbox' name='zerologged' /></td></tr>";
+    echo "<tr><td>{$strShowSitesThatHaveLoggedNoIncidents}</td><td><input type='checkbox' name='zerologged' id='zerologged' /></td></tr>";
+    echo "<tr><td>{$strShowOnlySitesWithNoPrefferredContract}</td><td><input type='checkbox' name='shownoprefferedcontractsonly' /></td></tr>";
+    echo "<tr><td>{$strShowSitesWhichHaveLoggedLessThanCalls}</td><td>";
+	echo "<input type='checkbox' name='showsitesloggedfewerthanxcalls' id='showsitesloggedfewerthanxcalls' onclick=\"checkBoxToggle();\" />";
+	echo "<input type='text' name='numberofcalls' id='numberofcalls' id='numberofcalls' style='display:none'/><label id='labelforxcalls' for='showsitesloggedfewerthanxcalls' style='display:none'>{$strIncidents}</label></td></tr>";
+	echo "<tr><td>{$strShowIncidentDetails}</td><td><input type='checkbox' name'showincidentdetails' id='showincidentdetails' /></td></tr>";
     echo "<tr><th>{$strOutput}</th>";
 	echo "<td><select name='mode'><option value='screen'>{$strScreen}</option>";
 	echo "<option value='csv'>{$strCSVfile}</option></td></tr>";
@@ -58,6 +89,8 @@ else
 	if (empty($startdate)) $startdate = date('Y-m-d', mktime(0, 0, 0, date("m"), date("d"), date("Y")-1)); // 1 year ago
 	if (empty($enddate)) $enddate = date('Y-m-d');
     
+    $sql = "SELECT DISTINCT id FROM `{$dbServiceLevels}`"
+    
     $sql = "SELECT DISTINCT s.id, s.name AS name, r.name AS resel, m.reseller ";
     $sql .= "FROM `{$dbSites}` AS s, `{$dbMaintenance}` AS m, `{$dbResellers}` AS r ";
     $sql.= "WHERE s.id = m.site AND r.id = m.reseller AND m.term <> 'yes' ORDER BY s.name";
@@ -71,7 +104,12 @@ else
             $sql = "SELECT count(i.id) AS incidentz, s.name AS site FROM `{$dbContacts}` AS c, `{$dbSites}` AS s, `{$dbIncidents}` AS i, `{$dbMaintenance}` AS m ";
             $sql.= "WHERE c.siteid = s.id AND s.id={$site->id} AND i.opened >".strtotime($startdate)." AND i.closed < ".strtotime($enddate)." AND i.contact = c.id ";
             $sql .= "AND m.id = i.maintenanceid AND m.reseller = '{$site->reseller}' ";
+            if ($shownoprefferedcontractsonly == 'on')
+            {
+            	
+            }
             $sql.= "GROUP BY site";
+            echo $sql;
             // echo $sql;
             $sresult = mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
@@ -79,10 +117,18 @@ else
             $count = $details->incidentz;
             if (!empty($zerologged))
             {
-                $csv .= "$count,{$site->name},{$site->resel}\n";
+            	if ($showsitesloggedfewerthanxcalls == 'on' AND $count <= $numberofcalls)
+            	{
+                	$csv .= "$count,{$site->name},{$site->resel}\n";
+            	}
+            	else if (empty($showsitesloggedfewerthanxcalls))
+            	{
+            		$csv .= "$count,{$site->name},{$site->resel}\n";
+            	}
             }
             else
             {
+            	// Dont need to check $showsitesloggedfewerthanxcalls as $zerologged will always be selected
                 if ($count != 0) $csv .="$count,{$site->name},{$site->resel}\n";
             }
         }

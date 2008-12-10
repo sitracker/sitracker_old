@@ -190,8 +190,8 @@ else
 	            echo "<tr><td><strong>TOTAL</strong></td><td><strong>";
                 echo $total;
                 echo "</strong></td></tr>\n";
-	            $monthtotals[$month['month']]['month']=$month['month'];
-                $monthtotals[$month['month']]['value']+=$total;
+	            $monthtotals[$month['month']]['month'] = $month['month'];
+                $monthtotals[$month['month']]['value'] += $total;
                 $skilltotals[$softwareNames[$i]]['name'] = $softwareNames[$i];
                 $skilltotals[$softwareNames[$i]][$month['month']]['month'] = $month['month'];
                 $skilltotals[$softwareNames[$i]][$month['month']]['numberofincidents'] = $total;
@@ -202,8 +202,8 @@ else
             echo "</tr></table>";
             echo "</td></tr>\n";
         }
-        if ($shade=='shade1') $shade='shade2';
-        else $shade='shade1';
+        if ($shade == 'shade1') $shade = 'shade2';
+        else $shade = 'shade1';
     }
     echo "</table>";
 
@@ -217,10 +217,10 @@ else
         {
             echo "<tr class='$shade'>";
             echo "<td>".$m['month']."</td><td align='center'>".$m['value']."</td><tr>";
-            $total+=$m['value'];
+            $total += $m['value'];
             echo "</tr>";
-            if ($shade=='shade1') $shade='shade2';
-            else $shade='shade1';
+            if ($shade == 'shade1') $shade = 'shade2';
+            else $shade = 'shade1';
         }
         echo "<tfoot><tr><th>{$strTotal}</th><td align='center'><strong>{$total}</strong></td></tr></tfoot>";
         echo "</table></p>";
