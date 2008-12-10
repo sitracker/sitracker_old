@@ -17,12 +17,12 @@
 
 
 // $include_path = '/var/www/sit/includes';
-$lib_path = '/home/paul/sit/htdocs/lib/';
+// $lib_path = '//var/www/sit/htodcs/lib/';
 
     // Or for Windows users
 
 // $include_path = 'c:\www\sit\includes';
-
+// $lib_path = 'c:\var\www\sit\htodcs\lib\';
 
 
 
