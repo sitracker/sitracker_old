@@ -75,13 +75,13 @@ if ($submit_value == "go")
 
 include ('htmlheader.inc.php');
 if ($search_string=='') $search_string='a';
-/*?>
+?>
 <script type="text/javascript">
 //<![CDATA[
     dojo.require ("dojo.widget.ComboBox");
 //]]>
 </script>
-<?php*/
+<?php
 echo "<h2>".icon('site', 32)." ";
 echo "{$strBrowseSites}</h2>";
 
@@ -91,8 +91,7 @@ echo "<td align='center'>";
 echo "<form action='{$_SERVER['PHP_SELF']}' method='get'>";
 
 echo "<p>{$strBrowseSites}: ";
-// dojoType='ComboBox' dataUrl='ajaxdata.php?action=sites'
-echo "<input style='width: 300px;' name='search_string' onkeyup=\"autocomplete(this, 'comboresults');\" />";
+echo "<input style='width: 300px;' name='search_string' dojoType='ComboBox' dataUrl='ajaxdata.php?action=sites' />"; //onkeyup=\"autocomplete(this, 'comboresults');\"
 echo "<input name='submit' type='submit' value='{$strGo}' /></p>";
 echo "</form>\n";
 if ($displayinactive=="true")
@@ -108,7 +107,7 @@ else
     if (!empty($search_string)) echo "&amp;search_string={$search_string}&amp;owner={$owner}";
     echo "'>{$strShowAll}</a>";
     $inactivestring="displayinactive=false";
-}  
+}
 echo "</td></tr>";
 echo "<tr><td valign='middle'>";
 echo "<a href='add_site.php'>{$strAddSite}</a> | ";
