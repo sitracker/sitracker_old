@@ -316,22 +316,40 @@ function setup_exec_sql($sqlquerylist)
 function setup_createdb()
 {
     global $CONFIG;
+
+    $res = FALSE;
     $sql = "CREATE DATABASE `{$CONFIG['db_database']}` DEFAULT CHARSET utf8";
-    if ($_REQUEST['action'] == 'createdatabase')
+    $db = @mysql_connect($CONFIG['db_hostname'], $CONFIG['db_username'], $CONFIG['db_password']);
+    if (!@mysql_error())
     {
+        // Connected to database
         echo "<h2>Creating database...</h2>";
         $result = mysql_query($sql);
         if ($result)
         {
+            $res = TRUE;
             echo "<p><strong>OK</strong> Database '{$CONFIG['db_database']}' created.</p>";
             echo setup_button('', 'Next');
         }
-        else
-        {
-            echo "<p class='error'>".mysql_error()."<br />The database could not be created automatically, ";
-            echo "you can create it manually by executing the SQL statement <br /><code>{$sql};</code></p>";
-        }
+        else $res = FALSE;
     }
+    else
+    {
+        $res = FALSE;
+    }
+
+    if ($res == FALSE)
+    {
+        echo "<p class='error'>";
+        if (mysql_error())
+        {
+            echo mysql_error()."<br />";
+        }
+        echo "The database could not be created automatically, ";
+        echo "you can create it manually by executing the SQL statement <br /><code>{$sql};</code></p>";
+        echo setup_button('', 'Next');
+    }
+    return $res;
 }
 
 // Returns TRUE if an admin account exists, or false if not
@@ -631,6 +649,7 @@ switch ($_REQUEST['action'])
                     }
                     echo "</p>";
                     echo setup_button('reconfigure', 'Reconfigure SiT!');
+                    echo setup_button('createdb', 'Create a database');
                     //echo "<p><a href='{$_SERVER['PHP_SELF']}?action=reconfigure'>Reconfigure</a> SiT!</p>";
                 }
                 else
@@ -692,6 +711,8 @@ switch ($_REQUEST['action'])
                     }
                     echo "</p>";
                     echo setup_button('reconfigure', 'Reconfigure SiT!');
+                    echo "<p>or</p>";
+                    echo setup_button('createdb', 'Create a database');
                     //echo "<p><a href='{$_SERVER['PHP_SELF']}?action=reconfigure'>Reconfigure</a> SiT!</p>";
                 }
                 else
@@ -765,9 +786,16 @@ switch ($_REQUEST['action'])
                     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);*/
                     $installed_version = $application_version;
                     echo "<h2>Database schema created</h2>";
-                    echo "<p>If no errors were reported above you should continue and check the installation.</p>";
-                    echo "<p>If there are errors, please log a bug <a href='http://sitracker.sourceforge.net/Bugs'>here</a>";
-                    echo ", with the full error message.</p>";
+                    if ($errors > 0)
+                    {
+                        echo "<p>If these errors do not appear to be caused by your configuration or setup, ";
+                        echo "please log a bug <a href='http://sitracker.sourceforge.net/Bugs'>here</a>";
+                        echo ", with the full error message.</p>";
+                    }
+                    else
+                    {
+                        echo "<p>You can now proceed with the next step.</p>";
+                    }
                     echo setup_button('checkinstallcomplete', 'Next');
                 }
                 else
@@ -813,7 +841,9 @@ switch ($_REQUEST['action'])
 
                     if (empty($installed_version))
                     {
-                        die ("<p class='error'>Fatal setup error - Could not determine version of installed software.  Try wiping your installation and installing from clean. (sorry)</p>");
+                        echo "<p class='error'>Fatal setup error - Could not determine version of installed software.  Try wiping your installation and installing from clean. (sorry)</p>";
+                        echo setup_button('', 'Restart setup');
+                        exit;
                     }
 
                     echo "<h2>Installed OK</h2>";
@@ -1019,7 +1049,7 @@ switch ($_REQUEST['action'])
 
                                 if ($version > $dashboardnames->version)
                                 {
-                                    echo "<p>Upgrading {$dashboardnames->name}</p>>";
+                                    echo "<p>Upgrading {$dashboardnames->name}...</p>";
                                     // apply all upgrades since running version
                                     $upgrade_func = "dashboard_{$dashboardnames->name}_upgrade";
 
