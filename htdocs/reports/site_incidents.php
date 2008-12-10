@@ -89,7 +89,27 @@ else
 	if (empty($startdate)) $startdate = date('Y-m-d', mktime(0, 0, 0, date("m"), date("d"), date("Y")-1)); // 1 year ago
 	if (empty($enddate)) $enddate = date('Y-m-d');
     
-    $sql = "SELECT DISTINCT id FROM `{$dbServiceLevels}`"
+    if ($shownoprefferedcontractsonly == 'on' AND count($CONFIG['preferred_maintenance']) > 0)
+    {
+    	$sql = "SELECT DISTINCT id FROM `{$dbServiceLevels}` WHERE ";
+    	foreach ($CONFIG['preferred_maintenance'] AS $p)
+    	{
+    		if (!empty($asql)) $asql .= " AND ";
+    		$asql .= " tag = '{$p}' ";
+    	}
+    	
+    	$sql .= $asql;
+    	
+    	$result = mysql_query($sql);
+	    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+	    if (mysql_num_rows($result) > 0)
+	    {
+	    	while ($obj = mysql_fetch_object($result))
+	    	{
+	    		$preferred_ids[] = $obj->id;
+	    	} 
+	    }
+    }
     
     $sql = "SELECT DISTINCT s.id, s.name AS name, r.name AS resel, m.reseller ";
     $sql .= "FROM `{$dbSites}` AS s, `{$dbMaintenance}` AS m, `{$dbResellers}` AS r ";
@@ -104,9 +124,9 @@ else
             $sql = "SELECT count(i.id) AS incidentz, s.name AS site FROM `{$dbContacts}` AS c, `{$dbSites}` AS s, `{$dbIncidents}` AS i, `{$dbMaintenance}` AS m ";
             $sql.= "WHERE c.siteid = s.id AND s.id={$site->id} AND i.opened >".strtotime($startdate)." AND i.closed < ".strtotime($enddate)." AND i.contact = c.id ";
             $sql .= "AND m.id = i.maintenanceid AND m.reseller = '{$site->reseller}' ";
-            if ($shownoprefferedcontractsonly == 'on')
+            if ($shownoprefferedcontractsonly == 'on' AND count($preferred_ids) > 0)
             {
-            	
+            	// TODO change so  theres an IF just after the while which checks if this site has a preffered contract and this is enabled is so jump over
             }
             $sql.= "GROUP BY site";
             echo $sql;
