@@ -22,7 +22,7 @@ require ('functions.inc.php');
 require ('auth.inc.php');
 
 // External Variables
-$submit=$_REQUEST['submit'];
+$submit = $_REQUEST['submit'];
 if (empty($_REQUEST['user']) || $_REQUEST['user'] == 'current') $user=$sit[2];
 else $user = cleanvar($_REQUEST['user']);
 
@@ -123,7 +123,7 @@ else
 
     if (is_array($expertise))
     {
-        $expertise=array_unique($expertise);
+        $expertise = array_unique($expertise);
         foreach ($expertise AS $value)
         {
             $checksql = "SELECT userid FROM `{$dbUserSoftware}` WHERE userid='{$_POST['userid']}' AND softwareid='$value' LIMIT 1";
