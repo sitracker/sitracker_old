@@ -97,7 +97,14 @@ elseif ($action == "edit")
     $engineerPeriod = cleanvar($_POST['engineerPeriod']);
     $customerPeriod = cleanvar($_POST['customerPeriod']);
     $allow_reopen = cleanvar($_POST['allow_reopen']);
-    if ($allow_reopen != 'yes') $allow_reopen = 'no';
+    if ($allow_reopen == 'on') 
+    {
+        $allow_reopen = 'yes';
+    }
+    else
+    {
+        $allow_reopen = 'no';
+    }
     $limit = cleanvar($_POST['limit']);
     if ($limit == '') $limit = 0;
     if ($_POST['timed'] != 'on')
