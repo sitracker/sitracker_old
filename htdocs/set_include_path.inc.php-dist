@@ -10,22 +10,17 @@
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
 
-
-
-    // If for any reason you cannot edit php.ini to set your include path you
-    // can uncomment the following line and set it here.
+// If for any reason you cannot edit php.ini to set your include path you
+// can uncomment the following line and set it here.
 
 
 // $include_path = '/var/www/sit/includes';
-// $lib_path = '//var/www/sit/htodcs/lib/';
+// $lib_path = '/var/www/sit/htodcs/lib/';
 
     // Or for Windows users
 
 // $include_path = 'c:\www\sit\includes';
 // $lib_path = 'c:\var\www\sit\htodcs\lib\';
-
-
-
 
 
 
