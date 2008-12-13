@@ -18,25 +18,25 @@ require ('auth.inc.php');
 
 if (!empty($_POST['type']))
 {
-	$type = cleanvar($_POST['type']);
-	$name = cleanvar($_POST['name']);
-	
-	if ($type == 'email')
-	{
-		$sql = "INSERT INTO `{$dbEmailTemplates}`(name) VALUES('{$name}')";
-		mysql_query($sql);
+    $type = cleanvar($_POST['type']);
+    $name = cleanvar($_POST['name']);
+
+    if ($type == 'email')
+    {
+        $sql = "INSERT INTO `{$dbEmailTemplates}`(name) VALUES('{$name}')";
+        mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);		
-		$id = mysql_insert_id();
-		header("Location: templates.php?id={$id}&action=edit&template=email");
-	}
-	elseif ($type == 'notice')
-	{
-		$sql = "INSERT INTO `{$dbNoticeTemplates}`(name) VALUES('{$name}')";
-		mysql_query($sql);
+        $id = mysql_insert_id();
+        header("Location: templates.php?id={$id}&action=edit&template=email");
+    }
+    elseif ($type == 'notice')
+    {
+        $sql = "INSERT INTO `{$dbNoticeTemplates}`(name) VALUES('{$name}')";
+        mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);		
-		$id = mysql_insert_id();
-		header("Location: templates.php?id={$id}&action=edit&template=notice");		
-	}
+        $id = mysql_insert_id();
+        header("Location: templates.php?id={$id}&action=edit&template=notice");		
+    }
 }
 include ('htmlheader.inc.php');
 
@@ -52,5 +52,7 @@ echo "{$strName}: <input name='name' />";
 echo "<br /><br /><input type='submit' value='{$strAdd}' />";
 echo "</p>";
 echo "</form>";
+
+include ('htmlfooter.inc.php');
 
 ?>
