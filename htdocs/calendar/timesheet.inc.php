@@ -89,10 +89,13 @@ else
     ";
 
     // Build up activity types
-
     $activity_files['$strSupport'] = $CONFIG['application_fspath'] . 'htdocs/calendar/activity_support.inc.php';
     $activity_files['$strTravelling'] = $CONFIG['application_fspath'] . 'htdocs/calendar/activity_travelling.inc.php';
     $activity_files['$strResearch'] = $CONFIG['application_fspath'] . 'htdocs/calendar/activity_research.inc.php';
+    $activity_files['$strDevelopment'] = $CONFIG['application_fspath'] . 'htdocs/calendar/activity_development.inc.php';
+    $activity_files['$PreSales'] = $CONFIG['application_fspath'] . 'htdocs/calendar/activity_presales.inc.php';
+    $activity_files['$strTraining'] = $CONFIG['application_fspath'] . 'htdocs/calendar/activity_training.inc.php';
+    $activity_files['$strManagement'] = $CONFIG['application_fspath'] . 'htdocs/calendar/activity_managerial.inc.php';
     plugin_do('activity_types');
 
     foreach ($activity_files as $activity_name => $activity_file)
