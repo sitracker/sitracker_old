@@ -61,7 +61,7 @@ echo "</tr>";
 echo "<tr>";
 echo "<td valign='middle'>";
 
-echo "<a href='add_contract.php'>{$strAddContract}</a> | ";
+echo "<a href='contract_add.php'>{$strAddContract}</a> | ";
 echo alpha_index("{$_SERVER['PHP_SELF']}?search_string=");
 echo "<a href='{$_SERVER['PHP_SELF']}?search_string=*'>{$strAll}</a>";
 

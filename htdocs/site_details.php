@@ -314,7 +314,7 @@ if (user_permission($sit[2],19)) // View contracts
         echo "</table>\n";
     }
     else echo "<p align='center'>{$strNoContractsForSite}</p>";
-    echo "<p align='center'><a href='add_contract.php?action=showform&amp;siteid=$id'>{$strAddContract}</a></p>";
+    echo "<p align='center'><a href='contract_add.php?action=showform&amp;siteid=$id'>{$strAddContract}</a></p>";
 }
 
 include ('htmlfooter.inc.php');

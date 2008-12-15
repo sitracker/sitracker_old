@@ -1,5 +1,5 @@
 <?php
-// add_contract.php - Add a new maintenance contract
+// contract_add.php - Add a new maintenance contract
 //
 // SiT (Support Incident Tracker) - Support call tracking system
 // Copyright (C) 2000-2008 Salford Software Ltd. and Contributors
@@ -386,7 +386,7 @@ elseif ($action == "add")
     {
         // show error message if errors
         include ('htmlheader.inc.php');
-        html_redirect("add_contract.php", FALSE);
+        html_redirect("contract_add.php", FALSE);
     }
 }
 ?>
