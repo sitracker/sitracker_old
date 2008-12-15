@@ -13,13 +13,22 @@ class fetchSitMail
                           'localhost', $servertype = 'pop', $port = '', 
                           $options = '')
     {
+        if (!empty($CONFIG['email_incoming_folder']))
+        {
+            $folder = $CONFIG['email_incoming_folder'];
+        }
+        else
+        {
+            $folder = 'INBOX';
+        }
         if ($servertype == 'imap')
         {
             if (empty($port))
             {
                 $port = '143';
             }
-            $connectionString = "{{$server}:{$port}/imap{$options}}INBOX";
+            $connectionString = "{{$server}:{$port}/imap{$options}".
+                                 "/user={$user}}$folder";
         }
         else
         {
@@ -27,7 +36,8 @@ class fetchSitMail
             {
                 $port = '110';                
             }
-            $connectionString = "{{$server}:{$port}/pop3{$options}}INBOX";
+            $connectionString = "{{$server}:{$port}/pop3{$options}".
+                                "/user={$user}}$folder";
         }
         $this->username = $username;
         $this->password = $password;
@@ -94,8 +104,16 @@ class fetchSitMail
     
     function messageBody($id)
     {
-        echo $id."\n";
-        return imap_body($this->mailbox, $id);
+        global $CONFIG;
+        if ($CONFIG['debug']) echo "Retreiving message {$id}\n";
+        if (imap_body($this->mailbox, $id))
+        {
+            return imap_body($this->mailbox, $id);
+        }
+        else 
+        {    
+            debug_log("Died on mesasge {$id} with: ".imap_last_error());
+        }
     }    
     
     function getMessageHeader($id)
@@ -105,7 +123,7 @@ class fetchSitMail
     
     function deleteEmail($id)
     {
-        imap_delete($this->mailbox, $id) OR trigger_error(imap_lasterror(), E_USER_ERROR);
+        imap_delete($this->mailbox, $id) OR trigger_error(imap_last_error(), E_USER_ERROR);
     }
         
     function iso8859Decode($text)
@@ -116,9 +134,9 @@ class fetchSitMail
 	function archiveEmail($id)
 	{
 		global $CONFIG;
-		if ($CONFIG['debug']) echo "Moving mail to {$CONFIG['email_archive_folder']} folder";
+		if ($CONFIG['debug']) echo "Moving mail to {$CONFIG['email_archive_folder']} folder\n";
 		imap_mail_move($this->mailbox, $id, $CONFIG['email_archive_folder']) OR
-			trigger_error(imap_lasterror(), E_USER_ERROR);
+			trigger_error(imap_last_error(), E_USER_ERROR);
 	}
 }
 ?>
