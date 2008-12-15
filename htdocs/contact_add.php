@@ -1,5 +1,5 @@
 <?php
-// add_contact.php - Adds a new contact
+// contact_add.php - Adds a new contact
 //
 // SiT (Support Incident Tracker) - Support call tracking system
 // Copyright (C) 2000-2008 Salford Software Ltd. and Contributors

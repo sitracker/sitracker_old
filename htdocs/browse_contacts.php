@@ -113,7 +113,7 @@ echo "<td align='center'>";
 <tr>
 <td valign="middle">
 <?php
-echo "<a href='add_contact.php'>{$strAdd}</a> | ";
+echo "<a href='contact_add.php'>{$strAdd}</a> | ";
 echo alpha_index("{$_SERVER['PHP_SELF']}?search_string=");
 echo "<a href='{$_SERVER['PHP_SELF']}?search_string=*&amp;{$inactivestring}'>{$strAll}</a>";
 ?>

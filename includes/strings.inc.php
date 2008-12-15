@@ -107,7 +107,7 @@ $hmenu[2010] = array_merge(array (10=> array ( 'perm'=> 11, 'name'=> $strBrowse,
 ), $hmenu[2010]);
 if (!is_array($hmenu[2020])) $hmenu[2020] = array();
 $hmenu[2020] = array_merge(array (10=> array ( 'perm'=> 11, 'name'=> $strBrowse, 'url'=>"{$CONFIG['application_webpath']}browse_contacts.php?search_string=A"),
-                      20=> array ( 'perm'=> 1, 'name'=> $strNewContact, 'url'=>"{$CONFIG['application_webpath']}add_contact.php?action=showform")
+                      20=> array ( 'perm'=> 1, 'name'=> $strNewContact, 'url'=>"{$CONFIG['application_webpath']}contact_add.php?action=showform")
 ), $hmenu[2020]);
 if (!is_array($hmenu[2030])) $hmenu[2030] = array();
 $hmenu[2030] = array_merge(array (10=> array ( 'perm'=> 19, 'name'=> $strBrowse, 'url'=>"{$CONFIG['application_webpath']}browse_contract.php?search_string=A"),

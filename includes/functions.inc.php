@@ -9166,7 +9166,7 @@ function process_add_contact($mode = 'internal')
         {
             if ($mode == 'internal')
             {
-                html_redirect("add_contact.php", FALSE);
+                html_redirect("contact_add.php", FALSE);
             }
             else
             {
@@ -9210,7 +9210,7 @@ function process_add_contact($mode = 'internal')
     {
         if ($mode == 'internal')
         {
-            html_redirect('add_contact.php', FALSE);
+            html_redirect('contact_add.php', FALSE);
         }
         else
         {

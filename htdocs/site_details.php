@@ -189,7 +189,7 @@ else
 {
     echo "<p align='center'>{$strNoContactsForSite}</p>";
 }
-echo "<p align='center'><a href='add_contact.php?siteid={$id}'>{$strAddContact}</a></p>";
+echo "<p align='center'><a href='contact_add.php?siteid={$id}'>{$strAddContact}</a></p>";
 
 
 // Valid user, check perms
