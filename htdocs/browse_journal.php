@@ -68,6 +68,7 @@ $journaltype[7] = 'User Management';
 $journaltype[8] = 'Maintenance';
 $journaltype[9] = 'Products';
 $journaltype[10] = 'Tasks';
+$journaltype[11] = 'Triggers';
 
 $journal_count = mysql_num_rows($result);
 if ($journal_count >= 1)
@@ -111,9 +112,9 @@ if ($journal_count >= 1)
     $prev=$offset-$perpage;
     $next=$offset+$perpage;
     echo "<p align='center'>";
-    if ($prev > 0) echo "<a href='{$_SERVER['PHP_SELF']}?offset={$prev}'>&lt;</a>";
+    if ($prev > 0) echo "<a href='{$_SERVER['PHP_SELF']}?offset={$prev}'>&lt; {$strPrev}</a>";
     echo "&nbsp;";
-    echo "<a href='{$_SERVER['PHP_SELF']}?offset={$next}'>&gt;</a>";
+    echo "<a href='{$_SERVER['PHP_SELF']}?offset={$next}'>{$strNext} &gt;</a>";
     echo "</p>";
 }
 else
