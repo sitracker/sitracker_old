@@ -231,7 +231,7 @@ function draw_calendar($nmonth, $nyear)
                 if ($dtype==1 || $dtype=='' || $dtype==5 || $dtype==3 || $dtype==2 || $dtype==4)
                 {
                     echo "<td class=\"$shade\" style=\"width: 15px; $style\">";
-                    echo "<a href=\"add_holiday.php?type=$type&amp;user=$user&amp;year=$nyear&amp;month=$nmonth&amp;day=$calday\"  title=\"$celltitle\">$bold$adjusted_day$notbold</a></td>";
+                    echo "<a href=\"holiday_add.php?type=$type&amp;user=$user&amp;year=$nyear&amp;month=$nmonth&amp;day=$calday\"  title=\"$celltitle\">$bold$adjusted_day$notbold</a></td>";
                 }
                 else
                 {
@@ -260,7 +260,7 @@ function appointment_popup($mode, $year, $month, $day, $time, $group, $user)
         $html .= "<div id='app{$user}{$year}{$month}{$day}{$time}' class='appointmentdata'>";
         $html .= "<h2><a href=\"javascript:void(0);\">[X]</a> {$year}-{$month}-{$day} {$time}</h2>";
         if ($mode=='book')
-            $html .= "<a href='add_holiday.php?type=1&amp;user={$user}&amp;year={$year}&amp;month={$month}&amp;day={$day}&amp;length={$time}'>{$GLOBALS['strBookHoliday']}</a><br />";
+            $html .= "<a href='holiday_add.php?type=1&amp;user={$user}&amp;year={$year}&amp;month={$month}&amp;day={$day}&amp;length={$time}'>{$GLOBALS['strBookHoliday']}</a><br />";
 //         else $html .= "<a href=''>Cancel Holiday</a><br />";
 //          TODO: Add the ability to cancel holiday from the holiday planner
         $html .= "</div>";

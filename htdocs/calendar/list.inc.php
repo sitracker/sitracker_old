@@ -49,7 +49,7 @@ if (mysql_num_rows($result))
         echo "<td>";
         if ($approver==TRUE)
         {
-            echo "<a href='add_holiday.php?hid={$dates['holidayid']}&amp;year=";
+            echo "<a href='holiday_add.php?hid={$dates['holidayid']}&amp;year=";
             echo date('Y',$dates['startdate'])."&amp;month=".date('m',$dates['startdate']);
             echo "&amp;day=".date('d',$dates['startdate'])."&amp;user={$dates['userid']}";
             echo "&amp;type={$dates['type']}&amp;length=0&amp;return=list' ";

@@ -1,5 +1,5 @@
 <?php
-// add_holiday.php - Adds a holiday to the database
+// holiday_add.php - Adds a holiday to the database
 //
 // SiT (Support Incident Tracker) - Support call tracking system
 // Copyright (C) 2000-2008 Salford Software Ltd. and Contributors

@@ -108,7 +108,7 @@ if ($numwaiting > 0)
             echo "<td>";
             if ($dates->length == 'pm' OR $dates->length == 'day')
             {
-                echo "<a href='add_holiday.php?type={$dates->type}&amp;user=$user";
+                echo "<a href='holiday_add.php?type={$dates->type}&amp;user=$user";
                 echo "&amp;year=".date('Y',$dates->startdate)."&amp;month=";
                 echo date('m',$dates->startdate)."&amp;day=";
                 echo date('d',$dates->startdate)."&amp;length=am' ";
@@ -118,7 +118,7 @@ if ($numwaiting > 0)
 
             if ($dates->length == 'am' OR $dates->length == 'day')
             {
-                echo "<a href='add_holiday.php?type={$dates->type}&amp;user=$user";
+                echo "<a href='holiday_add.php?type={$dates->type}&amp;user=$user";
                 echo "&amp;year=".date('Y',$dates->startdate)."&amp;month=";
                 echo date('m',$dates->startdate)."&amp;day=";
                 echo date('d',$dates->startdate)."&amp;length=pm' ";
@@ -128,7 +128,7 @@ if ($numwaiting > 0)
 
             if ($dates->length == 'am' OR $dates->length == 'pm')
             {
-                echo "<a href='add_holiday.php?type={$dates->type}&amp;user=$user";
+                echo "<a href='holiday_add.php?type={$dates->type}&amp;user=$user";
                 echo "&amp;year=".date('Y',$dates->startdate)."&amp;month=";
                 echo date('m',$dates->startdate)."&amp;day=";
                 echo date('d',$dates->startdate)."&amp;length=day' ";
@@ -138,7 +138,7 @@ if ($numwaiting > 0)
 
             if ($sit[2] == $user)
             {
-                echo "<a href='add_holiday.php?year=".date('Y',$dates->startdate)."&amp;month=".date('m',$dates->startdate)."&amp;day=".date('d',$dates->startdate)."&amp;user={$sit[2]}&amp;type={$dates->type}&amp;length=0&amp;return=holidays' onclick=\"return window.confirm('".date('l jS F Y', $dates->startdate).": {$strHolidayCancelConfirm}');\" title='{$strHolidayCancel}'>{$strCancel}</a>";
+                echo "<a href='holiday_add.php?year=".date('Y',$dates->startdate)."&amp;month=".date('m',$dates->startdate)."&amp;day=".date('d',$dates->startdate)."&amp;user={$sit[2]}&amp;type={$dates->type}&amp;length=0&amp;return=holidays' onclick=\"return window.confirm('".date('l jS F Y', $dates->startdate).": {$strHolidayCancelConfirm}');\" title='{$strHolidayCancel}'>{$strCancel}</a>";
             }
             echo "</td></tr>\n";
         }
