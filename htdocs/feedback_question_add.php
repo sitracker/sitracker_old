@@ -1,5 +1,5 @@
 <?php
-// add_feedback_question.php - Form for adding feedback questions
+// feedback_question_add.php - Form for adding feedback questions
 //
 // SiT (Support Incident Tracker) - Support call tracking system
 // Copyright (C) 2000-2008 Salford Software Ltd. and Contributors
@@ -76,7 +76,7 @@ switch ($_REQUEST['action'])
         mysql_query($sql);
         if (mysql_error()) trigger_error ("MySQL Error: ".mysql_error(), E_USER_ERROR);
         $newqid=$qid+1;
-        header("Location: add_feedback_question.php?fid={$formid}&qid={$newqid}");
+        header("Location: feedback_question_add.php?fid={$formid}&qid={$newqid}");
         exit;
     break;
 

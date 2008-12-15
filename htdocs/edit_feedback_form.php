@@ -58,7 +58,7 @@ switch ($_REQUEST['action'])
         include ('htmlheader.inc.php');
         echo "<h3>{$strAddFeedbackForm}</h3>";
         echo "<form action='{$_SERVER['PHP_SELF']}' method='post'>";
-        echo "<table summary='Form' align='center'>";
+        echo "<table summary='Form' align='center' class='vertical'>";
         echo "<tr>";
 
         /*echo "<th>Form ID:</th>";
@@ -88,7 +88,6 @@ switch ($_REQUEST['action'])
         echo "<tr>";
         echo "<th>{$strQuestions}:</th>";
         echo "<td>";
-        //echo "<p><a href='add_feedback_question.php?fid=$formid'>Add Question</a><br />Save the main form first</p>";
         echo "<p>{$strSaveTheMainFormFirst}t</p>";
         echo "</td></tr>\n";
         echo "<tr>";
