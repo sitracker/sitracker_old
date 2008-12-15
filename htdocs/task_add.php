@@ -1,5 +1,5 @@
 <?php
-// add_task.php - Add a new task
+// task_add.php - Add a new task
 //
 // SiT (Support Incident Tracker) - Support call tracking system
 // Copyright (C) 2000-2008 Salford Software Ltd. and Contributors
@@ -100,7 +100,7 @@ else
             if ($errors != 0)
             {
                 include ('htmlheader.inc.php');
-                html_redirect("add_task.php", FALSE);
+                html_redirect($_SERVER['PHP_SELF'], FALSE);
             }
             else
             {
