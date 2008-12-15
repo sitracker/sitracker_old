@@ -1,5 +1,5 @@
 <?php
-// add_service_level.php - Add a new service level
+// service_level_add.php - Add a new service level
 //
 // SiT (Support Incident Tracker) - Support call tracking system
 // Copyright (C) 2000-2008 Salford Software Ltd. and Contributors
@@ -186,7 +186,7 @@ elseif ($action == "edit")
     {
         // show error message if errors
         include ('htmlheader.inc.php');
-        html_redirect("add_service_level.php", FALSE);
+        html_redirect($_SERVER['PHP_SELF'], FALSE);
     }
     else
     {
