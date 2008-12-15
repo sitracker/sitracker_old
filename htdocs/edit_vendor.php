@@ -82,7 +82,7 @@ switch ($action)
             }
             echo "</table>";
         }
-        echo "<p align='center'><a href='add_vendor.php'>{$strAddVendor}</a></p>";
+        echo "<p align='center'><a href='vendor_add.php'>{$strAddVendor}</a></p>";
         include ('htmlfooter.inc.php');
         break;
 }

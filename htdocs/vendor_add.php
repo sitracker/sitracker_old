@@ -1,5 +1,5 @@
 <?php
-// add_vendor.php - Form for adding software vendors
+// vendor_add.php - Form for adding software vendors
 //
 // SiT (Support Incident Tracker) - Support call tracking system
 // Copyright (C) 2000-2008 Salford Software Ltd. and Contributors
@@ -80,7 +80,7 @@ else
     else
     {
         include ('htmlheader.inc.php');
-        html_redirect("add_vendor.php", FALSE);
+        html_redirect($_SERVER['PHP_SELF'], FALSE);
     }
 }
 ?>
