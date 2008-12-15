@@ -1,5 +1,5 @@
 <?php
-// add_user.php - Form for adding users
+// user_add.php - Form for adding users
 //
 // SiT (Support Incident Tracker) - Support call tracking system
 // Copyright (C) 2000-2008 Salford Software Ltd. and Contributors
@@ -241,7 +241,7 @@ else
     }
     else
     {
-        html_redirect("add_user.php", FALSE);
+        html_redirect($_SERVER['PHP_SELF'], FALSE);
     }
 }
 ?>
