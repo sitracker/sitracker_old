@@ -207,7 +207,7 @@ else
                 if ($results["fax"] == '') echo "<em>{$strNone}</em>";
 				else echo $results["fax"];
 				echo "</td>";
-                echo "<td><a href='add_incident.php?action=findcontact&amp;contactid={$results['id']}'>{$strAddIncident}</a> | ";
+                echo "<td><a href='incident_add.php?action=findcontact&amp;contactid={$results['id']}'>{$strAddIncident}</a> | ";
                 echo "<a href='edit_contact.php?action=edit&amp;contact={$results['id']}'>{$strEditContact}</a>";
                 echo "</td></tr>";
 
