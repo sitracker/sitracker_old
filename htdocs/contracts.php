@@ -1,5 +1,5 @@
 <?php
-// browse_contacts.php
+// contacts.php
 //
 // SiT (Support Incident Tracker) - Support call tracking system
 // Copyright (C) 2000-2008 Salford Software Ltd. and Contributors

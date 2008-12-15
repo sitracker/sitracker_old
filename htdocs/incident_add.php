@@ -128,7 +128,7 @@ if (empty($action) OR $action=='showform')
         echo "<input name='submit' type='submit' value='{$strFindContact}' />";
         echo "</td></tr>";
         echo "</table>";
-        echo "<p align='center'><a href='browse_contacts.php'>{$strBrowseContacts}</a>...</p>";
+        echo "<p align='center'><a href='contacts.php'>{$strBrowseContacts}</a>...</p>";
         echo "<input name='siteid' type='hidden' value='$siteid' />";
         echo "</form>\n";
     }

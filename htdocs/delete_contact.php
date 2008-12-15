@@ -151,6 +151,6 @@ else
     journal(CFG_LOGGING_NORMAL, 'Contact Deleted', "Contact $id was deleted", CFG_JOURNAL_CONTACTS, $id);
 
     if (!empty($newcontact)) html_redirect("contact_details.php?id={$newcontact}");
-    else  html_redirect("browse_contacts.php?search_string=A");
+    else  html_redirect("contacts.php?search_string=A");
 }
 ?>
