@@ -1,5 +1,5 @@
 <?php
-// add_software.php - Form for adding software
+// software_add.php - Form for adding software
 //
 // SiT (Support Incident Tracker) - Support call tracking system
 // Copyright (C) 2000-2008 Salford Software Ltd. and Contributors
@@ -141,7 +141,7 @@ else
     else
     {
         include ('htmlheader.inc.php');
-        html_redirect("add_software.php", FALSE);
+        html_redirect($_SERVER['PHP_SELF'], FALSE);
     }
 }
 ?>
