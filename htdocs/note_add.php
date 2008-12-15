@@ -1,5 +1,5 @@
 <?php
-// add_note.php - Add a new note
+// note_add.php - Add a new note
 //
 // SiT (Support Incident Tracker) - Support call tracking system
 // Copyright (C) 2000-2008 Salford Software Ltd. and Contributors

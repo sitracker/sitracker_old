@@ -5917,7 +5917,7 @@ function parse_updatebody($updatebody, $striptags = TRUE)
 function add_note_form($linkid, $refid)
 {
     global $now, $sit, $iconset;
-    $html = "<form name='addnote' action='add_note.php' method='post'>";
+    $html = "<form name='addnote' action='note_add.php' method='post'>";
     $html .= "<div class='detailhead note'> <div class='detaildate'>".readable_date($now)."</div>\n";
     $html .= icon('note', 16, $GLOBALS['strNote ']);
     $html .= " New Note by ".user_realname($sit[2])."</div>\n";
