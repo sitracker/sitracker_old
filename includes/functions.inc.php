@@ -9189,7 +9189,7 @@ function process_add_contact($mode = 'internal')
 
                 if ($returnpage == 'addincident')
                 {
-                    html_redirect("add_incident.php?action=findcontact&contactid={$newid}");
+                    html_redirect("incident_add.php?action=findcontact&contactid={$newid}");
                     exit;
                 }
                 elseif ($mode == 'internal')

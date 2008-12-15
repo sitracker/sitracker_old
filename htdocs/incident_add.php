@@ -314,7 +314,7 @@ elseif ($action == 'findcontact')
                 $html .=  "</tr>\n";
             }
             $html .=  "</table>\n";
-            $html .= "<p align='center'><a href='add_contact.php?name=".urlencode($search_string)."&amp;return=addincident'>{$strAddContact}</a></p>";
+            $html .= "<p align='center'><a href='contact_add.php?name=".urlencode($search_string)."&amp;return=addincident'>{$strAddContact}</a></p>";
 
             if ($customermatches > 0)
             {
@@ -325,7 +325,7 @@ elseif ($action == 'findcontact')
         else
         {
             echo "<h3>No matching contacts found</h3>";
-            echo "<p align='center'><a href=\"add_contact.php?name=".urlencode($search_string)."&amp;return=addincident\">{$strAddContact}</a></p>";
+            echo "<p align='center'><a href=\"contact_add.php?name=".urlencode($search_string)."&amp;return=addincident\">{$strAddContact}</a></p>";
         }
         echo "<p align='center'><a href=\"{$_SERVER['PHP_SELF']}?updateid={$updateid}&amp;win={$win}\">{$strSearchAgain}</a></p>";
         include ('htmlfooter.inc.php');
@@ -338,7 +338,7 @@ elseif ($action == 'findcontact')
         if (!empty($search_string)) echo "'$search_string' ";
         if (!empty($contactid)) echo "contact id $contactid ";
         echo "</h2>\n";
-        echo "<p align='center'><a href=\"add_incident.php?updateid=$updateid&amp;win={$win}\">{$strSearchAgain}</a></p>";
+        echo "<p align='center'><a href=\"incident_add.php?updateid=$updateid&amp;win={$win}\">{$strSearchAgain}</a></p>";
         // Select the contact from the list of contacts as well
         $sql = "SELECT *, c.id AS contactid FROM `{$dbContacts}` AS c, `{$dbSites}` AS s WHERE c.siteid = s.id ";
         if (empty($contactid))
@@ -388,12 +388,12 @@ elseif ($action == 'findcontact')
                 echo $html;
             }
 
-            echo "<p align='center'><a href='add_contact.php?name=".urlencode($search_string)."&amp;return=addincident'>{$strAddContact}</a></p>\n";
+            echo "<p align='center'><a href='contact_add.php?name=".urlencode($search_string)."&amp;return=addincident'>{$strAddContact}</a></p>\n";
         }
         else
         {
             echo "<h3>No matching contacts found</h3>";
-            echo "<p align='center'><a href=\"add_contact.php?name=".urlencode($search_string)."&amp;return=addincident\">{$strAddContact}</a></p>\n";
+            echo "<p align='center'><a href=\"contact_add.php?name=".urlencode($search_string)."&amp;return=addincident\">{$strAddContact}</a></p>\n";
         }
 
 
@@ -848,7 +848,7 @@ elseif ($action == 'assign')
 
             if ($CONFIG['auto_assign_incidents'])
             {
-                html_redirect("add_incident.php?action=reassign&userid={$suggested_user}&incidentid={$incidentid}");
+                html_redirect("incident_add.php?action=reassign&userid={$suggested_user}&incidentid={$incidentid}");
                 exit;
             }
             else

@@ -451,7 +451,7 @@ if (!empty($q))
                     <td>{$row->email}</td>
                     <td>{$row->telephone}</td>
                     <td>{$row->fax}</td>
-                    <td><a href='add_incident.php?action=findcontact&contactid={$row->contactid}'>
+                    <td><a href='incident_add.php?action=findcontact&contactid={$row->contactid}'>
                         {$strAddIncident}</a>
                     </td>
                   </tr>";
