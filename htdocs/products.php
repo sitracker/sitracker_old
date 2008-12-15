@@ -333,7 +333,7 @@ else
                 }
                 echo "</table>";
             }
-            echo "<p align='center'><a href='add_productinfo.php?product={$product->id}'>{$strAddProductQuestion}</a></p>";
+            echo "<p align='center'><a href='product_info_add.php?product={$product->id}'>{$strAddProductQuestion}</a></p>";
 
             $sql = "SELECT * FROM `{$dbMaintenance}` WHERE product='{$product->id}' ORDER BY id DESC";
             $result = mysql_query($sql);

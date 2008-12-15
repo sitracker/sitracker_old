@@ -1,5 +1,5 @@
 <?php
-// add_product_info.php - Form to add product information
+// product_info_add.php - Form to add product information
 //
 // SiT (Support Incident Tracker) - Support call tracking system
 // Copyright (C) 2000-2008 Salford Software Ltd. and Contributors

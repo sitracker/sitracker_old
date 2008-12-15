@@ -53,7 +53,7 @@ if (user_permission($sit[2],22)) // Administrate
     echo "<tr><td><a href='templates.php'>{$strManageEmailTemplates}</a></td></tr>";
     echo "<tr><td><a href='browse_journal.php'>{$strBrowse} {$CONFIG['application_shortname']} {$strJournal}</a></td></tr>";
     echo "<tr><td><a href='service_levels.php'>{$strServiceLevels}</a></td></tr>";
-    echo "<tr><td><a href='add_productinfo.php?action=showform'>{$strAddProductInformation}</a></td></tr>";
+    echo "<tr><td><a href='product_info_add.php?action=showform'>{$strAddProductInformation}</a></td></tr>";
     echo "<tr><td><a href='calendar.php?type=10&amp;display=year'>{$strSetPublicHolidays}</a></td></tr>";
     echo "<tr><td><a href='show_orphaned_contacts.php'>{$strShowOrphandedContacts}</a></td></tr>";
     echo "</tbody>";
