@@ -103,7 +103,7 @@ $hmenu[20] = array_merge(array (10=> array ( 'perm'=> 0, 'name'=> $strSites, 'ur
 
 if (!is_array($hmenu[2010])) $hmenu[2010] = array();
 $hmenu[2010] = array_merge(array (10=> array ( 'perm'=> 11, 'name'=> $strBrowse, 'url'=>"{$CONFIG['application_webpath']}browse_sites.php"),
-                      20=> array ( 'perm'=> 2, 'name'=> $strNewSite, 'url'=>"{$CONFIG['application_webpath']}add_site.php?action=showform")
+                      20=> array ( 'perm'=> 2, 'name'=> $strNewSite, 'url'=>"{$CONFIG['application_webpath']}site_add.php?action=showform")
 ), $hmenu[2010]);
 if (!is_array($hmenu[2020])) $hmenu[2020] = array();
 $hmenu[2020] = array_merge(array (10=> array ( 'perm'=> 11, 'name'=> $strBrowse, 'url'=>"{$CONFIG['application_webpath']}browse_contacts.php?search_string=A"),

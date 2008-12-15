@@ -110,7 +110,7 @@ else
 }
 echo "</td></tr>";
 echo "<tr><td valign='middle'>";
-echo "<a href='add_site.php'>{$strAddSite}</a> | ";
+echo "<a href='site_add.php'>{$strAddSite}</a> | ";
 echo alpha_index("{$_SERVER['PHP_SELF']}?search_string=");
 echo "<a href='{$_SERVER['PHP_SELF']}?search_string=*&amp;{$inactivestring}'>{$strAll}</a>\n";
 $sitesql = "SELECT COUNT(id) FROM `{$dbSites}` WHERE owner='{$sit[2]}'";

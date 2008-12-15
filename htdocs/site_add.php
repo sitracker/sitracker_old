@@ -1,5 +1,5 @@
 <?php
-// add_site.php - Form for adding sites
+// site_add.php - Form for adding sites
 //
 // SiT (Support Incident Tracker) - Support call tracking system
 // Copyright (C) 2000-2008 Salford Software Ltd. and Contributors
@@ -191,7 +191,7 @@ elseif ($action == "add")
     }
     else
     {
-        html_redirect("add_site.php", FALSE);
+        html_redirect($_SERVER['PHP_SELF'], FALSE);
     }
 }
 ?>
