@@ -55,7 +55,7 @@ if (mysql_num_rows($result) >= 1)
 }
 else echo "<p align='center'>{$strNoRecords}</p>";
 
-echo "<p align='center'><a href='add_escalation_path.php'>{$strAdd}</a></p>";
+echo "<p align='center'><a href='escalation_path_add.php'>{$strAdd}</a></p>";
 
 include ('htmlfooter.inc.php');
 
