@@ -143,7 +143,7 @@ if (empty($productid) AND $display!='skills')
             echo "</td>";
             echo "<td>{$countengineers}</td>";
             echo "<td>{$countincidents}</td>";
-            echo "<td><a href='add_product_software.php?softwareid={$software['id']}'>{$strLink}</a> ";
+            echo "<td><a href='product_software_add.php?softwareid={$software['id']}'>{$strLink}</a> ";
             echo "| <a href='edit_software.php?id={$software['id']}'>{$strEdit}</a> ";
             echo "| <a href='edit_software.php?id={$software['id']}&amp;action=delete'>{$strDelete}</a>";
             echo "</td>";
@@ -221,7 +221,7 @@ elseif (empty($productid) AND ($display=='skills' OR $display=='software'))
             echo "<td>{$countlinked}</td>";
             echo "<td>{$countengineers}</td>";
             echo "<td>{$countincidents}</td>";
-            echo "<td><a href='add_product_software.php?softwareid={$software->id}'>{$strLink}</a> ";
+            echo "<td><a href='product_software_add.php?softwareid={$software->id}'>{$strLink}</a> ";
             echo "| <a href='edit_software.php?id={$software->id}'>{$strEdit}</a> ";
             echo "| <a href='edit_software.php?id={$software->id}&amp;action=delete'>{$strDelete}</a>";
             echo "</td>";
@@ -313,7 +313,7 @@ else
                 echo "<tr><td>&nbsp;</td><td><em>{$strNoSkillsLinkedToProduct}</em></td><td>&nbsp;</td></tr>\n";
             }
             echo "</table>\n";
-            echo "<p align='center'><a href='add_product_software.php?productid={$product->id}'>".sprintf($strLinkSkillToX, $product->name)."</a></p>\n";
+            echo "<p align='center'><a href='product_software_add.php?productid={$product->id}'>".sprintf($strLinkSkillToX, $product->name)."</a></p>\n";
 
             $sql = "SELECT * FROM `{$dbProductInfo}` WHERE productid='{$product->id}'";
             $result = mysql_query($sql);
