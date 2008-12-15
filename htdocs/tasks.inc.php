@@ -734,12 +734,12 @@ if (mysql_num_rows($result) >=1 )
         // Show add activity link if the incident is open
         if (incident_status($id) != 2)
         {
-            echo "<p align='center'><a href='add_task.php?incident={$id}'>{$strStartNewActivity}</a></p>";
+            echo "<p align='center'><a href='task_add.php?incident={$id}'>{$strStartNewActivity}</a></p>";
         }
     }
     else if ($show != 'incidents')
     {
-        echo "<p align='center'><a href='add_task.php'>{$strAddTask}</a></p>";
+        echo "<p align='center'><a href='task_add.php'>{$strAddTask}</a></p>";
     }
 
     if ($mode == 'incident')
@@ -803,12 +803,12 @@ else
     if ($mode == 'incident')
     {
         echo "<p align='center'>";
-        echo "<a href='add_task.php?incident={$id}'>{$strStartNewActivity}";
+        echo "<a href='task_add.php?incident={$id}'>{$strStartNewActivity}";
         echo "</a></p>";
     }
     else if ($show != 'incidents')
     {
-        echo "<p align='center'><a href='add_task.php'>{$strAddTask}</a></p>";
+        echo "<p align='center'><a href='task_add.php'>{$strAddTask}</a></p>";
     }
 }
 

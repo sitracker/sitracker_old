@@ -1,5 +1,5 @@
 <?php
-// add_template.php - Form for adding new templates
+// template_add.php - Form for adding new templates
 //
 // SiT (Support Incident Tracker) - Support call tracking system
 // Copyright (C) 2000-2008 Salford Software Ltd. and Contributors

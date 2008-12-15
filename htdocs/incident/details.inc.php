@@ -193,7 +193,7 @@ if ($incident->status != 2 AND $incident->status!=7)
         switch (count($num_open_activities))
         {
         	case 0: //start
-                echo "<a href='add_task.php?incident={$id}'>{$strStartNewActivity}</a>";
+                echo "<a href='task_add.php?incident={$id}'>{$strStartNewActivity}</a>";
                 break;
             case 1: //stop
                 echo "<a href='view_task.php?id={$num_open_activities[0]}&amp;mode=incident&amp;incident={$id}'>{$strViewActivity}</a> | ";
