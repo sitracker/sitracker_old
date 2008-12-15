@@ -395,7 +395,7 @@ else
     echo "<p align='center'><a href='{$_SERVER['PHP_SELF']}#{$productid}'>{$strBackToList}</a></p>";
 }
 
-echo "<p align='center'><a href='add_vendor.php'>{$strAddVendor}</a> | <a href='add_product.php'>{$strAddProduct}</a> | <a href='add_software.php'>{$strAddSkill}</a>";
+echo "<p align='center'><a href='add_vendor.php'>{$strAddVendor}</a> | <a href='product_add.php'>{$strAddProduct}</a> | <a href='add_software.php'>{$strAddSkill}</a>";
 
 if ($display=='skills' OR $display=='software')
 {
