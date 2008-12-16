@@ -169,7 +169,7 @@ elseif ($action == 'findcontact')
 
     $sql  = "SELECT p.name AS productname, p.id AS productid, c.surname AS surname, ";
     $sql .= "m.id AS maintid, m.incident_quantity, m.incidents_used, m.expirydate, m.term, s.name AS name, ";
-    $sql .= "c.id AS contactid, s.id AS siteid, c.forenames ";
+    $sql .= "c.id AS contactid, s.id AS siteid, c.forenames, m.servicelevelid ";
     $sql .= "FROM `{$dbSupportContacts}` AS sc, `{$dbContacts}` AS c, `{$dbMaintenance}` AS m, `{$dbProducts}` AS p, `{$dbSites}` AS s ";
     $sql .= "WHERE m.product = p.id ";
     $sql .= "AND m.site = s.id ";
@@ -179,9 +179,14 @@ elseif ($action == 'findcontact')
     {
         $sql .= $contactsql;
     }
+    else
+    {
+        $sql .= "AND c.id = '$contactid' ";
+    }
+    
     $sql .= "UNION SELECT p.name AS productname, p.id AS productid, c.surname AS surname, ";
     $sql .= "m.id AS maintid, m.incident_quantity, m.incidents_used, m.expirydate, m.term, s.name AS name, ";
-    $sql .= "c.id AS contactid, s.id AS siteid, c.forenames ";
+    $sql .= "c.id AS contactid, s.id AS siteid, c.forenames, m.servicelevelid ";
     $sql .= "FROM `{$dbContacts}` AS c, `{$dbMaintenance}` AS m, `{$dbProducts}` AS p, `{$dbSites}` AS s ";
     $sql .= "WHERE m.product = p.id ";
     $sql .= "AND m.site = s.id ";
@@ -191,6 +196,11 @@ elseif ($action == 'findcontact')
     {
         $sql .= $contactsql;
     }
+    else
+    {
+        $sql .= "AND c.id = '$contactid' ";
+    }
+    
 
     $result=mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
