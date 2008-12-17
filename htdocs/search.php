@@ -124,10 +124,10 @@ if (!empty($q))
     $search = $q;
 
     //INCIDENT RESULTS
-    $incidentsql = "SELECT *,incidentid AS id, i.title, ";
-    $incidentsql .= "MATCH (bodytext, title) AGAINST ('{$search}' IN BOOLEAN MODE) AS score ";
+    $incidentsql = "SELECT SQL_CALC_FOUND_ROWS *,incidentid AS id, i.title, ";
+    $incidentsql .= "MATCH (bodytext) AGAINST ('{$search}' IN BOOLEAN MODE) AS score ";
     $incidentsql .= "FROM `{$dbUpdates}` as u, `{$dbIncidents}` as i ";
-    $incidentsql .= "WHERE (MATCH (bodytext, title) AGAINST ('{$search}' IN BOOLEAN MODE)) ";
+    $incidentsql .= "WHERE (MATCH (bodytext) AGAINST ('{$search}' IN BOOLEAN MODE)) ";
     $incidentsql .= "AND u.incidentid=i.id ";
     $incidentsql .= "GROUP BY u.incidentid ";
 
@@ -158,9 +158,8 @@ if (!empty($q))
     }
     else
     {
-        $incidentsql .= " ORDER BY score DESC ";
+        $incidentsql .= " ORDER BY score, i.id DESC ";
     }
-    $countsql = $incidentsql;
 
     if ($domain == 'incidents')
     {
@@ -170,13 +169,14 @@ if (!empty($q))
     {
         $incidentsql .= "LIMIT 0, {$resultsperpage} ";
     }
-
-    if ($incidentresult = mysql_query($incidentsql) AND mysql_num_rows($incidentresult) > 0)
+    $incidentresult = mysql_query($incidentsql);
+    $resultq = mysql_query("SELECT FOUND_ROWS() AS rows");
+    $resulto = mysql_fetch_object($resultq);
+    $results = $resulto->rows;
+    if ($incidentresult AND $results > 0)
     {
         echo "<h3>".icon('support', 32)." {$strIncidents}</h3>";
         $hits++;
-        $countresult = mysql_query($countsql);
-        $results = mysql_num_rows($countresult);
 
         if ($domain == 'incidents')
         {
@@ -196,7 +196,7 @@ if (!empty($q))
         echo "<p align='center'>".sprintf($strShowingXtoXofX,
                                           "<strong>".($begin+1)."</strong>",
                                           "<strong>".$end."</strong>",
-                                          "<strong>".$results."</strong>")."</p>";
+                                          "<strong>{$results}</strong>")."</p>";
         echo "<p align='center'>";
         if (!empty($start) AND $domain == 'incidents')
         {
