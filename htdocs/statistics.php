@@ -275,7 +275,7 @@ function give_overview()
 
     if (mysql_num_rows($result) > 1)
     {
-        echo "<h2>{$strByGroup}</h2><table class='vertical' align='center'>";
+        echo "<h2>{$GLOBALS['strByGroup']}</h2><table class='vertical' align='center'>";
         while ($groups = mysql_fetch_object($result))
         {
             $sqlGroups = "SELECT COUNT(i.id) AS count, istatus.name ";
@@ -294,7 +294,7 @@ function give_overview()
                 echo "<table class='vertical' align='center'>";
                 while ($rowGroup = mysql_fetch_object($resultGroups))
                 {
-                    echo "<tr><th>{$rowGroup->name}</th><td class='shade2' align='left'>";
+                    echo "<tr><th>{$GLOBALS[$rowGroup->name']}</th><td class='shade2' align='left'>";
                     //FIXME - HACK, no idea why this is needed
                     $amount = $rowGroup->count / 8;
                     echo "{$amount}</td></tr>";
@@ -329,7 +329,7 @@ function give_overview()
 
     if (mysql_num_rows($result) > 1)
     {
-        echo "<h2>{$strByVendor}</h2><table class='vertical' align='center'>";
+        echo "<h2>{$GLOBALS['strByVendor']}</h2><table class='vertical' align='center'>";
         while ($vendors = mysql_fetch_array($result))
         {
             // This should use the software and relate to the product and then to the vendor
@@ -355,7 +355,7 @@ function give_overview()
                 echo "<table class='vertical' align='center'>";
                 while ($rowVendor = mysql_fetch_object($resultVendor))
                 {
-                    echo "<tr><th>{$rowVendor->name}</th><td class='shade2' align='left'>";
+                    echo "<tr><th>{$GLOBALS[$rowVendor->name]}</th><td class='shade2' align='left'>";
                     echo "{$rowVendor->count}</td></tr>";
 
                     if (strpos(strtolower($rowVendor->name), "clos") === false)
