@@ -103,7 +103,7 @@ function trigger($triggerid, $paramarray='')
                 eval("return \$value = $checks;");
                 if ($value === FALSE)
                 {
-                    return;
+                    continue;
                 }
             }
         }
