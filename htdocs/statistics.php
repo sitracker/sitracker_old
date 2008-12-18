@@ -294,7 +294,7 @@ function give_overview()
                 echo "<table class='vertical' align='center'>";
                 while ($rowGroup = mysql_fetch_object($resultGroups))
                 {
-                    echo "<tr><th>{$GLOBALS[$rowGroup->name']}</th><td class='shade2' align='left'>";
+                    echo "<tr><th>{$GLOBALS[$rowGroup->name]}</th><td class='shade2' align='left'>";
                     //FIXME - HACK, no idea why this is needed
                     $amount = $rowGroup->count / 8;
                     echo "{$amount}</td></tr>";
