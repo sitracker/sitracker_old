@@ -590,6 +590,7 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
             $sql = "INSERT INTO `{$dbFiles}`(filename, size, userid, usertype) ";
             $sql .= "VALUES('{$name}', '{$size}', '{$sit[2]}', '1')";
             mysql_query($sql);
+            if (mysql_error()) trigger_error(mysql_error(), E_USER_WARNING);
             $fileid = mysql_insert_id();
 
             $filename = $CONFIG['attachment_fspath'].$id.$fsdelim.$fileid."-".$name;
