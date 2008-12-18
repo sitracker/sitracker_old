@@ -344,7 +344,7 @@ $CFGVAR['ldap_admin_group']['title'] = 'LDAP group for SIT admins';
 $CFGVAR['ldap_admin_group_attr']['title'] = 'LDAP group attribute for SIT admins';
 
 $CFGVAR['ldap_attr_map']['title'] = 'LDAP Attribute Map';
-$CFGVAR['ldap_attr_map']['help'] = 'Mapping between SIT and ldap attributes. Do not change the keys only the values Valid key values are: realname, forenames, jobtitle, email, mobile, fax, phone';
+$CFGVAR['ldap_attr_map']['help'] = 'Mapping between SIT and LDAP attributes. Do not change the keys, only change the values. Valid key values are: realname, forenames, jobtitle, email, mobile, fax, phone';
 
 $CFGVAR['ldap_autocreate_customer']['title'] = 'Auto create customer';
 $CFGVAR['ldap_autocreate_customer']['help'] = 'This attempts to create the customer record automatically using LDAP when creating an incident from an email in the holding queue.';
