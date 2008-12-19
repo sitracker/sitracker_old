@@ -22,12 +22,8 @@ $selcat = cleanvar($_REQUEST['cat']);
 $seltab = cleanvar($_REQUEST['tab']);
 $action = cleanvar($_REQUEST['action']);
 
-include ('htmlheader.inc.php');
 
 require('configvars.inc.php');
-
-echo "<h2>".icon('settings', 32, $strConfiguration);
-echo " {$CONFIG['application_shortname']} {$strConfiguration}</h2>";
 
 if ($action == 'save')
 {
@@ -37,11 +33,18 @@ if ($action == 'save')
         foreach ($CFGCAT[$selcat] AS $catvar)
         {
             $savevar[$catvar] = cleanvar($_REQUEST[$catvar]);
+            $CONFIG[$catvar] = cleanvar($_REQUEST[$catvar]);
         }
-        if ($CONFIG['debug']) echo "<pre>".print_r($savevar,true)."</pre>";
+        if ($CONFIG['debug']) $dbg .= "<pre>".print_r($savevar,true)."</pre>";
         cfgSave($savevar);
     }
 }
+
+include ('htmlheader.inc.php');
+
+echo "<h2>".icon('settings', 32, $strConfiguration);
+echo " {$CONFIG['application_shortname']} {$strConfiguration}</h2>";
+
 
 
 echo "<div class='tabcontainer'>";
@@ -88,7 +91,7 @@ echo "</fieldset>";
 echo "<input type='hidden' name='cat' value='{$selcat}' />";
 echo "<input type='hidden' name='action' value='save' />";
 echo "<p><input type='reset' value=\"{$strReset}\" /> <input type='submit' value=\"{$strSave}\" /></p>";
-
+echo "</form>";
 
 include ('htmlfooter.inc.php');
 ?>
