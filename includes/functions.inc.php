@@ -11030,5 +11030,6 @@ if (version_compare(PHP_VERSION, "5.0.0", "<")) trigger_error('INFO: You are run
 if (@ini_get('register_globals') == 1 OR strtolower(@ini_get('register_globals')) == 'on')
 {
     trigger_error('Error: php.ini MUST have register_globals set to off, there are potential security risks involved with leaving it as it is!', E_USER_ERROR);
+    die('Stopping SiT now, fix your php and try again.');
 }
 ?>
