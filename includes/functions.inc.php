@@ -219,7 +219,7 @@ function authenticate($username, $password)
     // SQL Auth
     if (authenticateSQL($username, $password) == 1)
     {
-        if ( $use_ldap )
+        if ($use_ldap)
         {
             ldapSyncUser($username, $password);
         }
@@ -227,7 +227,7 @@ function authenticate($username, $password)
     }
 
     // LDAP Auth
-    if ( $use_ldap )
+    if ($use_ldap)
     {
         return authenticateLDAP($username, $password);
     }

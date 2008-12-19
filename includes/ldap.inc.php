@@ -23,7 +23,7 @@ $now = time();
 
 
 /**
-    * Authenticate a customer. 
+    * Authenticate a customer.
     * If successful and the customer is new, the customer is created in the database
     * If successful and the customer is returning, the customer record is resynced
     * @author Lea Anthony
@@ -52,7 +52,7 @@ function authenticateLDAPCustomer($username, $password)
     $details["address1"] = "";
     $details["md5password"] = md5($password);
 
-    if( customerExistsInDB($username) ) 
+    if( customerExistsInDB($username) )
     {
         ldapUpdateContact($details);
     }
@@ -69,15 +69,16 @@ function authenticateLDAPCustomer($username, $password)
 */
 function ldapCreateContact($details)
 {
+    debug_log("LDAP CreateContact $details");
     global $CONFIG, $dbContacts, $now;
 
     // Create vars for the userdetails
-    foreach ($details as $key=>$value) 
+    foreach ($details as $key=>$value)
     {
-        eval("\${$key} = \"{$value}\";");  
+        eval("\${$key} = \"{$value}\";");
     }
 
-    if ( !isset($siteid) ) 
+    if ( !isset($siteid) )
     {
         $siteid = $CONFIG["ldap_default_customer_siteid"];
     }
@@ -105,9 +106,9 @@ function ldapUpdateContact($details)
     global $CONFIG, $dbContacts, $now;
 
     // Create vars for the userdetails
-    foreach ($details as $key=>$value) 
+    foreach ($details as $key=>$value)
     {
-        eval("\${$key} = \"{$value}\";");  
+        eval("\${$key} = \"{$value}\";");
     }
 
     // TODO: Check DB for existing attributes that are NOT mapped and
@@ -135,10 +136,11 @@ function ldapUpdateContact($details)
 */
 function ldapSearch($dn, $query)
 {
+    debug_log("ldapSearch DN: $dn    QUERY: $query");
     $ldap_conn = ldapOpen();
 
-    $result = ldap_search($ldap_conn, $dn, $query) 
-            or trigger_error("Error in search query: $query ", E_USER_ERROR);
+    $result = ldap_search($ldap_conn, $dn, $query)
+            or trigger_error("Error in search dn: $dn query: $query ", E_USER_ERROR);
     $info = ldap_get_entries($ldap_conn, $result);
 
     ldapClose();
@@ -156,6 +158,7 @@ function ldapSearch($dn, $query)
 */
 function ldapIsAdmin($username)
 {
+    debug_log("ldapIsAdmin $username");
     // Is user?
     global $CONFIG;
 
@@ -179,6 +182,7 @@ function ldapIsAdmin($username)
 */
 function ldapIsManager($username)
 {
+    debug_log("ldapIsManager $username");
     // Is user?
     global $CONFIG;
 
@@ -202,6 +206,7 @@ function ldapIsManager($username)
 */
 function ldapIsUser($username)
 {
+    debug_log("ldapIsUser $username");
     // Is user?
     global $CONFIG;
 
@@ -225,6 +230,7 @@ function ldapIsUser($username)
 */
 function ldapIsCustomer($username)
 {
+    debug_log("ldapIsCustomer $username");
     // Is customer?
     global $CONFIG;
 
@@ -252,16 +258,16 @@ function ldapIsCustomer($username)
 function ldapGetUserType($username)
 {
     global $CONFIG;
+    debug_log("ldapGetUserType $username");
 
     $result = LDAP_INVALID_USER;
 
-    if( ldapIsAdmin($username) ) $result = LDAP_USERTYPE_ADMIN;
-    elseif( ldapIsManager($username) ) $result = LDAP_USERTYPE_MANAGER;
-    elseif( ldapIsUser($username) ) $result = LDAP_USERTYPE_USER;
-    elseif( ldapIsCustomer($username) ) $result = LDAP_USERTYPE_CUSTOMER;
+    if (ldapIsAdmin($username)) $result = LDAP_USERTYPE_ADMIN;
+    elseif (ldapIsManager($username)) $result = LDAP_USERTYPE_MANAGER;
+    elseif (ldapIsUser($username)) $result = LDAP_USERTYPE_USER;
+    elseif (ldapIsCustomer($username)) $result = LDAP_USERTYPE_CUSTOMER;
 
     return $result;
-
 }
 
 
@@ -273,17 +279,17 @@ function ldapGetUserType($username)
 function ldapOpen()
 {
     // TODO: Secure binding to host using TLS/SSL
-    
+    debug_log("ldapOpen");
     global $CONFIG, $ldap_conn;
     $host = $CONFIG['ldap_host'];
     $ldap_conn = ldap_connect($host)
-                 or trigger_errror("Could not connect to server", E_USER_ERROR);
+                 or trigger_error("Could not connect to server", E_USER_ERROR);
 
     $bind_user = $CONFIG["ldap_bind_user"];
     $bind_pass = $CONFIG["ldap_bind_pass"];
 
     // Set protocol version
-    $protocol = $CONFIG["ldap_protocol"];        
+    $protocol = $CONFIG["ldap_protocol"];
     ldap_set_option($ldap_conn, LDAP_OPT_PROTOCOL_VERSION, $protocol);
     ldap_set_option($ldap_conn, LDAP_OPT_REFERRALS,0);
 
@@ -292,15 +298,15 @@ function ldapOpen()
         // Protocol V3 required for start_tls
         if ( $protocol == 3 )
         {
-            if ( !ldap_start_tls($ldap_conn) ) 
+            if ( !ldap_start_tls($ldap_conn) )
             {
-                die("Ldap_start_tls failed");
+                trigger_error("Ldap_start_tls failed", E_USER_ERROR);
             }
         }
         else
         {
-            die("Protocol v3 required for TLS");
-        } 
+            trigger_error("LDAP Protocol v3 required for TLS", E_USER_ERROR);
+        }
     }
 
     if ( isset($bind_user) && strlen($bind_user) > 0 )
@@ -309,7 +315,9 @@ function ldapOpen()
         if ( ! $r )
         {
             // Could not bind!
-            trigger_errror("Could not bind to LDAP server with credentials", E_USER_ERROR);
+//             $setupvars['use_ldap'] = FALSE;
+//             cfgSave($setupvars);
+            trigger_error("Could not bind to LDAP server with credentials", E_USER_ERROR);
         }
     }
 
@@ -323,9 +331,10 @@ function ldapOpen()
 */
 function ldapClose()
 {
+    debug_log("ldapClose");
     global $ldap_conn;
 
-    if( $ldap_conn != 0 ) 
+    if( $ldap_conn != 0 )
     {
         ldap_close($ldap_conn);
         $ldap_conn = 0;
@@ -341,12 +350,13 @@ function ldapClose()
 */
 function ldapGetUserDetails($username)
 {
+    debug_log("ldapGetUserDetails $username");
     // Get user details
     global $CONFIG;
 
     $user_attr = $CONFIG['ldap_user_attr'];
     $dn_base = $CONFIG['ldap_dn_base'];
-    $dn = "$user_attr=$username,$dn_base"; 
+    $dn = "$user_attr=$username,$dn_base";
 
     $query = "($user_attr=$username)";
 
@@ -361,10 +371,10 @@ function ldapGetUserDetails($username)
     $attributes = array("realname","forenames","jobtitle","email","mobile",
                         "surname", "fax","phone");
 
-    foreach ( $attributes as $attr ) 
+    foreach ( $attributes as $attr )
     {
         $mapattr = $CONFIG['ldap_attr_map'][$attr];
-        ( isset($mapattr) ? $r[$attr] = $info[0][$mapattr][0] : 
+        ( isset($mapattr) ? $r[$attr] = $info[0][$mapattr][0] :
         $r[$attr] = "" );
     }
 
@@ -381,6 +391,7 @@ function ldapGetUserDetails($username)
 */
 function ldapGetCustomerDetailsFromEmail($email)
 {
+    debug_log("ldapGetCustomerDetailsFromEmail $email");
     // Get user details
     global $CONFIG;
 
@@ -400,10 +411,10 @@ function ldapGetCustomerDetailsFromEmail($email)
     $attributes = array("realname","forenames","jobtitle","email","mobile",
                         "surname", "fax","phone");
 
-    foreach ( $attributes as $attr ) 
+    foreach ( $attributes as $attr )
     {
         $mapattr = $CONFIG['ldap_attr_map'][$attr];
-        ( isset($mapattr) ? $r[$attr] = $userdata[$mapattr][0] : 
+        ( isset($mapattr) ? $r[$attr] = $userdata[$mapattr][0] :
         $r[$attr] = "" );
     }
 
@@ -418,6 +429,7 @@ function ldapGetCustomerDetailsFromEmail($email)
     return $r;
 }
 
+
 /**
     * Checks if the given username and password are valid against the LDAP tree
     * @author Lea Anthony
@@ -429,6 +441,7 @@ function ldapGetCustomerDetailsFromEmail($email)
 */
 function ldapUserPassValid($username, $password)
 {
+    debug_log("ldapUserPassValid $username");
     global $CONFIG;
 
     $ldap_conn = ldapOpen();
@@ -439,12 +452,11 @@ function ldapUserPassValid($username, $password)
     $dn = "$user_attr=$username,$dn_base";
 
     // If the user not in LDAP then return FALSE
-    if( ! $r = @ldap_bind($ldap_conn, $dn, $password) ) return FALSE;
+    if (!$r = @ldap_bind($ldap_conn, $dn, $password)) return FALSE;
 
     ldapClose();
 
     return TRUE;
-
 }
 
 
@@ -461,11 +473,12 @@ function ldapUserPassValid($username, $password)
 */
 function authenticateLDAP($username, $password)
 {
-    global $CONFIG, $dbUsers, $dbContacts, $dbUserPermissions, 
+    debug_log("authenticateLDAP $username");
+    global $CONFIG, $dbUsers, $dbContacts, $dbUserPermissions,
         $dbPermissions, $ldap_conn, $now;
 
     // If the user/password are not valid then return gracefully
-    if( ! ldapUserPassValid($username,$password) ) return 0;
+    if(!ldapUserPassValid($username,$password)) return 0;
 
     // Get user type - if it's not a user then return
     $usertype = ldapGetUserType($username);
@@ -481,6 +494,7 @@ function authenticateLDAP($username, $password)
     return ldapCreateUser($details);
 }
 
+
 /**
     * Creates the User Record in the database
     * @author Lea Anthony
@@ -488,17 +502,18 @@ function authenticateLDAP($username, $password)
 */
 function ldapCreateUser($details)
 {
-    global $CONFIG, $dbUsers, $dbContacts, $dbUserPermissions, 
+    debug_log("ldapCreateUser".print_r($details, true));
+    global $CONFIG, $dbUsers, $dbContacts, $dbUserPermissions,
         $dbPermissions, $ldap_conn, $now;
 
     // Create vars for the userdetails
-    foreach ($details as $key=>$value) 
+    foreach ($details as $key=>$value)
     {
-        eval("\${$key} = \"{$value}\";");  
+        eval("\${$key} = \"{$value}\";");
     }
 
     // Defaults
-    $default_status = $CONFIG["ldap_default_user_status"]; 
+    $default_status = $CONFIG["ldap_default_user_status"];
     $default_style = $CONFIG['default_interface_style'];
     $default_lang = $CONFIG['default_i18n'];
 
@@ -516,7 +531,7 @@ function ldapCreateUser($details)
 
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     $newuserid = mysql_insert_id();
-    
+
     // Create permissions (set to none)
     $sql = "SELECT * FROM `{$dbPermissions}`";
     $result = mysql_query($sql);
@@ -542,9 +557,9 @@ function ldapCreateUser($details)
     * @param $username String. Username
     * @param $password String. Password
 */
-function ldapSyncUser($username, $password) 
+function ldapSyncUser($username, $password)
 {
-    global $CONFIG, $dbUsers, $dbContacts, $dbUserPermissions, 
+    global $CONFIG, $dbUsers, $dbContacts, $dbUserPermissions,
         $dbPermissions, $ldap_conn, $now;
 
     // Get User Details
@@ -565,9 +580,9 @@ function ldapUpdateUser($details)
     global $CONFIG, $dbUsers, $now;
 
     // Create vars for the userdetails
-    foreach ($details as $key=>$value) 
+    foreach ($details as $key=>$value)
     {
-        eval("\${$key} = \"{$value}\";");  
+        eval("\${$key} = \"{$value}\";");
     }
 
     // Get user type
@@ -593,7 +608,7 @@ function ldapUpdateUser($details)
     * @param $email String. Email
     * @return An array of the user data (if found)
 */
-function getUserDetailsFromDBByEmail($email) 
+function getUserDetailsFromDBByEmail($email)
 {
     global $dbUsers;
 
@@ -612,7 +627,7 @@ function getUserDetailsFromDBByEmail($email)
     * @author Lea Anthony
     * @param $email String. Email
 */
-function getContactDetailsFromDBByEmail($email) 
+function getContactDetailsFromDBByEmail($email)
 {
     global $dbContacts;
 

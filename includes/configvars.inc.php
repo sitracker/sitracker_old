@@ -380,6 +380,7 @@ $CFGVAR['ldap_protocol']['title'] = 'LDAP Protocol version to use';
 $CFGVAR['ldap_protocol']['type'] = 'number';
 
 $CFGVAR['ldap_use_tls']['title'] = 'TLS. TRUE = start TLS, FALSE = use unencrypted';
+$CFGVAR['ldap_use_tls']['help'] = 'Requires LDAP protocol v3';
 $CFGVAR['ldap_use_tls']['options'] = 'TRUE|FALSE';
 $CFGVAR['ldap_use_tls']['type'] = 'select';
 
