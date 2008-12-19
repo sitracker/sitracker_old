@@ -290,6 +290,8 @@ function update_ttna() {
     if ($('ttna_time').checked)
     {
         $('ttnacountdown').show();
+        $('timetonextaction_days').focus();
+        $('timetonextaction_days').select();
         $('ttnadate').hide();
     }
 
@@ -297,6 +299,8 @@ function update_ttna() {
     {
         $('ttnacountdown').hide();
         $('ttnadate').show();
+        $('timetonextaction_date').focus();
+        $('timetonextaction_date').select();
     }
 
     if ($('ttna_none').checked)

@@ -8456,7 +8456,7 @@ function group_user_selector($title, $level="engineer", $groupid)
 */
 function show_next_action()
 {
-    global $now;
+    global $now, $strAM, $strPM;
     $html = "{$GLOBALS['strPlaceIncidentInWaitingQueue']}<br />";
 
     $oldtimeofnextaction = incident_timeofnextaction($id); //FIXME $id never populated
@@ -8475,15 +8475,15 @@ function show_next_action()
     if ($na_hours < 0) $na_hours = 0;
     if ($na_minutes < 0) $na_minutes = 0;
 
-    $html .= "<label><input checked='checked' type='radio' ";
-    $html .= "name='timetonextaction_none' id='ttna_none' ";
-    $html .= "onchange=\"update_ttna();\" onclick=\"window.document.updateform.";
-    $html .= "timetonextaction_days.value = ''; window.document.updateform.";
-    $html .= "timetonextaction_hours.value = ''; window.document.updateform.";
-    $html .= "timetonextaction_minutes.value = '';\" value='None' />{$GLOBALS['strNo']}";
+    $html .= "<label>";
+    $html .= "<input checked='checked' type='radio' name='timetonextaction' ";
+    $html .= "id='ttna_none' onchange=\"update_ttna();\" ";
+//     $html .= "onclick=\"$('timetonextaction_days').value = ''; window.document.updateform.";
+//     $html .= "timetonextaction_hours.value = ''; window.document.updateform."; timetonextaction_minutes.value = '';\"
+    $html .= " value='None' />{$GLOBALS['strNo']}";
     $html .= "</label><br />";
 
-    $html .= "<label><input type='radio' name='timetonextaction_none' ";
+    $html .= "<label><input type='radio' name='timetonextaction' ";
     $html .= "id='ttna_time' value='time' onchange=\"update_ttna();\" />";
     $html .= "{$GLOBALS['strForXDaysHoursMinutes']}</label><br />";
     $html .= "<span id='ttnacountdown'";
@@ -8495,39 +8495,40 @@ function show_next_action()
     }
     $html .= ">";
     $html .= "&nbsp;&nbsp;&nbsp;<input maxlength='3' name='timetonextaction_days'";
-    $html .= " id='timetonextaction_days' value='{$na_days}' onclick='window.";
-    $html .= "document.updateform.timetonextaction_none[0].checked = true;' ";
+    $html .= " id='timetonextaction_days' value='{$na_days}' ";
+    $html .= "onclick=\"$('ttna_time').checked = true;\" ";
     $html .= "size='3' /> {$GLOBALS['strDays']}&nbsp;";
     $html .= "<input maxlength='2' name='timetonextaction_hours' ";
-    $html .= "id='timetonextaction_hours' value='{$na_hours}' onclick='window.";
-    $html .= "document.updateform.timetonextaction_none[0].checked = true;' ";
+    $html .= "id='timetonextaction_hours' value='{$na_hours}' ";
+    $html .= "onclick=\"$('ttna_time').checked = true;\"";
     $html .= "size='3' /> {$GLOBALS['strHours']}&nbsp;";
     $html .= "<input maxlength='2' name='timetonextaction_minutes' id='";
-    $html .= "timetonextaction_minutes' value='{$na_minutes}' onclick='window.";
-    $html .= "document.updateform.timetonextaction_none[0].checked = true;' ";
+    $html .= "timetonextaction_minutes' value='{$na_minutes}' ";
+    $html .= "onclick=\"$('ttna_time').checked = true;\"";
     $html .= "size='3' /> {$GLOBALS['strMinutes']}";
     $html .= "<br /></span>";
 
-    $html .= "<input type='radio' name='timetonextaction_none' id='ttna_date' ";
+    $html .= "<label><input type='radio' name='timetonextaction' id='ttna_date' ";
     $html .= "value='date' onchange=\"update_ttna();\" />";
-    $html .= "{$GLOBALS['strUntilSpecificDateAndTime']}<br />";
+    $html .= "{$GLOBALS['strUntilSpecificDateAndTime']}</label><br />";
     $html .= "<span id='ttnadate' style='display: none;'>";
-    $html .= "<input name='date' id='date' size='10' value='{$date}' onclick=";
-    $html .= "\"window.document.updateform.timetonextaction_none[1].checked = true;\"/> ";
-    $html .= date_picker('updateform.date');
+    $html .= "<input name='date' id='timetonextaction_date' size='10' value='{$date}' ";
+    $html .= "onclick=\"$('ttna_date').checked = true;\"";
+//     $html .= "\"window.document.updateform.timetonextaction_none[1].checked = true;\"/> ";
+    $html .= date_picker('updateform.timetonextaction_date');
     $html .= " <select name='timeoffset' id='timeoffset' onchange='window.";
     $html .= "document.updateform.timetonextaction_none[1].checked = true;'>";
     $html .= "<option value='0'></option>";
-    $html .= "<option value='0'>8:00 AM</option>";
-    $html .= "<option value='1'>9:00 AM</option>";
-    $html .= "<option value='2'>10:00 AM</option>";
-    $html .= "<option value='3'>11:00 AM</option>";
-    $html .= "<option value='4'>12:00 PM</option>";
-    $html .= "<option value='5'>1:00 PM</option>";
-    $html .= "<option value='6'>2:00 PM</option>";
-    $html .= "<option value='7'>3:00 PM</option>";
-    $html .= "<option value='8'>4:00 PM</option>";
-    $html .= "<option value='9'>5:00 PM</option>";
+    $html .= "<option value='0'>8:00 $strAM</option>";
+    $html .= "<option value='1'>9:00 $strAM</option>";
+    $html .= "<option value='2'>10:00 $strAM</option>";
+    $html .= "<option value='3'>11:00 $strAM</option>";
+    $html .= "<option value='4'>12:00 $strPM</option>";
+    $html .= "<option value='5'>1:00 $strPM</option>";
+    $html .= "<option value='6'>2:00 $strPM</option>";
+    $html .= "<option value='7'>3:00 $strPM</option>";
+    $html .= "<option value='8'>4:00 $strPM</option>";
+    $html .= "<option value='9'>5:00 $strPM</option>";
     $html .= "</select>";
     $html .= "<br /></span>";
 
