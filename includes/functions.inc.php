@@ -3701,6 +3701,8 @@ if (!function_exists('list_dir'))
         $handle = opendir($dirname);
         if ($handle == FALSE) trigger_error('Error in list_dir() Problem attempting to open directory: {$dirname}',E_USER_WARNING);
 
+        $result_array = array();
+
         while ($file = readdir($handle))
         {
             if ($file == '.' || $file == '..')
