@@ -2414,7 +2414,7 @@ function incident_lastupdate($id)
     global $dbUpdates;
     // Find the most recent update
     $sql = "SELECT userid, type, sla, currentowner, currentstatus, LEFT(bodytext,500) AS body, timestamp, nextaction, id ";
-    $sql .= "FROM `{$dbUpdates}` WHERE incidentid='$id' ORDER BY timestamp DESC, id DESC LIMIT 1";
+    $sql .= "FROM `{$dbUpdates}` WHERE incidentid='{$id}' ORDER BY timestamp DESC, id DESC LIMIT 1";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 

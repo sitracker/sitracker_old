@@ -166,9 +166,9 @@ else //submit
         
 		if ($CONFIG['portal_creates_incidents'])
 		{
-			$inc_id = create_incident($incidenttitle, $contactid, $servicelevel, 
+			$incidentid = create_incident($incidenttitle, $contactid, $servicelevel, 
 			                          $contractid, $productid, $software);
-		    $_SESSION['incidentid'] = $inc_id;
+		    $_SESSION['incidentid'] = $incidentid;
 	
 	        // Save productinfo if there is some
 	        $sql = "SELECT * FROM `{$dbProductInfo}` WHERE productid='{$productid}'";
