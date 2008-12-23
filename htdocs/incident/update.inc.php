@@ -499,7 +499,7 @@ else
     $nextaction = cleanvar($_POST['nextaction']);
     $newpriority = cleanvar($_POST['newpriority']);
     $cust_vis = cleanvar($_POST['cust_vis']);
-    $timetonextaction_none = cleanvar($_POST['timetonextaction_none']);
+    $timetonextaction = cleanvar($_POST['timetonextaction']);
     $date = cleanvar($_POST['date']);
     $timeoffset = cleanvar($_POST['timeoffset']);
     $timetonextaction_days = cleanvar($_POST['timetonextaction_days']);
@@ -519,7 +519,7 @@ else
 
     if (empty($newpriority)) $newpriority  = incident_priority($id);
     // update incident
-    switch ($timetonextaction_none)
+    switch ($timetonextaction)
     {
         case 'none':
             $timeofnextaction = 0;

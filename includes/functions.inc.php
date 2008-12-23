@@ -8518,8 +8518,8 @@ function show_next_action()
     $html .= "onclick=\"$('ttna_date').checked = true;\"";
 //     $html .= "\"window.document.updateform.timetonextaction_none[1].checked = true;\"/> ";
     $html .= date_picker('updateform.timetonextaction_date');
-    $html .= " <select name='timeoffset' id='timeoffset' onchange='window.";
-    $html .= "document.updateform.timetonextaction_none[1].checked = true;'>";
+    $html .= " <select name='timeoffset' id='timeoffset' ";
+    $html .= "onclick=\"$('ttna_date').checked = true;\" >";
     $html .= "<option value='0'></option>";
     $html .= "<option value='0'>8:00 $strAM</option>";
     $html .= "<option value='1'>9:00 $strAM</option>";
