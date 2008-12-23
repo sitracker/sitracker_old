@@ -135,6 +135,7 @@ $strApprove = 'Approve';
 $strApproveAll = 'Approve All';
 $strApproveTimesheets = 'Approve Timesheets';
 $strApproved = 'Approved';
+$strApproveFree = 'Approve Free';
 $strApprovedFree = 'Approved Free';
 $strApproveHolidays = 'Approve Holidays';
 # Short for April
