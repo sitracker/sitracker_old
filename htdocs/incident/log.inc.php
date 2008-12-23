@@ -373,7 +373,7 @@ while ($update = mysql_fetch_object($result))
         }
         else
         {
-            echo "<span>{$strMakeVisibleToCustomer}</span>";
+            echo "<span>{$strMakeVisibleInPortal}</span>";
         }
 
         echo "</a> {$updateheadertext}";
