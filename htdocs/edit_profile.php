@@ -269,6 +269,11 @@ if (empty($mode))
     echo "<td><input maxlength='5' name='updatesperpage' size='3' type='text' ";
     echo "value=\"".$user->var_num_updates_view."\" /> ({$str0MeansUnlimited})</td></tr>\n";
 
+    echo "<tr><th>{$strShowEmoticons}</th>";
+    echo "<td><input type='checkbox' name='emoticons' id='emoticons' value='true' ";
+    if ($user->var_emoticons == 'true') echo "checked='checked' ";
+    echo "/></td></tr>\n";
+
     echo "<tr><th colspan='2'>{$strNotifications}</th></tr>\n";
     echo "<tr><th></th><td>";
     echo "{$strNotificationsMovedToTriggersPage} - <a href='triggers.php'>{$strTriggers}</a></td></tr>\n";
@@ -318,16 +323,18 @@ elseif ($mode=='save')
     $message = cleanvar($_POST['message']);
     $status = cleanvar($_POST['status']);
     $collapse = cleanvar($_POST['collapse']);
-    $emailonreassign = cleanvar($_POST['emailonreassign']);
     $style = cleanvar($_POST['style']);
     $vari18n = cleanvar($_POST['vari18n']);
     $utcoffset = cleanvar($_POST['utcoffset']);
+    $emoticons = cleanvar($_POST['emoticons']);
     $accepting = cleanvar($_POST['accepting']);
     $roleid = cleanvar($_POST['roleid']);
     $holiday_entitlement = cleanvar($_POST['holiday_entitlement']);
     $password = cleanvar($_POST['oldpassword']);
     $newpassword1 = cleanvar($_POST['newpassword1']);
     $newpassword2 = cleanvar($_POST['newpassword2']);
+
+    if (empty($emoticons)) $emoticons = 'false';
 
     // Some extra checking here so that users can't edit other peoples profiles
     $edituserpermission = user_permission($sit[2],23); // edit user
@@ -414,8 +421,9 @@ elseif ($mode=='save')
             $emailonreassign = 'false';
         }
 
-        $sql  = "UPDATE `{$dbUsers}` SET realname='$realname', title='$jobtitle', email='$email', qualifications='$qualifications', ";
-        $sql .= "phone='$phone', mobile='$mobile', aim='$aim', icq='$icq', msn='$msn', fax='$fax', var_incident_refresh='$incidentrefresh', ";
+        $sql  = "UPDATE `{$dbUsers}` SET realname='{$realname}', title='{$jobtitle}', email='{$email}', qualifications='{$qualifications}', ";
+        $sql .= "phone='{$phone}', mobile='{$mobile}', aim='{$aim}', icq='{$icq}', msn='{$msn}', fax='{$fax}', var_incident_refresh='{$incidentrefresh}', ";
+        $sql .= "var_emoticons='{$emoticons}', ";
         if ($edituserid != 1 AND !empty($_REQUEST['roleid']) AND $edituserpermission==TRUE)
         {
             $sql .= "roleid='{$roleid}', ";
