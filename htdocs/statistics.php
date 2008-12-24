@@ -364,7 +364,7 @@ function give_overview()
                     }
                 }
                 echo "<tr><th>{$GLOBALS['strTotalOpen']}</th>";
-                echo "<td class='shade2' align='left'><strong>{$GLOBALS['openCallsVendor']}</strong></td></tr></table></td>";
+                echo "<td class='shade2' align='left'><strong>{$openCallsVendor}</strong></td></tr></table></td>";
             }
         }
         echo "</table>";
