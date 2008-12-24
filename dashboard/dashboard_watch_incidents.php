@@ -274,7 +274,7 @@ function dashboard_watch_incidents_edit($dashletid)
                     echo site_drop_down('id','');
                     break;
                 case '1': //contact
-                    echo "{$GLOABLS['strContact']}: ";
+                    echo "{$GLOBALS['strContact']}: ";
                     echo contact_drop_down('id','');
                     break;
                 case '2': //engineer
