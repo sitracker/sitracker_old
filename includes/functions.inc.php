@@ -765,6 +765,17 @@ function user_holiday_entitlement($userid)
 
 
 /**
+ * Returns the users preference for showing emoticons
+ * @author Paul Heaney
+ * @param $userid integer User ID
+ * @return String true or false
+ */
+function user_emoticon_preference($userid)
+{
+    return db_read_column('var_emoticons', $GLOBALS['dbUsers'], $userid);
+}
+
+/**
     * Find a contacts real name
     * @author Ivan Lucas
     * @param $id integer. Contact ID

@@ -1272,6 +1272,7 @@ $strShowActiveOnly = 'Show Active Only';
 $strShowAll = 'Show All';
 $strShowApproved = 'Show Approved';
 $strShowClosedIncidents = 'Show closed incidents';
+$strShowEmoticons = 'Show Emoticons';
 $strShowExpired = 'Show Expired';
 $strShowingAllArticles = 'Showing all articles';
 $strShowingAllClosedIncidents = 'Showing all closed incidents';

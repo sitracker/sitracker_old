@@ -1512,6 +1512,7 @@ CREATE TABLE `{$dbUsers}` (
   `var_monitor` enum('true','false') NOT NULL default 'true',
   `var_i18n` varchar(20) default NULL,
   `var_utc_offset` int(11) NOT NULL default '0' COMMENT 'Offset from UTC (timezone)',
+  `var_emoticons` enum('true','false') NOT NULL default 'false',
   `listadmin` tinytext,
   `holiday_entitlement` float NOT NULL default '0',
   `qualifications` tinytext,
@@ -2492,6 +2493,9 @@ CREATE TABLE IF NOT EXISTS `{$dbConfig}` (
 
 -- KH 2008-12-07
 ALTER TABLE `{$dbTriggers}` CHANGE `action` `action` ENUM( 'ACTION_NONE', 'ACTION_EMAIL', 'ACTION_NOTICE', 'ACTION_JOURNAL', 'ACTION_CREATE_INCIDENT' ) NOT NULL DEFAULT 'ACTION_NONE';
+
+-- PH 2008-12-24
+ALTER TABLE `{$dbUsers}` ADD `var_emoticons` ENUM( 'true', 'false' ) NOT NULL DEFAULT 'false' AFTER `var_utc_offset` ;
 
 ";
 // Important: When making changes to the schema you must add SQL to make the alterations
