@@ -257,50 +257,49 @@ elseif ($action == "add")
     $_SESSION['formdata']['add_contract'] = cleanvar($_POST, TRUE, FALSE, FALSE,
                                                      array("@"), array("'" => '"'));
 
-    // FIXME i18n these errors
     // Add maintenance to database
     $errors = 0;
     // check for blank site
     if ($site == 0)
     {
         $errors++;
-        $_SESSION['formerrors']['add_contract']['site'] = "You must select a site\n";
+        $_SESSION['formerrors']['add_contract']['site'] = "{$strMustSelectSite}\n";
     }
     // check for blank product
     if ($product == 0)
     {
         $errors++;
-        $_SESSION['formerrors']['add_contract']['product'] = "You must select a product\n";
+        $_SESSION['formerrors']['add_contract']['product'] = "{$strMustEnterProduct}\n";
     }
     // check for blank admin contact
     if ($admincontact == 0)
     {
         $errors++;
-        $_SESSION['formerrors']['add_contract']['admincontact'] = "You must select an admin contact\n";
+        $_SESSION['formerrors']['add_contract']['admincontact'] = "{$strMustSelectAdminContact}\n";
     }
     // check for blank expiry day
     if (!isset($expirydate))
     {
         $errors++;
-        $_SESSION['formerrors']['add_contract']['expirydate'] = "You must enter an expiry date\n";
+        $_SESSION['formerrors']['add_contract']['expirydate'] = "{$strMustEnterExpiryDate}\n";
     }
     elseif ($expirydate < $now AND $expirydate != -1)
     {
         $errors++;
-        $_SESSION['formerrors']['add_contract']['expirydate2'] = "Expiry date cannot be in the past\n";
+        $_SESSION['formerrors']['add_contract']['expirydate2'] = "{$strExpiryDateCannotBeInThePast}\n";
     }
     // check timed sla data and store it
 
     if ($timed == 'yes' AND ($billtype == 'billperunit' AND ($unitrate == 0 OR trim($unitrate) == '')))
     {
         $errors++;
-        $_SESSION['formerrors']['add_contract']['unitrate'] = "Unit rate must not be blank\n";
+        $_SESSION['formerrors']['add_contract']['unitrate'] = "{$strUnitRateMustNotBeBlank}\n";
     }
 
     if ($timed == 'yes' AND ($billtype == 'billperincident' AND ($incidentrate == 0 OR trim($incidentrate) == '')))
     {
         $errors++;
-        $_SESSION['formerrors']['add_contract']['incidentrate'] = "Incident rate must not be blank\n";
+        $_SESSION['formerrors']['add_contract']['incidentrate'] = "{$strIncidentRateMustNotBeBlank}\n";
     }
 
 
@@ -354,7 +353,7 @@ elseif ($action == "add")
         if (!$result)
         {
             $addition_errors = 1;
-            $addition_errors_string .= "<p class='error'>Addition of contract failed</p>\n"; // FIXME i18n
+            $addition_errors_string .= "<p class='error'>{$strAdditionFail}</p>\n";
         }
 
         // Add service
@@ -365,7 +364,7 @@ elseif ($action == "add")
         if (mysql_affected_rows() < 1) trigger_error("Insert failed",E_USER_ERROR);
 
         $serviceid = mysql_insert_id();
-        update_contract_balance($maintid, "New contract", $amount, $serviceid);
+        update_contract_balance($maintid, $strNewContract, $amount, $serviceid);
 
         if ($addition_errors == 1)
         {

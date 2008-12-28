@@ -46,7 +46,7 @@ switch ($mode)
 
             if (mysql_numrows($result) != 1)
             {
-                echo "<h2>No service with ID {$servicid} found</h2>";
+                echo "<h2>".sprintf($strNoServiceWithIDXFound, $serviceid)."</h2>";
             }
             else
             {
@@ -325,11 +325,11 @@ switch ($mode)
             $status = update_contract_balance($contractid, $reason, $amount, $sourceservice);
             if ($status)
             {
-                html_redirect("{$CONFIG['application_webpath']}contract_details.php?id={$contractid}", TRUE, 'Balance sucessfully udpated'); // FIXME i18n
+                html_redirect("{$CONFIG['application_webpath']}contract_details.php?id={$contractid}", TRUE, $strSuccessfullyUpdated);
             }
             else
             {
-                html_redirect("{$CONFIG['application_webpath']}contract_details.php?id={$contractid}", FALSE, 'Balance NOT udpated'); // FIXME i18n
+                html_redirect("{$CONFIG['application_webpath']}contract_details.php?id={$contractid}", FALSE, $strUpdateFailed);
             }
         }
         break;

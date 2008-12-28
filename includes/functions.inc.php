@@ -10996,7 +10996,8 @@ function cfgVarInput($setupvar, $showvarnames = FALSE)
     if ($setupvar=='db_password' AND $_REQUEST['action']!='reconfigure' AND $value != '') $html .= "<p class='info'>The current password setting is not shown</p>";
     $html .= "</div>";
     $html .= "<br />\n";
-    if ($c==1) $c==2; else $c=1;
+    if ($c == 1) $c == 2; 
+    else $c = 1;
 
     return $html;
 }
@@ -11025,6 +11026,18 @@ function holding_email_update_id($holding_email)
 {
     $holding_email = intval($holding_email);
     return db_read_column('updateid', 'tempincoming', $holding_email);
+}
+
+
+function beginsWith( $str, $sub )
+{
+   return ( substr( $str, 0, strlen( $sub ) ) === $sub );
+}
+
+
+function endsWith( $str, $sub )
+{
+   return ( substr( $str, strlen( $str ) - strlen( $sub ) ) === $sub );
 }
 
 // ** Place no more function defs below this **

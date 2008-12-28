@@ -279,7 +279,8 @@ if (file_exists($incident_attachment_fspath))
     }
     else
     {
-        foreach ($temparray as $value) {
+        foreach ($temparray as $value) 
+        {
             if (is_dir($value)) $dirarray[] = $value;
             elseif (is_file($value) AND substr($value,-1) != '.' AND substr($value,-8) != 'mail.eml')
             {

@@ -42,8 +42,7 @@ if (empty($_REQUEST['mode']))
     echo "<td><input type='text' name='enddate' id='enddate' size='10' /> ";
     echo date_picker('incidentsbysoftware.enddate');
     echo "</td></tr>\n";
-    // FIXME i18n month breakdown
-    echo "<tr><th>Month breakdown:</th><td><input type='checkbox' name='monthbreakdown' /></td></tr>\n";
+    echo "<tr><th>{$strMonthBreakdown}</th><td><input type='checkbox' name='monthbreakdown' /></td></tr>\n";
     echo "<tr><th>{$strSkill}</th><td>".software_drop_down('software', 0)."</td></tr>\n";
     echo "</table>\n";
     echo "<p align='center'>";
@@ -97,10 +96,10 @@ else
 
         if ($startdate > 1)
         {
-            echo "<p align='center'>since ".ldate($CONFIG['dateformat_date'], $startdate)."</p>"; // FIXME i18n since
+            echo "<p align='center'>".sprintf($strSinceX, ldate($CONFIG['dateformat_date'], $startdate))."</p>";
         }
         echo "<table class='vertical' align='center'>";
-        echo "<tr><th>Number of calls</th><th>%</th><th>{$strSkill}</th>";     // FIXME i18n number of calls
+        echo "<tr><th>{$strNumOfCalls}</th><th>%</th><th>{$strSkill}</th>";
         while ($sla = mysql_fetch_object($resultSLA))
         {
             echo "<th>".$sla->tag."</th>";
@@ -215,7 +214,7 @@ else
         if ($monthbreakdownstatus === "on")
         {
             echo "<p><table align='center'>";
-            echo "<tr><th>{$strMonth}</th><th>Number of calls</th></tr>"; // FIXME i18n Number of calls
+            echo "<tr><th>{$strMonth}</th><th>{$strNumOfCalls}</th></tr>";
             $shade = 'shade1';
 
             $total = 0;

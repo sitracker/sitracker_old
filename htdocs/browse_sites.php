@@ -135,7 +135,7 @@ echo "</td></tr></table>";
 if ($search_string == '')
 {
         $errors = 1;
-        echo "<p class='error'>You must enter a search string</p>\n"; // FIXME i18n
+        echo "<p class='error'>{$strMustEnterASearchString}</p>\n";
 }
 
 // search for criteria
@@ -196,6 +196,7 @@ if ($errors == 0)
     else
     {
         $countsites = mysql_num_rows($result);
+        // FIXME i18n
         echo "<p align='center'>Displaying $countsites site";
         if ($countsites > 1) echo "s";
 

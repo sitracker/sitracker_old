@@ -32,12 +32,12 @@ if ($submit_value == 'go')
 {
         // build SQL
         $sql  = "SELECT * FROM `{$dbContacts}` ";
-        $search_string_len=strlen($search_string);
+        $search_string_len = strlen($search_string);
         if ($search_string != '*')
         {
             $sql .= "WHERE ";
-            if ($search_string_len<=6) $sql .= "id=('$search_string') OR ";
-            if ($search_string_len<=2)
+            if ($search_string_len <= 6) $sql .= "id=('$search_string') OR ";
+            if ($search_string_len <= 2)
             {
                 $sql .= "SUBSTRING(surname,1,$search_string_len)=('$search_string') ";
             }
@@ -56,9 +56,9 @@ if ($submit_value == 'go')
         if (mysql_num_rows($result) == 1)
         {
             //go straight to the contact
-            $row = mysql_fetch_array($result);
-            $url = "contact_details.php?id=".$row["id"];
-            header("Location: $url");
+            $obj = mysql_fetch_object($result);
+            $url = "contact_details.php?id=".$obj->id;
+            header("Location: {$url}");
         }
 }
 $pagescripts = array('dojo/dojo.js');
@@ -85,46 +85,35 @@ echo "{$strBrowseContacts}</h2>";
 echo "<table summary='alphamenu' align='center'>";
 echo "<tr>";
 echo "<td align='center'>";
-    echo "<form action='{$_SERVER['PHP_SELF']}' method='get'>";
-    ?>
-    <!-- <input type="text" name="search_string" />-->
-    <?php
-    echo "<p>{$strBrowseContacts}: "; ?>
-    <input dojoType='ComboBox' dataUrl='ajaxdata.php?action=contact' style='width: 300px;' name='search_string' />
-    <?php echo "<input name='submit' type='submit' value=\"{$strGo}\" /></p>";
-    echo "</form>\n";
-        if ($displayinactive=="true")
-        {
-            echo "<a href='".$_SERVER['PHP_SELF']."?displayinactive=false";
-            if (!empty($search_string)) echo "&amp;search_string={$search_string}";
-            echo "'>{$strShowActiveOnly}</a>";
-            $inactivestring="displayinactive=true";
-        }
-        else
-        {
-            echo "<a href='".$_SERVER['PHP_SELF']."?displayinactive=true";
-            if (!empty($search_string)) echo "&amp;search_string={$search_string}";
-            echo "'>Show inactive</a>";
-            $inactivestring="displayinactive=false";
-        }
-    ?>
-</td>
-</tr>
-<tr>
-<td valign="middle">
-<?php
+echo "<form action='{$_SERVER['PHP_SELF']}' method='get'>";
+echo "<p>{$strBrowseContacts}: ";
+echo "<input dojoType='ComboBox' dataUrl='ajaxdata.php?action=contact' style='width: 300px;' name='search_string' />";
+echo "<input name='submit' type='submit' value=\"{$strGo}\" /></p>";
+echo "</form>\n";
+if ($displayinactive=="true")
+{
+    echo "<a href='".$_SERVER['PHP_SELF']."?displayinactive=false";
+    if (!empty($search_string)) echo "&amp;search_string={$search_string}";
+    echo "'>{$strShowActiveOnly}</a>";
+    $inactivestring="displayinactive=true";
+}
+else
+{
+    echo "<a href='".$_SERVER['PHP_SELF']."?displayinactive=true";
+    if (!empty($search_string)) echo "&amp;search_string={$search_string}";
+    echo "'>Show inactive</a>";
+    $inactivestring="displayinactive=false";
+}
+echo "</td></tr><tr><td valign='middle'>";
+
 echo "<a href='contact_add.php'>{$strAdd}</a> | ";
 echo alpha_index("{$_SERVER['PHP_SELF']}?search_string=");
 echo "<a href='{$_SERVER['PHP_SELF']}?search_string=*&amp;{$inactivestring}'>{$strAll}</a>";
-?>
-    </td>
-</tr>
-</table>
-<?php
+echo "</td></tr></table>";
 
 if (empty($search_string))
 {
-    trigger_error("No Search String", E_USER_WARNING);
+    trigger_error($strMustEnterASearchString, E_USER_WARNING);
 }
 else
 {
@@ -133,7 +122,7 @@ else
     if ($search_string == '')
     {
         $errors = 1;
-        echo "<p class='error'>You must enter a search string</p>\n"; // FIXME i18n
+        echo "<p class='error'>{$strMustEnterASearchString}</p>\n";
     }
     // search for criteria
     if ($errors == 0)
@@ -174,12 +163,12 @@ else
 
         if (mysql_num_rows($result) == 0)
         {
-            echo "<p align='center'>Sorry, unable to find any contacts matching <em>'$search_string</em>'</p>\n";
+            echo "<p align='center'>".sprintf($strSorryUnableToFindAnyContactsMatchingX, $search_string)."</p>\n";
         }
         else
         {
 
-            echo "<p align='center'>Displaying ".mysql_num_rows($result)." contact(s) matching <em>'{$search_string}'</em></p>";
+            echo "<p align='center'>".sprintf($strDisplayingXcontactMatchingY, mysql_num_rows($result), $search_string)."</em></p>";
 
             echo "<table align='center'>
             <tr>

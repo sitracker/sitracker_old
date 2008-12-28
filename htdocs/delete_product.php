@@ -25,26 +25,26 @@ $productid = cleanvar($_REQUEST['id']);
 
 if (!empty($productid))
 {
-    $errors=0;
+    $errors = 0;
     // Check there are no contracts with this product
-    $sql = "SELECT id FROM `{$dbMaintenance}` WHERE product=$productid LIMIT 1";
+    $sql = "SELECT id FROM `{$dbMaintenance}` WHERE product={$productid} LIMIT 1";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     if (mysql_num_rows($result) >= 1) $errors++;
 
     // check there are no incidents with this product
-    $sql = "SELECT id FROM `{$dbIncidents}` WHERE product=$productid LIMIT 1";
+    $sql = "SELECT id FROM `{$dbIncidents}` WHERE product={$productid} LIMIT 1";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     if (mysql_num_rows($result) >= 1) $errors++;
 
     // Check there is no software linked to this product
-    $sql = "SELECT productid FROM `{$dbSoftwareProducts}` WHERE productid=$productid LIMIT 1";
+    $sql = "SELECT productid FROM `{$dbSoftwareProducts}` WHERE productid={$productid} LIMIT 1";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     if (mysql_num_rows($result) >= 1) $errors++;
 
-    if ($errors==0)
+    if ($errors == 0)
     {
         $sql = "DELETE FROM `{$dbProducts}` WHERE id = $productid LIMIT 1";
         $result = mysql_query($sql);
@@ -55,7 +55,6 @@ if (!empty($productid))
     else
     {
         include ('htmlheader.inc.php');
-        // FIXME i18n error
         echo "<p class='error'>{$strSorryProductCantBeDeteled}</p>";
         echo "<p align='center'><a href='products.php#{$productid}'>{$strReturnToProductList}</a></p>";
         include ('htmlfooter.inc.php');
@@ -63,6 +62,6 @@ if (!empty($productid))
 }
 else
 {
-    trigger_error("Count not delete product: Parameter(s) missing".mysql_error(), E_USER_WARNING);
+    trigger_error($strCountNotDeleteProductParameterMissing.mysql_error(), E_USER_WARNING);
 }
 ?>

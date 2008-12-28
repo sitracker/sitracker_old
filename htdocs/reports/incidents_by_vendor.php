@@ -25,7 +25,7 @@ if (empty($_REQUEST['mode']))
 {
     include ('htmlheader.inc.php');
 
-    echo "<h2>$title</h2>";
+    echo "<h2>{$title}</h2>";
     echo "<form action='{$_SERVER['PHP_SELF']}' id='incidentsbyvendor' method='post'>";
     echo "<table class='vertical'>";
     echo "<tr><td class='shade2'>{$strStartDate}:</td>";
@@ -59,10 +59,9 @@ else
 
     include ('htmlheader.inc.php');
 
-    echo "<h2>$title</h2>";
+    echo "<h2>{$title}</h2>";
 
-    // FIXME i18n for the period N to N
-    echo "<p align='center'>For the period {$_REQUEST['startdate']} to {$_REQUEST['enddate']}</p>";
+    echo "<p align='center'>".sprintf($strForThePeriodXToY, $_REQUEST['startdate'], $_REQUEST['enddate'])."</p>";
 
     if (mysql_num_rows($result) > 0)
     {

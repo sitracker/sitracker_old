@@ -58,11 +58,6 @@ if (empty($mode))
     ?>
     <script type="text/javascript">
     //<![CDATA[
-    function showField(name)
-    {
-        $(name).show();
-    }
-
     function processForm()
     {
         // confirm_action('Are you sure you wish to update the last billed time to {$enddateorig}');
@@ -207,7 +202,7 @@ elseif ($mode == 'approvalpage')
         </script>
         <?php
 
-        echo "<p align='center'>This report shows incidents closed in the period "; // FIXME i18n
+        echo "<p align='center'>{$strThisReportShowsIncidentsClosedInThisPeriod} ";
         echo ldate($CONFIG['dateformat_date'], $startdate)." - ".ldate($CONFIG['dateformat_date'], $enddate)."</p>";
     }
 
@@ -618,7 +613,7 @@ elseif ($mode == 'approve')
     if ($percent !== FALSE)
     {
         //FIXME workarund for Mantis 198
-	//trigger('TRIGGER_SERVICE_LIMIT', array('contractid' => $maintid));
+    	//trigger('TRIGGER_SERVICE_LIMIT', array('contractid' => $maintid));
     }
     
     if ($status)
@@ -627,7 +622,7 @@ elseif ($mode == 'approve')
     }
     else
     {
-        html_redirect("{$_SERVER['PHP_SELF']}?mode=approvalpage&amp;startdate={$startdateorig}&amp;enddate={$enddateorig}&amp;showonlyapproved={$showonlyapproved}", FALSE, "Error approving incident"); // FIXME i18n
+        html_redirect("{$_SERVER['PHP_SELF']}?mode=approvalpage&amp;startdate={$startdateorig}&amp;enddate={$enddateorig}&amp;showonlyapproved={$showonlyapproved}", FALSE, $strErrorApprovingIncident);
     }
 }
 

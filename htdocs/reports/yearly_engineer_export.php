@@ -31,7 +31,7 @@ require ('auth.inc.php');
 if (empty($_REQUEST['mode']))
 {
     include ('htmlheader.inc.php');
-    echo "<h2>$title</h2>";
+    echo "<h2>{$title}</h2>";
     echo "<form action='{$_SERVER['PHP_SELF']}' method='post' id='incidentsbyengineer'>";
     echo "<table align='center' class='vertical'>";
     echo "<tr><th>{$strStartDate}:</th>";
@@ -67,8 +67,7 @@ if (empty($_REQUEST['mode']))
     echo "<option value='csv'>{$strCSVfile}</option>";
     echo "</select>";
     echo "</td></tr>";
-    // FIXME i18n statistics only
-    echo "<tr><th align='right' width='200'>Statistics only</th><td><input type='checkbox' name='statistics' /></td></tr>";
+    echo "<tr><th align='right' width='200'>{$strStatisticsOnly}</th><td><input type='checkbox' name='statistics' /></td></tr>";
     echo "</table>";
     echo "<p align='center'>";
     echo "<input type='hidden' name='table1' value='{$_POST['table1']}' />";
@@ -86,8 +85,12 @@ elseif ($_REQUEST['statistics'] == 'on')
     else $enddate = mktime(23,59,59,31,12,date('Y'));
 
     $type = $_POST['type'];
-    if (is_array($_POST['exc']) && is_array($_POST['exc'])) $_POST['inc']=array_values(array_diff($_POST['inc'],$_POST['exc']));  // don't include anything excluded
-    $includecount=count($_POST['inc']);
+    if (is_array($_POST['exc']) && is_array($_POST['exc']))
+    {
+        $_POST['inc']=array_values(array_diff($_POST['inc'],$_POST['exc']));  // don't include anything excluded
+    }
+    
+    $includecount = count($_POST['inc']);
     if ($includecount >= 1)
     {
         // $html .= "<strong>Include:</strong><br />";
@@ -222,21 +225,20 @@ elseif ($_REQUEST['statistics'] == 'on')
 
     if (sizeof($data) > 0)
     {
-        // FIXME i18n headings
         $html .= "<table align='center'>";
         $html .= "<tr>";
         $html .= "<th>{$strUser}</th>";
-        $html .= "<th>Assigned</th>";
+        $html .= "<th>{$strNumOfCalls}</th>";
         $html .= "<th>{$strEscalated}</th>";
         $html .= "<th>{$strClosed}</th>";
-        $html .= "<th>Avg Assigned (Month)</th>";
-        $html .= "<th>Avg Escalated (Month)</th>";
-        $html .= "<th>Avg Closed (Month)</th>";
-        $html .= "<th>Percentage escalated</th>";
+        $html .= "<th>{$strAvgAssignedMonth}</th>";
+        $html .= "<th>{$strAvgEscalatedMonth}</th>";
+        $html .= "<th>{$strAvgClosedMonth}</th>";
+        $html .= "<th>{$strPercentageEscalated}</th>";
         $html .= "<tr>";
 
-        $csv .= "{$strUser},Assigned,{$strEscalated},{$strClosed},Avg Assigned (Month),Avg Escalated (Month),";
-        $csv .= "Avg Closed (Month),Percentage escalated\n";
+        $csv .= "{$strUser},{$strNumOfCalls},{$strEscalated},{$strClosed},{$strAvgAssignedMonth},{$strAvgEscalatedMonth},";
+        $csv .= "{$strAvgClosedMonth},{$strPercentageEscalated}\n";
 
         $class = "class='shade1'";
         foreach ($data AS $engineer)
@@ -295,14 +297,12 @@ elseif ($_REQUEST['statistics'] == 'on')
         // FIXME i18n
         $html .= "<p align='center'>The statistics are approximation only. They don't take into consideration incidents reassigned</p>";
         $csv .= "The statistics are approximation only. They don't take into consideration incidents reassigned\n";
-
-
     }
 
     if ($_POST['output'] == 'screen')
     {
         include ('htmlheader.inc.php');
-        echo "<h2>Engineer statistics for past year</h2>"; // FIXME i18n
+        echo "<h2>".sprintf($strEngineersStatisticsForXMonths, 12)."</h2>";
         echo $html;
         include ('htmlfooter.inc.php');
     }
@@ -425,7 +425,7 @@ elseif ($_REQUEST['mode'] == 'report')
     $html .= "<table width='99%' align='center'>";
     $html .= "<tr><th>{$strOpened}</th><th>{$strClosed}</th><th>{$strIncident}</th>";
     $html .= "<th>{$strTitle}</th><th>{$strEngineer}</th><th>{$strEscalated}</th></tr>";
-    $csvfieldheaders .= "opened,closed,id,title,engineer,escalated\r\n";
+    $csvfieldheaders .= "{$strOpened},{$strClosed},{$strIncident},{$strTitle},{$strEngineer},{$strEscalated}\r\n";
     $rowcount = 0;
     while ($row = mysql_fetch_object($result))
     {

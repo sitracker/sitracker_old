@@ -58,18 +58,18 @@ switch ($_REQUEST['action'])
     case 'form':
     default:
         include ('htmlheader.inc.php');
-        echo "<h2>$title</h2>";
+        echo "<h2>{$title}</h2>";
 
         $sql = "SELECT * FROM `{$dbUsers}` WHERE status >= 1 ORDER BY realname ASC";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
-        // FIXME i18n holidays
         echo "<form name='editholidays' action='{$_SERVER['PHP_SELF']}' method='post'>";
-        echo "<p>Reset holiday entitlement and carry-over up to <em>n</em> days of unused holiday</p>";
-        echo "<div align='center'>Default new entitlement: <input type='text' name='default_entitlement' value='20' size='4' />, ";
-        echo "Max. Carry-over <input type='text' name='max_carryover' value='5' size='4' /> days";
-        echo "<br />Archive days booked prior to <input type='text' id='archivedate' name='archivedate' size='10' value='".date('Y-m-d')."' />\n ";
+        echo "<p>{$strResetHolidayEntitlementCarryOverNDaysOfUnusedHoliday}</p>";
+        echo "<div align='center'>{$strDefaultNewEntitlement}: <input type='text' name='default_entitlement' value='20' size='4' />, ";
+        echo sprintf($strMaxCarryOverXDays, "<input type='text' name='max_carryover' value='5' size='4' />");
+        $str = "<input type='text' id='archivedate' name='archivedate' size='10' value='".date('Y-m-d')."' />";
+        echo "<br />".sprintf($strArchiveDaysBookedPriorToX, $str)."\n ";
         echo date_picker('editholidays.archivedate');
         echo "</div>";
 
@@ -83,7 +83,7 @@ switch ($_REQUEST['action'])
         while ($users = mysql_fetch_object($result))
         {
             // define class for table row shading
-            if ($shade=='shade1') $shade = "shade2";
+            if ($shade == 'shade1') $shade = "shade2";
             else $shade = "shade1";
             echo "<tr class='$shade'>";
             echo "<td><input type='checkbox' name='user{$users->id}' value='yes' /></td>";

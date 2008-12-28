@@ -417,9 +417,8 @@ echo "<td class='shade1'>{$strOpen}</td>";
 echo "<td class='notice'>{$strSLAApproaching}</td>";
 echo "<td class='urgent'>{$strSLADue}</td>";
 echo "<td class='critical'>{$strSLAMissed}</td>";
-
-
 echo "</tr></table>";
+
 if (empty($incidents_minimal) && $user != 'all')
 
 if ($rowcount != 1)

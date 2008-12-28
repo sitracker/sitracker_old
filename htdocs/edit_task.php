@@ -348,7 +348,7 @@ switch ($action)
                 echo "</form>";
             }
         }
-        else echo "<p class='error'>No matching task found</p>";
+        else echo "<p class='error'>{$strNoMatchingTaskFound}</p>";
 
         echo "<p align='center'><a href='tasks.php'>{$strTaskList}</a></p>";
         include ('htmlfooter.inc.php');
