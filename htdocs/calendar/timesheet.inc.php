@@ -111,7 +111,7 @@ else
     {
         echo "<form method='post' action='" . $_SERVER['PHP_SELF'] . "?display=timesheet'>";
         echo user_drop_down('user', $user, FALSE);
-        echo "<input type='submit' value='Switch User' />"; // FIXME i18n Switch User.
+        echo "<input type='submit' value='{$strSwitchUser}' />";
         echo "</form>";
         echo "<br/>";
     }
@@ -119,13 +119,13 @@ else
     echo "<div id='addremove' style='position: absolute; display:none; top: 0px; ";
     echo "left: 0px; width: 0px; background-color: #fff; z-index:100; ";
     echo "border-bottom: 3px solid gray;'><fieldset style='width: 586px;'>";
-    echo "<legend>$strActivity</legend>: ";
+    echo "<legend>{$strActivity}</legend>: ";
     echo "<div style='float:right; '>";
     echo "</div>";
     echo "<div style='padding: 5px;'>";
     for ($i = 0; $i < 4; $i ++)
     {
-        echo "<input type='hidden' id='newactivity$i' name='' value='' />";
+        echo "<input type='hidden' id='newactivity{$i}' name='' value='' />";
     }
 
     echo "<input type='hidden' id='newactivityalias' name='' value='' />";
@@ -135,7 +135,7 @@ else
     echo "<option selected='selected'></option>";
     foreach ($activity_types as $type => $xxx)
     {
-        echo "<option>$type</option>";
+        echo "<option>{$type}</option>";
     }
     echo "</select>";
     echo "</td>";
@@ -169,8 +169,8 @@ else
     echo "<div id='rightdiv' style='float: right; padding: 23px 5px 0 0;'>";
     echo "<table class='timesheet'>";
     echo "<tr>";
-    echo "<th>Legend</th>"; // FIXME i18n
-    echo "<th>Controls</th>";
+    echo "<th>{$strLegend}</th>";
+    echo "<th>{$strControls}</th>";
     echo "</tr>";
     echo "<tr>";
     echo "<td style='width:200px;'><center>";
@@ -194,7 +194,7 @@ else
     echo "<div class='push'></div>";
     echo "<ul id='dropsources'><li>\n";
     echo "<table class='timesheet' style='width: 600px;' id='activitytable'><tr>";
-    echo "<th>$strActivity</th><th>$strStatus</th><th style='width: 400px;'>$strComments</th>";
+    echo "<th>{$strActivity}</th><th>{$strStatus}</th><th style='width: 400px;'>{}$strComments}</th>";
     echo "</tr></table>";
     echo "</li></ul>";
     echo "<div class='floor'></div>";
@@ -206,13 +206,13 @@ else
     echo "<div id='weekScheduler_top'>\n";
     echo "<div class='spacer'><span></span></div>\n";
     echo "<div class='days' id='weekScheduler_dayRow'>\n";
-    echo "<div id='drop1' class='shade2'>$strMonday <span></span></div>\n";
-    echo "<div id='drop2' class='shade2'>$strTuesday <span></span></div>\n";
-    echo "<div id='drop3' class='shade2'>$strWednesday <span></span></div>\n";
-    echo "<div id='drop4' class='shade2'>$strThursday <span></span></div>\n";
-    echo "<div id='drop5' class='shade2'>$strFriday <span></span></div>\n";
-    echo "<div id='drop6' class='shade2'>$strSaturday <span></span></div>\n";
-    echo "<div id='drop7' class='shade2'>$strSunday <span></span></div>\n";
+    echo "<div id='drop1' class='shade2'>{$strMonday} <span></span></div>\n";
+    echo "<div id='drop2' class='shade2'>{$strTuesday} <span></span></div>\n";
+    echo "<div id='drop3' class='shade2'>{$strWednesday} <span></span></div>\n";
+    echo "<div id='drop4' class='shade2'>{$strThursday} <span></span></div>\n";
+    echo "<div id='drop5' class='shade2'>{$strFriday} <span></span></div>\n";
+    echo "<div id='drop6' class='shade2'>{$strSaturday} <span></span></div>\n";
+    echo "<div id='drop7' class='shade2'>{$strSunday} <span></span></div>\n";
     echo "</div></div>\n";
     echo "<div id='weekScheduler_content'>\n";
     echo "<div id='weekScheduler_hours'>\n";

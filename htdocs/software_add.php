@@ -113,7 +113,7 @@ else
     if (mysql_num_rows($result) >= 1)
     {
         $errors++;
-        $_SESSION['formerrors']['add_software']['duplicate'] .= "A record already exists with that skill name"; // FIXME i18n
+        $_SESSION['formerrors']['add_software']['duplicate'] .= $strARecordAlreadyExistsWithTheSameName;
     }
 
     // add product if no errors
@@ -125,7 +125,7 @@ else
 
         if (!$result)
         {
-            echo "<p class='error'>Addition of Skill Failed</p>"; // FIXME i18n
+            echo "<p class='error'>{$strAdditionFail}</p>";
         }
         else
         {

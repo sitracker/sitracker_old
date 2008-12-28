@@ -29,7 +29,7 @@ if (empty($_REQUEST['mode']))
 {
     include ('htmlheader.inc.php');
     echo "<h2>{$title}</h2>";
-    echo "<p align='center'>This report lists the incidents that each site has logged over the past twelve months.</p>";
+    echo "<p align='center'>This report lists the incidents that each site has logged over the past twelve months.</p>"; // FIXME i18n
     echo "<form action='{$_SERVER['PHP_SELF']}' method='post'>";
     echo "<table summary='Site Selection Table' class='vertical'>";
     echo "<tr><th colspan='2' align='center'>{$strInclude}</th></tr>";
@@ -47,8 +47,8 @@ if (empty($_REQUEST['mode']))
     echo "</tr>\n";
     echo "<tr><th align='right'>{$strOutput}:</th>";
     echo "<td width='400'>";
-    echo "<label><input type='checkbox' name='showsitetotals' value='yes' /> Add a line after each site showing totals</label><br />";
-    echo "<label><input type='checkbox' name='showtotals' value='yes' /> Add a line to the bottom of the report showing totals</label><br /><br />";
+    echo "<label><input type='checkbox' name='showsitetotals' value='yes' /> Add a line after each site showing totals</label><br />"; // FIXME i18n
+    echo "<label><input type='checkbox' name='showtotals' value='yes' /> Add a line to the bottom of the report showing totals</label><br /><br />";  // FIXME i18n
     echo "<select name='output'>";
     echo "<option value='screen'>{$strScreen}</option>";
     echo "<option value='csv'>{$strCSVfile}</option>";
@@ -108,8 +108,7 @@ elseif ($_REQUEST['mode'] == 'report')
     $numrows = mysql_num_rows($result);
 
     $html .= "<h2>{$title}</h2>";
-    // FIXME i18n
-    $html .= "<p align='center'>This report is a list of ($numrows) incidents for all sites that you selected</p>";
+    $html .= "<p align='center'>This report is a list of ($numrows) incidents for all sites that you selected</p>";  // FIXME i18n
     $html .= "<table width='99%' align='center'>";
     $html .= "<tr><th>{$strOpened}</th><th>{$strIncident}</th><th>{$strExternalID}</th><th>{$strTitle}</th><th>{$strContact}</th><th>{$strSite}</th><th>{$strType}</th></tr>";
     $csvfieldheaders .= "{$strOpened},{$strIncident},{$strExternalID},{$strTitle},{$strContact},{$strSite},{$strType}\r\n";

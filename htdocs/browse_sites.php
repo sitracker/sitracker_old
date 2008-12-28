@@ -156,7 +156,9 @@ if ($errors == 0)
             $sql .= "WHERE ";
             if (strlen($search_string)==1)
             {
-                if ($search_string=='0') $sql .= "(SUBSTRING(name,1,1)=('0')
+                if ($search_string=='0')
+                {
+                    $sql .= "(SUBSTRING(name,1,1)=('0')
                                                 OR SUBSTRING(name,1,1)=('1')
                                                 OR SUBSTRING(name,1,1)=('2')
                                                 OR SUBSTRING(name,1,1)=('3')
@@ -166,6 +168,7 @@ if ($errors == 0)
                                                 OR SUBSTRING(name,1,1)=('7')
                                                 OR SUBSTRING(name,1,1)=('8')
                                                 OR SUBSTRING(name,1,1)=('9'))";
+                }
                 else $sql .= "SUBSTRING(name,1,1)=('$search_string') ";
             }
             else
@@ -188,6 +191,7 @@ if ($errors == 0)
 
     if (mysql_num_rows($result) == 0)
     {
+        // FIXME i18n
         echo "<p align='center'>Sorry, unable to find any sites ";
         if ($owner > 0) echo " owned by <strong>".user_realname($owner)."</strong></p>\n";
         elseif ($search_string == '0') echo " matching <strong><em>Number</em></strong>";

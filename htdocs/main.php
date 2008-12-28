@@ -273,7 +273,7 @@ echo sprintf($strLoggedInAsXAndCurrentlyXAndX,
 
 if ($sit[3] == 'public')
 {
-    echo "- Public/Shared Computer (Increased Security)"; // FIXME i18n
+    echo "- {$strPublicSharedComputerIncreasedSecurity}";
 }
 
 echo "</div>\n";

@@ -27,7 +27,7 @@ include ('htmlheader.inc.php');
 
 if ($id=='')
 {
-    echo "<p class='error'>You must select a site</p>";
+    echo "<p class='error'>{$strMustSelectASite}</p>";
     exit;
 }
 
@@ -82,7 +82,7 @@ while ($siterow = mysql_fetch_array($siteresult))
     {
         echo "<tr><th>".sprintf($strUnitsUsedLastXdays, 31).":</th><td>{$billableunits}</td></tr>"; // More appropriate label
     }
-    echo "<tr><th>{$strIncidentPool}:</th><td>".sprintf($strRemaining, $siterow['freesupport'])."</td></tr>"; // FIXME i18n
+    echo "<tr><th>{$strIncidentPool}:</th><td>".sprintf($strRemaining, $siterow['freesupport'])."</td></tr>";
     echo "<tr><th>{$strSalesperson}:</th><td>";
     if ($siterow['owner'] >= 1)
     {
@@ -242,23 +242,20 @@ if (user_permission($sit[2],19)) // View contracts
             <th>{$strAdminContact}</th>
             <th>{$strNotes}</th>
         </tr>";
-        $shade = 0;
+        $shade = 'shade1';
         while ($results = mysql_fetch_array($result))
         {
-            // define class for table row shading
-            if ($shade) $class = "shade1";
-            else $class = "shade2";
             if ($results['term'] == 'yes' OR
                 ($results['expirydate'] < $now AND
                 $results['expirydate'] != -1))
             {
-            	$class = "expired";
+            	$shade = "expired";
             }
             echo "<tr>";
-            echo "<td class='{$class}'>".icon('contract', 16)." ";
+            echo "<td class='{$shade}'>".icon('contract', 16)." ";
             echo "<a href='contract_details.php?id={$results['maintid']}'>{$strContract} {$results['maintid']}</a></td>";
-            echo "<td class='{$class}'>{$results['product']}</td>";
-            echo "<td class='{$class}'>";
+            echo "<td class='{$shade}'>{$results['product']}</td>";
+            echo "<td class='{$shade}'>";
             if (empty($results['reseller']))
             {
                 echo $strNoReseller;
@@ -269,7 +266,7 @@ if (user_permission($sit[2],19)) // View contracts
             }
 
             echo "</td>";
-            echo "<td class='{$class}'>";
+            echo "<td class='{$shade}'>";
 
             if (empty($results['licence_type']))
             {
@@ -289,14 +286,18 @@ if (user_permission($sit[2],19)) // View contracts
             }
 
             echo "</td>";
-            echo "<td class='{$class}'>";
+            echo "<td class='{$shade}'>";
             if ($results['expirydate'] == -1)
+            {
                 echo $strUnlimited;
+            }
             else
+            {
                 echo ldate($CONFIG['dateformat_date'], $results['expirydate']);
+            }
             echo "</td>";
-            echo "<td class='{$class}'>{$results['admincontactsforenames']}  {$results['admincontactssurname']}</td>";
-            echo "<td class='{$class}'>";
+            echo "<td class='{$shade}'>{$results['admincontactsforenames']}  {$results['admincontactssurname']}</td>";
+            echo "<td class='{$shade}'>";
             if ($results['maintnotes'] == '')
             {
                 echo '&nbsp;';
@@ -308,8 +309,8 @@ if (user_permission($sit[2],19)) // View contracts
             echo "</td>";
             echo "</tr>";
             // invert shade
-            if ($shade == 1) $shade = 0;
-            else $shade = 1;
+            if ($shade == 'shade1') $shade = 'shade2';
+            else $shade = 'shade1';
         }
         echo "</table>\n";
     }

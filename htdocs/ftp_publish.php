@@ -9,8 +9,6 @@
 //
 
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
-// TODO concert HTML to PHP
-// FIXME i18n
 
 @include ('set_include_path.inc.php');
 $permission = 44; // Publish Files to FTP site
@@ -43,26 +41,25 @@ if (!isset($temp_directory))
     // show form
     include ('htmlheader.inc.php');
     echo "<h2>{$strFTPPublish}</h2>";
-    ?>
-    <form name="publishform" action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
-    <input type="hidden" name="source_file" value="<?php echo $source_file; ?>" />
-    <input type="hidden" name="destination_file" value="<?php echo $destination_file; ?>" />
-    <input type="hidden" name="temp_directory" value="<?php echo $randomdir; ?>" />
-    <input type="hidden" name="ftp_url" value="<?php echo 'ftp://'.$CONFIG['ftp_hostname'].$CONFIG['ftp_path'].$randomdir.'/'.$destination_file; ?>" />
-    <table summary="ftp-publish" align="center" width="60%" class='vertical'>
-    <tr><th>Publish:</th><td><img src="<?php echo getattachmenticon($filename); ?>" alt="<?php echo $filename; ?> (<?php echo $pretty_file_size; ?>)" border='0' />
-    <strong><?php echo $destination_file; ?></strong> (<?php echo $pretty_file_size; ?>)</td></tr>
-    <tr><th>To:</th><td><code><?php echo 'ftp://'.$CONFIG['ftp_hostname'].$CONFIG['ftp_path'].$randomdir.'/'.$destination_file; ?></code></td></tr>
-    <tr><th>Title:</th><td><input type="text" name="shortdescription" maxlength="255" size="40" /></td></tr>
-    <tr><th>Description:</th><td><textarea name="longdescription" cols="40" rows="3"></textarea></td></tr>
-    <tr><th>File Version:</th><td><input type="text" name="fileversion" maxlength="50" size="10" /></td></tr>
-    <tr><th>Expire:</th><td>
-    <input type="radio" name="expiry_none" value="time"> In <em>x</em> days, hours, minutes<br />&nbsp;&nbsp;&nbsp;
-    <input maxlength=3 name="expiry_days" value="<?php echo $na_days ?>" onclick="window.document.publishform.expiry_none[0].checked = true;" size='3' /> Days&nbsp;
-    <input maxlength=2 name="expiry_hours" value="<?php echo $na_hours ?>"onclick="window.document.publishform.expiry_none[0].checked = true;" size='3' /> Hours&nbsp;
-    <input maxlength=2 name="expiry_minutes" value="<?php echo $na_minutes ?>"onclick="window.document.publishform.expiry_none[0].checked = true;" size='3' /> Minutes<br />
-    <input type="radio" name="expiry_none" value="date">On specified Date<br />&nbsp;&nbsp;&nbsp;
-    <?php
+    echo "<form name='publishform' action='{$_SERVER['PHP_SELF']}' method='post'>";
+    echo "<input type='hidden' name='source_file' value='{$source_file}' />";
+    echo "<input type='hidden' name='destination_file' value='{$destination_file}' />";
+    echo "<input type='hidden' name='temp_directory' value='{$randomdir}' />";
+    echo "<input type='hidden' name='ftp_url' value=\"ftp://{$CONFIG['ftp_hostname']}{$CONFIG['ftp_path']}{$randomdir}/{$destination_file}\" />";
+    echo "<table summary='ftp-publish' align='center' width='60%' class='vertical'>";
+    echo "<tr><th>{$strPublish}:</th><td><img src='".getattachmenticon($filename)."' alt='{$filename} ({$pretty_file_size})' border='0' />";
+    echo "<strong>{$destination_file}</strong> ({$pretty_file_size})</td></tr>";
+    echo "<tr><th>{$strTo}:</th><td><code>'ftp://{$CONFIG['ftp_hostname']}{$CONFIG['ftp_path']}{$randomdir}/{$destination_file}</code></td></tr>";
+    echo "<tr><th>{$strTitle}:</th><td><input type='text' name='shortdescription' maxlength='255' size='40'' /></td></tr>";
+    echo "<tr><th>{$strDescription}:</th><td><textarea name='longdescription' cols='40' rows='3'></textarea></td></tr>";
+    echo "<tr><th>{$strFileVersion}:</th><td><input type='text' name='fileversion' maxlength='50' size='10' /></td></tr>";
+    echo "<tr><th>{$strValid}:</th><td>";
+    echo "<input type='radio' name='expiry_none' value='time'> {$strForXDaysHoursMinutes}<br />&nbsp;&nbsp;&nbsp;"; 
+    echo "<input maxlength='3' name='expiry_days' value='{$na_days}' onclick=\"window.document.publishform.expiry_none[0].checked = true;\" size='3' /> {$strDays}&nbsp;";
+    echo "<input maxlength='2' name='expiry_hours' value='{$na_hours}' onclick=\"window.document.publishform.expiry_none[0].checked = true;\" size='3' /> {$strHours}&nbsp;";
+    echo "<input maxlength='2' name='expiry_minutes' value='{$na_minutes}' onclick=\"window.document.publishform.expiry_none[0].checked = true;\" size='3' /> {$strMinutes}<br />";
+    echo "<input type='radio' name='expiry_none' value='date'>{$strUntilSpecificDateAndTime}<br />&nbsp;&nbsp;&nbsp;";
+
     // Print Listboxes for a date selection    
     echo "<select name='day' onclick=\"window.document.publishform.expiry_none[1].checked = true;\">";
     
@@ -103,7 +100,7 @@ if (!isset($temp_directory))
     echo "</select>";
     echo "</td></tr>";
     echo "</table>";
-    echo "<p align='center'><input type='submit' value='publish' /></p>";
+    echo "<p align='center'><input type='submit' value='{$strPublish}' /></p>";
     echo "</form>";
 
     include ('htmlfooter.inc.php');
@@ -120,13 +117,13 @@ else
 
     // make the temporary directory
     $mk = @ftp_mkdir($conn_id, $CONFIG['ftp_path'] . $temp_directory);
-    if (!mk) trigger_error("FTP Failed creating directory: {$temp_directory}", E_USER_WARNING);
+    if (!mk) trigger_error(sprintf($strFTPFailedCreatingDirectoryX , $temp_directory), E_USER_WARNING);
 
     // check the source file exists
-    if (!file_exists($source_file)) trigger_error("Source file cannot be found: {$source_file}", E_USER_WARNING);
+    if (!file_exists($source_file)) trigger_error(sprintf($strSourceFailCannotBeFoundX, $source_file), E_USER_WARNING);
 
     // set passive mode
-    if (!ftp_pasv($conn_id, TRUE)) trigger_error("Problem setting passive FTP mode", E_USER_WARNING);
+    if (!ftp_pasv($conn_id, TRUE)) trigger_error($strProblemSettingPassiveFTPMode, E_USER_WARNING);
 
     // upload the file
     $upload = ftp_put($conn_id, "$destination_filepath", "$source_file", FTP_BINARY);
@@ -134,12 +131,12 @@ else
     // check upload status
     if (!$upload)
     {
-        echo "FTP upload has failed!<br />";
+        echo "{$strUploadFailed}<br />";
     }
     else
     {
-        echo "Uploaded $source_file to {$CONFIG['ftp_hostname']} as $destination_file<br />";
-        echo "<code>$ftp_url</code>";
+        echo sprintf($strUpdatedXToYAsZ, $source_file, $CONFIG['ftp_hostname'], $destination_filepath)."<br />";
+        echo "<code>{$ftp_url}</code>";
 
         journal(CFG_LOGGING_NORMAL, 'FTP File Published', "File $destination_file_file was published to {$CONFIG['ftp_hostname']}", CFG_JOURNAL_OTHER, 0);
 

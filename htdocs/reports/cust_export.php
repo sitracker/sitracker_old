@@ -41,7 +41,7 @@ if (!function_exists('strip_comma'))
 if (empty($_REQUEST['mode']))
 {
     include ('htmlheader.inc.php');
-    echo "<h2>$strCustomerExport</h2>";
+    echo "<h2>{$strCustomerExport}</h2>";
     echo "<form action='{$_SERVER['PHP_SELF']}' method='post'>";
     echo "<table align='center'>";
     echo "<tr><th colspan='2' align='center'>{$strInclude}</th></tr>";
@@ -74,7 +74,7 @@ if (empty($_REQUEST['mode']))
     echo "</p>";
     echo "</form>";
     echo "<table align='center'><tr><td>";
-    echo "<h4>When outputting to a CSV file the format is as follows:</h4>";
+    echo "<h4>When outputting to a CSV file the format is as follows:</h4>"; // FIXME i18n
     echo "<strong>Field 1:</strong> {$strForenames}<br />";
     echo "<strong>Field 2:</strong> {$strSurname}<br />";
     echo "<strong>Field 3:</strong> {$strEmail}<br />";
@@ -86,13 +86,16 @@ if (empty($_REQUEST['mode']))
     echo "<strong>Field 9:</strong> {$strCountry}<br />";
     echo "<strong>Field 10:</strong> {$strTelephone}<br />";
     echo "<strong>Field 11:</strong> {$strSite}<br />";
-    echo "<strong>Field 12:</strong> {$strProducts} <em>(Lists all the customers products regardless of selections made above)</em><br />";
+    echo "<strong>Field 12:</strong> {$strProducts} <em>(Lists all the customers products regardless of selections made above)</em><br />"; // FIXME i18n
     echo "</td></tr></table>";
     include ('htmlfooter.inc.php');
 }
 elseif ($_REQUEST['mode'] == 'report')
 {
-    if (is_array($_POST['exc']) && is_array($_POST['exc'])) $_POST['inc']=array_values(array_diff($_POST['inc'],$_POST['exc']));  // don't include anything excluded
+    if (is_array($_POST['exc']) && is_array($_POST['exc']))
+    {
+        $_POST['inc']=array_values(array_diff($_POST['inc'],$_POST['exc']));  // don't include anything excluded
+    }
     $includecount = count($_POST['inc']);
     if ($includecount >= 1)
     {
@@ -138,7 +141,7 @@ elseif ($_REQUEST['mode'] == 'report')
     // FIXME i18n
     // FIXME strip slashes from output
     $html .= "<h2>{$strCustomerExport}</h2>";
-    $html .= "<p align='center'>This report is a list of ($numrows) contact details for all sites that you selected</p>";
+    $html .= "<p align='center'>This report is a list of ($numrows) contact details for all sites that you selected</p>"; // FIXME i18n
     $html .= "<table width='99%' align='center'>";
     $html .= "<tr><th>{$strForenames}</th><th>{$strSurname}</th><th>{$strEmail}</th><th>{$strAddress1}</th>";
     $html .= "<th>{$strAddress2}</th><th>{$strCity}</th><th>{$strCounty}</th><th>{$strPostcode}</th><th>{$strCountry}</th><th>{$strTelephone}</th><th>{$strSite}</th><th>{$strProducts}</th></tr>";
@@ -204,8 +207,8 @@ elseif ($_REQUEST['mode'] == 'report')
         $rowcount++;
     }
     $html .= "</table>";
-    $html .= "<p align='center'>{$rowcount} Records</p>";
-    $html .= "<p align='center'>SQL Query used to produce this report:<br /><code>$sql</code></p>\n";
+    $html .= "<p align='center'>{$rowcount} Records</p>"; // FIXME i18n
+    // $html .= "<p align='center'>SQL Query used to produce this report:<br /><code>$sql</code></p>\n";
 
     if ($_POST['output'] == 'screen')
     {

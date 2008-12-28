@@ -42,7 +42,7 @@ if (empty($_REQUEST['mode']))
     echo "<td><input type='text' name='enddate' id='enddate' size='10' /> ";
     echo date_picker('incidentsbyengineer.enddate');
     echo "</td></tr>\n";
-    echo "<tr><th>Dates are:</th><td>";
+    echo "<tr><th>{$strDatesAre}:</th><td>";
     echo "<label><input type='radio' name='type' value='opened' />{$strOpened}</label> ";
     echo "<label><input type='radio' name='type' value='closed' />{$strClosed}</label> ";
     echo "<label><input type='radio' name='type' value='both' checked='checked' />{$strBoth}</label>";

@@ -20,9 +20,9 @@ if (realpath(__FILE__) == realpath($_SERVER['SCRIPT_FILENAME']))
 if ($type < 10)
 {
     echo "<h2>{$strCalendar}: ";
-    if ($user=='all' && $approver==TRUE) echo $strAll;
+    if ($user == 'all' && $approver == TRUE) echo $strAll;
     else echo user_realname($user,TRUE);
-    if ($type==1) echo "<p align='center'>Used ".user_count_holidays($user, $type)." of ".user_holiday_entitlement($user)." days entitlement.<br />";
+    if ($type==1) echo "<p align='center'>".sprintf($strUsedNofNDaysEntitlement,   user_count_holidays($user, $type), user_holiday_entitlement($user))."<br />";
 
     echo appointment_type_dropdown($type, 'year');
 
@@ -58,23 +58,22 @@ else
 echo "<p align='center'>";
 if (!empty($selectedday))
 {
+    // FIXME i18n holiday selection
     echo "$selectedday/$selectedmonth/$selectedyear is ";
     switch ($length)
     {
         case 'am':
-        echo "selected for the <strong>morning";
-        break;
-
+            echo "selected for the <strong>morning";
+            break;
         case 'pm':
-        echo "selected for the <strong>afternoon";
-        break;
-
+            echo "selected for the <strong>afternoon";
+            break;
         case 'day':
-        echo "selected for the <strong>full day";
-        break;
+            echo "selected for the <strong>full day";
+            break;
 
         default:
-        echo "<strong>not selected";
+            echo "<strong>not selected";
     }
     echo "</strong> ";
     echo " as ".holiday_type($type).".  ";
@@ -94,13 +93,13 @@ if (!empty($selectedday))
             case 'day':
                 echo "You can make it <a href='holiday_add.php?type=$type&amp;user=$user&amp;year=$selectedyear&amp;month=$selectedmonth&amp;day=$selectedday&amp;length=am'>the morning</a>, or <a href='holiday_add.php?type=$type&amp;user=$user&amp;year=$selectedyear&amp;month=$selectedmonth&amp;day=$selectedday&amp;length=pm'>the afternoon</a> instead. ";
         }
-        if ($length!='0')
+        if ($length != '0')
         {
             echo "Or you can <a href='holiday_add.php?type=$type&amp;user=$user&amp;year=$selectedyear&amp;month=$selectedmonth&amp;day=$selectedday&amp;length=0'>deselect</a> it. ";
             echo "<a href='calendar.php?type=$type&amp;user=$user' title='Clear this message'>Okay</a>.";
         }
     }
-    elseif ($approved==1)
+    elseif ($approved == 1)
     {
         list($xtype, $xlength, $xapproved, $xapprovedby)=user_holiday($user, $type, $selectedyear, $selectedmonth, $selectedday, FALSE);
         echo "Approved by ".user_realname($xapprovedby).".";
