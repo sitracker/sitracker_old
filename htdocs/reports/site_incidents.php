@@ -187,42 +187,42 @@ else
 	            	if (empty($count)) $count = 0;
 	            	if ($showsitesloggedfewerthanxcalls == 'on' AND $count <= $numberofcalls)
 	            	{
-	                	$csv .= "{$count},{$site->name},{$site->realname},{$site->resel}";
+	                	$csv .= "\"{$count}\",\"{$site->name}\",\"{$site->realname}\",\"{$site->resel}";
 	            	}
 	            	else if (empty($showsitesloggedfewerthanxcalls))
 	            	{
-	            		$csv .= "{$count},{$site->name},{$site->realname},{$site->resel}";
+	            		$csv .= "\"{$count}\",\"{$site->name}\",\"{$site->realname}\",\"{$site->resel}";
 	            	}
 	            }
 	            else
 	            {
 	            	// Dont need to check $showsitesloggedfewerthanxcalls as $zerologged will always be selected
-	                if ($count != 0) $csv .= "{$count},{$site->name},{$site->realname},{$site->resel}";
+	                if ($count != 0) $csv .= "\"{$count}\",\"{$site->name}\",\"{$site->realname}\",\"{$site->resel}";
 	            }
 	            
             	if ($showproducts == 'on')
 	        	{
-	        		$csv .= ",{$product}";
+	        		$csv .= "\",\"{$product}";
 	        	}
         	}
         	      	
-			$csv .= "\n";
+			$csv .= "\"\n";
         }
         
         echo "<pre>";
         echo $csv;
         echo "</pre>";
         
-        $header = "{$strIncidents},{$strSite},{$strAccountManager},{$strReseller}";
+        $header = "\"{$strIncidents}\",\"{$strSite}\",\"{$strAccountManager}\",\"{$strReseller}";
 		if ($showproducts == 'on')
 		{
-			$header .= ",{$strProducts}";
+			$header .= "\",\"{$strProducts}";
 		}
-		$csv = $header."\n".$csv;
+		$csv = $header."\"\n".$csv;
         
         if ($_REQUEST['mode'] == 'csv')
         {
-        	$csv = "{$strStartDate}:,{$startdate}\n{$strEndDate}:,{$enddate}".$csv;
+        	$csv = "\"{$strStartDate}:\",\"{$startdate}\"\n{$strEndDate}:\",\"{$enddate}".$csv;
 			echo create_report($csv, 'csv', 'yearly_incidents.csv');    		
         }
         else

@@ -17,6 +17,8 @@ include ('strings.inc.php');
 require ('functions.inc.php');
 populate_syslang();
 
+$crlg = "\n";
+
 /**
     * @author Ivan Lucas
 **/
@@ -36,7 +38,7 @@ function saction_test()
 function saction_CloseIncidents($closure_delay)
 {
     $success = TRUE;
-    global $dbIncidents, $dbUpdates, $CONFIG;
+    global $dbIncidents, $dbUpdates, $CONFIG, $crlf;
 
     if ($closure_delay < 1) $closure_delay = 554400; // Default  six days and 10 hours
 

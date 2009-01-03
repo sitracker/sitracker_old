@@ -296,6 +296,7 @@ if ($emails > 0)
                 if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
             }
         }
+        
         //** BEGIN UPDATE INCIDENT **//
         $headertext = '';
         // Build up header text to append to the incident log

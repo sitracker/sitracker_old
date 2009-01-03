@@ -237,8 +237,8 @@ elseif ($_REQUEST['statistics'] == 'on')
         $html .= "<th>{$strPercentageEscalated}</th>";
         $html .= "<tr>";
 
-        $csv .= "{$strUser},{$strNumOfCalls},{$strEscalated},{$strClosed},{$strAvgAssignedMonth},{$strAvgEscalatedMonth},";
-        $csv .= "{$strAvgClosedMonth},{$strPercentageEscalated}\n";
+        $csv .= "\"{$strUser}\",\"{$strNumOfCalls}\",\"{$strEscalated}\",\"{$strClosed}\",\"{$strAvgAssignedMonth}\",\"{$strAvgEscalatedMonth}\",\"";
+        $csv .= "{$strAvgClosedMonth}\",\"{$strPercentageEscalated}\"\n";
 
         $class = "class='shade1'";
         foreach ($data AS $engineer)
@@ -260,14 +260,14 @@ elseif ($_REQUEST['statistics'] == 'on')
             $html .= "<td {$class}>".round(($engineer['escalated']/$engineer['opened'])*100,2)."%</td>";
             $html .= "</tr>";
 
-            $csv .= $engineer['realname'].",";
-            $csv .= "{$opened},";
-            $csv .= "{$escalated},";
-            $csv .= "{$closed},";
-            $csv .= round($engineer['opened']/12,2).","; //The average over a 12mnth period
-            $csv .= round($engineer['escalated']/12,2).","; //The average over a 12mnth period
-            $csv .= round($engineer['closed']/12,2).","; //The average over a 12mnth period
-            $csv .= round(($engineer['escalated']/$engineer['opened'])*100,2)."%\n";
+            $csv .= "\"".$engineer['realname']."\",\"";
+            $csv .= "{$opened}\",\"";
+            $csv .= "{$escalated}\",\"";
+            $csv .= "{$closed}\",\"";
+            $csv .= round($engineer['opened']/12,2)."\",\""; //The average over a 12mnth period
+            $csv .= round($engineer['escalated']/12,2)."\",\""; //The average over a 12mnth period
+            $csv .= round($engineer['closed']/12,2)."\",\""; //The average over a 12mnth period
+            $csv .= round(($engineer['escalated']/$engineer['opened'])*100,2)."%\"\n";
 
 
             if ($class == "class='shade1'") $class = "class='shade2'";
@@ -285,14 +285,14 @@ elseif ($_REQUEST['statistics'] == 'on')
         $html .= "</tr>";
         $html .= "</table>";
 
-        $csv .= "{$strTOTALS}:,";
-        $csv .= $totalOpened.",";
-        $csv .= $totalEscalated.",";
-        $csv .= $totalClosed.",";
-        $csv .= round($totalOpened/12,2).","; //The average over a 12mnth period
-        $csv .= round($totalEscalated/12,2).","; //The average over a 12mnth period
-        $csv .= round($totalClosed/12,2).","; //The average over a 12mnth period
-        $csv .= round(($totalEscalated/$totalOpened)*100,2)."%\n";
+        $csv .= "\"{$strTOTALS}:\",\"";
+        $csv .= $totalOpened."\",\"";
+        $csv .= $totalEscalated."\",\"";
+        $csv .= $totalClosed."\",\"";
+        $csv .= round($totalOpened/12,2)."\",\""; //The average over a 12mnth period
+        $csv .= round($totalEscalated/12,2)."\",\""; //The average over a 12mnth period
+        $csv .= round($totalClosed/12,2)."\",\""; //The average over a 12mnth period
+        $csv .= round(($totalEscalated/$totalOpened)*100,2)."%\"\n";
 
         // FIXME i18n
         $html .= "<p align='center'>The statistics are approximation only. They don't take into consideration incidents reassigned</p>";
@@ -425,7 +425,7 @@ elseif ($_REQUEST['mode'] == 'report')
     $html .= "<table width='99%' align='center'>";
     $html .= "<tr><th>{$strOpened}</th><th>{$strClosed}</th><th>{$strIncident}</th>";
     $html .= "<th>{$strTitle}</th><th>{$strEngineer}</th><th>{$strEscalated}</th></tr>";
-    $csvfieldheaders .= "{$strOpened},{$strClosed},{$strIncident},{$strTitle},{$strEngineer},{$strEscalated}\r\n";
+    $csvfieldheaders .= "''{$strOpened}','{$strClosed}','{$strIncident}','{$strTitle}','{$strEngineer}','{$strEscalated}'\r\n";
     $rowcount = 0;
     while ($row = mysql_fetch_object($result))
     {

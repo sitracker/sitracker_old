@@ -91,7 +91,7 @@ if (empty($_REQUEST['mode']))
 }
 elseif ($_REQUEST['mode'] == 'report')
 {
-	echo "REPORT";
+	// echo "REPORT";
     // don't include anything excluded
     if (is_array($_POST['inc']) && is_array($_POST['exc']))
     {
@@ -161,10 +161,10 @@ elseif ($_REQUEST['mode'] == 'report')
     $html .= "<th>{$strAddress2}</th><th>{$strCity}</th><th>{$strCounty}</th>";
     $html .= "<th>{$strPostcode}</th><th>{$strCountry}</th><th>{$strTelephone}";
     $html .= "</th><th>{$strProducts}</th></tr>";
-    $csvfieldheaders .= "{$strForenames},{$strSurname},{$strEmail},{$strSite},";
-    $csvfieldheaders .= "{$strAddress1},{$strAddress2},{$strCity},{$strCounty},";
-    $csvfieldheaders .= "{$strPostcode},{$strCountry},{$strTelephone},";
-    $csvfieldheaders .= "{$strProducts}\r\n";
+    $csvfieldheaders .= "\"{$strForenames}\",\"{$strSurname}\",\"{$strEmail}\",\"{$strSite}\",\"";
+    $csvfieldheaders .= "{$strAddress1}\",\"{$strAddress2}\",\"{$strCity}\",\"{$strCounty}\",\"";
+    $csvfieldheaders .= "{$strPostcode}\",\"{$strCountry}\",\"{$strTelephone}\",\"";
+    $csvfieldheaders .= "{$strProducts}\"\r\n";
     $rowcount=0;
     while ($row = mysql_fetch_object($result))
     {
@@ -219,33 +219,33 @@ elseif ($_REQUEST['mode'] == 'report')
             $html .= "<td>";
 
             // FIXME dataprotection_address for csv
-            $csv .= strip_comma($row->forenames).','
-                . strip_comma($row->surname).',';
+            $csv .= "\"".strip_comma($row->forenames).'","'
+                . strip_comma($row->surname).'","';
                 
             if ($row->dataprotection_email!='Yes')
             {
-                $csv .= strip_comma(strtolower($row->contactemail)).',';
+                $csv .= strip_comma(strtolower($row->contactemail)).'","';
             }
             else
             {    
-                $csv .= ',';
+                $csv .= '","';
             }
             
-            $csv  .= strip_comma($row->sitename).','
-                . strip_comma($row->address1).','
-                . strip_comma($row->address2).','
-                . strip_comma($row->city).','
-                . strip_comma($row->county).','
-                . strip_comma($row->postcode).','
-                . strip_comma($row->country).',';
+            $csv  .= strip_comma($row->sitename).'","'
+                . strip_comma($row->address1).'","'
+                . strip_comma($row->address2).'","'
+                . strip_comma($row->city).'","'
+                . strip_comma($row->county).'","'
+                . strip_comma($row->postcode).'","'
+                . strip_comma($row->country).'","';
 
             if ($row->dataprotection_phone!='Yes')
             {
-                $csv .= strip_comma(strtolower($row->phone)).',';
+                $csv .= strip_comma(strtolower($row->phone)).'","';
             }
             else
             {
-                $csv .= ',';
+                $csv .= '","';
             }
 
             $presult = mysql_query($psql);
@@ -264,7 +264,7 @@ elseif ($_REQUEST['mode'] == 'report')
                 $productcount++;
             }
             $html .= "</td>";
-            $csv .= strip_comma($row->name) ."\r\n";
+            $csv .= strip_comma($row->name) ."\"\r\n";
 
             $rowcount++;
         }

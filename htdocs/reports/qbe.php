@@ -139,18 +139,18 @@ elseif ($_REQUEST['mode'] == 'report')
     $columns=count($_POST[fields]);
     if ($columns >= 1)
     {
-        $htmlfieldheaders="<tr>";
+        $htmlfieldheaders = "<tr>";
         for ($i = 0; $i < $columns; $i++)
         {
-            $fieldname=cleanvar($_POST[fields][$i]);
-            $fieldlist.=$fieldname;
-            if ($i < ($columns-1)) $fieldlist.=',';
-            $htmlfieldheaders.="<th>$fieldname</th>";
-            $csvfieldheaders.=$fieldname;
-            if ($i < ($columns-1)) $csvfieldheaders .= ",";
+            $fieldname = cleanvar($_POST[fields][$i]);
+            $fieldlist .= $fieldname;
+            if ($i < ($columns-1)) $fieldlist .= '","';
+            $htmlfieldheaders .= "<th>{$fieldname}</th>";
+            $csvfieldheaders .= $fieldname;
+            if ($i < ($columns-1)) $csvfieldheaders .= '","';
         }
         $fieldheaders.="</tr>\n";
-        $csvfieldheaders.="\r\n";
+        $csvfieldheaders.="\"\r\n";
     }
     else $fieldlist='*';
 
@@ -164,21 +164,22 @@ elseif ($_REQUEST['mode'] == 'report')
     $html .= "<p align='center'><code>$sql</code></p>\n";
     $html .= "<table width='100%'>";
     $html .= $htmlfieldheaders;
-    $shade='shade1';
+    $shade = 'shade1';
     while ($row = mysql_fetch_row($result))
     {
         $columns = count($row);
         $html .= "<tr class='$shade'>";
+        $csv .= "\"";
         for ($i = 0; $i < $columns; $i++)
         {
             $html .= "<td>{$row[$i]}</td>";
             $csv .= strip_comma($row[$i]);
-            if ($i < ($columns-1)) $csv .= ",";
+            if ($i < ($columns-1)) $csv .= '","';
         }
         $html .= "</tr>\n";
-        if ($shade=='shade1') $shade='shade2';
-        else $shade='shade1';
-        $csv.="\r\n";
+        if ($shade == 'shade1') $shade = 'shade2';
+        else $shade = 'shade1';
+        $csv.="\"\r\n";
     }
     $html .= "</table>";
     if ($_POST['output'] == 'screen')

@@ -10595,6 +10595,11 @@ function create_report($data, $output = 'table', $filename = 'report.csv')
 
         foreach($data as $line)
         {
+            if (!beginsWith($line, "\""))
+            {
+                    $line = "\"".str_replace(",", "\",\"",$line)."\"\r\n";
+            }
+            
             $html .= $line;
         }
     }

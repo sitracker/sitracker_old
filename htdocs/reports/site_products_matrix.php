@@ -47,8 +47,8 @@ switch ($_POST['action'])
         $vendor = cleanvar($_POST['vendor']);
 
         $sql  = "SELECT m.id AS maintid, s.name AS site, s.id AS siteid, ";
-        $sql .= "c.address1 AS address1, products.name AS product, ";
-        $sql .= "r.name AS reseller, licence_quantity, licencetypes.name AS licence_type, ";
+        $sql .= "c.address1 AS address1, p.name AS product, ";
+        $sql .= "r.name AS reseller, licence_quantity, l.name AS licence_type, ";
         $sql .= "expirydate, admincontact, c.forenames AS forenames, c.surname AS admincontactname, m.notes, ";
         $sql .= "c.department AS department, c.address2 AS address2, c.city AS city, c.county, c.country, c.postcode, st.typename AS typename ";
         $sql .= "FROM `{$dbMaintenance}` AS m, `{$dbSites}` AS s, `{$dbSiteTypes}` AS st, `{$dbContacts}` AS c, `{$dbProducts}` AS p, `{$dbLicenceTypes}` AS l, `{$dbResellers}` AS r WHERE ";
@@ -67,15 +67,15 @@ switch ($_POST['action'])
         if (mysql_num_rows($result) > 0)
         {
             $html = "<table><tr><th>Site</th>";
-            $csv = "Site";
+            $csv = "\"Site";
             // products list
             foreach ($product AS $prodid => $prodname)
             {
                 $html .= "<th>{$prodname}</th>";
-                $csv .= ",{$prodname}";
+                $csv .= "\",\"{$prodname}";
             }
             $html .= "</tr>";
-            $csv .= "\n";
+            $csv .= "\"\n";
 
             while ($site = mysql_fetch_array($result))
             {
@@ -108,16 +108,16 @@ switch ($_POST['action'])
                     if (array_key_exists($prodid, $supportedproduct[$site['siteid']]))
                     {
                         $html .= "<td>{$prodname}</td>";
-                        $csv .= ",".strip_comma($prodname);
+                        $csv .= "\",\"".strip_comma($prodname);
                     }
                     else
                     {
                         $html .= "<td></td>";
-                        $csv .= ",";
+                        $csv .= "\",\"";
                     }
                 }
                 $html .= "</tr>\n";
-                $csv .= "\n";
+                $csv .= "\"\n";
             }
             $html .= "</table>";
             mysql_free_result($result);
