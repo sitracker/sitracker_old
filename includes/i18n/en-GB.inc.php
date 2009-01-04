@@ -527,6 +527,7 @@ $strEnvironment = 'Environment';
 $strEOL = 'EOL';
 $strError = 'Error';
 $strErrorApprovingIncident = 'Error Approving Incident';
+$strErrorAssigningUpdate = 'Error assigning that incident update. Probable cause is that no incident exists with that ID or it has been closed.';
 $strErrorMenuNotDefined = 'Error. Menu not defined';
 $strErrorNoHandlerDefinedForQuestionTypeX = 'Error: Unable to accept a response for this question, no handler for question of type \'%s\'.';
 $strErrorNotUserSelectedToSendApproval = 'Error: You did not select a user to send the request to';

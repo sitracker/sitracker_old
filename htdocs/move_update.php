@@ -31,10 +31,9 @@ if ($incidentid == '')
     echo "<h2>{$title}</h2>";
     if ($error == '1')
     {
-        echo "<p class='error'>Error assigning that incident update. Probable cause is ";
-        echo "that no incident exists with that ID or it has been closed.</p>"; //FIXME i18n
+        echo "<p class='error'>{$strErrorAssigningUpdate}</p>";
     }
-    
+
     echo "<div align='center'>";
     echo "<form action='{$_SERVER['PHP_SELF']}' method='post'>";
     echo "{$strToIncidentID}: <input type='text' name='incidentid' value='{$incidentid}' />";
