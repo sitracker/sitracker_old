@@ -26,8 +26,8 @@ $display = cleanvar($_REQUEST['display']);
 
 include ('htmlheader.inc.php');
 // FIXME @@@ BUGBUG @@@ experimental ivan 10July2008
-echo "<p id='pageoptions'><a href='javascript:toggleMenuPanel();' title='Menu'>"; // FIXME i18n menu
-echo "".icon('auto', 16)."</a></p>";
+// echo "<p id='pageoptions'><a href='javascript:toggleMenuPanel();' title='Menu'>"; // FIXME i18n menu
+// echo "".icon('auto', 16)."</a></p>";
 
 if (empty($productid) AND $display!='skills')
 {
