@@ -583,7 +583,7 @@ $strFilename = 'Filename';
 $strFile = 'File';
 # e.g. computer files
 $strFiles = 'Files';
-$strFileDate = 'File Date'; 
+$strFileDate = 'File Date';
 $strFileUploaded = 'File uploaded';
 $strFileVersion = 'File Version';
 # e.g. File filename.txt (Text file 100 bytes) uploaded OK
@@ -1097,6 +1097,7 @@ $strOverXHoursAgo = 'Over %x hours ago';
 
 $strParameters = 'Parameters';
 $strPassword = 'Password';
+$strPasswordHasBeenReset = 'Your password has been reset, you can now login using the new details.';
 $strPasswordReset = 'Password reset';
 $strPasswordsDoNotMatch = 'Passwords do not match';
 $strPastXDays = 'Past %s days';

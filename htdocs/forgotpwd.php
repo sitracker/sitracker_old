@@ -274,13 +274,13 @@ switch ($_REQUEST['action'])
                     }
                     mysql_query($usql);
                     echo "<h3>{$strPasswordReset}</h3>";
-                    echo "<p>Your password has been reset, you can now login using the new details.</p>"; // FIXME i18n
+                    echo "<p>{$strPasswordHasBeenReset}</p>";
                     echo "<p><a href='index.php'>{$strBackToLoginPage}</a></p>";
                 }
                 else
                 {
                     echo "<h3>{$strError}</h3>";
-                    echo "<p>The new password you entered was not confirmed correctly.</p>"; // FIXME i18n
+                    echo "<p>{$strPasswordsDoNotMatch}</p>";
                     echo "<p><a href='index.php'>{$strBackToLoginPage}</a></p>";
                 }
             }
