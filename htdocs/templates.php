@@ -228,11 +228,11 @@ elseif ($action == "edit")
         echo "<tr><th>{$strTemplate}: <sup class='red'>*</sup></th><td><input maxlength='100' name='name' size='40' value=\"{$template->name}\" /></td></tr>\n";
         echo "<tr><th>{$strDescription}: <sup class='red'>*</sup></th>";
         echo "<td><textarea name='description' cols='50' rows='5' onfocus=\"clearFocusElement(this);\"";
-        if (strlen($template->description) > 3 AND substr_compare($template->description, 'str', 1, 3))
+        if (strlen($template->description) > 3 AND substr_compare($template->description, 'str', 0, 3) === 0)
         {
-            echo " readonly='readonly' ";
-            $template->description = $SYSLANG[$template->description];
-        }
+             echo " readonly='readonly' ";
+             $template->description = $SYSLANG[$template->description];
+         }
         echo ">{$template->description}</textarea></td></tr>\n";
         switch ($templatetype)
         {
@@ -256,7 +256,7 @@ elseif ($action == "edit")
             case 'notice':
                 echo "<tr><th>{$strLinkText}</th>";
                 echo "<td><input id='linktext' maxlength='50' name='linktext' size='50' ";
-                if (strlen($template->linktext) > 3 AND substr_compare($template->linktext, 'str', 1, 3))
+                if (strlen($template->linktext) > 3 AND substr_compare($template->linktext, 'str', 0, 3) === 0)
                 {
                     echo " readonly='readonly' ";
                     $template->linktext = $SYSLANG[$template->linktext];
@@ -291,7 +291,7 @@ elseif ($action == "edit")
         echo "<td>";
         if ($templatetype=='notice') echo bbcode_toolbar('bodytext');
         echo "<textarea id='bodytext' name='bodytext' rows='20' cols='50' onfocus=\"recordFocusElement(this);\"";
-        if (strlen($body) > 3 AND substr_compare($body, 'str', 1, 3))
+        if (strlen($body) > 3 AND substr_compare($body, 'str', 1, 3) === 0)
         {
             echo " readonly='readonly' ";
             $body = $SYSLANG[$body];
