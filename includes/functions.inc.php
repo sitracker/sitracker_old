@@ -6610,7 +6610,9 @@ function purge_tags()
 /**
     * Produce a list of tags
     * @author Ivan Lucas
-    * @param $html boolean. Return HTML when TRUE
+    * @param int $recordid. The record ID to find tags for
+    * @param int $type. The tag record type.
+    * @param boolean $html. Return HTML when TRUE
 */
 function list_tags($recordid, $type, $html = TRUE)
 {
@@ -6660,7 +6662,7 @@ function list_tags($recordid, $type, $html = TRUE)
 */
 function list_tag_icons($recordid, $type)
 {
-    global $CONFIG, $dbSetTags, $dbTags;
+    global $CONFIG, $dbSetTags, $dbTags, $iconset;
     $sql = "SELECT t.name, t.tagid ";
     $sql .= "FROM `{$dbSetTags}` AS st, `{$dbTags}` AS t WHERE st.tagid = t.tagid AND ";
     $sql .= "st.type = '$type' AND st.id = '$recordid' AND (";
