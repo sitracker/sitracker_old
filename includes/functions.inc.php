@@ -10362,7 +10362,7 @@ function transactions_report($serviceid, $startdate, $enddate, $sites, $display,
 
     $csv_currency = html_entity_decode($CONFIG['currency_symbol'], ENT_NOQUOTES, "ISO-8859-15"); // Note using -15 as -1 doesnt support euro
 
-    $sql = "SELECT DISTINCT t.*, m.site FROM `{$GLOBALS['dbTransactions']}` AS t, `{$GLOBALS['dbService']}` AS p, ";
+    $sql = "SELECT DISTINCT t.*, m.site, p.foc FROM `{$GLOBALS['dbTransactions']}` AS t, `{$GLOBALS['dbService']}` AS p, ";
     $sql .= "`{$GLOBALS['dbMaintenance']}` AS m, `{$GLOBALS['dbServiceLevels']}` AS sl, `{$GLOBALS['dbSites']}` AS s ";
     $sql .= "WHERE t.serviceid = p.serviceid AND p.contractid = m.id "; // AND t.date <= '{$enddateorig}' ";
     $sql .= "AND m.servicelevelid = sl.id AND sl.timed = 'yes' AND m.site = s.id ";
@@ -10371,7 +10371,7 @@ function transactions_report($serviceid, $startdate, $enddate, $sites, $display,
     if (!empty($startdate)) $sql .= "AND t.date >= '{$startdate}' ";
     if (!empty($enddate)) $sql .= "AND t.date <= '{$enddate}' ";
 
-    if (!showfoc) $sql .= "AND s.foc = 'no' ";
+    if (!$showfoc) $sql .= "AND p.foc = 'no' ";
 
     if (!empty($sites))
     {
@@ -10421,7 +10421,7 @@ function transactions_report($serviceid, $startdate, $enddate, $sites, $display,
                 $str .= "\"".html_entity_decode($transaction->description)."\",";
             }
 
-            if ($focaszero)
+            if ($focaszero AND $transaction->foc == 'yes')
             {
                 $transaction->amount = 0;
             }
