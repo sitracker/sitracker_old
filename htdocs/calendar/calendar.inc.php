@@ -643,7 +643,7 @@ function draw_chart($mode, $year, $month='', $day='', $groupid='', $userid='')
 
 function month_select($month, $year, $params = '')
 {
-    $cyear=$year;
+    $cyear = $year;
     $cmonth = $month - 3;
     if ($cmonth < 1)
     {
@@ -653,26 +653,29 @@ function month_select($month, $year, $params = '')
     $pmonth = $cmonth-5;
     $pyear = $cyear-1;
     $nyear = $cyear+1;
-    $html .= "<a href='{$SERVER['PHP_SELF']}?display=month&amp;month={$month}&amp;year={$pyear}$params' title='Back one year'>&lt;&lt;</a> ";
+    $html .= "<a href='{$SERVER['PHP_SELF']}?display=month&amp;month={$month}";
+    $html .= "&amp;year={$pyear}$params' title='Back one year'>&lt;&lt;</a> ";
     for ($c = 1; $c <= 12; $c++)
     {
-        if (mktime(0,0,0,$cmonth,1,$cyear) == mktime(0,0,0,date('m'),1,date('Y')))
+        if (gmmktime(0,0,0,$cmonth,1,$cyear) == gmmktime(0,0,0,date('m'),1,date('Y')))
         {
-            $html .= "<span style='background: #FF0;'>";
+            $html .= "<span class='calnavcurrent' style='background: #FF0;'>";
         }
 
-        if (mktime(0,0,0,$cmonth,1,$cyear) == mktime(0,0,0,$month,1,$year))
+        // Current month
+        if (gmmktime(0,0,0,$cmonth,1,$cyear) == gmmktime(0,0,0,$month,1,$year))
         {
-            $html .= "<span style='font-size: 160%'>";
+            $html .= "<span class='calnavselected' style='font-size: 160%'>";
         }
 
-        $html .= "<a href='{$SERVER['PHP_SELF']}?display=month&amp;month=$cmonth&amp;year=$cyear$params'>".ldate('M y',mktime(0,0,0,$cmonth,1,$cyear))."</a>";
-        if (mktime(0,0,0,$cmonth,1,$cyear) == mktime(0,0,0,$month,1,$year))
+        $html .= "<a href='{$SERVER['PHP_SELF']}?display=month&amp;month=$cmonth&amp;year=$cyear$params'>";
+        $html .= ldate('M y',gmmktime(0,0,0,$cmonth,1,$cyear))."</a>";
+        if (gmmktime(0,0,0,$cmonth,1,$cyear) == gmmktime(0,0,0,$month,1,$year))
         {
             $html .= "</span>";
         }
 
-        if (mktime(0,0,0,$cmonth,1,$cyear) == mktime(0,0,0,date('m'),1,date('Y')))
+        if (gmmktime(0,0,0,$cmonth,1,$cyear) == gmmktime(0,0,0,date('m'),1,date('Y')))
         {
             $html .= "</span>";
         }
