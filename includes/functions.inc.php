@@ -10599,7 +10599,7 @@ function create_report($data, $output = 'table', $filename = 'report.csv')
             {
                     $line = "\"".str_replace(",", "\",\"",$line)."\"\r\n";
             }
-            
+
             $html .= $line;
         }
     }
@@ -10635,21 +10635,30 @@ function postpone_task($taskid)
 
 
 /**
-* Returns HTML for a gravatar (Globally recognised avatar)
-* @author Ivan Lucas
-* @param string $email - Email address
-* @param int $size - Size in pixels
-* @returns string - HTML img tag
-*/
+ * Returns HTML for a gravatar (Globally recognised avatar)
+ * @author Ivan Lucas
+ * @param string $email - Email address
+ * @param int $size - Size in pixels
+ * @returns string - HTML img tag
+ */
 function gravatar($email, $size)
 {
     global $CONFIG, $iconset;
     $default = $CONFIG['default_gravatar'];
 
-    $grav_url = "http://www.gravatar.com/avatar.php?
-                gravatar_id=".md5(strtolower($email)).
-                "&default=".urlencode($CONFIG['default_gravatar']).
-                "&size=".$size;
+    if (isset( $_SERVER['HTTPS']) && (strtolower( $_SERVER['HTTPS'] ) != 'off' ))
+    {
+        // Secure
+        $grav_url = "https://secure.gravatar.com";
+    }
+    else
+    {
+        $grav_url = "http://www.gravatar.com";
+    }
+    $grav_url .= "/avatar.php?";
+    $grav_url .= "gravatar_id=".md5(strtolower($email));
+    $grav_url .= "&default=".urlencode($CONFIG['default_gravatar']);
+    $grav_url .= "&size=".$size;
 
     $html = "<img src='{$grav_url}' />";
 
@@ -11001,7 +11010,7 @@ function cfgVarInput($setupvar, $showvarnames = FALSE)
     if ($setupvar=='db_password' AND $_REQUEST['action']!='reconfigure' AND $value != '') $html .= "<p class='info'>The current password setting is not shown</p>";
     $html .= "</div>";
     $html .= "<br />\n";
-    if ($c == 1) $c == 2; 
+    if ($c == 1) $c == 2;
     else $c = 1;
 
     return $html;
