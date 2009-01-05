@@ -60,7 +60,7 @@ if ($allow_reopen == 'yes')
         echo "<tr><th>{$strStatus}</th><td>".incidentstatus_drop_down("newstatus", 1);
         echo "</td></tr>\n";
         echo "</table>";
-        echo "<p><input name='submit' type='submit' value='{$strReopenIncident}' /></p>";
+        echo "<p><input name='submit' type='submit' value='{$strReopen}' /></p>";
         echo "</form>";
         include ('incident_html_bottom.inc.php');
     }
