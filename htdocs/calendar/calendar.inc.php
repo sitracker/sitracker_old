@@ -394,10 +394,10 @@ function draw_chart($mode, $year, $month='', $day='', $groupid='', $userid='')
                         $html .= "<td align='center' class=\"$shade\"";
                         if (mktime(0,0,0,$month,$cday,$year)==mktime(0,0,0,date('m'),date('d'),date('Y'))) $html .= " style='background: #FFFF00;' title='Today'";
                         $html .= ">";
-                        $html .= substr(ldate('l',mktime(0,0,0,$month,$cday,$year)),0,$daywidth)."<br />";
+                        $html .= substr(ldate('l',gmmktime(0,0,0,$month,$cday,$year)),0,$daywidth)."<br />";
                         if ($mode == 'day')
                         {
-                            $html .= ldate('dS F Y',mktime(0,0,0,$month,$cday,$year));
+                            $html .= ldate('dS F Y',gmmktime(0,0,0,$month,$cday,$year));
                         }
                         else
                         {
