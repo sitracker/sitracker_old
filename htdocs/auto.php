@@ -38,11 +38,11 @@ function saction_test()
 function saction_CloseIncidents($closure_delay)
 {
     $success = TRUE;
-    global $dbIncidents, $dbUpdates, $CONFIG, $crlf;
+    global $dbIncidents, $dbUpdates, $CONFIG, $crlf, $now;
 
     if ($closure_delay < 1) $closure_delay = 554400; // Default  six days and 10 hours
 
-    $sql = "SELECT * FROM `{$dbIncidents}` WHERE status='7' AND (($now - lastupdated) > '{$closure_delay}') AND (timeofnextaction='0' OR timeofnextaction<='$now') ";
+    $sql = "SELECT * FROM `{$dbIncidents}` WHERE status='7' AND (({$now} - lastupdated) > '{$closure_delay}') AND (timeofnextaction='0' OR timeofnextaction<='{$now}') ";
     $result=mysql_query($sql);
     if (mysql_error())
     {
@@ -52,7 +52,7 @@ function saction_CloseIncidents($closure_delay)
     if ($CONFIG['debug']) echo "Found ".mysql_num_rows($result)." Incidents to close{$crlf}";
     while ($irow = mysql_fetch_array($result))
     {
-        $sqlb = "UPDATE `{$dbIncidents}` SET lastupdated='$now', closed='$now', status='2', closingstatus='4', timeofnextaction='0' WHERE id='".$irow['id']."'";
+        $sqlb = "UPDATE `{$dbIncidents}` SET lastupdated='{$now}', closed='{$now}', status='2', closingstatus='4', timeofnextaction='0' WHERE id='".$irow['id']."'";
         $resultb = mysql_query($sqlb);
         if (mysql_error())
         {
