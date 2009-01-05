@@ -326,6 +326,22 @@ while ($update = mysql_fetch_object($result))
     $replace = array("<a href=\"\\1\">\\1</a>");
     $updatebody = preg_replace ($search, $replace, $updatebody);
     */
+
+    // [begin] Insert link for old-style attachments [[att]]file.ext[[/att]] format
+    // This code is required to support attachments written prior to v3.35
+    // Please don't remove without a plan for what to do about old-style
+    // attachments.  INL 14Dec08
+    if (file_exists("{$CONFIG['attachment_fspath']}{$update->incidentid}/{$update->timestamp}"))
+    {
+        $attachment_webpath = "{$CONFIG['attachment_webpath']}{$update->incidentid}/{$update->timestamp}";
+    }
+    else
+    {
+        $attachment_webpath = "{$CONFIG['attachment_webpath']}updates/{$update->id}";
+    }
+    $updatebody = preg_replace("/\[\[att\]\](.*?)\[\[\/att\]\]/", "<a href = '{$attachment_webpath}/$1'>$1</a>", $updatebody);
+    // [end] Insert link for old-style attachments [[att]]file.ext[[/att]] format
+
     $updatebody = preg_replace("/href=\"(?!http[s]?:\/\/)/", "href=\"http://", $updatebody);
     $updatebody = bbcode($updatebody);
     $updatebody = preg_replace("!([\n\t ]+)(http[s]?:/{2}[\w\.]{2,}[/\w\-\.\?\&\=\#\$\%|;|\[|\]~:]*)!e", "'\\1<a href=\"\\2\" title=\"\\2\">'.(strlen('\\2')>=70 ? substr('\\2',0,70).'...':'\\2').'</a>'", $updatebody);
