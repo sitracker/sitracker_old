@@ -1926,9 +1926,10 @@ function group_drop_down($name, $selected)
 
 /**
     * A HTML Form and Select listbox for user groups, with javascript to reload page
-    * @param $selected int. Group ID to preselect
-    * @param $urlargs string. (Optional) text to pass after the '?' in the url (parameters)
-    * @returns HTML select
+    * @param int $selected. Group ID to preselect
+    * @param string $urlargs. (Optional) text to pass after the '?' in the url (parameters)
+    * @returns int Number of groups found
+    * @note outputs a HTML form directly
 */
 function group_selector($selected, $urlargs='')
 {
@@ -1939,26 +1940,27 @@ function group_selector($selected, $urlargs='')
     {
         $grouparr[$group->id] = $group->name;
     }
-    $numgroups = count($grouparr);
+    $numgroups = mysql_num_rows($gresult);
 
+    if (!empty($urlargs)) $urlargs = "&amp;{$urlargs}";
     if ($numgroups >= 1)
     {
         echo "<form action='{$_SERVER['PHP_SELF']}?{$urlargs}' class='filterform' method='get'>";
         echo "{$GLOBALS['strGroup']}: <select name='choosegroup' onchange='window.location.href=this.options[this.selectedIndex].value'>";
-        echo "<option value='{$_SERVER['PHP_SELF']}?{$urlargs}&amp;gid=all'";
+        echo "<option value='{$_SERVER['PHP_SELF']}?gid=all{$urlargs}'";
         if ($selected == 'all') echo " selected='selected'";
         echo ">{$GLOBALS['strAll']}</option>\n";
-        echo "<option value='{$_SERVER['PHP_SELF']}?{$urlargs}&amp;gid=allonline'";
+        echo "<option value='{$_SERVER['PHP_SELF']}?gid=allonline{$urlargs}'";
         if ($selected == 'allonline') echo " selected='selected'";
         echo ">{$GLOBALS['strAllOnline']}</option>\n";
         foreach ($grouparr AS $groupid => $groupname)
         {
-            echo "<option value='{$_SERVER['PHP_SELF']}?{$urlargs}&amp;gid={$groupid}'";
+            echo "<option value='{$_SERVER['PHP_SELF']}?gid={$groupid}{$urlargs}'";
             if ($groupid == $selected) echo " selected='selected'";
             echo ">{$groupname}</option>\n";
         }
-        echo "<option value='{$_SERVER['PHP_SELF']}?{$urlargs}&amp;gid=0'";
-        if ($selected == '0') echo " selected='selected'";
+        echo "<option value='{$_SERVER['PHP_SELF']}?gid=0{$urlargs}'";
+        if ($selected === '0') echo " selected='selected'";
         echo ">{$GLOBALS['strUsersNoGroup']}</option>\n";
         echo "</select>\n";
         echo "</form>\n";

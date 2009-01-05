@@ -37,7 +37,7 @@ include ('htmlheader.inc.php');
 echo "<h2>".icon('user', 32)." ";
 echo "{$strUsers}</h2>";
 
-$numgroups = group_selector($groupid);
+$numgroups = group_selector($filtergroup);
 
 $sql  = "SELECT * FROM `{$dbUsers}` WHERE status!=0 ";  // status=0 means account disabled
 if ($numgroups >= 1 AND $filtergroup == '0')
