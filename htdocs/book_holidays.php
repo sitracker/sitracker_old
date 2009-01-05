@@ -74,8 +74,6 @@ elseif ($step == '1')
     $end = cleanvar($_REQUEST['end']);
     $type = cleanvar($_REQUEST['type']);
 
-    $today = mktime(0,0,0,date('m'),date('m'),date('Y'));
-
     include ('htmlheader.inc.php');
     $start = strtotime($start);
     $end = strtotime($end);
@@ -102,12 +100,12 @@ elseif ($step == '1')
         echo "<h2>{$strBook} ".holiday_type($type)." for ".user_realname($user)."</h2>";
     }
 
-    if ($type == '2')
+    if ($type == HOL_SICKNESS)
     {
         echo "<p align='center'>Sickness, can of course only be booked for today or days that have passed.</p>";// FIXME i18n
     }
 
-    if ($type == '1')
+    if ($type == HOL_HOLIDAY)
     {
         $entitlement = user_holiday_entitlement($user);
         $holidaystaken = user_count_holidays($user, 1);
@@ -190,7 +188,7 @@ elseif ($step == '1')
                     }
                     elseif ($existing_holiday['length'] != 'day')
                     {
-                        if (($type=='2' && $day < $today) || ($type!='2'))
+                        if (($type == HOL_SICKNESS && $day < $today) || ($type != HOL_SICKNESS))
                         {
                             echo "<input type='radio' name='length{$daynumber}' value='am' checked='checked' />";
                             $options++;
@@ -211,7 +209,7 @@ elseif ($step == '1')
                     }
                     elseif ($existing_holiday['length'] != 'day')
                     {
-                        if (($type=='2' && $day < $today) || ($type!='2'))
+                        if (($type == HOL_SICKNESS && $day < $today) || ($type != HOL_SICKNESS))
                         {
                             echo "<input type='radio' name='length{$daynumber}' value='pm' checked='checked' />";
                             $options++;
@@ -239,7 +237,7 @@ elseif ($step == '1')
                 {
                     echo "<tr><td class='shade2' align='right'>".ldate('l jS M y',$day)." </td>";
                     // Don't allow booking sickness in the future, still not sure whether we should allow this or not, it could be useful in the case of long term illness
-                    if (($type == '2' && $day <= $today) || ($type != 2))
+                    if (($type == HOL_SICKNESS && $day <= $today) || ($type != HOL_SICKNESS))
                     {
                         echo "<td class='shade1' align='center'><input type='radio' name='length{$daynumber}' value='none' /></td>";
                         echo "<td class='shade1' align='center'><input type='radio' name='length{$daynumber}' value='day' checked='checked' /></td>";
@@ -249,7 +247,10 @@ elseif ($step == '1')
                     }
                     else
                     {
-                        echo "<td class='shade1' align='center'>-</td><td class='shade2' align='center'>-</td><td class='shade1' align='center'>-</td><td class='shade2' align='center'>-</td>";
+                        echo "<td class='shade1' align='center'>-</td>";
+                        echo "<td class='shade2' align='center'>-</td>";
+                        echo "<td class='shade1' align='center'>-</td>";
+                        echo "<td class='shade2' align='center'>-</td>";
                     }
                     echo "</tr>\n";
                 }
