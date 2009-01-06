@@ -229,7 +229,7 @@ else
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
         }
 
-        if (!$result) echo "<p class='error'>Addition of user failed\n";
+        if (!$result) echo "<p class='error'>Addition of user failed</p>\n";
         else
         {
             setup_user_triggers($newuserid);
