@@ -662,7 +662,8 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
 
                 if (preg_match("!/x\-.+!i", $attachmenttype)) $type = OCTET;
                 else $type = str_replace("\n","",$attachmenttype);
-                $mime -> fattach($filename, "Attachment for incident $id", $type);
+                $disp = "attachment; filename=\"$name\"; name=\"$name\";";
+                $mime -> fattach($filename, "Attachment for incident $id", $type, 'base64', $disp);
             }
 
             // Lookup the email template (we need this to find out if the update should be visible or not)
