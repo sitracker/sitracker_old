@@ -2571,6 +2571,32 @@ function closingstatus_name($id)
 
 
 
+/**
+    * A drop down to select from a list of open incidents
+    * optionally filtered by contactid
+    * @author Ivan Lucas
+    * @param string $name
+*/
+function incident_drop_down($name, $id, $contactid = 0)
+{
+    $html = '';
+
+    $sql = "SELECT * FROM `{$dbIncidents}` WHERE status != ".STATUS_CLOSED;
+    $result = mysql_query($sql);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+
+    if (mysql_num_rows($result) > 0)
+    {
+        $html = "<select id='{$name}' name='{$name}' {$select}>\n";
+
+    // FIXME unfinished
+
+        $html .= "</select>";
+    }
+    return $html;
+}
+
+
 /* Returns a string representing the name of   */
 /* the given user status. Returns an empty string if the      */
 /* status does not exist.                                     */

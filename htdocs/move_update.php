@@ -19,6 +19,7 @@ require ('auth.inc.php');
 // External variables
 $incidentid = cleanvar($_REQUEST['incidentid']);
 $updateid = cleanvar($_REQUEST['updateid']);
+$contactid = cleanvar($_REQUEST['contactid']);
 $id = cleanvar($_REQUEST['id']);
 $error = cleanvar($_REQUEST['error']);
 $send_email = cleanvar($_REQUEST['send_email']);
