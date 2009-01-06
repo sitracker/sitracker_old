@@ -301,38 +301,38 @@ switch ($_REQUEST['mode'])
         echo "$title</h2>";
         echo "<p align='center'>{$strAListOfAvailableTriggers}</p>";
 
-		if ($_GET['user'] != '0')
-		{
-	        if ($adminuser)
-	        {
-	            $sql  = "SELECT id, realname FROM `{$dbUsers}` WHERE status > 0 ";
-	            $sql .= "ORDER BY realname ASC";
-	            $result = mysql_query($sql);
-	            if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
-	
-	            $userarr[0] = $strAll;
-	            //$userarr[0] = $CONFIG['application_shortname'];
-	
-	            while ($userobj = mysql_fetch_object($result))
-	            {
-	                $userarr[$userobj->id] = $userobj->realname;
-	            }
-	            echo "<form action=''>";
-	            echo "<p>{$strUser}: ";
-	            echo array_drop_down($userarr, 'user', $selecteduser, 
-	                                 "onchange=\"window.location.href='".
-	                                 "{$_SERVER['PHP_SELF']}?user=' + ".
-	                                 "this.options[this.selectedIndex].value;\"");
-				echo "</p></form>\n";
-	        }
-	        else
-	        {
-	            // User has no admin rights so force the selection to the current user
-	            $selecteduser = $sit[2];
-	        }
-		}
+        if ($_GET['user'] != '0')
+        {
+            if ($adminuser)
+            {
+                $sql  = "SELECT id, realname FROM `{$dbUsers}` WHERE status > 0 ";
+                $sql .= "ORDER BY realname ASC";
+                $result = mysql_query($sql);
+                if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+
+                $userarr[0] = $strAll;
+                //$userarr[0] = $CONFIG['application_shortname'];
+
+                while ($userobj = mysql_fetch_object($result))
+                {
+                    $userarr[$userobj->id] = $userobj->realname;
+                }
+                echo "<form action=''>";
+                echo "<p>{$strUser}: ";
+                echo array_drop_down($userarr, 'user', $selecteduser,
+                                    "onchange=\"window.location.href='".
+                                    "{$_SERVER['PHP_SELF']}?user=' + ".
+                                    "this.options[this.selectedIndex].value;\"");
+                echo "</p></form>\n";
+            }
+            else
+            {
+                // User has no admin rights so force the selection to the current user
+                $selecteduser = $sit[2];
+            }
+        }
         echo "<table align='center'><tr><th>{$strTrigger}</th>";
-		echo "<th>{$strActions}</th><th>{$strOperation}</th></tr>\n";
+        echo "<th>{$strActions}</th><th>{$strOperation}</th></tr>\n";
 
         $shade = 'shade1';
         foreach ($triggerarray AS $trigger => $triggervar)

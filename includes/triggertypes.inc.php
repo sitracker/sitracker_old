@@ -26,7 +26,7 @@ array('name' => $strContactResetPassword,
       'type' => 'system'
       );
 
-$triggerarray['TRIGGER_HIDDEN_ERROR'] = 
+$triggerarray['TRIGGER_HIDDEN_ERROR'] =
 array('name' => $strHiddenError,
       'description' => $strTriggerHiddenErrorDesc,
       'required' => array('errortype','errorstring','errorfile','errorline',
@@ -620,12 +620,12 @@ $ttvararray['{triggeruseremail}'] =
 array('description' => 'Email address to send an user trigger email to',
       'replacement' => 'user_email($paramarray[\'triggeruserid\']);'
       );
-      
+
 $ttvararray['{updateid}'] =
 array('description' => 'The ID of the update',
       'replacement' => 'incoming_email_update_id($paramarray[\'holdingemailid\']);',
       'requires' => 'holdingemailid'
-      );      
+      );
 
 $ttvararray['{useraccepting}'] =
 array('description' => 'Whether the user is accepting or not',

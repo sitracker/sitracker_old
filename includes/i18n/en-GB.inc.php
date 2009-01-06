@@ -90,6 +90,7 @@ $strAddress2 = 'Address2';
 $strAddRSSAtomFeed = 'Add RSS/Atom feed';
 $strAddService = 'Add Service';
 $strAddServiceLevel = 'Add Service Level';
+$strAddsIncidentBasedOnEmail = 'Add an incident based on the contents of an email';
 # i.e. Physical site
 $strAddSite = 'Add Site';
 $strAddSiteSupportIncident = 'Add Site Support Incident';

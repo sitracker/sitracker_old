@@ -35,7 +35,7 @@ $actionarray['ACTION_EMAIL'] =
 array('name' => $strEmail,
       'description' => $strSendAnEmail
       );
-      
+
 $actionarray['ACTION_CREATE_INCIDENT'] =
 array('name' => $strAddIncident,
       'description' => $strAddsIncidentBasedOnEmail,
@@ -175,7 +175,7 @@ function trigger_action($userid, $triggerid, $action, $paramarray, $template)
             $rtnvalue = create_trigger_notice($userid, '', $triggerid, $template,
                                   $paramarray);
             break;
-            
+
         case "ACTION_CREATE_INCIDENT":
             $rtnvalue = create_incident_from_incoming($paramarray['holdingemailid']);
             break;
@@ -531,7 +531,7 @@ function email_templates($name, $triggertype='system', $selected = '')
         $name = strtolower($name);
         $html .= "<option value='{$template->name}'>{$template->name}</option>\n";
         $html .= "<option disabled='disabled' style='color: #333; text-indent: 10px;' value='{$template->name}'>".$template->description."</option>\n";
-    	
+
     }
     $html .= "</select>\n";
     return $html;
@@ -671,7 +671,7 @@ function trigger_description($triggervar)
     $html = ''.icon('trigger', 16)." ";
     $html .= "<strong>";
     if (!empty($triggervar['name'])) $html .= "{$triggervar['name']}";
-    else $html .= "{$trigger}";
+    else $html .= "{$GLOBALS['strUnknown']}";
     $html .= "</strong><br />\n";
     if (isset($GLOBALS[$triggervar['description']]))
     {
@@ -698,11 +698,10 @@ function triggeraction_description($trigaction, $editlink = FALSE)
     $html = icon('triggeraction', 16)." ";
     if (!empty($trigaction->template))
     {
+        $templatename = $trigaction->template;
         if ($trigaction->action == 'ACTION_EMAIL')
         {
             $html .= icon('email', 16)." ";
-            //$templatename = db_read_column('name', $dbEmailTemplates, $trigaction->template);
-            $templatename = $trigaction->template;
             if ($editlink) $template = "<a href='templates.php?id={$trigaction->template}&amp;action=edit&amp;template=email'>";
             $template .= "{$templatename}";
             if ($editlink) $template .= "</a>";
@@ -718,6 +717,8 @@ function triggeraction_description($trigaction, $editlink = FALSE)
         else
         {
             $template = $trigaction->template;
+            $html .= icon('incident');
+            //"{$trigaction->action}";
         }
         $html .= sprintf($actionarray[$trigaction->action]['description'], $template).". ";
     }
