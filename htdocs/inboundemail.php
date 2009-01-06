@@ -249,6 +249,7 @@ if ($emails > 0)
         {
             $incidentid = $m[1];
         }
+        if ($incidentid > 0) debug_log("Incident ID found in email: '{$incidentid}'");
 
         $customer_visible = 'No';
         $part = 1;
@@ -362,6 +363,7 @@ if ($emails > 0)
             mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
             $holdingemailid = mysql_insert_id();
+
             trigger('TRIGGER_NEW_HELD_EMAIL', array('holdingemailid' => $holdingemailid));
 
         }
@@ -377,6 +379,7 @@ if ($emails > 0)
             }
 
             //this prevents duplicate emails
+            $error = 0;
             $fifteenminsago = $now - 900;
             $sql = "SELECT bodytext FROM `{$dbUpdates}` ";
             $sql .= "WHERE incidentid = '{$incidentid}' AND timestamp > '{$fifteenminsago}' ";
