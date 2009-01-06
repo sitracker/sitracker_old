@@ -49,7 +49,7 @@ function saction_CloseIncidents($closure_delay)
         trigger_error(mysql_error(),E_USER_WARNING);
         $success = FALSE;
     }
-    if ($CONFIG['debug']) echo "Found ".mysql_num_rows($result)." Incidents to close{$crlf}";
+    if ($CONFIG['debug']) debug_log("Found ".mysql_num_rows($result)." Incidents to close");
     while ($irow = mysql_fetch_array($result))
     {
         $sqlb = "UPDATE `{$dbIncidents}` SET lastupdated='{$now}', closed='{$now}', status='2', closingstatus='4', timeofnextaction='0' WHERE id='".$irow['id']."'";
@@ -59,7 +59,7 @@ function saction_CloseIncidents($closure_delay)
             trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
             $success = FALSE;
         }
-        if ($CONFIG['debug']) echo "  Incident ".$irow['id']." closed{$crlf}";
+        if ($CONFIG['debug']) debug_log("  Incident ".$irow['id']." closed");
 
         $sqlc = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, currentowner, currentstatus, bodytext, timestamp, nextaction, customervisibility) ";
         $sqlc .= "VALUES ('".$irow['id']."', '0', 'closing', '".$irow['owner']."', '".$irow['status']."', 'Incident Closed by {$CONFIG['application_shortname']}', '$now', '', 'show' ) ";
@@ -89,7 +89,7 @@ function saction_PurgeJournal()
         trigger_error(mysql_error(),E_USER_WARNING);
         $success = FALSE;
     }
-    if ($CONFIG['debug']) echo "Purged ".mysql_affected_rows()." journal entries{$crlf}";
+    if ($CONFIG['debug']) debug_log("Purged ".mysql_affected_rows()." journal entries");
 
     return $success;
 }
@@ -109,7 +109,7 @@ function saction_TimeCalc()
     // FIXME this should only run INSIDE the working day
     // FIXME ? this will not update the database fully if two SLAs have been met since last run - does it matter ?
 
-    if ($CONFIG['debug']) echo "Calculating SLA times{$crlf}";
+    if ($CONFIG['debug']) debug_log("Calculating SLA times");
 
     $sql = "SELECT id, title, maintenanceid, priority, slaemail, slanotice, servicelevel, status, owner ";
     $sql .= "FROM `{$dbIncidents}` WHERE status != ".STATUS_CLOSED." AND status != ".STATUS_CLOSING;
@@ -136,7 +136,7 @@ function saction_TimeCalc()
         }
         else $tag = $incident['servicelevel'];
 
-        if ($CONFIG['debug']) echo $incident['id']." is a $tag incident{$crlf}";
+        if ($CONFIG['debug']) debug_log($incident['id']." is a $tag incident");
 
         $newReviewTime = -1;
         $newSlaTime = -1;
@@ -152,7 +152,7 @@ function saction_TimeCalc()
 
         if (mysql_num_rows($update_result) != 1)
         {
-            if ($CONFIG['debug']) echo "Cannot find SLA information for incident ".$incident['id'].", skipping{$crlf}";
+            if ($CONFIG['debug']) debug_log("Cannot find SLA information for incident ".$incident['id'].", skipping");
         }
         else
         {
@@ -160,7 +160,7 @@ function saction_TimeCalc()
             $newSlaTime = calculate_incident_working_time($incident['id'],$slaInfo['timestamp'],$now);
             if ($CONFIG['debug'])
             {
-                echo "   Last SLA record is ".$slaInfo['sla']." at ".date("jS F Y H:i",$slaInfo['timestamp'])." which is $newSlaTime working minutes ago{$crlf}";
+                debug_log("   Last SLA record is ".$slaInfo['sla']." at ".date("jS F Y H:i",$slaInfo['timestamp'])." which is $newSlaTime working minutes ago");
             }
         }
         mysql_free_result($update_result);
@@ -176,7 +176,7 @@ function saction_TimeCalc()
 
         if (mysql_num_rows($update_result) != 1)
         {
-            if ($CONFIG['debug']) echo "   Cannot find review information for incident ".$incident['id'].", skipping{$crlf}";
+            if ($CONFIG['debug']) debug_log("Cannot find review information for incident ".$incident['id'].", skipping");
         }
         else
         {
@@ -184,8 +184,7 @@ function saction_TimeCalc()
             $newReviewTime = floor($now-$reviewInfo['timestamp'])/60;
             if ($CONFIG['debug'])
             {
-                if ($reviewInfo['currentowner'] != 0) echo "   There has been no review on this incident, which was opened $newReviewTime minutes ago{$crlf}";
-                else echo "   The last review took place $newReviewTime minutes ago{$crlf}";
+                if ($reviewInfo['currentowner'] != 0) debug_log("There has been no review on incident {$incident['id']}, which was opened $newReviewTime minutes ago");
             }
             trigger('TRIGGER_INCIDENT_REVIEW_DUE', array('incidentid' => $incident['id'], 'time' => $newReviewTime));
         }
@@ -238,8 +237,8 @@ function saction_TimeCalc()
 
             if ($CONFIG['debug'])
             {
-                echo "   The next SLA target should be met in ".$times['next_sla_time']." minutes{$crlf}";
-                echo "   Reviews need to be made every ".($times['review_days']*24*60)." minutes{$crlf}";
+                debug_log("The next SLA target should be met in ".$times['next_sla_time']." minutes");
+                debug_log("Reviews need to be made every ".($times['review_days']*24*60)." minutes");
             }
 
             if ($incident['slanotice'] == 0)
@@ -358,8 +357,8 @@ function saction_SetUserStatus()
 
                 if ($CONFIG['debug'])
                 {
-                    echo user_realname($huser->userid).': '.userstatus_name($currentstatus).' -> '.userstatus_name($newstatus).$crlf;
-                    echo $usql.$crlf;
+                    debug_log(user_realname($huser->userid).': '.userstatus_name($currentstatus).' -> '.userstatus_name($newstatus));
+                    debug_log($usql);
                 }
 
                 mysql_query($usql);
