@@ -338,7 +338,7 @@ if ($emails > 0)
         //** END UPDATE INCIDENT **//
 
         //** BEGIN UPDATE **//
-        $message = mb_convert_encoding($message, "UTF-8", strtoupper($results[Encoding]));
+        $message = mb_convert_encoding($message, "UTF-8", strtoupper($results['Encoding']));
         $bodytext = $headertext . "<hr>" . mysql_real_escape_string($message);
 
         // Strip excessive line breaks
