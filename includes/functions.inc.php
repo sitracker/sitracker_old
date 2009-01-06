@@ -3191,21 +3191,24 @@ function sit_error_handler($errno, $errstr, $errfile, $errline, $errcontext)
             echo "{$errstr} in {$errfile} @ line {$errline}";
             if ($CONFIG['debug'])
             {
-
+                $tracelog = '';
                 echo "<br /><strong>Backtrace</strong>:";
                 foreach ($backtrace AS $trace)
                 {
                     if (!empty($trace['file']))
                     {
                         echo "<br />{$trace['file']} @ line {$trace['line']}";
+                        $tracelog .= "{$trace['file']} @ line {$trace['line']}";
                         if (!empty($trace['function']))
                         {
+                            $tracelog .= " {$trace['function']}()";
                             echo " {$trace['function']}() ";
     //                         foreach ($trace['args'] AS $arg)
     //                         {
     //                             echo "$arg &bull; ";
     //                         }
                         }
+                        $tracelog .= "\n";
                     }
                 }
                 if ($errno != E_NOTICE)
@@ -3240,7 +3243,7 @@ function sit_error_handler($errno, $errstr, $errfile, $errline, $errcontext)
         else
         {
             debug_log("ERROR: {$errortype[$errno]} {$errstr} in {$errfile} at line {$errline}\n".
-                      "ERROR: Backtrace:\n{$backtrace}\n");
+                      "ERROR: Backtrace:\n{$tracelog}\n");
         }
     }
 }
@@ -3257,7 +3260,9 @@ function sit_error_handler($errno, $errstr, $errfile, $errline, $errcontext)
 function debug_log($logentry)
 {
     global $CONFIG;
+    $logentry = $_SERVER["SCRIPT_NAME"] . ' ' .$logentry;
 
+    if (substr($logentry, -1) != "\n") $logentry .= "\n";
     if (!empty($CONFIG['error_logfile']))
     {
         if (is_writable($CONFIG['error_logfile']))
@@ -3265,7 +3270,7 @@ function debug_log($logentry)
             $fp = fopen($CONFIG['error_logfile'], 'a+');
             if ($fp)
             {
-                fwrite($fp, date('r').' '.strip_tags($logentry));
+                fwrite($fp, date('c').' '.strip_tags($logentry));
                 fclose($fp);
             }
             else
