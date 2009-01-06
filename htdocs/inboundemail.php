@@ -98,8 +98,7 @@ if ($emails > 0)
 {
     if ($CONFIG['debug'])
     {
-        echo $emails." emails to fetch\n";
-        echo "Archive folder set to: '.{$CONFIG['email_archive_folder']}\n";
+        debug_log("Found {$emails} email(s) to fetch, Archive folder set to: '{$CONFIG['email_archive_folder']}'\n");
     }
     for ($i = 0; $i < $emails; $i++)
     {
@@ -114,7 +113,7 @@ if ($emails > 0)
                 {
                     if ($CONFIG['debug'])
                     {
-                        echo "Archiving email\n";
+                        debug_log("Archiving email");
                     }
                     $mailbox->archiveEmail($i + 1);
                 }
