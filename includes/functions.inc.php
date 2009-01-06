@@ -3189,9 +3189,9 @@ function sit_error_handler($errno, $errstr, $errfile, $errline, $errcontext)
         {
             echo "<p class='{$class}'><strong>{$errortype[$errno]} [{$errno}]</strong><br />";
             echo "{$errstr} in {$errfile} @ line {$errline}";
+            $tracelog = '';
             if ($CONFIG['debug'])
             {
-                $tracelog = '';
                 echo "<br /><strong>Backtrace</strong>:";
                 foreach ($backtrace AS $trace)
                 {
@@ -3242,8 +3242,8 @@ function sit_error_handler($errno, $errstr, $errfile, $errline, $errcontext)
         }
         else
         {
-            debug_log("ERROR: {$errortype[$errno]} {$errstr} in {$errfile} at line {$errline}\n".
-                      "ERROR: Backtrace:\n{$tracelog}\n");
+            debug_log("ERROR: {$errortype[$errno]} {$errstr} in {$errfile} at line {$errline}\n");
+            if (!empty($tracelog)) debug_log("ERROR: Backtrace:\n{$tracelog}\n");
         }
     }
 }

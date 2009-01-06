@@ -286,6 +286,6 @@ if (isset($sit[2]))
 }
 echo "</form>\n";
 echo "</div>\n";
-if ($CONFIG['debug']) $dbg .= "<p>Lang: {$_SESSION['lang']}</p>";
+if ($CONFIG['debug']) $dbg .= "\nLang: {$_SESSION['lang']}\n";
 include ('htmlfooter.inc.php');
 ?>
