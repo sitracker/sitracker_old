@@ -37,14 +37,20 @@ if ($incidentid == '')
 
     echo "<div align='center'>";
     echo "<form action='{$_SERVER['PHP_SELF']}' method='post'>";
-    echo "{$strToIncidentID}: ";
+    echo "<label>{$strToIncidentID}: ";
     if ($contactid > 0) echo incident_drop_down('incidentid', 0, $contactid);
     else echo "<input type='text' name='incidentid' value='{$incidentid}' />";
+    echo "</label>";
     echo "<input type='submit' value='{$strMoveUpdate}' /><br />";
     echo "<input type='hidden' name='updateid' value='{$updateid}' />";
     echo "<input type='hidden' name='id' value='{$id}' />";
     echo "<input type='hidden' name='win' value='incomingview' />";
     echo "</form>";
+    if ($contactid > 0)
+    {
+        echo "<p><a href='move_update.php?id={$id}&amp;updateid=";
+        echo "{$updateid}&amp;win=incomingview'>{$strOtherIncidents}</a>";
+    }
     echo "</div>";
 
     $sql  = "SELECT * FROM `{$dbUpdates}` WHERE id='$updateid' ";

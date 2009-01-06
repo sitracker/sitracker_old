@@ -5853,6 +5853,15 @@ function percent_bar($percent)
 }
 
 
+/**
+    * Checks to see whether an incident exists
+    * @param int $incidentid
+    * @returns 'Yes', 'No' or 'Doesn't exist'
+    * @deprecated DEPRECATED don't use for any new code for >= 3.45
+    * @note this function needs replacing with something more sensible
+    * this function name would be more suitable for something that actually
+    * does the opening too...  legacy rubbish
+*/
 function incident_open($incidentid)
 {
     global $dbIncidents;
@@ -5861,7 +5870,7 @@ function incident_open($incidentid)
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
     if (mysql_num_rows($result) > 0)
     {
-        return $GLOBALS['strYes'];
+        return 'Yes'; // Do not translate
     }
     else
     {
@@ -5871,15 +5880,16 @@ function incident_open($incidentid)
         if (mysql_num_rows($result) > 0)
         {
             //closed
-            return $GLOBALS['strNo'];
+            return 'No'; // Do not translate
         }
         else
         {
             //doesn't exist
-            return "Doesn't exist";
+            return "Doesn't exist"; // Do not translate
         }
     }
 }
+
 
 // Return HTML for a table column header (th and /th) with links for sorting
 // Filter parameter can be an assocative array containing fieldnames and values
