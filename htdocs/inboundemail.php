@@ -124,7 +124,7 @@ if ($emails > 0)
                 }
             }
         }
-        
+
         $mime = new mime_parser_class();
         $mime->mbox = 0;
         $mime->decode_bodies = 1;
@@ -136,7 +136,7 @@ if ($emails > 0)
         $mime->Analyze($decoded[0], $results);
         $to = $cc = $from = $from_name = $from_email = "";
 
-        $from_email = $results[From][0][address];
+        $from_email = $results['From'][0]['address'];
         $sql = "SELECT id FROM `{$GLOBALS['dbContacts']}` ";
         $sql .= "WHERE email = '{$from_email}'";
         if ($result = mysql_query($sql))
@@ -145,97 +145,99 @@ if ($emails > 0)
             $row = mysql_fetch_object($result);
             $contactid = $row->id;
         }
-        
-        
-        
-        if (!empty($results[From][0][name]))
+
+
+
+        if (!empty($results['From'][0]['name']))
         {
-            $from_name = $results[From][0][name];
+            $from_name = $results['From'][0]['name'];
             $from =  $from_name . " <". $from_email . ">";
         }
         else
         {
             $from = $from_email;
         }
-        
-        $subject = $results[Subject];
-        $date = $results[Date];
-   
-        switch ($results[Type])
+
+        $subject = $results['Subject'];
+        $date = $results['Date'];
+
+        switch ($results['Type'])
         {
-            case 'html':                
-                foreach ($results[To] as $var)
+            case 'html':
+                foreach ($results['To'] as $var)
                 {
-                    $num = sizeof($results[To]);
+                    $num = sizeof($results['To']);
                     $cur = 1;
-                    if (!empty($var[name]))
+                    if (!empty($var['name']))
                     {
-                        $to .= $var[name]. " <".$var[address].">";
+                        $to .= $var['name']. " <".$var['address'].">";
                         if ($cur != $num) $cc .= ", ";
                     }
                     else
                     {
-                        $to .= $var[address];
+                        $to .= $var['address'];
                     }
+                    $cur++;
                 }
-                
-                if (is_array($results[Cc]))
+
+                if (is_array($results['Cc']))
                 {
-                    foreach ($results[Cc] as $var)
+                    foreach ($results['Cc'] as $var)
                     {
-                        $num = sizeof($results[Cc]);
+                        $num = sizeof($results['Cc']);
                         $cur = 1;
-                        if (!empty($var[name]))
+                        if (!empty($var['name']))
                         {
-                            $cc .= $var[name]. " <".$var[address].">";
+                            $cc .= $var['name']. " <".$var['address'].">";
                             if ($cur != $num) $cc .= ", ";
                         }
                         else
                         {
-                            $cc .= $var[address];
+                            $cc .= $var['address'];
                         }
+                        $cur++;
                     }
                 }
 
-                $message = $results[Alternative][0][Data];
+                $message = $results['Alternative'][0]['Data'];
                 break;
-                
+
             case 'text':
-                foreach ($results[To] as $var)
+                foreach ($results['To'] as $var)
                 {
-                    $num = sizeof($results[To]);
+                    $num = sizeof($results['To']);
                     $cur = 1;
-                    if (!empty($var[name]))
+                    if (!empty($var['name']))
                     {
-                        $to .= $var[name]. " <".$var[address].">";
+                        $to .= $var['name']. " <".$var['address'].">";
                         if ($cur != $num) $cc .= ", ";
                     }
                     else
                     {
-                        $to .= $var[address];
+                        $to .= $var['address'];
                     }
                 }
-                
-                if (is_array($results[Cc]))
+
+                if (is_array($results['Cc']))
                 {
-                    $num = sizeof($results[Cc]);
+                    $num = sizeof($results['Cc']);
                     $cur = 1;
-                    foreach ($results[Cc] as $var)
+                    foreach ($results['Cc'] as $var)
                     {
-                        if (!empty($var[name]))
+                        if (!empty($var['name']))
                         {
-                            $cc .= $var[name]. " <".$var[address].">";
+                            $cc .= $var['name']. " <".$var['address'].">";
                             if ($cur != $num) $cc .= ", ";
                         }
                         else
                         {
-                            $cc .= $var[address];
+                            $cc .= $var['address'];
                         }
                     }
                 }
-                $message = $results[Data];
+                $message = $results['Data'];
                 break;
-            
+
             default:
                 break;
         }
@@ -269,18 +271,18 @@ if ($emails > 0)
             {
                 $data = $attachment[Data];
                 $filename = $attachment[FileName];
-                $filename = str_replace(' ', '_', $filename);  
+                $filename = str_replace(' ', '_', $filename);
                 if (empty($filename))
                 {
                     $filename = 'part'.$part;
                     $part++;
                 }
-                $sql = "INSERT into `{$GLOBALS['dbFiles']}` ";             
-                $sql .= "( `id` ,`category` ,`filename` ,`size` ,`userid` ,`usertype` ,`shortdescription` ,`longdescription` ,`webcategory` ,`path` ,`downloads` ,`filedate` ,`expiry` ,`fileversion` ,`published` ,`createdby` ,`modified` ,`modifiedby` ) ";                                                             
-                $sql .= "VALUES('', '', '{$filename}', '0', '0', '', '', '', '', '', '', NOW(), '', '', '', '0', '', '')";                                 
-                mysql_query($sql);                                         
-                if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);                                                                              
-                $fileid = mysql_insert_id();                               
+                $sql = "INSERT into `{$GLOBALS['dbFiles']}` ";
+                $sql .= "( `id` ,`category` ,`filename` ,`size` ,`userid` ,`usertype` ,`shortdescription` ,`longdescription` ,`webcategory` ,`path` ,`downloads` ,`filedate` ,`expiry` ,`fileversion` ,`published` ,`createdby` ,`modified` ,`modifiedby` ) ";
+                $sql .= "VALUES('', '', '{$filename}', '0', '0', '', '', '', '', '', '', NOW(), '', '', '', '0', '', '')";
+                mysql_query($sql);
+                if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+                $fileid = mysql_insert_id();
                 $attachments[] = array('filename' => $filename, 'fileid' => $fileid);
                 $filename = $fileid."-".$filename;
 
@@ -296,7 +298,7 @@ if ($emails > 0)
                 if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
             }
         }
-        
+
         //** BEGIN UPDATE INCIDENT **//
         $headertext = '';
         // Build up header text to append to the incident log
@@ -359,7 +361,7 @@ if ($emails > 0)
             if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
             $holdingemailid = mysql_insert_id();
             trigger('TRIGGER_NEW_HELD_EMAIL', array('holdingemailid' => $holdingemailid));
-            
+
         }
         else
         {
