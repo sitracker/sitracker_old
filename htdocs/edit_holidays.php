@@ -78,7 +78,7 @@ switch ($_REQUEST['action'])
         echo colheader('realname', $strName, FALSE);
         echo colheader('entitlement', $strEntitlement, FALSE);
         echo colheader('holidaysused', $strUsed, FALSE);
-        echo colheader('holidaysremaining', $strRemaining, FALSE);
+        echo colheader('holidaysremaining', sprintf($strRemaining, ''), FALSE);
         echo "</tr>";
         while ($users = mysql_fetch_object($result))
         {
