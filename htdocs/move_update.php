@@ -37,7 +37,9 @@ if ($incidentid == '')
 
     echo "<div align='center'>";
     echo "<form action='{$_SERVER['PHP_SELF']}' method='post'>";
-    echo "{$strToIncidentID}: <input type='text' name='incidentid' value='{$incidentid}' />";
+    echo "{$strToIncidentID}: ";
+    if ($contactid > 0) echo incident_drop_down('incidentid', 0, $contactid);
+    else echo "<input type='text' name='incidentid' value='{$incidentid}' />";
     echo "<input type='submit' value='{$strMoveUpdate}' /><br />";
     echo "<input type='hidden' name='updateid' value='{$updateid}' />";
     echo "<input type='hidden' name='id' value='{$id}' />";

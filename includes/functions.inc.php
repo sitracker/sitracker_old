@@ -2579,17 +2579,23 @@ function closingstatus_name($id)
 */
 function incident_drop_down($name, $id, $contactid = 0)
 {
+    global $dbIncidents;
+
     $html = '';
 
-    $sql = "SELECT * FROM `{$dbIncidents}` WHERE status != ".STATUS_CLOSED;
+    $sql = "SELECT * FROM `{$dbIncidents}` WHERE status != ".STATUS_CLOSED . " ";
+    if ($contactid > 0) $sql .= "AND contact = {$contactid}";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
     if (mysql_num_rows($result) > 0)
     {
         $html = "<select id='{$name}' name='{$name}' {$select}>\n";
-
-    // FIXME unfinished
+        while ($incident = mysql_fetch_object($result))
+        {
+            // FIXME unfinished
+            $html .= "<option value='{$incident->id}'>[{$incident->id}] - {$incident->title}</option>";
+        }
 
         $html .= "</select>";
     }
