@@ -17,7 +17,8 @@ if ($_SESSION['auth'] == TRUE)
 }
 echo "</div>\n";
 if (!empty($application_revision) AND (substr($application_revision, 0, 4)=='beta')
-                                   OR (substr($application_revision, 0, 5)=='alpha'))
+                                   OR (substr($application_revision, 0, 5)=='alpha')
+                                   OR (substr($application_revision, 0, 3)=='svn'))
 {
     echo "<p class='warning'>".sprintf($strPreReleaseNotice, "v{$application_version} {$application_revision}");
     echo ". <a href=\"{$CONFIG['bugtracker_url']}\">{$strReportBug}</a></p>";

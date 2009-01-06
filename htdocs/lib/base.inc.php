@@ -31,9 +31,6 @@ $todayrecent = $now -(16 * 3600);  // past 16 hours
 
 $CONFIG['upload_max_filesize'] = return_bytes($CONFIG['upload_max_filesize']);
 
-// Set a string to be the full version number and revision of the application
-$application_version_string = trim("v{$application_version} {$application_revision}");
-
 //**** Begin internal functions ****//
 // Append SVN data for svn versions
 if ($application_revision == 'svn')
@@ -42,6 +39,9 @@ if ($application_revision == 'svn')
     preg_match('/([0-9]+)/','$LastChangedRevision$',$revision);
     $application_revision .= $revision[0];
 }
+
+// Set a string to be the full version number and revision of the application
+$application_version_string = trim("v{$application_version} {$application_revision}");
 
 // Report all PHP errors
 error_reporting(E_ALL);
