@@ -27,9 +27,11 @@ require ('auth.inc.php');
 function generate_row($update)
 {
     global $CONFIG, $sit;
+    $update['fromaddr'] = strtolower($update['fromaddr']);
+
     if (strlen($update['bodytext']) > 1003)
     {
-        $updatebodytext = substr($update['bodytext'],0,1000).'...';
+        $updatebodytext = substr($update['bodytext'],0,1000).'&hellip;';
     }
     else
     {
@@ -42,14 +44,18 @@ function generate_row($update)
     if ($updatebodytext == '') $updatebodytext = '&nbsp;';
 
     $shade = 'shade1';
-    if (!empty($update['fromaddr']))
+    if ($update['contactid'] != 0)
     {
-        // Have a look if we've got a customer or user with this email address
-        $sql = "SELECT COUNT(id) FROM `{$GLOBALS['dbContacts']}` WHERE email LIKE '%{$update['fromaddr']}%'";
+        $shade = 'idle';
+    }
+    else if (!empty($update['fromaddr']))
+    {
+        // Have a look if we've got a user with this email address
+        $sql = "SELECT COUNT(id) FROM `{$GLOBALS['dbUsers']}` WHERE email LIKE '%{$update['fromaddr']}%'";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
         list($contactmatches) = mysql_fetch_row($result);
-        if ($contactmatches > 0) $shade = 'idle';
+        if ($contactmatches > 0) $shade = 'notice';
     }
     $pluginshade = plugin_do('holdingqueue_rowshade',$update);
     $shade = $pluginshade ? $pluginshade : $shade;
@@ -61,12 +67,15 @@ function generate_row($update)
     }
     $html_row .= "</td>";
     $html_row .= "<td align='center' width='20%'>".date($CONFIG['dateformat_datetime'],$update['timestamp']).'</td>';
+
     $html_row .= "<td width='20%'>";
-    if (!empty($update['contactid'])
-        AND strtolower($update['fromaddr']) == strtolower(contact_email($update['contactid'])))
+    if (!empty($update['contactid']) AND
+        $update['fromaddr'] == contact_email($update['contactid']))
     {
+        $html_row .= gravatar($update['fromaddr'], 16) . ' ';
         $contact_realname = contact_realname($update['contactid']);
-        $html_row .= $contact_realname;
+        $html_row .= "<a href='contact_details.php?id={$update['contactid']}' class='info'>";
+        $html_row .= "{$contact_realname}<span>".htmlentities($update['fromaddr'],ENT_QUOTES, $GLOBALS['i18ncharset'])."</span></a>";
         $html_row .= " of ".contact_site($update['contactid']);
         if ($update['emailfrom'] != $contact_realname)
         {
@@ -301,6 +310,11 @@ if (mysql_num_rows($resultnew) >= 1)
 
 $realemails = $countresults - $spamcount;
 //$totalheld = $countresults + mysql_num_rows($resultnew) - $spamcount;
+
+/**
+* Incoming Email queue
+* This special queue shows a list of email received by the Inbound Email script
+*/
 if (is_array($queuerows))
 {
     echo "<h2>".icon('email', 32)." {$strIncomingEmail}</h2>";
@@ -336,6 +350,12 @@ if (is_array($queuerows))
     }
     echo "</table>\n";
     echo "</form>";
+
+    echo "<table class='incidentkey'><tr>";
+    echo "<td class='idle'>{$strContact}</td>";
+    echo "<td class='notice'>{$strUser}</td>";
+    echo "<td class='shade1'>{$strUnknown}</td>";
+    echo "</tr></table>";
 }
 else if ($spamcount == 0)
 {
@@ -343,6 +363,13 @@ else if ($spamcount == 0)
     echo "<p align='center'>{$strNoRecords}</p>";
 }
 
+
+/**
+* Unassigned Incidents queue
+* This special queue shows a list of incidents that are currently not assigned
+* to any engineer.
+* This could happen if a user goes on holiday but has no substitutes defined.
+*/
 if (is_array($incidentqueuerows))
 {
     if (sizeof($incidentqueuerows) > 0)
@@ -365,6 +392,11 @@ if (is_array($incidentqueuerows))
     }
 }
 
+
+/**
+* Spam queue
+* This special queue shows a list of incoming spam
+*/
 if ($spamcount > 0)
 {
     echo "<h2>{$strSpamEmail}";

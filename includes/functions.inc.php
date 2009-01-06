@@ -10647,10 +10647,10 @@ function postpone_task($taskid)
  * Returns HTML for a gravatar (Globally recognised avatar)
  * @author Ivan Lucas
  * @param string $email - Email address
- * @param int $size - Size in pixels
+ * @param int $size - Size in pixels (Default 32)
  * @returns string - HTML img tag
  */
-function gravatar($email, $size)
+function gravatar($email, $size = 32)
 {
     global $CONFIG, $iconset;
     $default = $CONFIG['default_gravatar'];

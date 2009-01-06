@@ -135,7 +135,10 @@ if ($emails > 0)
         $mime->Analyze($decoded[0], $results);
         $to = $cc = $from = $from_name = $from_email = "";
 
-        $from_email = $results['From'][0]['address'];
+        if ($CONFIG['debug']) debug_log("Email: \n" . print_r($results, true));
+
+        // Attempt to recognise contact from the email address
+        $from_email = strtolower($results['From'][0]['address']);
         $sql = "SELECT id FROM `{$GLOBALS['dbContacts']}` ";
         $sql .= "WHERE email = '{$from_email}'";
         if ($result = mysql_query($sql))
