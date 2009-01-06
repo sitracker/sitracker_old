@@ -69,6 +69,7 @@ switch ($action)
 
         if ($completion == 100 AND $enddate == '') $enddate = $now;
         $value = cleanvar($_REQUEST['value']);
+        $owner = cleanvar($_REQUEST['owner']);
         $distribution = cleanvar($_REQUEST['distribution']);
         $old_name = cleanvar($_REQUEST['old_name']);
         $old_description = cleanvar($_REQUEST['old_description']);
@@ -78,6 +79,7 @@ switch ($action)
         $old_completion = cleanvar($_REQUEST['old_completion']);
         $old_enddate = cleanvar($_REQUEST['old_enddate']);
         $old_value = cleanvar($_REQUEST['old_value']);
+        $old_owner = cleanvar($_REQUEST['old_owner']);
         $old_distribution = cleanvar($_REQUEST['old_distribution']);
         if ($distribution == 'public') $tags = cleanvar($_POST['tags']);
         else $tags='';
@@ -112,7 +114,7 @@ switch ($action)
             $sql .= "SET name='$name', description='$description', priority='$priority', ";
             $sql .= "duedate='$duedate', startdate='$startdate', ";
             $sql .= "completion='$completion', enddate='$enddate', value='$value', ";
-            $sql .= "distribution='$distribution' ";
+            $sql .= "owner=$owner, distribution='$distribution' ";
             $sql .= "WHERE id='$id' LIMIT 1";
             mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
@@ -124,12 +126,13 @@ switch ($action)
             if ($description != $old_description) $bodytext .= "Description: {$old_description} -&gt; [b]{$description}[/b]\n";
             if ($priority != $old_priority) $bodytext .= "Priority: ".priority_name($old_priority)." -&gt; [b]".priority_name($priority)."[/b]\n";
             $old_startdate = substr($old_startdate,0,10);
-            if ($startdate != $old_startdate) $bodytext .= "Start Date: {$old_startdate} -&gt; [b]{$startdate}[/b]\n";
+            if ($startdate != $old_startdate AND ($startdate != '' AND $old_startdate != '0000-00-00')) $bodytext .= "Start Date: {$old_startdate} -&gt; [b]{$startdate}[/b]\n";
             $old_duedate = substr($old_duedate,0,10);
-            if ($duedate != $old_duedate) $bodytext .= "Due Date: {$old_duedate} -&gt; [b]{$duedate}[/b]\n";
+            if ($duedate != $old_duedate AND ($duedate != '0000-00-00' AND $old_duedate != '0000-00-00')) $bodytext .= "Due Date: {$old_duedate} -&gt; [b]{$duedate}[/b]\n";
             if ($completion != $old_completion) $bodytext .= "Completion: {$old_completion}% -&gt; [b]{$completion}%[/b]\n";
-            if ($enddate != $old_enddate) $bodytext .= "End Date: {$old_enddate} -&gt; [b]{$enddate}[/b]\n";
+            if ($enddate != $old_enddate AND ($enddate != '0000-00-00 00:00:00' AND $old_enddate != '0000-00-00 00:00:00')) $bodytext .= "End Date: {$old_enddate} -&gt; [b]{$enddate}[/b]\n";
             if ($value != $old_value) $bodytext .= "Value: {$old_value} -&gt; [b]{$value}[/b]\n";
+            if ($owner != $old_owner) $bodytext .= "User: ".user_realname($old_owner)." -&gt; [b]".user_realname($owner)."[/b]\n";
             if ($distribution != $old_distribution) $bodytext .= "Privacy: {$old_distribution} -&gt; [b]{$distribution}[/b]\n";
             if (!empty($bodytext))
             {
@@ -242,7 +245,7 @@ switch ($action)
             {
             	trigger_error("No rows affected while updating incident",E_USER_ERROR);
             }
-            
+
             mark_task_completed($id, TRUE);
         }
         else
@@ -323,6 +326,10 @@ switch ($action)
                 echo "</td></tr>";
                 echo "<tr><th>{$strValue}</th>";
                 echo "<td><input type='text' name='value' size='6' maxlength='12' value='{$task->value}' /></td></tr>";
+                echo "<tr><th>{$strUser}</th>";
+                echo "<td>";
+                echo user_drop_down('owner', $task->owner, FALSE);
+                echo help_link('TaskUser')."</td></tr>";
                 echo "<tr><th>{$strPrivacy}</th>";
                 echo "<td>";
                 echo "<input type='radio' name='distribution' ";
@@ -344,6 +351,7 @@ switch ($action)
                 echo "<input type='hidden' name='old_completion' value='{$task->completion}' />";
                 echo "<input type='hidden' name='old_enddate' value='{$task->enddate}' />";
                 echo "<input type='hidden' name='old_value' value='{$task->value}' />";
+                echo "<input type='hidden' name='old_owner' value=\"{$task->owner}\" />";
                 echo "<input type='hidden' name='old_distribution' value='{$task->distribution}' />";
                 echo "</form>";
             }
