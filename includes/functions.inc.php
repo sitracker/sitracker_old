@@ -3222,40 +3222,37 @@ function sit_error_handler($errno, $errstr, $errfile, $errline, $errcontext)
             echo "<p class='{$class}'><strong>{$errortype[$errno]} [{$errno}]</strong><br />";
             echo "{$errstr} in {$errfile} @ line {$errline}";
             $tracelog = '';
-            if ($CONFIG['debug'])
+            if ($CONFIG['debug']) echo "<br /><strong>Backtrace</strong>:";
+            foreach ($backtrace AS $trace)
             {
-                echo "<br /><strong>Backtrace</strong>:";
-                foreach ($backtrace AS $trace)
+                if (!empty($trace['file']))
                 {
-                    if (!empty($trace['file']))
+                    if ($CONFIG['debug']) echo "<br />{$trace['file']} @ line {$trace['line']}";
+                    $tracelog .= "{$trace['file']} @ line {$trace['line']}";
+                    if (!empty($trace['function']))
                     {
-                        echo "<br />{$trace['file']} @ line {$trace['line']}";
-                        $tracelog .= "{$trace['file']} @ line {$trace['line']}";
-                        if (!empty($trace['function']))
-                        {
-                            $tracelog .= " {$trace['function']}()";
-                            echo " {$trace['function']}() ";
-    //                         foreach ($trace['args'] AS $arg)
-    //                         {
-    //                             echo "$arg &bull; ";
-    //                         }
-                        }
-                        $tracelog .= "\n";
+                        $tracelog .= " {$trace['function']}()";
+                        echo " {$trace['function']}() ";
+//                         foreach ($trace['args'] AS $arg)
+//                         {
+//                             echo "$arg &bull; ";
+//                         }
                     }
+                    $tracelog .= "\n";
                 }
-                if ($errno != E_NOTICE)
-                {
-                    $logentry = " {$errortype[$errno]} [{$errno}] {$errstr} (in line {$errline} of file {$errfile})\n";
-                }
-                if ($errno==E_ERROR
-                    || $errno==E_USER_ERROR
-                    || $errno==E_CORE_ERROR
-                    || $errno==E_CORE_WARNING
-                    || $errno==E_COMPILE_ERROR
-                    || $errno==E_COMPILE_WARNING) $logentry .= "Context:\n".print_r($errcontext, TRUE)."\n----------\n\n";
-
-                debug_log($logentry);
             }
+            if ($errno != E_NOTICE)
+            {
+                $logentry = " {$errortype[$errno]} [{$errno}] {$errstr} (in line {$errline} of file {$errfile})\n";
+            }
+            if ($errno==E_ERROR
+                || $errno==E_USER_ERROR
+                || $errno==E_CORE_ERROR
+                || $errno==E_CORE_WARNING
+                || $errno==E_COMPILE_ERROR
+                || $errno==E_COMPILE_WARNING) $logentry .= "Context:\n".print_r($errcontext, TRUE)."\n----------\n\n";
+
+            debug_log($logentry);
             echo "</p>";
             // Tips, to help diagnose errors
             if (strpos($errstr, 'Unknown column') !== FALSE OR
