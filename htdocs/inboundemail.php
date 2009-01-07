@@ -137,7 +137,8 @@ if ($emails > 0)
 
         if ($CONFIG['debug'])
         {
-            debug_log("Email Type: '{$results['Type']}', Encoding: '{$results['Encoding']}'");
+            debug_log("Message $i Email Type: '{$results['Type']}', Encoding: '{$results['Encoding']}'");
+            debug_log(print_r($results,true));
         }
 
         // Attempt to recognise contact from the email address
