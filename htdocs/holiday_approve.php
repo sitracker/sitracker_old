@@ -14,7 +14,7 @@
 $permission = 50; // Approve Holiday
 require ('db_connect.inc.php');
 require ('functions.inc.php');
-$title = "Holiday Approval";
+$title = "Holiday Approval"; // FIXME i18n holiday approval
 
 // This page requires authentication
 require ('auth.inc.php');
@@ -31,17 +31,17 @@ $view = cleanvar($_REQUEST['view']);
 switch (strtolower($approve))
 {
     case 'true':
-        $sql = "UPDATE `{$dbHolidays}` SET approved='1' ";
+        $sql = "UPDATE `{$dbHolidays}` SET approved='".HOL_APPROVAL_GRANTED."' ";
     break;
     case 'false':
-        $sql = "UPDATE `{$dbHolidays}` SET approved='2' ";
+        $sql = "UPDATE `{$dbHolidays}` SET approved='".HOL_APPROVAL_DENIED."' ";
     break;
     case 'free':
-        $sql = "UPDATE `{$dbHolidays}` SET approved='1', type='5' ";
+        $sql = "UPDATE `{$dbHolidays}` SET approved='".HOL_APPROVAL_GRANTED."', type='5' ";
     break;
 }
 
-$sql .= "WHERE approvedby='$sit[2]' AND approved=0 ";
+$sql .= "WHERE approvedby='$sit[2]' AND approved=".HOL_APPROVAL_NONE." ";
 
 if ($user != 'all')
 {

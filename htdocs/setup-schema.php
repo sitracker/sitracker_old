@@ -2498,6 +2498,12 @@ ALTER TABLE `{$dbTriggers}` CHANGE `action` `action` ENUM( 'ACTION_NONE', 'ACTIO
 ALTER TABLE `{$dbUsers}` ADD `var_emoticons` ENUM( 'true', 'false' ) NOT NULL DEFAULT 'false' AFTER `var_utc_offset` ;
 
 ";
+
+$upgrade_schema[345] = "
+-- INL 2009-01-07
+ALTER TABLE `{$dbUsers}` ADD `holiday_resetdate` DATE NULL AFTER `holiday_entitlement` ;
+";
+
 // Important: When making changes to the schema you must add SQL to make the alterations
 // to existing databases in $upgrade_schema[] *AND* you must also change $schema[] for
 // new installations (above the line of stars).

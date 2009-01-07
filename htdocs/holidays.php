@@ -63,8 +63,8 @@ if ($user == $sit[2] OR $approver == TRUE)
     echo "<tr class='shade1'><td><strong>{$strHolidayEntitlement}</strong>:</td></tr>\n";
     echo "<tr class='shade2'><td>";
     $entitlement = user_holiday_entitlement($user);
-    $holidaystaken = user_count_holidays($user, 1);
-    $awaitingapproval = user_count_holidays($user, 1, 0, array(0));
+    $holidaystaken = user_count_holidays($user, HOL_HOLIDAY);
+    $awaitingapproval = user_count_holidays($user, HOL_HOLIDAY, 0, array(HOL_APPROVAL_NONE));
     echo "$entitlement {$strDays}, ";
     echo "$holidaystaken {$strtaken}, ";
     printf ($strRemaining, $entitlement-$holidaystaken);
@@ -72,11 +72,11 @@ if ($user == $sit[2] OR $approver == TRUE)
     echo "</td></tr>\n";
     echo "<tr class='shade1'><td ><strong>{$strOtherLeave}</strong>:</td></tr>\n";
     echo "<tr class='shade2'><td>";
-    echo user_count_holidays($user, 2)." {$strdayssick}, ";
-    echo user_count_holidays($user, 3)." {$strdaysworkingaway}, ";
-    echo user_count_holidays($user, 4)." {$strdaystraining}";
+    echo user_count_holidays($user, HOL_SICKNESS)." {$strdayssick}, ";
+    echo user_count_holidays($user, HOL_WORKING_AWAY)." {$strdaysworkingaway}, ";
+    echo user_count_holidays($user, HOL_TRAINING)." {$strdaystraining}";
     echo "<br />";
-    echo user_count_holidays($user, 5)." {$strdaysother}";
+    echo user_count_holidays($user, HOL_FREE)." {$strdaysother}";
     echo "</td></tr>\n";
     echo "</table>\n";
 }
@@ -138,7 +138,12 @@ if ($numwaiting > 0)
 
             if ($sit[2] == $user)
             {
-                echo "<a href='holiday_add.php?year=".date('Y',$dates->startdate)."&amp;month=".date('m',$dates->startdate)."&amp;day=".date('d',$dates->startdate)."&amp;user={$sit[2]}&amp;type={$dates->type}&amp;length=0&amp;return=holidays' onclick=\"return window.confirm('".date('l jS F Y', $dates->startdate).": {$strHolidayCancelConfirm}');\" title='{$strHolidayCancel}'>{$strCancel}</a>";
+                echo "<a href='holiday_add.php?year=".date('Y',$dates->startdate);
+                echo "&amp;month=".date('m',$dates->startdate)."&amp;day=";
+                echo date('d',$dates->startdate)."&amp;user={$sit[2]}&amp;type=";
+                echo "{$dates->type}&amp;length=0&amp;return=holidays' ";
+                echo "onclick=\"return window.confirm('".date('l jS F Y', $dates->startdate);
+                echo ": {$strHolidayCancelConfirm}');\" title='{$strHolidayCancel}'>{$strCancel}</a>";
             }
             echo "</td></tr>\n";
         }
@@ -148,11 +153,11 @@ if ($numwaiting > 0)
 mysql_free_result($result);
 
 // Get list of holiday types
-$holidaytype[1] = $GLOBALS['strHoliday'];
-$holidaytype[2] = $GLOBALS['strAbsentSick'];
-$holidaytype[3] = $GLOBALS['strWorkingAway'];
-$holidaytype[4] = $GLOBALS['strTraining'];
-$holidaytype[5] = $GLOBALS['strCompassionateLeave'];
+$holidaytype[HOL_HOLIDAY] = $GLOBALS['strHoliday'];
+$holidaytype[HOL_SICKNESS] = $GLOBALS['strAbsentSick'];
+$holidaytype[HOL_WORKING_AWAY] = $GLOBALS['strWorkingAway'];
+$holidaytype[HOL_TRAINING] = $GLOBALS['strTraining'];
+$holidaytype[HOL_FREE] = $GLOBALS['strCompassionateLeave'];
 
 $totaltaken = 0;
 

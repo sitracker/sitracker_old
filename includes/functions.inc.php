@@ -87,6 +87,11 @@ define ('HOL_TRAINING', 4);
 define ('HOL_FREE', 5); // Compassionate/Maternity/Paterity/etc/free
 define ('HOL_PUBLIC', 10);  // Public Holiday (eg. Bank Holiday)
 
+define ('HOL_APPROVAL_NONE', 0); // Not granted or denied
+define ('HOL_APPROVAL_GRANTED', 1);
+define ('HOL_APPROVAL_DENIED', 2);
+// TODO define the other approval (archive) states here, 10, 11 etc.
+
 //default notice types
 define ('NORMAL_NOTICE_TYPE', 0);
 define ('WARNING_NOTICE_TYPE', 1);
@@ -708,12 +713,15 @@ function user_holiday($userid, $type= 0, $year, $month, $day, $length = FALSE)
 /**
     * Count a users holidays of specified type
     * @author Ivan Lucas
-    * @param $userid integer. User ID
-    * @param $type integer. Holiday type
-    * @param $date integer. (optional) UNIX timestamp. Only counts holidays before this date
+    * @param integer $userid . User ID
+    * @param integer $type. Holiday type
+    * @param integer $date. (optional) UNIX timestamp. Only counts holidays before this date
+    * @param array $approved (optional) An array of approval statuses to include
+                   when ommitted a default is used
     * @returns integer. Number of days holiday
 */
-function user_count_holidays($userid, $type, $date=0, $approved=array(0,1,2))
+function user_count_holidays($userid, $type, $date=0,
+                             $approved = array(HOL_APPROVAL_NONE, HOL_APPROVAL_GRANTED, HOL_APPROVAL_DENIED))
 {
     global $dbHolidays;
     $sql = "SELECT id FROM `{$dbHolidays}` WHERE userid='$userid' AND type='$type' AND length='day' AND approved >= 0 AND approved < 2 ";
@@ -2568,7 +2576,6 @@ function closingstatus_name($id)
 
     return ($GLOBALS[$closingstatus]);
 }
-
 
 
 /**
