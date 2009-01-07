@@ -481,7 +481,7 @@ if ($emails > 0)
 
     if ($CONFIG['enable_inbound_mail'] == 'POP/IMAP')
     {
-        / Delete the message from the mailbox
+        // Delete the message from the mailbox
         if ($mailbox->servertype == 'imap')
         {
             imap_expunge($mailbox->mailbox);
