@@ -135,7 +135,10 @@ if ($emails > 0)
         $mime->Analyze($decoded[0], $results);
         $to = $cc = $from = $from_name = $from_email = "";
 
-        if ($CONFIG['debug']) debug_log("Email: \n" . print_r($results, true));
+        if ($CONFIG['debug'])
+        {
+            debug_log("Email Type: '{$results['Type']}', Encoding: '{$results['Encoding']}'");
+        }
 
         // Attempt to recognise contact from the email address
         $from_email = strtolower($results['From'][0]['address']);
@@ -147,8 +150,6 @@ if ($emails > 0)
             $row = mysql_fetch_object($result);
             $contactid = $row->id;
         }
-
-
 
         if (!empty($results['From'][0]['name']))
         {
@@ -341,7 +342,11 @@ if ($emails > 0)
         //** END UPDATE INCIDENT **//
 
         //** BEGIN UPDATE **//
-        $message = mb_convert_encoding($message, "UTF-8", strtoupper($results['Encoding']));
+        // Convert the encoding to UTF-8 if it isn't already
+        if (!empty($results['Encoding']) AND !strcasecmp('UTF-8', $results['Encoding']))
+        {
+            $message = mb_convert_encoding($message, "UTF-8", strtoupper($results['Encoding']));
+        }
         $bodytext = $headertext . "<hr>" . mysql_real_escape_string($message);
 
         // Strip excessive line breaks
