@@ -2575,7 +2575,11 @@ function closingstatus_name($id)
     * A drop down to select from a list of open incidents
     * optionally filtered by contactid
     * @author Ivan Lucas
-    * @param string $name
+    * @param string $name The name attribute for the HTML select
+    * @param int $id The value to select by default (not implemented yet)
+    * @param int $contactid Filter the list to show incidents from a single
+    contact
+    * @returns string HTML
 */
 function incident_drop_down($name, $id, $contactid = 0)
 {
@@ -2594,10 +2598,15 @@ function incident_drop_down($name, $id, $contactid = 0)
         while ($incident = mysql_fetch_object($result))
         {
             // FIXME unfinished
-            $html .= "<option value='{$incident->id}'>[{$incident->id}] - {$incident->title}</option>";
+            $html .= "<option value='{$incident->id}'>[{$incident->id}] - ";
+            $html .= "{$incident->title}</option>";
         }
 
         $html .= "</select>";
+    }
+    else
+    {
+        $html = "<input type='text' name='{$name}' value='' size='10' maxlength='12' />";
     }
     return $html;
 }

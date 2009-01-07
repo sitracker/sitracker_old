@@ -39,7 +39,7 @@ if ($incidentid == '')
     echo "<form action='{$_SERVER['PHP_SELF']}' method='post'>";
     echo "<label>{$strToIncidentID}: ";
     if ($contactid > 0) echo incident_drop_down('incidentid', 0, $contactid);
-    else echo "<input type='text' name='incidentid' value='{$incidentid}' />";
+    else echo "<input type='text' name='incidentid' value='{$incidentid}' size='10' maxlength='12' />";
     echo "</label>";
     echo "<input type='submit' value='{$strMoveUpdate}' /><br />";
     echo "<input type='hidden' name='updateid' value='{$updateid}' />";
