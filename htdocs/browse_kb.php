@@ -29,29 +29,22 @@ if (empty($mode) && empty($search_string)) $mode='RECENT';
 if (empty($search_string) AND empty($mode)) $search_string='a';
 echo "<h2>".icon('kb', 32, $title)." ";
 echo "{$title}</h2>";
-if (strtolower($mode)=='recent') echo "<h4>{$strArticlesPublishedRecently}</h4>";
-elseif (strtolower($mode)=='today') echo "<h4>{$strArticlesPublishedToday}</h4>";
-?>
-<table summary="alphamenu" align="center">
-    <tr>
-        <td align="center">
-        <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="get">
-        <?php
-        echo "<input type='text' name='search_string' /><input type='submit' value=\"{$strGo}\" />";
-        ?>
-        </form>
-        </td>
-        </tr>
-        <tr>
-        <td valign="middle">
-        <?php
-        echo "<a href='{$_SERVER['PHP_SELF']}?mode=RECENT'>{$strRecent}</a> | ";
-        echo alpha_index("{$_SERVER['PHP_SELF']}?search_string=");
-        ?></td>
-    </tr>
-    </table>
-    <br />
-<?php
+if (strtolower($mode) == 'recent') echo "<h4>{$strArticlesPublishedRecently}</h4>";
+elseif (strtolower($mode) == 'today') echo "<h4>{$strArticlesPublishedToday}</h4>";
+
+echo "<form action='{$_SERVER['PHP_SELF']}' method='get'>";
+echo "<table summary='alphamenu' align='center'>";
+echo "<tr><td align='center''>";
+echo "<input type='text' name='search_string' /><input type='submit' value=\"{$strGo}\" />";
+echo "</td></tr>";
+echo "<tr><td valign='middle'>";
+echo "<a href='{$_SERVER['PHP_SELF']}?mode=RECENT'>{$strRecent}</a> | ";
+echo alpha_index("{$_SERVER['PHP_SELF']}?search_string=");
+echo "</tr>";
+echo "</table>";
+echo "</form>";
+echo "<br />";
+    
 // ---------------------------------------------
 // SQL Queries:
 
@@ -119,7 +112,6 @@ if (mysql_num_rows($result) >= 1)
     $shade = 'shade1';
     while ($kbarticle = mysql_fetch_object($result))
     {
-        // FIXME: These styles and colours need moving to the webtrack.css file really so they can be customised
         if (empty($kbarticle->title)) $kbarticle->title = $strUntitled;
         else $kbarticle->title = $kbarticle->title;
         echo "<tr class='{$shade}'>";
@@ -133,7 +125,7 @@ if (mysql_num_rows($result) >= 1)
         $rowcount = mysql_num_rows($sresult);
         if ($rowcount >= 1 AND $rowcount < 3)
         {
-            $count=1;
+            $count = 1;
             while ($kbsoftware = mysql_fetch_object($sresult))
             {
                 echo "{$kbsoftware->name}";
@@ -149,8 +141,8 @@ if (mysql_num_rows($result) >= 1)
         $asql = "SELECT LEFT(content,400) FROM `{$dbKBContent}` WHERE docid='{$kbarticle->docid}' ORDER BY id ASC LIMIT 1";
         $aresult = mysql_query($asql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
-        list($content)=mysql_fetch_row($aresult);
-        $content=strip_tags(remove_slashes($content));
+        list($content) = mysql_fetch_row($aresult);
+        $content = strip_tags(remove_slashes($content));
         echo "<span>{$content}</span>";
         echo "</a>";
         echo "</td>";
@@ -158,8 +150,8 @@ if (mysql_num_rows($result) >= 1)
         echo "<td>".user_realname($kbarticle->author)."</td>";
         echo "<td>{$kbarticle->keywords}</td>";
         echo "</tr>\n";
-        if ($shade=='shade1') $shade='shade2';
-        else $shade='shade1';
+        if ($shade == 'shade1') $shade = 'shade2';
+        else $shade = 'shade1';
     }
     echo "</table>\n";
 }
