@@ -479,19 +479,23 @@ if ($emails > 0)
             $bodytext, $message, $incidentid);
     }
 
-    if ($mailbox->servertype == 'imap')
-    {
-        imap_expunge($mailbox->mailbox);
-    }
-    elseif ($mailbox->servertype == 'pop')
-    {
-        imap_delete($mailbox->mailbox, '1:*');
-        imap_expunge($mailbox->mailbox);
-    }
-
     if ($CONFIG['enable_inbound_mail'] == 'POP/IMAP')
     {
-        imap_close($mailbox->mailbox);
+        / Delete the message from the mailbox
+        if ($mailbox->servertype == 'imap')
+        {
+            imap_expunge($mailbox->mailbox);
+        }
+        elseif ($mailbox->servertype == 'pop')
+        {
+            imap_delete($mailbox->mailbox, '1:*');
+            imap_expunge($mailbox->mailbox);
+        }
+
+        if ($CONFIG['enable_inbound_mail'] == 'POP/IMAP')
+        {
+            imap_close($mailbox->mailbox);
+        }
     }
 }
 ?>
