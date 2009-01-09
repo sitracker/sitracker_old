@@ -922,6 +922,7 @@ $strNewContact = 'New Contact';
 $strNewContract = 'New Contract';
 $strNewDuration = 'New Duration';
 $strNewEmail = 'New Email (none of the above)';
+$strNewEntitlement = 'New Entitlement';
 $strNewEscalationPath = 'New Escalation Path';
 $strNewHeldEmail = 'New Held Email';
 $strNewestAtBottom = 'Newest at the bottom';

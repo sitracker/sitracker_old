@@ -64,6 +64,7 @@ if (empty($step))
     echo "<input type='hidden' name='user' value='{$user}' />";
     echo "<input type='hidden' name='step' value='1' />";
     echo "<input type='submit' value=\"{$strBookHoliday}\" /></p>";
+    echo "<p align='center'><a href='holidays.php?user={$user}'>{$strBackToList}</a></p>";
     echo "</form>";
     include ('htmlfooter.inc.php');
 }
@@ -102,7 +103,7 @@ elseif ($step == '1')
 
     if ($type == HOL_SICKNESS)
     {
-        echo "<p align='center'>Sickness, can of course only be booked for today or days that have passed.</p>";// FIXME i18n
+        echo "<p class='error'>Sickness, can of course only be booked for today or days that have passed.</p>";// FIXME i18n
     }
 
     if ($type == HOL_HOLIDAY)
@@ -237,8 +238,14 @@ elseif ($step == '1')
                 else
                 {
                     echo "<tr><td class='shade2' align='right'>".ldate('l jS M y',$day)." </td>";
-                    // Don't allow booking sickness in the future, still not sure whether we should allow this or not, it could be useful in the case of long term illness
-                    if (($type == HOL_SICKNESS && $day <= $today) || ($type != HOL_SICKNESS))
+                    // Don't allow booking sickness in the future, still not sure
+                    // whether we should allow this or not - it could be useful
+                    // in the case of long term illness
+                    // If overbooking is disabled, prevent booking more holidays
+                    // in the current year than you have entitlement for
+                    if (($type == HOL_SICKNESS AND $day <= $today) OR ($type != HOL_SICKNESS) AND
+                        ($CONFIG['holiday_allow_overbooking'] == TRUE OR
+                        ($CONFIG['holiday_allow_overbooking'] == FALSE AND $day < $holiday_resetdate)))
                     {
                         echo "<td class='shade1' align='center'><input type='radio' name='length{$daynumber}' value='none' /></td>";
                         echo "<td class='shade1' align='center'><input type='radio' name='length{$daynumber}' value='day' checked='checked' /></td>";
