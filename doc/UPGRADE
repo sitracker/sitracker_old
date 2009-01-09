@@ -30,6 +30,11 @@ You must set $CONFIG['support_manager'] to the user ID for your support
 manager instead, this defaults to 1 which is your first user in the
 system, usually your SiT Administrator.
 
+A new config variable $CONFIG['default_entitlement'] has been created which
+allows you to specify a number of days holiday entitlement to give to new
+users as they are added.  This won't affect any existing users.  We've set this
+to 21 days, but you can of course alter it.
+
 
 Upgrading to 3.41
 -----------------

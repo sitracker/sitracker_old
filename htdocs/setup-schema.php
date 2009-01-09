@@ -2500,8 +2500,13 @@ ALTER TABLE `{$dbUsers}` ADD `var_emoticons` ENUM( 'true', 'false' ) NOT NULL DE
 ";
 
 $upgrade_schema[345] = "
--- INL 2009-01-07
+-- INL 2009-01-08
 ALTER TABLE `{$dbUsers}` ADD `holiday_resetdate` DATE NULL AFTER `holiday_entitlement` ;
+ALTER TABLE `{$dbUsers}` ADD `user_startdate` DATE NULL AFTER `accepting` ;
+ALTER TABLE `{$dbHolidays}` ADD `date` DATE NULL AFTER `startdate` ;
+UPDATE `{$dbHolidays}` SET `date` = FROM_UNIXTIME( `startdate` ) WHERE 1 ;
+ALTER TABLE `{$dbHolidays}` DROP `startdate`
+
 ";
 
 // Important: When making changes to the schema you must add SQL to make the alterations

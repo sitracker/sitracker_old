@@ -73,7 +73,8 @@ $CFGCAT['portal'] = array('portal',
                           'portal_creates_incidents',
                           'portal_interface_style');
 
-$CFGCAT['holidays'] = array('holidays_enabled');
+$CFGCAT['holidays'] = array('holidays_enabled',
+                            'default_entitlement');
 
 $CFGCAT['incidents'] = array('auto_assign_incidents',
                              'free_support_limit',
@@ -218,6 +219,11 @@ $CFGVAR['debug']['title'] = 'Debug Mode';
 $CFGVAR['debug']['type'] = 'select';
 
 $CFGVAR['default_css_url']['title'] = 'The CSS file to use when no other is configured';
+
+$CFGVAR['default_entitlement']['title'] = 'Default Holiday Entitlement';
+$CFGVAR['default_entitlement']['help'] = 'Default holiday entitlement for new users and new holiday periods (in days)';
+$CFGVAR['default_entitlement']['type'] = 'number';
+$CFGVAR['default_entitlement']['unit'] = $strDays;
 
 $CFGVAR['default_gravatar']['help'] = "can be 'wavatar', 'identicon', 'monsterid' a URL to an image, or blank for a blue G. see <a href='http://www.gravatar.com/'>www.gravatar.com</a> to learn about gravatars";
 $CFGVAR['default_gravatar']['title'] = "Default Gravatar";

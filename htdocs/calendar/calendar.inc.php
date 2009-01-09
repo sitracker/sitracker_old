@@ -13,11 +13,11 @@
 
 
 // Get list of holiday types
-$holidaytype[1] = $GLOBALS['strHoliday'];
-$holidaytype[2] = $GLOBALS['strAbsentSick'];
-$holidaytype[3] = $GLOBALS['strWorkingAway'];
-$holidaytype[4] = $GLOBALS['strTraining'];
-$holidaytype[5] = $GLOBALS['strCompassionateLeave'];
+$holidaytype[HOL_HOLIDAY] = $GLOBALS['strHoliday'];
+$holidaytype[HOL_SICKNESS] = $GLOBALS['strAbsentSick'];
+$holidaytype[HOL_WORKING_AWAY] = $GLOBALS['strWorkingAway'];
+$holidaytype[HOL_TRAINING] = $GLOBALS['strTraining'];
+$holidaytype[HOL_FREE] = $GLOBALS['strCompassionateLeave'];
 
 
 /**
@@ -162,7 +162,7 @@ function draw_calendar($nmonth, $nyear)
                 $style='';
 
                 // Get the holiday information for a single day
-                list($dtype, $dlength, $approved, $approvedby)=user_holiday($user, $type, $nyear, $nmonth, $calday, false);
+                list($dtype, $dlength, $approved, $approvedby) = user_holiday($user, $type, $nyear, $nmonth, $calday, false);
 
                 if ($dlength=='pm')
                 {
@@ -351,8 +351,8 @@ function draw_chart($mode, $year, $month='', $day='', $groupid='', $userid='')
         {
             unset($hdays);
 
-            $hsql = "SELECT * FROM `{$GLOBALS['dbHolidays']}` WHERE userid={$user->id} AND startdate >= $startdate AND startdate <= $enddate ";
-            $hsql .= "AND type != 10";
+            $hsql = "SELECT *, UNIX_TIMESTAMP(date) AS startdate FROM `{$GLOBALS['dbHolidays']}` WHERE userid={$user->id} AND date = FROM_UNIXTIME($startdate) ";
+            $hsql .= "AND type != ".HOL_PUBLIC;
             $hresult = mysql_query($hsql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
             while ($holiday = mysql_fetch_object($hresult))
@@ -363,7 +363,7 @@ function draw_chart($mode, $year, $month='', $day='', $groupid='', $userid='')
                 $happroved[$cday] = $holiday->approved;
             }
             // Public holidays
-            $phsql = "SELECT * FROM `{$GLOBALS['dbHolidays']}` WHERE type=10 AND startdate >= $startdate AND startdate <= $enddate ";
+            $phsql = "SELECT * FROM `{$GLOBALS['dbHolidays']}` WHERE type=".HOL_PUBLIC." AND date = FROM_UNIXTIME($startdate) ";
             $phresult = mysql_query($phsql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
             while ($pubhol = mysql_fetch_object($phresult))

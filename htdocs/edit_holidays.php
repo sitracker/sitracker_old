@@ -40,12 +40,15 @@ switch ($_REQUEST['action'])
                 $new_entitlement = $default_entitlement + $carryover;
 
                 // Archive previous holiday
-                $hsql = "UPDATE `{$dbHolidays}` SET approved = approved+10 WHERE approved <= 7 AND userid={$users->id} AND startdate < $archivedate";
+                $hsql = "UPDATE `{$dbHolidays}` SET approved = approved+10 ";
+                $hsql .= "WHERE approved < 10 AND userid={$users->id} ";
+                $hsql .= "AND date < FROM_UNIXTIME($archivedate)";
                 mysql_query($hsql);
                 if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
                 // Update Holiday Entitlement
-                $usql = "UPDATE `{$dbUsers}` SET holiday_entitlement = $new_entitlement WHERE id={$users->id} LIMIT 1";
+                $usql = "UPDATE `{$dbUsers}` SET holiday_entitlement = ";
+                $usql .= "$new_entitlement WHERE id={$users->id} LIMIT 1";
                 mysql_query($usql);
                 if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
             }
@@ -66,7 +69,8 @@ switch ($_REQUEST['action'])
 
         echo "<form name='editholidays' action='{$_SERVER['PHP_SELF']}' method='post'>";
         echo "<p>{$strResetHolidayEntitlementCarryOverNDaysOfUnusedHoliday}</p>";
-        echo "<div align='center'>{$strDefaultNewEntitlement}: <input type='text' name='default_entitlement' value='20' size='4' />, ";
+        echo "<div align='center'><label>{$strDefaultNewEntitlement}: ";
+        echo "<input type='text' name='default_entitlement' value='{$CONFIG['default_entitlement']}' size='4' /></label>, ";
         echo sprintf($strMaxCarryOverXDays, "<input type='text' name='max_carryover' value='5' size='4' />");
         $str = "<input type='text' id='archivedate' name='archivedate' size='10' value='".date('Y-m-d')."' />";
         echo "<br />".sprintf($strArchiveDaysBookedPriorToX, $str)."\n ";

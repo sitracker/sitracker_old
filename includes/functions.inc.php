@@ -85,12 +85,15 @@ define ('HOL_SICKNESS', 2);
 define ('HOL_WORKING_AWAY', 3);
 define ('HOL_TRAINING', 4);
 define ('HOL_FREE', 5); // Compassionate/Maternity/Paterity/etc/free
+// The holiday archiving assumes standard holidays are < 10
 define ('HOL_PUBLIC', 10);  // Public Holiday (eg. Bank Holiday)
 
 define ('HOL_APPROVAL_NONE', 0); // Not granted or denied
 define ('HOL_APPROVAL_GRANTED', 1);
 define ('HOL_APPROVAL_DENIED', 2);
 // TODO define the other approval (archive) states here, 10, 11 etc.
+define ('HOL_APPROVAL_GRANTED_ARCHIVED', 11);
+define ('HOL_APPROVAL_DENIED_ARCHIVED', 12);
 
 //default notice types
 define ('NORMAL_NOTICE_TYPE', 0);
@@ -111,6 +114,7 @@ define ("STATUS_UNSUPPORTED",9);
 define ("STATUS_UNASSIGNED",10);
 
 // User statuses
+define ('USERSTATUS_ACCOUNT_DISABLED', 0);
 define ('USERSTATUS_IN_OFFICE', 1);
 define ('USERSTATUS_NOT_IN_OFFICE', 2);
 define ('USERSTATUS_IN_MEETING', 3);
@@ -664,13 +668,11 @@ function user_incidents($id)
 function user_holiday($userid, $type= 0, $year, $month, $day, $length = FALSE)
 {
     global $dbHolidays;
-    $startdate = mktime(0,0,0,$month,$day,$year);
-    $enddate = mktime(23,59,59,$month,$day,$year);
-    $sql = "SELECT * FROM `{$dbHolidays}` WHERE startdate >= '$startdate' AND startdate < '$enddate' ";
+    $sql = "SELECT * FROM `{$dbHolidays}` WHERE `date` = '{$year}-{$month}-{$day}' ";
     if ($type !=0 )
     {
-        $sql .= "AND (type='$type' OR type='10' OR type='5') ";
-        $sql .= "AND IF(type!=10, userid='$userid', 1=1) ";
+        $sql .= "AND (type='$type' OR type='".HOL_PUBLIC."' OR type='".HOL_FREE."') ";
+        $sql .= "AND IF(type!=".HOL_PUBLIC.", userid='$userid', 1=1) ";
     }
     else
     {
@@ -681,7 +683,7 @@ function user_holiday($userid, $type= 0, $year, $month, $day, $length = FALSE)
     {
         $sql .= "AND length='$length' ";
     }
-
+debug_log($sql); // ###INL###
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
@@ -724,8 +726,9 @@ function user_count_holidays($userid, $type, $date=0,
                              $approved = array(HOL_APPROVAL_NONE, HOL_APPROVAL_GRANTED, HOL_APPROVAL_DENIED))
 {
     global $dbHolidays;
-    $sql = "SELECT id FROM `{$dbHolidays}` WHERE userid='$userid' AND type='$type' AND length='day' AND approved >= 0 AND approved < 2 ";
-    if ($date > 0) $sql .= "AND startdate < {$date}";
+    $sql = "SELECT id FROM `{$dbHolidays}` WHERE userid='$userid' ";
+    $sql .= "AND type='$type' AND length='day' ";
+    if ($date > 0) $sql .= "AND `date` < FROM_UNIXTIME({$date})";
     if (is_array($approved))
     {
         $sql .= "AND (";
@@ -738,19 +741,38 @@ function user_count_holidays($userid, $type, $date=0,
 
         $sql .= ") ";
     }
+    else
+    {
+        $sql .= "AND (approved = ".HOL_APPROVAL_NONE." OR approved = ".HOL_APPROVAL_GRANTED.") ";
+    }
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     $full_days = mysql_num_rows($result);
 
-
     $sql = "SELECT id FROM `{$dbHolidays}` ";
-    $sql .= "WHERE userid='{$userid}' AND type='{$type}' AND (length='pm' OR length='am') AND approved >= 0 AND approved < 2 ";
+    $sql .= "WHERE userid='{$userid}' AND type='{$type}' AND (length='pm' OR length='am') ";
+    if (is_array($approved))
+    {
+        $sql .= "AND (";
+
+        for ($i = 0; $i < sizeof($approved); $i++)
+        {
+            $sql .= "approved = {$approved[$i]} ";
+            if ($i < sizeof($approved)-1) $sql .= "OR ";
+        }
+
+        $sql .= ") ";
+    }
+    else
+    {
+        $sql .= "AND (approved = ".HOL_APPROVAL_NONE." OR approved = ".HOL_APPROVAL_GRANTED.") ";
+    }
 
     if ($date > 0)
     {
-        $sql .= "AND startdate < $date";
+        $sql .= "AND `date` < {$date}";
     }
-
+debug_log($sql); // ###INL###
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     $half_days = mysql_num_rows($result);
@@ -763,12 +785,24 @@ function user_count_holidays($userid, $type, $date=0,
 /**
     * Return the users holiday entitlement
     * @author Ivan Lucas
-    * @param $userid integer. User ID
+    * @param integer $userid. User ID
     * @returns integer. Number of days holiday a user is entitled to
 */
 function user_holiday_entitlement($userid)
 {
     return db_read_column('holiday_entitlement', $GLOBALS['dbUsers'], $userid);
+}
+
+
+/**
+    * Return the users holiday entitlement reset/rollover date
+    * @author Ivan Lucas
+    * @param integer $userid. User ID
+    * @returns integer. UNIX Timestamp date
+*/
+function user_holiday_resetdate($userid)
+{
+    return mysql2date(db_read_column('holiday_resetdate', $GLOBALS['dbUsers'], $userid) . ' 17:00:00');
 }
 
 
@@ -4245,7 +4279,7 @@ function check_group_holiday($userid, $date, $length='day')
         while ($member = mysql_fetch_object($mresult))
         {
             // check to see if this group member has holiday
-            $hsql = "SELECT id FROM `{$dbHolidays}` WHERE userid='{$member->userid}' AND startdate='{$date}' ";
+            $hsql = "SELECT id FROM `{$dbHolidays}` WHERE userid='{$member->userid}' AND date = FROM_UNIXTIME({$date}) ";
             if ($length == 'am' || $length == 'pm')
             {
                 $hsql .= "AND (length = '$length' OR length = 'day') ";
@@ -4981,7 +5015,7 @@ function is_active_status($status, $states)
 function get_public_holidays($startdate, $enddate)
 {
     $sql = "SELECT * FROM `{$GLOBALS['dbHolidays']}` ";
-    $sql .= "WHERE type = 10 AND (startdate >= '{$startdate}' AND startdate <= '{$enddate}')";
+    $sql .= "WHERE type = 10 AND (`date` >= FROM_UNIXTIME({$startdate}) AND `date` <= FROM_UNIXTIME({$enddate}))";
 
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
@@ -4994,8 +5028,8 @@ function get_public_holidays($startdate, $enddate)
         while ($obj = mysql_fetch_object($result))
         {
             $holiday = new Holiday();
-            $holiday->starttime = $obj->startdate;
-            $holiday->endtime = ($obj->startdate+(60*60*24));
+            $holiday->starttime = $obj->date;
+            $holiday->endtime = ($obj->date+(60*60*24));
 
             $publicholidays[] = $holiday;
         }
@@ -8011,7 +8045,9 @@ function contract_software()
 /**
 * HTML for an ajax help link
 * @author Ivan Lucas
-* @param $context string.  The base filename of the popup help file in htdocs/help/en-GB/ (without the .txt extension)
+* @param string $context. The base filename of the popup help file in
+                htdocs/help/en-GB/ (without the .txt extension)
+* @returns string HTML
 **/
 function help_link($context)
 {

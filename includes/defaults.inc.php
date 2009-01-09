@@ -262,6 +262,9 @@ $CONFIG['default_roleid'] = 3;
 // see www.gravatar.com to learn about gravatars
 $CONFIG['default_gravatar'] = 'identicon';
 
+// Default holiday entitlement for new users and new holiday periods (in days)
+$CONFIG['default_entitlement'] = 21;
+
 // Default for whom the billing reports should be mailed to, multiple address can be seperared by commas
 $CONFIG['billing_reports_email'] = 'admin@localhost';
 
@@ -345,6 +348,10 @@ $CONFIG["ldap_default_customer_siteid"] = 1;
 // when creating an incident from an email in the holding queue.
 $CONFIG["ldap_autocreate_customer"] = TRUE;
 
-//If true, portal users create incidents, if FALSE, they just create emails
+// If true, portal users create incidents, if FALSE, they just create emails
 $CONFIG['portal_creates_incidents'] = TRUE;
+
+// FIXME unfinished ###INL###
+$CONFIG['holiday_period_increment'] = array(0, 0, 0);
+
 ?>

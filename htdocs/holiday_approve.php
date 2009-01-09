@@ -50,7 +50,7 @@ if ($user != 'all')
 
 if ($startdate != 'all')
 {
-    $sql.="AND startdate='$startdate' AND type='$type' AND length='$length'";
+    $sql.="AND `date` = FROM_UNIXTIME($startdate) AND type='$type' AND length='$length'";
 }
 
 $result = mysql_query($sql);

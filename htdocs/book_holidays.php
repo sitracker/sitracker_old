@@ -108,7 +108,8 @@ elseif ($step == '1')
     if ($type == HOL_HOLIDAY)
     {
         $entitlement = user_holiday_entitlement($user);
-        $holidaystaken = user_count_holidays($user, 1);
+        $holiday_resetdate = user_holiday_resetdate($user);
+        $holidaystaken = user_count_holidays($user, HOL_HOLIDAY, $holiday_resetdate);
         if (($entitlement - $holidaystaken) <= 0 )
         {
             echo "<p class='error'>{$strNoHolidayEntitlement}</p>";
@@ -146,7 +147,7 @@ elseif ($step == '1')
     {
         if (date('D',$day) != 'Sat' && date('D',$day) != 'Sun')
         {
-            $sql = "SELECT * FROM `{$dbHolidays}` WHERE startdate = '$day' AND userid='{$user}'";
+            $sql = "SELECT * FROM `{$dbHolidays}` WHERE `date` = FROM_UNIXTIME($day) AND userid='{$user}'";
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
 
@@ -226,7 +227,7 @@ elseif ($step == '1')
             }
             else
             {
-                $sql = "SELECT * FROM `{$dbHolidays}` WHERE startdate = '{$day}' AND type='10' ";
+                $sql = "SELECT * FROM `{$dbHolidays}` WHERE `date` = FROM_UNIXTIME({$day}) AND type='".HOL_PUBLIC."' ";
                 $result = mysql_query($sql);
                 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
                 if (mysql_num_rows($result) > 0)
@@ -268,7 +269,7 @@ elseif ($step == '1')
         echo "<p align='center'>";
         echo "<input type='submit' value='{$strSelect}' />";
         echo "</p>";
-    } else echo "";
+    }
     echo "</form>";
 
 
@@ -305,8 +306,8 @@ else
         {
             // check to see if there is other holiday booked on this day
             // and modify that where required.
-            $sql = "INSERT INTO `{$dbHolidays}` (userid, type, startdate, length, approved, approvedby) ";
-            $sql .= "VALUES ('{$user}', '$type', '{$$d}', '{$$len}', '0', '$approvaluser') ";
+            $sql = "INSERT INTO `{$dbHolidays}` (userid, type, date, length, approved, approvedby) ";
+            $sql .= "VALUES ('{$user}', '$type', FROM_UNIXTIME({$$d}), '{$$len}', '0', '$approvaluser') ";
             mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
         }

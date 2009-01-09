@@ -59,7 +59,7 @@ function display_holiday_table($result)
             echo user_realname($holiday->userid,TRUE);
             echo "</a></td>";
         }
-        echo "<td>".ldate($CONFIG['dateformat_longdate'], $holiday->startdate)."</td>";
+        echo "<td>".ldate($CONFIG['dateformat_longdate'], mysql2date($holiday->date))."</td>";
         echo "<td>";
         if ($holiday->length=='am') echo $GLOBALS['strMorning'];
         if ($holiday->length=='pm') echo $GLOBALS['strAfternoon'];
@@ -72,10 +72,10 @@ function display_holiday_table($result)
             {
                 echo "<td>";
                 $approvetext = $GLOBALS['strApprove'];
-                if ($holiday->type == 2) $approvetext = $GLOBALS['strAcknowledge'];
+                if ($holiday->type == HOL_SICKNESS) $approvetext = $GLOBALS['strAcknowledge'];
                 echo "<a href=\"holiday_approve.php?approve=TRUE&amp;user={$holiday->userid}&amp;view={$user}&amp;startdate={$holiday->startdate}&amp;type={$holiday->type}&amp;length={$holiday->length}\">{$approvetext}</a> | ";
                 echo "<a href=\"holiday_approve.php?approve=FALSE&amp;user={$holiday->userid}&amp;view={$user}&amp;startdate={$holiday->startdate}&amp;type={$holiday->type}&amp;length={$holiday->length}\">{$GLOBALS['strDecline']}</a>";
-                if ($holiday->type == 1)
+                if ($holiday->type == HOL_HOLIDAY)
                 {
                     echo " | <a href=\"holiday_approve.php?approve=FREE&amp;user={$holiday->userid}&amp;view={$user}&amp;startdate={$holiday->startdate}&amp;type={$holiday->type}&amp;length={$holiday->length}\">{$GLOBALS['strApproveFree']}</a>";
                 }
@@ -136,11 +136,11 @@ if (!$sent)
         echo "<p align='center'><a href='holiday_request.php?user=all&amp;mode=approval'>{$strShowAll}</a></p>";
     }
 
-    $sql = "SELECT * FROM `{$dbHolidays}` WHERE approved=0 ";
+    $sql = "SELECT * FROM `{$dbHolidays}` WHERE approved=".HOL_APPROVAL_NONE." ";
     if (!empty($type)) $sql .= "AND type='$type' ";
     if ($mode != 'approval' || $user != 'all') $sql.="AND userid='$user' ";
     if ($approver == TRUE && $mode == 'approval') $sql .= "AND approvedby={$sit[2]} ";
-    $sql .= "ORDER BY startdate, length";
+    $sql .= "ORDER BY date, length";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
     if (mysql_num_rows($result) > 0)
@@ -208,10 +208,10 @@ if (!$sent)
     {
         // Show all holidays where requests have not been sent
 
-        $sql = "SELECT * FROM `{$dbHolidays}` WHERE approved = 0 AND userid != 0 ";
+        $sql = "SELECT * FROM `{$dbHolidays}` WHERE approved = ".HOL_APPROVAL_NONE." AND userid != 0 ";
         if (!empty($type)) $sql .= "AND type='$type' ";
         if ($mode == 'approval') $sql .= "AND approvedby = 0 ";
-        $sql .= "ORDER BY startdate, length";
+        $sql .= "ORDER BY date, length";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
 
@@ -233,24 +233,24 @@ else
     }
     else
     {
-        $sql = "SELECT * FROM `{$dbHolidays}` WHERE approved=0 ";
+        $sql = "SELECT * FROM `{$dbHolidays}` WHERE approved = ".HOL_APPROVAL_NONE." ";
         if ($action != 'resend') $sql .= "AND approvedby=0 ";
         if ($user != 'all' || $approver == FALSE) $sql .= "AND userid='{$user}' ";
-        $sql .= "ORDER BY startdate, length";
+        $sql .= "ORDER BY date, length";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
         if (mysql_num_rows($result)>0)
         {
             while ($holiday = mysql_fetch_object($result))
             {
-                $holidaylist .= ldate('l j F Y', $holiday->startdate).", ";
+                $holidaylist .= ldate('l j F Y', mysql2date($holiday->date)).", ";
                 if ($holiday->length == 'am') $holidaylist .= $strMorning;
                 if ($holiday->length == 'pm') $holidaylist .= $strAfternoon;
                 if ($holiday->length == 'day') $holidaylist .= $strFullDaye;
                 $holidaylist .= ", ";
                 $holidaylist .= holiday_type($holiday->type)."\n";
             }
-            
+
             if (strlen($memo) > 3)
             {
                 $holidaylist .= "{$SYSLANG['strCommentsSentWithRequest']}:\n\n";
@@ -258,7 +258,8 @@ else
             }
         }
         // Mark the userid of the person who will approve the request so that they can see them
-        $sql = "UPDATE `{$dbHolidays}` SET approvedby='{$approvaluser}' WHERE userid='{$user}' AND approved=0";
+        $sql = "UPDATE `{$dbHolidays}` SET approvedby='{$approvaluser}' ";
+        $sql .= "WHERE userid='{$user}' AND approved = ".HOL_APPROVAL_NONE;
         mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 

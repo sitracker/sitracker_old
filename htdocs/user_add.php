@@ -43,16 +43,19 @@ if (empty($submit))
     echo "<h2>".icon('user', 32)." ";
     echo "{$strNewUser}</h2>";
     echo "<h5>".sprintf($strMandatoryMarked,"<sup class='red'>*</sup>")."</h5>";
-    echo "<form action='{$_SERVER['PHP_SELF']}' method='post' onsubmit='return confirm_action(\"{$strAreYouSureAddUser}\");'>";
+    echo "<form id='adduser' action='{$_SERVER['PHP_SELF']}' method='post' ";
+    echo "onsubmit='return confirm_action(\"{$strAreYouSureAddUser}\");'>";
     echo "<table align='center' class='vertical'>\n";
-    echo "<tr><th>{$strRealName} <sup class='red'>*</sup></th><td><input maxlength='50' name='realname' size='30'";
+    echo "<tr><th>{$strRealName} <sup class='red'>*</sup></th>";
+    echo "<td><input maxlength='50' name='realname' size='30'";
     if ($_SESSION['formdata']['add_user']['realname'] != '')
     {
         echo "value='{$_SESSION['formdata']['add_user']['realname']}'";
     }
     echo "/></td></tr>\n";
 
-    echo "<tr><th>{$strUsername} <sup class='red'>*</sup></th><td><input maxlength='50' name='username' size='30'";
+    echo "<tr><th>{$strUsername} <sup class='red'>*</sup></th>";
+    echo "<td><input maxlength='50' name='username' size='30'";
     if ($_SESSION['formdata']['add_user']['username'] != '')
     {
         echo "value='{$_SESSION['formdata']['add_user']['username']}'";
@@ -124,12 +127,27 @@ if (empty($submit))
     }
     echo "/></td></tr>\n";
 
-    echo "<tr><th>{$strHolidayEntitlement}</th><td><input maxlength='3' name='holiday_entitlement' size='3' ";
-    if ($_SESSION['formdata']['add_user']['holiday_entitlement'] != '')
+    if ($CONFIG['holidays_enabled'])
     {
-        echo "value='{$_SESSION['formdata']['add_user']['holiday_entitlement']}'";
+        echo "<tr><th>{$strHolidayEntitlement}</th><td><input maxlength='3' name='holiday_entitlement' size='3' ";
+        if ($_SESSION['formdata']['add_user']['holiday_entitlement'] != '')
+        {
+            echo "value='{$_SESSION['formdata']['add_user']['holiday_entitlement']}'";
+        }
+        else
+        {
+            echo "value='{$CONFIG['default_entitlement']}'";
+        }
+        echo " /> {$strDays}</td></tr>\n";
+
+        echo "<tr><th>{$strStartDate} ".help_link('UserStartdate')."</th>";
+        echo "<td><input type='text' name='startdate' id='startdate' size='10'";
+        if ($_SESSION['formdata']['add_user']['startdate'] != '')
+        echo "value='{$_SESSION['formdata']['add_user']['startdate']}'";
+        echo "/> ";
+        echo date_picker('adduser.startdate');
+        echo "</td></tr>\n";
     }
-    echo " /> {$strDays}</td></tr>\n";
     plugin_do('add_user_form');
     echo "</table>\n";
     echo "<p><input name='submit' type='submit' value='{$strAddUser}' /></p>";
@@ -152,6 +170,11 @@ else
     $mobile = cleanvar($_REQUEST['mobile']);
     $fax = cleanvar($_REQUEST['fax']);
     $holiday_entitlement = cleanvar($_REQUEST['holiday_entitlement']);
+    if (!empty($_POST['startdate']))
+    {
+        $startdate = date('Y-m-d',strtotime($_POST['startdate']));
+    }
+    else $startdate = '';
 
     $_SESSION['formdata']['add_user'] = $_REQUEST;
     // Add user
@@ -211,8 +234,13 @@ else
     if ($errors == 0)
     {
         $password = md5($password);
-        $sql = "INSERT INTO `{$dbUsers}` (username, password, realname, roleid, groupid, title, email, phone, mobile, fax, status, var_style, holiday_entitlement) ";
-        $sql .= "VALUES ('$username', '$password', '$realname', '$roleid', '$groupid', '$jobtitle', '$email', '$phone', '$mobile', '$fax', 1, '{$CONFIG['default_interface_style']}', '$holiday_entitlement')";
+        $sql = "INSERT INTO `{$dbUsers}` (username, password, realname, roleid,
+                groupid, title, email, phone, mobile, fax, status, var_style,
+                holiday_entitlement, user_startdate) ";
+        $sql .= "VALUES ('$username', '$password', '$realname', '$roleid',
+                '$groupid', '$jobtitle', '$email', '$phone', '$mobile', '$fax',
+                1, '{$CONFIG['default_interface_style']}',
+                '$holiday_entitlement', '$startdate')";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
         $newuserid = mysql_insert_id();

@@ -275,8 +275,11 @@ function saction_SetUserStatus()
     $startdate = mktime(0,0,0,date('m'),date('d'),date('Y'));
     $enddate = mktime(23,59,59,date('m'),date('d'),date('Y'));
     $sql = "SELECT * FROM `{$dbHolidays}` ";
-    $sql .= "WHERE startdate >= '$startdate' AND startdate < '$enddate' AND (type >='1' AND type <= 5) ";
-    $sql .= "AND (approved=1 OR approved=2 OR approved=11 OR approved=12)";
+    $sql .= "WHERE `date` >= FROM_UNIXTIME($startdate) AND `date` < ";
+    $sql .= "FROM_UNIXTIME($enddate) AND (type >='".HOL_HOLIDAY."' AND type <= ".HOL_FREE.") ";
+    $sql .= "AND (approved=".HOL_APPROVAL_GRANTED." OR approved=".HOL_APPROVAL_DENIED;
+    $sql .= " OR approved=".HOL_APPROVAL_GRANTED_ARCHIVED;
+    $sql .= " OR approved=".HOL_APPROVAL_DENIED_ARCHIVED.")";
     $result = mysql_query($sql);
     if (mysql_error())
     {

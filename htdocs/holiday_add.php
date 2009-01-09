@@ -50,11 +50,13 @@ else $adminuser = FALSE;
 list($dtype, $dlength, $dapproved, $dapprovedby) = user_holiday($user, 0, $year, $month, $day, FALSE);
 
 // allow approver (or admin) to unbook holidays already approved
-if ($length=='0' AND ($approver==TRUE AND ($dapprovedby=$sit[2] OR $adminuser==TRUE)))
+if ($length == '0' AND ($approver == TRUE
+                      AND ($dapprovedby = $sit[2] OR $adminuser == TRUE)))
 {
     // Delete the holiday
     $sql = "DELETE FROM `{$dbHolidays}` ";
-    $sql .= "WHERE userid='$user' AND startdate >= '$startdate' AND startdate < '$enddate' AND type='$type' ";
+    $sql .= "WHERE userid='$user' AND `date` = '{$year}-{$month}-{$day}' ";
+    $sql .= "AND type='$type' ";
     if (!$adminuser) $sql .= "AND (approvedby='{$sit[2]}' OR userid={$sit[2]}) ";
     $result = mysql_query($sql);
     // echo $sql;
@@ -67,13 +69,13 @@ else
     if (empty($dapproved))
     {
         // Only allow these types to be modified
-        if ($dtype==HOL_HOLIDAY || $dtype==HOL_WORKING_AWAY || $dtype==HOL_TRAINING)
+        if ($dtype == HOL_HOLIDAY || $dtype == HOL_WORKING_AWAY || $dtype == HOL_TRAINING)
         {
-            if ($length=='0')
+            if ($length == '0')
             {
                 // FIXME: doesn't check permission or anything
                 $sql = "DELETE FROM `{$dbHolidays}` ";
-                $sql .= "WHERE userid='$user' AND startdate='$startdate' AND type='$type' ";
+                $sql .= "WHERE userid='$user' AND `date` = '{$year}-{$month}-{$day}' AND type='$type' ";
                 $result = mysql_query($sql);
                 // echo $sql;
                 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
@@ -84,7 +86,7 @@ else
             {
                 // there is an existing booking so alter it
                 $sql = "UPDATE `{$dbHolidays}` SET length='$length' ";
-                $sql .= "WHERE userid='$user' AND startdate='$startdate' AND type='$type' AND length='$dlength'";
+                $sql .= "WHERE userid='$user' AND `date` = '{$year}-{$month}-{$day}' AND type='$type' AND length='$dlength'";
                 $result = mysql_query($sql);
                 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
                 $dlength=$length;
@@ -94,10 +96,10 @@ else
         {
             // there is no holiday on this day, so make one
             $sql = "INSERT INTO `{$dbHolidays}` ";
-            $sql .= "SET userid='$user', type='$type', startdate='$startdate', length='$length' ";
+            $sql .= "SET userid='$user', type='$type', `date` = '{$year}-{$month}-{$day}', length='$length' ";
             $result = mysql_query($sql);
-            $dlength=$length;
-            $approved=0;
+            $dlength = $length;
+            $approved = 0;
         }
     }
 }

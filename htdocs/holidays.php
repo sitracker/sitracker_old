@@ -58,17 +58,29 @@ echo "</p>\n";
 if ($user == $sit[2] OR $approver == TRUE)
 {
     // Only shown when viewing your own holidays or when you're an approver
+    $holiday_resetdate = user_holiday_resetdate($user);
     echo "<table align='center' width='450'>\n";
     echo "<tr><th class='subhead'>{$strHolidays}</th></tr>\n";
-    echo "<tr class='shade1'><td><strong>{$strHolidayEntitlement}</strong>:</td></tr>\n";
+    echo "<tr class='shade1'><td><strong>{$strHolidayEntitlement}</strong> ";
+    printf("({$strUntilX})", date($CONFIG['dateformat_shortdate'], $holiday_resetdate));
+    echo ":</td></tr>\n";
     echo "<tr class='shade2'><td>";
-    $entitlement = user_holiday_entitlement($user);
-    $holidaystaken = user_count_holidays($user, HOL_HOLIDAY);
-    $awaitingapproval = user_count_holidays($user, HOL_HOLIDAY, 0, array(HOL_APPROVAL_NONE));
-    echo "$entitlement {$strDays}, ";
-    echo "$holidaystaken {$strtaken}, ";
-    printf ($strRemaining, $entitlement-$holidaystaken);
-    if ($awaitingapproval > 0) echo ", {$awaitingapproval} {$strAwaitingApproval} ";
+    if ($holiday_resetdate != '' AND $holiday_resetdate > 0 AND $holiday_resetdate >= $now)
+    {
+        $entitlement = user_holiday_entitlement($user);
+        $totalholidaystaken = user_count_holidays($user, HOL_HOLIDAY);
+        $holidaystaken = user_count_holidays($user, HOL_HOLIDAY, $holiday_resetdate);
+        $awaitingapproval = user_count_holidays($user, HOL_HOLIDAY, 0, array(HOL_APPROVAL_NONE));
+        echo "{$entitlement} {$strDays}, ";
+        echo "$holidaystaken {$strtaken}, ";
+        printf ($strRemaining, $entitlement-$holidaystaken);
+        if ($awaitingapproval > 0) echo ", {$awaitingapproval} {$strAwaitingApproval} ";
+        if ($totalholidaystaken > $holidaystaken)
+        {
+            $moreholstaken = $totalholidaystaken - $holidaystaken;
+            echo "<br />+ {$moreholstaken} {$strtakennextperiod}";
+        }
+    }
     echo "</td></tr>\n";
     echo "<tr class='shade1'><td ><strong>{$strOtherLeave}</strong>:</td></tr>\n";
     echo "<tr class='shade2'><td>";
@@ -84,7 +96,8 @@ if ($user == $sit[2] OR $approver == TRUE)
 // Holiday List
 echo "<table align='center' width='450'>\n";
 echo "<tr><th colspan='4' class='subhead'>{$strHolidayList}</th></tr>\n";
-$sql = "SELECT * FROM `{$dbHolidays}` WHERE userid='{$user}' AND approved=0 AND type < 10 ORDER BY startdate ASC";
+$sql = "SELECT *, UNIX_TIMESTAMP(`date`) AS date FROM `{$dbHolidays}` WHERE userid='{$user}' ";
+$sql .= "AND approved = ".HOL_APPROVAL_NONE." AND type < 10 ORDER BY date ASC";
 $result = mysql_query($sql);
 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
 $numwaiting = mysql_num_rows($result);
@@ -97,10 +110,10 @@ if ($numwaiting > 0)
         while ($dates = mysql_fetch_object($result))
         {
             echo "<tr class='shade1'><td>{$dates->name}</td>";
-            echo "<td>".ldate('l', $dates->startdate)." ";
+            echo "<td>".ldate('l', $dates->date)." ";
             if ($dates->length == 'am') echo "<u>{$strMorning}</u> ";
             if ($dates->length == 'pm') echo "<u>{$strAfternoon}</u> ";
-            echo ldate('jS F Y', $dates->startdate);
+            echo ldate('jS F Y', $dates->date);
             echo "</td>";
             echo "<td>";
             echo holiday_approval_status($dates->approved, $dates->approvedby);
@@ -109,40 +122,40 @@ if ($numwaiting > 0)
             if ($dates->length == 'pm' OR $dates->length == 'day')
             {
                 echo "<a href='holiday_add.php?type={$dates->type}&amp;user=$user";
-                echo "&amp;year=".date('Y',$dates->startdate)."&amp;month=";
-                echo date('m',$dates->startdate)."&amp;day=";
-                echo date('d',$dates->startdate)."&amp;length=am' ";
-                echo "onclick=\"return window.confirm('".ldate('l jS F Y', $dates->startdate);
+                echo "&amp;year=".date('Y',$dates->date)."&amp;month=";
+                echo date('m',$dates->date)."&amp;day=";
+                echo date('d',$dates->date)."&amp;length=am' ";
+                echo "onclick=\"return window.confirm('".ldate('l jS F Y', $dates->date);
                 echo ": {$strHolidayMorningOnlyConfirm}');\" title='{$strHolidayMorningOnly}'>{$strAM}</a> | ";
             }
 
             if ($dates->length == 'am' OR $dates->length == 'day')
             {
                 echo "<a href='holiday_add.php?type={$dates->type}&amp;user=$user";
-                echo "&amp;year=".date('Y',$dates->startdate)."&amp;month=";
-                echo date('m',$dates->startdate)."&amp;day=";
-                echo date('d',$dates->startdate)."&amp;length=pm' ";
-                echo "onclick=\"return window.confirm('".ldate('l jS F Y', $dates->startdate);
+                echo "&amp;year=".date('Y',$dates->date)."&amp;month=";
+                echo date('m',$dates->date)."&amp;day=";
+                echo date('d',$dates->date)."&amp;length=pm' ";
+                echo "onclick=\"return window.confirm('".ldate('l jS F Y', $dates->date);
                 echo ": {$strHolidayAfternoonOnlyConfirm}');\" title='{$strHolidayAfternoonOnly}'>{$strPM}</a> | ";
             }
 
             if ($dates->length == 'am' OR $dates->length == 'pm')
             {
                 echo "<a href='holiday_add.php?type={$dates->type}&amp;user=$user";
-                echo "&amp;year=".date('Y',$dates->startdate)."&amp;month=";
-                echo date('m',$dates->startdate)."&amp;day=";
-                echo date('d',$dates->startdate)."&amp;length=day' ";
-                echo "onclick=\"return window.confirm('".ldate('l jS F Y', $dates->startdate);
+                echo "&amp;year=".date('Y',$dates->date)."&amp;month=";
+                echo date('m',$dates->date)."&amp;day=";
+                echo date('d',$dates->date)."&amp;length=day' ";
+                echo "onclick=\"return window.confirm('".ldate('l jS F Y', $dates->date);
                 echo ": {$strHolidayFullDayConfirm}');\" title='{$strHolidayFullDay}'>{$strAllDay}</a> | ";
             }
 
             if ($sit[2] == $user)
             {
-                echo "<a href='holiday_add.php?year=".date('Y',$dates->startdate);
-                echo "&amp;month=".date('m',$dates->startdate)."&amp;day=";
-                echo date('d',$dates->startdate)."&amp;user={$sit[2]}&amp;type=";
+                echo "<a href='holiday_add.php?year=".date('Y',$dates->date);
+                echo "&amp;month=".date('m',$dates->date)."&amp;day=";
+                echo date('d',$dates->date)."&amp;user={$sit[2]}&amp;type=";
                 echo "{$dates->type}&amp;length=0&amp;return=holidays' ";
-                echo "onclick=\"return window.confirm('".date('l jS F Y', $dates->startdate);
+                echo "onclick=\"return window.confirm('".date('l jS F Y', $dates->date);
                 echo ": {$strHolidayCancelConfirm}');\" title='{$strHolidayCancel}'>{$strCancel}</a>";
             }
             echo "</td></tr>\n";
@@ -163,9 +176,9 @@ $totaltaken = 0;
 
 foreach ($holidaytype AS $htypeid => $htype)
 {
-    $sql = "SELECT *, from_unixtime(startdate) AS start FROM `{$dbHolidays}` ";
+    $sql = "SELECT *, UNIX_TIMESTAMP(`date`) AS date FROM `{$dbHolidays}` ";
     $sql .= "WHERE userid='{$user}' AND type={$htypeid} ";
-    $sql.= "AND (approved=1 OR (approved=11 AND startdate >= $now)) ORDER BY startdate ASC ";
+    $sql.= "AND (approved=".HOL_HOLIDAY." OR (approved=".HOL_APPROVAL_GRANTED_ARCHIVED." AND date >= FROM_UNIXTIME($now))) ORDER BY date ASC ";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
     $numtaken = mysql_num_rows($result);
@@ -176,10 +189,10 @@ foreach ($holidaytype AS $htypeid => $htype)
         while ($dates = mysql_fetch_object($result))
         {
             echo "<tr class='shade1'>";
-            echo "<td colspan='2'>".ldate('l', $dates->startdate)." ";
+            echo "<td colspan='2'>".ldate('l', $dates->date)." ";
             if ($dates->length == 'am') echo "<u>{$strMorning}</u> ";
             if ($dates->length == 'pm') echo "<u>{$strAfternoon}</u> ";
-            echo ldate('jS F Y', $dates->startdate);
+            echo ldate('jS F Y', $dates->date);
             echo "</td>";
             echo "<td colspan='2'>";
             echo holiday_approval_status($dates->approved, $dates->approvedby);
@@ -200,7 +213,9 @@ echo "</table>\n";
 if ($user == $sit[2])
 {
     // Only show when viewing your own holiday page
-    $sql  = "SELECT * FROM `{$dbUsers}` WHERE status!=0 AND status!=1 ";  // status=0 means left company
+    $sql  = "SELECT * FROM `{$dbUsers}` ";
+    $sql .= "WHERE status!=".USERSTATUS_ACCOUNT_DISABLED;
+    $sql .= " AND status!=".USERSTATUS_IN_OFFICE." ";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
     echo "<table align='center' width='450'>";

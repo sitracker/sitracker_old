@@ -50,7 +50,7 @@ if (empty($mode))
 
     echo "<h2>".icon('user', 32)." ";
     echo sprintf($strEditProfileFor, $user->realname)."</h2>";
-    echo "<form action='{$_SERVER['PHP_SELF']}' method='post'>";
+    echo "<form id='edituser' action='{$_SERVER['PHP_SELF']}' method='post'>";
     echo "<table align='center' class='vertical'>";
     echo "<col width='250'></col><col width='*'></col>";
     echo "<tr><th colspan='2'>";
@@ -109,22 +109,29 @@ if (empty($mode))
     {
         echo "<tr><th>{$strHolidayEntitlement}</th><td>";
         echo "<input type='text' name='holiday_entitlement' value='{$entitlement}' size='2' /> {$strDays}";
-        echo "</td></tr>";
+        echo "</td></tr>\n";
+        echo "<tr><th>{$strStartDate} ".help_link('UserStartdate')."</th>";
+        echo "<td><input type='text' name='startdate' id='startdate' size='10' ";
+        echo "value='{$user->user_startdate}'";
+        echo "/> ";
+        echo date_picker('edituser.startdate');
+        echo "</td></tr>\n";
     }
     elseif ($entitlement > 0)
     {
-        $holidaystaken = user_count_holidays($edituserid, 1);
+        $holiday_resetdate = user_holiday_resetdate($edituserid);
+        $holidaystaken = user_count_holidays($edituserid, HOL_HOLIDAY, $holiday_resetdate);
         echo "<tr><th>{$strHolidayEntitlement}</th><td>";
-        echo "{$entitlement} {$strdays}, ";
+        echo "{$entitlement} {$strDays}, ";
         echo "{$holidaystaken} {$strtaken}, ";
         echo sprintf($strRemaining, $entitlement-$holidaystaken);
         echo "</td></tr>\n";
         echo "<tr><th>{$strOtherLeave}</th><td>";
-        echo user_count_holidays($edituserid, 2)." {$strdayssick}, ";
-        echo user_count_holidays($edituserid, 3)." {$strdaysworkingaway}, ";
-        echo user_count_holidays($edituserid, 4)." {$strdaystraining}";
+        echo user_count_holidays($user, HOL_SICKNESS)." {$strdayssick}, ";
+        echo user_count_holidays($user, HOL_WORKING_AWAY)." {$strdaysworkingaway}, ";
+        echo user_count_holidays($user, HOL_TRAINING)." {$strdaystraining}";
         echo "<br />";
-        echo user_count_holidays($edituserid, 5)." {$strdaysother}";
+        echo user_count_holidays($user, HOL_FREE)." {$strdaysother}";
         echo "</td></tr>";
     }
 
@@ -330,6 +337,11 @@ elseif ($mode=='save')
     $accepting = cleanvar($_POST['accepting']);
     $roleid = cleanvar($_POST['roleid']);
     $holiday_entitlement = cleanvar($_POST['holiday_entitlement']);
+    if (!empty($_POST['startdate']))
+    {
+        $startdate = date('Y-m-d',strtotime($_POST['startdate']));
+    }
+    else $startdate = '';
     $password = cleanvar($_POST['oldpassword']);
     $newpassword1 = cleanvar($_POST['newpassword1']);
     $newpassword2 = cleanvar($_POST['newpassword2']);
@@ -432,6 +444,10 @@ elseif ($mode=='save')
         if (!empty($holiday_entitlement) AND $edituserpermission == TRUE)
         {
             $sql .= "holiday_entitlement='{$holiday_entitlement}', ";
+        }
+        if ($edituserpermission == TRUE)
+        {
+            $sql .= "user_startdate='{$startdate}', ";
         }
         $sql .= "var_update_order='$updateorder', var_num_updates_view='$updatesperpage', var_style='$style', signature='$signature', message='$message', status='$status', accepting='$accepting', ";
         $sql .= "var_i18n='{$vari18n}', var_utc_offset='{$utcoffset}' ";
