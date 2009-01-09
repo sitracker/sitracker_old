@@ -23,8 +23,11 @@ echo "<h3>{$strDescendingDateOrder}</h3>";
 
 $sql = "SELECT *, h.id AS holidayid FROM `{$dbHolidays}` AS h, `{$dbUsers}` AS u ";
 $sql .= "WHERE h.userid = u.id AND h.type=$type ";
-if (!empty($user) AND $user!='all') $sql .= "AND u.id='{$user}' ";
-$sql .= "ORDER BY startdate DESC";
+if (!empty($user) AND $user != 'all')
+{
+    $sql .= "AND u.id='{$user}' ";
+}
+$sql .= "ORDER BY date DESC";
 $result = mysql_query($sql);
 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
 if (mysql_num_rows($result))
@@ -36,7 +39,7 @@ if (mysql_num_rows($result))
     {
         echo "<tr class='$shade'><td>".holiday_type($dates['type'])."</td>";
         echo "<td>{$dates['realname']}</td>";
-        echo "<td>".date('l jS F Y', $dates['startdate']);
+        echo "<td>".date('l jS F Y', mysql2date($dates['date']));
         if ($dates['length'] == 'am') echo " {$strMorning}";
         if ($dates['length'] == 'pm') echo " {$strAfternoon}";
         echo "</td>";
@@ -47,13 +50,13 @@ if (mysql_num_rows($result))
         elseif ($dates['approvedby'] > 0 AND empty($dates['approved'])) echo " of ".user_realname($dates['approvedby']);
         echo "</td>";
         echo "<td>";
-        if ($approver==TRUE)
+        if ($approver == TRUE)
         {
             echo "<a href='holiday_add.php?hid={$dates['holidayid']}&amp;year=";
-            echo date('Y',$dates['startdate'])."&amp;month=".date('m',$dates['startdate']);
-            echo "&amp;day=".date('d',$dates['startdate'])."&amp;user={$dates['userid']}";
+            echo substr($dates['date'], 0, 4) ."&amp;month=".substr($dates['date'], 5, 2);
+            echo "&amp;day=".substr($dates['date'], 8, 2)."&amp;user={$dates['userid']}";
             echo "&amp;type={$dates['type']}&amp;length=0&amp;return=list' ";
-            echo "onclick=\"return window.confirm('{$dates['realname']}: ".ldate('l jS F Y', $dates['startdate']);
+            echo "onclick=\"return window.confirm('{$dates['realname']}: ".ldate('l jS F Y', mysql2date($dates['date']));
             echo ": {$strAreYouSureDelete}');\">{$strDelete}</a>";
         }
         echo "</td></tr>\n";

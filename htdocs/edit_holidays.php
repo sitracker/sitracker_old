@@ -15,7 +15,7 @@ require ('functions.inc.php');
 // This page requires authentication
 require ('auth.inc.php');
 
-$title = $strEditHolidays;
+$title = $strEditHolidayEntitlement;
 
 switch ($_REQUEST['action'])
 {
