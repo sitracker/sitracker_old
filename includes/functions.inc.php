@@ -8141,14 +8141,14 @@ function contract_details($id, $mode='internal')
     $maintresult = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
 
-    $maintrow = mysql_fetch_array($maintresult);
+    $maint = mysql_fetch_object($maintresult);
 
     $html = "<table align='center' class='vertical'>";
     $html .= "<tr><th>{$GLOBALS[strContract]} {$GLOBALS[strID]}:</th>";
     $html .= "<td><h3>".icon('contract', 32)." ";
-    $html .= "{$maintrow['id']}</h3></td></tr>";
+    $html .= "{$maint->id}</h3></td></tr>";
     $html .= "<tr><th>{$GLOBALS[strStatus]}:</th><td>";
-    if ($maintrow['term'] == 'yes')
+    if ($maint->term == 'yes')
     {
         $html .= "<strong>{$GLOBALS[strTerminated]}</strong>";
     }
@@ -8157,7 +8157,7 @@ function contract_details($id, $mode='internal')
         $html .= $GLOBALS[strActive];
     }
 
-    if ($maintrow['expirydate'] < $now AND $maintrow['expirydate'] != '-1')
+    if ($maint->expirydate < $now AND $maint->expirydate != '-1')
     {
         $html .= "<span class='expired'>, {$GLOBALS[strExpired]}</span>";
     }
@@ -8166,74 +8166,74 @@ function contract_details($id, $mode='internal')
 
     if ($mode == 'internal')
     {
-        $html .= "<td><a href=\"site_details.php?id=".$maintrow['site']."\">".$maintrow['sitename']."</a></td></tr>";
+        $html .= "<td><a href=\"site_details.php?id=".$maint->site."\">".$maint->sitename."</a></td></tr>";
     }
     else
     {
-        $html .= "<td><a href=\"sitedetails.php\">".$maintrow['sitename']."</a></td></tr>";
+        $html .= "<td><a href=\"sitedetails.php\">".$maint->sitename."</a></td></tr>";
     }
     $html .= "<tr><th>{$GLOBALS[strAdminContact]}:</th>";
 
     if ($mode == 'internal')
     {
         $html .= "<td><a href=\"contact_details.php?id=";
-        $html .= "{$maintrow['admincontact']}\">";
-        $html .= contact_realname($maintrow['admincontact'])."</a></td></tr>";
+        $html .= "{$maint->admincontact}\">";
+        $html .= contact_realname($maint->admincontact)."</a></td></tr>";
     }
     else
     {
-        $html .= "<td><a href='contactdetails.php?id={$maintrow['admincontact']}'>";
-        $html .= contact_realname($maintrow['admincontact'])."</a></td></tr>";
+        $html .= "<td><a href='contactdetails.php?id={$maint->admincontact}'>";
+        $html .= contact_realname($maint->admincontact)."</a></td></tr>";
     }
 
     $html .= "<tr><th>{$GLOBALS[strReseller]}:</th><td>";
 
-    if (empty($results['resellername']))
+    if (empty($maint->resellername))
     {
         $html .= $GLOBALS[strNoReseller];
     }
     else
     {
-        $html .= $maintrow['resellername'];
+        $html .= $maint->resellername;
     }
     $html .= "</td></tr>";
-    $html .= "<tr><th>{$GLOBALS[strProduct]}:</th><td>".product_name($maintrow['product'])."</td></tr>";
+    $html .= "<tr><th>{$GLOBALS[strProduct]}:</th><td>".product_name($maint->product)."</td></tr>";
     $html .= "<tr><th>{$GLOBALS[strIncidents]}:</th>";
     $html .= "<td>";
-    $incidents_remaining = $maintrow['incident_quantity'] - $maintrow['incidents_used'];
+    $incidents_remaining = $maint->incident_quantity - $maint->incidents_used;
 
-    if ($maintrow['incident_quantity'] == 0)
+    if ($maint->incident_quantity == 0)
     {
         $quantity = $GLOBALS[strUnlimited];
     }
     else
     {
-        $quantity = $maintrow['incident_quantity'];
+        $quantity = $maint->incident_quantity;
     }
 
-    $html .= sprintf($GLOBALS[strUsedNofN], $maintrow['incidents_used'], $quantity);
-    if ($maintrow['incidents_used'] >= $maintrow['incident_quantity'] AND
-        $maintrow['incident_quantity'] != 0)
+    $html .= sprintf($GLOBALS[strUsedNofN], $maint->incidents_used, $quantity);
+    if ($maint->incidents_used >= $maint->incident_quantity AND
+        $maint->incident_quantity != 0)
     {
         $html .= " ($GLOBALS[strZeroRemaining])";
     }
 
     $html .= "</td></tr>";
-    if ($maintrow['licence_quantity'] != '0')
+    if ($maint->licence_quantity != '0')
     {
         $html .= "<tr><th>{$GLOBALS[strLicense]}:</th>";
-        $html .= "<td>{$maintrow['licence_quantity']} {$maintrow['licensetypename']}</td></tr>\n";
+        $html .= "<td>{$maint->licence_quantity} {$maint->licensetypename}</td></tr>\n";
     }
 
-    $html .= "<tr><th>{$GLOBALS[strServiceLevel]}:</th><td>".servicelevel_name($maintrow['servicelevelid'])."</td></tr>";
+    $html .= "<tr><th>{$GLOBALS[strServiceLevel]}:</th><td>".servicelevel_name($maint->servicelevelid)."</td></tr>";
     $html .= "<tr><th>{$GLOBALS[strExpiryDate]}:</th><td>";
-    if ($maintrow['expirydate'] == '-1')
+    if ($maint->expirydate == '-1')
     {
         $html .= "{$GLOBALS[strUnlimited]}";
     }
     else
     {
-        $html .= ldate($CONFIG['dateformat_date'], $maintrow['expirydate']);
+        $html .= ldate($CONFIG['dateformat_date'], $maint->expirydate);
     }
 
     $html .= "</td></tr>";
@@ -8251,9 +8251,9 @@ function contract_details($id, $mode='internal')
         $html .= "</td></tr>";
     }
 
-    if ($maintrow['maintnotes'] != '' AND $mode == 'internal')
+    if ($maint->maintnotes != '' AND $mode == 'internal')
     {
-        $html .= "<tr><th>{$GLOBALS[strNotes]}:</th><td>".$maintrow['maintnotes']."</td></tr>";
+        $html .= "<tr><th>{$GLOBALS[strNotes]}:</th><td>{$maint->maintnotes}</td></tr>";
     }
     $html .= "</table>";
 
@@ -8267,13 +8267,13 @@ function contract_details($id, $mode='internal')
 
     if (mysql_num_rows($maintresult) > 0)
     {
-        if ($maintrow['allcontactssupported'] == 'yes')
+        if ($maint->allcontactssupported == 'yes')
         {
             $html .= "<p class='info'>{$GLOBALS['strAllSiteContactsSupported']}</p>";
         }
         else
         {
-            $allowedcontacts = $maintrow['supportedcontacts'];
+            $allowedcontacts = $maint->supportedcontacts;
 
             $supportedcontacts = supported_contacts($id);
             $numberofcontacts = 0;
@@ -8320,7 +8320,7 @@ function contract_details($id, $mode='internal')
                     $html .= "<p class='info'>{$GLOBALS[strNoRecords]}<p>";
                 }
         }
-        if ($maintrow['allcontactssupported'] != 'yes')
+        if ($maint->allcontactssupported != 'yes')
         {
             $html .= "<p align='center'>";
             $html .= sprintf($GLOBALS['strUsedNofN'],
@@ -8330,7 +8330,7 @@ function contract_details($id, $mode='internal')
 
             if ($numberofcontacts < $allowedcontacts OR $allowedcontacts == 0 AND $mode == 'internal')
             {
-                $html .= "<p align='center'><a href='add_contact_support_contract.php?maintid={$id}&amp;siteid={$maintrow['site']}&amp;context=maintenance'>";
+                $html .= "<p align='center'><a href='add_contact_support_contract.php?maintid={$id}&amp;siteid={$maint->site}&amp;context=maintenance'>";
                 $html .= "{$GLOBALS[strAddContact]}</a></p>";
             }
             else
@@ -8357,7 +8357,7 @@ function contract_details($id, $mode='internal')
         $html .= "<h3>{$GLOBALS[strSkillsSupportedUnderContract]}:</h3>";
         // supported software
         $sql = "SELECT * FROM `{$GLOBALS[dbSoftwareProducts]}` AS sp, `{$GLOBALS[dbSoftware]}` AS s ";
-        $sql .= "WHERE sp.softwareid = s.id AND productid='{$maintrow['product']}' ";
+        $sql .= "WHERE sp.softwareid = s.id AND productid='{$maint->product}' ";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
 
