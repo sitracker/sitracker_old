@@ -1110,6 +1110,9 @@ CREATE TABLE IF NOT EXISTS `{$dbService}` (
   `dailyrate` float NOT NULL default '0',
   `billingmatrix` int(11) NOT NULL default '1',
   `priority` smallint(6) NOT NULL default '0',
+  `cust_ref` VARCHAR( 255 ) NULL AFTER `priority`,
+  `cust_ref_date` DATE NULL AFTER `po_number`,
+  `title` VARCHAR( 255 ) NULL AFTER `po_date`,
   `notes` TEXT NOT NULL,
   `foc` enum('yes','no') NOT NULL default 'no' COMMENT 'Free of charge (customer not charged)',
     PRIMARY KEY  (`serviceid`)
@@ -2507,6 +2510,10 @@ ALTER TABLE `{$dbHolidays}` ADD `date` DATE NULL AFTER `startdate` ;
 UPDATE `{$dbHolidays}` SET `date` = FROM_UNIXTIME( `startdate` ) WHERE 1 ;
 ALTER TABLE `{$dbHolidays}` DROP `startdate`
 
+-- PH
+ALTER TABLE `{$dbService}` ADD `cust_ref` VARCHAR( 255 ) NULL AFTER `priority` ,
+ADD `cust_ref_date` DATE NULL AFTER `po_number` ,
+ADD `title` VARCHAR( 255 ) NULL AFTER `po_date` ;
 ";
 
 // Important: When making changes to the schema you must add SQL to make the alterations

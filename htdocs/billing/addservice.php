@@ -78,6 +78,9 @@ if (empty($submit) OR !empty($_SESSION['formerrors']['add_service']))
     echo date_picker('serviceform.enddate');
     echo " <span class='required'>{$strRequired}</span></td></tr>";
 
+    echo "<tr><th>{$strTitle}</th><td>";
+    echo "<input type='text' id=title' name='title' /'></td></tr>";
+
     echo "<tr><th>{$strNotes}</th><td>";
     echo "<textarea rows='5' cols='20' name='notes'></textarea></td></tr>";
 
@@ -92,6 +95,15 @@ if (empty($submit) OR !empty($_SESSION['formerrors']['add_service']))
     echo "</td></tr>\n";
 
     echo "<tbody id='billingsection'>"; //FIXME not XHTML
+
+    echo "<tr><th>{$strCustomerReference}</th>";
+    echo "<td><input type='text' id='cust_ref' name='cust_ref' /></td></tr>";
+
+    echo "<tr><th>{$strCustomerReferenceDate}</th>";
+    echo "<td><input type='text' name='cust_ref_date' id='cust_ref_date' size='10'";
+    echo "value='".date('Y-m-d', $now)."' />";
+    echo date_picker('serviceform.cust_ref_date');
+    echo " </td></tr>";
 
     echo "<tr><th>{$strCreditAmount}</th>";
     echo "<td>{$CONFIG['currency_symbol']} ";
@@ -156,8 +168,12 @@ else
     if ($billtype == 'billperunit') $incidentrate = 0;
     elseif ($billtype == 'billperincident') $unitrate = 0;
 
-    $sql = "INSERT INTO `{$dbService}` (contractid, startdate, enddate, creditamount, unitrate, incidentrate, notes, foc) ";
-    $sql .= "VALUES ('{$contractid}', '{$startdate}', '{$enddate}', '{$amount}', '{$unitrate}', '{$incidentrate}', '{$notes}', '{$foc}')";
+    $cust_ref = cleanvar($_REQUEST['cust_ref']);
+    $cust_ref_date = cleanvar($_REQUEST['cust_ref_date']);
+    $title = cleanvar($_REQUEST['title']);
+
+    $sql = "INSERT INTO `{$dbService}` (contractid, startdate, enddate, creditamount, unitrate, incidentrate, cust_ref, cust_ref_date, title, notes, foc) ";
+    $sql .= "VALUES ('{$contractid}', '{$startdate}', '{$enddate}', '{$amount}', '{$unitrate}', '{$incidentrate}', '{$cust_ref}', '{$cust_ref_date}', '{$title}', '{$notes}', '{$foc}')";
 
     mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);

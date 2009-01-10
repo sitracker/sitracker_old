@@ -10288,9 +10288,24 @@ function contract_service_table($contractid)
             $html .= "<td><a href='transactions.php?serviceid={$service->serviceid}' class='info'>".ldate($CONFIG['dateformat_date'],$service->startdate);
 
             $span = '';
+            if (!empty($service->title))
+            {
+            	$span .= "<strong>{$GLOBALS['strTitle']}</strong>: {$service->title}<br />";
+            }
+            
             if (!empty($service->notes))
             {
                 $span .= "<strong>{$GLOBALS['strNotes']}</strong>: {$service->notes}<br />";
+            }
+            
+            if (!empty($service->cust_ref))
+            {
+            	$span .= "<strong>{$GLOBALS['strCustomerReference']}</strong>: {$service->cust_ref}";
+                if ($service->cust_ref_date != "1970-01-01")
+                {
+                	$span .= " - <strong>{$GLOBALS['strCustomerReferenceDate']}</strong>: {$service->cust_ref_date}";
+                }
+                $span .= "<br />";
             }
 
             if ($service->creditamount != 0)

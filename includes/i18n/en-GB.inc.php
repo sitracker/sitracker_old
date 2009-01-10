@@ -362,6 +362,8 @@ $strCustomerExport = 'Customer Export';
 $strCustomerHasBeenCalledToChase = 'Customer has been called to chase';
 $strCustomerImpact = 'Customer Impact';
 $strCustomerImpactCustomerText = 'How many users are affected by this issue? Is this an issue of downtime or a minor niggle? Does the issue prevent people from working?';
+$strCustomerReference = 'Customer Ref';
+$strCustomerReferenceDate = 'Customer Ref Date'; 
 $strCustomerRequestedClosure = 'Customer Requested Incident Closure';
 $strCustomers = 'Customers';
 
