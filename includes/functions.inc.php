@@ -10473,7 +10473,8 @@ function transactions_report($serviceid, $startdate, $enddate, $sites, $display,
 
     $csv_currency = html_entity_decode($CONFIG['currency_symbol'], ENT_NOQUOTES, "ISO-8859-15"); // Note using -15 as -1 doesnt support euro
 
-    $sql = "SELECT DISTINCT t.*, m.site, p.foc FROM `{$GLOBALS['dbTransactions']}` AS t, `{$GLOBALS['dbService']}` AS p, ";
+    $sql = "SELECT DISTINCT t.*, m.site, p.foc, p.cust_ref, p.cust_ref_date, p.title, p.notes ";
+    $sql .= "FROM `{$GLOBALS['dbTransactions']}` AS t, `{$GLOBALS['dbService']}` AS p, ";
     $sql .= "`{$GLOBALS['dbMaintenance']}` AS m, `{$GLOBALS['dbServiceLevels']}` AS sl, `{$GLOBALS['dbSites']}` AS s ";
     $sql .= "WHERE t.serviceid = p.serviceid AND p.contractid = m.id "; // AND t.date <= '{$enddateorig}' ";
     $sql .= "AND m.servicelevelid = sl.id AND sl.timed = 'yes' AND m.site = s.id ";
@@ -10512,10 +10513,36 @@ function transactions_report($serviceid, $startdate, $enddate, $sites, $display,
         $totalcredit = 0;
         $totaldebit = 0;
 
+        $details = '';
+
         while ($transaction = mysql_fetch_object($result))
         {
             if ($display == 'html')
             {
+                if ($serviceid > 0 AND empty($details))
+                {
+                    if (!empty($transaction->cust_ref))
+                    {
+                        $details .= "<tr>";
+                        $details .= "<th>{$GLOBALS['strCustomerReference']}</th><td>{$transaction->cust_ref}</td>";
+                        if ($transaction->cust_ref_date != "1970-01-01")
+                        {
+                            $details .= "<th>{$GLOBALS['strCustomerReferenceDate']}</th><td>{$transaction->cust_ref_date}</td>";
+                        }
+                        $details .= "</tr>";
+                    }
+                    
+                    if (!empty($transaction->title))
+                    {
+                    	$details .= "<tr><th>{$GLOBALS['strTitle']}</th><td>{$transaction->title}</td></tr>";
+                    }
+                    
+                    if (!empty($transaction->notes))
+                    {
+                        $details .= "<tr><th>{$GLOBALS['strNotes']}</th><td>{$transaction->notes}</td></tr>";
+                    }
+                }
+                
                 $str = "<tr class='$shade'>";
                 $str .= "<td>{$transaction->date}</td>";
                 $str .= "<td>{$transaction->transactionid}</td>";
@@ -10525,6 +10552,29 @@ function transactions_report($serviceid, $startdate, $enddate, $sites, $display,
             }
             elseif ($display == 'csv')
             {
+                if ($serviceid > 0 AND empty($details))
+                {
+                    if (!empty($transaction->cust_ref))
+                    {
+                        $details .= "\"{$GLOBALS['strCustomerReference']}\",\"{$transaction->cust_ref}\",";
+                        if ($transaction->cust_ref_date != "1970-01-01")
+                        {
+                            $details .= "\"{$GLOBALS['strCustomerReferenceDate']}\",\"{$transaction->cust_ref_date}\",";
+                        }
+                        $details .= "\n";
+                    }
+                    
+                    if (!empty($transaction->title))
+                    {
+                        $details .= "\"{$GLOBALS['strTitle']}\",\"{$transaction->title}\"\n";
+                    }
+                    
+                    if (!empty($transaction->notes))
+                    {
+                        $details .= "\"{$GLOBALS['strNotes']}\",\"{$transaction->notes}\"\n";
+                    }
+                }
+                
                 $str = "\"{$transaction->date}\",";
                 $str .= "\"{$transaction->transactionid}\",";
                 $str .= "\"{$transaction->serviceid}\",\"";
@@ -10618,6 +10668,12 @@ function transactions_report($serviceid, $startdate, $enddate, $sites, $display,
         {
             if ($display == 'html')
             {
+                if (!empty($details))
+                {
+                	// Dont need to worry about this in the above section as sitebreakdown and serviceid are multually exclusive
+                    $text .= "<div><table align='center'>{$details}</table></div>";
+                }
+                
                 $text .= "<table align='center'>";
                 $text .= "<tr><th>{$GLOBALS['strDate']}</th><th>{$GLOBALS['strID']}</th><th>{$GLOBALS['strServiceID']}</th>";
                 $text .= "<th>{$GLOBALS['strSite']}</th>";
@@ -10630,6 +10686,10 @@ function transactions_report($serviceid, $startdate, $enddate, $sites, $display,
             }
             elseif ($display == 'csv')
             {
+                if (!empty($details))
+                {
+                    $text .= $details;
+                }
                 $text .= "\"{$GLOBALS['strDate']}\",\"{$GLOBALS['strID']}\",\"{$GLOBALS['strServiceID']}\",";
                 $text .= "\"{$GLOBALS['strSite']}\",";
                 $text .= "\"{$GLOBALS['strDescription']}\",\"{$GLOBALS['strCredit']}\",\"{$GLOBALS['strDebit']}\"\n";
