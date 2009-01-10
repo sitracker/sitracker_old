@@ -49,8 +49,16 @@ class fetchSitMail
     function connect()
     {
         $this->mailbox = imap_open($this->server, $this->username,
-                                   $this->password, 'CL_EXPUNGE') OR
-            trigger_error(imap_last_error(), E_USER_ERROR)."\n";
+                                   $this->password, 'CL_EXPUNGE');
+	if ($this->mailbox)
+	{
+	    return TRUE;
+	}
+	else
+	{
+	    trigger_error(imap_last_error(), E_USER_ERROR)."\n";
+	    return FALSE;
+	}
     }
 
     function getNumUnreadEmails()

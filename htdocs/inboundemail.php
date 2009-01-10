@@ -85,7 +85,15 @@ elseif ($CONFIG['enable_inbound_mail'] == 'POP/IMAP')
                                 $CONFIG['email_options']);
 
 
-    $mailbox->connect();
+    if (!$mailbox->connect())
+    {
+	if ($CONFIG['debug'])
+	{
+	    echo "Connection error, see debug log for details, if enabled.\n";
+	}
+	exit;
+    }
+
     $emails = $mailbox->getNumUnreadEmails();
 //     $size = $mailbox->getTotalSize($emails);
 }
