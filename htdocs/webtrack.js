@@ -17,7 +17,7 @@ var mainframe = '50%';
 function incident_details_window(incidentid,win,rtn)
 {
 	// URL = "incident.php?popup=yes&id=" + incidentid;
-	URL = "incident_details.php?id=" + incidentid + "&win=" + win;
+	URL = application_webpath + "incident_details.php?id=" + incidentid + "&win=" + win;
 	if (popwin) { popwin.close(); }
 	popwin = window.open(URL, "sit_popup", "toolbar=yes,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=700,height=600");
 	if (rtn == true) return popwin;
@@ -49,14 +49,14 @@ function confirm_action(msg)
 
 function message_window(userid)
 {
-    URL = "messages.php?userid=" + userid;
+    URL = application_webpath + "messages.php?userid=" + userid;
     window.open(URL, "message_window", "toolbar=yes,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=700,height=600");
 }
 
 
 function help_window(helpid)
 {
-    URL = "/help.php?id=" + helpid;
+    URL = application_webpath + "help.php?id=" + helpid;
     window.open(URL, "help_window", "toolbar=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width=500,height=500");
 }
 
@@ -313,7 +313,7 @@ function update_ttna() {
 // Check whether a service level is timed when adding a contract
 function addcontract_sltimed(servicelevel)
 {
-    new Ajax.Request('ajaxdata.php?action=servicelevel_timed&servicelevel=' + servicelevel + '&rand=' + get_random(),
+    new Ajax.Request(application_webpath + 'ajaxdata.php?action=servicelevel_timed&servicelevel=' + servicelevel + '&rand=' + get_random(),
         {
             method:'get',
                 onSuccess: function(transport)
@@ -507,19 +507,19 @@ function confirm_addword()
 
 function email_window(incidentid)
 {
-  URL = "email_incident.php?menu=hide&id=" + incidentid;
+  URL = application_webpath + "email_incident.php?menu=hide&id=" + incidentid;
   window.open(URL, "email_window", "toolbar=yes,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=700,height=600");
 }
 
 function close_window(incidentid)
 {
-  URL = "close_incident.php?menu=hide&id=" + incidentid;
+  URL = application_webpath + "close_incident.php?menu=hide&id=" + incidentid;
   window.open(URL, "email_window", "toolbar=yes,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=700,height=600");
 }
 
 function help_window(helpid)
 {
-  URL = "help.php?id=" + helpid;
+  URL = application_webpath + "help.php?id=" + helpid;
   window.open(URL, "help_window", "toolbar=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width=500,height=500");
 }
 
