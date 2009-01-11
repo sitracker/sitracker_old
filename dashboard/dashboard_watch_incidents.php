@@ -11,6 +11,7 @@
 
 $dashboard_watch_incidents_version = 1;
 
+
 function dashboard_watch_incidents($dashletid)
 {
     global $sit, $CONFIG, $iconset;
@@ -113,7 +114,7 @@ function dashboard_watch_incidents_display($dashletid)
                     $sql = "SELECT i.id, i.title, i.status, i.servicelevel, i.maintenanceid, i.priority, c.forenames, c.surname, c.siteid ";
                     $sql .= "FROM `{$GLOBALS['dbIncidents']}` AS i, `{$GLOBALS['dbContacts']}`  AS c ";
                     $sql .= "WHERE i.contact = c.id AND c.siteid = {$obj->id} ";
-                    $sql .= "AND i.status != 2 AND i.status != 7 ";
+                    $sql .= "AND i.status != ".STATUS_CLOSED." AND i.status != ".STATUS_CLOSING." ";
 
                     $lsql = "SELECT name FROM `{$GLOBALS['dbSites']}` WHERE id = {$obj->id}";
                     $lresult = mysql_query($lsql);
@@ -125,7 +126,7 @@ function dashboard_watch_incidents_display($dashletid)
                     $sql = "SELECT i.id, i.title, i.status, i.servicelevel, i.maintenanceid, i.priority, c.forenames, c.surname, c.siteid ";
                     $sql .= "FROM `{$GLOBALS['dbIncidents']}` AS i, `{$GLOBALS['dbContacts']}`  AS c ";
                     $sql .= "WHERE i.contact = c.id AND i.contact = {$obj->id} ";
-                    $sql .= "AND i.status != 2 AND i.status != 7 ";
+                    $sql .= "AND i.status != ".STATUS_CLOSED." AND i.status != ".STATUS_CLOSING." ";
 
                     $lsql = "SELECT forenames, surname FROM `{$GLOBALS['dbContacts']}` WHERE id = {$obj->id} ";
                     $lresult = mysql_query($lsql);
@@ -137,7 +138,7 @@ function dashboard_watch_incidents_display($dashletid)
                     $sql = "SELECT i.id, i.title, i.status, i.servicelevel, i.maintenanceid, i.priority, c.forenames, c.surname, c.siteid ";
                     $sql .= "FROM `{$GLOBALS['dbIncidents']}` AS i, `{$GLOBALS['dbContacts']}`  AS c ";
                     $sql .= "WHERE i.contact = c.id AND (i.owner = {$obj->id} OR i.towner = {$obj->id}) ";
-                    $sql .= "AND i.status != 2 AND i.status != 7 ";
+                    $sql .= "AND i.status != ".STATUS_CLOSED." AND i.status != ".STATUS_CLOSING." ";
 
                     $lsql = "SELECT realname FROM `{$GLOBALS['dbUsers']}` WHERE id = {$obj->id}";
                     $lresult = mysql_query($lsql);
@@ -263,7 +264,7 @@ function dashboard_watch_incidents_edit($dashletid)
         case 'add':
             $type = $_REQUEST['type'];
             echo "<h2>{$GLOBALS['strWatchAddSet']}</h2>";
-            echo "<form id='dwiaddform' action='{$_SERVER['PHP_SELF']}?action=do_add&type={$type}' method='post'>";
+            echo "<form id='dwiaddform' action='{$_SERVER['PHP_SELF']}?action=do_add&type={$type}' method='post' onsubmit='return false'>";
             echo "<table class='vertical'>";
             echo "<tr><td>";
 
