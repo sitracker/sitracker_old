@@ -1223,32 +1223,6 @@ CREATE TABLE `{$dbSoftwareProducts}` (
 INSERT INTO `{$dbSoftwareProducts}` VALUES (1,1);
 
 
-CREATE TABLE `{$dbSpellcheck}` (
-  `id` int(11) NOT NULL auto_increment,
-  `updateid` int(11) NOT NULL default '0',
-  `bodytext` text NOT NULL,
-  `newincidentstatus` int(11) default NULL,
-  `timetonextaction_none` varchar(50) default NULL,
-  `timetonextaction_days` int(11) default NULL,
-  `timetonextaction_hours` int(11) default NULL,
-  `timetonextaction_minutes` int(11) default NULL,
-  `day` int(11) default NULL,
-  `month` int(11) default NULL,
-  `year` int(11) default NULL,
-  `fromfield` varchar(255) default NULL,
-  `replytofield` varchar(255) default NULL,
-  `ccfield` varchar(255) default NULL,
-  `bccfield` varchar(255) default NULL,
-  `tofield` varchar(255) default NULL,
-  `subjectfield` varchar(255) default NULL,
-  `attachmenttype` varchar(255) default NULL,
-  `filename` varchar(255) default NULL,
-  `timestamp` timestamp(14) NOT NULL,
-  PRIMARY KEY  (`id`),
-  KEY `updateid` (`updateid`)
-) ENGINE=MyISAM COMMENT='Temporary table used during spellcheck' ;
-
-
 CREATE TABLE `{$dbSupportContacts}` (
   `id` int(11) NOT NULL auto_increment,
   `maintenanceid` int(11) default NULL,
@@ -2510,10 +2484,14 @@ ALTER TABLE `{$dbHolidays}` ADD `date` DATE NULL AFTER `startdate` ;
 UPDATE `{$dbHolidays}` SET `date` = FROM_UNIXTIME( `startdate` ) WHERE 1 ;
 ALTER TABLE `{$dbHolidays}` DROP `startdate`
 
--- PH
+-- PH 2009-01-10
 ALTER TABLE `{$dbService}` ADD `cust_ref` VARCHAR( 255 ) NULL AFTER `priority` ,
 ADD `cust_ref_date` DATE NULL AFTER `po_number` ,
 ADD `title` VARCHAR( 255 ) NULL AFTER `po_date` ;
+
+-- INL 2009-01-11
+DROP TABLE `spellcheck`;
+
 ";
 
 // Important: When making changes to the schema you must add SQL to make the alterations

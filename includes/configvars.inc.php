@@ -130,10 +130,7 @@ $CFGCAT['kb'] = array('kb_enabled',
 $CFGCAT['outboundemail'] = array('sales_email');
 $CFGCAT['journal'] = array('journal_loglevel', 'journal_purge_after');
 
-$CFGCAT['other'] = array('enable_spellchecker',
-                         'main_dictionary_file',
-                         'custom_dictionary_file',
-                         'support_manager');
+$CFGCAT['other'] = array('support_manager');
 
 
 
@@ -182,8 +179,6 @@ $CFGVAR['creditsfile']['title'] = 'Path to the Credits file';
 $CFGVAR['critical_threshold']['help'] = 'Enter a number between 0 and 100.';
 $CFGVAR['critical_threshold']['title'] = 'flag items as critical when they are this percentage complete.';
 $CFGVAR['critical_threshold']['type'] = 'percent';
-
-$CFGVAR['custom_dictionary_file']['title'] = 'Spell check custom words dictionary file';
 
 $CFGVAR['dateformat_datetime']['help'] = "See <a href='http://www.php.net/manual/en/function.date.php'>http://www.php.net/manual/en/function.date.php</a> for help with date formats";
 $CFGVAR['dateformat_datetime']['title'] = 'Date and Time format';
@@ -272,10 +267,6 @@ $CFGVAR['enable_inbound_mail']['help'] = "Normal users should choose 'POP/IMAP' 
 $CFGVAR['enable_inbound_mail']['options'] = "POP/IMAP|MTA|disabled";
 $CFGVAR['enable_inbound_mail']['title'] = "Enable incoming mail to SiT";
 $CFGVAR['enable_inbound_mail']['type'] = 'select';
-
-$CFGVAR['enable_spellchecker']['options'] = 'TRUE|FALSE';
-$CFGVAR['enable_spellchecker']['title'] = 'Set to TRUE to enable spellchecking or FALSE to disable';
-$CFGVAR['enable_spellchecker']['type'] = 'select';
 
 $CFGVAR['end_working_day']['help'] = 'Seconds since midnight';
 $CFGVAR['end_working_day']['title'] = 'Time of the end of the working day (in seconds)';
@@ -402,8 +393,6 @@ $CFGVAR['logout_url']['help'] = "When left blank this defaults to \$CONFIG['appl
 $CFGVAR['logout_url']['title'] = "The URL to redirect the user too after he/she logs out";
 
 $CFGVAR['mailin_spool_path']['title'] = "Incoming mail spool directory, the location of mail processed by mailfilter shell script";
-
-$CFGVAR['main_dictionary_file']['title'] = 'Spell check main dictionary file';
 
 $CFGVAR['max_incoming_email_perday']['title'] = 'maximum no. of incoming emails per incident before a mail-loop is detected';
 $CFGVAR['max_incoming_email_perday']['type'] = 'number';

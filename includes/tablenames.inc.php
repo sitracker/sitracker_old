@@ -64,7 +64,6 @@ $dbSites = "{$CONFIG['db_tableprefix']}sites";
 $dbSiteTypes = "{$CONFIG['db_tableprefix']}sitetypes";
 $dbSoftware = "{$CONFIG['db_tableprefix']}software";
 $dbSoftwareProducts = "{$CONFIG['db_tableprefix']}softwareproducts";
-$dbSpellcheck = "{$CONFIG['db_tableprefix']}spellcheck";
 $dbSupportContacts = "{$CONFIG['db_tableprefix']}supportcontacts";
 $dbSystem = "{$CONFIG['db_tableprefix']}system";
 $dbTags = "{$CONFIG['db_tableprefix']}tags";

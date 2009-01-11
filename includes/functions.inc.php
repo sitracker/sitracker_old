@@ -4037,136 +4037,6 @@ function global_signature()
 }
 
 
-// checks the spelling of a word and returns true if spelled correctly and
-// false if misspelled.  Uses the pspell library using link provided.
-function spellcheck_word($pspell_link, $word)
-{
-    return pspell_check($pspell_link,$word);
-}
-
-
-function spellcheck_addword($word)
-{
-    global $CONFIG;
-    $pspell_config = pspell_config_create ("en");
-    pspell_config_personal ($pspell_config, $CONFIG['main_dictionary_file']);
-    pspell_config_repl ($pspell_config, $CONFIG['main_dictionary_file']);
-    $pspell_link = pspell_new_personal ($CONFIG['custom_dictionary_file'], 'en' , 'british', '', 'iso8859-1', PSPELL_FAST);
-
-    pspell_add_to_personal ($pspell_link, $word);
-    pspell_save_wordlist ($pspell_link);
-}
-
-
-// urltext should take the form '&var=value'
-// FIXME i18n
-function spellcheck_text($text, $urltext)
-{
-    global $CONFIG;
-    $pspell_config = pspell_config_create ("en");
-    pspell_config_personal ($pspell_config, $CONFIG['main_dictionary_file']);
-    pspell_config_repl ($pspell_config, $CONFIG['main_dictionary_file']);
-    $pspell_link = pspell_new_personal ($CONFIG['custom_dictionary_file'], 'en' , 'british', '', 'iso8859-1', PSPELL_FAST);
-
-    if (!$pspell_link) trigger_error('Dictionary Link Error', E_USER_WARNING);
-
-    // try and stop html getting through in the source text (INL 2July03)
-    $text = str_replace('<','&#060;', $text);
-    $text = str_replace('>','&#062;', $text);
-
-    for ($c=0; $c <= strlen($text); $c++)
-    {
-        $char = strtolower(substr($text,$c,1));
-        if (!(ord($char) >= 97 && ord($char) <= 122))
-        {
-            if ($endwordpos==-1 && $startwordpos==-1)
-            {
-                $newtext .= $char;
-            }
-
-            if ($startwordpos==-1)
-            {
-                $startwordpos=$c+1;
-            }
-            else
-            {
-                $endwordpos=$c;
-            }
-        }
-        if ($c == 0 && (ord($char) >= 97 && ord($char) <= 122))
-        {
-            $startwordpos=0;
-        }
-
-        if ($endwordpos!=-1 && $startwordpos!=-1)
-        {
-            $word = substr($text, $startwordpos, ($endwordpos-$startwordpos));
-            if (!spellcheck_word($pspell_link, $word))
-            {
-                $suggestions = pspell_suggest($pspell_link, $word);
-                if (count($suggestions) > 1)
-                {
-                    $tooltiptext = "Possible spellings:<br /><br />"; // FIXME i18n
-                    $tooltiptext .= "<table summary='suggestions'>";
-                    $col = 0;
-                    foreach ($suggestions as $suggestion)
-                    {
-                        if ($col > 3)
-                        {
-                            $tooltiptext .= "</tr>\n<tr>"; $col=0;
-                        }
-
-                        $tooltiptext .= "<td valign='top' align='left'><a href='{$_SERVER['PHP_SELF']}?changepos=$c&amp;replacement=$suggestion$urltext&amp;step=3'>$suggestion</a></td>";
-                        $col++;
-                    }
-                    $tooltiptext .= "</tr>\n</table>\n";
-                }
-                else
-                {
-                    $tooltiptext = "Sorry, there are no reasonable suggested spellings for '$word' in the dictionary<br />";
-                }
-                $tooltiptext .= "<br /><a href='{$_SERVER['PHP_SELF']}?addword=$word$urltext&amp;step=3' onclick='return confirm_addword();'>Add</a> '$word' to the dictionary.";
-                echo "<script type=\"text/javascript\">var linkHelp$c = \"$tooltiptext\";</script>\n";
-
-                $newtext .= "<a class=\"spellLink\" href=\"?\" onclick=\"showHelpTip(event, linkHelp$c); return false\">$word</a>";
-            }
-            else
-            {
-                $newtext .= "$word";
-            }
-
-            $c--;
-            $startwordpos=-1;
-            $endwordpos=-1;
-        }
-    }
-    return $newtext;
-}
-
-
-// replace word in text
-function replace_word($text, $changepos, $replacement)
-{
-    // changepos is the position of the end of the word needing to be changed
-
-    // read backwards until the end of the word and store the word end position
-    $limit = $changepos-30;
-    $c = $changepos-1;
-    do
-    {
-        $char = strtolower(substr($text,$c,1));
-        $startwordpos = $c;
-        $c--;
-    } while ((ord($char) >= 97 && ord($char) <= 122) && $c > 1 );
-
-    $newtext = substr($text, 0, $startwordpos+1 );
-    $newtext .= $replacement;
-    $newtext .= substr($text, $changepos);
-
-    return $newtext;
-}
-
-
 function holiday_type ($id)
 {
     switch ($id)
@@ -4645,13 +4515,6 @@ function incident_get_next_review($incidentid)
     }
     return $timesincereview;
 }
-
-
-function strip_anchor_tags ($string)
-{
-    return preg_replace('/<a class=\"spellLink\" href=\"?\" onclick=\"showHelpTip.event, linkHelp(.*).; return false\">/', '', $string);
-}
-
 
 
 /**
@@ -10292,12 +10155,12 @@ function contract_service_table($contractid)
             {
             	$span .= "<strong>{$GLOBALS['strTitle']}</strong>: {$service->title}<br />";
             }
-            
+
             if (!empty($service->notes))
             {
                 $span .= "<strong>{$GLOBALS['strNotes']}</strong>: {$service->notes}<br />";
             }
-            
+
             if (!empty($service->cust_ref))
             {
             	$span .= "<strong>{$GLOBALS['strCustomerReference']}</strong>: {$service->cust_ref}";
@@ -10531,18 +10394,18 @@ function transactions_report($serviceid, $startdate, $enddate, $sites, $display,
                         }
                         $details .= "</tr>";
                     }
-                    
+
                     if (!empty($transaction->title))
                     {
                     	$details .= "<tr><th>{$GLOBALS['strTitle']}</th><td>{$transaction->title}</td></tr>";
                     }
-                    
+
                     if (!empty($transaction->notes))
                     {
                         $details .= "<tr><th>{$GLOBALS['strNotes']}</th><td>{$transaction->notes}</td></tr>";
                     }
                 }
-                
+
                 $str = "<tr class='$shade'>";
                 $str .= "<td>{$transaction->date}</td>";
                 $str .= "<td>{$transaction->transactionid}</td>";
@@ -10563,18 +10426,18 @@ function transactions_report($serviceid, $startdate, $enddate, $sites, $display,
                         }
                         $details .= "\n";
                     }
-                    
+
                     if (!empty($transaction->title))
                     {
                         $details .= "\"{$GLOBALS['strTitle']}\",\"{$transaction->title}\"\n";
                     }
-                    
+
                     if (!empty($transaction->notes))
                     {
                         $details .= "\"{$GLOBALS['strNotes']}\",\"{$transaction->notes}\"\n";
                     }
                 }
-                
+
                 $str = "\"{$transaction->date}\",";
                 $str .= "\"{$transaction->transactionid}\",";
                 $str .= "\"{$transaction->serviceid}\",\"";
@@ -10673,7 +10536,7 @@ function transactions_report($serviceid, $startdate, $enddate, $sites, $display,
                 	// Dont need to worry about this in the above section as sitebreakdown and serviceid are multually exclusive
                     $text .= "<div><table align='center'>{$details}</table></div>";
                 }
-                
+
                 $text .= "<table align='center'>";
                 $text .= "<tr><th>{$GLOBALS['strDate']}</th><th>{$GLOBALS['strID']}</th><th>{$GLOBALS['strServiceID']}</th>";
                 $text .= "<th>{$GLOBALS['strSite']}</th>";
@@ -11235,7 +11098,6 @@ function endsWith( $str, $sub )
 // These are the modules that we are dependent on, without these something
 // or everything will fail, so let's throw an error here.
 // Check that the correct modules are loaded
-if (!extension_loaded('pspell')) $CONFIG['enable_spellchecker'] = FALSE; // FORCE Turn off spelling if module not found
 if (!extension_loaded('mysql')) trigger_error('SiT requires the php/mysql module', E_USER_ERROR);
 if (!extension_loaded('imap') AND $CONFIG['enable_inbound_mail'] == 'POP/IMAP')
 {

@@ -35,6 +35,9 @@ allows you to specify a number of days holiday entitlement to give to new
 users as they are added.  This won't affect any existing users.  We've set this
 to 21 days, but you can of course alter it.
 
+The SiT integrated spellcheck feature has been removed, it has been unmaintained
+for a few years and browsers like Firefox do a much better job of spellcheck
+anyway.
 
 Upgrading to 3.41
 -----------------

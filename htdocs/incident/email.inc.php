@@ -518,12 +518,6 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
         echo "</textarea>";
         echo "<div id='updatestr'></div>";
         echo "</td></tr>";
-        if ($CONFIG['enable_spellchecker'] == TRUE)
-        {
-            echo "<tr><th>&nbsp;</th>";
-            echo "<td><input type='checkbox' name='spellcheck' value='yes' />";
-            echo "Check Spelling before sending</td></tr>\n"; // FIXME i18n
-        }
         echo "</table>";
         echo "<p align='center'>";
         echo "<input name='newincidentstatus' id='newincidentstatus' type='hidden' value='{$newincidentstatus}' />";
@@ -546,7 +540,7 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
     break;
 
     case 3:
-        // show form 3 (spellcheck) or send email and update incident
+        // show form 3 or send email and update incident
 
         // External variables
         $bodytext = $_REQUEST['bodytext'];
@@ -599,13 +593,6 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
             if (!mv) trigger_error("Problem moving attachment from temp directory: {$filename}", E_USER_WARNING);
             $attachmenttype = $_FILES['attachment']['type'];
         }
-        // spellcheck email if required
-        if ($spellcheck == 'yes')
-        {
-            include ('../spellcheck_email.php');
-            exit;
-        }
-
         $errors = 0;
         // check to field
         if ($tofield == '')

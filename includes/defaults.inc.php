@@ -106,12 +106,6 @@ $CONFIG['ftp_pasv'] = TRUE;
 // The path to the directory where we store files, (e.g. /pub/support/) the trailing slash is important
 $CONFIG['ftp_path'] = '/';
 
-// Set to TRUE to enable spellchecking or FALSE to disable
-$CONFIG['enable_spellchecker'] = FALSE;
-// Spell check dictionaries
-$CONFIG['main_dictionary_file'] = '/usr/share/dict/linux.words';
-$CONFIG['custom_dictionary_file'] = "{$CONFIG['application_fspath']}dictionary/custom.words";
-
 // The CSS file to use when no other is configured
 $CONFIG['default_css_url'] = 'styles/sit8.css';
 
