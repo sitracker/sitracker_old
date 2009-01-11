@@ -2470,13 +2470,12 @@ CREATE TABLE IF NOT EXISTS `{$dbConfig}` (
 
 -- KH 2008-12-07
 ALTER TABLE `{$dbTriggers}` CHANGE `action` `action` ENUM( 'ACTION_NONE', 'ACTION_EMAIL', 'ACTION_NOTICE', 'ACTION_JOURNAL', 'ACTION_CREATE_INCIDENT' ) NOT NULL DEFAULT 'ACTION_NONE';
-
--- PH 2008-12-24
-ALTER TABLE `{$dbUsers}` ADD `var_emoticons` ENUM( 'true', 'false' ) NOT NULL DEFAULT 'false' AFTER `var_utc_offset` ;
-
 ";
 
 $upgrade_schema[345] = "
+-- PH 2008-12-24
+ALTER TABLE `{$dbUsers}` ADD `var_emoticons` ENUM( 'true', 'false' ) NOT NULL DEFAULT 'false' AFTER `var_utc_offset` ;
+
 -- INL 2009-01-08
 ALTER TABLE `{$dbUsers}` ADD `holiday_resetdate` DATE NULL AFTER `holiday_entitlement` ;
 ALTER TABLE `{$dbUsers}` ADD `user_startdate` DATE NULL AFTER `accepting` ;
