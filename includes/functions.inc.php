@@ -4041,16 +4041,17 @@ function holiday_type ($id)
 {
     switch ($id)
     {
-        case 1: $holidaytype = $GLOBALS['strHoliday']; break;
-        case 2: $holidaytype = $GLOBALS['strAbsentSick']; break;
-        case 3: $holidaytype = $GLOBALS['strWorkingAway']; break;
-        case 4: $holidaytype = $GLOBALS['strTraining']; break;
-        case 5: $holidaytype = $GLOBALS['strCompassionateLeave']; break;
-        case 10: $holidaytype = $GLOBALS['strPublicHoliday']; break;
+        case HOL_HOLIDAY: $holidaytype = $GLOBALS['strHoliday']; break;
+        case HOL_SICKNESS: $holidaytype = $GLOBALS['strAbsentSick']; break;
+        case HOL_WORKING_AWAY: $holidaytype = $GLOBALS['strWorkingAway']; break;
+        case HOL_TRAINING: $holidaytype = $GLOBALS['strTraining']; break;
+        case HOL_FREE: $holidaytype = $GLOBALS['strCompassionateLeave']; break;
+        case HOL_PUBLIC: $holidaytype = $GLOBALS['strPublicHoliday']; break;
         default: $holidaytype = $GLOBALS['strUnknown']; break;
     }
     return ($holidaytype);
 }
+
 
 function holiday_approval_status($approvedid, $approvedby=-1)
 {
@@ -4082,11 +4083,11 @@ function holiday_approval_status($approvedid, $approvedby=-1)
 
 function holidaytype_drop_down($name, $id)
 {
-    $holidaytype[1] = $GLOBALS['strHoliday'];
-    $holidaytype[2] = $GLOBALS['strAbsentSick'];
-    $holidaytype[3] = $GLOBALS['strWorkingAway'];
-    $holidaytype[4] = $GLOBALS['strTraining'];
-    $holidaytype[5] = $GLOBALS['strCompassionateLeave'];
+    $holidaytype[HOL_HOLIDAY] = $GLOBALS['strHoliday'];
+    $holidaytype[HOL_SICKNESS] = $GLOBALS['strAbsentSick'];
+    $holidaytype[HOL_WORKING_AWAY] = $GLOBALS['strWorkingAway'];
+    $holidaytype[HOL_TRAINING] = $GLOBALS['strTraining'];
+    $holidaytype[HOL_FREE] = $GLOBALS['strCompassionateLeave'];
 
     $html = "<select name='$name'>";
     if ($id == 0)
