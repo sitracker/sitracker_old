@@ -42,7 +42,9 @@ function saction_CloseIncidents($closure_delay)
 
     if ($closure_delay < 1) $closure_delay = 554400; // Default  six days and 10 hours
 
-    $sql = "SELECT * FROM `{$dbIncidents}` WHERE status='7' AND (({$now} - lastupdated) > '{$closure_delay}') AND (timeofnextaction='0' OR timeofnextaction<='{$now}') ";
+    $sql = "SELECT * FROM `{$dbIncidents}` WHERE status='".STATUS_CLOSING."' ";
+    $sql .= "AND (({$now} - lastupdated) > '{$closure_delay}') ";
+    $sql .= "AND (timeofnextaction='0' OR timeofnextaction<='{$now}') ";
     $result=mysql_query($sql);
     if (mysql_error())
     {
@@ -52,7 +54,9 @@ function saction_CloseIncidents($closure_delay)
     if ($CONFIG['debug']) debug_log("Found ".mysql_num_rows($result)." Incidents to close");
     while ($irow = mysql_fetch_array($result))
     {
-        $sqlb = "UPDATE `{$dbIncidents}` SET lastupdated='{$now}', closed='{$now}', status='2', closingstatus='4', timeofnextaction='0' WHERE id='".$irow['id']."'";
+        $sqlb = "UPDATE `{$dbIncidents}` SET lastupdated='{$now}', ";
+        $sqlb .= "closed='{$now}', status='".STATUS_CLOSED."', closingstatus='4', ";
+        $sqlb .= "timeofnextaction='0' WHERE id='".$irow['id']."'";
         $resultb = mysql_query($sqlb);
         if (mysql_error())
         {
@@ -475,7 +479,8 @@ function saction_ChaseCustomers()
                             $success = FALSE;
                         }
 
-                        $sql_update = "UPDATE `{$dbIncidents}` SET lastupdated = '{$now}', nextactiontime = 0, status = 1 WHERE id = {$obj->id}";
+                        $sql_update = "UPDATE `{$dbIncidents}` SET lastupdated = '{$now}', ";
+                        $sql_update .= "nextactiontime = 0, status = ".STATUS_ACTIVE." WHERE id = {$obj->id}";
                         mysql_query($sql_update);
                         if (mysql_error())
                         {
@@ -503,7 +508,7 @@ function saction_ChaseCustomers()
                             $success = FALSE;
                         }
 
-                        $sql_update = "UPDATE `{$dbIncidents}` SET lastupdated = '{$now}', nextactiontime = 0, status = 1 WHERE id = {$obj->id}";
+                        $sql_update = "UPDATE `{$dbIncidents}` SET lastupdated = '{$now}', nextactiontime = 0, status = ".STATUS_ACTIVE." WHERE id = {$obj->id}";
                         mysql_query($sql_update);
                         if (mysql_error())
                         {
@@ -526,7 +531,7 @@ function saction_ChaseCustomers()
                             $success = FALSE;
                         }
 
-                        $sql_update = "UPDATE `{$dbIncidents}` SET lastupdated = '{$now}', nextactiontime = 0, status = 1 WHERE id = {$obj->id}";
+                        $sql_update = "UPDATE `{$dbIncidents}` SET lastupdated = '{$now}', nextactiontime = 0, status = ".STATUS_ACTIVE." WHERE id = {$obj->id}";
                         mysql_query($sql_update);
                         if (mysql_error())
                         {
