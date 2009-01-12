@@ -38,6 +38,7 @@ else list($cssurl, $iconset) = mysql_fetch_row($cssresult);
 if (empty($iconset)) $iconset = 'sit';
 unset($styleid);
 echo "<script src='{$CONFIG['application_webpath']}scripts/prototype/prototype.js' type='text/javascript'></script>\n";
+echo "<script src='{$CONFIG['application_webpath']}sit.js.php' type='text/javascript'></script>\n";
 echo "<script src='{$CONFIG['application_webpath']}webtrack.js' type='text/javascript'></script>\n";
 // javascript popup date library
 echo "<script src='{$CONFIG['application_webpath']}calendar.js' type='text/javascript'></script>\n";
