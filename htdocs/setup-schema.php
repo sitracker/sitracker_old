@@ -2485,8 +2485,8 @@ ALTER TABLE `{$dbHolidays}` DROP `startdate`
 
 -- PH 2009-01-10
 ALTER TABLE `{$dbService}` ADD `cust_ref` VARCHAR( 255 ) NULL AFTER `priority` ,
-ADD `cust_ref_date` DATE NULL AFTER `po_number` ,
-ADD `title` VARCHAR( 255 ) NULL AFTER `po_date` ;
+ADD `cust_ref_date` DATE NULL AFTER `cust_ref` ,
+ADD `title` VARCHAR( 255 ) NULL AFTER `cust_ref_date` ;
 
 -- INL 2009-01-11
 DROP TABLE `spellcheck`;
