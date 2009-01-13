@@ -41,10 +41,15 @@ fieldset
     border: 1px solid #ccc;
 }
 
-table.timesheet td, table.timesheet th
+table.timesheet th
 {
     text-align: center;
     width: 50px;
+}
+
+table.timesheet td
+{
+    text-align: left;
 }
 
 .push
@@ -94,8 +99,12 @@ table.timesheet td, table.timesheet th
 	height:20px;
 	border-bottom:1px solid #CCC;
 }
-
-.calendarContentTime, .spacer
+.spacer
+{
+    width: 50px;
+    text-align: center;
+}
+.calendarContentTime
 {
 	text-align:center;
 	line-height: {$rowHeight}px;

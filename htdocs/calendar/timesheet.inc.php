@@ -238,7 +238,9 @@ else
     echo "<br />";
     echo "<div id='weekScheduler_container'>\n";
     echo "<div id='weekScheduler_top'>\n";
-    echo "<div class='spacer'><span></span></div>\n";
+    echo "<div class='spacer'><a href='javascript:displayPreviousWeek();' title='Previous Week'>&lt;</a>";
+    echo " &nbsp; ";
+    echo "<a href='javascript:displayNextWeek();' title='Next Week'>&gt;</a><span></span></div>\n";
     echo "<div class='days' id='weekScheduler_dayRow'>\n";
     echo "<div id='drop1' class='shade2'>{$strMonday} <span></span></div>\n";
     echo "<div id='drop2' class='shade2'>{$strTuesday} <span></span></div>\n";
