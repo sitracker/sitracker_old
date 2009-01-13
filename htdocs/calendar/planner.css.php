@@ -12,13 +12,18 @@ ul
 
 li
 {
-    cursor: move;
     list-style-type: none;
     border: 1px solid #448;
     background-color: #ccf;
     margin-left: 0px;
     padding: 2px;
     left: 0px;
+}
+
+ul#dropsources li li:hover
+{
+    background: yellow;
+    cursor: move;
 }
 
 #menu li
@@ -72,14 +77,14 @@ table.timesheet td, table.timesheet th
 #weekScheduler_container
 {
 	border:1px solid #CCC;
-	width:986px;	
+	width:986px;
 }
 
 .weekScheduler_appointments_day
 {	/* Column for each day */
 	width:130px;
 	float:left;
-	border-right:1px solid #CCC;	
+	border-right:1px solid #CCC;
 	position:relative;
 }
 
@@ -102,14 +107,14 @@ table.timesheet td, table.timesheet th
 .weekScheduler_appointmentHour
 {	/* Small squares for each hour inside the appointment div */
 	height: {$rowHeight}px;
-	border-bottom:1px solid #CCC;	
+	border-bottom:1px solid #CCC;
 }
 
 .spacer
 {
 	height:20px;
 	float:left;
-}	
+}
 
 #weekScheduler_hours
 {
@@ -131,11 +136,11 @@ table.timesheet td, table.timesheet th
 .calendarContentTime .content_hour
 {
 	font-size:12px;
-	text-decoration:superscript;	
+	text-decoration:superscript;
 	vertical-align:top;
 	line-height:{$rowHeight}px;
 }
-	
+
 #weekScheduler_top
 {
 	position:relative;
