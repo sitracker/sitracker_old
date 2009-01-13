@@ -117,10 +117,41 @@ else
         echo "<br/>";
     }
 
-    echo "<div id='addremove' style='position: absolute; display:none; top: 0px; ";
-    echo "left: 0px; width: 0px; background-color: #fff; z-index:100; ";
-    echo "border-bottom: 3px solid gray;'><fieldset style='width: 586px;'>";
-    echo "<legend>{$strActivity}</legend>: ";
+    // Controls Table
+    echo "<div id='rightdiv' style='float: right; border: 1px dashed gray; width: 25%;'>";
+    echo "<table class='timesheet'>";
+    echo "<tr>";
+    echo "<th>{$strKey}</th>";
+    echo "<th>{$strControls}</th>";
+    echo "</tr>";
+    echo "<tr>";
+    echo "<td style='width:200px;'><center>";
+    foreach (array('Unconfirmed' => 'ddf', 'Confirmed' => 'fff', 'Waiting Approval' => 'ffb', 'Approved' => 'fdf', 'Unavailable' => 'dfd') as $at => $col)
+    {
+        echo "<div style='background-color: #$col; width: 110px; margin: 5px; border: 1px solid grey;'>$at</div>";
+    }
+    echo "</center></td>";
+    echo "<td>";
+    echo "<input type='button' class='weekButton' value='&lt;&lt; Week' onclick='displayPreviousWeek(); return false' /><br />";
+    echo "<input type='button' class='weekButton' value='Week &gt;&gt;' onclick='displayNextWeek(); return false' style='margin-bottom: 10px;'/><br />";
+    echo "<input id='addtogbutton' type='button' class='weekButton' value='$strAdd &uArr;' onclick=\"toggleMode();\" style='margin-bottom: 20px;' /><br />";
+    echo "<input type='button' class='weekButton' value='Submit' onclick='submitTimesheet(); return false'/><br />";
+    echo "</td>";
+    echo "</tr>";
+    echo "</table>\n";
+    echo "</div>";
+
+
+
+
+
+
+
+    echo "<div id='addremove' style='position: absolute; display:none;  ";
+    echo "width: 0px; background-color: #CCCCFF; z-index:30000; ";
+    echo "border: 3px solid gray;'>";
+//     echo "<fieldset style='width: 586px;'>";
+//     echo "<legend>{$strActivity}</legend>: ";
     echo "<div style='float:right; '>";
     echo "</div>";
     echo "<div style='padding: 5px;'>";
@@ -163,43 +194,45 @@ else
 
     echo "</div>";
     echo "<br /><br />";
-    echo "</fieldset>";
+//     echo "</fieldset>";
     echo "</div>";
 
-    echo "<div style='text-align: left; width: 986px;'>";
-    echo "<div id='rightdiv' style='float: right; padding: 23px 5px 0 0;'>";
-    echo "<table class='timesheet'>";
-    echo "<tr>";
-    echo "<th>{$strLegend}</th>";
-    echo "<th>{$strControls}</th>";
-    echo "</tr>";
-    echo "<tr>";
-    echo "<td style='width:200px;'><center>";
-    foreach (array('Unconfirmed' => 'ddf', 'Confirmed' => 'fff', 'Waiting Approval' => 'ffb', 'Approved' => 'fdf', 'Unavailable' => 'dfd') as $at => $col)
-    {
-        echo "<div style='background-color: #$col; width: 110px; margin: 5px; border: 1px solid grey;'>$at</div>";
-    }
-    echo "</center></td>";
-    echo "<td>";
-    echo "<input type='button' class='weekButton' value='&lt;&lt; Week' onclick='displayPreviousWeek(); return false' /><br />";
-    echo "<input type='button' class='weekButton' value='Week &gt;&gt;' onclick='displayNextWeek(); return false' style='margin-bottom: 10px;'/><br />";
-    echo "<input id='addtogbutton' type='button' class='weekButton' value='$strAdd &uArr;' onclick=\"toggleMode();\" style='margin-bottom: 20px;' /><br />";
-    echo "<input type='button' class='weekButton' value='Submit' onclick='submitTimesheet(); return false'/><br />";
-    echo "</td>";
-    echo "</tr>";
-    echo "</table>\n";
-    echo "</div>";
+    echo "<div style='text-align: left;'>"; // width: 986px;
+//     echo "<div id='rightdiv' style='float: right; padding: 23px 5px 0 0;'>";
+//     echo "<table class='timesheet'>";
+//     echo "<tr>";
+//     echo "<th>{$strKey}</th>";
+//     echo "<th>{$strControls}</th>";
+//     echo "</tr>";
+//     echo "<tr>";
+//     echo "<td style='width:200px;'><center>";
+//     foreach (array('Unconfirmed' => 'ddf', 'Confirmed' => 'fff', 'Waiting Approval' => 'ffb', 'Approved' => 'fdf', 'Unavailable' => 'dfd') as $at => $col)
+//     {
+//         echo "<div style='background-color: #$col; width: 110px; margin: 5px; border: 1px solid grey;'>$at</div>";
+//     }
+//     echo "</center></td>";
+//     echo "<td>";
+//     echo "<input type='button' class='weekButton' value='&lt;&lt; Week' onclick='displayPreviousWeek(); return false' /><br />";
+//     echo "<input type='button' class='weekButton' value='Week &gt;&gt;' onclick='displayNextWeek(); return false' style='margin-bottom: 10px;'/><br />";
+//     echo "<input id='addtogbutton' type='button' class='weekButton' value='$strAdd &uArr;' onclick=\"toggleMode();\" style='margin-bottom: 20px;' /><br />";
+//     echo "<input type='button' class='weekButton' value='Submit' onclick='submitTimesheet(); return false'/><br />";
+//     echo "</td>";
+//     echo "</tr>";
+//     echo "</table>\n";
+//     echo "</div>";
 
-    echo "<div id='leftdiv'>";
-    echo "<fieldset><legend>$strTimesheet</legend>\n";
+
+
+    echo "<div id='leftdiv' style='width: 70%;'>";
+//     echo "<fieldset><legend>{$strTimesheet}</legend>\n";
     echo "<div class='push'></div>";
     echo "<ul id='dropsources'><li>\n";
-    echo "<table class='timesheet' style='width: 600px;' id='activitytable'><tr>";
-    echo "<th>{$strActivity}</th><th>{$strStatus}</th><th style='width: 400px;'>{}$strComments}</th>";
+    echo "<table class='timesheet' style='width: 100%;' id='activitytable'><tr>";
+    echo "<th>{$strActivity}</th><th>{$strStatus}</th><th style='width: 400px;'>{$strNotes}</th>";
     echo "</tr></table>";
     echo "</li></ul>";
     echo "<div class='floor'></div>";
-    echo "</fieldset>";
+//     echo "</fieldset>";
     echo "</div>";
 
     echo "<br />";
