@@ -1175,7 +1175,7 @@ function addActivity(id, name, optionvalue, editvalue)
 
     newtd2.appendChild(newselect);
 
-    newedit.type='edit';
+    newedit.type='text';
     newedit.id='activityedit' + activitycount;
     newedit.width=255;
     newedit.style.width = '400px';

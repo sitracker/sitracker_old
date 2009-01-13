@@ -23,24 +23,24 @@ foreach(array('level', 'data', 'ws' ) as $var)
 	eval("\$$var=cleanvar(\$_REQUEST['$var']);");
 }
 
-if ($level == "")
+if ($level == '')
 {
-    $activity_types['Development'] = "";
+    $activity_types['Development'] = '';
     echo "<script type='text/javascript'>
-        
+/* <![CDATA[ */
         function activityDevelopment(level)
         {
             if (level == 0)
             {
-	    	$('newactivityalias').value = 'Development';
+                $('newactivityalias').value = 'Development';
                 var newid = weekSchedule_ajaxObjects.length;
                 weekSchedule_ajaxObjects[newid] = new sack();
-                weekSchedule_ajaxObjects[newid].requestFile = 'calendar/activity_development.inc.php?level=' + level + '&data=' + getSelectedActivity() + '&ws=' + dateStartOfWeek.getTime();
-                weekSchedule_ajaxObjects[newid].onCompletion = function(){ activityDevelopmentCallback(level, newid); }; 
-                weekSchedule_ajaxObjects[newid].runAJAX();		                
+                weekSchedule_ajaxObjects[newid].requestFile = 'calendar/activity_development.inc.php?level=' + level + '&amp;data=' + getSelectedActivity() + '&amp;ws=' + dateStartOfWeek.getTime();
+                weekSchedule_ajaxObjects[newid].onCompletion = function(){ activityDevelopmentCallback(level, newid); };
+                weekSchedule_ajaxObjects[newid].runAJAX();
             }
         }
-        
+
         function activityDevelopmentCallback(level, newid)
         {
             var incidents = new Array();
@@ -61,38 +61,35 @@ if ($level == "")
                 }
             }
             level ++;
-            
+
             while ($('addactivityselect' + level).length > 1)
             {
                 $('addactivityselect' + level).remove(0);
             }
-            
+
             for (i = 1; i < incidents.length; i ++)
             {
                 $('addactivitydescription' + level).innerHTML = incidents[i]['description'];
                 $('addactivitydescription' + level).parentNode.parentNode.style.display = 'table-row';
                 var incidentname = '" . $strIncident . " ' + incidents[i]['id'];
-                $('newactivityalias').value = incidentname;               
+                $('newactivityalias').value = incidentname;
              	hint = incidents[i]['title'];
                 appendOption($('addactivityselect' + level), incidentname + ' - ' + hint, incidentname);
-            }           
+            }
         }
-        
+
         activityTypes['Development'] = activityDevelopment;
-    
+/* ]]> */
     </script>
-";    
+";
 }
 else
 {
     header('Content-Type: text/xml');
     echo '<?xml version="1.0" ?>' . "\n";
-    
+
     $descr[1] = 'You may choose a project:';
     $descr[2] = 'You may choose a category:';
     $descr[3] = 'You may choose a bug:';
 }
 ?>
-
-
-

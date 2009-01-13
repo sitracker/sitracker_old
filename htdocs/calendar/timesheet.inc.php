@@ -37,6 +37,7 @@ else
     echo "<script src='{$CONFIG['application_webpath']}calendar/week_planner.js.php?user=$user' type='text/javascript'></script>\n";
 
     // DOJO to drop the jobs, etc. onto the dates
+    // FIXME dojo is DEPRECATED
     echo "<script type='text/javascript' src='{$CONFIG['application_webpath']}scripts/dojo/dojo.js' djConfig='parseOnLoad: true'></script>\n";
 
     echo "<script type='text/javascript'>\n
