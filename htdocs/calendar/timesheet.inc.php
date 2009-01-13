@@ -228,7 +228,7 @@ else
     echo "<div class='push'></div>";
     echo "<ul id='dropsources'><li>\n";
     echo "<table class='timesheet' style='width: 100%;' id='activitytable'><tr>";
-    echo "<th>{$strActivity}</th><th>{$strStatus}</th><th style='width: 400px;'>{$strNotes}</th>";
+    echo "<th>{$strActivity}</th><th>{$strStatus}</th><th>{$strNotes}</th>";
     echo "</tr></table>";
     echo "</li></ul>";
     echo "<div class='floor'></div>";
