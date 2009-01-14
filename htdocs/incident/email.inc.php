@@ -635,7 +635,6 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
             if ($filename != '' && strlen($filename) > 3)
             {
                 //          if (!isset($filename)) $filename = $attachment_fspath.$_FILES['attachment']['name'];   ??? TPG 13/08/2002
-                ## bugbug move was here
                 if (!file_exists($filename)) trigger_error("File did not exist upon processing attachment: {$filename}", E_USER_WARNING);
                 if ($filename == '') trigger_error("Filename was blank upon processing attachment: {$filename}", E_USER_WARNING);
 

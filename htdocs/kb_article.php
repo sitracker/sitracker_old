@@ -59,9 +59,11 @@ if (isset($_POST['submit']))
 
     if (empty($kbid))
     {
+        // KB ID should never be blank, in the unlikely case that it happens to be blank, we insert this dummy
         $sqlinsert = "INSERT INTO `{$dbKBArticles}` (title, keywords, distribution, author) VALUES ('{$kbtitle}', '{$keywords}', '{$distribution}', 'BUGBUG')";
         mysql_query($sqlinsert);
         $kbid = mysql_insert_id();
+        trigger_error('KB ID was unexpectedly blank', E_USER_WARNING);
     }
     else
     {

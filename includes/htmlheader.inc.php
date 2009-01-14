@@ -363,9 +363,9 @@ if ($sit[0] != '')
 $headerdisplayed = TRUE; // Set a variable so we can check to see if the header was included
 
 // FIXME @@@ BUGBUG @@@ experimental ivan 10July2008
-echo "<div id='menupanel'>";
-echo "<h3>Menu</h3>";
-echo "</div>";
+//echo "<div id='menupanel'>";
+//echo "<h3>Menu</h3>";
+//echo "</div>";
 
 
 

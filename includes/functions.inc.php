@@ -5502,7 +5502,7 @@ function create_incident_feedback($formid, $incidentid)
 {
     global $dbFeedbackRespondents;
     $contactid = incident_contact($incidentid);
-    $email = contact_email($respondent);  // BUGBUG where is this variable comeing from ?
+    $email = contact_email($respondent);  // FIXME BUGBUG where is this variable comeing from ?
 
     $sql = "INSERT INTO `{$dbFeedbackRespondents}` (formid, contactid, email, incidentid) VALUES (";
     $sql .= "'".mysql_real_escape_string($formid)."', ";
