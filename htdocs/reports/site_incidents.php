@@ -146,6 +146,11 @@ else
     	$sql .= "AND m.expirydate > '{$now}' "; 
     }
     $sql .= "ORDER BY s.name";
+    /*
+SELECT DISTINCT s.id, s.name AS name, r.name AS resel, m.reseller, u.realname 
+FROM `sites` AS s, `maintenance` AS m, `resellers` AS r, `users` AS u 
+WHERE s.id = m.site AND r.id = m.reseller AND m.term <> 'yes' AND s.owner = u.id AND m.expirydate > '1231609928' ORDER BY s.name 
+     */
     // echo $sql;
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);

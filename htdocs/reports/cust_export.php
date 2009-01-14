@@ -207,7 +207,7 @@ elseif ($_REQUEST['mode'] == 'report')
         $rowcount++;
     }
     $html .= "</table>";
-    $html .= "<p align='center'>{$rowcount} Records</p>"; // FIXME i18n
+    $html .= "<p align='center'>".sprintf($strXRecords, $rowcount)."</p>";
     // $html .= "<p align='center'>SQL Query used to produce this report:<br /><code>$sql</code></p>\n";
 
     if ($_POST['output'] == 'screen')

@@ -29,7 +29,7 @@ if (empty($_REQUEST['mode']))
 {
     include ('htmlheader.inc.php');
     echo "<h2>{$title}</h2>";
-    echo "<p align='center'>This report lists the incidents that each site has logged over the past twelve months.</p>"; // FIXME i18n
+    echo "<p align='center'>".sprintf($strReportListsIncidentsLoggedThatEachSiteLoggedOverPastXMonths, 12)."</p>";
     echo "<form action='{$_SERVER['PHP_SELF']}' method='post'>";
     echo "<table summary='Site Selection Table' class='vertical'>";
     echo "<tr><th colspan='2' align='center'>{$strInclude}</th></tr>";
@@ -47,8 +47,8 @@ if (empty($_REQUEST['mode']))
     echo "</tr>\n";
     echo "<tr><th align='right'>{$strOutput}:</th>";
     echo "<td width='400'>";
-    echo "<label><input type='checkbox' name='showsitetotals' value='yes' /> Add a line after each site showing totals</label><br />"; // FIXME i18n
-    echo "<label><input type='checkbox' name='showtotals' value='yes' /> Add a line to the bottom of the report showing totals</label><br /><br />";  // FIXME i18n
+    echo "<label><input type='checkbox' name='showsitetotals' value='yes' /> {$strShowSiteTotals}</label><br />";
+    echo "<label><input type='checkbox' name='showtotals' value='yes' />{$strShowTotals}</label><br /><br />";
     echo "<select name='output'>";
     echo "<option value='screen'>{$strScreen}</option>";
     echo "<option value='csv'>{$strCSVfile}</option>";

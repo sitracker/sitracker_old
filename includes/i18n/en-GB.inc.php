@@ -1208,6 +1208,7 @@ $strRepeat = 'Repeat';
 $strReplyTo = 'Reply To';
 $strReportBug = 'Report a Bug';
 $strReportedBug = 'Reported Bug';
+$strReportListsIncidentsLoggedThatEachSiteLoggedOverPastXMonths = 'This report lists the incidents that each site has logged over the past %s months';
 $strReports = 'Reports';
 $strRequested = 'Requested';
 $strRequestClosure = 'Request Closure';
@@ -1338,6 +1339,8 @@ $strShowQuote = 'Show quote';
 $strShowRenewals = 'Show Renewals';
 $strShowSitesThatHaveLoggedNoIncidents = 'Show sites that have logged no incidents';
 $strShowSitesWhichHaveLoggedLessThanCalls = 'Show sites which have logged less than X calls';
+$strShowSiteTotals = 'Show Site Totals';
+$strShowTotals = 'Show Totals';
 $strSimpleHTMLallowed = 'Simple HTML allowed';
 $strSinceX = 'since %s';
 $strSingleIncident = '%s Incident';
@@ -1658,6 +1661,7 @@ $strXMonths = '%s Months';
 $strXold = '%s old';
 # e.g. 'Fred of ACME Inc'. i.e. Name of Site
 $strXofX = '%s of %s';
+$strXRecords = '%s Records';
 # e.g. John's Activities
 $strXsActivities = '%s\'s Activities';
 $strXSeconds = '%s Seconds';
