@@ -2,7 +2,7 @@
 // dashboard_watch_incidents.php - Watch incidents on your dashboard either from a site, a customer or a user
 //
 // SiT (Support Incident Tracker) - Support call tracking system
-// Copyright (C) 2000-2008 Salford Software Ltd. and Contributors
+// Copyright (C) 2000-2009 Salford Software Ltd. and Contributors
 //
 // This software may be used and distributed according to the terms
 // of the GNU General Public License, incorporated herein by reference.

@@ -2,7 +2,7 @@
 // detailed_stats.php - Report shows details of opened/closed incidents each day in period along with engineer break down and incident details
 //
 // SiT (Support Incident Tracker) - Support call tracking system
-// Copyright (C) 2000-2008 Salford Software Ltd. and Contributors
+// Copyright (C) 2000-2009 Salford Software Ltd. and Contributors
 //
 // This software may be used and distributed according to the terms
 // of the GNU General Public License, incorporated herein by reference.

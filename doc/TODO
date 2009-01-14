@@ -1,52 +1,8 @@
 To Do
 
-* Ability to delete products. Should check contracts and incidents and
-  correct any inconsitancies
-* Allow holidays to be cancelled after they've been approved, cancellations
-  will need to be approved too probably?
-* Mark previous holidays as 'spent' when holiday entitlement is changed
-* Re-write the help
-* Context 'actions' menus?
-* Interface for editing incident product info questions
-* Contact flags
-* Internationalisation
-* Interface for editing vendors
-* Change maintenance table to use servicelevel field that stores tag instead of id
-* Overhaul the email templates (emailtypes)
-* Add tabbed incident_details popup window, with tabs relevant to SLA status
-* Customer portal view of incidents, with ability to add/update incidents
-* Monitor incidents by email, e.g. get an email when an incident is about to go out of SLA
-* Update users status automatically based on data from the holiday calendar
-  this would need to be a scheduled task that runs (at least) twice a day
-* EMail admin contact for site with list of current contacts for contracts to ensure we have
-  the correct contacts (could be a report, could by in the user portal)
-* Ability to add more Roles
-* Make all date and time formats consistantly use config files
+Our To Do list is now stored in Mantis bug tracker at http://sitracker.sourceforge.net/Bugs
 
 Roadmap
 
 Our project roadmap is now maintained online at http://sitracker.sourceforge.net/Roadmap
-
-
-List of needed icons
-
-Tip
-Feeds
-Tasks
-Incidents
-Watch
-Customers
-Sites
-Reports
-Contract
-Product
-Skill
-Help
-User
-Critical Priority
-High Priority
-Medium Priority
-Low Priority
-Calendar
-Knowledge Base
 
