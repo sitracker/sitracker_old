@@ -60,12 +60,12 @@ if (mysql_numrows($result) > 0)
     {
         $str .= "<table align='center' class='vertical'><tr><th>{$strSiteName}</th><th>{$strProduct}</th>";
         $str .= "<th>{$strCustomerReference}</th><th>{$strStartDate}</th><th>{$strEndDate}</th>";
-        $str .= "<th>{$strCreditAmount}</th><th>{$strBalance}</th>";
+        $str .= "<th>{$strFreeOfCharge}</th><th>{$strCreditAmount}</th><th>{$strBalance}</th>";
         $str .= "<th>{$strUnitRate}</th><th>Units remaining @1x</th></tr>";
     }
     elseif ($display == 'csv')
     {
-        $str .= "\"{$strSiteName}\",\"{$strProduct}\",\"{$strCustomerReference}\", \"{$strStartDate}\",\"{$strEndDate}\",\"{$strCreditAmount}\",\"{$strBalance}\",\"{$strUnitRate}\",\"Units remaining @1 x\"\n"; // FIXME i18n
+        $str .= "\"{$strSiteName}\",\"{$strProduct}\",\"{$strCustomerReference}\", \"{$strStartDate}\",\"{$strEndDate}\",\"{$strFreeOfCharge}\",\"{$strCreditAmount}\",\"{$strBalance}\",\"{$strUnitRate}\",\"Units remaining @1 x\"\n"; // FIXME i18n
     }
 
     $lastsite = '';
@@ -115,6 +115,8 @@ if (mysql_numrows($result) > 0)
             }
 
             $str .= "<td>{$obj->cust_ref}</td><td>{$obj->startdate}</td><td>{$obj->enddate}</td>";
+            if ($obj->foc == 'yes') $str .= "<td>{$strYes}</td>";
+            else $str .= "<td>{$strNo}</td>";
             $str .= "<td>{$CONFIG['currency_symbol']}".number_format($obj->creditamount,2)."</td>";
             $str .= "<td>{$CONFIG['currency_symbol']}".number_format($obj->balance,2)."</td>";
             $str .= "<td>{$CONFIG['currency_symbol']}{$obj->unitrate}</td>";
@@ -144,6 +146,8 @@ if (mysql_numrows($result) > 0)
             }
 
             $str .= "\"{$obj->cust_ref}\",\"{$obj->startdate}\",\"{$obj->enddate}\",";
+            if ($obj->foc == 'yes') $str .= "\"{$strYes}\",";
+            else $str .= "\"{$strNo}\",";
             $str .= "\"{$csv_currency}{$obj->creditamount}\",\"{$csv_currency}{$obj->balance}\",";
             $str .= "\"{$csv_currency}{$obj->unitrate}\",";
             $str .= "\"{$unitsat1times}\"\n";
@@ -152,14 +156,14 @@ if (mysql_numrows($result) > 0)
 
     if ($display == 'html')
     {
-        $str .= "<tr><td colspan='5' align='right'>{$strTOTALS}</td><td>{$CONFIG['currency_symbol']}".number_format($totalcredit, 2)."</td>";
+        $str .= "<tr><td colspan='6' align='right'>{$strTOTALS}</td><td>{$CONFIG['currency_symbol']}".number_format($totalcredit, 2)."</td>";
         $str .= "<td>{$CONFIG['currency_symbol']}".number_format($totalbalance, 2)."</td><td></td><td>{$remainingunits}</td></tr>";
         $str .= "</table>";
         $str .= "<p align='center'><a href='{$_SERVER['HTTP_REFERER']}'>{$strReturnToPreviousPage}</a></p>";
     }
     elseif ($display == 'csv')
     {
-        $str .= ",,,,\"{$strTOTALS}\",\"{$csv_currency}{$totalcredit}\",";
+        $str .= ",,,,,\"{$strTOTALS}\",\"{$csv_currency}{$totalcredit}\",";
         $str .= "\"{$csv_currency}{$totalbalance}\",,\"{$remainingunits}\"\n";
     }
 }
