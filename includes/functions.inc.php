@@ -9884,6 +9884,7 @@ function is_billable_incident_approved($incidentid)
     * @author Ivan Lucas
     * @param $contractid int. Contract ID of the contract to credit
     * @param $includenonapproved boolean. Include incidents which have not been approved
+    * @return int The total balance remaining on the contract
     * @note The balance is a sum of all the current service that have remaining balance
     * @todo FIXME add a param that makes this optionally show the incident pool balance
     in the case of non-timed type contracts
@@ -9911,7 +9912,31 @@ function get_contract_balance($contractid, $includenonapproved = FALSE)
 }
 
 
-// TODO document (PH)
+/**
+ * Get the current balance of a service
+ * @author Paul Heaney
+ * @param $serviceid int. Service ID of the service to get the balance for
+ * @return int The remaining balance on the service
+ */
+function get_service_balance($serviceid)
+{
+	global $dbService;
+    
+    $sql = "SELECT balance FROM `{$dbService}` WHERE serviceid = {$serviceid}";
+    $result = mysql_query($sql);
+    if (mysql_error()) trigger_error(mysql_error(), E_USER_WARNING);
+    list($balance) = mysql_fetch_row($result);
+    
+    return $balance;
+}
+
+
+/**
+ * Returns the total value of inicidents awaiting approval for a contract
+ * @author Paul Heaney
+ * @param $contractid int. Contract ID of the contract to find total value of inicdents awaiting approval
+ * @return int The total value of all incidents awaiting approval logged against the contract
+ */
 function total_awaiting_approval($contractid)
 {
     $sqlcontract = "SELECT i.* FROM `{$GLOBALS['dbIncidents']}` AS i, `{$GLOBALS['dbServiceLevels']}` AS sl ";

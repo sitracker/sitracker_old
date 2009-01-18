@@ -1507,6 +1507,9 @@ $strTrackURL = 'Track URL';
 $strTraining = 'Training';
 $strTransactions = 'Transactions';
 $strTransfer = 'Transfer';
+# An example of transfering amounts between services
+$strTransferExamplePositiveService = 'Select the service which has a negative balance and transfer the amount from here, e.g. Service A is -100 to resolve this transfer 100 from here.';
+$strTransferExampleNegativeService = 'Select a service which has a positive balance and transfer the amount from here, e.g. Service A is 100 to resolve this transfer -100 from here.';
 $strTransferFailed = 'Transfer Failed';
 $strTransferSucessful = 'Transfer Sucessful';
 $strTranslate = 'Translate';

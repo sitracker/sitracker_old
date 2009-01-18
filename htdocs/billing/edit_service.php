@@ -282,7 +282,11 @@ switch ($mode)
                 
                 echo "<input type='radio' name='mode' id='transfer' value='transfer' onclick=\"$('transfersection').show();\" /> {$strTransfer} ";
                 echo "</td></tr>";
-                echo "<tbody  style='display:none' id='transfersection' ><tr><th>{$strDestinationService}</th>";
+                echo "<tbody  style='display:none' id='transfersection' >";
+                echo "<tr><td colspan='2'>";
+                if (get_service_balance($sourceservice) >= 0) echo $strTransferExamplePositiveService;
+                else $strTransferExampleNegativeService;
+                echo "</td></tr><tr><th>{$strDestinationService}</th>";
                 echo "<td>";
 
                 echo "<select name='destinationservice'>\n";
