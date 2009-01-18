@@ -191,6 +191,8 @@ else
 		        }
         	}
         	
+            $rowshowed = false;
+            
         	if ((!empty($slas) AND !does_site_have_certain_sla_contract($site->id, $slas)) OR empty($slas))
         	{
 	            $sql = "SELECT count(i.id) AS incidentz, s.name AS site FROM `{$dbContacts}` AS c, `{$dbSites}` AS s, `{$dbIncidents}` AS i, `{$dbMaintenance}` AS m ";
@@ -211,10 +213,12 @@ else
                         if ($output == 'csv')
                         {
     	                	$csv .= "\"{$count}\",\"{$site->name}\",\"{$site->realname}\",\"{$site->resel}";
+                            $rowshowed = true;
                         }
                         else
                         {
                             $csv .= "<tr><td>{$count}</td><td>{$site->name}</td><td>{$site->realname}</td><td>{$site->resel}</td>";
+                            $rowshowed = true;
                         }
                         if ($showproducts == 'on')
                         {
@@ -232,6 +236,7 @@ else
                         else
                         {
                         	$csv .= "<tr><td>{$count}</td><td>{$site->name}</td><td>{$site->realname}</td><td>{$site->resel}</td>";
+                            $rowshowed = true;
                         }
                         
                         if ($showproducts == 'on')
@@ -250,12 +255,15 @@ else
                         if ($output == 'csv')
                         {
                             $csv .= "\"{$count}\",\"{$site->name}\",\"{$site->realname}\",\"{$site->resel}";
+                            $rowshowed = true;
                         }
                         else
                         {
                         	$csv .= "<tr><td>{$count}</td><td>{$site->name}</td><td>{$site->realname}</td><td>{$site->resel}</td>";
+                            $rowshowed = true;
                         }
                     }
+                    
                     if ($showproducts == 'on')
                     {
                         $colspan = 5;
@@ -268,22 +276,25 @@ else
 			if ($output == 'csv') $csv .= "\"\n";
             else $csv .= "</tr>";
             
-            if ($showincidentdetails == 'on' AND $output == 'screen' AND $count > 0)
+            if ($showincidentdetails == 'on' AND $output == 'screen' AND $count > 0 AND $rowshowed)
             {
-                $sql = "SELECT i.id, i.title, i.softwareid, i.status, i.owner, i.opened, i.closed, i.servicelevel, c.forenames, c.surname AS site ";
-                $sql .= "FROM `{$dbContacts}` AS c, `{$dbSites}` AS s, `{$dbIncidents}` AS i ";
-                $sql.= "WHERE c.siteid = s.id AND s.id={$site->id} AND i.opened >".strtotime($startdate)." AND i.closed < ".strtotime($enddate)." AND i.contact = c.id ";
-                $result = mysql_query($sql);
+                $isql = "SELECT i.id, i.title, i.softwareid, i.status, i.owner, i.opened, i.closed, i.servicelevel, c.forenames, c.surname ";
+                $isql .= "FROM `{$dbContacts}` AS c, `{$dbSites}` AS s, `{$dbIncidents}` AS i ";
+                $isql.= "WHERE c.siteid = s.id AND s.id={$site->id} AND i.opened >".strtotime($startdate)." AND i.closed < ".strtotime($enddate)." AND i.contact = c.id ";
+                $iresult = mysql_query($isql);
                 if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
                 
-                if (mysql_num_rows($result) > 0)
+                if (mysql_num_rows($iresult) > 0)
                 {
                 	$csv .= "<tr><td colspan='{$colspan}'>";
                     $csv .= "<table><th>{$strID}</th><th>{$strTitle}</th><th>{$strContact}</th><th>{$strSkill}</th><th>{$strStatus}</th>";
                     $csv .= "<th>{$strEngineer}</th><th>{$strOpened}</th><th>{$strClosed}</th><th>{$strDuration}</th><th>{$strSLA}</th></tr>";
-                    while ($obj = mysql_fetch_object($result))
+                    
+                    $shade = 'shade1';
+                    
+                    while ($obj = mysql_fetch_object($iresult))
                     {
-                    	$csv .= "<tr>";
+                    	$csv .= "<tr class='{$shade}'>";
                         $csv .= "<td>{$obj->id}</td><td>{$obj->title}</td>";
                         $csv .= "<td>{$obj->forenames} {$obj->surname}</td>";
                         $csv .= "<td>".software_name($obj->softwareid)."</td>";
@@ -299,6 +310,9 @@ else
                         $csv .= "</td>";
                         $csv .= "<td>{$obj->servicelevel}</td>";
                         $csv .= "</tr>";
+                        
+                        if ($shade == 'shade1') $shade = 'shade2';
+                        else $shade = 'shade1';
                     }
                     
                     $csv .= "</table>";
