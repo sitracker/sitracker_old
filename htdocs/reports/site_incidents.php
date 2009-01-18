@@ -36,7 +36,7 @@ if (empty($mode))
 
 	?>
 	<script type='text/javascript'>
-	function checkBoxToggle()
+	function toggleLessThanX()
 	{
 		if ($('showsitesloggedfewerthanxcalls').checked == true)
 		{
@@ -53,6 +53,19 @@ if (empty($mode))
 			$('zerologged').readOnly = false;
 		}
 	}
+    
+    function toggleDisableIncidents()
+    {
+    	if ($('output').value == 'screen')
+        {
+            $('showincidentdetails').readOnly = false;
+        }
+        else
+        {
+            $('showincidentdetails').checked = false;
+        	$('showincidentdetails').readOnly = true;
+        }
+    }
 	</script>
 	<?php
 
@@ -88,14 +101,14 @@ if (empty($mode))
 	echo "</td></tr>\n";
     
     echo "<tr><th>{$strShowSitesWhichHaveLoggedLessThanCalls}</th><td>\n";
-	echo "<input type='checkbox' name='showsitesloggedfewerthanxcalls' id='showsitesloggedfewerthanxcalls' onclick=\"checkBoxToggle();\" />\n";
+	echo "<input type='checkbox' name='showsitesloggedfewerthanxcalls' id='showsitesloggedfewerthanxcalls' onclick=\"toggleLessThanX();\" />\n";
 	echo "<input type='text' name='numberofcalls' id='numberofcalls' style='display:none'/><label id='labelforxcalls' for='showsitesloggedfewerthanxcalls' style='display:none'>{$strIncidents}</label></td></tr>\n";
 	echo "<tr><th>{$strShowIncidentDetails}</th><td><input type='checkbox' name='showincidentdetails' id='showincidentdetails' /></td></tr>\n";
 	echo "<tr><th>{$strOnlyShowSitesWithActiveContracts}</th><td><input type='checkbox' name='onlyshowactivesites' id='onlyshowactivesites' /></td></tr>\n";
 	echo "<tr><th>{$strShowProducts}</th><td><input type='checkbox' name='showproducts' id='showproducts' /></td></tr>";
     echo "<tr><th>{$strOutput}</th>\n";
-	echo "<td><select name='mode'><option value='screen'>{$strScreen}</option>\n";
-	echo "<option value='csv'>{$strCSVfile}</option></select></td></tr>\n";
+	echo "<td><select name='output' id='output'><option value='screen' onclick='toggleDisableIncidents();'>{$strScreen}</option>\n";
+	echo "<option value='csv' onclick='toggleDisableIncidents();'>{$strCSVfile}</option></select></td></tr>\n";
     echo "</table>\n";
     echo "<p align='center'>";
     echo "<input type='hidden' name='user' value='{$user}' />";
@@ -107,6 +120,8 @@ if (empty($mode))
 }
 else
 {
+    $output = cleanvar($_REQUEST['output']);
+    
 	if (empty($startdate)) $startdate = date('Y-m-d', mktime(0, 0, 0, date("m"), date("d"), date("Y")-1)); // 1 year ago
 	if (empty($enddate)) $enddate = date('Y-m-d');
 
@@ -147,9 +162,9 @@ else
     }
     $sql .= "ORDER BY s.name";
     /*
-SELECT DISTINCT s.id, s.name AS name, r.name AS resel, m.reseller, u.realname 
-FROM `sites` AS s, `maintenance` AS m, `resellers` AS r, `users` AS u 
-WHERE s.id = m.site AND r.id = m.reseller AND m.term <> 'yes' AND s.owner = u.id AND m.expirydate > '1231609928' ORDER BY s.name 
+        SELECT DISTINCT s.id, s.name AS name, r.name AS resel, m.reseller, u.realname 
+        FROM `sites` AS s, `maintenance` AS m, `resellers` AS r, `users` AS u 
+        WHERE s.id = m.site AND r.id = m.reseller AND m.term <> 'yes' AND s.owner = u.id AND m.expirydate > '1231609928' ORDER BY s.name 
      */
     // echo $sql;
     $result = mysql_query($sql);
@@ -190,52 +205,143 @@ WHERE s.id = m.site AND r.id = m.reseller AND m.term <> 'yes' AND s.owner = u.id
 	            if (!empty($zerologged))
 	            {
 	            	if (empty($count)) $count = 0;
+                    $colspan = 4;
 	            	if ($showsitesloggedfewerthanxcalls == 'on' AND $count <= $numberofcalls)
 	            	{
-	                	$csv .= "\"{$count}\",\"{$site->name}\",\"{$site->realname}\",\"{$site->resel}";
+                        if ($output == 'csv')
+                        {
+    	                	$csv .= "\"{$count}\",\"{$site->name}\",\"{$site->realname}\",\"{$site->resel}";
+                        }
+                        else
+                        {
+                            $csv .= "<tr><td>{$count}</td><td>{$site->name}</td><td>{$site->realname}</td><td>{$site->resel}</td>";
+                        }
+                        if ($showproducts == 'on')
+                        {
+                            $colspan = 5;
+                            if ($output == 'csv') $csv .= "\",\"{$product}";
+                            else $csv .= "<td>{$product}</td>";
+                        }
 	            	}
 	            	else if (empty($showsitesloggedfewerthanxcalls))
 	            	{
-	            		$csv .= "\"{$count}\",\"{$site->name}\",\"{$site->realname}\",\"{$site->resel}";
+                        if ($output == 'csv')
+                        {
+    	            		$csv .= "\"{$count}\",\"{$site->name}\",\"{$site->realname}\",\"{$site->resel}";
+                        }
+                        else
+                        {
+                        	$csv .= "<tr><td>{$count}</td><td>{$site->name}</td><td>{$site->realname}</td><td>{$site->resel}</td>";
+                        }
+                        
+                        if ($showproducts == 'on')
+                        {
+                            $colspan = 5;
+                            if ($output == 'csv') $csv .= "\",\"{$product}";
+                            else $csv .= "<td>{$product}</td>";
+                        }
 	            	}
 	            }
 	            else
 	            {
 	            	// Dont need to check $showsitesloggedfewerthanxcalls as $zerologged will always be selected
-	                if ($count != 0) $csv .= "\"{$count}\",\"{$site->name}\",\"{$site->realname}\",\"{$site->resel}";
+	                if ($count != 0)
+                    {
+                        if ($output == 'csv')
+                        {
+                            $csv .= "\"{$count}\",\"{$site->name}\",\"{$site->realname}\",\"{$site->resel}";
+                        }
+                        else
+                        {
+                        	$csv .= "<tr><td>{$count}</td><td>{$site->name}</td><td>{$site->realname}</td><td>{$site->resel}</td>";
+                        }
+                    }
+                    if ($showproducts == 'on')
+                    {
+                        $colspan = 5;
+                        if ($output == 'csv') $csv .= "\",\"{$product}";
+                        else $csv .= "<td>{$product}</td>";
+                    }
 	            }
-	            
-            	if ($showproducts == 'on')
-	        	{
-	        		$csv .= "\",\"{$product}";
-	        	}
         	}
         	      	
-			$csv .= "\"\n";
+			if ($output == 'csv') $csv .= "\"\n";
+            else $csv .= "</tr>";
+            
+            if ($showincidentdetails == 'on' AND $output == 'screen' AND $count > 0)
+            {
+                $sql = "SELECT i.id, i.title, i.softwareid, i.status, i.owner, i.opened, i.closed, i.servicelevel, c.forenames, c.surname AS site ";
+                $sql .= "FROM `{$dbContacts}` AS c, `{$dbSites}` AS s, `{$dbIncidents}` AS i ";
+                $sql.= "WHERE c.siteid = s.id AND s.id={$site->id} AND i.opened >".strtotime($startdate)." AND i.closed < ".strtotime($enddate)." AND i.contact = c.id ";
+                $result = mysql_query($sql);
+                if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+                
+                if (mysql_num_rows($result) > 0)
+                {
+                	$csv .= "<tr><td colspan='{$colspan}'>";
+                    $csv .= "<table><th>{$strID}</th><th>{$strTitle}</th><th>{$strContact}</th><th>{$strSkill}</th><th>{$strStatus}</th>";
+                    $csv .= "<th>{$strEngineer}</th><th>{$strOpened}</th><th>{$strClosed}</th><th>{$strDuration}</th><th>{$strSLA}</th></tr>";
+                    while ($obj = mysql_fetch_object($result))
+                    {
+                    	$csv .= "<tr>";
+                        $csv .= "<td>{$obj->id}</td><td>{$obj->title}</td>";
+                        $csv .= "<td>{$obj->forenames} {$obj->surname}</td>";
+                        $csv .= "<td>".software_name($obj->softwareid)."</td>";
+                        $csv .= "<td>".incidentstatus_name($obj->status)."</td>";
+                        $csv .= "<td>".user_realname($obj->owner)."</td>";
+                        $csv .= "<td>".format_date_friendly($obj->opened)."</td>";
+                        $csv .= "<td>";
+                        if ($obj->closed > 0) $csv .= format_date_friendly($obj->closed);
+                        else $csv .= $strCurrentlyOpen;
+                        $csv .= "</td>";
+                        $csv .= "<td>";
+                        if ($obj->closed > 0) $csv .= format_workday_minutes($obj->closed - $obj->opened);
+                        $csv .= "</td>";
+                        $csv .= "<td>{$obj->servicelevel}</td>";
+                        $csv .= "</tr>";
+                    }
+                    
+                    $csv .= "</table>";
+                    $csv .= "</td></tr>";
+                }
+            }
         }
         
-        echo "<pre>";
-        echo $csv;
-        echo "</pre>";
+        if ($output == 'csv')
+        {
+            $header = "\"{$strIncidents}\",\"{$strSite}\",\"{$strAccountManager}\",\"{$strReseller}";
+    		if ($showproducts == 'on')
+    		{
+    			$header .= "\",\"{$strProducts}";
+    		}
+    		$csv = $header."\"\n".$csv;
+        }
+        else
+        {
+        	$header = "<tr><th>{$strIncidents}</th><th>{$strSite}</th><th>{$strAccountManager}</th><th>{$strReseller}</th>";
+            if ($showproducts == 'on')
+            {
+                $header .= "<th>{$strProducts}</th>";
+            }
+            $csv = $header."</tr>".$csv;
+        }
         
-        $header = "\"{$strIncidents}\",\"{$strSite}\",\"{$strAccountManager}\",\"{$strReseller}";
-		if ($showproducts == 'on')
-		{
-			$header .= "\",\"{$strProducts}";
-		}
-		$csv = $header."\"\n".$csv;
-        
-        if ($_REQUEST['mode'] == 'csv')
+        if ($output == 'csv')
         {
         	$csv = "\"{$strStartDate}:\",\"{$startdate}\"\n{$strEndDate}:\",\"{$enddate}".$csv;
-			echo create_report($csv, 'csv', 'yearly_incidents.csv');    		
+            header("Content-type: text/csv\r\n");
+            header("Content-disposition-type: attachment\r\n");
+            header("Content-disposition: filename=yearly_incidents.csv");
+			echo $csv;    		
         }
         else
         {
         	include ('htmlheader.inc.php');
         	echo "<h2>".icon('site', 32)." {$strSiteIncidents}</h2>";
         	echo "<p align='center'>{$strStartDate}: {$startdate}. {$strEndDate}: {$enddate}</p>";
-        	echo create_report($csv, 'table');
+        	
+            echo "<table align='center'>{$csv}</table>";
+
         	include ('htmlfooter.inc.php');
         }
 
