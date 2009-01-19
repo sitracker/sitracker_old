@@ -287,7 +287,7 @@ else
                 if (mysql_num_rows($iresult) > 0)
                 {
                 	$csv .= "<tr><td colspan='{$colspan}'>";
-                    $csv .= "<table><th>{$strID}</th><th>{$strTitle}</th><th>{$strContact}</th><th>{$strSkill}</th><th>{$strStatus}</th>";
+                    $csv .= "<table width='100%'><th>{$strID}</th><th>{$strTitle}</th><th>{$strContact}</th><th>{$strSkill}</th><th>{$strStatus}</th>";
                     $csv .= "<th>{$strEngineer}</th><th>{$strOpened}</th><th>{$strClosed}</th><th>{$strDuration}</th><th>{$strSLA}</th></tr>";
                     
                     $shade = 'shade1';

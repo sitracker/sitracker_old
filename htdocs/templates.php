@@ -298,7 +298,7 @@ elseif ($action == "edit")
         }
         echo ">{$body}</textarea></td>";
 
-        if ($template->type=='incident')
+        if ($template->type == 'incident')
         {
             echo "<tr><th></th><td><label><input type='checkbox' name='storeinlog' value='Yes' ";
             if ($template->storeinlog == 'Yes')
