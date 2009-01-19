@@ -1294,6 +1294,7 @@ CREATE TABLE `{$dbTempIncoming}` (
 `description` VARCHAR( 255 ) NOT NULL ,
 `userid` TINYINT NOT NULL ,
 `date` DATETIME NOT NULL ,
+`status` enum('approved','awaitingapproval','allocated') NOT NULL default 'awaitingapproval',
 PRIMARY KEY ( `transactionid` )
 ) ENGINE = MYISAM;
 
@@ -2491,6 +2492,9 @@ ADD `title` VARCHAR( 255 ) NULL AFTER `cust_ref_date` ;
 -- INL 2009-01-11
 DROP TABLE `spellcheck`;
 
+-- PH 2009-01-19
+ALTER TABLE `{$dbTransactions}` ADD `status` ENUM( 'approved', 'awaitingapproval', 'allocated' ) NOT NULL DEFAULT 'awaitingapproval';
+UPDATE `{$dbTransactions}` SET status = 'approved';
 ";
 
 // Important: When making changes to the schema you must add SQL to make the alterations

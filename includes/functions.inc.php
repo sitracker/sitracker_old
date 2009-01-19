@@ -7613,7 +7613,7 @@ function make_incident_billing_array($incidentid, $totals=TRUE)
 }
 
 /**
-*Function to make an array with the number of units at each billable multiplier, broken down by engineer
+* Function to make an array with the number of units at each billable multiplier, broken down by engineer
 * @author Paul Heaney
 *
 */
