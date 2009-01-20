@@ -76,7 +76,7 @@ elseif ($step == '1')
     $type = cleanvar($_REQUEST['type']);
 
     include ('htmlheader.inc.php');
-    $start = strtotime($start);
+    $start = strtotime("{$start} 09:00");
     $end = strtotime($end);
     if ($start == 0 && $end == 0)
     {
