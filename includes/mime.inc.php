@@ -11,7 +11,7 @@
 
     define ('BASE64', 'base64');
     define ('BIT7', '7bit');
-    define ('QP', 'quoted_printable');
+    define ('QP', 'quoted-printable');
     define ('NOSUBJECT', '(No Subject)');
     define ('WARNING', 'This is a MIME encoded message');
     define ('OCTET', 'application/octet-stream');
@@ -20,7 +20,8 @@
     define ('JPEG', 'image/jpg');
     define ('GIF', 'image/gif');
     define ('CRLF', "\n");   // was \r\n
-    define ('CHARSET', 'us-ascii');
+    //define ('CHARSET', 'us-ascii');
+    define ('CHARSET', 'UTF-8');
     define ('INLINE', 'inline');
     define ('ATTACH', 'attachment');
     define ('BODY', CRLF.'BODY'.CRLF);
@@ -126,7 +127,8 @@
     if (trim($encoding) == '') $encoding = BASE64;
     if ($encoding == BIT7) $emsg = $data;
     elseif ($encoding == QP) {
-        $emsg = $$this->qp_func($data);
+        //$emsg = $$this->qp_func($data);
+        $emsg = imap_8bit($data);
                 $emsg = chunk_split($emsg);
         }
     elseif ($encoding == BASE64) {
@@ -138,7 +140,7 @@
     }
     //Check if content-type is text/plain and if charset is not specified append default CHARSET
     if (preg_match("!^".TEXT."!i", $contenttype) && !preg_match("!;charset=!i", $contenttype))
-        $contenttype .= ";\r\n\tcharset=".CHARSET ;
+        $contenttype .= ";".CRLF."\tcharset=".CHARSET ;
     $msg = sprintf("Content-Type: %sContent-Transfer-Encoding: %s%s%s%s",
     $contenttype.CRLF,
     $encoding.CRLF,
