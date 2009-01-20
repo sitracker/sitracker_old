@@ -298,7 +298,7 @@ $CFGVAR['end_working_day']['unit'] = $strSeconds;
 $CFGVAR['error_logfile']['help'] = "This file must already exist and be writable";
 $CFGVAR['error_logfile']['title'] = "Path to a file to log error messages";
 
-$CFGVAR['error_notavailable_url']['title']="The URL to redirect too for pages that do not exist yet.";
+$CFGVAR['error_notavailable_url']['title']="The URL to redirect to for pages that do not exist yet.";
 
 $CFGVAR['feedback_enabled']['help'] = "TRUE for enabled, FALSE for disabled";
 $CFGVAR['feedback_enabled']['options'] = 'TRUE|FALSE';
@@ -419,7 +419,7 @@ $CFGVAR['ldap_user_group_attr']['title'] = 'LDAP group attribute for SIT users';
 $CFGVAR['licensefile']['title'] = 'Path to the License file';
 
 $CFGVAR['logout_url']['help'] = "When left blank this defaults to \$CONFIG['application_webpath'], setting that here will take the value of the default";
-$CFGVAR['logout_url']['title'] = "The URL to redirect the user too after he/she logs out";
+$CFGVAR['logout_url']['title'] = "The URL to redirect the user to after he/she logs out";
 
 $CFGVAR['mailin_spool_path']['title'] = "Incoming mail spool directory, the location of mail processed by mailfilter shell script";
 
