@@ -3749,7 +3749,9 @@ function send_email($to, $from, $subject, $body, $replyto='', $cc='', $bcc='')
     }
     if (!empty($CONFIG['support_email'])) $extra_headers .= "Errors-To: {$CONFIG['support_email']}\n";
     $extra_headers .= "X-Mailer: {$CONFIG['application_shortname']} {$application_version_string}/PHP " . phpversion()."\n";
-    $extra_headers .= "X-Originating-IP: {$_SERVER['REMOTE_ADDR']}";
+    $extra_headers .= "X-Originating-IP: {$_SERVER['REMOTE_ADDR']}\n";
+    $extra_headers .= "MIME-Version: 1.0\n";
+    $extra_headers .= "Content-type: text/plain; charset={$GLOBALS['i18ncharset']}";
     $extra_headers .= "\r\n";
 
     if ($CONFIG['demo'])
@@ -9921,12 +9923,12 @@ function get_contract_balance($contractid, $includenonapproved = FALSE)
 function get_service_balance($serviceid)
 {
 	global $dbService;
-    
+
     $sql = "SELECT balance FROM `{$dbService}` WHERE serviceid = {$serviceid}";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(), E_USER_WARNING);
     list($balance) = mysql_fetch_row($result);
-    
+
     return $balance;
 }
 
@@ -10997,8 +10999,6 @@ function cfgVarInput($setupvar, $showvarnames = FALSE)
     $html .= "<h4>{$title}</h4>";
     if ($CFGVAR[$setupvar]['help']!='') $html .= "<p class='helptip'>{$CFGVAR[$setupvar]['help']}</p>\n";
 
-    if ($showvarnames) $html .= "<var>\$CONFIG['$setupvar']</var> = ";
-
     $value = '';
     if (!$cfg_file_exists OR ($cfg_file_exists AND $cfg_file_writable))
     {
@@ -11072,6 +11072,8 @@ function cfgVarInput($setupvar, $showvarnames = FALSE)
     }
     if (!empty($CFGVAR[$setupvar]['unit'])) $html .= " {$CFGVAR[$setupvar]['unit']}";
     if ($setupvar=='db_password' AND $_REQUEST['action']!='reconfigure' AND $value != '') $html .= "<p class='info'>The current password setting is not shown</p>";
+
+    if ($showvarnames) $html .= "<br />(<var>\$CONFIG['$setupvar']</var>)";
     $html .= "</div>";
     $html .= "<br />\n";
     if ($c == 1) $c == 2;
