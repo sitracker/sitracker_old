@@ -246,6 +246,7 @@ $CFGVAR['default_gravatar']['title'] = "Default Gravatar";
 
 $CFGVAR['default_i18n']['help'] = "The system language, or the language that will be used when no other language is selected by the user, see <a href='http://sitracker.sourceforge.net/Translation'>http://sitracker.sourceforge.net/Translation</a> for a list of supported languages. ";
 $CFGVAR['default_i18n']['title'] = "Default Language";
+// TODO Language selection
 
 $CFGVAR['default_interface_style']['title'] = 'The interface style that new users should use (user default style)';
 $CFGVAR['default_interface_style']['type'] = 'interfacestyleselect';
@@ -254,7 +255,7 @@ $CFGVAR['default_roleid']['help'] = "Role given to new users by default";
 $CFGVAR['default_roleid']['title'] = "Default role id";
 
 $CFGVAR['default_service_level']['title'] = 'The service level to use in case the contact does not specify (text not the tag)';
-// TODO selection
+// TODO service level selection
 
 $CFGVAR['demo']['help'] = 'Set to TRUE to run in demo mode, some features are disabled or replaced with mock-ups';
 $CFGVAR['demo']['options'] = 'TRUE|FALSE';
@@ -305,13 +306,15 @@ $CFGVAR['feedback_enabled']['title'] = "Feedback Enabled/Disabled";
 $CFGVAR['feedback_enabled']['type'] = 'select';
 
 $CFGVAR['feedback_form']['title'] = 'Incident feedback form (the id number of the feedback form to use or empty to disable sending feedback forms out)';
+$CFGVAR['feedback_form']['type'] = 'number';
+// TODO Feedback form lookup
 
 $CFGVAR['feedback_max_score']['title'] = 'The max score to use in rating fields for feedback forms';
 $CFGVAR['feedback_max_score']['type'] = 'number';
 
 $CFGVAR['free_support_limit']['title'] = 'Number of free (site) support incidents that can be logged to a site';
 $CFGVAR['free_support_limit']['type'] = 'number';
-$CFGVAR['free_support_limit']['unit'] =$strSiteIncidents;
+$CFGVAR['free_support_limit']['unit'] = $strSiteIncidents;
 
 $CFGVAR['ftp_hostname']['title'] = 'The FTP hostname or IP address';
 
