@@ -19,6 +19,11 @@ $CFGTAB['email'] = array('inboundemail', 'outboundemail');
 $CFGTAB['features'] = array('incidents', 'portal', 'ftp', 'kb', 'sla', 'holidays', 'feedback');
 $CFGTAB['system'] = array('paths', 'locale', 'journal');
 
+$TABI18n['application'] = $strApplication;
+$TABI18n['email'] = $strEmail;
+$TABI18n['features'] = $strFeatures;
+$TABI18n['system'] = $strSystem;
+
 $CFGCAT['paths'] = array('application_fspath',
                          'application_webpath',
                          'access_logfile',
@@ -130,10 +135,26 @@ $CFGCAT['kb'] = array('kb_enabled',
 $CFGCAT['outboundemail'] = array('sales_email');
 $CFGCAT['journal'] = array('journal_loglevel', 'journal_purge_after');
 
-$CFGCAT['other'] = array('support_manager');
+$CFGCAT['other'] = array('support_manager', 'timesheets_enabled');
 
-
-
+// i18n keys for categories
+$CATI18N['appmain'] = $strGeneral;
+$CATI18N['theming'] = $strTheme;
+$CATI18N['system'] = $strSystem;
+$CATI18N['ldap'] = 'LDAP';
+$CATI18N['other'] = $strOther;
+$CATI18N['inboundemail'] = $strInbound;
+$CATI18N['outboundemail'] = $strOutbound;
+$CATI18N['incidents'] = $strIncidents;
+$CATI18N['portal'] = $strPortal;
+$CATI18N['ftp'] = 'FTP';
+$CATI18N['kb'] = $strKBabbr;
+$CATI18N['sla'] = $strSLA;
+$CATI18N['holidays'] = $strHolidays;
+$CATI18N['feedback'] = $strFeedback;
+$CATI18N['paths'] = $strPaths;
+$CATI18N['locale'] = $strLocale;
+$CATI18N['journal'] = $strJournal;
 
 // Descriptions of all the config variables
 $CFGVAR['access_logfile']['help'] = "This file must be writable of course";

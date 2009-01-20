@@ -33,6 +33,10 @@ blockquote
 code { white-space: pre; }
 td sup { color: #444; }
 
+fieldset { background: #DEDEFF;}
+legend { border: 1px solid #185594; background: white; padding: 0px 15px;}
+var { font-family: monospace;}
+
 /* ID & Class Selectors */
 
 #masthead {
@@ -670,4 +674,3 @@ div.tabcontainer { display: block; border: red;  }
     margin-top: 0.1em;
     margin-bottom: 0.2em;
 }
-

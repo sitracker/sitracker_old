@@ -45,8 +45,6 @@ include ('htmlheader.inc.php');
 echo "<h2>".icon('settings', 32, $strConfiguration);
 echo " {$CONFIG['application_shortname']} {$strConfiguration}</h2>";
 
-
-
 echo "<div class='tabcontainer'>";
 echo "<ul>";
 foreach ($CFGTAB AS $tab => $cat)
@@ -54,7 +52,7 @@ foreach ($CFGTAB AS $tab => $cat)
     if (empty($seltab)) $seltab = 'application';
     echo "<li";
     if ($seltab == $tab) echo " class='active'";
-    echo "><a href='{$_SERVER['PHP_SELF']}?tab={$tab}'>{$tab}</a></li>";
+    echo "><a href='{$_SERVER['PHP_SELF']}?tab={$tab}'>{$TABI18n[$tab]}</a></li>";
 }
 echo "</ul>";
 echo "</div>";
@@ -69,7 +67,9 @@ foreach ($CFGTAB[$seltab] AS $cat)
     if (empty($selcat)) $selcat = $CFGTAB[$seltab][0];
     echo "<li";
     if ($selcat == $cat) echo " class='active'";
-    echo "><a href='{$_SERVER['PHP_SELF']}?tab={$seltab}&amp;cat={$cat}'>{$cat}</a></li>";
+    $catname = $CATI18N[$cat];
+    if (empty($catname)) $catname = $cat;
+    echo "><a href='{$_SERVER['PHP_SELF']}?tab={$seltab}&amp;cat={$cat}'>{$catname}</a></li>";
 }
 echo "</ul>";
 echo "</div>";
@@ -78,7 +78,9 @@ echo "<div style='clear: both;'></div>";
 
 echo "<form action='{$_SERVER['PHP_SELF']}' method='post'>";
 echo "<fieldset>";
-echo "<legend>{$selcat}</legend>";
+$catname = $CATI18N[$selcat];
+if (empty($catname)) $catname = $selcat;
+echo "<legend>{$catname}</legend>";
 if (!empty($selcat))
 {
     foreach ($CFGCAT[$selcat] AS $catvar)

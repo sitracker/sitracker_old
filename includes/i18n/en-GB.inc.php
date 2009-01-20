@@ -132,6 +132,8 @@ $strAmountToEditBy = 'Amount to edit by +ve/-ve';
 # i.e. before noon
 $strAM = 'am';
 $strAnswer = 'Answer';
+# e.g. SiT is an application
+$strApplication = 'Application';
 $strApprovalStatusUnknown = 'Approval Status Unknown';
 $strApprove = 'Approve';
 $strApproveAll = 'Approve All';
@@ -363,7 +365,7 @@ $strCustomerHasBeenCalledToChase = 'Customer has been called to chase';
 $strCustomerImpact = 'Customer Impact';
 $strCustomerImpactCustomerText = 'How many users are affected by this issue? Is this an issue of downtime or a minor niggle? Does the issue prevent people from working?';
 $strCustomerReference = 'Customer Ref';
-$strCustomerReferenceDate = 'Customer Ref Date'; 
+$strCustomerReferenceDate = 'Customer Ref Date';
 $strCustomerRequestedClosure = 'Customer Requested Incident Closure';
 $strCustomers = 'Customers';
 
@@ -566,6 +568,7 @@ $strFailedToUpdateDuration = 'Failed to update duration';
 $strFAILED = 'FAILED';
 $strFatalError = 'Fatal Error';
 $strFax = 'Fax';
+$strFeatures = 'Features';
 # Short for February
 $strFebAbbr = 'Feb';
 $strFebruary = 'February';
@@ -626,6 +629,7 @@ $strFullDetails = 'Full Details';
 $strFullNameCurrentUser = 'Full name of current user';
 
 $strGBytes = 'GBytes';
+$strGeneral = 'General';
 $strGetHelpOnline = 'Get Help Online';
 $strGlobalSignature = 'Global Signature';
 $strGlobalSignatureDescription = 'A signature to insert at the bottom of outgoing emails.  It\'s recommended that you begin this signature with two dashes, a space and a line feed.';
@@ -677,6 +681,7 @@ $strID = 'ID';
 $strIfYouShouldHaveAccess = 'If you feel that you should have access to this particular feature, please ask an administrator to grant you access';
 $strImportant = 'Important';
 $strInactive = 'Inactive';
+$strInbound = 'Inbound';
 $strIncident = 'Incident';
 $strIncidentActivitiesIntro = 'This page is to keep track of activities relating to an incident where time spent dealing with the incident needs to be known';
 $strIncidentAdded = 'Incident Added';
@@ -776,6 +781,8 @@ $strJunAbbr = 'Jun';
 $strJune = 'June';
 $strJustNow = 'Just Now';
 
+# Abbreviation for Knowledge base
+$strKBabbr = 'KB';
 $strKBytes = 'KBytes';
 $strKeepCurrentLanguage = 'Keep current language';
 #e.g. graph legend
@@ -819,6 +826,8 @@ $strListShowsContracts = 'This list shows contracts, i.e. supported contacts and
 $strListSkills = 'List Skills';
 $strLinkSkillToX = 'Link skill to %s';
 $strLoading = 'Loading';
+# Parameters defining location, language and regional preferences
+$strLocale = 'Locale';
 $strLocation = 'Location';
 $strLocked = 'Locked';
 $strLockedByX = 'Locked by %s';
@@ -1092,6 +1101,7 @@ $strOrphanedSites = 'Orphaned Sites';
 $strOther = 'Other';
 $strOtherIncidents = 'Other Incidents';
 $strOtherLeave = 'Other Leave';
+$strOutbound = 'Outbound';
 $strOutput = 'Output';
 $strOwner = 'Owner';
 $strOwners = 'Owners';
@@ -1107,6 +1117,8 @@ $strPasswordReset = 'Password reset';
 $strPasswordsDoNotMatch = 'Passwords do not match';
 $strPastXDays = 'Past %s days';
 $strPastXMonths = 'Past %s months';
+# e.g. File system directory paths
+$strPaths = 'Paths';
 $strPercentageEscalated = 'Percentage Escalated';
 $strPeriod = 'Period';
 $strPeriodStarted = 'Period Started';
@@ -1429,6 +1441,7 @@ $strSupportedContacts = 'Supported Contacts';
 $strSurname = 'Surname';
 $strSwitchUser = 'Switch User';
 $strSymptoms = 'Symptoms';
+$strSystem = 'System';
 $strSystemActions = 'System Actions';
 
 $strTable = 'Table';
@@ -1472,6 +1485,8 @@ $strth = 'th';
 $strTheFollowingVariables = 'The following variables may be used:';
 $strThereAreXIncidentsInThisList = 'There are %s incidents in this list';
 $strTheInfoInThisArticle = 'The information in this article applies to';
+# Theme as in Interface Style
+$strTheme = 'Theme';
 $strTheMoreInformation = 'The more information you can provide, the better';
 $strThisMonth = 'This month';
 $strThisReportShowsIncidentsClosedInThisPeriod = 'This report shows incidents closed in the period';
