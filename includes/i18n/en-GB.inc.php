@@ -1251,6 +1251,8 @@ $strReturnAfterSaving = 'Return to this page after saving';
 $strReturnToPreviousPage = 'Return to previous page';
 $strReturnToProductList = 'Return to product list';
 $strReturnWithoutSaving = 'Return without saving';
+# Show
+$strReveal = 'Reveal';
 $strReverseLinks = 'Reverse Links';
 $strReview = 'Review';
 $strReviewby = 'Review %s by %s';

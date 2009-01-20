@@ -16,11 +16,11 @@ var mainframe = '50%';
 
 function incident_details_window(incidentid,win,rtn)
 {
-	// URL = "incident.php?popup=yes&id=" + incidentid;
-	URL = application_webpath + "incident_details.php?id=" + incidentid + "&win=" + win;
-	if (popwin) { popwin.close(); }
-	popwin = window.open(URL, "sit_popup", "toolbar=yes,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=700,height=600");
-	if (rtn == true) return popwin;
+    // URL = "incident.php?popup=yes&id=" + incidentid;
+    URL = application_webpath + "incident_details.php?id=" + incidentid + "&win=" + win;
+    if (popwin) { popwin.close(); }
+    popwin = window.open(URL, "sit_popup", "toolbar=yes,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=700,height=600");
+    if (rtn == true) return popwin;
 }
 
 
@@ -657,17 +657,17 @@ function toggleMenuPanel()
 
 function resizeTextarea(t)
 {
-	a = t.value.split('\n');
-	b=1;
-	for (x=0;x < a.length; x++)
-	{
-		if (a[x].length >= t.cols)
-		{
-			b+= Math.floor(a[x].length/t.cols);
-		}
-	}
-	b+= a.length;
-	if (b > t.rows) t.rows = b;
+    a = t.value.split('\n');
+    b=1;
+    for (x=0;x < a.length; x++)
+    {
+        if (a[x].length >= t.cols)
+        {
+            b+= Math.floor(a[x].length/t.cols);
+        }
+    }
+    b+= a.length;
+    if (b > t.rows) t.rows = b;
 }
 
 function enableBillingPeriod()
@@ -688,4 +688,23 @@ function enableBillingPeriod()
         $('allow_reopen').checked=true;
         $('limit').hide();
     }
+}
+
+
+function password_reveal(elem)
+{
+    var elemlink = 'link' + elem;
+    if ($(elem).type == 'password')
+    {
+        $(elem).type = 'text';
+        $(elemlink).innerHTML = 'Hide'; // FIXME i18n
+    }
+    else
+    {
+        $(elem).type = 'password';
+        $(elemlink).innerHTML = 'Reveal'; // FIXME i18n
+    }
+
+
+
 }

@@ -11059,6 +11059,10 @@ function cfgVarInput($setupvar, $showvarnames = FALSE)
             $html .= "<input type='text' name='$setupvar' size='7' value=\"{$value}\" />";
         break;
 
+        case 'password':
+          $html .= "<input type='password' id='cfg{$setupvar}' name='$setupvar' size='16' value=\"{$value}\" /> ".password_reveal_link("cfg{$setupvar}");
+        break;
+
         case 'text':
         default:
             if (strlen($CONFIG[$setupvar]) < 65)
@@ -11099,6 +11103,17 @@ function cfgSave($setupvars)
         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     }
     return TRUE;
+}
+
+
+/**
+ * HTML for a hyperlink to hide/reveal a password field
+ * @author Ivan Lucas
+**/
+function password_reveal_link($id)
+{
+    $html = "<a href=\"javascript:password_reveal('$id')\" id=\"link{$id}\">{$GLOBALS['strReveal']}</a>";
+    return $html;
 }
 
 

@@ -14,7 +14,7 @@
 // TODO we need some sort of hierarchy for the config categories
 // as this is way too many
 
-$CFGTAB['application'] = array('appmain', 'theming', 'system', 'ldap', 'other');
+$CFGTAB['application'] = array('appmain', 'theming', 'ldap', 'other');
 $CFGTAB['email'] = array('inboundemail', 'outboundemail');
 $CFGTAB['features'] = array('incidents', 'portal', 'ftp', 'kb', 'sla', 'holidays', 'feedback');
 $CFGTAB['system'] = array('paths', 'locale', 'journal');
@@ -37,15 +37,6 @@ $CFGCAT['appmain'] = array('application_name',
                                'logout_url',
                                'plugins'
                                );
-
-
-$CFGCAT['system'] = array('demo', 'debug', 'bugtracker_name', 'bugtracker_url',
-                          'changelogfile','creditsfile',
-                          'error_logfile',
-                          'error_notavailable_url',
-                          'licensefile',
-                          'session_name',
-                          'upload_max_filesize');
 
 $CFGCAT['locale'] = array('home_country',
                           'timezone',
@@ -135,12 +126,20 @@ $CFGCAT['kb'] = array('kb_enabled',
 $CFGCAT['outboundemail'] = array('sales_email');
 $CFGCAT['journal'] = array('journal_loglevel', 'journal_purge_after');
 
-$CFGCAT['other'] = array('support_manager', 'timesheets_enabled');
+$CFGCAT['other'] = array('support_manager', 'timesheets_enabled',
+                          'demo', 'debug', 'bugtracker_name', 'bugtracker_url',
+                          'changelogfile','creditsfile',
+                          'error_logfile',
+                          'error_notavailable_url',
+                          'licensefile',
+                          'session_name',
+                          'upload_max_filesize');
+
+
 
 // i18n keys for categories
 $CATI18N['appmain'] = $strGeneral;
 $CATI18N['theming'] = $strTheme;
-$CATI18N['system'] = $strSystem;
 $CATI18N['ldap'] = 'LDAP';
 $CATI18N['other'] = $strOther;
 $CATI18N['inboundemail'] = $strInbound;
@@ -223,6 +222,7 @@ $CFGVAR['db_hostname']['help']="The Hostname or IP address of the MySQL Database
 $CFGVAR['db_hostname']['title'] = 'MySQL Database Hostname';
 
 $CFGVAR['db_password']['title'] = 'MySQL Database Password';
+$CFGVAR['db_password']['type'] = 'password';
 
 $CFGVAR['db_tableprefix']['help']="Prefix database tables with the a string (e.g. 'sit_', use this if the database you are using is shared with other applications";
 $CFGVAR['db_tableprefix']['title'] = 'MySQL Database Table Prefix';
@@ -262,13 +262,13 @@ $CFGVAR['demo']['title'] = 'Demo Mode';
 $CFGVAR['demo']['type'] = 'select';
 
 $CFGVAR['email_address']['title'] = "Incoming email account address";
-$CFGVAR['email_address']['title'] = "Incoming email account address";
 
 $CFGVAR['email_options']['help'] = "e.g. Gmail needs '/ssl', secure Groupwise needs /novalidate-cert etc. See http://uk2.php.net/imap_open for examples";
 $CFGVAR['email_options']['title'] = "Extra options to pass to the mailbox";
 
 $CFGVAR['email_password']['title'] = "Incoming email account password";
-$CFGVAR['email_password']['title'] = "Incoming email account password";
+$CFGVAR['email_password']['help'] = "The password for the incoming email account connection";
+$CFGVAR['email_password']['type'] = 'password';
 
 $CFGVAR['email_port']['title'] = "Incoming email account port";
 $CFGVAR['email_port']['type'] = 'number';
@@ -311,10 +311,12 @@ $CFGVAR['feedback_max_score']['type'] = 'number';
 
 $CFGVAR['free_support_limit']['title'] = 'Number of free (site) support incidents that can be logged to a site';
 $CFGVAR['free_support_limit']['type'] = 'number';
+$CFGVAR['free_support_limit']['unit'] =$strSiteIncidents;
 
 $CFGVAR['ftp_hostname']['title'] = 'The ftp hostname or IP address';
 
-$CFGVAR['ftp_password']['title'] = 'Ftp password';
+$CFGVAR['ftp_password']['title'] = 'FTP password';
+$CFGVAR['ftp_password']['type'] = 'password';
 
 $CFGVAR['ftp_pasv']['options'] = 'TRUE|FALSE';
 $CFGVAR['ftp_pasv']['title'] = 'Set to TRUE to enable ftp PASSV mode or FALSE to disable';
@@ -372,6 +374,7 @@ $CFGVAR['ldap_autocreate_customer']['type'] = 'select';
 $CFGVAR['ldap_bind_user']['title'] = 'The user for binding to the LDAP host';
 
 $CFGVAR['ldap_bind_pass']['title'] = 'The password for binding to the LDAP host';
+$CFGVAR['ldap_bind_pass']['type'] = 'password';
 
 $CFGVAR['ldap_customer_group']['title'] = 'LDAP Customer Group';
 

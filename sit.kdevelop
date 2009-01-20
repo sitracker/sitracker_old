@@ -3,7 +3,7 @@
   <general>
     <author>Ivan Lucas</author>
     <email>ivanlucas@users.sourceforge.net</email>
-    <version>3.35</version>
+    <version>3.x</version>
     <projectmanagement>KDevScriptProject</projectmanagement>
     <primarylanguage>PHP</primarylanguage>
     <ignoreparts/>
@@ -48,11 +48,11 @@
     </webInvocation>
     <shell>
       <phpexe>/usr/local/bin/php</phpexe>
-      <phpini/>
+      <phpini></phpini>
     </shell>
     <options>
-      <phpincludepath/>
-      <defaultFile/>
+      <phpincludepath></phpincludepath>
+      <defaultFile></defaultFile>
       <startupFileMode>1</startupFileMode>
     </options>
   </kdevphpsupport>
