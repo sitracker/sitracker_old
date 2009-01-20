@@ -490,7 +490,7 @@ $CFGVAR['start_working_day']['unit'] = $strSeconds;
 
 $CFGVAR['support_email']['title'] = 'Emails sent by SiT will come from this address';
 
-$CFGVAR['support_manager']['title'] = 'The user ID of the person who is in charge of your support service';
+$CFGVAR['support_manager']['title'] = 'The person who is in charge of your support service';
 $CFGVAR['support_manager']['type'] = 'userselect';
 
 $CFGVAR['tag_icons']['help'] = "Set up an array to use an icon for specified tags, format: array('tag' => 'icon', 'tag2' => 'icon2')";
