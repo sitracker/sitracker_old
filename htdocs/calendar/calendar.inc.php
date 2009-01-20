@@ -48,12 +48,12 @@ function draw_calendar($nmonth, $nyear)
         if ($monthTest != $monthOrig) { $lastday -= 1; }
     }
     while ($monthTest != $monthOrig);
-    $monthName = ldate('F',mktime(0,0,0,$nmonth,1,$nyear));
+    $monthName = ldate('F',gmmktime(0,0,0,$nmonth,1,$nyear));
 
     if ($CONFIG['debug'])
     {
-        echo "<p>first day of the first week of $nmonth $nyear is $firstday (from 0 to 6) <p>\n";
-        echo "The last day of $nmonth $nyear is $lastday\n<p>";
+        debug_log("first day of the first week of $nmonth $nyear is $firstday (from 0 to 6)");
+        debug_log("The last day of $nmonth $nyear is $lastday");
     }
     $days[0] = $GLOBALS['strSun'];
     $days[1] = $GLOBALS['strMon'];
@@ -67,7 +67,7 @@ function draw_calendar($nmonth, $nyear)
     echo "\n<table summary='{$monthName} {$nyear}'>";
 
     /* Make navigation control for months */
-    if ($nmonth >=1)
+    if ($nmonth >= 1)
     {
         $prevmonth = $nmonth-1;
         $prevyear = $nyear;
@@ -83,10 +83,10 @@ function draw_calendar($nmonth, $nyear)
         // $nextmonth=nmonth+1;
         $nextyear=$nyear;
     }
-    if ($nmonth==12)
+    if ($nmonth == 12)
     {
-        $nextmonth=1;
-        $nextyear=$nyear+1;
+        $nextmonth = 1;
+        $nextyear = $nyear + 1;
     }
     echo "<tr><th colspan='7'>";
     //       echo "<small><a href=\"blank.php?nmonth=".date('m',$timebase)."&nyear=".date('Y',$timebase)."&nday=".date('d',$timebase)."&sid=$sid\" title=\"jump to today\">".date('D jS M Y')."</a></small><br /> ";

@@ -17,12 +17,15 @@ if (realpath(__FILE__) == realpath($_SERVER['SCRIPT_FILENAME']))
 }
 
 // Display year calendar
-if ($type < 10)
+if ($type < HOL_PUBLIC)
 {
     echo "<h2>{$strCalendar}: ";
     if ($user == 'all' && $approver == TRUE) echo $strAll;
     else echo user_realname($user,TRUE);
-    if ($type==1) echo "<p align='center'>".sprintf($strUsedNofNDaysEntitlement,   user_count_holidays($user, $type), user_holiday_entitlement($user))."<br />";
+    if ($type == HOL_HOLIDAY)
+    {
+        echo "<p align='center'>".sprintf($strUsedNofNDaysEntitlement, user_count_holidays($user, $type), user_holiday_entitlement($user))."<br />";
+    }
 
     echo appointment_type_dropdown($type, 'year');
 
@@ -130,7 +133,7 @@ echo "</p>";
 echo "<table align='center' border='1' cellpadding='0' cellspacing='0' style='border-collapse:collapse; border-color: #AAA; width: 80%;'>";
 $displaymonth = 1;
 $displayyear = $year;
-for ($r = 1;$r < 3;$r ++)
+for ($r = 1;$r <= 3;$r ++)
 {
     echo "<tr>";
     for ($c = 1;$c <= 4;$c++)
