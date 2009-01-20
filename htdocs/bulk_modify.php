@@ -26,7 +26,7 @@ $action = cleanvar($_REQUEST['action']);
     {
         case 'external_esc': //show external escalation modification page
             echo "<h2>{$strBulkModify}: {$strExternalEngineersName}</h2>";
-            $sql = "SELECT distinct(externalemail), externalengineer ";
+            $sql = "SELECT DISTINCT(externalemail), externalengineer ";
             $sql .= "FROM `{$dbIncidents}` WHERE closed = '0' AND externalemail!=''";
 
             $result = mysql_query($sql);

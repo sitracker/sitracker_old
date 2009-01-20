@@ -11075,6 +11075,7 @@ function cfgVarInput($setupvar, $showvarnames = FALSE)
             }
     }
     if (!empty($CFGVAR[$setupvar]['unit'])) $html .= " {$CFGVAR[$setupvar]['unit']}";
+    if (!empty($CFGVAR[$setupvar]['helplink'])) $html .= ' '.help_link($CFGVAR[$setupvar]['helplink']);
     if ($setupvar=='db_password' AND $_REQUEST['action']!='reconfigure' AND $value != '') $html .= "<p class='info'>The current password setting is not shown</p>";
 
     if ($showvarnames) $html .= "<br />(<var>\$CONFIG['$setupvar']</var>)";

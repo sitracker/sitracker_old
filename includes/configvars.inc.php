@@ -156,20 +156,28 @@ $CATI18N['locale'] = $strLocale;
 $CATI18N['journal'] = $strJournal;
 
 // Descriptions of all the config variables
+// each config var may have these elements:
+//      title   - A title/short description of the configuration variable
+//      help    - A line of instructions/help to assist the user configuring
+//      helplink - A help context label for /htdocs/help/en-GB/help.txt type help
+//      type - A datatype, see cfgVarInput() for list
+//      unit - A unit string to print after the input
+//      options - A pipe seperated list of optios for a 'select' type
+
 $CFGVAR['access_logfile']['help'] = "This file must be writable of course";
 $CFGVAR['access_logfile']['title'] = 'Filename to log authentication failures';
 
 $CFGVAR['application_fspath']['help']="The full absolute filesystem path to the SiT! directory with trailing slash. e.g. '/var/www/sit/'";
 $CFGVAR['application_fspath']['title'] = 'Filesystem Path';
 
-$CFGVAR['application_name']['help'] = 'You should not normally need to change this';
-$CFGVAR['application_name']['title'] = 'The application name';
+$CFGVAR['application_name']['title'] = 'Application Name';
+$CFGVAR['application_name']['help'] = 'The full name of this application. This is displayed at the top of each page and various other places throughout the web interface.';
 
-$CFGVAR['application_shortname']['help'] = 'You should not normally need to change this';
-$CFGVAR['application_shortname']['title'] = 'A short version of the application name';
+$CFGVAR['application_shortname']['title'] = 'Short Application Name';
+$CFGVAR['application_shortname']['help'] = 'A short (abbreviated) version of the application name. This is used to refer to this application where space is at a premium.';
 
-$CFGVAR['application_uriprefix']['help'] = 'The URI prefix to use when referring to this application (in emails etc.) e.g. http://{$_SERVER[\'HTTP_HOST\']}';
 $CFGVAR['application_uriprefix']['title'] = 'URI Prefix';
+$CFGVAR['application_uriprefix']['help'] = "The <abbr title='Uniform Resource Identifier'>URI</abbr> prefix to use when referring to this application (in emails etc.) e.g. http://{\$_SERVER[\'HTTP_HOST\']}";
 
 $CFGVAR['application_webpath']['title'] = 'The path to SiT! from the browsers perspective with a trailing slash. e.g. /sit/';
 
@@ -234,7 +242,8 @@ $CFGVAR['debug']['options'] = 'TRUE|FALSE';
 $CFGVAR['debug']['title'] = 'Debug Mode';
 $CFGVAR['debug']['type'] = 'select';
 
-$CFGVAR['default_css_url']['title'] = 'The CSS file to use when no other is configured';
+$CFGVAR['default_css_url']['title'] = 'Default CSS URL';
+$CFGVAR['default_css_url']['help'] = "The <abbr title='Cascading Style Sheet'>CSS</abbr> file to use when no other is configured. You should not normally need to change this.";
 
 $CFGVAR['default_entitlement']['title'] = 'Default Holiday Entitlement';
 $CFGVAR['default_entitlement']['help'] = 'Default holiday entitlement for new users and new holiday periods (in days)';
@@ -397,13 +406,15 @@ $CFGVAR['ldap_default_user_status']['type'] = 'number';
 $CFGVAR['ldap_dn_base']['title'] = 'The LDAP Base DN for user lookups';
 
 $CFGVAR['ldap_host']['title'] = 'LDAP Host Name';
+$CFGVAR['ldap_host']['help'] = "This should be your <abbr title='Lightweight Directory Access Protocol'>LDAP</abbr> IP address or hostname, e.g.: ldap.example.com";
 
 $CFGVAR['ldap_manager_group']['title'] = 'LDAP group for SIT admins';
 
 $CFGVAR['ldap_manager_group_attr']['title'] = 'LDAP group attribute for SIT admins';
 
 $CFGVAR['ldap_protocol']['title'] = 'LDAP Protocol version to use';
-$CFGVAR['ldap_protocol']['type'] = 'number';
+$CFGVAR['ldap_protocol']['type'] = 'select';
+$CFGVAR['ldap_protocol']['options'] = '1|2|3';
 
 $CFGVAR['ldap_use_tls']['title'] = 'TLS. TRUE = start TLS, FALSE = use unencrypted';
 $CFGVAR['ldap_use_tls']['help'] = 'Requires LDAP protocol v3';
@@ -418,8 +429,8 @@ $CFGVAR['ldap_user_group_attr']['title'] = 'LDAP group attribute for SIT users';
 
 $CFGVAR['licensefile']['title'] = 'Path to the License file';
 
-$CFGVAR['logout_url']['help'] = "When left blank this defaults to \$CONFIG['application_webpath'], setting that here will take the value of the default";
-$CFGVAR['logout_url']['title'] = "The URL to redirect the user to after he/she logs out";
+$CFGVAR['logout_url']['help'] = "The URL to redirect the user to after he/she logs out. When left blank this defaults to the SiT login page.";
+$CFGVAR['logout_url']['title'] = "Logout URL";
 
 $CFGVAR['mailin_spool_path']['title'] = "Incoming mail spool directory, the location of mail processed by mailfilter shell script";
 
@@ -519,7 +530,8 @@ $CFGVAR['upload_max_filesize']['title'] = "The maximum file upload size (in byte
 $CFGVAR['upload_max_filesize']['type'] = 'number';
 $CFGVAR['upload_max_filesize']['unit'] = $strBytes;
 
-$CFGVAR['use_ldap']['title'] = "Set to TRUE for LDAP authentication, or FALSE for standard database authentication";
+$CFGVAR['use_ldap']['title'] = 'Enable LDAP authentication';
+$CFGVAR['use_ldap']['help'] = "Set to TRUE for LDAP authentication, or FALSE for standard database authentication";
 $CFGVAR['use_ldap']['options'] = 'TRUE|FALSE';
 $CFGVAR['use_ldap']['type'] = 'select';
 
