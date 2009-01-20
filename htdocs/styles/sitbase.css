@@ -35,7 +35,7 @@ td sup { color: #444; }
 
 fieldset { background: #DEDEFF;}
 legend { border: 1px solid #185594; background: white; padding: 0px 15px;}
-var { font-family: monospace;}
+var { font-family: monospace; color: #303030; }
 
 /* ID & Class Selectors */
 
