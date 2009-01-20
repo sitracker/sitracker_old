@@ -313,7 +313,7 @@ $CFGVAR['free_support_limit']['title'] = 'Number of free (site) support incident
 $CFGVAR['free_support_limit']['type'] = 'number';
 $CFGVAR['free_support_limit']['unit'] =$strSiteIncidents;
 
-$CFGVAR['ftp_hostname']['title'] = 'The ftp hostname or IP address';
+$CFGVAR['ftp_hostname']['title'] = 'The FTP hostname or IP address';
 
 $CFGVAR['ftp_password']['title'] = 'FTP password';
 $CFGVAR['ftp_password']['type'] = 'password';
@@ -329,6 +329,8 @@ $CFGVAR['ftp_username']['title'] = 'Ftp username';
 
 $CFGVAR['hide_closed_incidents_older_than']['help'] = "Incidents closed more than this number of days ago aren't show in the incident queue, -1 means disabled";
 $CFGVAR['hide_closed_incidents_older_than']['title'] = 'Hide closed incidents older than';
+$CFGVAR['hide_closed_incidents_older_than']['type'] = 'number';
+$CFGVAR['hide_closed_incidents_older_than']['unit'] = $strDays;
 
 $CFGVAR['holidays_enabled']['help'] = "TRUE for enabled, FALSE for disabled";
 $CFGVAR['holidays_enabled']['options'] = 'TRUE|FALSE';
@@ -463,6 +465,8 @@ $CFGVAR['preferred_maintenance']['help'] = "e.g. array('standard', 'high')";
 $CFGVAR['preferred_maintenance']['title'] = "An array of SLA's to indicate order of preference when logging incidents against them";
 
 $CFGVAR['record_lock_delay']['title'] = 'Lock records for (number of seconds)';
+$CFGVAR['record_lock_delay']['type'] = 'number';
+$CFGVAR['record_lock_delay']['unit'] = $strSeconds;
 
 $CFGVAR['regular_contact_days']['title'] = 'The number of days to elapse before we are prompted to contact the customer (usually overridden by SLA)';
 $CFGVAR['regular_contact_days']['type'] = 'number';
