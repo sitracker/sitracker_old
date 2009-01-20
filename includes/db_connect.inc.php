@@ -19,16 +19,13 @@ include ("defaults.inc.php");
 // i18n
 @include ('i18n/en-gb.inc.php');
 
-if ($CONFIG['debug'] > 0)
+// Set Start Time for Execution Timing
+function getmicrotime()
 {
-    // Set Start Time for Execution Timing
-    function getmicrotime()
-    {
-        list($usec, $sec) = explode(" ",microtime());
-        return ((float)$usec + (float)$sec);
-    }
-    $exec_time_start = getmicrotime();
+    list($usec, $sec) = explode(" ",microtime());
+    return ((float)$usec + (float)$sec);
 }
+$exec_time_start = getmicrotime();
 
 if ($CONFIG['db_username'] == '' OR $CONFIG['db_database'] == '')
 {
