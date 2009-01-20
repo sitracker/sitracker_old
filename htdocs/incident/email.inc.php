@@ -624,11 +624,11 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
             $extra_headers .= "X-Originating-IP: {$_SERVER['REMOTE_ADDR']}\n";
             if ($ccfield != '')  $extra_headers .= "cc: $ccfield\n";
             if ($bccfield != '') $extra_headers .= "Bcc: $bccfield\n";
-
             $extra_headers .= "\n"; // add an extra crlf to create a null line to separate headers from body
                                 // this appears to be required by some email clients - INL
 
-            $mime = new MIME_mail($fromfield, $tofield, html_entity_decode($subjectfield), $bodytext, $extra_headers, $mailerror);
+            $mime = new MIME_mail($fromfield, $tofield, html_entity_decode($subjectfield), '', $extra_headers, $mailerror);
+            $mime -> attach($bodytext, '', "text-plain; charset={$GLOBALS['i18ncharset']}", 'quoted-printable');
 
             // check for attachment
             //        if ($_FILES['attachment']['name']!='' || strlen($filename) > 3)
