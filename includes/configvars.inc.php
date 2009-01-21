@@ -275,7 +275,7 @@ $CFGVAR['demo']['type'] = 'select';
 $CFGVAR['email_address']['title'] = "Incoming email account address";
 
 $CFGVAR['email_options']['title'] = "Incoming email connection options";
-$CFGVAR['email_options']['help'] = "Extra options to pass to the mailbox e.g. Gmail needs '/ssl', secure Groupwise needs /novalidate-cert etc. See <a href='http://www.php.net/imap_open'>http://www.php.net/imap_open</a> for examples";
+$CFGVAR['email_options']['help'] = "Extra options to pass to the mailbox e.g. Gmail needs '/ssl', secure Groupwise needs /ssl/novalidate-cert etc. See <a href='http://www.php.net/imap_open'>http://www.php.net/imap_open</a> for examples";
 
 $CFGVAR['email_password']['title'] = "Incoming email account password";
 $CFGVAR['email_password']['help'] = "The password for the incoming email account connection";
