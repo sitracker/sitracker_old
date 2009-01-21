@@ -127,7 +127,6 @@ $CFGCAT['other'] = array('support_manager', 'timesheets_enabled',
                           'demo', 'debug', 'bugtracker_url',
                           'changelogfile','creditsfile',
                           'error_logfile',
-                          'error_notavailable_url',
                           'licensefile',
                           'session_name',
                           'upload_max_filesize');
@@ -197,8 +196,10 @@ $CFGVAR['calendar_enabled']['title'] = "Calendar Enabled/Disabled";
 $CFGVAR['calendar_enabled']['type'] = 'select';
 
 $CFGVAR['changelogfile']['title'] = 'Path to the Changelog file';
+$CFGVAR['changelogfile']['help'] = 'The filesystem path and filename of the SiT! Changelog file, this can be specified relative to the htdocs directory.';
 
 $CFGVAR['creditsfile']['title'] = 'Path to the Credits file';
+$CFGVAR['creditsfile']['help'] = 'The filesystem path and filename of the SiT! CREDITS file, this can be specified relative to the htdocs directory.';
 
 $CFGVAR['critical_threshold']['help'] = 'Enter a number between 0 and 100.';
 $CFGVAR['critical_threshold']['title'] = 'flag items as critical when they are this percentage complete.';
@@ -302,10 +303,8 @@ $CFGVAR['end_working_day']['title'] = 'Time of the end of the working day (in se
 $CFGVAR['end_working_day']['type'] = 'number';
 $CFGVAR['end_working_day']['unit'] = $strSeconds;
 
-$CFGVAR['error_logfile']['help'] = "This file must already exist and be writable";
-$CFGVAR['error_logfile']['title'] = "Path to a file to log error messages";
-
-$CFGVAR['error_notavailable_url']['title']="The URL to redirect to for pages that do not exist yet.";
+$CFGVAR['error_logfile']['title'] = "Path to an error log file";
+$CFGVAR['error_logfile']['help'] = "The filesystem path and filename of a file that already exist and is writable to log error messages into. Enable Debug Mode to see more verbose messages in this file.";
 
 $CFGVAR['feedback_enabled']['help'] = "TRUE for enabled, FALSE for disabled";
 $CFGVAR['feedback_enabled']['options'] = 'TRUE|FALSE';

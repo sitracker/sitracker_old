@@ -202,9 +202,6 @@ $CONFIG['access_logfile'] = '';
 //$CONFIG['plugins'] = array();
 $CONFIG['plugins'] =array('');
 
-// The URL for pages that do not exist yet.
-$CONFIG['error_notavailable_url']="/?msg=not+available";
-
 $CONFIG['no_feedback_contracts'] = array();
 
 $CONFIG['preferred_maintenance'] = array();
