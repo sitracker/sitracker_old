@@ -10993,6 +10993,7 @@ function is_assoc_callback($a, $b)
 function cfgVarInput($setupvar, $showvarnames = FALSE)
 {
     global $CONFIG, $CFGVAR;
+    global $availablelanguages;
     $html .= "<div class='configvar'>";
     if ($CFGVAR[$setupvar]['title']!='') $title = $CFGVAR[$setupvar]['title'];
     else $title = $setupvar;
@@ -11049,6 +11050,23 @@ function cfgVarInput($setupvar, $showvarnames = FALSE)
 
         case 'interfacestyleselect':
             $html .= interfacestyle_drop_down($setupvar, $value);
+        break;
+
+        case 'languageselect':
+            $html .= "<select name='{$setupvar}'>";
+            foreach ($availablelanguages AS $langcode => $language)
+            {
+                if ($langcode == $_SESSION['lang'])
+                {
+                    $html .= "<option value='{$langcode}' selected='selected'>{$language}";
+                    $html .= "</option>\n";
+                }
+                else
+                {
+                    $html .= "<option value='{$langcode}'>{$language}</option>\n";
+                }
+            }
+            $html .= "</select>";
         break;
 
         case 'userselect':

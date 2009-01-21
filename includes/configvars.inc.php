@@ -10,10 +10,6 @@
 //
 // Author: Ivan Lucas, <ivanlucas[at]users.sourceforge.net
 
-
-// TODO we need some sort of hierarchy for the config categories
-// as this is way too many
-
 $CFGTAB['application'] = array('appmain', 'theming', 'ldap', 'other');
 $CFGTAB['email'] = array('inboundemail', 'outboundemail');
 $CFGTAB['features'] = array('incidents', 'portal', 'ftp', 'kb', 'sla', 'holidays', 'feedback');
@@ -253,9 +249,9 @@ $CFGVAR['default_entitlement']['unit'] = $strDays;
 $CFGVAR['default_gravatar']['help'] = "can be 'wavatar', 'identicon', 'monsterid' a URL to an image, or blank for a blue G. see <a href='http://www.gravatar.com/'>www.gravatar.com</a> to learn about gravatars";
 $CFGVAR['default_gravatar']['title'] = "Default Gravatar";
 
-$CFGVAR['default_i18n']['help'] = "The system language, or the language that will be used when no other language is selected by the user, see <a href='http://sitracker.sourceforge.net/Translation'>http://sitracker.sourceforge.net/Translation</a> for a list of supported languages. ";
+$CFGVAR['default_i18n']['help'] = "The system language, or the language that will be used when no other language is selected by the user, see <a href='http://sitracker.sourceforge.net/Translation'>http://sitracker.sourceforge.net/Translation</a> for an up to date list of supported languages.";
 $CFGVAR['default_i18n']['title'] = "Default Language";
-// TODO Language selection
+$CFGVAR['default_i18n']['type'] = 'languageselect';
 
 $CFGVAR['default_interface_style']['title'] = 'The interface style that new users should use (user default style)';
 $CFGVAR['default_interface_style']['type'] = 'interfacestyleselect';
