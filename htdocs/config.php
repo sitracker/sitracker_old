@@ -94,6 +94,10 @@ echo "<fieldset>";
 $catname = $CATI18N[$selcat];
 if (empty($catname)) $catname = $selcat;
 echo "<legend>{$catname}</legend>";
+if (!empty($CATINTRO[$selcat]))
+{
+    echo "<div id='catintro'>{$CATINTRO[$selcat]}</div>";
+}
 if (!empty($selcat))
 {
     foreach ($CFGCAT[$selcat] AS $catvar)

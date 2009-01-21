@@ -674,3 +674,11 @@ div.tabcontainer { display: block; border: red;  }
     margin-top: 0.1em;
     margin-bottom: 0.2em;
 }
+
+#catintro
+{
+    margin: 10px 0px;
+    -moz-border-radius: 7px; -khtml-border-radius: 7px; border-radius: 7px;
+    background: #EEF6FF;
+    padding: 1em;
+}

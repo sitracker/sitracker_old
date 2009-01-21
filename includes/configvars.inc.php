@@ -150,6 +150,11 @@ $CATI18N['paths'] = $strPaths;
 $CATI18N['locale'] = $strLocale;
 $CATI18N['journal'] = $strJournal;
 
+// Text to introduce a configuration category, may contain HTML
+$CATINTRO['sla'] = "This section allows you to configure how service levels are used, configure the <abbr title='Service Level Agreements'>SLA</abbr>'s themselves on the <a href='service_levels.php'>Service Levels</a> page.";
+
+
+
 // Descriptions of all the config variables
 // each config var may have these elements:
 //      title   - A title/short description of the configuration variable
@@ -367,7 +372,7 @@ $CFGVAR['journal_loglevel']['title'] = 'Journal Logging Level';
 $CFGVAR['journal_loglevel']['options'] = '0|1|2|3|4';
 $CFGVAR['journal_loglevel']['type'] = 'select';
 
-$CFGVAR['journal_purge_after']['title'] = 'Jounal Purge Delay';
+$CFGVAR['journal_purge_after']['title'] = 'Journal Purge Delay';
 $CFGVAR['journal_purge_after']['help'] = 'How long should we keep journal entries (in seconds), entries older than this will be purged (deleted)';
 $CFGVAR['journal_purge_after']['type'] = 'number';
 $CFGVAR['journal_purge_after']['unit'] = $strSeconds;
