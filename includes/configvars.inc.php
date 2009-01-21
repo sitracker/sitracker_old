@@ -436,7 +436,8 @@ $CFGVAR['licensefile']['title'] = 'Path to the License file';
 $CFGVAR['logout_url']['help'] = "The URL to redirect the user to after he/she logs out. When left blank this defaults to the SiT login page.";
 $CFGVAR['logout_url']['title'] = "Logout URL";
 
-$CFGVAR['max_incoming_email_perday']['title'] = 'maximum no. of incoming emails per incident before a mail-loop is detected';
+$CFGVAR['max_incoming_email_perday']['title'] = 'Maximum number of incoming emails';
+$CFGVAR['max_incoming_email_perday']['help'] = 'The maximum number of incoming emails per incident, per day to allow before a mail-loop is detected';
 $CFGVAR['max_incoming_email_perday']['type'] = 'number';
 
 $CFGVAR['no_feedback_contracts']['title'] = "No-Feedback Contracts";
@@ -494,9 +495,8 @@ $CFGVAR['sales_email']['title'] = 'Your sales departments email address';
 $CFGVAR['session_name']['title'] = 'Session Name';
 $CFGVAR['session_name']['help'] = 'The session name for use in cookies and URLs, Must contain alphanumeric characters only';
 
-$CFGVAR['spam_email_subject']['title'] = 'String to look for in email message subject to determine a message is spam';
-
-$CFGVAR['spam_forward']['title'] = 'Email address to forward spam messages thatare to be marked as spam';
+$CFGVAR['spam_email_subject']['title'] = 'Spam Subject';
+$CFGVAR['spam_email_subject']['help'] = 'String to look for in email message subject to determine a message is spam';
 
 $CFGVAR['start_working_day']['help'] = 'Seconds since midnight';
 $CFGVAR['start_working_day']['title'] = 'Time of the start of the working day (in seconds)';
