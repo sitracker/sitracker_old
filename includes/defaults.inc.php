@@ -69,7 +69,6 @@ $CONFIG['email_servertype'] = '';
 $CONFIG['email_options'] = '';
 $CONFIG['email_port'] = '';
 
-$CONFIG['bugtracker_name'] = 'Bug Tracker';
 $CONFIG['bugtracker_url'] = 'http://sitracker.sourceforge.net/Bugs';
 
 // See http://www.php.net/manual/en/function.date.php for help with date formats

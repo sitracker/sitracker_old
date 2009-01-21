@@ -124,7 +124,7 @@ $CFGCAT['outboundemail'] = array('sales_email');
 $CFGCAT['journal'] = array('journal_loglevel', 'journal_purge_after');
 
 $CFGCAT['other'] = array('support_manager', 'timesheets_enabled',
-                          'demo', 'debug', 'bugtracker_name', 'bugtracker_url',
+                          'demo', 'debug', 'bugtracker_url',
                           'changelogfile','creditsfile',
                           'error_logfile',
                           'error_notavailable_url',
@@ -188,9 +188,8 @@ $CFGVAR['auto_assign_incidents']['options'] = 'TRUE|FALSE';
 $CFGVAR['auto_assign_incidents']['title'] = "Auto-assign incidents";
 $CFGVAR['auto_assign_incidents']['type'] = 'select';
 
-$CFGVAR['bugtracker_name']['title'] = 'Bug tracker name';
-
-$CFGVAR['bugtracker_url']['title'] = 'Bug tracker url';
+$CFGVAR['bugtracker_url']['title'] = 'Bug tracker URL';
+$CFGVAR['bugtracker_url']['help'] = "The <abbr title='Uniform Resource Locator'>URL</abbr> of a web page to report bugs with SiT!  We recommend you don't alter this setting unless you really need to.";
 
 $CFGVAR['calendar_enabled']['help'] = "TRUE for enabled, FALSE for disabled";
 $CFGVAR['calendar_enabled']['options'] = 'TRUE|FALSE';
@@ -239,22 +238,23 @@ $CFGVAR['debug']['options'] = 'TRUE|FALSE';
 $CFGVAR['debug']['title'] = 'Debug Mode';
 $CFGVAR['debug']['type'] = 'select';
 
-$CFGVAR['default_css_url']['title'] = 'Default CSS URL';
-$CFGVAR['default_css_url']['help'] = "The <abbr title='Cascading Style Sheet'>CSS</abbr> file to use when no other is configured. You should not normally need to change this.";
+$CFGVAR['default_css_url']['title'] = 'Default CSS file';
+$CFGVAR['default_css_url']['help'] = "A <abbr title='Uniform Resource Locator'>URL</abbr> pointing to the <abbr title='Cascading Style Sheet'>CSS</abbr> file to use when no other is configured. You should not normally need to change this.";
 
 $CFGVAR['default_entitlement']['title'] = 'Default Holiday Entitlement';
 $CFGVAR['default_entitlement']['help'] = 'Default holiday entitlement for new users and new holiday periods (in days)';
 $CFGVAR['default_entitlement']['type'] = 'number';
 $CFGVAR['default_entitlement']['unit'] = $strDays;
 
-$CFGVAR['default_gravatar']['help'] = "can be 'wavatar', 'identicon', 'monsterid' a URL to an image, or blank for a blue G. see <a href='http://www.gravatar.com/'>www.gravatar.com</a> to learn about gravatars";
+$CFGVAR['default_gravatar']['help'] = "One of 'wavatar', 'identicon', 'monsterid', a URL to an image, or blank (for a blue G icon).  See <a href='http://www.gravatar.com/'>www.gravatar.com</a> to learn about gravatars";
 $CFGVAR['default_gravatar']['title'] = "Default Gravatar";
 
 $CFGVAR['default_i18n']['help'] = "The system language, or the language that will be used when no other language is selected by the user, see <a href='http://sitracker.sourceforge.net/Translation'>http://sitracker.sourceforge.net/Translation</a> for an up to date list of supported languages.";
 $CFGVAR['default_i18n']['title'] = "Default Language";
 $CFGVAR['default_i18n']['type'] = 'languageselect';
 
-$CFGVAR['default_interface_style']['title'] = 'The interface style that new users should use (user default style)';
+$CFGVAR['default_interface_style']['title'] = 'Default Theme';
+$CFGVAR['default_interface_style']['help'] = 'The theme/interface style that be given to new user accounts';
 $CFGVAR['default_interface_style']['type'] = 'interfacestyleselect';
 
 $CFGVAR['default_roleid']['help'] = "Role given to new users by default";
@@ -507,7 +507,8 @@ $CFGVAR['start_working_day']['unit'] = $strSeconds;
 
 $CFGVAR['support_email']['title'] = 'Emails sent by SiT will come from this address';
 
-$CFGVAR['support_manager']['title'] = 'The person who is in charge of your support service';
+$CFGVAR['support_manager']['title'] = 'Support Manager';
+$CFGVAR['support_manager']['help'] = 'The person who is in charge of your support service. Used in email templates etc.';
 $CFGVAR['support_manager']['type'] = 'userselect';
 
 $CFGVAR['tag_icons']['help'] = "Set up an array to use an icon for specified tags, format: array('tag' => 'icon', 'tag2' => 'icon2')";
@@ -518,9 +519,9 @@ $CFGVAR['tasks_enabled']['options'] = 'TRUE|FALSE';
 $CFGVAR['tasks_enabled']['title'] = "Tasks Enabled/Disabled";
 $CFGVAR['tasks_enabled']['type'] = 'select';
 
-$CFGVAR['timesheets_enabled']['help'] = "TRUE for enabled, FALSE for disabled";
+$CFGVAR['timesheets_enabled']['title'] = "Timesheets Enabled";
+$CFGVAR['timesheets_enabled']['help'] = "<em>Experimental Feature</em>. Set to TRUE to enable, or FALSE to disable";
 $CFGVAR['timesheets_enabled']['options'] = 'TRUE|FALSE';
-$CFGVAR['timesheets_enabled']['title'] = "Timesheets Enabled/Disabled";
 $CFGVAR['timesheets_enabled']['type'] = 'select';
 
 $CFGVAR['timezone']['title'] = 'System Time Zone';
