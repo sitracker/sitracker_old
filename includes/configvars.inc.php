@@ -323,19 +323,21 @@ $CFGVAR['free_support_limit']['title'] = 'Number of free (site) support incident
 $CFGVAR['free_support_limit']['type'] = 'number';
 $CFGVAR['free_support_limit']['unit'] = $strSiteIncidents;
 
-$CFGVAR['ftp_hostname']['title'] = 'The FTP hostname or IP address';
+$CFGVAR['ftp_hostname']['title'] = 'FTP hostname';
+$CFGVAR['ftp_hostname']['help'] = 'The hostname or IP address of the FTP server to connect to';
 
 $CFGVAR['ftp_password']['title'] = 'FTP password';
 $CFGVAR['ftp_password']['type'] = 'password';
 
+$CFGVAR['ftp_pasv']['title'] = 'FTP passive mode';
 $CFGVAR['ftp_pasv']['options'] = 'TRUE|FALSE';
-$CFGVAR['ftp_pasv']['title'] = 'Set to TRUE to enable ftp PASSV mode or FALSE to disable';
+$CFGVAR['ftp_pasv']['help'] = 'Set to TRUE to enable FTP Passive (PASV) mode or FALSE to disable';
 $CFGVAR['ftp_pasv']['type'] = 'select';
 
-$CFGVAR['ftp_path']['help'] = '(e.g. /pub/support/) the trailing slash is important';
-$CFGVAR['ftp_path']['title'] = 'The path to the directory where we store files on the ftp server';
+$CFGVAR['ftp_path']['title'] = 'FTP Path';
+$CFGVAR['ftp_path']['help'] = 'The path to the directory where we store files on the ftp server (e.g. /pub/support/) the trailing slash is important';
 
-$CFGVAR['ftp_username']['title'] = 'Ftp username';
+$CFGVAR['ftp_username']['title'] = 'FTP username';
 
 $CFGVAR['hide_closed_incidents_older_than']['help'] = "Incidents closed more than this number of days ago aren't show in the incident queue, -1 means disabled";
 $CFGVAR['hide_closed_incidents_older_than']['title'] = 'Hide closed incidents older than';
@@ -349,7 +351,9 @@ $CFGVAR['holidays_enabled']['type'] = 'select';
 
 $CFGVAR['home_country']['title'] = "The default country in capitals. e.g. 'UNITED KINGDOM'";
 
-$CFGVAR['incident_pools']['title'] = 'Comma seperated list specifying the numbers of incidents to assign to contracts';
+$CFGVAR['incident_pools']['title'] = 'Incident Pool options';
+$CFGVAR['incident_pools']['help'] = 'Comma seperated list specifying the numbers of incidents to assign to contracts';
+// Note: incident_pools is not a 1darray, it's actually a comma separated list
 
 $CFGVAR['journal_loglevel']['help'] = '0 = none, 1 = minimal, 2 = normal, 3 = full, 4 = maximum/debug';
 $CFGVAR['journal_loglevel']['title'] = 'Journal Logging Level';
@@ -463,8 +467,6 @@ $CFGVAR['portal_kb_enabled']['options'] = 'TRUE|FALSE';
 $CFGVAR['portal_kb_enabled']['title'] = "Portal Knowledge base Enabled/Disabled";
 $CFGVAR['portal_kb_enabled']['type'] = 'select';
 
-
-
 $CFGVAR['portal_site_incidents']['help'] = "Users in the portal can view site incidents based on the contract options";
 $CFGVAR['portal_site_incidents']['options'] = 'TRUE|FALSE';
 $CFGVAR['portal_site_incidents']['title'] = "Show site incidents in portal";
@@ -478,8 +480,9 @@ $CFGVAR['portal_usernames_can_be_changed']['options'] = 'TRUE|FALSE';
 $CFGVAR['portal_usernames_can_be_changed']['title'] = "Allow portal users to change usernames";
 $CFGVAR['portal_usernames_can_be_changed']['type'] = 'select';
 
-$CFGVAR['preferred_maintenance']['help'] = "e.g. array('standard', 'high')";
-$CFGVAR['preferred_maintenance']['title'] = "An array of SLA's to indicate order of preference when logging incidents against them";
+$CFGVAR['preferred_maintenance']['title'] = "Preferred SLA for new incidents";
+$CFGVAR['preferred_maintenance']['help'] = "A comma separated list of SLA's to indicate order of preference when logging incidents against them e.g. 'standard,high'";
+$CFGVAR['preferred_maintenance']['type'] = '1darray';
 
 $CFGVAR['record_lock_delay']['title'] = 'Lock records for (number of seconds)';
 $CFGVAR['record_lock_delay']['type'] = 'number';
