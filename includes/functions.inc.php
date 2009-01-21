@@ -11089,6 +11089,12 @@ function cfgVarInput($setupvar, $showvarnames = FALSE)
             $html .= "<input type='text' name='$setupvar' size='7' value=\"{$value}\" />";
         break;
 
+        case '1darray':
+            $replace = array('array(', ')', "'");
+            $value = str_replace($replace, '',  $value);
+            $html .= "<input type='text' name='$setupvar' size='60' value=\"{$value}\" />";
+        break;
+
         case 'password':
           $html .= "<input type='password' id='cfg{$setupvar}' name='$setupvar' size='16' value=\"{$value}\" /> ".password_reveal_link("cfg{$setupvar}");
         break;
@@ -11131,7 +11137,7 @@ function cfgSave($setupvars)
     {
         $sql = "REPLACE INTO `{$dbConfig}` (`config`, `value`) VALUES ('{$key}', '{$value}')";
         mysql_query($sql);
-        if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+        if (mysql_error()) trigger_error(mysql_error(). "  $sql",E_USER_WARNING);
     }
     return TRUE;
 }

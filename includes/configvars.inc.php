@@ -438,15 +438,17 @@ $CFGVAR['mailin_spool_path']['title'] = "Incoming mail spool directory, the loca
 $CFGVAR['max_incoming_email_perday']['title'] = 'maximum no. of incoming emails per incident before a mail-loop is detected';
 $CFGVAR['max_incoming_email_perday']['type'] = 'number';
 
-$CFGVAR['no_feedback_contracts']['help'] = "eg. array(123, 765) would withhold feedback requests for contract 123 and 765";
-$CFGVAR['no_feedback_contracts']['title'] = "An array of contracts to not request feedback for";
+$CFGVAR['no_feedback_contracts']['title'] = "No-Feedback Contracts";
+$CFGVAR['no_feedback_contracts']['help'] = "A comma separated list of contract ID's where feedback is not to be requested e.g. '123,765' would withhold feedback requests for contract 123 and 765";
+$CFGVAR['no_feedback_contracts']['type'] = '1darray';
 
 $CFGVAR['notice_threshold']['help'] = 'Enter a number between 0 and 100.';
 $CFGVAR['notice_threshold']['title'] = 'Flag items as notice when they are this percentage complete.';
 $CFGVAR['notice_threshold']['type'] = 'percent';
 
-$CFGVAR['plugins']['help'] = "e.g. 'array('magic_plugin', 'lookup_plugin')'";
-$CFGVAR['plugins']['title'] = "An array of plugin names";
+$CFGVAR['plugins']['title'] = "Load Plugins";
+$CFGVAR['plugins']['help'] = "Comma separated list of plugins to load. e.g. 'magic_plugin,lookup_plugin'";
+$CFGVAR['plugins']['type'] = '1darray';
 
 $CFGVAR['portal_creates_incidents']['help'] = "TRUE if customers can create incidents from the portal, FALSE if they can just create emails";
 $CFGVAR['portal_creates_incidents']['title'] = "Portal can create Incidents?";
@@ -541,6 +543,8 @@ $CFGVAR['urgent_threshold']['help'] = 'Enter a number between 0 and 100.';
 $CFGVAR['urgent_threshold']['title'] = 'Flag items as urgent when they are this percentage complete.';
 $CFGVAR['urgent_threshold']['type'] = 'percent';
 
-$CFGVAR['working_days']['title'] = 'Array containing working days (0=Sun, 1=Mon... 6=Sat)';
+$CFGVAR['working_days']['title'] = 'Working Days';
+$CFGVAR['working_days']['help'] = 'Comma separated list of working days (Where 0 = Sun, 1 = Mon... 6 = Sat)';
+$CFGVAR['working_days']['type'] = '1darray';
 
 ?>

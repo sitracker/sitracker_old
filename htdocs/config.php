@@ -32,7 +32,20 @@ if ($action == 'save')
         $savevar = array();
         foreach ($CFGCAT[$selcat] AS $catvar)
         {
-            $savevar[$catvar] = cleanvar($_REQUEST[$catvar]);
+            $value = cleanvar($_REQUEST[$catvar]);
+            // Type conversions
+            switch ($CFGVAR[$catvar]['type'])
+            {
+                case '1darray':
+                    $parts = explode(',', $value);
+                    foreach ($parts AS $k => $v)
+                    {
+                        $parts[$k] = "'{$v}'";
+                    }
+                    $value = 'array(' . implode(',', $parts) . ')';
+                break;
+            }
+            $savevar[$catvar] = mysql_real_escape_string($value);
             $CONFIG[$catvar] = cleanvar($_REQUEST[$catvar]);
         }
         if ($CONFIG['debug']) $dbg .= "<pre>".print_r($savevar,true)."</pre>";
