@@ -291,7 +291,7 @@ array('description' => 'The Notify Contact email address (if set)',
 $ttvararray['{contactphone}'] =
 array('description' => 'Contact phone number',
       'requires' => 'contactid',
-      'replacement' => 'contact_site($paramarray[\'contactid\']);'
+      'replacement' => 'contact_phone($paramarray[\'contactid\']);'
       );
 
 $ttvararray['{contactusername}'] =
