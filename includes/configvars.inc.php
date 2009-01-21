@@ -78,14 +78,13 @@ $CFGCAT['incidents'] = array('auto_assign_incidents',
 
 
 $CFGCAT['inboundemail'] = array('enable_inbound_mail',
-                         'email_address',
-                         'email_options',
-                         'email_password',
-                         'email_port',
                          'email_server',
                          'email_servertype',
+                         'email_port',
+                         'email_options',
                          'email_username',
-                         'mailin_spool_path',
+                         'email_password',
+                         'email_address',
                          'max_incoming_email_perday',
                          'spam_email_subject'
                          );
@@ -123,10 +122,10 @@ $CFGCAT['kb'] = array('kb_enabled',
 $CFGCAT['outboundemail'] = array('sales_email');
 $CFGCAT['journal'] = array('journal_loglevel', 'journal_purge_after');
 
-$CFGCAT['other'] = array('support_manager', 'timesheets_enabled',
-                          'demo', 'debug', 'bugtracker_url',
+$CFGCAT['other'] = array('debug', 'error_logfile',
+                        'support_manager', 'timesheets_enabled',
+                          'demo', 'bugtracker_url',
                           'changelogfile','creditsfile',
-                          'error_logfile',
                           'licensefile',
                           'session_name',
                           'upload_max_filesize');
@@ -272,18 +271,19 @@ $CFGVAR['demo']['type'] = 'select';
 
 $CFGVAR['email_address']['title'] = "Incoming email account address";
 
-$CFGVAR['email_options']['help'] = "e.g. Gmail needs '/ssl', secure Groupwise needs /novalidate-cert etc. See http://uk2.php.net/imap_open for examples";
-$CFGVAR['email_options']['title'] = "Extra options to pass to the mailbox";
+$CFGVAR['email_options']['title'] = "Incoming email connection options";
+$CFGVAR['email_options']['help'] = "Extra options to pass to the mailbox e.g. Gmail needs '/ssl', secure Groupwise needs /novalidate-cert etc. See <a href='http://www.php.net/imap_open'>http://www.php.net/imap_open</a> for examples";
 
 $CFGVAR['email_password']['title'] = "Incoming email account password";
 $CFGVAR['email_password']['help'] = "The password for the incoming email account connection";
 $CFGVAR['email_password']['type'] = 'password';
 
 $CFGVAR['email_port']['title'] = "Incoming email account port";
+$CFGVAR['email_port']['help'] = "Usually 110 for POP, 143 for IMAP or 995 for secure POP, 993 for secure IMAP.";
 $CFGVAR['email_port']['type'] = 'number';
 
-$CFGVAR['email_server']['title'] = "Incoming email account server URL";
-$CFGVAR['email_server']['title'] = "Incoming email account server URL";
+$CFGVAR['email_server']['title'] = "Incoming email server";
+$CFGVAR['email_server']['help'] = "The hostname or IP address of your incoming email server";
 
 $CFGVAR['email_servertype']['options'] = 'imap|pop';
 $CFGVAR['email_servertype']['title'] = "Incoming email account server type";
@@ -436,8 +436,6 @@ $CFGVAR['licensefile']['title'] = 'Path to the License file';
 $CFGVAR['logout_url']['help'] = "The URL to redirect the user to after he/she logs out. When left blank this defaults to the SiT login page.";
 $CFGVAR['logout_url']['title'] = "Logout URL";
 
-$CFGVAR['mailin_spool_path']['title'] = "Incoming mail spool directory, the location of mail processed by mailfilter shell script";
-
 $CFGVAR['max_incoming_email_perday']['title'] = 'maximum no. of incoming emails per incident before a mail-loop is detected';
 $CFGVAR['max_incoming_email_perday']['type'] = 'number';
 
@@ -493,7 +491,8 @@ $CFGVAR['regular_contact_days']['unit'] = $strDays;
 
 $CFGVAR['sales_email']['title'] = 'Your sales departments email address';
 
-$CFGVAR['session_name']['title'] = 'The session name for use in cookies and URLs, Must contain alphanumeric characters only';
+$CFGVAR['session_name']['title'] = 'Session Name';
+$CFGVAR['session_name']['help'] = 'The session name for use in cookies and URLs, Must contain alphanumeric characters only';
 
 $CFGVAR['spam_email_subject']['title'] = 'String to look for in email message subject to determine a message is spam';
 

@@ -89,9 +89,6 @@ $CONFIG['end_working_day'] = (17 * 3600);
 $CONFIG['attachment_fspath'] = "/var/www/sit/attachments/";
 $CONFIG['attachment_webpath'] = "attachments/";
 
-// Incoming mail spool directory, the location of mail processed by mailfilter shell script
-$CONFIG['mailin_spool_path'] = "{$CONFIG['application_fspath']}mailin/";
-
 $CONFIG['upload_max_filesize'] = get_cfg_var('upload_max_filesize');
 // Convert a PHP.INI integer value into a byte value
 
