@@ -23,19 +23,43 @@ if (!empty($_POST['type']))
 
     if ($type == 'email')
     {
-        $sql = "INSERT INTO `{$dbEmailTemplates}`(name) VALUES('{$name}')";
-        mysql_query($sql);
-        if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);		
-        $id = mysql_insert_id();
-        header("Location: templates.php?id={$id}&action=edit&template=email");
+        // First check the template does not already exist
+        $sql = "SELECT id FROM `{$dbEmailTemplates}` WHERE name = '{$name}' LIMIT 1";
+        $result = mysql_query($sql);
+        if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+        if (mysql_num_rows($result) < 1)
+        {
+            $sql = "INSERT INTO `{$dbEmailTemplates}` (name) VALUES('{$name}')";
+            mysql_query($sql);
+            if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+            $id = mysql_insert_id();
+            header("Location: templates.php?id={$id}&action=edit&template=email");
+        }
+        else
+        {
+            html_redirect($_SERVER['PHP_SELF'], FALSE, $strADuplicateAlreadyExists);
+            exit;
+        }
     }
     elseif ($type == 'notice')
     {
-        $sql = "INSERT INTO `{$dbNoticeTemplates}`(name) VALUES('{$name}')";
-        mysql_query($sql);
-        if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);		
-        $id = mysql_insert_id();
-        header("Location: templates.php?id={$id}&action=edit&template=notice");		
+        // First check the template does not already exist
+        $sql = "SELECT id FROM `{$dbNoticeTemplates}` WHERE name = '{$name}' LIMIT 1";
+        $result = mysql_query($sql);
+        if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+        if (mysql_num_rows($result) < 1)
+        {
+            $sql = "INSERT INTO `{$dbNoticeTemplates}`(name) VALUES('{$name}')";
+            mysql_query($sql);
+            if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+            $id = mysql_insert_id();
+            header("Location: templates.php?id={$id}&action=edit&template=notice");
+        }
+        else
+        {
+            html_redirect($_SERVER['PHP_SELF'], FALSE, $strADuplicateAlreadyExists);
+            exit;
+        }
     }
 }
 include ('htmlheader.inc.php');
