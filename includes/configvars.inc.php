@@ -45,7 +45,8 @@ $CFGCAT['locale'] = array('home_country',
                           'dateformat_time',
                           'default_i18n');
 
-$CFGCAT['sla'] = array('start_working_day',
+$CFGCAT['sla'] = array('default_service_level',
+                       'start_working_day',
                        'end_working_day',
                        'critical_threshold',
                        'urgent_threshold',
@@ -259,8 +260,9 @@ $CFGVAR['default_interface_style']['type'] = 'interfacestyleselect';
 $CFGVAR['default_roleid']['help'] = "Role given to new users by default";
 $CFGVAR['default_roleid']['title'] = "Default role id";
 
-$CFGVAR['default_service_level']['title'] = 'The service level to use in case the contact does not specify (text not the tag)';
-// TODO service level selection
+$CFGVAR['default_service_level']['title'] = 'Default Service Level';
+$CFGVAR['default_service_level']['help'] = 'The service level to use in case the contact does not specify';
+$CFGVAR['default_service_level']['type'] = 'slaselect';
 
 $CFGVAR['demo']['help'] = 'Set to TRUE to run in demo mode, some features are disabled or replaced with mock-ups';
 $CFGVAR['demo']['options'] = 'TRUE|FALSE';

@@ -2980,10 +2980,10 @@ function calculate_time_of_next_action($days, $hours, $minutes)
 
 
 /**
-* @param $name String name of select
-* @param $id Int The ID which should be choosed
-* @param $collapse Boolean Only show the tag rather than tag + priority
-* @param $select String additional parameter to the select clause e.g. onchange code
+* @param string $name name of select
+* @param int $id The ID which should be chosen
+* @param bool $collapse Only show the tag rather than tag + priority
+* @param string $select additional parameter to the select clause e.g. onchange code
 * @return String HTML of the SLA drop down
 */
 function servicelevel_drop_down($name, $id, $collapse = FALSE, $select = '')
@@ -11067,6 +11067,10 @@ function cfgVarInput($setupvar, $showvarnames = FALSE)
                 }
             }
             $html .= "</select>";
+        break;
+
+        case 'slaselect':
+            $html .= serviceleveltag_drop_down($setupvar, $value, TRUE);
         break;
 
         case 'userselect':

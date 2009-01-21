@@ -122,7 +122,7 @@ $CONFIG['kb_disclaimer_html'] .= 'OR INCIDENTAL DAMAGES, EVEN IF PROVIDER HAS BE
 $CONFIG['kb_disclaimer_html'] .= 'USER AGREES TO HOLD PROVIDER HARMLESS FROM AND AGAINST ANY AND ALL CLAIMS, LOSSES, LIABILITIES AND EXPENSES.';
 
 // The service level to use in case the contact does not specify (text not the tag)
-$CONFIG['default_service_level'] = 'SLA1';
+$CONFIG['default_service_level'] = 'standard';
 // The number of days to elapse before we are prompted to contact the customer (usually overridden by SLA)
 $CONFIG['regular_contact_days'] = 7;
 
