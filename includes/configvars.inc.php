@@ -11,7 +11,7 @@
 // Author: Ivan Lucas, <ivanlucas[at]users.sourceforge.net
 
 $CFGTAB['application'] = array('appmain', 'theming', 'ldap', 'other');
-$CFGTAB['email'] = array('inboundemail', 'outboundemail');
+$CFGTAB['email'] = array('inboundemail');
 $CFGTAB['features'] = array('incidents', 'portal', 'ftp', 'kb', 'sla', 'holidays', 'feedback');
 $CFGTAB['system'] = array('paths', 'locale', 'journal');
 
@@ -119,7 +119,7 @@ $CFGCAT['kb'] = array('kb_enabled',
                       'kb_disclaimer_html',
                       'kb_id_prefix');
 
-$CFGCAT['outboundemail'] = array('sales_email');
+// $CFGCAT['outboundemail'] = array();
 $CFGCAT['journal'] = array('journal_loglevel', 'journal_purge_after');
 
 $CFGCAT['other'] = array('debug', 'error_logfile',
@@ -159,8 +159,8 @@ $CATI18N['journal'] = $strJournal;
 //      unit - A unit string to print after the input
 //      options - A pipe seperated list of optios for a 'select' type
 
-$CFGVAR['access_logfile']['help'] = "This file must be writable of course";
-$CFGVAR['access_logfile']['title'] = 'Filename to log authentication failures';
+$CFGVAR['access_logfile']['title'] = 'Path to an access log file';
+$CFGVAR['access_logfile']['help'] = "The filesystem path and filename of a file that already exist and is writable to log authentication messages into.";
 
 $CFGVAR['application_fspath']['help']="The full absolute filesystem path to the SiT! directory with trailing slash. e.g. '/var/www/sit/'";
 $CFGVAR['application_fspath']['title'] = 'Filesystem Path';
@@ -174,12 +174,15 @@ $CFGVAR['application_shortname']['help'] = 'A short (abbreviated) version of the
 $CFGVAR['application_uriprefix']['title'] = 'URI Prefix';
 $CFGVAR['application_uriprefix']['help'] = "The <abbr title='Uniform Resource Identifier'>URI</abbr> prefix to use when referring to this application (in emails etc.) e.g. http://{\$_SERVER['HTTP_HOST']}";
 
-$CFGVAR['application_webpath']['title'] = 'The path to SiT! from the browsers perspective with a trailing slash. e.g. /sit/';
+$CFGVAR['application_webpath']['title'] = 'Web Path';
+$CFGVAR['application_webpath']['help'] = 'The path to SiT! from the browsers perspective with a trailing slash. e.g. /sit/';
 
-$CFGVAR['attachment_fspath']['help'] = "This directory should be writable";
-$CFGVAR['attachment_fspath']['title'] = "The full absolute file system path to the attachments directory (with a trailing slash)";
+$CFGVAR['attachment_fspath']['title'] = "Attachment Filesystem Path";
+$CFGVAR['attachment_fspath']['help'] = "The full absolute file system path to a directory to store attachments in (with a trailing slash). This directory should be writable";
 
-$CFGVAR['attachment_webpath']['title'] = "The path to the attachments directory from the browsers perspective";
+$CFGVAR['attachment_webpath']['title'] = "Attachment Web Path";
+$CFGVAR['attachment_webpath']['help'] = 'The path to the attachments directory from the browsers perspective with a trailing slash. e.g. /sit/';
+
 
 $CFGVAR['auto_assign_incidents']['help'] = "incidents are automatically assigned based on a lottery weighted towards who are less busy, assumes everyone set to accepting is an engineer and willing to take incidents";
 $CFGVAR['auto_assign_incidents']['options'] = 'TRUE|FALSE';
@@ -200,8 +203,8 @@ $CFGVAR['changelogfile']['help'] = 'The filesystem path and filename of the SiT!
 $CFGVAR['creditsfile']['title'] = 'Path to the Credits file';
 $CFGVAR['creditsfile']['help'] = 'The filesystem path and filename of the SiT! CREDITS file, this can be specified relative to the htdocs directory.';
 
-$CFGVAR['critical_threshold']['help'] = 'Enter a number between 0 and 100.';
-$CFGVAR['critical_threshold']['title'] = 'flag items as critical when they are this percentage complete.';
+$CFGVAR['critical_threshold']['title'] = 'Critical Threshold';
+$CFGVAR['critical_threshold']['help'] = 'Flag items as critical when they are this percentage complete.';
 $CFGVAR['critical_threshold']['type'] = 'percent';
 
 $CFGVAR['dateformat_datetime']['help'] = "See <a href='http://www.php.net/manual/en/function.date.php'>http://www.php.net/manual/en/function.date.php</a> for help with date formats";
@@ -242,7 +245,7 @@ $CFGVAR['default_css_url']['title'] = 'Default CSS file';
 $CFGVAR['default_css_url']['help'] = "A <abbr title='Uniform Resource Locator'>URL</abbr> pointing to the <abbr title='Cascading Style Sheet'>CSS</abbr> file to use when no other is configured. You should not normally need to change this.";
 
 $CFGVAR['default_entitlement']['title'] = 'Default Holiday Entitlement';
-$CFGVAR['default_entitlement']['help'] = 'Default holiday entitlement for new users and new holiday periods (in days)';
+$CFGVAR['default_entitlement']['help'] = 'The default holiday entitlement for new users and new holiday periods (in days)';
 $CFGVAR['default_entitlement']['type'] = 'number';
 $CFGVAR['default_entitlement']['unit'] = $strDays;
 
@@ -298,25 +301,29 @@ $CFGVAR['enable_inbound_mail']['options'] = "POP/IMAP|MTA|disabled";
 $CFGVAR['enable_inbound_mail']['title'] = "Enable incoming mail to SiT";
 $CFGVAR['enable_inbound_mail']['type'] = 'select';
 
-$CFGVAR['end_working_day']['help'] = 'Seconds since midnight';
-$CFGVAR['end_working_day']['title'] = 'Time of the end of the working day (in seconds)';
+$CFGVAR['end_working_day']['title'] = 'End of the working day';
+$CFGVAR['end_working_day']['help'] = 'The number of seconds since midnight that indicate the end of the working day. (e.g. 61200 = 5pm)';
+
 $CFGVAR['end_working_day']['type'] = 'number';
 $CFGVAR['end_working_day']['unit'] = $strSeconds;
 
 $CFGVAR['error_logfile']['title'] = "Path to an error log file";
 $CFGVAR['error_logfile']['help'] = "The filesystem path and filename of a file that already exist and is writable to log error messages into. Enable Debug Mode to see more verbose messages in this file.";
 
-$CFGVAR['feedback_enabled']['help'] = "TRUE for enabled, FALSE for disabled";
+$CFGVAR['feedback_enabled']['title'] = "Feedback Enabled";
+$CFGVAR['feedback_enabled']['help'] = "Set to TRUE to enable Feedback, or FALSE to disable it";
 $CFGVAR['feedback_enabled']['options'] = 'TRUE|FALSE';
-$CFGVAR['feedback_enabled']['title'] = "Feedback Enabled/Disabled";
 $CFGVAR['feedback_enabled']['type'] = 'select';
 
-$CFGVAR['feedback_form']['title'] = 'Incident feedback form (the id number of the feedback form to use or empty to disable sending feedback forms out)';
+$CFGVAR['feedback_form']['title'] = 'Feedback Form';
+$CFGVAR['feedback_form']['help'] = 'The id number of the feedback form to use.  Leave blank disable sending feedback forms';
 $CFGVAR['feedback_form']['type'] = 'number';
 // TODO Feedback form lookup
 
-$CFGVAR['feedback_max_score']['title'] = 'The max score to use in rating fields for feedback forms';
-$CFGVAR['feedback_max_score']['type'] = 'number';
+$CFGVAR['feedback_max_score']['title'] = 'Max Score';
+$CFGVAR['feedback_max_score']['help'] = 'The maximum score to use in rating fields for feedback forms';
+$CFGVAR['feedback_max_score']['options'] = '1|2|3|4|5|6|7|8|9';
+$CFGVAR['feedback_max_score']['type'] = 'select';
 
 $CFGVAR['free_support_limit']['title'] = 'Number of free (site) support incidents that can be logged to a site';
 $CFGVAR['free_support_limit']['type'] = 'number';
@@ -343,9 +350,10 @@ $CFGVAR['hide_closed_incidents_older_than']['title'] = 'Hide closed incidents ol
 $CFGVAR['hide_closed_incidents_older_than']['type'] = 'number';
 $CFGVAR['hide_closed_incidents_older_than']['unit'] = $strDays;
 
-$CFGVAR['holidays_enabled']['help'] = "TRUE for enabled, FALSE for disabled";
+$CFGVAR['holidays_enabled']['title'] = "Holidays Enabled";
+$CFGVAR['holidays_enabled']['help'] = "Set to TRUE to enable Holidays or set to FALSE to disable";
 $CFGVAR['holidays_enabled']['options'] = 'TRUE|FALSE';
-$CFGVAR['holidays_enabled']['title'] = "Holidays Enabled/Disabled";
+
 $CFGVAR['holidays_enabled']['type'] = 'select';
 
 $CFGVAR['home_country']['title'] = "The default country in capitals. e.g. 'UNITED KINGDOM'";
@@ -359,16 +367,17 @@ $CFGVAR['journal_loglevel']['title'] = 'Journal Logging Level';
 $CFGVAR['journal_loglevel']['options'] = '0|1|2|3|4';
 $CFGVAR['journal_loglevel']['type'] = 'select';
 
-$CFGVAR['journal_purge_after']['title'] = 'How long should we keep journal entries (in seconds), entries older than this will be purged (deleted)';
+$CFGVAR['journal_purge_after']['title'] = 'Jounal Purge Delay';
+$CFGVAR['journal_purge_after']['help'] = 'How long should we keep journal entries (in seconds), entries older than this will be purged (deleted)';
 $CFGVAR['journal_purge_after']['type'] = 'number';
 $CFGVAR['journal_purge_after']['unit'] = $strSeconds;
 
-$CFGVAR['kb_disclaimer_html']['help']  = 'Simple HTML is allowed';
-$CFGVAR['kb_disclaimer_html']['title'] = 'Knowledgebase disclaimer, displayed at the bottom of every article';
+$CFGVAR['kb_disclaimer_html']['title'] = 'Knowledgebase disclaimer';
+$CFGVAR['kb_disclaimer_html']['help']  = 'A disclaimer message to be displayed at the bottom of every knowledge base article. Simple HTML is allowed';
 
-$CFGVAR['kb_enabled']['help'] = "TRUE for enabled, FALSE for disabled";
+$CFGVAR['kb_enabled']['title'] = "Knowledge base Enabled";
+$CFGVAR['kb_enabled']['help'] = "Set to TRUE to enable the Knoweldge Base or FALSE to disable it";
 $CFGVAR['kb_enabled']['options'] = 'TRUE|FALSE';
-$CFGVAR['kb_enabled']['title'] = "Knowledge base Enabled/Disabled";
 $CFGVAR['kb_enabled']['type'] = 'select';
 
 $CFGVAR['kb_id_prefix']['help'] = 'inserted before the ID to give it uniqueness';
@@ -444,8 +453,8 @@ $CFGVAR['no_feedback_contracts']['title'] = "No-Feedback Contracts";
 $CFGVAR['no_feedback_contracts']['help'] = "A comma separated list of contract ID's where feedback is not to be requested e.g. '123,765' would withhold feedback requests for contract 123 and 765";
 $CFGVAR['no_feedback_contracts']['type'] = '1darray';
 
-$CFGVAR['notice_threshold']['help'] = 'Enter a number between 0 and 100.';
-$CFGVAR['notice_threshold']['title'] = 'Flag items as notice when they are this percentage complete.';
+$CFGVAR['notice_threshold']['title'] = 'Notice Threshold';
+$CFGVAR['notice_threshold']['help'] = 'Flag items as notice when they are this percentage complete.';
 $CFGVAR['notice_threshold']['type'] = 'percent';
 
 $CFGVAR['plugins']['title'] = "Load Plugins";
@@ -482,15 +491,15 @@ $CFGVAR['preferred_maintenance']['title'] = "Preferred SLA for new incidents";
 $CFGVAR['preferred_maintenance']['help'] = "A comma separated list of SLA's to indicate order of preference when logging incidents against them e.g. 'standard,high'";
 $CFGVAR['preferred_maintenance']['type'] = '1darray';
 
-$CFGVAR['record_lock_delay']['title'] = 'Lock records for (number of seconds)';
+$CFGVAR['record_lock_delay']['title'] = 'Record Lock Delay';
+$CFGVAR['record_lock_delay']['help'] = 'The period to wait before automatically unlocking records that have been locked by a user (e.g. Incoming email)';
 $CFGVAR['record_lock_delay']['type'] = 'number';
 $CFGVAR['record_lock_delay']['unit'] = $strSeconds;
 
-$CFGVAR['regular_contact_days']['title'] = 'The number of days to elapse before we are prompted to contact the customer (usually overridden by SLA)';
+$CFGVAR['regular_contact_days']['title'] = 'Regular contact period';
+$CFGVAR['regular_contact_days']['help'] = 'The number of days to elapse before users are prompted to contact the customer (can be overridden by the SLA)';
 $CFGVAR['regular_contact_days']['type'] = 'number';
 $CFGVAR['regular_contact_days']['unit'] = $strDays;
-
-$CFGVAR['sales_email']['title'] = 'Your sales departments email address';
 
 $CFGVAR['session_name']['title'] = 'Session Name';
 $CFGVAR['session_name']['help'] = 'The session name for use in cookies and URLs, Must contain alphanumeric characters only';
@@ -498,8 +507,8 @@ $CFGVAR['session_name']['help'] = 'The session name for use in cookies and URLs,
 $CFGVAR['spam_email_subject']['title'] = 'Spam Subject';
 $CFGVAR['spam_email_subject']['help'] = 'String to look for in email message subject to determine a message is spam';
 
-$CFGVAR['start_working_day']['help'] = 'Seconds since midnight';
-$CFGVAR['start_working_day']['title'] = 'Time of the start of the working day (in seconds)';
+$CFGVAR['start_working_day']['title'] = 'Start of the working day';
+$CFGVAR['start_working_day']['help'] = 'The number of seconds since midnight that indicate the start of the working day. (e.g. 32400 = 9am)';
 $CFGVAR['start_working_day']['type'] = 'number';
 $CFGVAR['start_working_day']['unit'] = $strSeconds;
 
@@ -541,8 +550,9 @@ $CFGVAR['use_ldap']['help'] = "Set to TRUE for LDAP authentication, or FALSE for
 $CFGVAR['use_ldap']['options'] = 'TRUE|FALSE';
 $CFGVAR['use_ldap']['type'] = 'select';
 
-$CFGVAR['urgent_threshold']['help'] = 'Enter a number between 0 and 100.';
-$CFGVAR['urgent_threshold']['title'] = 'Flag items as urgent when they are this percentage complete.';
+$CFGVAR['urgent_threshold']['title'] = 'Urgent Threshold';
+$CFGVAR['urgent_threshold']['help'] = 'Flag items as urgent when they are this percentage complete.';
+
 $CFGVAR['urgent_threshold']['type'] = 'percent';
 
 $CFGVAR['working_days']['title'] = 'Working Days';
