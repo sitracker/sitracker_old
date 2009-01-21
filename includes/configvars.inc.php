@@ -383,9 +383,11 @@ $CFGVAR['ldap_autocreate_customer']['help'] = 'This attempts to create the custo
 $CFGVAR['ldap_autocreate_customer']['options'] = 'TRUE|FALSE';
 $CFGVAR['ldap_autocreate_customer']['type'] = 'select';
 
-$CFGVAR['ldap_bind_user']['title'] = 'The user for binding to the LDAP host';
+$CFGVAR['ldap_bind_user']['title'] = 'LDAP Bind user';
+$CFGVAR['ldap_bind_user']['help'] = 'The user for binding to the LDAP host';
 
-$CFGVAR['ldap_bind_pass']['title'] = 'The password for binding to the LDAP host';
+$CFGVAR['ldap_bind_pass']['title'] = 'LDAP Bind password';
+$CFGVAR['ldap_bind_pass']['help'] = 'The password for binding to the LDAP host';
 $CFGVAR['ldap_bind_pass']['type'] = 'password';
 
 $CFGVAR['ldap_customer_group']['title'] = 'LDAP Customer Group';
@@ -396,11 +398,12 @@ $CFGVAR['ldap_default_customer_siteid']['title'] = 'LDAP Customer default site';
 $CFGVAR['ldap_default_customer_siteid']['help'] = 'Place LDAP customers as contacts under this site';
 $CFGVAR['ldap_default_customer_siteid']['type'] = 'siteselect';
 
-$CFGVAR['ldap_default_user_status']['title'] = 'LDAP default user status';
+$CFGVAR['ldap_default_user_status']['title'] = 'LDAP User status';
 $CFGVAR['ldap_default_user_status']['help'] = 'The initial status that will be given to LDAP users';
 $CFGVAR['ldap_default_user_status']['type'] = 'userstatusselect';
 
-$CFGVAR['ldap_dn_base']['title'] = 'The LDAP Base DN for user lookups';
+$CFGVAR['ldap_dn_base']['title'] = 'LDAP Base DN';
+$CFGVAR['ldap_dn_base']['help'] = 'The LDAP Base DN for user lookups';
 
 $CFGVAR['ldap_host']['title'] = 'LDAP Host Name';
 $CFGVAR['ldap_host']['help'] = "This should be your <abbr title='Lightweight Directory Access Protocol'>LDAP</abbr> IP address or hostname, e.g.: ldap.example.com";
@@ -409,16 +412,17 @@ $CFGVAR['ldap_manager_group']['title'] = 'LDAP group for SIT admins';
 
 $CFGVAR['ldap_manager_group_attr']['title'] = 'LDAP group attribute for SIT admins';
 
-$CFGVAR['ldap_protocol']['title'] = 'LDAP Protocol version to use';
+$CFGVAR['ldap_protocol']['title'] = 'LDAP Protocol version';
 $CFGVAR['ldap_protocol']['type'] = 'select';
 $CFGVAR['ldap_protocol']['options'] = '1|2|3';
 
-$CFGVAR['ldap_use_tls']['title'] = 'TLS. TRUE = start TLS, FALSE = use unencrypted';
-$CFGVAR['ldap_use_tls']['help'] = 'Requires LDAP protocol v3';
+$CFGVAR['ldap_use_tls']['title'] = 'Use TLS';
+$CFGVAR['ldap_use_tls']['help'] = 'Use Transport Layer Security. TRUE = start TLS, FALSE = use unencrypted. (Requires LDAP protocol v3)';
 $CFGVAR['ldap_use_tls']['options'] = 'TRUE|FALSE';
 $CFGVAR['ldap_use_tls']['type'] = 'select';
 
-$CFGVAR['ldap_user_attr']['title'] = 'The LDAP user attribute';
+$CFGVAR['ldap_user_attr']['title'] = 'LDAP User attribute';
+$CFGVAR['ldap_user_attr']['help'] = 'The LDAP user attribute';
 
 $CFGVAR['ldap_user_group']['title'] = 'LDAP group for SIT users';
 
