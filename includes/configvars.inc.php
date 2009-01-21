@@ -177,7 +177,7 @@ $CFGVAR['application_shortname']['title'] = 'Short Application Name';
 $CFGVAR['application_shortname']['help'] = 'A short (abbreviated) version of the application name. This is used to refer to this application where space is at a premium.';
 
 $CFGVAR['application_uriprefix']['title'] = 'URI Prefix';
-$CFGVAR['application_uriprefix']['help'] = "The <abbr title='Uniform Resource Identifier'>URI</abbr> prefix to use when referring to this application (in emails etc.) e.g. http://{\$_SERVER[\'HTTP_HOST\']}";
+$CFGVAR['application_uriprefix']['help'] = "The <abbr title='Uniform Resource Identifier'>URI</abbr> prefix to use when referring to this application (in emails etc.) e.g. http://{\$_SERVER['HTTP_HOST']}";
 
 $CFGVAR['application_webpath']['title'] = 'The path to SiT! from the browsers perspective with a trailing slash. e.g. /sit/';
 
@@ -517,9 +517,10 @@ $CFGVAR['timesheets_enabled']['options'] = 'TRUE|FALSE';
 $CFGVAR['timesheets_enabled']['title'] = "Timesheets Enabled/Disabled";
 $CFGVAR['timesheets_enabled']['type'] = 'select';
 
-$CFGVAR['timezone']['help'] = "See <a href='http://www.php.net/timezones'>http://www.php.net/timezones</a> for a list of supported Timezones";
-$CFGVAR['timezone']['title'] = "System Time Zone";
-$CFGVAR['timezone']['title'] = 'Timezone';
+$CFGVAR['timezone']['title'] = 'System Time Zone';
+$CFGVAR['timezone']['help'] = "Set this to match the timezone that your server running SiT! is configured to use";
+$CFGVAR['timezone']['type'] = 'select';
+$CFGVAR['timezone']['options'] = file_get_contents('lib/timezones.txt');
 
 $CFGVAR['trusted_server']['help'] = 'If you set this to TRUE, passwords will nolonger be used or required, this assumes that you are using another mechanism for authentication';
 $CFGVAR['trusted_server']['options'] = 'TRUE|FALSE';
