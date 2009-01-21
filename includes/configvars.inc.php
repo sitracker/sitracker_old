@@ -392,14 +392,13 @@ $CFGVAR['ldap_customer_group']['title'] = 'LDAP Customer Group';
 
 $CFGVAR['ldap_customer_group_attr']['title'] = 'LDAP Customer Group attribute';
 
-
-$CFGVAR['ldap_default_customer_siteid']['title'] = 'LDAP default customer site ID';
-$CFGVAR['ldap_default_customer_siteid']['type'] = 'number';
-// TODO site select
+$CFGVAR['ldap_default_customer_siteid']['title'] = 'LDAP Customer default site';
+$CFGVAR['ldap_default_customer_siteid']['help'] = 'Place LDAP customers as contacts under this site';
+$CFGVAR['ldap_default_customer_siteid']['type'] = 'siteselect';
 
 $CFGVAR['ldap_default_user_status']['title'] = 'LDAP default user status';
-$CFGVAR['ldap_default_user_status']['type'] = 'number';
-// TODO user status select
+$CFGVAR['ldap_default_user_status']['help'] = 'The initial status that will be given to LDAP users';
+$CFGVAR['ldap_default_user_status']['type'] = 'userstatusselect';
 
 $CFGVAR['ldap_dn_base']['title'] = 'The LDAP Base DN for user lookups';
 

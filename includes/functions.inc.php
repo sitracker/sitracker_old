@@ -2178,9 +2178,9 @@ function closingstatus_drop_down($name, $id, $required = FALSE)
 /**
     * Return HTML for a select box of user statuses
     * @author Ivan Lucas
-    * @param $name string. Name attribute
-    * @param $id integer. ID of User Status to pre-select. None selected if 0 or blank.
-    * @param $userdisable boolean. (optional). When TRUE an additional option is given to allow disabling of accounts
+    * @param string $name. Name attribute
+    * @param int $id. ID of User Status to pre-select. None selected if 0 or blank.
+    * @param bool $userdisable. (optional). When TRUE an additional option is given to allow disabling of accounts
     * @returns string. HTML
 */
 function userstatus_drop_down($name, $id, $userdisable = FALSE)
@@ -11075,6 +11075,14 @@ function cfgVarInput($setupvar, $showvarnames = FALSE)
 
         case 'userselect':
             $html .= user_drop_down($setupvar, $value, FALSE, FALSE, '', TRUE);
+        break;
+
+        case 'siteselect':
+            $html .= site_drop_down($setupvar, $value, FALSE);
+        break;
+
+        case 'userstatusselect':
+            $html .= userstatus_drop_down($setupvar, $value);
         break;
 
         case 'number':
