@@ -67,12 +67,12 @@ include ('htmlheader.inc.php');
 echo "<h2>".icon('add', 32)." {$strAddTemplate}</h2>";
 
 echo "<form action='{$_SERVER['PHP_SELF']}?action=add' method='post'>";
-echo "<p align='center'>{$strType}: ";
+echo "<p align='center'><label>{$strType}: ";
 echo "<select name='type'>";
 echo "<option value='email'>{$strEmail}</option>";
 echo "<option value='notice'>{$strNotice}</option>";
-echo "</select><br /><br />";
-echo "{$strName}: <input name='name' />";
+echo "</select></label><br /><br />";
+echo "<label>{$strName}: <input name='name' /></label>";
 echo "<br /><br /><input type='submit' value='{$strAdd}' />";
 echo "</p>";
 echo "</form>";
