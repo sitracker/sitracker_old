@@ -123,12 +123,12 @@ $CFGCAT['kb'] = array('kb_enabled',
 $CFGCAT['journal'] = array('journal_loglevel', 'journal_purge_after');
 
 $CFGCAT['other'] = array('debug', 'error_logfile',
-                        'support_manager', 'timesheets_enabled',
+                        'support_manager', 'tasks_enabled', 'timesheets_enabled',
                           'demo', 'bugtracker_url',
                           'changelogfile','creditsfile',
                           'licensefile',
                           'session_name',
-                          'upload_max_filesize');
+                          'upload_max_filesize','default_roleid','trusted_server');
 
 
 
@@ -267,6 +267,7 @@ $CFGVAR['default_interface_style']['type'] = 'interfacestyleselect';
 
 $CFGVAR['default_roleid']['help'] = "Role given to new users by default";
 $CFGVAR['default_roleid']['title'] = "Default role id";
+// TODO Role selection
 
 $CFGVAR['default_service_level']['title'] = 'Default Service Level';
 $CFGVAR['default_service_level']['help'] = 'The service level to use in case the contact does not specify';
@@ -529,9 +530,9 @@ $CFGVAR['tag_icons']['title'] = "Tag Icons";
 $CFGVAR['tag_icons']['help'] = "You can specify icons to display next to certain tags, enter tag/icon associations one per line, format: tag=>icon";
 $CFGVAR['tag_icons']['type'] = '2darray';
 
-$CFGVAR['tasks_enabled']['help'] = "TRUE for enabled, FALSE for disabled";
+$CFGVAR['tasks_enabled']['title'] = "Tasks Enabled";
+$CFGVAR['tasks_enabled']['help'] = "Set to TRUE to enable the tasks feature, or FALSE to disable";
 $CFGVAR['tasks_enabled']['options'] = 'TRUE|FALSE';
-$CFGVAR['tasks_enabled']['title'] = "Tasks Enabled/Disabled";
 $CFGVAR['tasks_enabled']['type'] = 'select';
 
 $CFGVAR['timesheets_enabled']['title'] = "Timesheets Enabled";
@@ -544,7 +545,7 @@ $CFGVAR['timezone']['help'] = "Set this to match the timezone that your server r
 $CFGVAR['timezone']['type'] = 'select';
 $CFGVAR['timezone']['options'] = file_get_contents('lib/timezones.txt');
 
-$CFGVAR['trusted_server']['help'] = 'If you set this to TRUE, passwords will nolonger be used or required, this assumes that you are using another mechanism for authentication';
+$CFGVAR['trusted_server']['help'] = 'If you set this to TRUE, passwords will no longer be used or required, this assumes that you are using an external mechanism for authentication';
 $CFGVAR['trusted_server']['options'] = 'TRUE|FALSE';
 $CFGVAR['trusted_server']['title'] = 'Enable trusted server mode';
 $CFGVAR['trusted_server']['type'] = 'select';
