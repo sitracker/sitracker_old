@@ -221,7 +221,7 @@ elseif ($action == "edit")
         else $required = $triggerarray[$trigaction->triggerid]['required'];
         if (!empty($required) AND $CONFIG['debug'])
         {
-            echo "<br />required: <code>".print_r($required, true)."</code><br />";
+            debug_log("Variables required by email template {$template->id}: ".print_r($required, TRUE));
         }
         echo "</td><tr>";
 
