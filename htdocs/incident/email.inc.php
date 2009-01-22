@@ -16,8 +16,6 @@ if (realpath(__FILE__) == realpath($_SERVER['SCRIPT_FILENAME']))
     exit;
 }
 
-//if (empty($step)) $step=1;
-
 if (empty($step))
 {
     $action = $_REQUEST['action'];
@@ -65,7 +63,7 @@ switch ($step)
         include ('incident_html_top.inc.php');
         ?>
         <script type="text/javascript">
-        <!--
+        //<![CDATA[
         function deleteOption(object)
         {
             var Current = object.updatetype.selectedIndex;
@@ -174,7 +172,7 @@ switch ($step)
             object.updatetype.options[Current].text = object.currentText.value;
             object.updatetype.options[Current].value = object.currentText.value;
         }
-        //-->
+        //]]>
         </script>
         <?php
         echo "<h2>".icon('email', 32)." {$strSendEmail}</h2>";
@@ -214,6 +212,7 @@ switch ($step)
                 echo "no-repeat;' onclick='reprioritise(this.form)'>";
                 echo "{$strResolutionReprioritisation}</option>\n";
             break;
+
             case 'probdef':
                 echo "<option value='probdef' style='text-indent: 15px; height:";
                 echo " 17px; background-image: ";
@@ -234,6 +233,7 @@ switch ($step)
                 echo "no-repeat;' onclick='reprioritise(this.form)'>";
                 echo "{$strResolutionReprioritisation}</option>\n";
             break;
+
             case 'actionplan':
                 echo "<option value='actionplan' style='text-indent: 15px; ";
                 echo "height: 17px; background-image: ";
@@ -248,7 +248,8 @@ switch ($step)
                 echo "no-repeat;' onclick='reprioritise(this.form)'>";
                 echo "{$strResolutionReprioritisation}</option>\n";
             break;
-                case 'solution':
+
+            case 'solution':
                 echo "<option value='solution' style='text-indent: 15px; ";
                 echo "height: 17px; background-image: ";
                 echo "url({$CONFIG['application_webpath']}/images/icons/";
@@ -322,6 +323,8 @@ switch ($step)
         include ('incident_html_top.inc.php');
         ?>
         <script type='text/javascript'>
+        //<![CDATA[
+
         function confirm_send_mail()
         {
             return window.confirm('<?php echo $strAreYouSureSendEmail ?>');
@@ -425,6 +428,7 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
 
         setInterval("save_content()", 10000); //every 10 seconds
 
+        //]]>
         </script>
         <?php
         // External vars
@@ -490,23 +494,25 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
             $body = $metadata[18];
         }
 
-        echo "<form action='{$_SERVER['PHP_SELF']}?id={$id}' method='post' enctype='multipart/form-data' onsubmit='return confirm_send_mail();' >";
+        echo "<form action='{$_SERVER['PHP_SELF']}?id={$id}' method='post' ";
+        echo "enctype='multipart/form-data' onsubmit='return confirm_send_mail();' >";
         echo "<table align='center' class='vertical' width='95%'>";
-        echo "<tr><th width='30%'>{$strFrom}</th><td><input maxlength='100' name='fromfield' id='fromfield' size='40' value=\"{$from}\" /></td></tr>\n";
-        echo "<tr><th>{$strReplyTo}</th><td><input maxlength='100' name='replytofield' id='replytofield' size='40' value=\"{$replyto}\" /></td></tr>\n";
+        echo "<tr><th width='30%'>{$strFrom}</th><td><input maxlength='100' ";
+        echo "name='fromfield' id='fromfield' size='40' value=\"{$from}\" /></td></tr>\n";
+        echo "<tr><th>{$strReplyTo}</th><td><input maxlength='100' name='replytofield' ";
+        echo "id='replytofield' size='40' value=\"{$replyto}\" /></td></tr>\n";
         if (trim($ccemail) == ",") $ccemail = '';
         if (substr($ccemail, 0, 1) == ",") $ccfield = substr($ccemail, 1, strlen($ccemail));
-        echo "<tr><th>CC</th><td><input maxlength='100' name='ccfield' id='ccfield' size='40' value=\"{$ccemail}\" /></td></tr>\n";
-        echo "<tr><th>BCC</th><td><input maxlength='100' name='bccfield' id='bccfield' size='40' value=\"{$bccemail}\" /></td></tr>\n";
-        echo "<tr><th>{$strTo}</th><td><input maxlength='100' name='tofield' id='tofield' size='40' value=\"{$toemail}\" /></td></tr>\n";
-        echo "<tr><th>{$strSubject}</th><td><input maxlength='255' name='subjectfield' id='subjectfield' size='40' value=\"{$subject}\" /></td></tr>\n";
+        echo "<tr><th>{$strCC}</th><td><input maxlength='100' name='ccfield' ";
+        echo "id='ccfield' size='40' value=\"{$ccemail}\" /></td></tr>\n";
+        echo "<tr><th>{$strBCC}</th><td><input maxlength='100' name='bccfield' ";
+        echo "id='bccfield' size='40' value=\"{$bccemail}\" /></td></tr>\n";
+        echo "<tr><th>{$strTo}</th><td><input maxlength='100' name='tofield' ";
+        echo "id='tofield' size='40' value=\"{$toemail}\" /></td></tr>\n";
+        echo "<tr><th>{$strSubject}</th><td><input maxlength='255' ";
+        echo "name='subjectfield' id='subjectfield' size='40' value=\"{$subject}\" /></td></tr>\n";
         echo "<tr><th>{$strAttachment}";
-        // calculate filesize
-        $j = 0;
-        $ext = array($strBytes, $strKBytes, $strMBytes, $strGBytes, $strTBytes);
-        $file_size = $CONFIG['upload_max_filesize'];
-        while ($file_size >= pow(1024,$j)) ++$j;
-        $file_size = round($file_size / pow(1024,$j-1) * 100) / 100 . ' ' . $ext[$j-1];
+        $file_size = readable_file_size($CONFIG['upload_max_filesize']);
         echo "(&lt; $file_size)";
         echo "</th><td>";
         echo "<input type='hidden' name='MAX_FILE_SIZE' value='{$CONFIG['upload_max_filesize']}' />";
@@ -558,8 +564,6 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
         $timetonextaction_minutes = cleanvar($_REQUEST['timetonextaction_minutes']);
         $date = cleanvar($_REQUEST['date']);
         $timeoffset = cleanvar($_REQUEST['timeoffset']);
-        /*$day = cleanvar($_REQUEST['day']);
-        $month = cleanvar($_REQUEST['month']);*/
         $year = cleanvar($_REQUEST['year']);
         $target = cleanvar($_REQUEST['target']);
         $chase_customer = cleanvar($_REQUEST['chase_customer']);
@@ -622,8 +626,8 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
             $extra_headers = "Reply-To: $replytofield\nErrors-To: ".user_email($sit[2])."\n";
             $extra_headers .= "X-Mailer: {$CONFIG['application_shortname']} {$application_version_string}/PHP " . phpversion() . "\n";
             $extra_headers .= "X-Originating-IP: {$_SERVER['REMOTE_ADDR']}\n";
-            if ($ccfield != '')  $extra_headers .= "cc: $ccfield\n";
-            if ($bccfield != '') $extra_headers .= "Bcc: $bccfield\n";
+            if ($ccfield != '')  $extra_headers .= "CC: $ccfield\n";
+            if ($bccfield != '') $extra_headers .= "BCC: $bccfield\n";
             $extra_headers .= "\n"; // add an extra crlf to create a null line to separate headers from body
                                 // this appears to be required by some email clients - INL
 
@@ -661,28 +665,6 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
 
             // actually send the email
             $mailok = $mime -> send_mail();
-
-//             // after mail is sent, move the attachment to the incident file attachment directory / timestamp
-//             if ($filename != '' && file_exists($filename) && $mailok == TRUE)
-//             {
-//                 // make incident attachment dir if it doesn't exist
-//                 $umask = umask(0000);
-//                 if (!file_exists($CONFIG['attachment_fspath'] . "$id"))
-//                 {
-//                     $mk = mkdir($CONFIG['attachment_fspath'] ."$id", 0770);
-//                     trigger_error("Failed creating incident attachment directory after sending mail: {$CONFIG['attachment_fspath']} {$id}", E_USER_WARNING);
-//                 }
-//                 $mk = mkdir($CONFIG['attachment_fspath'] .$id . "/$now", 0770);
-//                 trigger_error("Failed creating incident attachment (timestamp) directory after sending mail: {$CONFIG['attachment_fspath']} {$id}/{$now}", E_USER_WARNING);
-//                 umask($umask);
-//                 // failes coz renaming file to a directory
-//                 $filename_parts_array = explode('/', $filename);
-//                 $filename_parts_count = count($filename_parts_array)-1;
-//                 $filename_end_part = $filename_parts_array[$filename_parts_count]; // end part of filename (actual name)
-//                 $rn = rename($filename, $CONFIG['attachment_fspath'] . $id . "/$now/" . $filename_end_part);
-//                 if (!rn) trigger_error("Failed moving attachment after sending mail: {$CONFIG['attachment_fspath']} {$id}/{$now}", E_USER_WARNING);
-//                 // unlink ($filename);  // used to delete the file - don't any more INL 6Nov01
-//             }
 
             if ($mailok == FALSE)
             {
@@ -852,6 +834,7 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
                 }
 
                 journal(CFG_LOGGING_FULL, $SYSLANG['strEmailSent'], "{$SYSLANG['strSubject']}: $subjectfield, {$SYSLANG['strIncident']}: $id", CFG_JOURNAL_INCIDENTS, $id);
+                // FIXME i18n, maybe have a function that prints a dialog and then closes the window?
                 echo "<html>";
                 echo "<head>";
                 ?>
