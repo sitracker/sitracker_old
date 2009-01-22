@@ -7,6 +7,12 @@
 // This software may be used and distributed according to the terms
 // of the GNU General Public License, incorporated herein by reference.
 
+// Prevent script from being run directly (ie. it must always be included
+if (realpath(__FILE__) == realpath($_SERVER['SCRIPT_FILENAME']))
+{
+    exit;
+}
+
 require_once('base.inc.php');
 
 /**
@@ -21,7 +27,7 @@ require_once('base.inc.php');
 function guess_contract_id($contactid)
 {
     global $dbSupportContacts;
-    
+
     $contactid = intval($contactid);
     $sql = "SELECT * FROM `{$dbSupportContacts}` ";
     $sql .= "WHERE contactid = '{$contactid}'";
@@ -29,7 +35,7 @@ function guess_contract_id($contactid)
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
     $num_contracts = mysql_num_rows($result);
-    
+
     if ($num_contracts == 0)
     {
         $contractid = FALSE;
@@ -43,7 +49,7 @@ function guess_contract_id($contactid)
     {
         //to complete as a programming exercise
     }
-    
+
     return $contractid;
 }
 

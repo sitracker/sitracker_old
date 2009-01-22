@@ -1,14 +1,20 @@
 <?php
-// mime_parser.inc.php - Parse MIME encapsulated e-mail message data compliant 
+// mime_parser.inc.php - Parse MIME encapsulated e-mail message data compliant
 // with the RFC 2822 or aggregated in mbox format
 //
 // SiT (Support Incident Tracker) - Support call tracking system
-// Copyright Manuel Lemos 2006 - 2008 
+// Copyright Manuel Lemos 2006 - 2008
 // http://www.phpclasses.org/browse/package/3169.html
 // $Id: mime_parser.php,v 1.60 2008/07/17 00:54:24 mlemos Exp $
 //
 // This software may be used and distributed according to the terms
 // of the GNU General Public License, incorporated herein by reference.
+
+// Prevent script from being run directly (ie. it must always be included
+if (realpath(__FILE__) == realpath($_SERVER['SCRIPT_FILENAME']))
+{
+    exit;
+}
 
 define('MIME_PARSER_START',        1);
 define('MIME_PARSER_HEADER',       2);
