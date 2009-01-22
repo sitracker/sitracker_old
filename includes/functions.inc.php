@@ -11095,6 +11095,13 @@ function cfgVarInput($setupvar, $showvarnames = FALSE)
             $html .= "<input type='text' name='$setupvar' size='60' value=\"{$value}\" />";
         break;
 
+        case '2darray':
+            $replace = array('array(', ')', "'", '\r','\n');
+            $value = str_replace($replace, '',  $value);
+            $value = str_replace(',', "\n", $value);
+            $html .= "<textarea name='$setupvar' cols='60' rows='10'>{$value}</textarea>";
+        break;
+
         case 'password':
           $html .= "<input type='password' id='cfg{$setupvar}' name='$setupvar' size='16' value=\"{$value}\" /> ".password_reveal_link("cfg{$setupvar}");
         break;

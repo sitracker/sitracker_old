@@ -44,9 +44,24 @@ if ($action == 'save')
                     }
                     $value = 'array(' . implode(',', $parts) . ')';
                 break;
+
+                case '2darray':
+                    $value = str_replace('\n', ',', $value);
+                    $value = str_replace('\r', '', $value);
+                    $value = str_replace("\r", '', $value);
+                    $value = str_replace("\n", '', $value);
+                    $parts = explode(",", $value);
+                    foreach ($parts AS $k => $v)
+                    {
+                        $y = explode('=&gt;', $v);
+                        $parts[$k] = "'{$y[0]}'=>'{$y[1]}'";
+                    }
+                    $value = 'array(' . implode(',', $parts) . ')';
+                break;
+
             }
             $savevar[$catvar] = mysql_real_escape_string($value);
-            $CONFIG[$catvar] = cleanvar($_REQUEST[$catvar]);
+            $CONFIG[$catvar] = $value;
         }
         if ($CONFIG['debug']) $dbg .= "<pre>".print_r($savevar,true)."</pre>";
         cfgSave($savevar);
