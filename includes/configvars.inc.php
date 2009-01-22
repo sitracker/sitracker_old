@@ -55,7 +55,7 @@ $CFGCAT['sla'] = array('default_service_level',
                        'working_days');
 
 
-$CFGCAT['theming'] = array('default_interface_style', 'default_css_url', 'default_gravatar');
+$CFGCAT['theming'] = array('default_interface_style', 'default_css_url', 'default_gravatar','tag_icons');
 
 $CFGCAT['ftp'] = array('ftp_hostname', 'ftp_username', 'ftp_password', 'ftp_pasv', 'ftp_path');
 
@@ -525,8 +525,9 @@ $CFGVAR['support_manager']['title'] = 'Support Manager';
 $CFGVAR['support_manager']['help'] = 'The person who is in charge of your support service. Used in email templates etc.';
 $CFGVAR['support_manager']['type'] = 'userselect';
 
-$CFGVAR['tag_icons']['help'] = "Set up an array to use an icon for specified tags, format: array('tag' => 'icon', 'tag2' => 'icon2')";
-$CFGVAR['tag_icons']['title'] = "An array of tags and associated icons";
+$CFGVAR['tag_icons']['title'] = "Tag Icons";
+$CFGVAR['tag_icons']['help'] = "You can specify icons to display next to certain tags, enter tag/icon associations one per line, format: tag=>icon";
+$CFGVAR['tag_icons']['type'] = '2darray';
 
 $CFGVAR['tasks_enabled']['help'] = "TRUE for enabled, FALSE for disabled";
 $CFGVAR['tasks_enabled']['options'] = 'TRUE|FALSE';
