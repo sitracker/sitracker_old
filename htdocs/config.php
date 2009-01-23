@@ -85,10 +85,8 @@ foreach ($CFGTAB AS $tab => $cat)
 echo "</ul>";
 echo "</div>";
 
-// echo "<div style='clear: both;'></div>";
 
-
-echo "<div class='tabcontainer smalltabs'>";
+echo "<div class='smalltabs'>";
 echo "<ul>";
 foreach ($CFGTAB[$seltab] AS $cat)
 {
