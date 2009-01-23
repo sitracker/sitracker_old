@@ -399,7 +399,7 @@ function user_id($username, $password)
   * Return a users password
   * @author Ivan Lucas
   * @param int $id User ID
-  * @returns
+  * @returns string
   * @note this is an MD5 hash
 */
 function user_password($id)
@@ -412,8 +412,9 @@ function user_password($id)
 /**
     * Return a users real name
     * @author Ivan Lucas
-    * @param $id integer. A user ID
-    * @param $allowhtml boolean. may return HTML if TRUE, only ever returns plain text if FALSE
+    * @param int $id. A user ID
+    * @param bool $allowhtml. may return HTML if TRUE, only ever returns plain text if FALSE
+    * @returns string
     * @note If $allowhtml is TRUE disabled user accounts are returned as HTML with span class 'deleted'
 */
 function user_realname($id, $allowhtml = FALSE)
@@ -558,7 +559,7 @@ function user_status($id)
 /**
     * Check whether the given user is accepting
     * @author Ivan Lucas
-    * @param $id The userid of the user to check
+    * @param int $id The userid of the user to check
     * @returns string
     * @retval 'Yes' User is accepting
     * @retval 'No' User is not accepting
@@ -576,7 +577,7 @@ function user_accepting($id)
 /**
     * Count the number of active incidents for a given user
     * @author Ivan Lucas
-    * @param $id The userid of the user to check
+    * @param int $id The userid of the user to check
     * @returns int
 */
 function user_activeincidents($userid)
@@ -606,7 +607,7 @@ function user_activeincidents($userid)
 /**
     * Counts a users open incidents
     * @author Ivan Lucas
-    * @param $id The userid of the user to check
+    * @param int $id The userid of the user to check
     * @returns int
     * @note This number will never match the number shown in the active queue and is not meant to
 */
@@ -627,7 +628,7 @@ function user_countincidents($id)
 /**
     * Counts number of incidents and priorty for a given user
     * @author Ivan Lucas
-    * @param $id The userid of the user to check
+    * @param int $id The userid of the user to check
     * @returns array
 */
 function user_incidents($id)
@@ -657,12 +658,12 @@ function user_incidents($id)
     * gets users holiday information for a certain day given an optional type
     * and optional length returns both type and length and approved as an array
     * @author Ivan Lucas
-    * @param $userid integer. The userid of the holiday to retrieve
-    * @param $type integer. The holiday type. e.g. sickness
-    * @param $year integer. Year. eg. 2008
-    * @param $month integer. Month. eg. 11 = November
-    * @param $day integer. Day
-    * @param $length string. 'am', 'pm', 'day' or FALSE to list all
+    * @param int $userid. The userid of the holiday to retrieve
+    * @param int $type. The holiday type. e.g. sickness
+    * @param int $year. Year. eg. 2008
+    * @param int $month. Month. eg. 11 = November
+    * @param int $day. Day
+    * @param string $length. 'am', 'pm', 'day' or FALSE to list all
     * @returns array
 */
 function user_holiday($userid, $type= 0, $year, $month, $day, $length = FALSE)
@@ -809,18 +810,21 @@ function user_holiday_resetdate($userid)
 /**
  * Returns the users preference for showing emoticons
  * @author Paul Heaney
- * @param $userid integer User ID
- * @return String true or false
+ * @param int $userid User ID
+ * @return string true or false
+ * @retval 'true' means the user wants emoticons shown
+ * @retval 'false' means the user doesn't want emoticons
  */
 function user_emoticon_preference($userid)
 {
     return db_read_column('var_emoticons', $GLOBALS['dbUsers'], $userid);
 }
 
+
 /**
     * Find a contacts real name
     * @author Ivan Lucas
-    * @param $id integer. Contact ID
+    * @param int $id. Contact ID
     * @returns string. Full name or 'Unknown'
 */
 function contact_realname($id)
@@ -848,7 +852,7 @@ function contact_realname($id)
 /**
     * Return a contacts site name
     * @author Ivan Lucas
-    * @param $id integer. Contact ID
+    * @param int $id. Contact ID
     * @returns string. Full site name or 'Unknown'
     * @note this returns the site _NAME_ not the siteid for the site id use contact_siteid()
 */
@@ -878,8 +882,8 @@ function contact_site($id)
 /**
     * Return a contacts site ID
     * @author Ivan Lucas
-    * @param $id integer. Contact ID
-    * @returns integer. Site ID
+    * @param int $id. Contact ID
+    * @returns int. Site ID
 */
 function contact_siteid($id)
 {
@@ -890,7 +894,7 @@ function contact_siteid($id)
 /**
     * Return a contacts email address
     * @author Ivan Lucas
-    * @param $id integer. Contact ID
+    * @param int $id. Contact ID
     * @returns string. Email address
 */
 function contact_email($id)
@@ -914,7 +918,7 @@ function contact_phone($id)
 /**
     * Return a contacts fax number
     * @author Ivan Lucas
-    * @param $id integer. Contact ID
+    * @param int $id. Contact ID
     * @returns string. Fax number
 */
 function contact_fax($id)
@@ -926,7 +930,7 @@ function contact_fax($id)
 /**
     * Return the number of incidents ever logged against a contact
     * @author Ivan Lucas
-    * @param $id integer. Contact ID
+    * @param int $id. Contact ID
     * @returns int.
 */
 function contact_count_incidents($id)
@@ -946,7 +950,7 @@ function contact_count_incidents($id)
 /**
     * Return the number of incidents ever logged against a site
     * @author Kieran
-    * @param $id integer. Site ID
+    * @param int $id. Site ID
     * @returns int.
 */
 function site_count_incidents($id)
@@ -970,7 +974,7 @@ function site_count_incidents($id)
 /**
     * Return the number of inventory items for a site
     * @author Kieran
-    * @param $id integer. Site ID
+    * @param int $id. Site ID
     * @returns int.
 */
 function site_count_inventory_items($id)
@@ -991,7 +995,7 @@ function site_count_inventory_items($id)
 /**
     * Return the number of inventory items for a contact
     * @author Kieran
-    * @param $id integer. Contact ID
+    * @param int $id. Contact ID
     * @returns int.
 */
 function contact_count_inventory_items($id)
@@ -1013,7 +1017,7 @@ function contact_count_inventory_items($id)
 /**
     * The number representing the total number of currently OPEN incidents submitted by a given contact.
     * @author Ivan Lucas
-    * @param $id The Contact ID to check
+    * @param int $id. The Contact ID to check
     * @returns integer. The number of currently OPEN incidents for the given contact
 */
 function contact_count_open_incidents($id)
@@ -1033,7 +1037,7 @@ function contact_count_open_incidents($id)
 /**
     * Creates a vcard electronic business card for the given contact
     * @author Ivan Lucas
-    * @param $id integer Contact ID
+    * @param int $id Contact ID
     * @returns string vcard
 */
 function contact_vcard($id)
@@ -1091,7 +1095,7 @@ function contact_vcard($id)
 
 /**
     * @author Ivan Lucas
-    * @param $id Incident ID
+    * @param int $id Incident ID
     * @returns integer. UserID of the user that currently owns the incident
 */
 function incident_owner($id)
@@ -1102,7 +1106,7 @@ function incident_owner($id)
 
 /**
     * @author Ivan Lucas
-    * @param $id Incident ID
+    * @param int $id Incident ID
     * @returns integer. UserID of the user that currently temporarily owns the incident
 */
 function incident_towner($id)
@@ -1113,7 +1117,7 @@ function incident_towner($id)
 
 /**
     * @author Ivan Lucas
-    * @param $id Incident ID
+    * @param int $id Incident ID
     * @returns integer. ContactID of the contact this incident is logged against
 */
 function incident_contact($id)
@@ -1124,7 +1128,7 @@ function incident_contact($id)
 
 /**
     * @author Ivan Lucas
-    * @param $id Incident ID
+    * @param int $id Incident ID
     * @returns integer. Contract ID of the maintenance contract this incident is logged against
 */
 function incident_maintid($id)
@@ -1143,7 +1147,7 @@ function incident_maintid($id)
 
 /**
     * @author Ivan Lucas
-    * @param $id Incident ID
+    * @param int $id Incident ID
     * @returns string. Title of the incident
 */
 function incident_title($id)
@@ -1154,7 +1158,7 @@ function incident_title($id)
 
 /**
     * @author Ivan Lucas
-    * @param $id Incident ID
+    * @param int $id Incident ID
     * @returns id. Current incident status ID
 */
 function incident_status($id)
@@ -1165,7 +1169,7 @@ function incident_status($id)
 
 /**
     * @author Ivan Lucas
-    * @param $id Incident ID
+    * @param int $id Incident ID
     * @returns id. Current incident Priority ID
 */
 function incident_priority($id)
@@ -1176,7 +1180,7 @@ function incident_priority($id)
 
 /**
     * @author Ivan Lucas
-    * @param $id Incident ID
+    * @param int $id Incident ID
     * @returns id. Current incident external ID
 */
 function incident_externalid($id)
@@ -1187,7 +1191,7 @@ function incident_externalid($id)
 
 /**
     * @author Ivan Lucas
-    * @param $id Incident ID
+    * @param int $id Incident ID
     * @returns string. Current incident external engineer
 */
 function incident_externalengineer($id)
@@ -1198,7 +1202,7 @@ function incident_externalengineer($id)
 
 /**
     * @author Ivan Lucas
-    * @param $id Incident ID
+    * @param int $id Incident ID
     * @returns string. Current incident external email address
 */
 function incident_externalemail($id)
@@ -1209,7 +1213,7 @@ function incident_externalemail($id)
 
 /**
     * @author Ivan Lucas
-    * @param $id Incident ID
+    * @param int $id Incident ID
     * @returns string. Current incident CC email address
 */
 function incident_ccemail($id)
@@ -1220,7 +1224,7 @@ function incident_ccemail($id)
 
 /**
     * @author Ivan Lucas
-    * @param $id Incident ID
+    * @param int $id Incident ID
     * @returns int. UNIX Timestamp of the time of the next action for this incident
 */
 function incident_timeofnextaction($id)
@@ -1233,7 +1237,7 @@ function incident_timeofnextaction($id)
     * Returns a string of HTML nicely formatted for the incident details page containing any additional
     * product info for the given incident.
     * @author Ivan Lucas
-    * @param $incidentid The incident ID
+    * @param int $incidentid The incident ID
     * @returns string HTML
 */
 function incident_productinfo_html($incidentid)
@@ -1501,12 +1505,12 @@ function contact_drop_down($name, $id, $showsite = FALSE, $required = FALSE)
     * prints the HTML for a drop down list of contacts along with their site, with the given name and
     * and with the given id selected.
     * @author Ivan Lucas
-    * @param $name string. The name of the field
-    * @param $id int. Select this contactID by default
-    * @param $siteid int. (optional) Filter list to show contacts from this siteID only
-    * @param $exclude int|array (optional) Do not show this contactID in the list, accepts an int or array of ints
-    * @param $showsite bool (optional) Suffix the name with the site name
-    * @param $allownone bool (optional) Allow 'none' to be selected (blank value)
+    * @param string $name. The name of the field
+    * @param int $id. Select this contactID by default
+    * @param int $siteid. (optional) Filter list to show contacts from this siteID only
+    * @param mixed $exclude int|array (optional) Do not show this contactID in the list, accepts an integer or array of integers
+    * @param bool $showsite (optional) Suffix the name with the site name
+    * @param bool $allownone (optional) Allow 'none' to be selected (blank value)
     * @returns string.  HTML select
 */
 function contact_site_drop_down($name, $id, $siteid='', $exclude='', $showsite=TRUE, $allownone=FALSE)
@@ -1567,9 +1571,9 @@ function contact_site_drop_down($name, $id, $siteid='', $exclude='', $showsite=T
 /**
     * HTML for a drop down list of products
     * @author Ivan Lucas
-    * @param $name string. name/id to use for the select element
-    * @param $id int. Product ID
-    * @param $required bool.
+    * @param string $name. name/id to use for the select element
+    * @param int $id. Product ID
+    * @param bool $required.
     * @returns string. HTML select
     * @note With the given name and with the given id selected.
 */
@@ -1612,8 +1616,8 @@ function product_drop_down($name, $id, $required = FALSE)
 /**
     * HTML for a drop down list of skills (was called software)
     * @author Ivan Lucas
-    * @param $name string. name/id to use for the select element
-    * @param $id int. Software ID
+    * @param string $name. name/id to use for the select element
+    * @param int $id. Software ID
     * @returns HTML select
 */
 function software_drop_down($name, $id)
@@ -1660,7 +1664,7 @@ function software_drop_down($name, $id)
 /**
     *
     * @author Kieran Hogg
-    * @param $name string. name/id to use for the select element
+    * @param string $name. name/id to use for the select element
     * @returns HTML select
 */
 function softwareproduct_drop_down($name, $id, $productid, $visibility='internal')
@@ -1710,8 +1714,8 @@ function softwareproduct_drop_down($name, $id, $productid, $visibility='internal
 /**
     * A HTML Select listbox for vendors
     * @author Ivan Lucas
-    * @param $name string. name/id to use for the select element
-    * @param $id int. Vendor ID to preselect
+    * @param string $name. name/id to use for the select element
+    * @param int $id. Vendor ID to preselect
     * @returns HTML select
 */
 function vendor_drop_down($name, $id)
@@ -1744,9 +1748,9 @@ function vendor_drop_down($name, $id)
 /**
     * A HTML Select listbox for Site Types
     * @author Ivan Lucas
-    * @param $name string. name/id to use for the select element
-    * @param $id int. Site Type ID to preselect
-    * @todo TODO i18n needed
+    * @param string $name. name/id to use for the select element
+    * @param int $id. Site Type ID to preselect
+    * @todo TODO i18n needed site types
     * @returns HTML select
 */
 function sitetype_drop_down($name, $id)
@@ -1823,13 +1827,14 @@ function supported_product_drop_down($name, $contactid, $productid)
 
 
 /**
-    * prints the HTML for a drop down list of  users, with the given name and with the given id selected.
+    * Returns the HTML for a drop down list of  users, with the given name and with the given id selected.
     * @author Ivan Lucas
-    * @param $name string. Name attribute
-    * @param $id integer. User ID to pre-select
-    * @param $accepting boolean. when true displays the accepting status. hides it when false
-    * @param $exclude integer. User ID not to list
-    * @param $attribs string. Extra attributes for the select control
+    * @param string $name. Name attribute
+    * @param int $id. User ID to pre-select
+    * @param bool $accepting. when true displays the accepting status. hides it when false
+    * @param int $exclude. User ID not to list
+    * @param string $attribs. Extra attributes for the select control
+    * @returns string HTML
 */
 function user_drop_down($name, $id, $accepting = TRUE, $exclude = FALSE, $attribs= '', $return = FALSE)
 {
@@ -1904,8 +1909,8 @@ function user_drop_down($name, $id, $accepting = TRUE, $exclude = FALSE, $attrib
 /**
     * A HTML Select listbox for user roles
     * @author Ivan Lucas
-    * @param $name string. name to use for the select element
-    * @param $id int. Role ID to preselect
+    * @param string $name. name to use for the select element
+    * @param int $id. Role ID to preselect
     * @returns HTML select
 */
 function role_drop_down($name, $id)
@@ -1940,8 +1945,8 @@ function role_drop_down($name, $id)
 /**
     * A HTML Select listbox for user groups
     * @author Ivan Lucas
-    * @param $name string. name attribute to use for the select element
-    * @param $selected int. Group ID to preselect
+    * @param string $name. name attribute to use for the select element
+    * @param int $selected.  Group ID to preselect
     * @returns HTML select
 */
 function group_drop_down($name, $selected)
@@ -2015,8 +2020,8 @@ function group_selector($selected, $urlargs='')
 /**
     * Return HTML for a box to select interface style/theme
     * @author Ivan Lucas
-    * @param $name string. Name attribute
-    * @param $id integer. Interface style ID
+    * @param string $name. Name attribute
+    * @param int $id. Interface style ID
     * @returns string.  HTML
 */
 function interfacestyle_drop_down($name, $id)
@@ -2049,7 +2054,7 @@ function interfacestyle_drop_down($name, $id)
 /**
     * Retrieve cssurl and headerhtml for given interface style
     * @author Ivan Lucas
-    * @param $id Integer. Interface style ID
+    * @param int $id. Interface style ID
     * @returns asoc array.
 */
 function interface_style($id)
@@ -2084,9 +2089,9 @@ function interface_style($id)
     * prints the HTML for a drop down list of incident status names (EXCLUDING 'CLOSED'),
     * with the given name and with the given id selected.
     * @author Ivan Lucas
-    * @param $name string. Text to use for the HTML select name and id attributes
-    * @param $id Integer. Status ID to preselect
-    * @param $disabled Bool. Disable the select box when TRUE
+    * @param string $name. Text to use for the HTML select name and id attributes
+    * @param int $id. Status ID to preselect
+    * @param bool $disabled. Disable the select box when TRUE
     * @returns string. HTML.
 */
 
@@ -2128,8 +2133,8 @@ function incidentstatus_drop_down($name, $id, $disabled = FALSE)
 /**
     * Return HTML for a select box of closing statuses
     * @author Ivan Lucas
-    * @param $name string. Name attribute
-    * @param $id integer. ID of Closing Status to pre-select. None selected if 0 or blank.
+    * @param string $name. Name attribute
+    * @param int $id. ID of Closing Status to pre-select. None selected if 0 or blank.
     * @todo Requires database i18n
     * @returns string. HTML
 */
@@ -2220,8 +2225,8 @@ function userstatus_drop_down($name, $id, $userdisable = FALSE)
     * Return HTML for a select box of user statuses with javascript to effect changes immediately
     * Includes two extra options for setting Accepting yes/no
     * @author Ivan Lucas
-    * @param $name string. Name attribute
-    * @param $id integer. ID of User Status to pre-select. None selected if 0 or blank.
+    * @param string $name. Name attribute
+    * @param int $id. ID of User Status to pre-select. None selected if 0 or blank.
     * @returns string. HTML
 */
 function userstatus_bardrop_down($name, $id)
@@ -2265,9 +2270,9 @@ function userstatus_bardrop_down($name, $id)
 /**
     * Return HTML for a select box of user email templates
     * @author Ivan Lucas
-    * @param $name string. Name attribute
-    * @param $id integer. ID of Template to pre-select. None selected if 0 or blank.
-    * @param $type string. Type to display.
+    * @param string $name. Name attribute
+    * @param int $id. ID of Template to pre-select. None selected if 0 or blank.
+    * @param string $type. Type to display.
     * @returns string. HTML
 */
 function emailtemplate_drop_down($name, $id, $type)
@@ -2309,10 +2314,10 @@ function emailtemplate_drop_down($name, $id, $type)
 /**
     * Return HTML for a select box of priority names (with icons)
     * @author Ivan Lucas
-    * @param $name string. Name attribute
-    * @param $id integer. ID of priority to pre-select. None selected if 0 or blank.
-    * @param $max integer. The maximum priority ID to list.
-    * @param $disable boolean. Disable the control when TRUE.
+    * @param string $name. Name attribute
+    * @param int $id. ID of priority to pre-select. None selected if 0 or blank.
+    * @param int $max. The maximum priority ID to list.
+    * @param bool $disable. Disable the control when TRUE.
     * @returns string. HTML
 */
 function priority_drop_down($name, $id, $max=4, $disable = FALSE)
@@ -2370,8 +2375,8 @@ function priority_drop_down($name, $id, $max=4, $disable = FALSE)
 /**
     * Return HTML for a select box for accepting yes/no. The given user's accepting status is displayed.
     * @author Ivan Lucas
-    * @param $name string. Name attribute
-    * @param $userid integer. The user ID to check
+    * @param string $name. Name attribute
+    * @param int $userid. The user ID to check
     * @returns string. HTML
 */
 function accepting_drop_down($name, $userid)
@@ -2396,8 +2401,8 @@ return $html;
 
 /**
     * Return HTML for a select box for escalation path
-    * @param $name string. Name attribute
-    * @param $userid integer. The escalation path ID to pre-select
+    * @param string $name. Name attribute
+    * @param int $userid. The escalation path ID to pre-select
     * @returns string. HTML
 */
 function escalation_path_drop_down($name, $id)
@@ -2461,7 +2466,7 @@ function priority_icon($id)
 /**
     * Returns an array of fields from the most recent update record for a given incident id
     * @author Ivan Lucas
-    * @param $id An incident ID
+    * @param int $id An incident ID
     * @returns array
 */
 function incident_lastupdate($id)
@@ -2534,7 +2539,7 @@ function incident_lastupdate($id)
     * Returns a string containing the body of the first update (that is visible to customer)
     * in a format suitable for including in an email
     * @author Ivan Lucas
-    * @param $id An incident ID
+    * @param int $id An incident ID
 */
 function incident_firstupdate($id)
 {
@@ -2560,8 +2565,8 @@ function incident_firstupdate($id)
 /**
     * Converts an incident status ID to an internationalised status string
     * @author Ivan Lucas
-    * @param $id integer incident status ID
-    * @param $type string. 'internal' or 'external', where external means customer/client facing
+    * @param int $id. incident status ID
+    * @param string $type. 'internal' or 'external', where external means customer/client facing
     * @returns string Internationalised incident status.
     *                 Or empty string if the ID is not recognised.
     * @note The incident status database table must contain i18n keys.
@@ -2676,8 +2681,8 @@ function product_name($id)
 /**
     * Formats a given number of seconds into a readable string showing days, hours and minutes.
     * @author Ivan Lucas
-    * @param $seconds integer number of seconds
-    * @param $showseconds bool If TRUE and $seconds is less than 60 the function returns 1 minute.
+    * @param int $seconds number of seconds
+    * @param bool $showseconds bool If TRUE and $seconds is less than 60 the function returns 1 minute.
     * @returns string Readable date/time
 */
 function format_seconds($seconds, $showseconds = FALSE)
@@ -2860,7 +2865,7 @@ function format_workday_minutes($minutes)
 /**
     * Make a readable and friendly date, i.e. say Today, or Yesterday if it is
     * @author Ivan Lucas
-    * @param $date a UNIX timestamp
+    * @param int $date a UNIX timestamp
     * @returns string. Date in a readable friendly format
     * @note See also readable_date() dupe?
 */
@@ -2891,9 +2896,10 @@ function format_date_friendly($date)
 /**
     * Generate HTML for a redirect/confirmation page
     * @author Ivan Lucas
-    * @param $url string. URL to redirect to
-    * @param $success boolean. TRUE = Success, FALSE = Failure
-    * @param $message string. HTML message to display on the page before redirection
+    * @param string $url. URL to redirect to
+    * @param bool $success. TRUE = Success, FALSE = Failure
+    * @param string $message. HTML message to display on the page before redirection
+    * @returns string HTML page with redirect
     * @note Replaces confirmation_page() from versions prior to 3.35
     * @note If a header HTML has already been displayed a continue link is printed
     * @note a meta redirect will also be inserted, which is invalid HTML but appears
@@ -3096,8 +3102,8 @@ function servicelevel_name($id)
 /**
     * Find whether a given servicelevel is timed
     * @author Ivan Lucas
-    * @param $slid Integer. Service level tag
-    * @returns. Bool. TRUE if any part of the service level is timed, otherwise returns FALSE
+    * @param string Service level tag
+    * @returns. bool. TRUE if any part of the service level is timed, otherwise returns FALSE
 */
 function servicelevel_timed($sltag)
 {
@@ -3118,8 +3124,8 @@ function servicelevel_timed($sltag)
 /**
     * Retrieves the service level ID of a given maintenance contract
     * @author Ivan Lucas
-    * @param $maintid Integer. Contract ID
-    * @returns. Integer. Service Level ID
+    * @param int $maintid. Contract ID
+    * @returns. int Service Level ID
     * @deprecated
     * @note Service level ID's are DEPRECATED service level tags should be used in favour of service level ID's
 */
@@ -3369,8 +3375,8 @@ function debug_log($logentry)
 
 /**
     * Displays user errors
-    * @param $message array. An array of error strings
-    * @returns Nothing. Outputs HTML list of user errors directly
+    * @param mixed $message An error string or an array of error strings
+    * @returns string HTML
 */
 function throw_user_error($message, $details='')
 {
@@ -3463,13 +3469,12 @@ function site_name($id)
 
 /**
 * prints the HTML for a drop down list of maintenance contracts
-* @param $name string. name of the drop down box
-* @param $id int. the contract id to preselect
-* @param $siteid int. Show records from this SiteID only, blank for all sites
-* @param $excludes array. Hide contracts with ID's in this array
-* @param $return bool. Whether to return to HTML or echo
-* @param $showonlyactive bool. True show only active (with a future expiry date), false shows all
-*
+* @param string $name. name of the drop down box
+* @param int $id. the contract id to preselect
+* @param int $siteid. Show records from this SiteID only, blank for all sites
+* @param array $excludes. Hide contracts with ID's in this array
+* @param bool $return. Whether to return to HTML or echo
+* @param bool $showonlyactive. True show only active (with a future expiry date), false shows all
 */
 function maintenance_drop_down($name, $id, $siteid = '', $excludes = '', $return = FALSE, $showonlyactive = FALSE)
 {
@@ -3721,13 +3726,13 @@ function html_checkbox($name, $state, $return = FALSE)
 
 /**
     Send an email from SiT
-    * @param $to string. Destination email address
-    * @param $from string. Source email address
-    * @param $subject string. Email subject line
-    * @param $body string. Email body text
-    * @param $replyto string. (optional) Address to send reply to
-    * @param $cc string. (optional) Carbon copy address
-    * @param $bcc string. (optional) Blind carbon copy address
+    * @param string $to. Destination email address
+    * @param string $from. Source email address
+    * @param string $subject. Email subject line
+    * @param string $body. Email body text
+    * @param string $replyto. (optional) Address to send reply to
+    * @param string $cc. (optional) Carbon copy address
+    * @param string $bcc. (optional) Blind carbon copy address
     * @returns The return value from PHP mail() function or TRUE when in Demo mode
     * @note Returns TRUE but does not actually send mail when SiT is in Demo mode
 */
@@ -4113,8 +4118,8 @@ function holidaytype_drop_down($name, $id)
 
 /**
 * @author Paul Heaney
-* @param $userid - userid to find group for
-* @return A int of the groupid
+* @param int $userid - userid to find group for
+* @return int the groupid
 */
 function user_group_id($userid)
 {
@@ -4131,9 +4136,9 @@ function user_group_id($userid)
 /**
 * check to see if any fellow group members have holiday on the date specified
 * @author Ivan Lucas
-* @param $userid int - user ID
-* @param $date int - UNIX Timestamp
-* @param $length string - 'day', 'pm' or 'am'
+* @param int $userid - user ID
+* @param int $date - UNIX Timestamp
+* @param string $length - 'day', 'pm' or 'am'
 * @return HTML space seperated list of users that are away on the date specified
 */
 function check_group_holiday($userid, $date, $length='day')
@@ -4173,9 +4178,9 @@ function check_group_holiday($userid, $date, $length='day')
 /**
 * Print a listbox of countries
 * @author Ivan Lucas
-* @param $name string - HTML select 'name' attribute
-* @param $country string - Country to pre-select (default to config file setting)
-* @param $extraattributes string - Extra attributes to put on the select tag
+* @param string $name - HTML select 'name' attribute
+* @param string $country - Country to pre-select (default to config file setting)
+* @param string $extraattributes - Extra attributes to put on the select tag
 * @return HTML
 * @note if the $country given is not in the list, an editable input box is given instead of a select box
 * @todo TODO i18n country list (How do we do this?)
@@ -4523,7 +4528,7 @@ function incident_get_next_review($incidentid)
 /**
     * Converts a MySQL date to a UNIX Timestamp
     * @author Ivan Lucas
-    * @param $mysqldate string. A date column from mysql
+    * @param string $mysqldate - A date column from mysql
     * @returns integer. a UNIX Timestamp
 */
 function mysql2date($mysqldate)
@@ -4563,7 +4568,7 @@ function mysql2date($mysqldate)
 /**
     * Converts a MySQL timestamp to a UNIX Timestamp
     * @author Ivan Lucas
-    * @param $mysqldate string. A timestamp column from mysql
+    * @param string $mysqldate  A timestamp column from mysql
     * @returns integer. a UNIX Timestamp
 */
 function mysqlts2date($mysqldate)
@@ -4607,8 +4612,8 @@ function iso_8601_date($timestamp)
 /**
     * Decide whether the time is during a public holiday
     * @author Paul Heaney
-    * @param $time integer. Timestamp to identify
-    * @param $publicholidays array of Holiday. Public holiday to compare against
+    * @param int $time  Timestamp to identify
+    * @param array $publicholidays array of Holiday. Public holiday to compare against
     * @returns integer. If > 0 number of seconds left in the public holiday
 */
 function is_public_holiday($time, $publicholidays)
@@ -4630,8 +4635,8 @@ function is_public_holiday($time, $publicholidays)
 /**
     * Calculate the working time between two timestamps
     * @author Tom Gerrard, Ivan Lucas, Paul Heaney
-    * @param $t1 integer. The start timestamp (earliest date/time)
-    * @param $t2 integer. The ending timetamp (latest date/time)
+    * @param int $t1. The start timestamp (earliest date/time)
+    * @param int $t2. The ending timetamp (latest date/time)
     * @returns integer. the number of working minutes (minutes in the working day)
 */
 function calculate_working_time($t1, $t2, $publicholidays)
@@ -4874,8 +4879,8 @@ function is_active_status($status, $states)
 /**
 * Function to get an array of public holdidays
 * @author Paul Heaney
-* @param $startdate int - Start of the period to find public holidays in
-* @param $enddate int - Start of the period to find public holidays in
+* @param int $startdate - Start of the period to find public holidays in
+* @param int $enddate - Start of the period to find public holidays in
 * @return array of Holiday
 */
 function get_public_holidays($startdate, $enddate)
@@ -4908,10 +4913,10 @@ function get_public_holidays($startdate, $enddate)
     * Calculate the engineer working time between two timestamps for a given incident
     i.e. ignore times when customer has action
     * @author Ivan Lucas
-    @param $incidentid integer - The incident ID to perform a calculation on
-    @param $t1 integer - UNIX Timestamp. Start of range
-    @param $t2 integer - UNIX Timestamp. End of range
-    @param $states array (optional) Does not count time when the incident is set to
+    @param int $incidentid - The incident ID to perform a calculation on
+    @param int $t1 - UNIX Timestamp. Start of range
+    @param int $t2 - UNIX Timestamp. End of range
+    @param array $states (optional) Does not count time when the incident is set to
         any of the states in this array. (Default is closed, awaiting closure and awaiting customer action)
 */
 function calculate_incident_working_time($incidentid, $t1, $t2, $states=array(2,7,8))
@@ -5020,12 +5025,15 @@ function leading_zero($length,$number)
 
 
 /**
-* @param $lang string takes either 'user' or 'system' as to which language to use
+* Takes a UNIX Timestamp and returns a string with a pretty readable date
+* @param int $date
+* @param string $lang. takes either 'user' or 'system' as to which language to use
+* @returns string
 **/
 function readable_date($date, $lang = 'user')
 {
     global $SYSLANG;
-    // Takes a UNIX Timestamp and returns a string with a pretty readable date
+    //
     // e.g. Yesterday @ 5:28pm
     if (ldate('dmy', $date) == ldate('dmy', time()))
     {
@@ -5118,8 +5126,8 @@ function contact_notify_email($contactid)
 /**
     * Returns the contact ID of the notify contact for the given contact ID
     * @author Ivan Lucas
-    * @param $contactid integer. Contact ID
-    * @param $level integer. Number of levels to recurse upwards
+    * @param int $contactid. Contact ID
+    * @param int $level. Number of levels to recurse upwards
     * @note If Level is specified and is >= 1 then the notify contact is
     * found recursively, ie. the notify contact of the notify contact etc.
 */
@@ -5229,8 +5237,8 @@ function software_backup_userid($userid, $softwareid)
 /**
     * Switches incidents temporary owners to the backup/substitute engineer depending on the setting of 'accepting'
     * @author Ivan Lucas
-    * @param $userid integer. The userid of the user who's status has changed.
-    * @param $accepting string. 'yes' or 'no' to indicate whether the user is accepting
+    * @param int $userid. The userid of the user who's status has changed.
+    * @param string $accepting. 'yes' or 'no' to indicate whether the user is accepting
     * @note if the $accepting parameter is 'no' then the function will attempt to temporarily assign
     * all the open incidents that the user owns to the users defined substitute engineers
     * If Substitute engineers cannot be found or they themselves are not accepting, the given users incidents
@@ -5406,8 +5414,8 @@ function incident_backup_switchover($userid, $accepting)
 /**
     * Format an external ID (From an escalation partner) as HTML
     * @author Ivan Lucas
-    * @param $externalid integer. An external ID to format
-    * @param $escalationpath integer. Escalation path ID
+    * @param int $externalid. An external ID to format
+    * @param int $escalationpath. Escalation path ID
     * @returns HTML
 */
 function format_external_id($externalid, $escalationpath='')
@@ -5636,7 +5644,7 @@ function external_escalation($escalated, $incid)
 /**
     * Converts BBcode to HTML
     * @author Paul Heaney
-    * @param $text string. Text with BBCode
+    * @param string $text. Text with BBCode
     * @returns string HTML
 */
 function bbcode($text)
@@ -5707,7 +5715,7 @@ function strip_bbcode_tooltip($text)
 /**
     * Produces a HTML toolbar for use with a textarea or input box for entering bbcode
     * @author Ivan Lucas
-    * @param $elementid string. HTML element ID of the textarea or input
+    * @param string $elementid. HTML element ID of the textarea or input
     * @returns string HTML
 */
 function bbcode_toolbar($elementid)
@@ -5732,7 +5740,7 @@ function bbcode_toolbar($elementid)
 /**
     * Uses calendar.js to make a popup date picker
     * @author Ivan Lucas
-    * @param $formelement string. form element id, eg. myform.dateinputbox
+    * @param string $formelement. form element id, eg. myform.dateinputbox
     * @returns string HTML
 */
 function date_picker($formelement)
@@ -5750,7 +5758,7 @@ function date_picker($formelement)
 /**
     * Produces HTML for a percentage indicator
     * @author Ivan Lucas
-    * @param $percent int. Number between 0 and 100
+    * @param int $percent. Number between 0 and 100
     * @returns string HTML
 */
 function percent_bar($percent)
@@ -5960,14 +5968,14 @@ function show_notes($linkid, $refid, $delete = TRUE)
 /**
     * Produces a HTML dashlet 'window' for display on the dashboard
     * @author Ivan Lucas
-    * @param $dashboard string. Dashboard component name.
-    * @param $dashletid string. The table row ID of that we are 'drawing' this dashlet into and
+    * @param string $dashboard. Dashboard component name.
+    * @param string $dashletid. The table row ID of that we are 'drawing' this dashlet into and
     *                           the ID of the dashboard component instance as recorded in the users settings
     *                           as a single string, this is received by the dashlet from dashboard_do()
-    * @param $icon string. HTML for an icon to be displayed on the dashlet window
-    * @param $title string. A title for the dashlet, also displayed on the dashlet window
-    * @param $link string. URL of a page to link to from the dashlet window (link on the title)
-    * @param $content string. HTML content to display inside the dashlet window
+    * @param string $icon. HTML for an icon to be displayed on the dashlet window
+    * @param string $title. A title for the dashlet, also displayed on the dashlet window
+    * @param string $link. URL of a page to link to from the dashlet window (link on the title)
+    * @param string $content. HTML content to display inside the dashlet window
     * @note This function looks for the existence of two dashboard component functions
     *       dashboard_*_display() and dashboard_*_edit(), (where * is the name of the dashlet)
     *       if these are found the dashlet will use ajax and call these functions for it's
@@ -6016,18 +6024,18 @@ function dashlet($dashboard, $dashletid, $icon, $title='', $link='', $content=''
 /**
     * Creates a link that opens within a dashlet window
     * @author Ivan Lucas
-    * @param $dashboard string. Dashboard component name.
-    * @param $dashletid string. The table row ID of that we are 'drawing' this dashlet into and
+    * @param string $dashboard. Dashboard component name.
+    * @param string $dashletid. The table row ID of that we are 'drawing' this dashlet into and
     *                           the ID of the dashboard component instance as recorded in the users settings
     *                           as a single string, this is received by the dashlet from dashboard_do()
-    * @param $text string. The text of the hyperlink for the user to click
-    * @param $action string. edit|save|display
+    * @param string $text. The text of the hyperlink for the user to click
+    * @param string $action. edit|save|display
                                 edit = This is a link to a dashlet config form page
                                 save = Submit a dashlet config form (see $formid param)
                                 display = Display a regular dashlet page
-    * @param $params array. Associative array of parameters to pass on the URL of the link
-    * @param $refresh boolean. The link will be automatically refreshed when TRUE
-    * @param $formid string. The form element ID to be submitted when using 'save' action
+    * @param array $params. Associative array of parameters to pass on the URL of the link
+    * @param bool $refresh. The link will be automatically refreshed when TRUE
+    * @param string $formid. The form element ID to be submitted when using 'save' action
     * @returns string HTML
 */
 function dashlet_link($dashboard, $dashletid, $text='', $action='', $params='', $refresh = FALSE, $formid='')
@@ -6220,7 +6228,7 @@ function show_create_links($table, $ref)
 /**
     * Create a PNG chart
     * @author Ivan Lucas
-    * @param $type string. The type of chart to draw. (e.g. 'pie').
+    * @param string $type. The type of chart to draw. (e.g. 'pie').
     * @returns a PNG image resource
     * @note Currently only has proper support for pie charts (type='pie')
     * @todo TODO Support for bar and line graphs
@@ -6849,8 +6857,8 @@ function implode_assoc($glue1, $glue2, $array)
 
 /**
     * @author Kieran Hogg
-    * @param $name string. name of the html entity
-    * @param $time string. the time to set it to, format 12:34
+    * @param string $name. name of the html entity
+    * @param string $time. the time to set it to, format 12:34
     * @returns string. HTML
 */
 function time_dropdown($name, $time='')
@@ -6893,7 +6901,7 @@ function time_dropdown($name, $time='')
 
 /**
     * @author Kieran Hogg
-    * @param $seconds Int. Number of seconds
+    * @param int $seconds. Number of seconds
     * @returns string. Readable time in seconds
 */
 function exact_seconds($seconds)
@@ -6918,7 +6926,7 @@ function exact_seconds($seconds)
 /**
     * An icon showing a users online status
     * @author Kieran Hogg
-    * @param $user The user ID of the user to check
+    * @param int $user The user ID of the user to check
     * @returns string. HTML of a 16x16 status icon.
 */
 function user_online_icon($user)
@@ -6941,7 +6949,7 @@ function user_online_icon($user)
 /**
     * Returns users online status
     * @author Kieran Hogg
-    * @param $user The user ID of the user to check
+    * @param int $user The user ID of the user to check
     * @returns boolean. TRUE if online, FALSE if not
 */
 function user_online($user)
@@ -6999,13 +7007,14 @@ function clear_form_data($formname)
     unset($_SESSION['formdata'][$formname]);
 }
 
+
 /**
     * Trims a string so that it is not longer than the length given and
     * add ellipses (...) to the end
     * @author Ivan Lucas
-    * @param $text string. Some plain text to shorten
-    * @param $maxlength int. Length of the resulting string (in characters)
-    * @param $html bool. Set to TRUE to include HTML in the output (for ellipses)
+    * @param string $text. Some plain text to shorten
+    * @param int $maxlength. Length of the resulting string (in characters)
+    * @param bool $html. Set to TRUE to include HTML in the output (for ellipsis)
     *                    Set to FALSE for plain text only
     * @returns string. A shortned string (optionally with html)
 */
@@ -7044,9 +7053,9 @@ function truncate_string($text, $maxlength=255, $html = TRUE)
 /**
     * Returns a localised and translated date
     * @author Ivan Lucas
-    * @param $format string. date() format
-    * @param $date int. UNIX timestamp.  Uses 'now' if ommitted
-    * @param $utc bool. Is the timestamp being passed as UTC or system time
+    * @param string $format. date() format
+    * @param int $date.  UNIX timestamp.  Uses 'now' if ommitted
+    * @param bool $utc bool. Is the timestamp being passed as UTC or system time
                         TRUE = passed as UTC
                         FALSE = passed as system time
     * @returns string. An internationised date/time string
@@ -7133,10 +7142,11 @@ function ldate($format, $date = '', $utc = TRUE)
     return $datestring;
 }
 
+
 /**
     * Returns an array of open activities/timed tasks for an incident
     * @author Paul Heaney
-    * @param $incidentid int. Incident ID you want
+    * @param int $incidentid. Incident ID you want
     * @returns array - with the task id
 */
 function open_activities_for_incident($incientid)
@@ -7187,7 +7197,7 @@ function open_activities_for_incident($incientid)
 /**
     * Returns the number of open activities/timed tasks for a site
     * @author Paul Heaney
-    * @param $siteid int. Site ID you want
+    * @param int $siteid. Site ID you want
     * @returns int. Number of open activities for the site (0 if non)
 */
 function open_activities_for_site($siteid)
@@ -7309,7 +7319,7 @@ function schedule_actions_due()
 /**
 * Marks a schedule action as started
 * @author Paul Heaney
-* @param $action string Name of scheduled action
+* @param string $action. Name of scheduled action
 * @return boolean Success of update
 */
 function schedule_action_started($action)
@@ -7334,8 +7344,8 @@ function schedule_action_started($action)
 /**
     * Mark a schedule action as done
     * @author Ivan Lucas
-    * @param $doneaction string. Name of scheduled action
-    * @param $success bool. Was the run successful, TRUE = Yes, FALSE = No
+    * @param string $doneaction. Name of scheduled action
+    * @param bool $success. Was the run successful, TRUE = Yes, FALSE = No
 **/
 function schedule_action_done($doneaction, $success = TRUE)
 {
@@ -7366,8 +7376,9 @@ function schedule_action_done($doneaction, $success = TRUE)
 /**
 * Make a billing array for a incident
 * @author Paul Heaney
-* @param $incidentid - Incident number of the incident to create the array from
+* @param int $incidentid - Incident number of the incident to create the array from
 * @todo Can this be merged into make_incident_billing_array? Does it serve any purpose on its own?
+*   -- I would prefer to keep seperate - INL 23Jan09
 **/
 function get_incident_billing_details($incidentid)
 {
@@ -7407,7 +7418,7 @@ function get_incident_billing_details($incidentid)
 
 
 /**
-* TODO
+* TODO 3.45
 * @author Paul Heaney
 * @param $count TODO
 * @param $countType TODO
@@ -7723,7 +7734,7 @@ function billable_units_site($siteid, $startdate=0, $enddate=0)
 /**
 * Return an array of contacts allowed to use this contract
 * @author Kieran Hogg
-* @param $maintid integer - ID of the contract
+* @param int $maintid - ID of the contract
 * @returns array of supported contacts, NULL if none
 **/
 function supported_contacts($maintid)
@@ -7749,8 +7760,8 @@ function supported_contacts($maintid)
 /**
 * Return an array of contracts which the contact is an admin contact for
 * @author Kieran Hogg
-* @param $maintid integer - ID of the contract
-* @param $siteid integer - The ID of the site
+* @param int $maintid - ID of the contract
+* @param int $siteid - The ID of the site
 * @returns array of contract ID's for which the given contactid is an admin contact, NULL if none
 **/
 function admin_contact_contracts($contactid, $siteid)
@@ -7777,7 +7788,7 @@ function admin_contact_contracts($contactid, $siteid)
 /**
 * Return an array of contracts which the contact is an named contact for
 * @author Kieran Hogg
-* @param $maintid integer - ID of the contract
+* @param int $maintid - ID of the contract
 * @returns array of supported contracts, NULL if none
 **/
 function contact_contracts($contactid, $siteid, $checkvisible = TRUE)
@@ -7808,7 +7819,7 @@ function contact_contracts($contactid, $siteid, $checkvisible = TRUE)
 /**
 * Return an array of contracts which non-contract contacts can see incidents
 * @author Kieran Hogg
-* @param $maintid integer - ID of the contract
+* @param int $maintid - ID of the contract
 * @returns array of supported contracts, NULL if none
 **/
 function all_contact_contracts($contactid, $siteid)
@@ -7832,7 +7843,7 @@ function all_contact_contracts($contactid, $siteid)
 /**
 * Checks is a given username is unique
 * @author Kieran Hogg
-* @param $username string - username
+* @param string $username - username
 * @returns bool TRUE if valid, FALSE if not
 **/
 function valid_username($username)
@@ -7986,8 +7997,8 @@ function readable_file_size($filesize)
 /**
 * Return the html of contract detatils
 * @author Kieran Hogg
-* @param $maintid integer - ID of the contract
-* @param $mode string. 'internal' or 'external'
+* @param int $maintid - ID of the contract
+* @param string $mode. 'internal' or 'external'
 * @returns array of supported contracts, NULL if none
 **/
 function contract_details($id, $mode='internal')
@@ -8259,8 +8270,8 @@ function contract_details($id, $mode='internal')
 /**
 * Uploads a file
 * @author Kieran Hogg
-* @param $file mixed file to upload
-* @param $id
+* @param mixed $file file to upload
+* @param int $incidentd
 * @returns string path of file
 **/
 function upload_file($file, $incidentid, $updateid, $type='public')
@@ -8355,10 +8366,10 @@ function create_ftp_connection()
 /**
 * Fucntion to return a HTML table row with two columns.
 * Giving radio boxes for groups and if the level is 'management' then you are able to view the users (de)selcting
-* @param $title - text to go in the first column
-* @param $level either management or engineer, management is able to (de)select users
-* @param $groupid  Defalt group to select
-* @return table of format <tr><th /><td /></tr>
+* @param string $title - text to go in the first column
+* @param string $level either management or engineer, management is able to (de)select users
+* @param int $groupid  Defalt group to select
+* @return table row of format <tr><th /><td /></tr>
 * @author Paul Heaney
 */
 function group_user_selector($title, $level="engineer", $groupid)
@@ -9248,7 +9259,7 @@ function application_url()
 /**
 * Outputs the product name of a contract
 *
-* @param $maintid ID of the contract
+* @param int $maintid ID of the contract
 * @return string the name of the product
 * @author Kieran Hogg
 */
@@ -9273,7 +9284,7 @@ function contract_product($maintid)
 /**
 * Outputs the contract's site name
 *
-* @param $maintid ID of the contract
+* @param int $maintid ID of the contract
 * @return string name of the site
 * @author Kieran Hogg
 */
@@ -9308,7 +9319,7 @@ function add_new_user($username, $password, $realname, $roleid, $groupid, $title
 /**
 * Sets up default triggers for new users or upgraded users
 *
-* @param $userid ID of the user
+* @param int $userid ID of the user
 * @return bool TRUE on success, FALSE if not
 * @author Kieran Hogg
 */
@@ -9354,7 +9365,7 @@ function setup_user_triggers($userid)
 /**
 * Returns the SLA ID of a contract
 *
-* @param $maintid ID of the contract
+* @param int $maintid ID of the contract
 * @return int ID of the SLA
 * @author Kieran Hogg
 */
@@ -9369,7 +9380,7 @@ function contract_slaid($maintid)
 /**
 * Returns the salesperson ID of a site
 *
-* @param $siteid ID of the site
+* @param int $siteid ID of the site
 * @return int ID of the salesperson
 * @author Kieran Hogg
 */
@@ -9384,7 +9395,7 @@ function site_salespersonid($siteid)
 /**
 * Returns the salesperson's name of a site
 *
-* @param $siteid ID of the site
+* @param int $siteid ID of the site
 * @return string name of the salesperson
 * @author Kieran Hogg
 */
@@ -9435,7 +9446,7 @@ function database_schema_version()
 /**
 * Returns whether the user is accepting or not
 *
-* @param $userid ID of the user
+* @param int $userid ID of the user
 * @return string 'accepting'|'not accepting'
 * @author Kieran Hogg
 */
@@ -9454,7 +9465,7 @@ function user_accepting_status($userid)
 /**
 * Returns the status of a user
 *
-* @param $userid ID of the user
+* @param int $userid ID of the user
 * @return string user status
 * @author Kieran Hogg
 */
@@ -9466,9 +9477,9 @@ function user_status_name($userid)
 
 
 /**
-* Returns the user's porta username
+* Returns the contacts's portal username
 *
-* @param $userid ID of the user
+* @param int $userid ID of the contact
 * @return string username
 * @author Kieran Hogg
 */
@@ -9518,9 +9529,9 @@ function populate_syslang()
 
 
 /**
-* Outputs a user's contract associate, if the viewing user is allowed
+* Outputs a contact's contract associate, if the viewing user is allowed
 *
-* @param $userid ID of the user
+* @param int $userid ID of the contact
 * @return string output html
 * @author Kieran Hogg
 */
@@ -9726,8 +9737,8 @@ function get_billable_multiplier($dayofweek, $hour, $billingmatrix = 1)
 
 /**
 * @author Paul Heaney
-* @param $contractid  The Contract ID
-* @param $date  UNIX timestamp. The function will look for service that is current as of this timestamp
+* @param int $contractid  The Contract ID
+* @param int $date  UNIX timestamp. The function will look for service that is current as of this timestamp
 * @return mixed.     Service ID, or -1 if not found, or FALSE on error
 */
 function get_serviceid($contractid, $date = '')
@@ -9767,8 +9778,8 @@ function get_serviceid($contractid, $date = '')
 
 /**
 * Function to find the most applicable unit rate for a particular contract
-* @param $contractid - The contract id
-* @param $date UNIX timestamp. The function will look for service that is current as of this timestamp
+* @param int $contractid - The contract id
+* @param int $date UNIX timestamp. The function will look for service that is current as of this timestamp
 * @return int th eunit rate, -1 if non found
 * @author Paul Heaney
 */
@@ -9885,8 +9896,8 @@ function is_billable_incident_approved($incidentid)
 /**
     * Get the current contract balance
     * @author Ivan Lucas
-    * @param $contractid int. Contract ID of the contract to credit
-    * @param $includenonapproved boolean. Include incidents which have not been approved
+    * @param int $contractid. Contract ID of the contract to credit
+    * @param bool $includenonapproved. Include incidents which have not been approved
     * @return int The total balance remaining on the contract
     * @note The balance is a sum of all the current service that have remaining balance
     * @todo FIXME add a param that makes this optionally show the incident pool balance
@@ -9918,7 +9929,7 @@ function get_contract_balance($contractid, $includenonapproved = FALSE)
 /**
  * Get the current balance of a service
  * @author Paul Heaney
- * @param $serviceid int. Service ID of the service to get the balance for
+ * @param int $serviceid. Service ID of the service to get the balance for
  * @return int The remaining balance on the service
  */
 function get_service_balance($serviceid)
@@ -9937,7 +9948,7 @@ function get_service_balance($serviceid)
 /**
  * Returns the total value of inicidents awaiting approval for a contract
  * @author Paul Heaney
- * @param $contractid int. Contract ID of the contract to find total value of inicdents awaiting approval
+ * @param int $contractid. Contract ID of the contract to find total value of inicdents awaiting approval
  * @return int The total value of all incidents awaiting approval logged against the contract
  */
 function total_awaiting_approval($contractid)
@@ -9991,11 +10002,11 @@ function total_awaiting_approval($contractid)
 /**
     * Update contract balance by an amount and log a transaction to record the change
     * @author Ivan Lucas
-    * @param $contractid int. Contract ID of the contract to credit
-    * @param $description string. A useful description of the transaction
-    * @param $amount. float. The amount to credit or debit to the contract balance
+    * @param int $contractid. Contract ID of the contract to credit
+    * @param string $description. A useful description of the transaction
+    * @param float $amount. The amount to credit or debit to the contract balance
                     positive for credit and negative for debit
-    * @param $serviceid    int.    optional serviceid to use. This is calculated if ommitted.
+    * @param int $serviceid.    optional serviceid to use. This is calculated if ommitted.
     * @return boolean - status of the balance update
     * @note The actual service to credit will be calculated automatically if not specified
 */
@@ -10155,7 +10166,7 @@ function update_last_billed_time($serviceid, $date)
 /**
     * HTML table showing a summary of current contract service periods
     * @author Ivan Lucas
-    * @param $contractid int. Contract ID of the contract to show service for
+    * @param int $contractid. Contract ID of the contract to show service for
     * @returns string. HTML table
 */
 function contract_service_table($contractid)
@@ -10244,7 +10255,7 @@ function contract_service_table($contractid)
 
 /**
     * @author Ivan Lucas
-    * @param $contractid int. Contract ID of the contract to show a balance for
+    * @param int $contractid. Contract ID of the contract to show a balance for
     * @returns int. Number of available units according to the service balances and unit rates
     * @todo Use the includenonapproved variable and calc non approved incidents
 **/
@@ -10839,7 +10850,7 @@ function alpha_index($baseurl = '#')
 /**
     * Converts emoticon text to HTML
     * @author Kieran Hogg
-    * @param $text string. Text with smileys in it
+    * @param string $text. Text with smileys in it
     * @returns string HTML
 */
 function emoticons($text)

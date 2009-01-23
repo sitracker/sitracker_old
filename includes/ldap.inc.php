@@ -27,8 +27,8 @@ $now = time();
     * If successful and the customer is new, the customer is created in the database
     * If successful and the customer is returning, the customer record is resynced
     * @author Lea Anthony
-    * @param $username String. Username
-    * @param $password String. Password
+    * @param string $username. Username
+    * @param string $password. Password
     * @return an integer to indicate whether the user authenticated against the LDAP backend
     * @retval 0 the credentials were wrong or the user was not found.
     * @retval 1 to indicate user is authenticated and allowed to continue.
@@ -65,7 +65,7 @@ function authenticateLDAPCustomer($username, $password)
 /**
     * Creates the Contact Record in the database
     * @author Lea Anthony
-    * @param $details Array. The details of the user
+    * @param array $details. The details of the user
 */
 function ldapCreateContact($details)
 {
@@ -99,7 +99,7 @@ function ldapCreateContact($details)
 /**
     * Updates the Contact Record in the database
     * @author Lea Anthony
-    * @param $details Array. The details of the user
+    * @param array $details. The details of the user
 */
 function ldapUpdateContact($details)
 {
@@ -130,8 +130,8 @@ function ldapUpdateContact($details)
 /**
     * Performs a search on the LDAP tree
     * @author Lea Anthony
-    * @param $dn String. The DN of the tree to search
-    * @param $query String. The query
+    * @param string $dn. The DN of the tree to search
+    * @param string $query. The query
     * @return an array of results from the search
 */
 function ldapSearch($dn, $query)
@@ -151,7 +151,7 @@ function ldapSearch($dn, $query)
 /**
     * Test if the given username is in the admin ldap group
     * @author Lea Anthony
-    * @param $username String. Username
+    * @param string $username. Username
     * @return an integer to indicate whether the username is in the group
     * @retval 0 int. The username is not in the group
     * @retval 1 int. The username in in the group
@@ -175,7 +175,7 @@ function ldapIsAdmin($username)
 /**
     * Test if the given username is in the managers ldap group
     * @author Lea Anthony
-    * @param $username String. Username
+    * @param string $username. Username
     * @return an integer to indicate whether the username is in the group
     * @retval 0 int. The username is not in the group
     * @retval 1 int. The username in in the group
@@ -199,7 +199,7 @@ function ldapIsManager($username)
 /**
     * Test if the given username is in the user ldap group
     * @author Lea Anthony
-    * @param $username String. Username
+    * @param string $username String. Username
     * @return an integer to indicate whether the username is in the group
     * @retval 0 int. The username is not in the group
     * @retval 1 int. The username in in the group
@@ -223,7 +223,7 @@ function ldapIsUser($username)
 /**
     * Test if the given username is in the customer ldap group
     * @author Lea Anthony
-    * @param $username String. Username
+    * @param string $username. Username
     * @return an integer to indicate whether the username is in the group
     * @retval 0 int. The username is not in the group
     * @retval 1 int. The username in in the group
@@ -247,7 +247,7 @@ function ldapIsCustomer($username)
 /**
     * Gets the type of user for the given username
     * @author Lea Anthony
-    * @param $username String. Username
+    * @param string $username. Username
     * @return an integer to indicate what group the user is in
     * @retval LDAP_INVALID_USER int. the username is not valid
     * @retval LDAP_USERTYPE_CUSTOMER int. the username in in the customers group
@@ -345,7 +345,7 @@ function ldapClose()
 /**
     * Gets the user details from LDAP for the given username
     * @author Lea Anthony
-    * @param $username String. Username
+    * @param string $username. Username
     * @return an array containing the user details
 */
 function ldapGetUserDetails($username)
@@ -386,7 +386,7 @@ function ldapGetUserDetails($username)
 /**
     * Gets the user details from LDAP for the given email
     * @author Lea Anthony
-    * @param $username String. Email
+    * @param string $username. Email
     * @return an array containing the user details
 */
 function ldapGetCustomerDetailsFromEmail($email)
@@ -433,8 +433,8 @@ function ldapGetCustomerDetailsFromEmail($email)
 /**
     * Checks if the given username and password are valid against the LDAP tree
     * @author Lea Anthony
-    * @param $username String. Username
-    * @param $password String. Password
+    * @param string $username. Username
+    * @param string $password. Password (in plain text)
     * @return an integer to indicate what group the user is in
     * @retval 0 (FALSE) int. The user/pass is not valid
     * @retval 1 (TRUE) int. The user/pass is valid
@@ -465,8 +465,8 @@ function ldapUserPassValid($username, $password)
     * If successful and the user is new, the user is created in the database
     * If successful and the user is returning, the user record is resynced
     * @author Lea Anthony
-    * @param $username String. Username
-    * @param $password String. Password
+    * @param string $username. Username
+    * @param string $password. Password
     * @return an integer to indicate whether the user authenticated against the LDAP backend
     * @retval 0 the credentials were wrong or the user was not found.
     * @retval 1 to indicate user is authenticated and allowed to continue.
@@ -498,7 +498,7 @@ function authenticateLDAP($username, $password)
 /**
     * Creates the User Record in the database
     * @author Lea Anthony
-    * @param $details Array. The details of the user
+    * @param array $details. The details of the user
 */
 function ldapCreateUser($details)
 {
@@ -554,8 +554,8 @@ function ldapCreateUser($details)
 /**
     * Updates the user record in the database with details from LDAP
     * @author Lea Anthony
-    * @param $username String. Username
-    * @param $password String. Password
+    * @param string $username. Username
+    * @param string $password. Password
 */
 function ldapSyncUser($username, $password)
 {
@@ -573,7 +573,7 @@ function ldapSyncUser($username, $password)
 /**
     * Updates the User Record in the database
     * @author Lea Anthony
-    * @param $details Array. The details of the user
+    * @param array $details. The details of the user
 */
 function ldapUpdateUser($details)
 {
@@ -605,7 +605,7 @@ function ldapUpdateUser($details)
 /**
     * Gets the details of a user from the database from their email
     * @author Lea Anthony
-    * @param $email String. Email
+    * @param string $email. Email
     * @return An array of the user data (if found)
 */
 function getUserDetailsFromDBByEmail($email)
@@ -625,7 +625,7 @@ function getUserDetailsFromDBByEmail($email)
 /**
     * Gets the details of a contact from the database from their email
     * @author Lea Anthony
-    * @param $email String. Email
+    * @param string $email. Email
 */
 function getContactDetailsFromDBByEmail($email)
 {
@@ -644,7 +644,7 @@ function getContactDetailsFromDBByEmail($email)
     * Checks that the email address given is a contact that has not yet
     * been imported into the DB, then imports them.
     * @author Lea Anthony
-    * @param $email String. Email
+    * @param string $email. Email
     * @return An array of the user data (if found)
 */
 function ldapImportCustomerFromEmail($email)
