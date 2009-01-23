@@ -288,11 +288,18 @@ array('description' => 'The Notify Contact email address (if set)',
       'replacement' => 'contact_notify_email($paramarray[\'contactid\']);'
       );
 
-$ttvararray['{contactphone}'] =
+$ttvararray['{contactphone}'][] =
 array('description' => 'Contact phone number',
       'requires' => 'contactid',
       'replacement' => 'contact_phone($paramarray[\'contactid\']);'
       );
+
+$ttvararray['{contactphone}'][] =
+array('description' => 'Contact phone number',
+      'requires' => 'incidentid',
+      'replacement' => 'contact_phone(incident_contact($paramarray[\'incidentid\']));'
+      );
+
 
 $ttvararray['{contactusername}'] =
 array('description' => 'The portal username of a contact',
