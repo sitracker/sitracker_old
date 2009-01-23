@@ -217,7 +217,9 @@ elseif ($action == "edit")
         {
             echo $strOther;
         }
+        // Set up required params, each template type needs an entry here TODO add the rest
         if ($template->type == 'user') $required = array('incidentid', 'userid');
+        elseif ($template->type == 'incident') $required = array('incidentid', 'triggeruserid');
         else $required = $triggerarray[$trigaction->triggerid]['required'];
         if (!empty($required) AND $CONFIG['debug'])
         {

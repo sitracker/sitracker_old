@@ -902,7 +902,7 @@ function contact_email($id)
 /**
     * Return a contacts phone number
     * @author Ivan Lucas
-    * @param $id integer. Contact ID
+    * @param integer $id. Contact ID
     * @returns string. Phone number
 */
 function contact_phone($id)

@@ -470,11 +470,12 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
 
         if ($draftid == -1)
         {
-            $tsql = "SELECT * FROM `{$dbEmailTemplates}` WHERE id=$emailtype";
+            // Grab the template
+            $tsql = "SELECT * FROM `{$dbEmailTemplates}` WHERE id=$emailtype LIMIT 1";
             $tresult = mysql_query($tsql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
-            $template = mysql_fetch_object($tresult);
-            $paramarray = array('incidentid' => $id, 'triggeruserid' => $sit[2],);
+            if (mysql_num_rows($tresult) > 0) $template = mysql_fetch_object($tresult);
+            $paramarray = array('incidentid' => $id, 'triggeruserid' => $sit[2]);
             $from = replace_specials($template->fromfield, $paramarray);
             $replyto = replace_specials($template->replytofield, $paramarray);
             $ccemail = replace_specials($template->ccfield, $paramarray);

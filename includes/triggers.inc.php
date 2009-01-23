@@ -260,11 +260,11 @@ function trigger_replace_specials($triggerid, $string, $paramarray)
 /**
     * Actually do the replacement, used so we can define variables more than once
     * @author Kieran Hogg
-    * @param &$ttvar array the array of the variable to replace
-    * @param &$triggerid string The name of the trigger
-    * @param &$identifier string the {variable} name
-    * @param &$paramarray array the array of trigger parameters
-    * @param &$required array optional array of required vars to pass, used if
+    * @param array &$ttvar the array of the variable to replace
+    * @param string &$triggerid The name of the trigger
+    * @param string &$identifier the {variable} name
+    * @param array &$paramarray the array of trigger parameters
+    * @param array &$required  optional array of required vars to pass, used if
     * we're not dealing with a trigger
     * @return mixed array if replacement found, NULL if not
 */
@@ -309,6 +309,7 @@ function replace_vars(&$ttvar, &$triggerid, &$identifier, &$paramarray, $require
     //if we're able to use this variable
     if ($usetvar)
     {
+        debug_log("Using $identifier");
         $trigger_regex = "/{$identifier}/s";
         if (!empty($ttvar['replacement']))
         {
@@ -325,8 +326,8 @@ function replace_vars(&$ttvar, &$triggerid, &$identifier, &$paramarray, $require
 /**
     * Replaces template variables with their values
     * @author Ivan Lucas
-    * @param $string string. The string containing the variables
-    * @param $paramarray array An array containing values to be substituted
+    * @param string $string. The string containing the variables
+    * @param string $paramarray An array containing values to be substituted
     * @return string The string with variables replaced
 */
 function replace_specials($string, $paramarray)
@@ -336,7 +337,7 @@ function replace_specials($string, $paramarray)
     //manual variables
     $required = array('incidentid');
 
-    //this loops through each variable and creates an array of useable varaibles' regexs
+    //this loops through each variable and creates an array of useable variables' regexs
     foreach ($ttvararray AS $identifier => $ttvar)
     {
         $multiple = FALSE;
