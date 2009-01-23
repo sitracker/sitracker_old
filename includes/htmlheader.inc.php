@@ -221,7 +221,7 @@ if ($sit[0] != '')
     echo "</ul>\n\n";
 
     echo "<div id='topsearch'>";
-    echo "<form name='jumptoincident' action='search.php' method='get'>";
+    echo "<form name='jumptoincident' action='{$CONFIG['application_webpath']}search.php' method='get'>";
     echo "<input type='text' name='q' id='searchfield' size='30' value='{$strIncidentNumOrSearchTerm}'
     onblur=\"if ($('searchfield').value == '') { if (!isIE) { $('searchfield').style.color='#888;'; } $('searchfield').value='{$strIncidentNumOrSearchTerm}';}\"
     onfocus=\"if ($('searchfield').value == '{$strIncidentNumOrSearchTerm}') { if (!isIE) { $('searchfield').style.color='#000;'; } $('searchfield').value=''; }\"
