@@ -11086,6 +11086,10 @@ function cfgVarInput($setupvar, $showvarnames = FALSE)
             $html .= userstatus_drop_down($setupvar, $value);
         break;
 
+        case 'roleselect':
+            $html .= role_drop_down($setupvar, $value);
+        break;
+
         case 'number':
             $html .= "<input type='text' name='$setupvar' size='7' value=\"{$value}\" />";
         break;

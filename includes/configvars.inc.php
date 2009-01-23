@@ -267,7 +267,7 @@ $CFGVAR['default_interface_style']['type'] = 'interfacestyleselect';
 
 $CFGVAR['default_roleid']['help'] = "Role given to new users by default";
 $CFGVAR['default_roleid']['title'] = "Default role id";
-// TODO Role selection
+$CFGVAR['default_roleid']['type'] = 'roleselect';
 
 $CFGVAR['default_service_level']['title'] = 'Default Service Level';
 $CFGVAR['default_service_level']['help'] = 'The service level to use in case the contact does not specify';
