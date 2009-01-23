@@ -486,7 +486,7 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
         else
         {
             $from = $metadata[12];
-            $replyTo = $metadata[13];
+            $replyto = $metadata[13];
             $ccemail = $metadata[14];
             $bccemail = $metadata[15];
             $toemail = $metadata[16];

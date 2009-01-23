@@ -163,7 +163,7 @@ while ($update = mysql_fetch_object($result))
 
     $updateid = $update->id;
     $updatebody = trim($update->bodytext);
-    $updatebodylen=strlen($updatebody);
+    $updatebodylen = strlen($updatebody);
     $updatebody = str_replace($origtag, $temptag, $updatebody);
     $updatebody = str_replace($temptag, $origtag, $updatebody);
 

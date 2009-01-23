@@ -3733,7 +3733,7 @@ function html_checkbox($name, $state, $return = FALSE)
 */
 function send_email($to, $from, $subject, $body, $replyto='', $cc='', $bcc='')
 {
-    global $CONFIG;
+    global $CONFIG, $application_version_string;
 
     if (empty($to)) trigger_error('Empty TO address in email', E_USER_WARNING);
 
@@ -9738,13 +9738,14 @@ function get_serviceid($contractid, $date = '')
     $sql = "SELECT serviceid FROM `{$GLOBALS['dbService']}` AS p ";
     $sql .= "WHERE contractid = {$contractid} AND UNIX_TIMESTAMP(startdate) <= {$date} ";
     $sql .= "AND UNIX_TIMESTAMP(enddate) > {$date} ";
+    $sql .= "AND (balance > 0 OR (select count(1) from service where contractid = s.contractid and balance > 0) = 0) ";
 
     if (!$CONFIG['billing_allow_incident_approval_against_overdrawn_service'])
     {
         $sql .= "AND balance > 0 ";
     }
 
-    $sql .= "ORDER BY priority DESC, enddate, balance ASC LIMIT 1";
+    $sql .= "ORDER BY priority DESC, enddate ASC, balance DESC LIMIT 1";
 
     $result = mysql_query($sql);
     if (mysql_error())
