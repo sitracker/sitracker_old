@@ -21,7 +21,7 @@ if (!isset($accesslevel))
     include 'htmlfooter.inc.php';
     exit;
 }
-elseif ($accesslevel == 'admin' AND $_SESSION['usertype'] != 'admin')
+elseif ($accesslevel == 'admin' AND $_SESSION['usertype'] != 'admin' AND $_SESSION['portalauth'] == TRUE)
 {
     include 'portalheader.inc.php';
     echo "<p class='error'>{$strPermissionDenied}</p>";
