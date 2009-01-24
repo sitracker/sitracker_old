@@ -302,4 +302,42 @@ function get_serviceid($contractid, $date = '')
     return $serviceid;
 }
 
+
+/**
+    * Get the current contract balance
+    * @author Ivan Lucas
+    * @param int $contractid. Contract ID of the contract to credit
+    * @param bool $includenonapproved. Include incidents which have not been approved
+    * @param bool $showonlycurrentlyvalue - Show only contracts which have valid NOW() - i.e. startdate less than NOW() and endate greate than NOW()
+    * @return int The total balance remaining on the contract
+    * @note The balance is a sum of all the current service that have remaining balance
+    * @todo FIXME add a param that makes this optionally show the incident pool balance
+    in the case of non-timed type contracts
+*/
+function get_contract_balance($contractid, $includenonapproved = FALSE, $showonlycurrentlyvalid = TRUE)
+{
+    global $dbService, $now;
+    $balance = 0.00;
+
+    $sql = "SELECT SUM(balance) FROM `{$dbService}` ";
+    $sql .= "WHERE contractid = {$contractid} ";
+    if ($showonlycurrentlyvalid)
+    {
+        $sql .= "AND UNIX_TIMESTAMP(startdate) <= {$now} ";
+        $sql .= "AND UNIX_TIMESTAMP(enddate) >= {$now}  ";
+    }
+    $result = mysql_query($sql);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+    list($balance) = mysql_fetch_row($result);
+
+    if ($includenonapproved)
+    {
+        // Need to get sum of non approved incidents for this contract and deduct
+
+        $balance -= total_awaiting_approval($contractid);
+    }
+
+    return $balance;
+}
+
 ?>
