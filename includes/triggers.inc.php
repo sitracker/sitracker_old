@@ -12,6 +12,7 @@
 
 include ($CONFIG['application_fspath'] . '/htdocs/set_include_path.inc.php');
 include ($lib_path . 'incident.inc.php');
+include_once ($lib_path . 'billing.inc.php');
 include ('mime.inc.php');
 include ('triggertypes.inc.php');
 

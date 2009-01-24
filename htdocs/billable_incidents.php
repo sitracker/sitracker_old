@@ -16,6 +16,8 @@ $permission = 37; // Run Reports // FIXME permissions need defining
 require ('db_connect.inc.php');
 require ('functions.inc.php');
 
+require_once ($lib_path . 'billing.inc.php');
+
 // This page requires authentication
 require ('auth.inc.php');
 

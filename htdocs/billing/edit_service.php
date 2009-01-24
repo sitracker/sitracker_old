@@ -16,6 +16,7 @@ $permission =  80;
 
 require_once('db_connect.inc.php');
 require_once('functions.inc.php');
+require_once ($lib_path . 'billing.inc.php');
 // This page requires authentication
 require_once('auth.inc.php');
 

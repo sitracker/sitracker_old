@@ -15,6 +15,8 @@ $permission = 61; // View Incident Details
 require ('db_connect.inc.php');
 require ('functions.inc.php');
 
+require_once ($lib_path . 'billing.inc.php');
+
 // This page requires authentication
 require ('auth.inc.php');
 
