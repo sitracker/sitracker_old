@@ -99,65 +99,66 @@ echo "</tr>\n";
 
 // show results
 $shade = 0;
-while ($users = mysql_fetch_array($result))
+while ($users = mysql_fetch_object($result))
 {
     // define class for table row shading
     if ($shade) $class = "shade1";
     else $class = "shade2";
 
     // print HTML for rows
-    echo "<tr class='$class'>";
+    echo "<tr class='{$class}'>";
     echo "<td>";
-    echo "<a href='mailto:{$users['email']}' title='{$strEmail} ";
-    echo "{$users['realname']}'>";
+    echo "<a href='mailto:{$users->email}' title='{$strEmail} ";
+    echo "{$users->realname}'>";
     echo icon('email', 16, $strEmail)."</a> ";
-    echo "<a href='incidents.php?user={$users['id']}&amp;queue=1&amp;";
+    echo "<a href='incidents.php?user={$users->id}&amp;queue=1&amp;";
     echo "type=support' class='info'>";
-    if (!empty($users['message']))
+    if (!empty($users->message))
     {
-        echo icon('messageflag', 16, $strMessage, $users['message']);
+        echo icon('messageflag', 16, $strMessage, $users->message);
     }
-    echo " {$users['realname']}";
+    echo " {$users->realname}";
     echo "<span>";
-    echo gravatar($users['email'], 50);
-    if (!empty($users['title']))
+    echo gravatar($users->email, 50);
+    if (!empty($users->title))
     {
-        echo "<strong>{$users['title']}</strong><br />";
+        echo "<strong>{$users->title}</strong><br />";
     }
-    if ($users['groupid'] > 0)
+    
+    if ($users->groupid > 0)
     {
-        echo "{$strGroup}: {$grouparr[$users['groupid']]}<br />";
+        echo "{$strGroup}: ".db_read_column("name", $GLOBALS['dbGroups'], $users->groupid)."<br />";
     }
-    if (strlen($users['aim']) > 3)
+    if (strlen($users->aim) > 3)
     {
-        echo icon('aim', 16, $users['aim']);
-        echo " <strong>AIM</strong>: {$users['aim']}<br />";
+        echo icon('aim', 16, $users->aim);
+        echo " <strong>AIM</strong>: {$users->aim}<br />";
     }
-    if (strlen($users['icq']) > 3)
+    if (strlen($users->icq) > 3)
     {
         echo icon('icq', 16, $users['icq']);
-        echo " <strong>ICQ</strong>: {$users['icq']}<br />";
+        echo " <strong>ICQ</strong>: {$users->icq}<br />";
     }
-    if (strlen($users['msn']) > 3)
+    if (strlen($users->msn) > 3)
     {
-        echo icon('msn', 16, $users['msn']);
-        echo " <strong>MSN</strong>: {$users['msn']}<br />";
+        echo icon('msn', 16, $users->msn);
+        echo " <strong>MSN</strong>: {$users->msn}<br />";
     }
-    if (!empty($users['message']))
+    if (!empty($users->message))
     {
         echo "<br />".icon('messageflag', 16);
-        echo " <strong>{$strMessage}</strong>: {$users['message']}";
+        echo " <strong>{$strMessage}</strong>: {$users->message}";
     }
     echo "</span>";
     echo "</a>";
     echo "</td>";
-    echo "<td align='center'><a href='incidents.php?user={$users['id']}&amp;";
+    echo "<td align='center'><a href='incidents.php?user={$users->id}&amp;";
     echo "queue=1&amp;type=support'>";
-    $incpriority = user_incidents($users['id']);
+    $incpriority = user_incidents($users->id);
     $countincidents = ($incpriority['1']+$incpriority['2']+$incpriority['3']+$incpriority['4']);
     if ($countincidents >= 1)
     {
-        $countactive = user_activeincidents($users['id']);
+        $countactive = user_activeincidents($users->id);
     }
     else
     {
@@ -167,7 +168,7 @@ while ($users = mysql_fetch_array($result))
     $countdiff = $countincidents-$countactive;
 
     echo $countactive;
-    echo "</a> / <a href='incidents.php?user={$users['id']}&amp;queue=2&amp;";
+    echo "</a> / <a href='incidents.php?user={$users->id}&amp;queue=2&amp;";
     echo "type=support'>{$countdiff}</a></td>";
     $critical += $incpriority['4'];
     $high += $incpriority['3'];
@@ -178,33 +179,33 @@ while ($users = mysql_fetch_array($result))
     echo "<td align='center'>".$incpriority['2']."</td>";
     echo "<td align='center'>".$incpriority['1']."</td>";
     echo "<td align='center'>";
-    if ($users["phone"] == '')
+    if ($users->phone == '')
     {
         echo $strNone;
     }
     else
     {
-        echo $users["phone"];
+        echo $users->phone;
     }
 
     echo "</td>";
     echo "<td align='center'>";
 
-    if ($users["mobile"] == '')
+    if ($users->mobile == '')
     {
         echo $strNone;
     }
     else
     {
-        echo $users["mobile"];
+        echo $users->mobile;
     }
     echo "</td>";
     echo "<td align='left'>";
     //see if the users has been active in the last 30mins
-    echo user_online_icon($users[id])." ";
-    echo userstatus_name($users["status"]);
+    echo user_online_icon($users->id)." ";
+    echo userstatus_name($users->status);
     echo "</td><td align='center'>";
-    if ($users["accepting"] == 'Yes')
+    if ($users->accepting == 'Yes')
     {
         echo $strYes;
     }
@@ -213,17 +214,17 @@ while ($users = mysql_fetch_array($result))
         echo "<span class='error'>{$strNo}</span>";
     }
     echo "</td><td>";
-    echo "<a href='holidays.php?user={$users['id']}' title='{$strHolidays}'>";
+    echo "<a href='holidays.php?user={$users->id}' title='{$strHolidays}'>";
     echo icon('holiday', 16, $strHolidays)."</a> ";
-    echo "<a href='tasks.php?user={$users['id']}' title='{$strTasks}'>";
+    echo "<a href='tasks.php?user={$users->id}' title='{$strTasks}'>";
     echo icon('task', 16, $strTask)."</a> ";
-    $sitesql = "SELECT COUNT(id) FROM `{$dbSites}` WHERE owner='{$users['id']}'";
+    $sitesql = "SELECT COUNT(id) FROM `{$dbSites}` WHERE owner='{$users->id}'";
     $siteresult = mysql_query($sitesql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     list($ownedsites) = mysql_fetch_row($siteresult);
     if ($ownedsites > 0)
     {
-        echo "<a href='browse_sites.php?owner={$users['id']}'";
+        echo "<a href='browse_sites.php?owner={$users->id}'";
         echo " title='{$strSites}'>";
         echo icon('site', 16, $strSite)."</a> ";
     }
