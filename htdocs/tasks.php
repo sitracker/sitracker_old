@@ -14,7 +14,9 @@
 @include ('set_include_path.inc.php');
 require ('db_connect.inc.php');
 require ('functions.inc.php');
+require_once ($lib_path . 'billing.inc.php');
 require ('auth.inc.php');
+
 if (!$CONFIG['tasks_enabled'])
 {
     header("Location: main.php");

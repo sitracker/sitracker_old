@@ -13,6 +13,7 @@ $permission = 18; //  Close Incidents
 
 require ('db_connect.inc.php');
 require ('functions.inc.php');
+require_once ($lib_path . 'billing.inc.php');
 // This page requires authentication
 require ('auth.inc.php');
 
@@ -339,10 +340,19 @@ else
         }
         else
         {
-            // mark incident as closed
-            $sql = "UPDATE `{$dbIncidents}` SET status='2', closingstatus='$closingstatus', lastupdated='$now', closed='$now' WHERE id='$id'";
-            $result = mysql_query($sql);
-            if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+            $bill = close_billable_incident($id);
+            if (!$bill)
+            {
+                $addition_errors = 1;
+                $addition_errors_string .= "<p class='error'>Addition of billable incident to transactions failed</p>\n";
+            }
+            else
+            {
+                // mark incident as closed
+                $sql = "UPDATE `{$dbIncidents}` SET status='2', closingstatus='$closingstatus', lastupdated='$now', closed='$now' WHERE id='$id'";
+                $result = mysql_query($sql);
+                if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+            }
         }
 
         if (!$result)

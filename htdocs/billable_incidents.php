@@ -87,17 +87,17 @@ if (empty($mode))
 
     echo "<tr><th>{$strType}:</th><td>";
     echo "<input type='radio' name='mode' value='summarypage' id='summarypage' onclick=\"$('startdatesection').hide();" .
-            " $('enddatesection').hide(); $('sitebreakdownsection').hide(); $('displaysection').show(); $('showapprovedsection').hide(); $('showfoc').show(); $('showfocaszero').show();\" checked='checked' />{$strSummary} ";
+            " $('enddatesection').hide(); $('sitebreakdownsection').hide(); $('displaysection').show(); $('showfoc').show(); $('showfocaszero').show();\" checked='checked' />{$strSummary} ";
     if (user_permission($sit[2], 73) == TRUE)
     {
         echo "<input type='radio' name='mode' value='approvalpage' id='approvalpage' onclick=\"$('startdatesection').show();" .
-                " $('enddatesection').show(); $('sitebreakdownsection').hide(); $('displaysection').hide(); $('showapprovedsection').show(); $('showfoc').hide(); $('showfocaszero').hide();\" />{$strApprove} ";
+                " $('enddatesection').show(); $('sitebreakdownsection').hide(); $('displaysection').hide(); $('showfoc').hide(); $('showfocaszero').hide();\" />{$strApprove} ";
     }
 
     if (user_permission($sit[2], 76) == TRUE)
     {
         echo "<input type='radio' name='mode' value='transactions' id='transactions' onclick=\"$('startdatesection').show(); " .
-                "$('enddatesection').show(); $('sitebreakdownsection').show(); $('displaysection').show(); $('showapprovedsection').hide(); $('showfoc').show(); $('showfocaszero').show();\" />{$strTransactions} ";
+                "$('enddatesection').show(); $('sitebreakdownsection').show(); $('displaysection').show(); $('showfoc').show(); $('showfocaszero').show();\" />{$strTransactions} ";
     }
     echo "</td></tr>\n";
 
@@ -114,9 +114,9 @@ if (empty($mode))
     echo "<td><input type='checkbox' name='sitebreakdown' id='sitebreakdown' size='10' /> ";
     echo "</td></tr></tbody>\n";
 
-    echo "<tbody style='display:none' id='showapprovedsection' ><tr><th>Show only awaiting approved:</th>";
-    echo "<td><input type='checkbox' name='showonlyapproved' value='true' checked='checked' />";
-    echo "</td></tr></tbody>\n";
+//    echo "<tbody style='display:none' id='showapprovedsection' ><tr><th>Show only awaiting approved:</th>";
+//    echo "<td><input type='checkbox' name='showonlyapproved' value='true' checked='checked' />";
+//    echo "</td></tr></tbody>\n";
 
     echo "<tbody id='showfoc'><tr><th>{$strShowFreeOfCharge}</th>";
     echo "<td><input type='checkbox' id='foc' name='foc' value='show' checked /></td></tr></tbody>";
@@ -260,6 +260,7 @@ elseif ($mode == 'approvalpage')
 
             $used = false;
 
+            /*
             $sql = "SELECT i.* FROM `{$GLOBALS['dbIncidents']}` AS i, `{$GLOBALS['dbContacts']}` AS c, `{$dbServiceLevels}` AS sl ";
             $sql .= "WHERE c.id = i.contact AND c.siteid = {$objsite->site} ";
             $sql .= "AND sl.tag = i.servicelevel AND sl.priority = i.priority AND sl.timed = 'yes' ";
@@ -275,7 +276,27 @@ elseif ($mode == 'approvalpage')
             }
 
             $sql .= "ORDER by closed ";
+            */
+            /*
+             * WORKED
+             * SELECT * FROM `transactions` t, `links` l, `incidents` i, `contacts` c WHERE t.transactionid = l.origcolref AND t.status = 5 AND linktype= 6 AND l.linkcolref = i.id AND i.contact = c.id
+             */
+            
+            // TODO FIXME only retrieve necessary fields
+            $sql = "SELECT i.id, i.owner, i.contact, i.title, i.closed, i.opened, t.transactionid FROM `{$GLOBALS['dbTransactions']}` AS t, `{$GLOBALS['dbLinks']}` AS l, `{$GLOBALS['dbIncidents']}` AS i ";
+            $sql .= ", `{$GLOBALS['dbContacts']}` AS c WHERE ";
+            $sql .= "t.transactionid = l.origcolref AND t.transactionstatus = ".AWAITINGAPPROVAL." AND linktype= 6 AND l.linkcolref = i.id AND i.contact = c.id AND c.siteid = {$objsite->site} ";
+            if ($startdate != 0)
+            {
+                $sql .= "AND i.closed >= {$startdate} ";
+            }
 
+            if ($enddate != 0)
+            {
+                $sql .= "AND i.closed <= {$enddate} ";
+            }
+            $sql .= "ORDER BY i.closed";
+            // echo $sql."<br />";
             $result = mysql_query($sql);
             if (mysql_error())
             {
@@ -299,7 +320,8 @@ elseif ($mode == 'approvalpage')
                     {
                         $billableunitsincident = 0;
 
-                        $isapproved = is_billable_incident_approved($obj->id);
+                        // $isapproved = is_billable_incident_approved($obj->id);
+                        $isapproved = false;
 
                         $unitrate = get_unit_rate(incident_maintid($obj->id));
 
@@ -309,10 +331,10 @@ elseif ($mode == 'approvalpage')
 
                         if (!$isapproved AND !$unapprovable)
                         {
-                            $line .= "<input type='checkbox' name='selected[]' value='{$obj->id}' />";
+                            $line .= "<input type='checkbox' name='selected[]' value='{$obj->transactionid}' />";
                         }
                         $line .= "</td>";
-                        $line .= "<td><a href=\"javascript:incident_details_window('{$obj->id}','incident{$incidents['id']}')\" class='info'>";
+                        $line .= "<td><a href=\"javascript:incident_details_window('{$obj->id}','incident{$obj->id}')\" class='info'>";
                         $line .= "{$obj->id}</a></td><td>{$obj->title}</td><td>".contact_realname($obj->contact)."</td>";
                         $line .= "<td>".user_realname($obj->owner)."</td>";
                         $line .= "<td>".ldate($CONFIG['dateformat_datetime'], $obj->opened)."</td><td>".ldate($CONFIG['dateformat_datetime'], $obj->closed)."</td>";
@@ -384,7 +406,7 @@ elseif ($mode == 'approvalpage')
                         }
                         else
                         {
-                            $line .= "<a href='{$_SERVER['PHP_SELF']}?mode=approve&amp;incidentid={$obj->id}&amp;startdate={$startdateorig}&amp;enddate={$enddateorig}&amp;showonlyapproved={$showonlyapproved}'>{$strApprove}</a> | ";
+                            $line .= "<a href='{$_SERVER['PHP_SELF']}?mode=approve&amp;transactionid={$obj->transactionid}&amp;startdate={$startdateorig}&amp;enddate={$enddateorig}&amp;showonlyapproved={$showonlyapproved}'>{$strApprove}</a> | ";
                             $line .= "<a href='billing/update_incident_balance.php?incidentid={$obj->id}'>{$strAdjust}</a>";
                             $sitetotalawaitingapproval += $cost;
 
@@ -412,8 +434,7 @@ elseif ($mode == 'approvalpage')
                     }
                 }
             }
-
-            // $str .= "<tr><td><a href=\"javascript: submitform({$sitenamenospaces})\" onclick='return confirm_action('Confirm approval');'>{$strApprove}</a>";
+            
             $str .= "<tr><td><input type='submit' value='{$strApprove}' />";
             $str .= "</td><td colspan='5'></td>";
 
@@ -512,8 +533,8 @@ elseif ($mode == 'invoicepage')
                 $str .= "<tr><th>{$strDate}</th><th>{$strDescription}</th><th>{$strAmount}</th></tr>\n";
 
                 $sql = "SELECT t.* FROM `{$dbTransactions}` AS t, `{$dbService}` AS p, `{$dbMaintenance}` AS m ";
-                $sql .= "WHERE t.serviceid = p.serviceid AND p.contractid = m.id AND t.date <= '{$enddateorig}' ";
-                $sql .= "AND t.date > p.lastbilled AND m.site = {$objsite->site} ";
+                $sql .= "WHERE t.serviceid = p.serviceid AND p.contractid = m.id AND t.dateupdated <= '{$enddateorig}' ";
+                $sql .= "AND t.dateupdated > p.lastbilled AND m.site = {$objsite->site} ";
 
                 $result = mysql_query($sql);
                 if (mysql_error())
@@ -586,14 +607,14 @@ elseif ($mode == 'approve')
         exit;
     }
 
-    $incidentid = cleanvar($_REQUEST['incidentid']);
+    $transactionid = cleanvar($_REQUEST['transactionid']);
     $selected = $_POST['selected'];
 
-    if (!empty($incidentid))
+    if (!empty($transactionid))
     {
-        $status = approve_incident($incidentid);
+        $status = approve_incident_transaction($transactionid);
         
-        $maintid = incident_maintid($incidentid);
+        $maintid = maintid_from_transaction($transactionid);
         $percent = get_service_percentage($maintid);
     }
     elseif (!empty($selected))
@@ -601,11 +622,11 @@ elseif ($mode == 'approve')
         $status = TRUE;
         foreach ($selected AS $s)
         {
-            $l = approve_incident($s);
+            $l = approve_incident_transaction($s);
 
             $status = $status AND $l;
             
-            $maintid = incident_maintid($s);
+            $maintid = maintid_from_transaction($s);
             $p = get_service_percentage($maintid);
             if (p == FALSE) $percent = true;
         }

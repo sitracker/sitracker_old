@@ -1290,11 +1290,14 @@ CREATE TABLE `{$dbTempIncoming}` (
  CREATE TABLE `{$dbTransactions}` (
 `transactionid` INT NOT NULL AUTO_INCREMENT ,
 `serviceid` INT NOT NULL ,
+`totalunits` INT NOT NULL,
+`totalbillableunits` INT NOT NULL,
+`totalrefunds` INT NOT NULL, 
 `amount` FLOAT NOT NULL ,
 `description` VARCHAR( 255 ) NOT NULL ,
 `userid` TINYINT NOT NULL ,
-`date` DATETIME NOT NULL ,
-`status` enum('approved','awaitingapproval','allocated') NOT NULL default 'awaitingapproval',
+`dateupdated` DATETIME NOT NULL ,
+`transactionstatus` smallint(6) NOT NULL default '5',
 PRIMARY KEY ( `transactionid` )
 ) ENGINE = MYISAM;
 
@@ -2493,8 +2496,12 @@ ADD `title` VARCHAR( 255 ) NULL AFTER `cust_ref_date` ;
 DROP TABLE `spellcheck`;
 
 -- PH 2009-01-19
-ALTER TABLE `{$dbTransactions}` ADD `status` ENUM( 'approved', 'awaitingapproval', 'allocated' ) NOT NULL DEFAULT 'awaitingapproval';
-UPDATE `{$dbTransactions}` SET status = 'approved';
+ALTER TABLE `{$dbTransactions}` ADD `transactionstatus` SMALLINT NOT NULL DEFAULT '5' ;
+UPDATE `{$dbTransactions}` SET transactionstatus = '0';
+ALTER TABLE `{$dbTransactions}` ADD `totalunits` INT NOT NULL AFTER `serviceid` ;
+ALTER TABLE `{$dbTransactions}` ADD `totalbillableunits` INT NOT NULL AFTER `serviceid` ;
+ALTER TABLE `{$dbTransactions}` ADD `totalrefunds` INT NOT NULL AFTER `totalbillableunits` ;
+ALTER TABLE `{$dbTransactions}` CHANGE `date` `dateupdated` DATETIME NOT NULL  
 ";
 
 // Important: When making changes to the schema you must add SQL to make the alterations

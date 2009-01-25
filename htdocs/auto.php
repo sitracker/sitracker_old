@@ -51,27 +51,39 @@ function saction_CloseIncidents($closure_delay)
         trigger_error(mysql_error(),E_USER_WARNING);
         $success = FALSE;
     }
+    
     if ($CONFIG['debug']) debug_log("Found ".mysql_num_rows($result)." Incidents to close");
-    while ($irow = mysql_fetch_array($result))
+    
+    while ($obj = mysql_fetch_object($result))
     {
-        $sqlb = "UPDATE `{$dbIncidents}` SET lastupdated='{$now}', ";
-        $sqlb .= "closed='{$now}', status='".STATUS_CLOSED."', closingstatus='4', ";
-        $sqlb .= "timeofnextaction='0' WHERE id='".$irow['id']."'";
-        $resultb = mysql_query($sqlb);
-        if (mysql_error())
+        $bill = close_billable_incident($obj->id); // Do the close tasks if necessary
+        
+        if ($bill)
         {
-            trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
-            $success = FALSE;
+            $sqlb = "UPDATE `{$dbIncidents}` SET lastupdated='{$now}', ";
+            $sqlb .= "closed='{$now}', status='".STATUS_CLOSED."', closingstatus='4', ";
+            $sqlb .= "timeofnextaction='0' WHERE id='{$obj->id}'";
+            $resultb = mysql_query($sqlb);
+            if (mysql_error())
+            {
+                trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
+                $success = FALSE;
+            }
+            
+            if ($CONFIG['debug']) debug_log("  Incident {$obj->id closed");
+    
+            $sqlc = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, currentowner, currentstatus, bodytext, timestamp, nextaction, customervisibility) ";
+            $sqlc .= "VALUES ('{$obj->id}', '0', 'closing', '{$obj->owner}', '{$obj->status}', 'Incident Closed by {$CONFIG['application_shortname']}', '{$now}', '', 'show' ) ";
+            $resultc = mysql_query($sqlc);
+            if (mysql_error())
+            {
+                trigger_error(mysql_error(),E_USER_WARNING);
+                $success = FALSE;
+            }
         }
-        if ($CONFIG['debug']) debug_log("  Incident ".$irow['id']." closed");
-
-        $sqlc = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, currentowner, currentstatus, bodytext, timestamp, nextaction, customervisibility) ";
-        $sqlc .= "VALUES ('".$irow['id']."', '0', 'closing', '".$irow['owner']."', '".$irow['status']."', 'Incident Closed by {$CONFIG['application_shortname']}', '$now', '', 'show' ) ";
-        $resultc = mysql_query($sqlc);
-        if (mysql_error())
+        else
         {
-            trigger_error(mysql_error(),E_USER_WARNING);
-            $success = FALSE;
+        	$success = FALSE;
         }
     }
     return $success;

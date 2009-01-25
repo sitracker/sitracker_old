@@ -1235,6 +1235,7 @@ $strResearchedby = 'Researched by %s';
 $strResearching = 'Researching';
 $strResearchNeeded = 'Research Needed';
 $strResearchNotes = 'Research Notes';
+$strReserved = 'Reserved';
 $strReset = 'Reset';
 $strResetHolidayEntitlementCarryOverNDaysOfUnusedHoliday = 'Reset holiday entitlement and carry-over up to <em>n</em> days of unused holiday';
 $strResetPassword = 'Reset Password';
