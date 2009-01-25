@@ -208,7 +208,7 @@ switch ($action)
             if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
             $enddate = $now;
-            $duration = $enddate - $startdate;
+            $duration = round(($enddate - $startdate) / 60);
 
             $startdate = readable_date($startdate, 'system');
             $enddate = readable_date($enddate, 'system');
@@ -228,7 +228,7 @@ switch ($action)
             $sql = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, ";
             $sql .= "currentstatus, bodytext, timestamp, duration) ";
             $sql .= "VALUES('{$incident}', '{$sit[2]}', 'fromtask', ";
-            $sql .= "'{$status}', '{$updatehtml}', '$now', '$duration')";
+            $sql .= "'{$status}', '{$updatehtml}', '{$now}', '{$duration}')";
             mysql_query($sql);
             if (mysql_error())
             {
