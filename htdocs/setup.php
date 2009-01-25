@@ -789,7 +789,7 @@ switch ($_REQUEST['action'])
                     if ($errors > 0)
                     {
                         echo "<p>If these errors do not appear to be caused by your configuration or setup, ";
-                        echo "please log a bug <a href='http://sitracker.sourceforge.net/Bugs'>here</a>";
+                        echo "please log a bug <a href='http://sitracker.org/wiki/Bugs'>here</a>";
                         echo ", with the full error message.</p>";
                     }
                     else
@@ -1204,7 +1204,7 @@ switch ($_REQUEST['action'])
 }
 echo "<div style='margin-top: 50px;'>";
 echo "<hr style='width: 50%; margin-left: 0px;'/>";
-echo "<p><a href='http://sourceforge.net/projects/sitracker'>{$CONFIG['application_name']}</a> Setup | <a href='http://sitracker.sourceforge.net/Installation'>Installation Help</a></p>";
+echo "<p><a href='http://sourceforge.net/projects/sitracker'>{$CONFIG['application_name']}</a> Setup | <a href='http://sitracker.org/wiki/Installation'>Installation Help</a></p>";
 echo "<p></p>";
 echo "</div>";
 echo "\n</body>\n</html>";

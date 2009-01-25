@@ -5,7 +5,7 @@ echo "\n<div id='statusbar'>";
 if ($_SESSION['auth'] == TRUE) echo "<a href='about.php'>";
 echo "<img src='{$CONFIG['application_webpath']}images/sitting_man_logo16x16.png' width='16' height='16' border='0' alt='About {$CONFIG['application_shortname']}' />";
 if ($_SESSION['auth'] == TRUE) echo "</a>";
-echo " <strong><a href='http://sitracker.sourceforge.net/'>Support Incident Tracker</a>";
+echo " <strong><a href='http://sitracker.org/'>Support Incident Tracker</a>";
 if ($_SESSION['auth'] == TRUE) echo " {$application_version_string}";
 echo "</strong>";
 if ($_SESSION['auth'] == TRUE)

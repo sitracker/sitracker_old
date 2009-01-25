@@ -184,7 +184,7 @@ CREATE TABLE `{$dbEmailSig}` (
   PRIMARY KEY  (`id`)
 )  ENGINE=MyISAM COMMENT='Global Email Signature' ;
 
-INSERT INTO `{$dbEmailSig}` (`id`, `signature`) VALUES (1, '--\r\n... Powered by Open Source Software: Support Incident Tracker (SiT!) is available free from http://sitracker.sourceforge.net/');
+INSERT INTO `{$dbEmailSig}` (`id`, `signature`) VALUES (1, '--\r\n... Powered by Open Source Software: Support Incident Tracker (SiT!) is available free from http://sitracker.org/');
 
 
 CREATE TABLE IF NOT EXISTS `{$dbEmailTemplates}` (

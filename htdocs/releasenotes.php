@@ -25,7 +25,7 @@ include_once('htmlheader.inc.php');
 echo "<h2>Release Notes</h2>";
 
 echo "<div id='help'>";
-echo "<h4>This is a summary of the full release notes showing only the most important changes, for more detailed notes and the latest information on this release please <a href='http://sitracker.sourceforge.net/ReleaseNotes'>see the SiT website</a>:</h4>";
+echo "<h4>This is a summary of the full release notes showing only the most important changes, for more detailed notes and the latest information on this release please <a href='http://sitracker.org/wiki/ReleaseNotes'>see the SiT website</a>:</h4>";
 
 echo "<h3><a name='3.40'>v3.40</a></h3>";
 echo "<div>";

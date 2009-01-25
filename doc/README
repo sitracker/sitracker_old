@@ -6,7 +6,7 @@ of the GNU General Public License, incorporated herein by reference.
 
         This readme contains only very basic instructions,
         for more help please refer to
-        http://sourceforge.net/projects/sitracker/
+        http://sitracker.org/wiki/Documentation
 
      README
 
@@ -253,7 +253,7 @@ https://lists.sourceforge.net/lists/listinfo/sitracker-devel
 or post a message on our forum at http://sourceforge.net/forum/?group_id=160319
 
 We also have an IRC channel.  #sit on the freenode network, we'd love
-for you to join us, see here http://sitracker.sourceforge.net/IRC
+for you to join us, see here http://sitracker.org/wiki/IRC
 for more info.
 
 
@@ -261,7 +261,7 @@ Reporting Bugs
 --------------
 In the (hopefully unlikely) event that you find a bug in SiT! feel free
 to report it via our bug tracker
-at http://sitracker.sourceforge.net/Bugs
+at http://sitracker.org/wiki/Bugs
 
 If you're not sure whether the problem you've found is actually a bug,
 please discuss it with us first.
@@ -291,5 +291,5 @@ The Support Incident Tracker developers can be reached via the mailing
 list, see here for more info http://sourceforge.net/mail/?group_id=160319
 
 We also now have an IRC channel.  #sit on the freenode network, we'd
-love for you to join us, see here http://sitracker.sourceforge.net/IRC
+love for you to join us, see here http://sitracker.org/wiki/IRC
 for more info.
