@@ -716,10 +716,10 @@ function is_billable_incident_approved($incidentid)
     $sql = "SELECT DISTINCT origcolref, linkcolref ";
     $sql .= "FROM `{$GLOBALS['dbLinks']}` AS l, `{$GLOBALS['dbTransactions']}` AS t ";
     $sql .= "WHERE l.linktype = 6 ";
-    $sql .= "AND i.origcolref = t.transactionid ";
+    $sql .= "AND l.origcolref = t.transactionid ";
     $sql .= "AND linkcolref = {$incidentid} ";
     $sql .= "AND direction = 'left' ";
-    $sql .= "AND t.transactionstatus = '".APPROVED."''";
+    $sql .= "AND t.transactionstatus = '".APPROVED."'";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
