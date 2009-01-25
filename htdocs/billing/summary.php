@@ -61,11 +61,12 @@ if (mysql_numrows($result) > 0)
         $str .= "<table align='center' class='vertical'><tr><th>{$strSiteName}</th><th>{$strProduct}</th>";
         $str .= "<th>{$strCustomerReference}</th><th>{$strStartDate}</th><th>{$strEndDate}</th>";
         $str .= "<th>{$strFreeOfCharge}</th><th>{$strCreditAmount}</th><th>{$strBalance}</th>";
+        $str .= "<th>{$strAwaitingApproval}</th><th>{$strReserved}</th><th>{$strActual}</th>";
         $str .= "<th>{$strUnitRate}</th><th>Units remaining @1x</th></tr>";
     }
     elseif ($display == 'csv')
     {
-        $str .= "\"{$strSiteName}\",\"{$strProduct}\",\"{$strCustomerReference}\", \"{$strStartDate}\",\"{$strEndDate}\",\"{$strFreeOfCharge}\",\"{$strCreditAmount}\",\"{$strBalance}\",\"{$strUnitRate}\",\"Units remaining @1 x\"\n"; // FIXME i18n
+        $str .= "\"{$strSiteName}\",\"{$strProduct}\",\"{$strCustomerReference}\", \"{$strStartDate}\",\"{$strEndDate}\",\"{$strFreeOfCharge}\",\"{$strCreditAmount}\",\"{$strBalance}\",\"{$strAwaitingApproval}\",\"{$strReserved}\",\"{$actual}\",\"{$strUnitRate}\",\"Units remaining @1 x\"\n"; // FIXME i18n
     }
 
     $lastsite = '';
@@ -85,7 +86,14 @@ if (mysql_numrows($result) > 0)
         
         $totalcredit += $obj->creditamount;
         $totalbalance += $obj->balance;
+        $awaitingapproval = service_transaction_total($obj->serviceid, AWAITINGAPPROVAL);
+        $totalawaitingapproval += $awaitingapproval;
+        $reserved = service_transaction_total($obj->serviceid, RESERVED);
+        $totalreserved += $reserved;
         $remainingunits += $unitsat1times;
+
+        $actual = ($obj->balance - $awaitingapproval) - $reserved;
+        $totalactual +=$actual;
 
         if ($display == 'html')
         {
@@ -119,6 +127,9 @@ if (mysql_numrows($result) > 0)
             else $str .= "<td>{$strNo}</td>";
             $str .= "<td>{$CONFIG['currency_symbol']}".number_format($obj->creditamount,2)."</td>";
             $str .= "<td>{$CONFIG['currency_symbol']}".number_format($obj->balance,2)."</td>";
+            $str .= "<td>{$CONFIG['currency_symbol']}".number_format($awaitingapproval, 2)."</td>";
+            $str .= "<td>{$CONFIG['currency_symbol']}".number_format($reserved, 2)."</td>";
+            $str .= "<td>{$CONFIG['currency_symbol']}".number_format($actual, 2)."</td>";
             $str .= "<td>{$CONFIG['currency_symbol']}{$obj->unitrate}</td>";
             $str .= "<td>{$unitsat1times}</td></tr>";
 
@@ -149,6 +160,7 @@ if (mysql_numrows($result) > 0)
             if ($obj->foc == 'yes') $str .= "\"{$strYes}\",";
             else $str .= "\"{$strNo}\",";
             $str .= "\"{$csv_currency}{$obj->creditamount}\",\"{$csv_currency}{$obj->balance}\",";
+            $str .= "\"{$awaitingapproval}\", \"{$reserved}\", \"{$actual}\", ";
             $str .= "\"{$csv_currency}{$obj->unitrate}\",";
             $str .= "\"{$unitsat1times}\"\n";
         }
@@ -157,14 +169,15 @@ if (mysql_numrows($result) > 0)
     if ($display == 'html')
     {
         $str .= "<tr><td colspan='6' align='right'>{$strTOTALS}</td><td>{$CONFIG['currency_symbol']}".number_format($totalcredit, 2)."</td>";
-        $str .= "<td>{$CONFIG['currency_symbol']}".number_format($totalbalance, 2)."</td><td></td><td>{$remainingunits}</td></tr>";
+        $str .= "<td>{$CONFIG['currency_symbol']}".number_format($totalbalance, 2)."</td><td>{$CONFIG['currency_symbol']}".number_format($totalawaitingapproval, 2)."</td>";
+        $str .= "<td>{$CONFIG['currency_symbol']}".number_format($totalreserved, 2)."</td><td>{$CONFIG['currency_symbol']}".number_format($totalactual, 2)."</td><td></td><td>{$remainingunits}</td></tr>";
         $str .= "</table>";
         $str .= "<p align='center'><a href='{$_SERVER['HTTP_REFERER']}'>{$strReturnToPreviousPage}</a></p>";
     }
     elseif ($display == 'csv')
     {
         $str .= ",,,,,\"{$strTOTALS}\",\"{$csv_currency}{$totalcredit}\",";
-        $str .= "\"{$csv_currency}{$totalbalance}\",,\"{$remainingunits}\"\n";
+        $str .= "\"{$csv_currency}{$totalbalance}\",\"{$totalawaitingapproval}\",\"{$totalreserved}\",\"{$totalactual}\",,\"{$remainingunits}\"\n";
     }
 }
 else
