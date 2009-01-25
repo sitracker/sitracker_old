@@ -673,6 +673,10 @@ if (mysql_num_rows($result) >=1 )
         if ($mode == 'incident' OR $show == 'incidents')
         {
             echo "<td>".user_realname($task->owner)."</td>";
+            if ($task->owner == $sit[2] AND $enddate == '0')
+            {
+                $engineerhasrunnintask = TRUE;
+            }
         }
 
         if ($mode == 'incident' AND $enddate == '0')
@@ -732,7 +736,7 @@ if (mysql_num_rows($result) >=1 )
     if ($mode == 'incident')
     {
         // Show add activity link if the incident is open
-        if (incident_status($id) != 2)
+        if (incident_status($id) != 2 AND !$engineerhasrunnintask)
         {
             echo "<p align='center'><a href='task_add.php?incident={$id}'>{$strStartNewActivity}</a></p>";
         }
