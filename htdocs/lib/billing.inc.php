@@ -1625,4 +1625,82 @@ function transactions_report($serviceid, $startdate, $enddate, $sites, $display,
 
     return $text;
 }
+
+
+/**
+ * Produces a HTML dropdown of all valid services for a contract
+ * @author Paul Heaney
+ * @param int $contractid The contract ID to report on
+ * @param int $name name for the dropdown
+ * @param int $selected The service ID to select
+ * @return string HTML for the dropdown
+ */
+function service_dropdown_contract($contractid, $name, $selected=0)
+{
+    global $now, $CONFIG;
+	$sql = "SELECT * FROM `{$GLOBALS['dbService']}` WHERE contractid = {$contractid} ";
+    $sql .= "AND UNIX_TIMESTAMP(startdate) <= {$now} AND UNIX_TIMESTAMP(enddate) >= {$now}";
+    $result = mysql_query($sql);
+    if (mysql_error()) trigger_error("Error getting services. ".mysql_error(), E_USER_WARNING);
+    
+    $html = FALSE;
+    
+    if (mysql_num_rows($result) > 0)
+    {
+    	$html = "<select name='{$name}' id={$name}>\n";
+        $html .= "<option value='0' ";
+        if ($selected == 0) $html .= " selected ";
+        $html .= "></option>";
+        while ($obj = mysql_fetch_object($result))
+        {
+        	$html .= "<option value='{$obj->serviceid}' ";
+            if ($selected == $obj->serviceid) $html .= " selected ";
+            $html .= ">{$CONFIG['currency_symbol']}".get_service_balance($obj->serviceid, TRUE, TRUE);
+            $html .= " ({$obj->startdate} - {$obj->enddate})</option>";
+        }
+        $html .= "</select>\n";
+    }
+    
+    return $html;
+}
+
+
+/**
+ * Produces a HTML dropdown of all valid services for a site
+ * @author Paul Heaney
+ * @param int $contractid The contract ID to report on
+ * @param int $name name for the dropdown
+ * @param int $selected The service ID to select
+ * @return string HTML for the dropdown
+ */
+function service_dropdown_site($siteid, $name, $selected=0)
+{
+    global $now, $CONFIG;
+    $sql = "SELECT s.* FROM `{$GLOBALS['dbService']}` AS s, `{$GLOBALS['dbMaintenance']}` AS m ";
+    $sql .= "WHERE s.contractid = m.id AND  m.site = {$siteid} ";
+    $sql .= "AND UNIX_TIMESTAMP(s.startdate) <= {$now} AND UNIX_TIMESTAMP(s.enddate) >= {$now}";
+    $result = mysql_query($sql);
+    if (mysql_error()) trigger_error("Error getting services. ".mysql_error(), E_USER_WARNING);
+    
+    $html = FALSE;
+    
+    if (mysql_num_rows($result) > 0)
+    {
+        $html = "<select name='{$name}' id={$name}>\n";
+        $html .= "<option value='0' ";
+        if ($selected == 0) $html .= " selected ";
+        $html .= "></option>";
+        while ($obj = mysql_fetch_object($result))
+        {
+            $html .= "<option value='{$obj->serviceid}' ";
+            if ($selected == $obj->serviceid) $html .= " selected ";
+            $html .= ">{$CONFIG['currency_symbol']}".get_service_balance($obj->serviceid, TRUE, TRUE);
+            $html .= " ({$obj->startdate} - {$obj->enddate})</option>";
+        }
+        $html .= "</select>\n";
+    }
+    
+    return $html;
+}
+
 ?>
