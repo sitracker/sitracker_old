@@ -124,7 +124,7 @@ while ($users = mysql_fetch_object($result))
     {
         echo "<strong>{$users->title}</strong><br />";
     }
-    
+
     if ($users->groupid > 0)
     {
         echo "{$strGroup}: ".db_read_column("name", $GLOBALS['dbGroups'], $users->groupid)."<br />";
@@ -224,7 +224,7 @@ while ($users = mysql_fetch_object($result))
     list($ownedsites) = mysql_fetch_row($siteresult);
     if ($ownedsites > 0)
     {
-        echo "<a href='browse_sites.php?owner={$users->id}'";
+        echo "<a href='sites.php?owner={$users->id}'";
         echo " title='{$strSites}'>";
         echo icon('site', 16, $strSite)."</a> ";
     }

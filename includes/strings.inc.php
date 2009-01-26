@@ -28,7 +28,7 @@ $hmenu[1031] = array (10=> array ( 'perm'=> 0, 'name'=> "Option1", 'url'=>""),
 //
 if (!is_array($hmenu[0])) $hmenu[0] = array();
 $hmenu[0] = array_merge(array (10=> array ( 'perm'=> 0, 'name'=> $CONFIG['application_shortname'], 'url'=>"{$CONFIG['application_webpath']}main.php", 'submenu'=>"10"),
-                   20=> array ( 'perm'=> 11, 'name'=> $strCustomers, 'url'=>"{$CONFIG['application_webpath']}browse_sites.php", 'submenu'=>"20"),
+                   20=> array ( 'perm'=> 11, 'name'=> $strCustomers, 'url'=>"{$CONFIG['application_webpath']}sites.php", 'submenu'=>"20"),
                    30=> array ( 'perm'=> 6, 'name'=> $strSupport, 'url'=>"{$CONFIG['application_webpath']}incidents.php?user=current&amp;queue=1&amp;type=support", 'submenu'=>"30"),
                    40=> array ( 'perm'=> 0, 'name'=> $strTasks, 'url'=>"{$CONFIG['application_webpath']}tasks.php", 'submenu'=>"40", 'enablevar' => 'tasks_enabled'),
                    50=> array ( 'perm'=> 54, 'name'=> $strKnowledgeBase, 'url'=>"{$CONFIG['application_webpath']}browse_kb.php", 'submenu'=>"50", 'enablevar' => 'kb_enabled'),
@@ -94,7 +94,7 @@ $hmenu[1040] = array_merge(array (10=> array ( 'perm'=> 0, 'name'=> $strViewUser
 
 // Customers
 if (!is_array($hmenu[20])) $hmenu[20] = array();
-$hmenu[20] = array_merge(array (10=> array ( 'perm'=> 0, 'name'=> $strSites, 'url'=>"{$CONFIG['application_webpath']}browse_sites.php", 'submenu'=>"2010"),
+$hmenu[20] = array_merge(array (10=> array ( 'perm'=> 0, 'name'=> $strSites, 'url'=>"{$CONFIG['application_webpath']}sites.php", 'submenu'=>"2010"),
                     20=> array ( 'perm'=> 0, 'name'=> $strContacts, 'url'=>"{$CONFIG['application_webpath']}contacts.php?search_string=A", 'submenu'=>"2020"),
                     35=> array ( 'perm'=> 0, 'name'=> $strMaintenance, 'url'=>"{$CONFIG['application_webpath']}browse_contract.php?search_string=A", 'submenu'=>"2030"),
                     30=> array ( 'perm'=> 0, 'name'=> $strInventory, 'url'=>"{$CONFIG['application_webpath']}inventory.php"),
@@ -102,7 +102,7 @@ $hmenu[20] = array_merge(array (10=> array ( 'perm'=> 0, 'name'=> $strSites, 'ur
 ), $hmenu[20]);
 
 if (!is_array($hmenu[2010])) $hmenu[2010] = array();
-$hmenu[2010] = array_merge(array (10=> array ( 'perm'=> 11, 'name'=> $strBrowse, 'url'=>"{$CONFIG['application_webpath']}browse_sites.php"),
+$hmenu[2010] = array_merge(array (10=> array ( 'perm'=> 11, 'name'=> $strBrowse, 'url'=>"{$CONFIG['application_webpath']}sites.php"),
                       20=> array ( 'perm'=> 2, 'name'=> $strNewSite, 'url'=>"{$CONFIG['application_webpath']}site_add.php?action=showform")
 ), $hmenu[2010]);
 if (!is_array($hmenu[2020])) $hmenu[2020] = array();
