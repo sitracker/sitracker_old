@@ -71,9 +71,6 @@ Salford Software, Lancastrian Office Centre, Talbot Road, Old Trafford, Manchest
 
 <p align='center'>Incorporating:</p>
 
-<p align='center'>Help Tip 1.12 by <a href='http://webfx.eae.net/contact.html#erik'>Erik Arvidsson</a><br />
-Copyright &copy; 1999 - 2002 Erik Arvidsson. Licensed under the GPLv2.</p>
-
 <p align='center'>KDEClassic Icon theme<br />
 Completely free for commercial and non-commercial use.</p>
 
