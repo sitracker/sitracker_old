@@ -5948,7 +5948,7 @@ function show_notes($linkid, $refid, $delete = TRUE)
             $html .= "<div class='detailhead note'> <div class='detaildate'>".readable_date(mysqlts2date($note->timestamp));
             if ($delete)
             {
-                $html .= "<a href='delete_note.php?id={$note->id}&amp;rpath=";
+                $html .= "<a href='note_delete.php?id={$note->id}&amp;rpath=";
                 $html .= "{$_SERVER['PHP_SELF']}?{$_SERVER['QUERY_STRING']}' ";
                 $html .= "onclick=\"return confirm_action('{$strAreYouSureDelete}');\">";
                 $html .= icon('delete', 16)."</a>";
