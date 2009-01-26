@@ -271,7 +271,7 @@ switch ($mode)
             echo "<table align='center' class='vertical'>";
             echo "<tr><th>{$strEdit}</th><td>{$sourceservice}</td></tr>";
             echo "<tr><th></th><td>";
-            echo "<input type='radio' name='mode' id='edit' value='edit' checked='checked' onclick=\"$('transfersection').hide();\" /> {$strEdit} ";
+            echo "<input type='radio' name='mode' id='edit' value='edit' checked='checked' onclick=\"$('transfersection').hide(); $('transfersectionbtn').hide(); $('editsection').show(); \" /> {$strEdit} ";
             
             // Only allow transfers on the same contractid
             $sql = "SELECT * FROM `{$dbService}` WHERE contractid = '{$contractid}' AND serviceid != {$sourceservice}";
@@ -281,7 +281,7 @@ switch ($mode)
             if (mysql_numrows($result) > 0)
             {
                 
-                echo "<input type='radio' name='mode' id='transfer' value='transfer' onclick=\"$('transfersection').show();\" /> {$strTransfer} ";
+                echo "<input type='radio' name='mode' id='transfer' value='transfer' onclick=\"$('transfersection').show(); $('transfersectionbtn').show(); $('editsection').hide(); \" /> {$strTransfer} ";
                 echo "</td></tr>";
                 echo "<tbody  style='display:none' id='transfersection' >";
                 echo "<tr><td colspan='2'>";
@@ -309,7 +309,8 @@ switch ($mode)
             echo "<tr><th>{$strReason}</th><td><input type='text' name='reason' id='reason' /></td></tr>";
 
             echo "</table>";
-            echo "<p align='center'><input type='submit' name='runreport' value='{$strTransfer}' /></p>";
+            echo "<p align='center'><input type='submit' style='display:none'  name='runreport' id='transfersectionbtn' value='{$strTransfer}' /></p>";
+            echo "<p align='center'><input type='submit' name='runreport' id='editsection' value='{$strEdit}' /></p>";
 
             echo "<input type='hidden' name='sourceservice' value='{$sourceservice}' />";
             echo "<input type='hidden' name='contractid' value='{$contractid}' />";
