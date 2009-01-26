@@ -342,6 +342,91 @@ function get_contract_balance($contractid, $includenonapproved = FALSE, $showonl
 
 
 /**
+ * Get the overdraft limit for a contract
+ * @author Paul Heaney
+ * @param int $contractid - The contract to check on
+ * @return int - The overdraft limit, FALSE if non found
+ */
+function get_overdraft($contractid)
+{
+    $rtnvalue = FALSE;
+	$sql = "SELECT DISTINCT sl.id, sl.tag FROM `{$GLOBALS['dbServiceLevels']}` AS sl, `{$GLOBALS['dbMaintenance']}` AS m ";
+    $sql .= "WHERE m.servicelevelid = sl.id AND m.id = {$contractid}";
+    $result = mysql_query($sql);
+    if (mysql_error()) trigger_error("Error getting servicelevel details. ".mysql_error(), E_USER_WARNING);
+    
+    if (mysql_num_rows($result) == 1)
+    {
+    	list($id, $tag) = mysql_fetch_row($result);
+        $sql = "SELECT DISTINCT limit FROM `{$GLOBALS['dbBillingPeriods']}` ";
+        $sql .= "WHERE servicelevelid = $id AND tag = '{$tag}'";
+        $result = mysql_query($sql);
+        if (mysql_error()) trigger_error("Error getting servicelevel details. ".mysql_error(), E_USER_WARNING);
+        if (mysql_num_rows($result) == 1)
+        {
+        	list($rtnvalue) = mysql_fetch_row($result);
+        }
+    }
+
+    return $rtnvalue;
+}
+
+/**
+ * Reserve monies from a serviceid
+ * @author Paul Heaney
+ * @param int $serviceid - The serviceID to reserve monies from
+ * @param int $linktype - The type of link to create between the transaction and the reserve type
+ * @param int $linkref - The ID to link this transaction to
+ * @param int $amount - The positive amount of money to reserve
+ * @param string $description - A description to put on the reservation
+ * @return int - The transaction ID
+ */
+function reserve_monies($serviceid, $linktype, $linkref, $amount, $description)
+{
+    global $now, $sit;
+    $rtnvalue = FALSE;
+	$balance = get_service_balance($serviceid, TRUE, TRUE);
+    // TODO take into account overdraft limit
+    
+    $amount *= -1;
+    
+    if ($balance != FALSE)
+    {
+    	$sql = "INSERT INTO `{$GLOBALS['dbTransactions']}` (serviceid, amount, description, userid, dateupdated, transactionstatus) ";
+        $sql .= "VALUES ('{$serviceid}', '{$amount}', '{$description}', '{$_SESSION['userid']}', '".date('Y-m-d H:i:s', $now)."', '".RESERVED."')";
+        
+        $result = mysql_query($sql);
+        if (mysql_error())
+        {
+            trigger_error("Error inserting transaction. ".mysql_error(), E_USER_WARNING);
+            $rtnvalue = FALSE;
+        }
+
+        $rtnvalue = mysql_insert_id();
+        
+        if ($rtnvalue != FALSE)
+        {
+
+            $sql = "INSERT INTO `{$GLOBALS['dbLinks']}` VALUES ({$linktype}, {$rtnvalue}, {$linkref}, 'left', '{$_SESSION['userid']}')";
+            mysql_query($sql);
+            if (mysql_error())
+            {
+                trigger_error(mysql_error(),E_USER_ERROR);
+                $rtnvalue = FALSE;
+            }
+            if (mysql_affected_rows() < 1)
+            {
+                trigger_error("Link reservation failed",E_USER_ERROR);
+                $rtnvalue = FALSE;
+            }
+        }
+    }
+    
+    return $rtnvalue;
+}
+
+
+/**
  * Do the necessary tasks to billable incidents on closure, including creating transactions
  * @author Paul Heaney
  * @param int $incidentid The incident ID to do the close on, if its not a billable incident then no actions are performed
@@ -431,7 +516,7 @@ function close_billable_incident($incidentid)
             if ($transactionid != FALSE)
             {
     
-                $sql = "INSERT INTO `{$GLOBALS['dbLinks']}` VALUES (6, {$transactionid}, {$incidentid}, 'left', {$sit[2]})";
+                $sql = "INSERT INTO `{$GLOBALS['dbLinks']}` VALUES (6, {$transactionid}, {$incidentid}, 'left', {$_SESSION['userid']})";
                 mysql_query($sql);
                 if (mysql_error())
                 {
@@ -440,7 +525,7 @@ function close_billable_incident($incidentid)
                 }
                 if (mysql_affected_rows() < 1)
                 {
-                    trigger_error("Approval failed",E_USER_ERROR);
+                    trigger_error("Link transaction on closure failed",E_USER_ERROR);
                     $rtnvalue = FALSE;
                 }
             }
@@ -668,7 +753,6 @@ function service_transaction_total($serviceid, $status)
     {
         list($rtnvalue) = mysql_fetch_row($result);
     }
-    
     return $rtnvalue;
 }
 
@@ -686,21 +770,24 @@ function get_service_balance($serviceid, $includeawaitingapproval = TRUE, $inclu
 {
     global $dbService;
 
+    $balance = FALSE;
+
     $sql = "SELECT balance FROM `{$dbService}` WHERE serviceid = {$serviceid}";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(), E_USER_WARNING);
-    list($balance) = mysql_fetch_row($result);
-
-    if ($includeawaitingapproval)
+    if (mysql_num_rows($result) == 1)
     {
-    	$balance += service_transaction_total($serviceid, AWAITINGAPPROVAL);
+        list($balance) = mysql_fetch_row($result);
+        if ($includeawaitingapproval)
+        {
+        	$balance += service_transaction_total($serviceid, AWAITINGAPPROVAL);
+        }
+        
+        if ($includereserved)
+        {
+        	$balance += service_transaction_total($serviceid, RESERVED);
+        }
     }
-    
-    if ($includereserved)
-    {
-    	$balance += service_transaction_total($serviceid, RESERVED);
-    }
-
     return $balance;
 }
 
