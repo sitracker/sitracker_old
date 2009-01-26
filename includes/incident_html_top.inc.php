@@ -50,7 +50,6 @@ if (mysql_error()) trigger_error(mysql_error(), E_USER_WARNING);
 
 // FIXME put here some js to set action field then post form
 
-echo "<script type=\"text/javascript\" src=\"helptip.js\"></script>";
 echo "</head>";
 echo "<body onload=\"self.focus()\">";
 
