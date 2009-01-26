@@ -745,7 +745,7 @@ function contract_service_table($contractid)
     {
         $shade = '';
         $html = "\n<table align='center'>";
-        $html .= "<tr><th>{$GLOBALS['strStartDate']}</th><th>{$GLOBALS['strEndDate']}</th><th>{$GLOBALS['strAvailableBalance']}</th><th></th>";
+        $html .= "<tr><th></th><th>{$GLOBALS['strStartDate']}</th><th>{$GLOBALS['strEndDate']}</th><th>{$GLOBALS['strAvailableBalance']}</th><th></th>";
         $html .= "</tr>\n";
         while ($service = mysql_fetch_object($result))
         {
@@ -753,7 +753,6 @@ function contract_service_table($contractid)
             $service->enddate = mysql2date($service->enddate);
             $service->lastbilled = mysql2date($service->lastbilled);
             $html .= "<tr class='{$shade}'>";
-            $html .= "<td><a href='transactions.php?serviceid={$service->serviceid}' class='info'>".ldate($CONFIG['dateformat_date'],$service->startdate);
 
             $balance = get_service_balance($service->serviceid);
             $awaitingapproval = service_transaction_total($service->serviceid, AWAITINGAPPROVAL) * -1;
@@ -815,11 +814,17 @@ function contract_service_table($contractid)
                 $span .= "<strong>{$GLOBALS['strFreeOfCharge']}</strong>";
             }
 
+            $html .= "<td><a href='transactions.php?serviceid={$service->serviceid}' class='info'>".icon('billing', 16);
             if (!empty($span))
             {
                     $html .= "<span>{$span}</span>";
             }
-
+            $html .= "</a></td>";
+            $html .= "<td><a href='transactions.php?serviceid={$service->serviceid}' class='info'>".ldate($CONFIG['dateformat_date'],$service->startdate);
+            if (!empty($span))
+            {
+                    $html .= "<span>{$span}</span>";
+            }
             $html .= "</a></td>";
             $html .= "<td>";
             $html .= ldate($CONFIG['dateformat_date'], $service->enddate)."</td>";
