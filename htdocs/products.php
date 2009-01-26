@@ -71,7 +71,7 @@ if (empty($productid) AND $display!='skills')
                     echo "<td align='right'>";
                     if ($countcontracts > 0)
                     {
-                        echo "<a href='browse_contract.php?search_string=&amp;productid={$product->id}&amp;activeonly=yes'>{$countcontracts}</a>";
+                        echo "<a href='contracts.php?search_string=&amp;productid={$product->id}&amp;activeonly=yes'>{$countcontracts}</a>";
                     }
                     else
                     {
