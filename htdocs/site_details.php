@@ -102,7 +102,7 @@ mysql_free_result($siteresult);
 
 echo "</table>\n";
 echo "<p align='center'><a href='edit_site.php?action=edit&amp;site={$id}'>{$strEdit}</a> | ";
-echo "<a href='delete_site.php?id={$id}'>{$strDelete}</a>";
+echo "<a href='site_delete.php?id={$id}'>{$strDelete}</a>";
 echo "</p>";
 
 // Display Contacts
