@@ -72,9 +72,9 @@ if (empty($action) OR $action == "showform")
     }
     echo help_link('ServiceLevelTimed');
     echo "</td></tr>";
-    echo "<tr id='engineerBillingPeriod'><th>{$strBillingEngineerPeriod}</th><td><input type='text' size='5' name='engineerPeriod' maxlength='5' value='{$engineerPeriod}' /> {$strMinutes}</td></tr>";
-    echo "<tr id='customerBillingPeriod'><th>{$strBillingCustomerPeriod}</th><td><input type='text' size='5' name='customerPeriod' maxlength='5' value='{$customerPeriod}' /> {$strMinutes}</td></tr>";
-    echo "<tr id='limit'><th>{$strLimit}</th><td>{$CONFIG['currency_symbol']} <input type='text' size='5' name='limit' maxlength='5' value='{$limit}' /></td></tr>";
+    echo "<tr id='engineerBillingPeriod'><th>{$strBillingEngineerPeriod} ".help_link('ServiceLevelEngineerPeriod')."</th><td><input type='text' size='5' name='engineerPeriod' maxlength='5' value='{$engineerPeriod}' /> {$strMinutes}</td></tr>";
+    echo "<tr id='customerBillingPeriod'><th>{$strBillingCustomerPeriod} ".help_link('ServiceLevelCustomerPeriod')."</th><td><input type='text' size='5' name='customerPeriod' maxlength='5' value='{$customerPeriod}' /> {$strMinutes}</td></tr>";
+    echo "<tr id='limit'><th>{$strLimit} ".help_link('ServiceLevelLimit')."</th><td>{$CONFIG['currency_symbol']} <input type='text' size='5' name='limit' maxlength='5' value='{$limit}' /></td></tr>";
     echo "</table>";
     echo "<script type='text/javascript'>enableBillingPeriod();</script>";
     echo "<input type='hidden' name='action' value='edit' />";
