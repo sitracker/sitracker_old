@@ -257,7 +257,7 @@ $CFGVAR['default_entitlement']['unit'] = $strDays;
 $CFGVAR['default_gravatar']['help'] = "One of 'wavatar', 'identicon', 'monsterid', a URL to an image, or blank (for a blue G icon).  See <a href='http://www.gravatar.com/'>www.gravatar.com</a> to learn about gravatars";
 $CFGVAR['default_gravatar']['title'] = "Default Gravatar";
 
-$CFGVAR['default_i18n']['help'] = "The system language, or the language that will be used when no other language is selected by the user, see <a href='http://sitracker.sourceforge.net/Translation'>http://sitracker.sourceforge.net/Translation</a> for an up to date list of supported languages.";
+$CFGVAR['default_i18n']['help'] = "The system language, or the language that will be used when no other language is selected by the user, see <a href='http://sitracker.org/wiki/Translation'>http://sitracker.org/wiki/Translation</a> for an up to date list of supported languages.";
 $CFGVAR['default_i18n']['title'] = "Default Language";
 $CFGVAR['default_i18n']['type'] = 'languageselect';
 
