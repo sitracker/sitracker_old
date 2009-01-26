@@ -299,7 +299,7 @@ else
     // Close the incident
     $errors = 0;
 
-    echo "<script src='{$CONFIG['application_webpath']}webtrack.js' type='text/javascript'></script>\n";
+    echo "<script src='{$CONFIG['application_webpath']}scripts/webtrack.js' type='text/javascript'></script>\n";
 
     // check for blank closing status field
     if ($closingstatus == 0)

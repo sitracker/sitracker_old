@@ -37,7 +37,7 @@ elseif ($_REQUEST['win'] == 'jump')
     {
         echo "<html><head>";
         echo "<script src='{$CONFIG['application_webpath']}scripts/prototype/prototype.js' type='text/javascript'></script>\n";
-        echo "<script src='{$CONFIG['application_webpath']}webtrack.js' type='text/javascript'></script>\n";
+        echo "<script src='{$CONFIG['application_webpath']}scripts/webtrack.js' type='text/javascript'></script>\n";
         if (!empty($_GET['return']))
         {
             $return = cleanvar($_GET['return']);
@@ -66,7 +66,7 @@ elseif ($_REQUEST['win'] == 'jump')
         // return without loading popup
         echo "<html><head>";
         echo "<script src='{$CONFIG['application_webpath']}scripts/prototype/prototype.js' type='text/javascript'></script>\n";
-        echo "<script src='{$CONFIG['application_webpath']}webtrack.js' type='text/javascript'></script>\n";
+        echo "<script src='{$CONFIG['application_webpath']}scripts/webtrack.js' type='text/javascript'></script>\n";
         if (!empty($_GET['return']))
         {
             $return = cleanvar($_GET['return']);
