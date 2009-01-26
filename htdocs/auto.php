@@ -15,6 +15,7 @@
 require ('db_connect.inc.php');
 include ('strings.inc.php');
 require ('functions.inc.php');
+include_once ($lib_path . 'billing.inc.php');
 populate_syslang();
 
 $crlg = "\n";

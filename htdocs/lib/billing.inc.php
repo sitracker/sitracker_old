@@ -329,12 +329,12 @@ function get_contract_balance($contractid, $includenonapproved = FALSE, $showonl
     if ($includenonapproved)
     {
         // Need to get sum of non approved incidents for this contract and deduct
-        $balance -= contract_transaction_total($contractid, AWAITINGAPPROVAL);
+        $balance += contract_transaction_total($contractid, AWAITINGAPPROVAL);
     }
     
     if ($includereserved)
     {
-    	$balance -= contract_transaction_total($contractid, RESERVED);
+    	$balance += contract_transaction_total($contractid, RESERVED);
     }
 
     return $balance;
@@ -694,12 +694,12 @@ function get_service_balance($serviceid, $includeawaitingapproval = TRUE, $inclu
 
     if ($includeawaitingapproval)
     {
-    	$balance -= service_transaction_total($serviceid, AWAITINGAPPROVAL);
+    	$balance += service_transaction_total($serviceid, AWAITINGAPPROVAL);
     }
     
     if ($includereserved)
     {
-    	$balance -= service_transaction_total($serviceid, RESERVED);
+    	$balance += service_transaction_total($serviceid, RESERVED);
     }
 
     return $balance;
@@ -745,19 +745,19 @@ function contract_service_table($contractid)
     {
         $shade = '';
         $html = "\n<table align='center'>";
-        $html .= "<tr><th>{$GLOBALS['strStartDate']}</th><th>{$GLOBALS['strEndDate']}</th><th>{$GLOBALS['strRemainingBalance']}</th><th></th>";
+        $html .= "<tr><th>{$GLOBALS['strStartDate']}</th><th>{$GLOBALS['strEndDate']}</th><th>{$GLOBALS['strAvailableBalance']}</th><th></th>";
         $html .= "</tr>\n";
         while ($service = mysql_fetch_object($result))
         {
             $service->startdate = mysql2date($service->startdate);
             $service->enddate = mysql2date($service->enddate);
             $service->lastbilled = mysql2date($service->lastbilled);
-            $html .= "<tr class='$shade'>";
+            $html .= "<tr class='{$shade}'>";
             $html .= "<td><a href='transactions.php?serviceid={$service->serviceid}' class='info'>".ldate($CONFIG['dateformat_date'],$service->startdate);
 
             $balance = get_service_balance($service->serviceid);
-            $awaitingapproval = service_transaction_total($service->serviceid, AWAITINGAPPROVAL);
-            $reserved = service_transaction_total($service->serviceid, RESERVED);
+            $awaitingapproval = service_transaction_total($service->serviceid, AWAITINGAPPROVAL) * -1;
+            $reserved = service_transaction_total($service->serviceid, RESERVED) * -1;
 
             $span = '';
             if (!empty($service->title))
@@ -782,7 +782,7 @@ function contract_service_table($contractid)
 
             if ($service->creditamount != 0)
             {
-                $span .= "<strong>{$GLOBALS['strAmount']}</strong>: {$CONFIG['currency_symbol']}".number_format($service->creditamount, 2)."<br />";
+                $span .= "<strong>{$GLOBALS['strCreditAmount']}</strong>: {$CONFIG['currency_symbol']}".number_format($service->creditamount, 2)."<br />";
             }
 
             if ($service->unitrate != 0)
@@ -790,14 +790,19 @@ function contract_service_table($contractid)
                 $span .= "<strong>{$GLOBALS['strUnitRate']}</strong>: {$CONFIG['currency_symbol']}{$service->unitrate}<br />";
             }
 
-            if ($awaitingapproval != FALSE)
+            if ($balance != $service->balance)
             {
-                $span .= "<strong>{$GLOBALS['strAwaitingApproval']}<strong>: {$CONFIG['currency_symbol']}{$awaitingapproval}<br />";
-            }
-            
-            if ($reserved != FALSE)
-            {
-                $span .= "<strong>{$GLOBALS['strReserved']}</strong>: {$CONFIG['currency_symbol']}{$reserved}<br />";
+                $span .= "<strong>{$GLOBALS['strBalance']}</strong>: {$CONFIG['currency_symbol']}".number_format($service->balance, 2)."<br />";
+                if ($awaitingapproval != FALSE)
+                {
+                    $span .= "<strong>{$GLOBALS['strAwaitingApproval']}</strong>: {$CONFIG['currency_symbol']}".number_format($awaitingapproval, 2)."<br />";
+                }
+                
+                if ($reserved != FALSE)
+                {
+                    $span .= "<strong>{$GLOBALS['strReserved']}</strong>: {$CONFIG['currency_symbol']}".number_format($reserved, 2)."<br />";
+                }
+                $span .= "<strong>{$GLOBALS['strAvailableBalance']}</strong>: {$CONFIG['currency_symbol']}".number_format($balance, 2)."<br />";
             }
 
             if ($service->lastbilled > 0)
@@ -1236,4 +1241,297 @@ function contract_unit_balance($contractid, $includenonapproved = FALSE, $includ
     return $unitbalance;
 }
 
+
+/**
+* Function to display/generate the transactions table
+* @author Paul Heaney
+* @param int $serviceid - The service ID to show transactons for
+* @param Date $startdate - Date in format yyyy-mm-dd when you want to start the report from
+* @param Date $enddate - Date in  format yyyy-mm-dd when you want to end the report, empty means today
+* @param int[] $sites - Array of sites to report on
+* @param String $display either csv or html
+* @param boolean $sitebreakdown - Breakdown per site
+* @param boolean $showfoc - Show free of charge as well (defaults to true);
+* @param boolean $includeawaitingapproval - Include transactions awaiting approval
+* @param boolean $includereserved - Include reserved transactions
+* @return String -either HTML or CSV
+*/
+function transactions_report($serviceid, $startdate, $enddate, $sites, $display, $sitebreakdown=TRUE, $showfoc=TRUE, $focaszero=FALSE, $includeawaitingapproval = TRUE, $includereserved = TRUE)
+{
+    global $CONFIG;
+
+    $csv_currency = html_entity_decode($CONFIG['currency_symbol'], ENT_NOQUOTES, "ISO-8859-15"); // Note using -15 as -1 doesnt support euro
+
+    $sql = "SELECT DISTINCT t.*, m.site, p.foc, p.cust_ref, p.cust_ref_date, p.title, p.notes ";
+    $sql .= "FROM `{$GLOBALS['dbTransactions']}` AS t, `{$GLOBALS['dbService']}` AS p, ";
+    $sql .= "`{$GLOBALS['dbMaintenance']}` AS m, `{$GLOBALS['dbServiceLevels']}` AS sl, `{$GLOBALS['dbSites']}` AS s ";
+    $sql .= "WHERE t.serviceid = p.serviceid AND p.contractid = m.id "; // AND t.date <= '{$enddateorig}' ";
+    $sql .= "AND m.servicelevelid = sl.id AND sl.timed = 'yes' AND m.site = s.id ";
+    //// $sql .= "AND t.date > p.lastbilled AND m.site = {$objsite->site} ";
+    if ($serviceid > 0) $sql .= "AND t.serviceid = {$serviceid} ";
+    if (!empty($startdate)) $sql .= "AND t.dateupdated >= '{$startdate}' ";
+    if (!empty($enddate)) $sql .= "AND t.dateupdated <= '{$enddate}' ";
+    $orsql[] = "t.transactionstatus = ".APPROVED;
+    if ($includeawaitingapproval) $orsql[] = "t.transactionstatus = ".AWAITINGAPPROVAL;
+    if ($includereserved) $orsql[] = "t.transactionstatus = ".RESERVED;
+    $o = implode(" OR ", $orsql);
+    $sql .= "AND ($o) ";
+
+    if (!$showfoc) $sql .= "AND p.foc = 'no' ";
+
+    if (!empty($sites))
+    {
+        $sitestr = '';
+
+        foreach ($sites AS $s)
+        {
+            if (empty($sitestr)) $sitestr .= "m.site = {$s} ";
+            else $sitestr .= "OR m.site = {$s} ";
+        }
+
+        $sql .= "AND {$sitestr} ";
+    }
+
+    if (!empty($site)) $sql .= "AND m.site = {$site} ";
+
+    $sql .= "ORDER BY s.name ";
+
+    $result = mysql_query($sql);
+    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
+
+    if (mysql_num_rows($result) > 0)
+    {
+        $shade = 'shade1';
+
+        $total = 0;
+        $totalcredit = 0;
+        $totaldebit = 0;
+
+        $details = '';
+
+        while ($transaction = mysql_fetch_object($result))
+        {
+            if ($display == 'html')
+            {
+                if ($serviceid > 0 AND empty($details))
+                {
+                    if (!empty($transaction->cust_ref))
+                    {
+                        $details .= "<tr>";
+                        $details .= "<th>{$GLOBALS['strCustomerReference']}</th><td>{$transaction->cust_ref}</td>";
+                        if ($transaction->cust_ref_date != "1970-01-01")
+                        {
+                            $details .= "<th>{$GLOBALS['strCustomerReferenceDate']}</th><td>{$transaction->cust_ref_date}</td>";
+                        }
+                        $details .= "</tr>";
+                    }
+
+                    if (!empty($transaction->title))
+                    {
+                        $details .= "<tr><th>{$GLOBALS['strTitle']}</th><td>{$transaction->title}</td></tr>";
+                    }
+
+                    if (!empty($transaction->notes))
+                    {
+                        $details .= "<tr><th>{$GLOBALS['strNotes']}</th><td>{$transaction->notes}</td></tr>";
+                    }
+                }
+
+                $str = "<tr class='$shade'>";
+                $str .= "<td>{$transaction->dateupdated}</td>";
+                $str .= "<td>{$transaction->transactionid}</td>";
+                $str .= "<td>{$transaction->serviceid}</td>";
+                $str .= "<td>".site_name($transaction->site)."</td>";
+                $str .= "<td>{$transaction->description}</td>";
+                $str .= "<td>";
+                switch ($transaction->transactionstatus)
+                {
+                    case APPROVED: $str .= $GLOBALS['strApproved'];
+                        break;
+                    case AWAITINGAPPROVAL: $str .= $GLOBALS['strAwaitingApproval'];
+                        break;
+                    case RESERVED: $str .= $GLOBALS['strReserved'];
+                        break;    
+                }
+                $str .= "</td>";
+            }
+            elseif ($display == 'csv')
+            {
+                if ($serviceid > 0 AND empty($details))
+                {
+                    if (!empty($transaction->cust_ref))
+                    {
+                        $details .= "\"{$GLOBALS['strCustomerReference']}\",\"{$transaction->cust_ref}\",";
+                        if ($transaction->cust_ref_date != "1970-01-01")
+                        {
+                            $details .= "\"{$GLOBALS['strCustomerReferenceDate']}\",\"{$transaction->cust_ref_date}\",";
+                        }
+                        $details .= "\n";
+                    }
+
+                    if (!empty($transaction->title))
+                    {
+                        $details .= "\"{$GLOBALS['strTitle']}\",\"{$transaction->title}\"\n";
+                    }
+
+                    if (!empty($transaction->notes))
+                    {
+                        $details .= "\"{$GLOBALS['strNotes']}\",\"{$transaction->notes}\"\n";
+                    }
+                }
+
+                $str = "\"{$transaction->date}\",";
+                $str .= "\"{$transaction->transactionid}\",";
+                $str .= "\"{$transaction->serviceid}\",\"";
+                $str .= site_name($transaction->site)."\",";
+                $str .= "\"".html_entity_decode($transaction->description)."\",";
+                $str .= "\"";
+                switch ($transaction->transactionstatus)
+                {
+                    case APPROVED: $str .= $GLOBALS['strApproved'];
+                        break;
+                    case AWAITINGAPPROVAL: $str .= $GLOBALS['strAwaitingApproval'];
+                        break;
+                    case RESERVED: $str .= $GLOBALS['strReserved'];
+                        break;    
+                }
+                $str .= "\",";
+            }
+
+            if ($focaszero AND $transaction->foc == 'yes')
+            {
+                $transaction->amount = 0;
+            }
+
+            $total += $transaction->amount;
+            if ($transaction->amount < 0)
+            {
+                $totaldebit += $transaction->amount;
+                if ($display == 'html')
+                {
+                    $str .= "<td></td><td>{$CONFIG['currency_symbol']}".number_format($transaction->amount, 2)."</td>";
+                }
+                elseif ($display == 'csv')
+                {
+                    $str .= ",\"{$csv_currency}".number_format($transaction->amount, 2)."\",";
+                }
+            }
+            else
+            {
+                $totalcredit += $transaction->amount;
+                if ($display == 'html')
+                {
+                    $str .= "<td>{$CONFIG['currency_symbol']}".number_format($transaction->amount, 2)."</td><td></td>";
+                }
+                elseif ($display == 'csv')
+                {
+                    $str .= "\"{$csv_currency}".number_format($transaction->amount, 2)."\",,";
+                }
+            }
+
+            if ($display == 'html') $str .= "</tr>";
+            elseif ($display == 'csv') $str .= "\n";
+
+            if ($sitebreakdown == TRUE)
+            {
+                $table[$transaction->site]['site'] = site_name($transaction->site);
+                $table[$transaction->site]['str'] .= $str;
+                if ($transaction->amount < 0)
+                {
+                    $table[$transaction->site]['debit'] += $transaction->amount;
+                }
+                else
+                {
+                    $table[$transaction->site]['credit'] += $transaction->amount;
+                }
+            }
+            else
+            {
+                $table .= $str;
+            }
+        }
+
+        if ($sitebreakdown == TRUE)
+        {
+            foreach ($table AS $e)
+            {
+                if ($display == 'html')
+                {
+                    $text .= "<h3>{$e['site']}</h3>";
+                    $text .= "<table align='center'  width='60%'>";
+                    //echo "<tr><th colspan='7'>{$e['site']}</th></tr>";
+                    $text .= "<tr><th>{$GLOBALS['strDate']}</th><th>{$GLOBALS['strID']}</th><th>{$GLOBALS['strServiceID']}</th>";
+                    $text .= "<th>{$GLOBALS['strSite']}</th><th>{$GLOBALS['strDescription']}</th><th>{$GLOBALS['strCredit']}</th><th>{$GLOBALS['strDebit']}</th></tr>";
+                    $text .= $e['str'];
+                    $text .= "<tr><td colspan='5' align='right'>{$GLOBALS['strTotal']}</td>";
+                    $text .= "<td>{$CONFIG['currency_symbol']}".number_format($e['credit'], 2)."</td>";
+                    $text .= "<td>{$CONFIG['currency_symbol']}".number_format($e['debit'], 2)."</td></tr>";
+                    $text .= "</table>";
+                }
+                elseif ($display == 'csv')
+                {
+                    $text .= "\"{$e['site']}\"\n\n";
+                    $text .= "\"{$GLOBALS['strDate']}\",\"{$GLOBALS['strID']}\",\"{$GLOBALS['strServiceID']}\",";
+                    $text .= "\"{$GLOBALS['strSite']}\",\"{$GLOBALS['strDescription']}\",\"{$GLOBALS['strCredit']}\",\"{$GLOBALS['strDebit']}\"\n";
+                    $text .= $e['str'];
+                    $text .= ",,,,{$GLOBALS['strTotal']},";
+                    $text .= "\"{$csv_currency}".number_format($e['credit'], 2)."\",\"";
+                    $text .="{$csv_currency}".number_format($e['debit'], 2)."\"\n";
+                }
+            }
+        }
+        else
+        {
+            if ($display == 'html')
+            {
+                if (!empty($details))
+                {
+                    // Dont need to worry about this in the above section as sitebreakdown and serviceid are multually exclusive
+                    $text .= "<div><table align='center'>{$details}</table></div>";
+                }
+
+                $text .= "<table align='center'>";
+                $text .= "<tr><th>{$GLOBALS['strDate']}</th><th>{$GLOBALS['strID']}</th><th>{$GLOBALS['strServiceID']}</th>";
+                $text .= "<th>{$GLOBALS['strSite']}</th>";
+                $text .= "<th>{$GLOBALS['strDescription']}</th><th>{$GLOBALS['strStatus']}</th><th>{$GLOBALS['strCredit']}</th><th>{$GLOBALS['strDebit']}</th></tr>";
+                $text .= $table;
+                $text .= "<tr><td colspan='5' align='right'>{$strTOTALS}</td>";
+                $text .= "<td>{$CONFIG['currency_symbol']}".number_format($totalcredit, 2)."</td>";
+                $text .= "<td>{$CONFIG['currency_symbol']}".number_format($totaldebit, 2)."</td></tr>";
+                $text .= "</table>";
+            }
+            elseif ($display == 'csv')
+            {
+                if (!empty($details))
+                {
+                    $text .= $details;
+                }
+                $text .= "\"{$GLOBALS['strDate']}\",\"{$GLOBALS['strID']}\",\"{$GLOBALS['strServiceID']}\",";
+                $text .= "\"{$GLOBALS['strSite']}\",";
+                $text .= "\"{$GLOBALS['strDescription']}\",\"{$GLOBALS['strStatus']}\",\"{$GLOBALS['strCredit']}\",\"{$GLOBALS['strDebit']}\"\n";
+                $text .= $table;
+                $text .= ",,,,{$GLOBALS['strTOTALS']},";
+                $text .= "\"{$csv_currency}".number_format($totalcredit, 2)."\",\"";
+                $text .= "{$csv_currency}".number_format($totaldebit, 2)."\"\n";
+            }
+        }
+
+
+        if ($shade == 'shade1') $shade = 'shade2';
+        else $shade = 'shade1';
+    }
+    else
+    {
+        if ($display == 'html')
+        {
+            $text = "<p align='center'>{$GLOBALS['strNoTransactionsMatchYourSearch']}</p>";
+        }
+        elseif ($display == 'csv')
+        {
+            $text = $GLOBALS['strNoTransactionsMatchYourSearch']."\n";
+        }
+    }
+
+    return $text;
+}
 ?>

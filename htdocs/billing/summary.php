@@ -61,12 +61,12 @@ if (mysql_numrows($result) > 0)
         $str .= "<table align='center' class='vertical'><tr><th>{$strSiteName}</th><th>{$strProduct}</th>";
         $str .= "<th>{$strCustomerReference}</th><th>{$strStartDate}</th><th>{$strEndDate}</th>";
         $str .= "<th>{$strFreeOfCharge}</th><th>{$strCreditAmount}</th><th>{$strBalance}</th>";
-        $str .= "<th>{$strAwaitingApproval}</th><th>{$strReserved}</th><th>{$strActual}</th>";
+        $str .= "<th>{$strAwaitingApproval}</th><th>{$strReserved}</th><th>{$strAvailableBalance}</th>";
         $str .= "<th>{$strUnitRate}</th><th>Units remaining @1x</th></tr>";
     }
     elseif ($display == 'csv')
     {
-        $str .= "\"{$strSiteName}\",\"{$strProduct}\",\"{$strCustomerReference}\", \"{$strStartDate}\",\"{$strEndDate}\",\"{$strFreeOfCharge}\",\"{$strCreditAmount}\",\"{$strBalance}\",\"{$strAwaitingApproval}\",\"{$strReserved}\",\"{$actual}\",\"{$strUnitRate}\",\"Units remaining @1 x\"\n"; // FIXME i18n
+        $str .= "\"{$strSiteName}\",\"{$strProduct}\",\"{$strCustomerReference}\", \"{$strStartDate}\",\"{$strEndDate}\",\"{$strFreeOfCharge}\",\"{$strCreditAmount}\",\"{$strBalance}\",\"{$strAwaitingApproval}\",\"{$strReserved}\",\"{$strAvailableBalance}\",\"{$strUnitRate}\",\"Units remaining @1 x\"\n"; // FIXME i18n
     }
 
     $lastsite = '';
@@ -75,9 +75,6 @@ if (mysql_numrows($result) > 0)
     $shade = 'shade1';
     while ($obj = mysql_fetch_object($result))
     {
-        if ($obj->unitrate != 0) $unitsat1times = round(($obj->balance/$obj->unitrate), 2);
-        else $unitsat1times = 0;
-        
         if ($obj->foc == 'yes' AND !empty($focaszero))
         {
 			$obj->creditamount = 0;
@@ -86,14 +83,18 @@ if (mysql_numrows($result) > 0)
         
         $totalcredit += $obj->creditamount;
         $totalbalance += $obj->balance;
-        $awaitingapproval = service_transaction_total($obj->serviceid, AWAITINGAPPROVAL);
+        $awaitingapproval = service_transaction_total($obj->serviceid, AWAITINGAPPROVAL)  * -1;
         $totalawaitingapproval += $awaitingapproval;
-        $reserved = service_transaction_total($obj->serviceid, RESERVED);
+        $reserved = service_transaction_total($obj->serviceid, RESERVED) * -1;
         $totalreserved += $reserved;
-        $remainingunits += $unitsat1times;
 
         $actual = ($obj->balance - $awaitingapproval) - $reserved;
         $totalactual +=$actual;
+
+        if ($obj->unitrate != 0) $unitsat1times = round(($actual/$obj->unitrate), 2);
+        else $unitsat1times = 0;
+
+        $remainingunits += $unitsat1times;        
 
         if ($display == 'html')
         {
@@ -168,9 +169,9 @@ if (mysql_numrows($result) > 0)
 
     if ($display == 'html')
     {
-        $str .= "<tr><td colspan='6' align='right'>{$strTOTALS}</td><td>{$CONFIG['currency_symbol']}".number_format($totalcredit, 2)."</td>";
+        $str .= "<tfoot><tr><td colspan='6' align='right'>{$strTOTALS}</td><td>{$CONFIG['currency_symbol']}".number_format($totalcredit, 2)."</td>";
         $str .= "<td>{$CONFIG['currency_symbol']}".number_format($totalbalance, 2)."</td><td>{$CONFIG['currency_symbol']}".number_format($totalawaitingapproval, 2)."</td>";
-        $str .= "<td>{$CONFIG['currency_symbol']}".number_format($totalreserved, 2)."</td><td>{$CONFIG['currency_symbol']}".number_format($totalactual, 2)."</td><td></td><td>{$remainingunits}</td></tr>";
+        $str .= "<td>{$CONFIG['currency_symbol']}".number_format($totalreserved, 2)."</td><td>{$CONFIG['currency_symbol']}".number_format($totalactual, 2)."</td><td></td><td>{$remainingunits}</td></tr></tfoot>";
         $str .= "</table>";
         $str .= "<p align='center'><a href='{$_SERVER['HTTP_REFERER']}'>{$strReturnToPreviousPage}</a></p>";
     }

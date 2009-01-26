@@ -191,6 +191,7 @@ $strAugust = 'August';
 $strAuthor = 'Author';
 $strAuthors = 'Authors';
 $strAutoReassignmentsThatCouldntBeMade = 'Automatic reassignments that could not be made because users were set to \'not accepting\'';
+$strAvailableBalance = 'Available Balance';
 # Average Assigned per month
 $strAvgAssignedMonth =  'Average Assigned (Month)';
 # Average Closed per month
