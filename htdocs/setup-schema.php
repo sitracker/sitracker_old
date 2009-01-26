@@ -2501,7 +2501,7 @@ UPDATE `{$dbTransactions}` SET transactionstatus = '0';
 ALTER TABLE `{$dbTransactions}` ADD `totalunits` INT NOT NULL AFTER `serviceid` ;
 ALTER TABLE `{$dbTransactions}` ADD `totalbillableunits` INT NOT NULL AFTER `serviceid` ;
 ALTER TABLE `{$dbTransactions}` ADD `totalrefunds` INT NOT NULL AFTER `totalbillableunits` ;
-ALTER TABLE `{$dbTransactions}` CHANGE `date` `dateupdated` DATETIME NOT NULL
+ALTER TABLE `{$dbTransactions}` CHANGE `date` `dateupdated` DATETIME NOT NULL ;
 ";
 
 // Important: When making changes to the schema you must add SQL to make the alterations
