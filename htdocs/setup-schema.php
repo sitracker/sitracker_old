@@ -1292,7 +1292,7 @@ CREATE TABLE `{$dbTempIncoming}` (
 `serviceid` INT NOT NULL ,
 `totalunits` INT NOT NULL,
 `totalbillableunits` INT NOT NULL,
-`totalrefunds` INT NOT NULL, 
+`totalrefunds` INT NOT NULL,
 `amount` FLOAT NOT NULL ,
 `description` VARCHAR( 255 ) NOT NULL ,
 `userid` TINYINT NOT NULL ,
@@ -2493,7 +2493,7 @@ ADD `cust_ref_date` DATE NULL AFTER `cust_ref` ,
 ADD `title` VARCHAR( 255 ) NULL AFTER `cust_ref_date` ;
 
 -- INL 2009-01-11
-DROP TABLE `spellcheck`;
+DROP TABLE `{$CONFIG['db_tableprefix']}spellcheck`;
 
 -- PH 2009-01-19
 ALTER TABLE `{$dbTransactions}` ADD `transactionstatus` SMALLINT NOT NULL DEFAULT '5' ;
@@ -2501,7 +2501,7 @@ UPDATE `{$dbTransactions}` SET transactionstatus = '0';
 ALTER TABLE `{$dbTransactions}` ADD `totalunits` INT NOT NULL AFTER `serviceid` ;
 ALTER TABLE `{$dbTransactions}` ADD `totalbillableunits` INT NOT NULL AFTER `serviceid` ;
 ALTER TABLE `{$dbTransactions}` ADD `totalrefunds` INT NOT NULL AFTER `totalbillableunits` ;
-ALTER TABLE `{$dbTransactions}` CHANGE `date` `dateupdated` DATETIME NOT NULL  
+ALTER TABLE `{$dbTransactions}` CHANGE `date` `dateupdated` DATETIME NOT NULL
 ";
 
 // Important: When making changes to the schema you must add SQL to make the alterations
