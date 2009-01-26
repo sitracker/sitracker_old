@@ -534,7 +534,7 @@ function approve_incident_transaction($transactionid)
     * @return boolean - status of the balance update
     * @note The actual service to credit will be calculated automatically if not specified
 */
-function update_contract_balance($contractid, $description, $amount, $serviceid='', $transactionid, $totalunits, $totalbillableunits, $totalrefunds)
+function update_contract_balance($contractid, $description, $amount, $serviceid='', $transactionid='', $totalunits=0, $totalbillableunits=0, $totalrefunds=0)
 {
     global $now, $dbService, $dbTransactions;
     $rtnvalue = TRUE;
@@ -575,7 +575,6 @@ function update_contract_balance($contractid, $description, $amount, $serviceid=
         {
             $sql = "INSERT INTO `{$dbTransactions}` (serviceid, totalunits, totalbillableunits, totalrefunds, amount, description, userid, dateupdated, transactionstatus) ";
             $sql .= "VALUES ('{$serviceid}', '{$totalunits}', '{$totalbillableunits}', '{$totalrefunds}', '{$amount}', '{$description}', '{$_SESSION['userid']}', '{$date}', '".APPROVED."')";
-            echo $sql;
             $result = mysql_query($sql);
     
             $rtnvalue = mysql_insert_id();
@@ -1500,9 +1499,9 @@ function transactions_report($serviceid, $startdate, $enddate, $sites, $display,
                 $text .= "<th>{$GLOBALS['strSite']}</th>";
                 $text .= "<th>{$GLOBALS['strDescription']}</th><th>{$GLOBALS['strStatus']}</th><th>{$GLOBALS['strCredit']}</th><th>{$GLOBALS['strDebit']}</th></tr>";
                 $text .= $table;
-                $text .= "<tr><td colspan='5' align='right'>{$strTOTALS}</td>";
+                $text .= "<tfoot><tr><td colspan='6' align='right'>{$GLOBALS['strTOTALS']}</td>";
                 $text .= "<td>{$CONFIG['currency_symbol']}".number_format($totalcredit, 2)."</td>";
-                $text .= "<td>{$CONFIG['currency_symbol']}".number_format($totaldebit, 2)."</td></tr>";
+                $text .= "<td>{$CONFIG['currency_symbol']}".number_format($totaldebit, 2)."</td></tr></tfoot>";
                 $text .= "</table>";
             }
             elseif ($display == 'csv')

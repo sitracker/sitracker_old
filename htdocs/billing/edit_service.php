@@ -327,7 +327,6 @@ switch ($mode)
         }
         else
         {
-            //function update_contract_balance($contractid, $description, $amount, $serviceid='')
             $status = update_contract_balance($contractid, $reason, $amount, $sourceservice);
             if ($status)
             {
@@ -339,7 +338,7 @@ switch ($mode)
             }
         }
         break;
-    case 'transfer': // TODO check this logic is what people expect
+    case 'transfer':
         if (user_permission($sit[2], 79) == FALSE)
         {
             header("Location: {$CONFIG['application_webpath']}noaccess.php?id=79");
