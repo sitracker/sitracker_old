@@ -7779,7 +7779,7 @@ function contract_details($id, $mode='internal')
     if ($mode == 'internal')
     {
         $html .= "<p align='center'>";
-        $html .= "<a href=\"edit_contract.php?action=edit&amp;maintid=$id\">{$GLOBALS[strEditContract]}</a> | ";
+        $html .= "<a href=\"contract_edit.php?action=edit&amp;maintid=$id\">{$GLOBALS[strEditContract]}</a> | ";
         $html .= "<a href='billing/addservice.php?contractid={$id}'>{$GLOBALS['strAddService']}</a></p>";
     }
     $html .= "<h3>{$GLOBALS['strContacts']}</h3>";

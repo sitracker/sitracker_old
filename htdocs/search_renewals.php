@@ -111,7 +111,7 @@ else
                 else $class = "shade2";
                 ?>
                 <tr>
-                <td align='center' class='<?php echo $class ?>' width='50'><a href="edit_contract.php?action=edit&amp;maintid=<?php echo $results["maintid"] ?>" ><?php echo $results["maintid"] ?></a></td>
+                <td align='center' class='<?php echo $class ?>' width='50'><a href="contract_edit.php?action=edit&amp;maintid=<?php echo $results["maintid"] ?>" ><?php echo $results["maintid"] ?></a></td>
                 <td align='center' class='<?php echo $class ?>' width='100'><?php echo $results["site"] ?></td>
                 <td align='center' class='<?php echo $class ?>' width='100'><?php echo $results["product"] ?></td>
                 <td align='center' class='<?php echo $class ?>' width='100'><?php echo $results["reseller"] ?></td>
