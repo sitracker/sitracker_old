@@ -1030,6 +1030,7 @@ $strNoticeIncidentNearingSLADesc = 'Notifies of a nearing Incident SLA';
 $strNoticeIncidentNearingSLA = '{incidentowner}\'s incident {incidentid} - {incidenttitle}: {nextsla} due';
 $strNoticeIncidentReviewDueDesc = 'Notifies of a nearing Incident review';
 $strNoticeIncidentReviewDue = '{incidentowner}\'s incident {incidentid} - {incidenttitle} is due for review';
+$strNoInicdentsToApprove = 'No Incidents to approve';
 $strNoticeKBCreatedDesc = 'Notifies of a new KB article';
 $strNoticeKBCreated = 'KB Article {kbname} has been created by {userrealname}';
 $strNoticeLanguageDiffersDesc = 'Notifies a user that they\'re using a different language to their profile';

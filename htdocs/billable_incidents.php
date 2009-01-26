@@ -500,6 +500,10 @@ elseif ($mode == 'approvalpage')
                     }
                 }
             }
+            else
+            {
+                echo "<p align='center'>{$strNoInicdentsToApprove}</p>";
+            }
         }
     }
 
