@@ -223,7 +223,7 @@ while ($contactrow = mysql_fetch_array($contactresult))
     echo "<a href='incident_add.php?action=findcontact&amp;contactid={$id}'>{$strAddIncident}</a> | ";
     echo "<a href='contact_details.php?id={$id}&amp;output=vcard'>".icon('vcard', 16)." vCard</a> | ";
     echo "<a href='contact_edit.php?action=edit&amp;contact={$id}'>{$strEdit}</a> | ";
-    echo "<a href='delete_contact.php?id={$id}'>{$strDelete}</a>";
+    echo "<a href='contact_delete.php?id={$id}'>{$strDelete}</a>";
     echo "</p>\n";
 
 
