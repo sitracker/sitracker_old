@@ -78,7 +78,7 @@ if (empty($productid) AND $display!='skills')
                         echo $countcontracts;
                     }
                     echo "</td>";
-                    echo "<td><a href='edit_product.php?id={$product->id}'>Edit</a> | <a href='delete_product.php?id={$product->id}'>Delete</a></td>";
+                    echo "<td><a href='edit_product.php?id={$product->id}'>{$strEdit}</a> | <a href='product_delete.php?id={$product->id}'>{$strDelete}</a></td>";
                     echo "</tr>\n";
                     if ($shade == 'shade1') $shade = 'shade2';
                     else $shade = 'shade1';
@@ -245,7 +245,7 @@ else
         {
             echo "<h2>".icon('product', 32)." Product: {$product->name}</h2>";
             echo "<p align='center'><a href='edit_product.php?id={$product->id}'>Edit</a> ";
-            echo "| <a href='delete_product.php?id={$product->id}'>{$strDelete}</a></p>";
+            echo "| <a href='product_delete.php?id={$product->id}'>{$strDelete}</a></p>";
             $tags = list_tags($product->id, TAG_PRODUCT, TRUE);
 
             if (!empty($tags)) echo "<div style='width: 50%; margin: auto;'>{$tags}</div><br />\n";
