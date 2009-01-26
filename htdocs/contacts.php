@@ -190,14 +190,14 @@ else
                 echo "<td>{$results['email']}</td>";
                 echo "<td>";
                 if ($results["phone"] == '')  echo "<em>{$strNone}</em>";
-				else echo $results["phone"];
-				echo "</td>";
+                else echo $results["phone"];
+                echo "</td>";
                 echo "<td>";
                 if ($results["fax"] == '') echo "<em>{$strNone}</em>";
-				else echo $results["fax"];
-				echo "</td>";
+                else echo $results["fax"];
+                echo "</td>";
                 echo "<td><a href='incident_add.php?action=findcontact&amp;contactid={$results['id']}'>{$strAddIncident}</a> | ";
-                echo "<a href='edit_contact.php?action=edit&amp;contact={$results['id']}'>{$strEditContact}</a>";
+                echo "<a href='contact_edit.php?action=edit&amp;contact={$results['id']}'>{$strEditContact}</a>";
                 echo "</td></tr>";
 
                 // invert shade

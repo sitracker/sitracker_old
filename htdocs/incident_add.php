@@ -183,7 +183,7 @@ elseif ($action == 'findcontact')
     {
         $sql .= "AND c.id = '$contactid' ";
     }
-    
+
     $sql .= "UNION SELECT p.name AS productname, p.id AS productid, c.surname AS surname, ";
     $sql .= "m.id AS maintid, m.incident_quantity, m.incidents_used, m.expirydate, m.term, s.name AS name, ";
     $sql .= "c.id AS contactid, s.id AS siteid, c.forenames, m.servicelevelid ";
@@ -200,7 +200,7 @@ elseif ($action == 'findcontact')
     {
         $sql .= "AND c.id = '$contactid' ";
     }
-    
+
 
     $result=mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
@@ -234,7 +234,7 @@ elseif ($action == 'findcontact')
         while ($contactrow = mysql_fetch_array($result))
         {
             if (empty($CONFIG['preferred_maintenance']) OR
-                (is_array($CONFIG['preferred_maintenance']) AND 
+                (is_array($CONFIG['preferred_maintenance']) AND
                 in_array(servicelevel_id2tag($contactrow['servicelevelid']),
                                              $CONFIG['preferred_maintenance'])))
             {
@@ -446,7 +446,7 @@ elseif ($action=='incidentform')
     }
 
     echo "<h3>".icon('contact', 32);
-    echo " ".contact_realname($contactid)." <small>(<a href='edit_contact.php?action=edit&amp;";
+    echo " ".contact_realname($contactid)." <small>(<a href='contact_edit.php?action=edit&amp;";
     echo "contact={$contactid}'>{$strEdit}</a>)</small></h3>";
     echo "<p align='center'><strong>".contact_email($contactid)."<br />";
     echo contact_phone($contactid)."</strong></p>";
