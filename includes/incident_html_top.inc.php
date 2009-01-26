@@ -41,7 +41,7 @@ echo "<script src='{$CONFIG['application_webpath']}scripts/prototype/prototype.j
 echo "<script src='{$CONFIG['application_webpath']}sit.js.php' type='text/javascript'></script>\n";
 echo "<script src='{$CONFIG['application_webpath']}scripts/webtrack.js' type='text/javascript'></script>\n";
 // javascript popup date library
-echo "<script src='{$CONFIG['application_webpath']}calendar.js' type='text/javascript'></script>\n";
+echo "<script src='{$CONFIG['application_webpath']}scripts/calendar.js' type='text/javascript'></script>\n";
 
 //update last seen
 $lastseensql = "UPDATE LOW_PRIORITY `{$dbUsers}` SET lastseen=NOW() WHERE id='{$_SESSION['userid']}' LIMIT 1";

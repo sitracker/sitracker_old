@@ -80,7 +80,7 @@ if (is_array($pagescripts))
     unset($pagescripts, $pscript);
 }
 // javascript popup date library
-echo "<script src='{$CONFIG['application_webpath']}calendar.js' type='text/javascript'></script>\n";
+echo "<script src='{$CONFIG['application_webpath']}scripts/calendar.js' type='text/javascript'></script>\n";
 
 if ($sit[0] != '')
 {
