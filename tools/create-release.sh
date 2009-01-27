@@ -8,7 +8,7 @@
 ##
 ## Authors: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 ##          Paul Heaney <paulheaney[at]users.sourceforge.net>
-##          Kieran Hogg <kieran_hogg[at]users.sourceforge.net>
+##          Kieran Hogg <kieran[at]sitracker.org>
 # Requirements:
 #    svn        svn2cl     wget
 #    dch    debuild     dput    bzr

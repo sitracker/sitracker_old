@@ -9,7 +9,7 @@
 //
 
 // Authors: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
-//          Kieran Hogg <kieran_hogg[at]users.sourceforge.net>
+//          Kieran Hogg <kieran[at]sitracker.org>
 //          Paul Heaney <paulheaney[at]users.sourceforge.net>
 // called by tasks.php
 

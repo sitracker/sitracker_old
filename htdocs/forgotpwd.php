@@ -9,7 +9,7 @@
 //
 // Authors: Paul Heaney <paulheaney[at]users.sourceforge.net>
 //          Ivan Lucas <ivanlucas[at]users.sourceforge.net>
-//          Kieran Hogg <kieran_hogg[at]users.sourceforge.net>
+//          Kieran Hogg <kieran[at]sitracker.org>
 
 @include ('set_include_path.inc.php');
 $permission = 0; // not required

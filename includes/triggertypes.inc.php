@@ -7,7 +7,7 @@
 // This software may be used and distributed according to the terms
 // of the GNU General Public License, incorporated herein by reference.
 //
-// Author: Kieran Hogg <kieran_hogg[at]users.sourceforge.net>
+// Author: Kieran Hogg <kieran[at]sitracker.org>
 
 
 // Define a list of available triggers, trigger() will need to be called in the appropriate

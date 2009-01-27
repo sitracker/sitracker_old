@@ -10,7 +10,7 @@
 // This Page Is Valid XHTML 1.0 Transitional! 27Oct05
 //
 // Authors: Ivan Lucas <ivanlucas[at]users.sourceforge.net>,
-//          Kieran Hogg <kieran_hogg[at]users.sourceforge.net>
+//          Kieran Hogg <kieran[at]sitracker.org>
 
 // Use session language if available, else use default language
 if (!empty($_SESSION['lang'])) $lang = $_SESSION['lang'];

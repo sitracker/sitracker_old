@@ -8,7 +8,7 @@
 // of the GNU General Public License, incorporated herein by reference.
 //
 
-// Authors: Kieran Hogg, <kieran_hogg[at]users.sourceforge.net>
+// Authors: Kieran Hogg, <kieran[at]sitracker.org>
 //          Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 //          Tom Gerrard <tomgerrard[at]users.sourceforge.net>
 

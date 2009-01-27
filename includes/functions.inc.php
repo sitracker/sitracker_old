@@ -11,7 +11,7 @@
 //          Tom Gerrard, <tomgerrard[at]users.sourceforge.net> - 2001 onwards
 //          Martin Kilcoyne - 2000
 //          Paul Heaney, <paulheaney[at]users.sourceforge.net>
-//          Kieran Hogg, <kieran_hogg[at]users.sourceforge.net>
+//          Kieran Hogg, <kieran[at]sitracker.org>
 
 // Many functions here simply extract various snippets of information from
 // Most are legacy and can replaced by improving the pages that call them to

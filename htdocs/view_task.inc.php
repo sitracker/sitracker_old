@@ -9,7 +9,7 @@
 //
 
 // Authors: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
-//          Kieran Hogg <kieran_hogg[at]users.sourceforge.net>
+//          Kieran Hogg <kieran[at]sitracker.org>
 // included by view_task.php
 
 if ($mode != 'incident')

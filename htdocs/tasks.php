@@ -8,7 +8,7 @@
 // of the GNU General Public License, incorporated herein by reference.
 //
 
-// Author: Kieran Hogg <kieran_hogg[at]users.sourceforge.net
+// Author: Kieran Hogg <kieran[at]sitracker.org
 // This Page Is Valid XHTML 1.0 Transitional!
 
 @include ('set_include_path.inc.php');

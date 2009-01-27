@@ -7,7 +7,7 @@
 // This software may be used and distributed according to the terms
 // of the GNU General Public License, incorporated herein by reference.
 
-// Author: Kieran Hogg <kieran_hogg[at]users.sourceforge.net>
+// Author: Kieran Hogg <kieran[at]sitracker.org>
 //         Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
 include ($CONFIG['application_fspath'] . '/htdocs/set_include_path.inc.php');

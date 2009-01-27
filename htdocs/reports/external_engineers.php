@@ -10,7 +10,7 @@
 //
 
 // Authors: Paul Heaney <paulheaney[at]users.sourceforge.net>
-//          Kieran Hogg <kieran_hogg[at]users.sourceforge.net>
+//          Kieran Hogg <kieran[at]sitracker.org>
 // heavily based on the Salford Report by Paul Heaney
 
 @include ('../set_include_path.inc.php');
