@@ -1373,6 +1373,7 @@ $strSiteName = 'Site Name';
 $strSiteNotes = 'Site Notes:';
 $strSiteNotListed = 'Site not listed?';
 $strSiteProducts = 'Site Products';
+$strSiteProductsMatrix = 'Site Products Matrix';
 $strSites = 'Sites';
 $strSiteSupport = 'Site Support';
 $strSiteType = 'Site Type';

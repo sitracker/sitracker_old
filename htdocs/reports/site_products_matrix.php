@@ -148,7 +148,7 @@ switch ($_POST['action'])
 
     default:
         include ('htmlheader.inc.php');
-        echo "<h2>Site Product Matrix</h2>";
+        echo "<h2>{$strSiteProductsMatrix}</h2>";
         echo "<form name='report' action='{$_SERVER['PHP_SELF']}' method='post'>";
         echo "<table class='vertical'>";
         echo "<tr><th>{$strVendor}</th>";
