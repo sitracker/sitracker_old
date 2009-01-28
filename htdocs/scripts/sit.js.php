@@ -13,7 +13,7 @@
 //       to enable us to pass variables from PHP to Javascript.
 //
 
-@include ('set_include_path.inc.php');
+@include ('../set_include_path.inc.php');
 
 $permission=0; // not required
 require ('db_connect.inc.php');
