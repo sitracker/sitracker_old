@@ -231,22 +231,7 @@ function get_unit_rate($contractid, $date='')
 
     if ($serviceid != -1)
     {
-        $sql = "SELECT unitrate FROM `{$GLOBALS['dbService']}` AS p WHERE serviceid = {$serviceid}";
-
-        $result = mysql_query($sql);
-        if (mysql_error())
-        {
-            trigger_error(mysql_error(),E_USER_WARNING);
-            return FALSE;
-        }
-
-        $unitrate = -1;
-
-        if (mysql_num_rows($result) > 0)
-        {
-            $obj = mysql_fetch_object($result);
-            $unitrate = $obj->unitrate;
-        }
+        $unitrate = get_service_unitrate($serviceid);
     }
     else
     {
@@ -254,6 +239,87 @@ function get_unit_rate($contractid, $date='')
     }
 
     return $unitrate;
+}
+
+
+/**
+ * Returns the unit rate for a service
+ * @author Paul Heaney
+ * @param int $serviceid - The serviceID to get the unit rate for 
+ * @return mixed FALSE if no service found else the unit rate
+ */
+function get_service_unitrate($serviceid)
+{
+    $rtnvalue = FALSE;
+	$sql = "SELECT unitrate FROM `{$GLOBALS['dbService']}` AS p WHERE serviceid = {$serviceid}";
+
+    $result = mysql_query($sql);
+    if (mysql_error())
+    {
+        trigger_error(mysql_error(),E_USER_WARNING);
+        return FALSE;
+    }
+
+    if (mysql_num_rows($result) > 0)
+    {
+        list($rtnvalue) = mysql_fetch_row($result);
+    }
+    
+    return $rtnvalue;
+}
+
+
+/**
+ * Returns the daily rate for a service
+ * @author Paul Heaney
+ * @param int $serviceid - The serviceID to get the daily rate for 
+ * @return mixed FALSE if no service found else the daily rate
+ */
+function get_service_dailyrate($serviceid)
+{
+    $rtnvalue = FALSE;
+    $sql = "SELECT dailyrate FROM `{$GLOBALS['dbService']}` AS p WHERE serviceid = {$serviceid}";
+
+    $result = mysql_query($sql);
+    if (mysql_error())
+    {
+        trigger_error(mysql_error(),E_USER_WARNING);
+        return FALSE;
+    }
+
+    if (mysql_num_rows($result) > 0)
+    {
+        list($rtnvalue) = mysql_fetch_row($result);
+    }
+    
+    return $rtnvalue;
+}
+
+
+/**
+ * Returns the incident rate for a service
+ * @author Paul Heaney
+ * @param int $serviceid - The serviceID to get the incident rate for 
+ * @return mixed FALSE if no service found else the incident rate
+ */
+function get_service_incidentrate($serviceid)
+{
+    $rtnvalue = FALSE;
+    $sql = "SELECT incidentrate FROM `{$GLOBALS['dbService']}` AS p WHERE serviceid = {$serviceid}";
+
+    $result = mysql_query($sql);
+    if (mysql_error())
+    {
+        trigger_error(mysql_error(),E_USER_WARNING);
+        return FALSE;
+    }
+
+    if (mysql_num_rows($result) > 0)
+    {
+        list($rtnvalue) = mysql_fetch_row($result);
+    }
+    
+    return $rtnvalue;
 }
 
 
@@ -394,7 +460,6 @@ function reserve_monies($serviceid, $linktype, $linkref, $amount, $description)
     {
     	$sql = "INSERT INTO `{$GLOBALS['dbTransactions']}` (serviceid, amount, description, userid, dateupdated, transactionstatus) ";
         $sql .= "VALUES ('{$serviceid}', '{$amount}', '{$description}', '{$_SESSION['userid']}', '".date('Y-m-d H:i:s', $now)."', '".RESERVED."')";
-        
         $result = mysql_query($sql);
         if (mysql_error())
         {
@@ -419,6 +484,42 @@ function reserve_monies($serviceid, $linktype, $linkref, $amount, $description)
                 trigger_error("Link reservation failed",E_USER_ERROR);
                 $rtnvalue = FALSE;
             }
+        }
+    }
+    
+    return $rtnvalue;
+}
+
+
+/**
+ * Updates the amount and optionally the description on a transaction awaiting reservation
+ * @author Paul Heaney
+ * @param int $transactionid The transaction ID to update
+ * @param int $amount The amount to set the transaction to
+ * @param stringd $description (optional) the description to set on the transaction
+ * @return mixed TRUE on a sucessful update FALSE otherwise
+ */
+function update_reservation($transactionid, $amount, $description='')
+{
+    $rtnvalue = FALSE;
+    // Note we dont need to check its awaiting reservation as we check this when doing the update
+    if (is_numeric($transactionid))
+    {
+    	$sql = "UPDATE `{$GLOBALS['dbTransactions']}` SET amount = '{$amount}' ";
+        if (!empty($description))
+        {
+        	$sql .= ", description = '{$description}' ";
+        }
+        $sql .= "WHERE transactionid = {$transactionid} AND transactionstatus = 10";
+        mysql_query($sql);
+        if (mysql_error())
+        {
+            trigger_error(mysql_error(),E_USER_ERROR);
+            $rtnvalue = FALSE;
+        }
+        if (mysql_affected_rows() > 0)
+        {
+            $rtnvalue = TRUE;
         }
     }
     
