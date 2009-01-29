@@ -26,6 +26,8 @@ include_once ($lib_path . 'user.inc.php');
 include_once ($lib_path . 'sla.inc.php');
 include_once ($lib_path . 'ftp.inc.php');
 include_once ($lib_path . 'tags.inc.php');
+include_once ($lib_path . 'string.inc.php');
+include_once ($lib_path . 'html.inc.php');
 
 // function stripslashes_array($data)
 // {
@@ -2227,85 +2229,7 @@ function format_date_friendly($date)
     return ($datestring);
 }
 
-/**
-    * Generate HTML for a redirect/confirmation page
-    * @author Ivan Lucas
-    * @param string $url. URL to redirect to
-    * @param bool $success. TRUE = Success, FALSE = Failure
-    * @param string $message. HTML message to display on the page before redirection
-    * @returns string HTML page with redirect
-    * @note Replaces confirmation_page() from versions prior to 3.35
-    * @note If a header HTML has already been displayed a continue link is printed
-    * @note a meta redirect will also be inserted, which is invalid HTML but appears
-    * @note to work in most browswers.
-    * @note The recommended way to use this function is to call it without headers/footers
-    * @note already displayed.
-*/
-function html_redirect($url, $success = TRUE, $message='')
-{
-    global $CONFIG, $headerdisplayed;
 
-    if (!empty($_REQUEST['dashboard']))
-    {
-        $headerdisplayed = TRUE;
-    }
-
-    if (empty($message))
-    {
-        $refreshtime = 1;
-    }
-    elseif ($success == FALSE)
-    {
-        $refreshtime = 3;
-    }
-    else
-    {
-        $refreshtime = 6;
-    }
-
-    $refresh = "{$refreshtime}; url={$url}";
-
-    $title = $GLOBALS['strPleaseWaitRedirect'];
-    if (!$headerdisplayed)
-    {
-        include ('htmlheader.inc.php');
-    }
-    else
-    {
-        echo "<meta http-equiv=\"refresh\" content=\"$refreshtime; url=$url\" />\n";
-    }
-
-    echo "<h3>";
-    if ($success)
-    {
-        echo "<span class='success'>{$GLOBALS['strSuccess']}</span>";
-    }
-    else
-    {
-        echo "<span class='failure'>{$GLOBALS['strFailed']}</span>";
-    }
-
-    if (!empty($message))
-    {
-        echo ": {$message}";
-    }
-
-    echo "</h3>";
-    if (empty($_REQUEST['dashboard']))
-    {
-        echo "<h4>{$GLOBALS['strPleaseWaitRedirect']}</h4>";
-        if ($headerdisplayed)
-        {
-            echo "<p align='center'><a href=\"{$url}\">{$GLOBALS['strContinue']}</a></p>";
-        }
-    }
-    // TODO 3.35 Add a link to refresh the dashlet if this is run inside a dashlet
-
-    if ($headerdisplayed)
-    {
-        include ('htmlfooter.inc.php');
-    }
-}
 
 
 /*  calculates the value of the unix timestamp  */
@@ -2317,8 +2241,6 @@ function calculate_time_of_next_action($days, $hours, $minutes)
     $return_value = $now + ($days * 86400) + ($hours * 3600) + ($minutes * 60);
     return ($return_value);
 }
-
-
 
 
 /**
@@ -2868,29 +2790,6 @@ function journal($loglevel, $event, $bodytext, $journaltype, $refid)
     {
         // Below minimum log level - do nothing
         return FALSE;
-    }
-}
-
-
-// prints the HTML for a checkbox, the 'state' value should be a 1, yes, true or 0, no, false */
-function html_checkbox($name, $state, $return = FALSE)
-{
-    if ($state == 1 || $state == 'Yes' || $state == 'yes' || $state == 'true' || $state == 'TRUE')
-    {
-        $html = "<input type='checkbox' checked='checked' name='{$name}' id='{$name}' value='{$state}' />" ;
-    }
-    else
-    {
-        $html = "<input type='checkbox' name='{$name}' id='{$name}' value='{$state}' />" ;
-    }
-
-    if ($return)
-    {
-        return $html;
-    }
-    else
-    {
-        echo $html;
     }
 }
 
@@ -4155,29 +4054,6 @@ function calculate_incident_working_time($incidentid, $t1, $t2, $states=array(2,
 }
 
 
-function strip_comma($string)
-{
-    // also strips Tabs, CR's and LF's
-    $string = str_replace(",", " ", $string);
-    $string = str_replace("\r", " ", $string);
-    $string = str_replace("\n", " ", $string);
-    $string = str_replace("\t", " ", $string);
-    return $string;
-}
-
-
-function leading_zero($length,$number)
-{
-    $length = $length-strlen($number);
-    for ($i = 0; $i < $length; $i++)
-    {
-        $number = "0" . $number;
-    }
-    return ($number);
-}
-
-
-
 /**
 * Takes a UNIX Timestamp and returns a string with a pretty readable date
 * @param int $date
@@ -4219,7 +4095,10 @@ function readable_date($date, $lang = 'user')
 }
 
 
-// Select a header style, h1, h2 etc.
+/**
+* Select a header style, h1, h2 etc.
+* @deprecated DEPRECATED remove before after 3.45 release
+**/
 function header_listbox($headersize,$header,$element)
 {
     $html .= "<select id='header$element' name='header$element' style='display:inline' onchange=\"change_header($element,'$header');\">\n";
@@ -4233,6 +4112,9 @@ function header_listbox($headersize,$header,$element)
 }
 
 
+/**
+* @deprecated DEPRECATED remove before after 3.45 release
+**/
 function distribution_listbox($name, $distribution)
 {
     $html  = "<select name='$name'>\n";
@@ -4241,17 +4123,6 @@ function distribution_listbox($name, $distribution)
     $html .= "<option value='restricted' style='color: red;' ";  if ($distribution=='restricted') $html .= "selected='selected'";  $html .= ">{$GLOBALS['strRestricted']}</option>\n";
     $html .= "</select>\n";
     return $html;
-}
-
-
-function remove_slashes($string)
-{
-    $string = str_replace("\\'", "'", $string);
-    $string = str_replace("\'", "'", $string);
-    $string = str_replace("\\'", "'", $string);
-    $string = str_replace("\\\"", "\"", $string);
-
-    return $string;
 }
 
 
@@ -4910,25 +4781,6 @@ function date_picker($formelement)
 
 
 /**
-    * Produces HTML for a percentage indicator
-    * @author Ivan Lucas
-    * @param int $percent. Number between 0 and 100
-    * @returns string HTML
-*/
-function percent_bar($percent)
-{
-    if ($percent == '') $percent = 0;
-    if ($percent < 0) $percent = 0;
-    if ($percent > 100) $percent = 100;
-    // #B4D6B4;
-    $html = "<div class='percentcontainer'>";
-    $html .= "<div class='percentbar' style='width: {$percent}%;'>  {$percent}&#037;";
-    $html .= "</div></div>\n";
-    return $html;
-}
-
-
-/**
     * Checks to see whether an incident exists
     * @param int $incidentid
     * @returns 'Yes', 'No' or 'Doesn't exist'
@@ -4966,56 +4818,6 @@ function incident_open($incidentid)
 }
 
 
-// Return HTML for a table column header (th and /th) with links for sorting
-// Filter parameter can be an assocative array containing fieldnames and values
-// to pass on the url for data filtering purposes
-function colheader($colname, $coltitle, $sort = FALSE, $order='', $filter='', $defaultorder='a', $width='')
-{
-    global $CONFIG;
-    if ($width !=  '')
-    {
-        $html = "<th width='".intval($width)."%'>";
-    }
-    else
-    {
-        $html = "<th>";
-    }
-
-    $qsappend='';
-    if (!empty($filter) AND is_array($filter))
-    {
-        foreach ($filter AS $key => $var)
-        {
-            if ($var != '') $qsappend .= "&amp;{$key}=".urlencode($var);
-        }
-    }
-    else
-    {
-        $qsappend='';
-    }
-
-    if ($sort==$colname)
-    {
-        //if ($order=='') $order=$defaultorder;
-        if ($order=='a')
-        {
-            $html .= "<a href='{$_SERVER['PHP_SELF']}?sort=$colname&amp;order=d{$qsappend}'>{$coltitle}</a> ";
-            $html .= "<img src='{$CONFIG['application_webpath']}images/sort_a.png' width='5' height='5' alt='{$GLOBALS['SortAscending']}' /> ";
-        }
-        else
-        {
-            $html .= "<a href='{$_SERVER['PHP_SELF']}?sort=$colname&amp;order=a{$qsappend}'>{$coltitle}</a> ";
-            $html .= "<img src='{$CONFIG['application_webpath']}images/sort_d.png' width='5' height='5' alt='{$GLOBALS['SortDescending']}' /> ";
-        }
-    }
-    else
-    {
-        if ($sort === FALSE) $html .= "{$coltitle}";
-        else $html .= "<a href='{$_SERVER['PHP_SELF']}?sort=$colname&amp;order={$defaultorder}{$qsappend}'>{$coltitle}</a> ";
-    }
-    $html .= "</th>";
-    return $html;
-}
 
 
 function parse_updatebody($updatebody, $striptags = TRUE)
@@ -5664,16 +5466,6 @@ function array_remove_duplicate($array, $field)
 }
 
 
-// This function doesn't exist for PHP4 so use this instead
-if (!function_exists("stripos"))
-{
-function stripos($str,$needle,$offset=0)
-{
-    return strpos(strtolower($str),strtolower($needle),$offset);
-}
-}
-
-
 function array_multi_search($needle, $haystack, $searchkey)
 {
     foreach ($haystack AS $thekey => $thevalue)
@@ -5681,23 +5473,6 @@ function array_multi_search($needle, $haystack, $searchkey)
         if ($thevalue[$searchkey] == $needle) return $thekey;
     }
     return FALSE;
-}
-
-
-function string_find_all($haystack, $needle, $limit=0)
-{
-    $positions = array();
-    $currentoffset = 0;
-
-    $offset = 0;
-    $count = 0;
-    while (($pos = stripos($haystack, $needle, $offset)) !== false && ($count < $limit || $limit == 0))
-    {
-        $positions[] = $pos;
-        $offset = $pos + strlen($needle);
-        $count++;
-    }
-    return $positions;
 }
 
 
@@ -5818,48 +5593,6 @@ function clear_form_errors($formname)
 function clear_form_data($formname)
 {
     unset($_SESSION['formdata'][$formname]);
-}
-
-
-/**
-    * Trims a string so that it is not longer than the length given and
-    * add ellipses (...) to the end
-    * @author Ivan Lucas
-    * @param string $text. Some plain text to shorten
-    * @param int $maxlength. Length of the resulting string (in characters)
-    * @param bool $html. Set to TRUE to include HTML in the output (for ellipsis)
-    *                    Set to FALSE for plain text only
-    * @returns string. A shortned string (optionally with html)
-*/
-function truncate_string($text, $maxlength=255, $html = TRUE)
-{
-
-    if (strlen($text) > $maxlength)
-    {
-        // Leave space for ellipses
-        if ($html == TRUE)
-        {
-            $maxlength -= 1;
-        }
-        else
-        {
-            $maxlength -= 3;
-        }
-
-        $text = utf8_encode(wordwrap(utf8_decode($text), $maxlength, '^\CUT/^', 1));
-        $parts = explode('^\CUT/^', $text);
-        $text = $parts[0];
-
-        if ($html == TRUE)
-        {
-            $text .= '&hellip;';
-        }
-        else
-        {
-            $text .= '...';
-        }
-    }
-    return $text;
 }
 
 
@@ -6059,6 +5792,7 @@ function mark_task_completed($taskid, $incident)
     mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 }
+
 
 /**
     * Finds out which scheduled tasks should be run right now
@@ -6721,6 +6455,7 @@ function contract_details($id, $mode='internal')
     return $html;
 }
 
+
 /**
 * Uploads a file
 * @author Kieran Hogg
@@ -7015,6 +6750,7 @@ function icon($filename, $size='', $alt='', $title='', $id='')
 
     return $icon;
 }
+
 
 /**
 * Output the html for a KB article
@@ -8252,54 +7988,6 @@ function gravatar($email, $size = 32)
 
 
 /**
-* UTF8 substr() replacement
-* @author Anon / Public Domain
-* @note see http://www.php.net/manual/en/function.substr.php#57899
-*/
-function utf8_substr($str, $from, $len)
-{
-    # utf8 substr
-    # www.yeap.lv
-    return preg_replace('#^(?:[\x00-\x7F]|[\xC0-\xFF][\x80-\xBF]+){0,'.$from.'}'.
-                    '((?:[\x00-\x7F]|[\xC0-\xFF][\x80-\xBF]+){0,'.$len.'}).*#s',
-                    '$1',$str);
-}
-
-
-/**
-* UTF8 strlen() replacement
-* @author anpaza at mail dot ru / Public Domain
-* @note see http://www.php.net/manual/en/function.strlen.php#59258
-*/
-function utf8_strlen($str)
-{
-    $i = 0;
-    $count = 0;
-    $len = strlen ($str);
-    while ($i < $len)
-    {
-    $chr = ord ($str[$i]);
-    $count++;
-    $i++;
-    if ($i >= $len)
-        break;
-
-    if ($chr & 0x80)
-    {
-        $chr <<= 1;
-        while ($chr & 0x80)
-        {
-        $i++;
-        $chr <<= 1;
-        }
-    }
-    }
-    return $count;
-}
-
-
-
-/**
 * HTML for an alphabetical index of links
 * @author Ivan Lucas
 * @param string $baseurl start of a URL, the letter will be appended to this
@@ -8323,6 +8011,7 @@ function alpha_index($baseurl = '#')
     }
     return $html;
 }
+
 
 /**
     * Converts emoticon text to HTML
@@ -8363,6 +8052,7 @@ function emoticons($text)
     $html = preg_replace($smiley_regex, $smiley_replace, $text);
     return $html;
 }
+
 
 /**
  * Inserts a new update
@@ -8661,16 +8351,6 @@ function holding_email_update_id($holding_email)
 }
 
 
-function beginsWith( $str, $sub )
-{
-   return ( substr( $str, 0, strlen( $sub ) ) === $sub );
-}
-
-
-function endsWith( $str, $sub )
-{
-   return ( substr( $str, strlen( $str ) - strlen( $sub ) ) === $sub );
-}
 
 // ** Place no more function defs below this **
 
