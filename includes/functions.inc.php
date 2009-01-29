@@ -23,6 +23,8 @@ include ('ldap.inc.php');
 include ($lib_path . 'base.inc.php');
 include_once ($lib_path . 'billing.inc.php');
 include_once ($lib_path . 'user.inc.php');
+include_once ($lib_path . 'sla.inc.php');
+include_once ($lib_path . 'ftp.inc.php');
 
 // function stripslashes_array($data)
 // {
@@ -7084,34 +7086,7 @@ function upload_file($file, $incidentid, $updateid, $type='public')
 
 
 /**
-* Function to return a logged in ftp connection
-* @author Ivan Lucas
-*/
-function create_ftp_connection()
-{
-    global $CONFIG;
-
-    $conn_id = ftp_connect($CONFIG['ftp_hostname']);
-
-    // login with username and password
-    $login_result = ftp_login($conn_id, $CONFIG['ftp_username'], $CONFIG['ftp_password']);
-
-    // check connection
-    if ((!$conn_id) || (!$login_result))
-    {
-        trigger_error("FTP Connection failed, connecting to {$CONFIG['ftp_hostname']} for user {$CONFIG['ftp_hostname']}}", E_USER_WARNING);
-    }
-    else
-    {
-        echo "Connected to {$CONFIG['ftp_hostname']}, for user {$CONFIG['ftp_username']}<br />";
-    }
-
-    return $conn_id;
-}
-
-
-/**
-* Fucntion to return a HTML table row with two columns.
+* Function to return a HTML table row with two columns.
 * Giving radio boxes for groups and if the level is 'management' then you are able to view the users (de)selcting
 * @param string $title - text to go in the first column
 * @param string $level either management or engineer, management is able to (de)select users

@@ -83,11 +83,11 @@ if (!empty($filterby))
 
 echo "<form action='{$_SERVER['PHP_SELF']}' method='post' id='filterform'><p align='center'>\n";
 echo "{$strFilter}:\n";
-echo "<input type='radio' name='filterby' value='none' checked='checked' onclick=\"hide_filter(true);\" {$nonChecked} />{$strNone} \n";
-echo "<input type='radio' name='filterby' value='sla' onclick=\"get_and_display('../ajaxdata.php?action=slas', 'filter'); hide_filter(false);\" {$slaChecked} />{$strBySLA} \n";
-echo "<input type='radio' name='filterby' value='softwareid' onclick=\"get_and_display('../ajaxdata.php?action=skills', 'filter'); hide_filter(false);\" {$softwareChecked} />{$strBySkill} \n";
-echo "<input type='radio' name='filterby' value='product' onclick=\"get_and_display('../ajaxdata.php?action=products', 'filter'); hide_filter(false);\" {$productCheck} />{$strByProduct} \n";
-echo "<br />\n";
+echo "<label><input type='radio' name='filterby' value='none' checked='checked' onclick=\"hide_filter(true);\" {$nonChecked} />{$strNone}</label> \n";
+echo "<label><input type='radio' name='filterby' value='sla' onclick=\"get_and_display('../ajaxdata.php?action=slas', 'filter'); hide_filter(false);\" {$slaChecked} />{$strBySLA}</label> \n";
+echo "<label><input type='radio' name='filterby' value='softwareid' onclick=\"get_and_display('../ajaxdata.php?action=skills', 'filter'); hide_filter(false);\" {$softwareChecked} />{$strBySkill}</label> \n";
+echo "<label><input type='radio' name='filterby' value='product' onclick=\"get_and_display('../ajaxdata.php?action=products', 'filter'); hide_filter(false);\" {$productCheck} />{$strByProduct}</label> \n";
+echo "<br /><br />\n";
 echo "<select id='filter' name='filter'>\n";
 echo "<option />";
 echo "</select>\n";
@@ -116,7 +116,7 @@ else
 {
     echo "<script type='text/javascript'>hide_filter(true);</script>";
 }
-echo "<input type='submit' name='go' value='{$strGo}' />";
+echo "<br /><br /><input type='submit' name='go' value='{$strRunReport}' />";
 echo "</p></form>";
 
 $sql = "SELECT id, name FROM `{$dbEscalationPaths}`";
