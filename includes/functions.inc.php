@@ -28,6 +28,7 @@ include_once ($lib_path . 'ftp.inc.php');
 include_once ($lib_path . 'tags.inc.php');
 include_once ($lib_path . 'string.inc.php');
 include_once ($lib_path . 'html.inc.php');
+include_once ($lib_path . 'tasks.inc.php');
 
 // function stripslashes_array($data)
 // {
@@ -791,58 +792,6 @@ function incident_productinfo_html($incidentid)
         }
         echo $html;
     }
-}
-
-
-
-
-/**
-    * Takes an array and makes an HTML selection box
-    * @author Ivan Lucas
-*/
-function array_drop_down($array, $name, $setting='', $enablefield='', $usekey = '')
-{
-    $html = "<select name='$name' id='$name' $enablefield>\n";
-
-    if ($usekey == '')
-    {
-        if ((array_key_exists($setting, $array) AND
-            in_array((string)$setting, $array) == FALSE) OR
-            $usekey == TRUE)
-        {
-            $usekey = TRUE;
-        }
-        else
-        {
-            $usekey = FALSE;
-        }
-    }
-
-    foreach ($array AS $key => $value)
-    {
-        $value = htmlentities($value, ENT_COMPAT, $GLOBALS['i18ncharset']);
-        if ($usekey)
-        {
-            $html .= "<option value='$key'";
-            if ($key == $setting)
-            {
-                $html .= " selected='selected'";
-            }
-
-        }
-        else
-        {
-            $html .= "<option value='$value'";
-            if ($value == $setting)
-            {
-                $html .= " selected='selected'";
-            }
-        }
-
-        $html .= ">{$value}</option>\n";
-    }
-    $html .= "</select>\n";
-    return $html;
 }
 
 
@@ -5771,29 +5720,6 @@ function open_activities_for_site($siteid)
 }
 
 
-function mark_task_completed($taskid, $incident)
-{
-    global $dbNotes, $dbTasks;
-    if (!$incident)
-    {
-        // Insert note to say what happened
-        $bodytext = "Task marked 100% complete by {$_SESSION['realname']}:\n\n".$bodytext;
-        $sql = "INSERT INTO `{$dbNotes}` ";
-        $sql .= "(userid, bodytext, link, refid) ";
-        $sql .= "VALUES ('0', '{$bodytext}', '10', '{$taskid}')";
-        mysql_query($sql);
-        if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
-    }
-
-    $enddate = date('Y-m-d H:i:s');
-    $sql = "UPDATE `{$dbTasks}` ";
-    $sql .= "SET completion='100', enddate='$enddate' ";
-    $sql .= "WHERE id='$taskid' LIMIT 1";
-    mysql_query($sql);
-    if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
-}
-
-
 /**
     * Finds out which scheduled tasks should be run right now
     * @author Ivan Lucas, Paul Heaney
@@ -7929,30 +7855,6 @@ function create_report($data, $output = 'table', $filename = 'report.csv')
 }
 
 
-/**
-* Postpones a task's due date 24 hours
-* @author Kieran Hogg
-* @param int $taskid The ID of the task to postpone
-*/
-function postpone_task($taskid)
-{
-    global $dbTasks;
-    if (is_numeric($taskid))
-    {
-        $sql = "SELECT duedate FROM `{$dbTasks}` AS t ";
-        $sql .= "WHERE id = '{$taskid}'";
-        $result = mysql_query($sql);
-        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
-        $task = mysql_fetch_object($result);
-        if ($task->duedate != "0000-00-00 00:00:00")
-        {
-            $newtime = date("Y-m-d H:i:s", (mysql2date($task->duedate) + 60 * 60 * 24));
-            $sql = "UPDATE `{$dbTasks}` SET duedate = '{$newtime}' WHERE id = '{$taskid}'";
-            mysql_query($sql);
-            if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
-        }
-    }
-}
 
 
 /**

@@ -95,7 +95,11 @@ function html_redirect($url, $success = TRUE, $message='')
 }
 
 
-// prints the HTML for a checkbox, the 'state' value should be a 1, yes, true or 0, no, false */
+/**
+    * Prints the HTML for a checkbox, the 'state' value should be a 1, yes, true or 0, no, false
+    * @author Ivan Lucas
+    * @returns string HTML
+*/
 function html_checkbox($name, $state, $return = FALSE)
 {
     if ($state == 1 || $state == 'Yes' || $state == 'yes' || $state == 'true' || $state == 'TRUE')
@@ -185,6 +189,56 @@ function colheader($colname, $coltitle, $sort = FALSE, $order='', $filter='', $d
         else $html .= "<a href='{$_SERVER['PHP_SELF']}?sort=$colname&amp;order={$defaultorder}{$qsappend}'>{$coltitle}</a> ";
     }
     $html .= "</th>";
+    return $html;
+}
+
+
+/**
+    * Takes an array and makes an HTML selection box
+    * @author Ivan Lucas
+*/
+function array_drop_down($array, $name, $setting='', $enablefield='', $usekey = '')
+{
+    $html = "<select name='$name' id='$name' $enablefield>\n";
+
+    if ($usekey == '')
+    {
+        if ((array_key_exists($setting, $array) AND
+            in_array((string)$setting, $array) == FALSE) OR
+            $usekey == TRUE)
+        {
+            $usekey = TRUE;
+        }
+        else
+        {
+            $usekey = FALSE;
+        }
+    }
+
+    foreach ($array AS $key => $value)
+    {
+        $value = htmlentities($value, ENT_COMPAT, $GLOBALS['i18ncharset']);
+        if ($usekey)
+        {
+            $html .= "<option value='$key'";
+            if ($key == $setting)
+            {
+                $html .= " selected='selected'";
+            }
+
+        }
+        else
+        {
+            $html .= "<option value='$value'";
+            if ($value == $setting)
+            {
+                $html .= " selected='selected'";
+            }
+        }
+
+        $html .= ">{$value}</option>\n";
+    }
+    $html .= "</select>\n";
     return $html;
 }
 
