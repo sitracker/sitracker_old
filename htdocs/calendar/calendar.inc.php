@@ -716,7 +716,7 @@ function appointment_type_dropdown($type, $display)
 
 function get_users_appointments($user, $start, $end)
 {
-    global $holidaytype;
+    global $holidaytype, $CONFIG;
     $items = array();
     $sql = "SELECT * FROM `{$GLOBALS['dbTasks']}` WHERE startdate >= '";
     $sql.= date("Y-m-d H:i:s", $start);
@@ -759,29 +759,29 @@ function get_users_appointments($user, $start, $end)
                          'bgColorCode' => $bgcolor);
     }
 
-    $sql = "SELECT * FROM `{$GLOBALS['dbHolidays']}` WHERE startdate >= '$start' AND startdate < '$end' AND userid = '$user'";
+    $sql = "SELECT UNIX_TIMESTAMP(date) type, userid FROM `{$GLOBALS['dbHolidays']}` WHERE UNIX_TIMESTAMP(date) >= '$start' AND UNIX_TIMESTAMP(date) < '$end' AND userid = '$user'";
     $res = mysql_query($sql);
     echo mysql_error();
-    global $CONFIG;
+
     while($inf = mysql_fetch_array($res))
     {
         switch ($inf['length'])
         {
             case 'am':
-                $startdate = $inf['startdate'] + $CONFIG['start_working_day'];
-                $enddate = $inf['startdate'] + ($CONFIG['start_working_day'] + $CONFIG['end_working_day']) / 2;
+                $startdate = $inf['date'] + $CONFIG['start_working_day'];
+                $enddate = $inf['date'] + ($CONFIG['start_working_day'] + $CONFIG['end_working_day']) / 2;
             break;
 
             case 'pm':
-                $startdate = $inf['startdate'] + ($CONFIG['start_working_day'] + $CONFIG['end_working_day']) / 2;
-                $enddate = $inf['startdate'] + $CONFIG['end_working_day'];
+                $startdate = $inf['date'] + ($CONFIG['start_working_day'] + $CONFIG['end_working_day']) / 2;
+                $enddate = $inf['date'] + $CONFIG['end_working_day'];
             break;
 
             default:
-                $startdate = $inf['startdate'] + $CONFIG['start_working_day'];
-                $enddate = $inf['startdate'] + $CONFIG['end_working_day'];
+                $startdate = $inf['date'] + $CONFIG['start_working_day'];
+                $enddate = $inf['date'] + $CONFIG['end_working_day'];
             break;
-        }
+        }       
 
         switch ($inf['type'])
         {
