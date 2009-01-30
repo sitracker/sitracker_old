@@ -14,11 +14,11 @@
 @include ('set_include_path.inc.php');
 
 $permission = 0; // not required
-require ('db_connect.inc.php');
-require ('functions.inc.php');
+require ($lib_path.'db_connect.inc.php');
+require ($lib_path.'functions.inc.php');
 
 // This page requires authentication
-require ('auth.inc.php');
+require ($lib_path.'auth.inc.php');
 echo "<?xml version=\"1.0\"?>";
 echo "<OpenSearchDescription xmlns=\"http://a9.com/-/spec/opensearch/1.1/\">";
 echo "<ShortName>{$CONFIG['application_shortname']}</ShortName>";

@@ -161,6 +161,6 @@ else
     echo "<p align='center'>{$strNoRecords}</p>";
 }
 
-include ('htmlfooter.inc.php');
+include ('./inc/htmlfooter.inc.php');
 
 ?>

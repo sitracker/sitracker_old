@@ -16,13 +16,13 @@ include ('db_connect.inc.php');
 include ('functions.inc.php');
 
 // This page requires authentication
-require ('auth.inc.php');
+require ($lib_path.'auth.inc.php');
 
 $mode = cleanvar($_REQUEST['mode']);
 
 if (empty($mode) OR $mode == 'showform')
 {
-	include ('htmlheader.inc.php');
+	include ('./inc/htmlheader.inc.php');
 	
 	echo "<h2>Monthly Activity Totals</h2>";
     echo "<form name='report' action='{$_SERVER['PHP_SELF']}' method='post'>";
@@ -50,7 +50,7 @@ if (empty($mode) OR $mode == 'showform')
     echo "<input type='hidden' id='mode' name='mode' value='runreport' />";
     echo "</form>";
 	
-	include ('htmlfooter.inc.php');
+	include ('./inc/htmlfooter.inc.php');
 }
 elseif ($mode == 'runreport')
 {
@@ -102,7 +102,7 @@ elseif ($mode == 'runreport')
 //    print_r($util);
 //    echo "</pre>";
     
-    include ('htmlheader.inc.php');
+    include ('./inc/htmlheader.inc.php');
     
     echo "<h2>Monthly Activity Totals</h2>";
     
@@ -168,7 +168,7 @@ elseif ($mode == 'runreport')
     
     echo "</table>";
     
-    include ('htmlfooter.inc.php');
+    include ('./inc/htmlfooter.inc.php');
 }
 
 ?>

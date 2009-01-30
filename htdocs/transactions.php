@@ -57,14 +57,14 @@ $text = transactions_report($serviceid, $startdate, $enddate, $sites, $display, 
 
 if ($display == 'html')
 {
-    include ('htmlheader.inc.php');
+    include ('./inc/htmlheader.inc.php');
 
     echo "<h3>{$strTransactions}</h3>";
 
     echo $text;
     echo "<p align='center'><a href='{$_SERVER['HTTP_REFERER']}'>{$strReturnToPreviousPage}</a></p>";
 
-    include('htmlfooter.inc.php');
+    include('./inc/htmlfooter.inc.php');
 }
 elseif ($display == 'csv')
 {

@@ -16,13 +16,13 @@
 @include ('../set_include_path.inc.php');
 $permission = 67; // Run Reports
 $title='Incidents open/closed by period';
-require ('db_connect.inc.php');
-require ('functions.inc.php');
+require ($lib_path.'db_connect.inc.php');
+require ($lib_path.'functions.inc.php');
 
 // This page requires authentication
-require ('auth.inc.php');
+require ($lib_path.'auth.inc.php');
 
-include ('htmlheader.inc.php');
+include ('./inc/htmlheader.inc.php');
 $startdate = strtotime($_REQUEST['startdate']);
 $enddate = strtotime($_REQUEST['enddate']);
 
@@ -157,5 +157,5 @@ else
     }
 }
 
-include ('htmlfooter.inc.php');
+include ('./inc/htmlfooter.inc.php');
 ?>

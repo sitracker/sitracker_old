@@ -17,17 +17,17 @@
 @include ('../set_include_path.inc.php');
 $permission = 37; // Run Reports
 
-require ('db_connect.inc.php');
-require ('functions.inc.php');
+require ($lib_path.'db_connect.inc.php');
+require ($lib_path.'functions.inc.php');
 
 // This page requires authentication
-require ('auth.inc.php');
+require ($lib_path.'auth.inc.php');
 
 $title = $strIncidentsBySite;
 
 if (empty($_REQUEST['mode']))
 {
-    include ('htmlheader.inc.php');
+    include ('./inc/htmlheader.inc.php');
     echo "<h2>{$title}</h2>";
     echo "<p align='center'>".sprintf($strReportListsIncidentsLoggedThatEachSiteLoggedOverPastXMonths, 12)."</p>";
     echo "<form action='{$_SERVER['PHP_SELF']}' method='post'>";
@@ -61,7 +61,7 @@ if (empty($_REQUEST['mode']))
     echo "<input type='submit' value=\"{$strRunReport}\" />";
     echo "</p>";
     echo "</form>";
-    include ('htmlfooter.inc.php');
+    include ('./inc/htmlfooter.inc.php');
 }
 elseif ($_REQUEST['mode'] == 'report')
 {
@@ -167,9 +167,9 @@ elseif ($_REQUEST['mode'] == 'report')
 
     if ($_POST['output'] == 'screen')
     {
-        include ('htmlheader.inc.php');
+        include ('./inc/htmlheader.inc.php');
         echo $html;
-        include ('htmlfooter.inc.php');
+        include ('./inc/htmlfooter.inc.php');
     }
     elseif ($_POST['output'] == 'csv')
     {

@@ -11,12 +11,12 @@
 
 @include ('set_include_path.inc.php');
 $permission = 27; /* View your calendar */
-require ('db_connect.inc.php');
-require ('functions.inc.php');
+require ($lib_path.'db_connect.inc.php');
+require ($lib_path.'functions.inc.php');
 $title = $strHolidayRequests;
 
 // This page requires authentication
-require ('auth.inc.php');
+require ($lib_path.'auth.inc.php');
 
 // External variables
 $user = cleanvar($_REQUEST['user']);
@@ -27,7 +27,7 @@ $type = cleanvar($_REQUEST['type']);
 $memo = cleanvar($_REQUEST['memo']);
 $approvaluser = cleanvar($_REQUEST['approvaluser']);
 
-include ('htmlheader.inc.php');
+include ('./inc/htmlheader.inc.php');
 
 function display_holiday_table($result)
 {
@@ -277,5 +277,5 @@ else
     }
     echo "<p align='center'><a href='holidays.php?user={$user}'>{$strMyHolidays}</p></p>";
 }
-include ('htmlfooter.inc.php');
+include ('./inc/htmlfooter.inc.php');
 ?>

@@ -13,10 +13,10 @@
 @include ('set_include_path.inc.php');
 $permission = 6; // View Incidents
 
-require ('db_connect.inc.php');
-require ('functions.inc.php');
+require ($lib_path.'db_connect.inc.php');
+require ($lib_path.'functions.inc.php');
 
-require ('auth.inc.php');
+require ($lib_path.'auth.inc.php');
 // soon to be replaced by incident/sla.inc.php
 
 $incidentid = cleanvar($_REQUEST['id']);

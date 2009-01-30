@@ -37,7 +37,7 @@ if ($incidentcontact == $_SESSION['contactid'])
         echo "<p>{$strReason}:</p><textarea name='reason' cols='50' rows='10'></textarea><br />";
         echo "<p><input type='submit' value=\"{$strRequestClosure}\" /></p></form></div>";
 
-        include 'htmlfooter.inc.php';
+        include './inc/htmlfooter.inc.php';
     }
     else
     {
@@ -67,7 +67,7 @@ if ($incidentcontact == $_SESSION['contactid'])
 else
 {
     echo "<p class='warning'>$strNoPermission.</p>";
-    include ('htmlfooter.inc.php');
+    include ('./inc/htmlfooter.inc.php');
     exit;
 }
 

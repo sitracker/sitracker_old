@@ -11,11 +11,11 @@
 
 @include ('set_include_path.inc.php');
 $permission = 0; // not required
-require ('db_connect.inc.php');
-require ('functions.inc.php');
+require ($lib_path.'db_connect.inc.php');
+require ($lib_path.'functions.inc.php');
 
 // This page requires authentication
-require ('auth.inc.php');
+require ($lib_path.'auth.inc.php');
 
 $dashboardid = $_REQUEST['id'];
 
@@ -39,7 +39,7 @@ if (empty($dashboardid))
         $ondashboard[$c[1]] = $c[1];
     }
 
-    include ('htmlheader.inc.php');
+    include ('./inc/htmlheader.inc.php');
 
     $sql = "SELECT * FROM `{$dbDashboard}` WHERE enabled = 'true'";
     $result = mysql_query($sql);
@@ -70,7 +70,7 @@ if (empty($dashboardid))
         echo "<p class='info'>{$strNoDashletsInstalled}</p>";
     }
 
-    include ('htmlfooter.inc.php');
+    include ('./inc/htmlfooter.inc.php');
 }
 else
 {

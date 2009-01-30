@@ -10,7 +10,7 @@
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
 @include ('set_include_path.inc.php');
-require ('db_connect.inc.php');
+require ($lib_path.'db_connect.inc.php');
 
 session_name($CONFIG['session_name']);
 session_start();
@@ -27,7 +27,7 @@ setcookie(session_name(), session_id(),ini_get("session.cookie_lifetime"), "/");
 
 $language = $_POST['lang'];
 
-require ('functions.inc.php');
+require ($lib_path.'functions.inc.php');
 populate_syslang();
 // External vars
 $password = md5($_REQUEST['password']);

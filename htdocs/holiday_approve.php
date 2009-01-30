@@ -12,12 +12,12 @@
 
 @include ('set_include_path.inc.php');
 $permission = 50; // Approve Holiday
-require ('db_connect.inc.php');
-require ('functions.inc.php');
+require ($lib_path.'db_connect.inc.php');
+require ($lib_path.'functions.inc.php');
 $title = "Holiday Approval"; // FIXME i18n holiday approval
 
 // This page requires authentication
-require ('auth.inc.php');
+require ($lib_path.'auth.inc.php');
 
 // External variables
 $approve = $_REQUEST['approve'];

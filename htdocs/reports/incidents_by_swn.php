@@ -21,18 +21,18 @@
 @include ('../set_include_path.inc.php');
 $permission = 37; // Run Reports
 
-require ('db_connect.inc.php');
-require ('functions.inc.php');
+require ($lib_path.'db_connect.inc.php');
+require ($lib_path.'functions.inc.php');
 
 // This page requires authentication
-require ('auth.inc.php');
+require ($lib_path.'auth.inc.php');
 
 $title = $strIncidentsBySkill;
 $pagescripts = array('dojo/dojo.js');
 
 if (empty($_REQUEST['mode']))
 {
-    include ('htmlheader.inc.php');
+    include ('./inc/htmlheader.inc.php');
 
     echo "<h2>$title</h2>";
     echo "<form action='{$_SERVER['PHP_SELF']}' id='incidentsbysoftware' method='post'>";
@@ -54,7 +54,7 @@ if (empty($_REQUEST['mode']))
     echo "</p>";
     echo "</form>\n";
 
-    include ('htmlfooter.inc.php');
+    include ('./inc/htmlfooter.inc.php');
 }
 else
 {
@@ -85,7 +85,7 @@ else
         $c ++;
     }
 
-    include ('htmlheader.inc.php');
+    include ('./inc/htmlheader.inc.php');
     // FIXME i18n
 
     $sqlSLA = "SELECT DISTINCT(tag) FROM `{$dbServiceLevels}`";
@@ -420,7 +420,7 @@ echo "</pre>";
         echo "\n</div></p>";
     }
 
-    include ('htmlfooter.inc.php');
+    include ('./inc/htmlfooter.inc.php');
 
 }
 

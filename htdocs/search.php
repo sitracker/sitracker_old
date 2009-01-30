@@ -11,11 +11,11 @@
 // Author: Kieran Hogg <kieran[at]sitracker.org>
 // TODO eventually this needs refactorising, just couldn't do it well enough for this release
 @include ('set_include_path.inc.php');
-require ('db_connect.inc.php');
-require ('functions.inc.php');
+require ($lib_path.'db_connect.inc.php');
+require ($lib_path.'functions.inc.php');
 
 // This page requires authentication
-require ('auth.inc.php');
+require ($lib_path.'auth.inc.php');
 $q = cleanvar($_GET['q']);
 
 $resultsperpage = 20;
@@ -80,7 +80,7 @@ function search_highlight($x,$var)
 }
 
 
-include ('htmlheader.inc.php');
+include ('./inc/htmlheader.inc.php');
 
 ?>
 <script type='text/javascript'>
@@ -742,6 +742,6 @@ else
 
 echo "' /></p></form>";
 
-include ('htmlfooter.inc.php');
+include ('./inc/htmlfooter.inc.php');
 
 ?>

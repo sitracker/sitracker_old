@@ -11,15 +11,15 @@
 @include ('../set_include_path.inc.php');
 $permission = 37; // Run Reports
 $title = $strSiteProducts;
-require ('db_connect.inc.php');
-require ('functions.inc.php');
+require ($lib_path.'db_connect.inc.php');
+require ($lib_path.'functions.inc.php');
 
 // This page requires authentication
-require ('auth.inc.php');
+require ($lib_path.'auth.inc.php');
 
 if (empty($_REQUEST['mode']))
 {
-    include ('htmlheader.inc.php');
+    include ('./inc/htmlheader.inc.php');
     echo "<h2>{$title}</h2>";
     echo "<form action='{$_SERVER['PHP_SELF']}' method='post'>";
     echo "<table align='center'>";
@@ -55,7 +55,7 @@ if (empty($_REQUEST['mode']))
     echo "<strong>{$strField} 7:</strong> {$strPostcode}<br />";
     echo "<strong>{$strField} 8:</strong> {$strProducts}<br />";
     echo "</td></tr></table>";
-    include ('htmlfooter.inc.php');
+    include ('./inc/htmlfooter.inc.php');
 }
 elseif ($_REQUEST['mode'] == 'report')
 {
@@ -110,9 +110,9 @@ elseif ($_REQUEST['mode'] == 'report')
 
     if ($_POST['output'] == 'screen')
     {
-        include ('htmlheader.inc.php');
+        include ('./inc/htmlheader.inc.php');
         echo $html;
-        include ('htmlfooter.inc.php');
+        include ('./inc/htmlfooter.inc.php');
     }
     elseif ($_POST['output'] == 'csv')
     {

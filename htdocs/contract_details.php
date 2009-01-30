@@ -16,18 +16,18 @@
 @include ('set_include_path.inc.php');
 $permission = 19;  // view Maintenance contracts
 
-require ('db_connect.inc.php');
-require ('functions.inc.php');
+require ($lib_path.'db_connect.inc.php');
+require ($lib_path.'functions.inc.php');
 
 // This page requires authentication
-require ('auth.inc.php');
+require ($lib_path.'auth.inc.php');
 
 $id = cleanvar($_REQUEST['id']);
 
-include ('htmlheader.inc.php');
+include ('./inc/htmlheader.inc.php');
 
 // Display Maintenance
 echo contract_details($id);
 
-include ('htmlfooter.inc.php');
+include ('./inc/htmlfooter.inc.php');
 ?>

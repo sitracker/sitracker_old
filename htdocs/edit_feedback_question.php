@@ -12,10 +12,10 @@
 @include ('set_include_path.inc.php');
 $permission = 49; // Edit Feedback Forms
 
-require ('db_connect.inc.php');
-require ('functions.inc.php');
+require ($lib_path.'db_connect.inc.php');
+require ($lib_path.'functions.inc.php');
 // This page requires authentication
-require ('auth.inc.php');
+require ($lib_path.'auth.inc.php');
 
 function qtype_listbox($type)
 {
@@ -77,7 +77,7 @@ switch ($action)
     break;
 
     default:
-        include ('htmlheader.inc.php');
+        include ('./inc/htmlheader.inc.php');
 
         echo "<h2 align='center'>$title</h2>\n";
 
@@ -133,7 +133,7 @@ switch ($action)
 
             echo "</table>";
         }
-        include ('htmlfooter.inc.php');
+        include ('./inc/htmlfooter.inc.php');
     break;
 }
 ?>

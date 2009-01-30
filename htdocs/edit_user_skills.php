@@ -16,10 +16,10 @@ if (empty($_REQUEST['user'])
     OR $_REQUEST['userid']==$_SESSION['userid']) $permission=58; // Edit your software skills
 else $permission=59; // Manage users software skills
 
-require ('db_connect.inc.php');
-require ('functions.inc.php');
+require ($lib_path.'db_connect.inc.php');
+require ($lib_path.'functions.inc.php');
 // This page requires authentication
-require ('auth.inc.php');
+require ($lib_path.'auth.inc.php');
 
 // External Variables
 $submit = $_REQUEST['submit'];
@@ -28,7 +28,7 @@ else $user = cleanvar($_REQUEST['user']);
 
 if (empty($submit))
 {
-    include ('htmlheader.inc.php');
+    include ('./inc/htmlheader.inc.php');
     $sql = "SELECT * FROM `{$dbUserSoftware}` AS us, `{$dbSoftware}` AS s WHERE us.softwareid = s.id AND userid = '$user' ORDER BY name";
     $result = mysql_query($sql);
     if (mysql_num_rows($result) >= 1)
@@ -98,7 +98,7 @@ if (empty($submit))
     echo "<p align='center'><input name='submit' type='submit' value='{$strSave}' /></p>";
     echo "</form>\n";
 
-    include ('htmlfooter.inc.php');
+    include ('./inc/htmlfooter.inc.php');
 }
 else
 {

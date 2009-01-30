@@ -12,11 +12,11 @@
 @include ('set_include_path.inc.php');
 $permission = 35;  // Set your status
 
-require ('db_connect.inc.php');
-require ('functions.inc.php');
+require ($lib_path.'db_connect.inc.php');
+require ($lib_path.'functions.inc.php');
 
 // This page requires authentication
-require ('auth.inc.php');
+require ($lib_path.'auth.inc.php');
 
 // External variables
 $mode = cleanvar($_REQUEST['mode']);

@@ -18,9 +18,9 @@ require ('fetchSitMail.class.php');
 
 if (realpath(__FILE__) == realpath($_SERVER['SCRIPT_FILENAME']))
 {
-    require ('db_connect.inc.php');
+    require ($lib_path.'db_connect.inc.php');
     include ('strings.inc.php');
-    require ('functions.inc.php');
+    require ($lib_path.'functions.inc.php');
     require ($lib_path . 'base.inc.php');
 }
 else

@@ -12,9 +12,9 @@
 // This file should be called from a cron job (or similar) to run tasks periodically
 
 @include ('set_include_path.inc.php');
-require ('db_connect.inc.php');
+require ($lib_path.'db_connect.inc.php');
 include ('strings.inc.php');
-require ('functions.inc.php');
+require ($lib_path.'functions.inc.php');
 include_once ($lib_path . 'billing.inc.php');
 populate_syslang();
 

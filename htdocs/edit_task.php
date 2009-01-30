@@ -13,11 +13,11 @@
 @include ('set_include_path.inc.php');
 $permission = 70;
 
-require ('db_connect.inc.php');
-require ('functions.inc.php');
+require ($lib_path.'db_connect.inc.php');
+require ($lib_path.'functions.inc.php');
 
 // This page requires authentication
-require ('auth.inc.php');
+require ($lib_path.'auth.inc.php');
 if (!$CONFIG['tasks_enabled'])
 {
     header("Location: main.php");
@@ -90,7 +90,7 @@ switch ($action)
         if ($startdate > $duedate AND $duedate != '' AND $duedate > 0 ) $startdate = $duedate;
         if (count($error) >= 1)
         {
-            include ('htmlheader.inc.php');
+            include ('./inc/htmlheader.inc.php');
             echo "<p class='error'>Please check the data you entered</p>";
             echo "<ul class='error'>";
             foreach ($error AS $err)
@@ -98,7 +98,7 @@ switch ($action)
                 echo "<li>$err</li>";
             }
             echo "</ul>";
-            include ('htmlfooter.inc.php');
+            include ('./inc/htmlfooter.inc.php');
         }
         else
         {
@@ -275,7 +275,7 @@ switch ($action)
 
     case '':
     default:
-        include ('htmlheader.inc.php');
+        include ('./inc/htmlheader.inc.php');
         echo "<h2>".icon('task', 32)." ";
         echo "$title</h2>";
         $sql = "SELECT * FROM `{$dbTasks}` WHERE id='$id'";
@@ -359,7 +359,7 @@ switch ($action)
         else echo "<p class='error'>{$strNoMatchingTaskFound}</p>";
 
         echo "<p align='center'><a href='tasks.php'>{$strTaskList}</a></p>";
-        include ('htmlfooter.inc.php');
+        include ('./inc/htmlfooter.inc.php');
 }
 
 ?>

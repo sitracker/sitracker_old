@@ -21,7 +21,7 @@ if (!@include ($lib_path.'db_connect.inc.php'))
 session_name($CONFIG['session_name']);
 session_start();
 include ($lib_path.'strings.inc.php');
-require ('functions.inc.php');
+require ($lib_path.'functions.inc.php');
 
 if ($_SESSION['auth'] != TRUE)
 {
@@ -35,7 +35,7 @@ if ($_SESSION['auth'] != TRUE)
     $page = htmlentities($page, ENT_COMPAT, $GLOBALS['i18ncharset']);
 
     // Invalid user, show log in form
-    include ('htmlheader.inc.php');
+    include ('./inc/htmlheader.inc.php');
     if ($id == 1)
     {
         echo "<p class='error'>";
@@ -113,7 +113,7 @@ if ($_SESSION['auth'] != TRUE)
     echo "<br /><a href='forgotpwd.php'>{$strForgottenDetails}</a>";
     echo "</form>\n";
     echo "</div>\n</div>\n";
-    include ('htmlfooter.inc.php');
+    include ('./inc/htmlfooter.inc.php');
 }
 else
 {

@@ -16,12 +16,12 @@
 @include ('set_include_path.inc.php');
 $permission = 12;  // view contacts
 
-require ('db_connect.inc.php');
-require ('functions.inc.php');
+require ($lib_path.'db_connect.inc.php');
+require ($lib_path.'functions.inc.php');
 $title = 'Contact Details';
 
 // This page requires authentication
-require ('auth.inc.php');
+require ($lib_path.'auth.inc.php');
 
 // External variables
 $id = mysql_real_escape_string($_REQUEST['id']);
@@ -36,7 +36,7 @@ if ($output == 'vcard')
     exit;
 }
 
-include ('htmlheader.inc.php');
+include ('./inc/htmlheader.inc.php');
 
 // Display contacts
 $sql = "SELECT * FROM `{$dbContacts}` WHERE id='{$id}' ";
@@ -233,5 +233,5 @@ while ($contactrow = mysql_fetch_array($contactresult))
 }
 mysql_free_result($contactresult);
 
-include ('htmlfooter.inc.php');
+include ('./inc/htmlfooter.inc.php');
 ?>

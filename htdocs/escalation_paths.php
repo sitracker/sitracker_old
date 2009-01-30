@@ -15,15 +15,15 @@
 @include ('set_include_path.inc.php');
 $permission = 64; // Manage escalation paths
 
-require ('db_connect.inc.php');
-require ('functions.inc.php');
+require ($lib_path.'db_connect.inc.php');
+require ($lib_path.'functions.inc.php');
 
 // This page requires authentication
-require ('auth.inc.php');
+require ($lib_path.'auth.inc.php');
 
 $title = $strEscalationPaths;
 
-include ('htmlheader.inc.php');
+include ('./inc/htmlheader.inc.php');
 echo "<h2>".icon('escalation', 32, $strEscalationPaths)." {$title}</h2>";
 
 $sql = "SELECT * FROM `{$dbEscalationPaths}` ORDER BY name";
@@ -57,6 +57,6 @@ else echo "<p align='center'>{$strNoRecords}</p>";
 
 echo "<p align='center'><a href='escalation_path_add.php'>{$strAdd}</a></p>";
 
-include ('htmlfooter.inc.php');
+include ('./inc/htmlfooter.inc.php');
 
 ?>

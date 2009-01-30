@@ -16,14 +16,14 @@
 $permission = 44; // Publish Files to FTP site
 
 $title = 'FTP File Details';
-require ('db_connect.inc.php');
-require ('functions.inc.php');
+require ($lib_path.'db_connect.inc.php');
+require ($lib_path.'functions.inc.php');
 
 // This page requires authentication
-require ('auth.inc.php');
+require ($lib_path.'auth.inc.php');
 
 // display file details
-include ('htmlheader.inc.php');
+include ('./inc/htmlheader.inc.php');
 
 // External Vars
 $id = cleanvar($_REQUEST['id']);
@@ -62,5 +62,5 @@ echo "</table>\n";
 echo "<p align='center'>";
 echo "<a href='ftp_delete.php?id={$id}'>Delete this file</a> | ";
 echo "<a href='ftp_edit_file.php?id={$id}'>Describe and Publish this file</a></p>";
-include ('htmlfooter.inc.php');
+include ('./inc/htmlfooter.inc.php');
 ?>

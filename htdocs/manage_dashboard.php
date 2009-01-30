@@ -11,11 +11,11 @@
 
 @include ('set_include_path.inc.php');
 $permission = 66; // Install dashboard components
-require ('db_connect.inc.php');
-require ('functions.inc.php');
+require ($lib_path.'db_connect.inc.php');
+require ($lib_path.'functions.inc.php');
 
 // This page requires authentication
-require ('auth.inc.php');
+require ($lib_path.'auth.inc.php');
 
 // A duplicate of that in setup.php - Probably wants moving to functions.inc.php eventually PH 9/12/07
 function setup_exec_sql($sqlquerylist)
@@ -47,7 +47,7 @@ function setup_exec_sql($sqlquerylist)
 switch ($_REQUEST['action'])
 {
     case 'install':
-        include ('htmlheader.inc.php');
+        include ('./inc/htmlheader.inc.php');
 
         $sql = "SELECT name FROM `{$dbDashboard}`";
         $result = mysql_query($sql);
@@ -99,7 +99,7 @@ switch ($_REQUEST['action'])
             echo "</form>\n";
         }
 
-        include ('htmlfooter.inc.php');
+        include ('./inc/htmlfooter.inc.php');
 
         break;
     case 'installdashboard':
@@ -214,7 +214,7 @@ switch ($_REQUEST['action'])
         break;
 
     default:
-        include ('htmlheader.inc.php');
+        include ('./inc/htmlheader.inc.php');
 
         $sql = "SELECT * FROM `{$dbDashboard}`";
         $result = mysql_query($sql);
@@ -271,7 +271,7 @@ switch ($_REQUEST['action'])
 
         echo "<p align='center'><a href='".$_SERVER['PHP_SELF']."?action=install'>{$strInstall}</a></p>";
 
-        include ('htmlfooter.inc.php');
+        include ('./inc/htmlfooter.inc.php');
         break;
 }
 

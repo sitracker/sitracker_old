@@ -13,11 +13,11 @@
 @include ('set_include_path.inc.php');
 $permission = 0; // Allow all auth users
 
-require ('db_connect.inc.php');
-require ('functions.inc.php');
+require ($lib_path.'db_connect.inc.php');
+require ($lib_path.'functions.inc.php');
 
 // This page requires authentication
-require ('auth.inc.php');
+require ($lib_path.'auth.inc.php');
 
 $title = $strAddLink;
 
@@ -47,7 +47,7 @@ switch ($action)
 
     case '':
     default:
-        include ('htmlheader.inc.php');
+        include ('./inc/htmlheader.inc.php');
 
         // Find out what kind of link we are to make
         $sql = "SELECT * FROM `{$dbLinkTypes}` WHERE id='$linktypeid'";
@@ -91,7 +91,7 @@ switch ($action)
             }
             else echo "<p class='error'>Nothing to link</p>";
         }
-        include ('htmlfooter.inc.php');
+        include ('./inc/htmlfooter.inc.php');
 }
 
 ?>

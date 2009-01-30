@@ -13,11 +13,11 @@
 @include ('set_include_path.inc.php');
 $permission = 44; // Publish Files to FTP site
 
-require ('db_connect.inc.php');
-require ('functions.inc.php');
+require ($lib_path.'db_connect.inc.php');
+require ($lib_path.'functions.inc.php');
 
 // This page requires authentication
-require ('auth.inc.php');
+require ($lib_path.'auth.inc.php');
 
 // seed with microseconds since last "whole" second
 mt_srand((double)microtime()*1000000);
@@ -39,7 +39,7 @@ $pretty_file_size = readable_file_size($filesize);
 if (!isset($temp_directory))
 {
     // show form
-    include ('htmlheader.inc.php');
+    include ('./inc/htmlheader.inc.php');
     echo "<h2>{$strFTPPublish}</h2>";
     echo "<form name='publishform' action='{$_SERVER['PHP_SELF']}' method='post'>";
     echo "<input type='hidden' name='source_file' value='{$source_file}' />";
@@ -103,12 +103,12 @@ if (!isset($temp_directory))
     echo "<p align='center'><input type='submit' value='{$strPublish}' /></p>";
     echo "</form>";
 
-    include ('htmlfooter.inc.php');
+    include ('./inc/htmlfooter.inc.php');
 }
 else
 {
     // publish file
-    include ('htmlheader.inc.php');
+    include ('./inc/htmlheader.inc.php');
     echo "<h2>{$strFTPPublish}</h2>";
     // set up basic connection
     $conn_id = create_ftp_connection();
@@ -172,6 +172,6 @@ else
     }
     // close the FTP stream
     ftp_close($conn_id);
-    include ('htmlfooter.inc.php');
+    include ('./inc/htmlfooter.inc.php');
 }
 ?>

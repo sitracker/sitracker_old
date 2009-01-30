@@ -18,10 +18,10 @@ $permission = 37; // Run Reports
 
 include ('db_connect.inc.php');
 include ('functions.inc.php');
-require ('auth.inc.php');
+require ($lib_path.'auth.inc.php');
 
 
-include ('htmlheader.inc.php');
+include ('./inc/htmlheader.inc.php');
 
 $filterby = cleanvar($_REQUEST['filterby']);
 $filter = cleanvar($_REQUEST['filter']);
@@ -243,5 +243,5 @@ while ($escalations = mysql_fetch_object($escs))
     unset($esc);
 }
 echo $html;
-include ('htmlfooter.inc.php');
+include ('./inc/htmlfooter.inc.php');
 ?>

@@ -15,11 +15,11 @@
 
 @include ('set_include_path.inc.php');
 $permission = 14; // View Users
-require ('db_connect.inc.php');
-require ('functions.inc.php');
+require ($lib_path.'db_connect.inc.php');
+require ($lib_path.'functions.inc.php');
 
 // This page requires authentication
-require ('auth.inc.php');
+require ($lib_path.'auth.inc.php');
 
 // External variables
 $sort = cleanvar($_REQUEST['sort']);
@@ -32,7 +32,7 @@ if ($groupid == 'all' OR ($groupid == '' AND $_SESSION['groupid'] == 0)) $filter
 elseif ($groupid == '') $filtergroup = $_SESSION['groupid'];
 else $filtergroup = $groupid;
 
-include ('htmlheader.inc.php');
+include ('./inc/htmlheader.inc.php');
 
 echo "<h2>".icon('user', 32)." ";
 echo "{$strUsers}</h2>";
@@ -245,5 +245,5 @@ echo "</tr></table>\n";
 
 mysql_free_result($result);
 
-include ('htmlfooter.inc.php');
+include ('./inc/htmlfooter.inc.php');
 ?>

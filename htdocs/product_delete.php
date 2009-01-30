@@ -14,11 +14,11 @@
 
 @include ('set_include_path.inc.php');
 $permission = 65;  // Delete products
-require ('db_connect.inc.php');
-require ('functions.inc.php');
+require ($lib_path.'db_connect.inc.php');
+require ($lib_path.'functions.inc.php');
 
 // This page requires authentication
-require ('auth.inc.php');
+require ($lib_path.'auth.inc.php');
 
 // External variables
 $productid = cleanvar($_REQUEST['id']);
@@ -54,10 +54,10 @@ if (!empty($productid))
     }
     else
     {
-        include ('htmlheader.inc.php');
+        include ('./inc/htmlheader.inc.php');
         echo "<p class='error'>{$strSorryProductCantBeDeteled}</p>";
         echo "<p align='center'><a href='products.php#{$productid}'>{$strReturnToProductList}</a></p>";
-        include ('htmlfooter.inc.php');
+        include ('./inc/htmlfooter.inc.php');
     }
 }
 else

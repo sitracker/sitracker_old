@@ -13,10 +13,10 @@
 @include ('set_include_path.inc.php');
 $permission = 1; // Add new contact
 
-require ('db_connect.inc.php');
-require ('functions.inc.php');
+require ($lib_path.'db_connect.inc.php');
+require ($lib_path.'functions.inc.php');
 // This page requires authentication
-require ('auth.inc.php');
+require ($lib_path.'auth.inc.php');
 
 $pagescripts = array('dojo/dojo.js');
 
@@ -26,7 +26,7 @@ $submit = $_REQUEST['submit'];
 
 if (empty($submit) OR !empty($_SESSION['formerrors']['add_contact']))
 {
-    include ('htmlheader.inc.php');
+    include ('./inc/htmlheader.inc.php');
     ?>
     <script type='text/javascript'>
     //<![CDATA[
@@ -35,7 +35,7 @@ if (empty($submit) OR !empty($_SESSION['formerrors']['add_contact']))
     </script>
     <?php
     echo show_add_contact($siteid, 'internal');
-    include ('htmlfooter.inc.php');
+    include ('./inc/htmlfooter.inc.php');
 }
 else
 {

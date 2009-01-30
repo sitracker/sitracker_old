@@ -10,11 +10,11 @@
 // Author: Paul Heaney <paulheaney[at]users.sourceforge.net>
 
 @include ('set_include_path.inc.php');
-require ('db_connect.inc.php');
-require ('functions.inc.php');
+require ($lib_path.'db_connect.inc.php');
+require ($lib_path.'functions.inc.php');
 
 // This page requires authentication
-require ('auth.inc.php');
+require ($lib_path.'auth.inc.php');
 
 $title=  $strTodaysStats;
 
@@ -506,7 +506,7 @@ function give_overview()
     return $string;
 }
 
-include ('htmlheader.inc.php');
+include ('./inc/htmlheader.inc.php');
 
 switch ($mode)
 {
@@ -527,5 +527,5 @@ switch ($mode)
         break;
 }
 
-include ('htmlfooter.inc.php');
+include ('./inc/htmlfooter.inc.php');
 ?>

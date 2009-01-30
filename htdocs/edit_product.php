@@ -13,10 +13,10 @@
 @include ('set_include_path.inc.php');
 $permission = 29; // Edit products
 
-require ('db_connect.inc.php');
-require ('functions.inc.php');
+require ($lib_path.'db_connect.inc.php');
+require ($lib_path.'functions.inc.php');
 // This page requires authentication
-require ('auth.inc.php');
+require ($lib_path.'auth.inc.php');
 
 // External variables
 $id = cleanvar($_REQUEST['id']);
@@ -52,7 +52,7 @@ if ($action == 'save')
 else
 {
     $title = $strEditProduct;
-    include ('htmlheader.inc.php');
+    include ('./inc/htmlheader.inc.php');
 
     echo "<h2>".icon('product', 32)." ";
     echo "$title</h2>\n";
@@ -89,6 +89,6 @@ else
     echo "<p align='center'><a href='products.php'>{$strReturnWithoutSaving}</a></p>";
     mysql_free_result($result);
 
-    include ('htmlfooter.inc.php');
+    include ('./inc/htmlfooter.inc.php');
 }
 ?>

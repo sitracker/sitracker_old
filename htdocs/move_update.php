@@ -11,11 +11,11 @@
 
 @include ('set_include_path.inc.php');
 $permission = 8; // Update Incidents
-require ('db_connect.inc.php');
-require ('functions.inc.php');
+require ($lib_path.'db_connect.inc.php');
+require ($lib_path.'functions.inc.php');
 
 // This page requires authentication
-require ('auth.inc.php');
+require ($lib_path.'auth.inc.php');
 // External variables
 $incidentid = cleanvar($_REQUEST['incidentid']);
 $updateid = cleanvar($_REQUEST['updateid']);
@@ -147,7 +147,7 @@ if ($incidentid == '')
         echo "</td></tr>";
         echo "</table>";
 
-        include ('htmlfooter.inc.php');
+        include ('./inc/htmlfooter.inc.php');
     }
 }
 else

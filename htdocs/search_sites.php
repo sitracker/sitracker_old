@@ -11,11 +11,11 @@
 @include ('set_include_path.inc.php');
 $permission = 11; // View Sites
 
-require ('db_connect.inc.php');
-require ('functions.inc.php');
+require ($lib_path.'db_connect.inc.php');
+require ($lib_path.'functions.inc.php');
 
 // This page requires authentication
-require ('auth.inc.php');
+require ($lib_path.'auth.inc.php');
 
 // External variables
 $search_string = cleanvar($_REQUEST['search_string']);
@@ -24,7 +24,7 @@ $user = cleanvar($_REQUEST['user']);
 // show search sites form
 if (empty($search_string))
 {
-    include ('htmlheader.inc.php');
+    include ('./inc/htmlheader.inc.php');
     ?>
     <h2>Search Sites</h2>
     <form action="<?php echo $_SERVER['PHP_SELF'] ?>" method="post">
@@ -44,12 +44,12 @@ if (empty($search_string))
     <input name="submit" type="submit" value="Search" />
     </form>
     <?php
-    include ('htmlfooter.inc.php');
+    include ('./inc/htmlfooter.inc.php');
 }
 else
 {
     // perform search
-    include ('htmlheader.inc.php');
+    include ('./inc/htmlheader.inc.php');
 
     // check input
     if ($search_string == '' AND $user== '')
@@ -133,6 +133,6 @@ else
             <?php
         }
     }
-    include ('htmlfooter.inc.php');
+    include ('./inc/htmlfooter.inc.php');
 }
 ?>

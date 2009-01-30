@@ -16,10 +16,10 @@
 @include ('set_include_path.inc.php');
 $permission = 6; // view incidents
 
-require ('db_connect.inc.php');
-require ('functions.inc.php');
+require ($lib_path.'db_connect.inc.php');
+require ($lib_path.'functions.inc.php');
 // This page requires authentication
-require ('auth.inc.php');
+require ($lib_path.'auth.inc.php');
 
 // External variables
 $id = cleanvar($_REQUEST['id']);
@@ -30,7 +30,7 @@ if (!empty($_REQUEST['end'])) $end = strtotime($_REQUEST['end']);
 else $end=0;
 $status = $_REQUEST['status'];
 
-include ('htmlheader.inc.php');
+include ('./inc/htmlheader.inc.php');
 
 if ($mode=='site') echo "<h2>".site_name($id)."</h2>";
 else echo "<h2>".contact_realname($id)."</h2>";
@@ -242,5 +242,5 @@ if ($countproducts >= 1 OR $contactcontacts >= 1)
     }
 }
 
-include ('htmlfooter.inc.php');
+include ('./inc/htmlfooter.inc.php');
 ?>

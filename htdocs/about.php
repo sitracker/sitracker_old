@@ -14,12 +14,12 @@
 @include ('set_include_path.inc.php');
 $permission = 41; // View Status
 
-require ('db_connect.inc.php');
-require ('functions.inc.php');
+require ($lib_path.'db_connect.inc.php');
+require ($lib_path.'functions.inc.php');
 // This page requires authentication
-require ('auth.inc.php');
+require ($lib_path.'auth.inc.php');
 
-include ('htmlheader.inc.php');
+include ('./inc/htmlheader.inc.php');
 
 echo "<div id='aboutsit'>";
 echo "<img src='images/sitlogo_270x100.png' width='270' height='100' alt='SiT! Support Incident Tracker' />";
@@ -153,5 +153,5 @@ plugin_do('about');
 
 echo "</div>";
 
-include ('htmlfooter.inc.php');
+include ('./inc/htmlfooter.inc.php');
 ?>

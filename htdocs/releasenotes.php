@@ -9,8 +9,8 @@
 
 @include ('set_include_path.inc.php');
 $permission = 0;
-require ('db_connect.inc.php');
-require ('functions.inc.php');
+require ($lib_path.'db_connect.inc.php');
+require ($lib_path.'functions.inc.php');
 $version = cleanvar($_GET['v']);
 //as passed by triggers
 $version = str_replace("v", "", $version);
@@ -20,8 +20,8 @@ if (!empty($version))
 }
 
 // This page requires authentication
-require ('auth.inc.php');
-include_once('htmlheader.inc.php');
+require ($lib_path.'auth.inc.php');
+include_once('./inc/htmlheader.inc.php');
 echo "<h2>Release Notes</h2>";
 
 echo "<div id='help'>";
@@ -175,6 +175,6 @@ echo '<div>
     </div>';
 echo "</div>";
 
-include_once('htmlfooter.inc.php');
+include_once('./inc/htmlfooter.inc.php');
 
 ?>

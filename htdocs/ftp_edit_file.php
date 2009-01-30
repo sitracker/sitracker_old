@@ -16,11 +16,11 @@
 $permission=44; // Publish Files to FTP site
 
 $title='Edit FTP File Details and Publish';
-require ('db_connect.inc.php');
-require ('functions.inc.php');
+require ($lib_path.'db_connect.inc.php');
+require ($lib_path.'functions.inc.php');
 
 // This page requires authentication
-require ('auth.inc.php');
+require ($lib_path.'auth.inc.php');
 
 // External Vars
 $id = cleanvar($_REQUEST['id']);
@@ -31,7 +31,7 @@ switch ($mode)
 {
     case 'form':
         // display file details
-        include ('htmlheader.inc.php');
+        include ('./inc/htmlheader.inc.php');
         $sql = "SELECT * FROM `{$dbFiles}` WHERE id='{$id}'";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
@@ -85,7 +85,7 @@ switch ($mode)
         echo "<input type='hidden' name='mode' value='save' />";
         echo "<p align='center'><input type='submit' value='Save &amp; Publish' /></p>";
         echo "</form>";
-        include ('htmlfooter.inc.php');
+        include ('./inc/htmlfooter.inc.php');
     break;
 
     case 'save':

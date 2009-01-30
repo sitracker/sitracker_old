@@ -10,10 +10,10 @@
 
 @include ('set_include_path.inc.php');
 $permission = 22; // Administrate
-require ('db_connect.inc.php');
-require ('functions.inc.php');
+require ($lib_path.'db_connect.inc.php');
+require ($lib_path.'functions.inc.php');
 // This page requires authentication
-require ('auth.inc.php');
+require ($lib_path.'auth.inc.php');
 
 $title = $strEditHolidayEntitlement;
 
@@ -60,7 +60,7 @@ switch ($_REQUEST['action'])
 
     case 'form':
     default:
-        include ('htmlheader.inc.php');
+        include ('./inc/htmlheader.inc.php');
         echo "<h2>{$title}</h2>";
 
         $sql = "SELECT * FROM `{$dbUsers}` WHERE status >= 1 ORDER BY realname ASC";
@@ -111,7 +111,7 @@ switch ($_REQUEST['action'])
         echo "<input type='hidden' name='action' value='save' />";
         echo "<input type='submit' name='submit' value='{$strSave}' /></p>";
         echo "</form>";
-        include ('htmlfooter.inc.php');
+        include ('./inc/htmlfooter.inc.php');
     break;
 }
 ?>

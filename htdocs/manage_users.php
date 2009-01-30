@@ -12,12 +12,12 @@
 
 @include ('set_include_path.inc.php');
 $permission = 22; // Administrate
-require ('db_connect.inc.php');
-require ('functions.inc.php');
+require ($lib_path.'db_connect.inc.php');
+require ($lib_path.'functions.inc.php');
 // This page requires authentication
-require ('auth.inc.php');
+require ($lib_path.'auth.inc.php');
 
-include ('htmlheader.inc.php');
+include ('./inc/htmlheader.inc.php');
 
 $sql  = "SELECT *,u.id AS userid FROM `{$dbUsers}` AS u, `{$dbRoles}` AS r ";
 $sql .= "WHERE u.roleid = r.id ";
@@ -146,5 +146,5 @@ echo "</table>\n";
 // free result and disconnect
 mysql_free_result($result);
 
-include ('htmlfooter.inc.php');
+include ('./inc/htmlfooter.inc.php');
 ?>

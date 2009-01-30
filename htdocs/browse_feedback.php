@@ -13,13 +13,13 @@
 @include ('set_include_path.inc.php');
 $permission = 51; // View Feedback
 
-require ('db_connect.inc.php');
-require ('functions.inc.php');
+require ($lib_path.'db_connect.inc.php');
+require ($lib_path.'functions.inc.php');
 // This page requires authentication
-require ('auth.inc.php');
+require ($lib_path.'auth.inc.php');
 
 $title = $strBrowseFeedback;
-include ('htmlheader.inc.php');
+include ('./inc/htmlheader.inc.php');
 
 // External variables
 $formid = cleanvar($_REQUEST['id']);
@@ -257,5 +257,5 @@ switch ($mode)
             }
         }
 }
-include ('htmlfooter.inc.php');
+include ('./inc/htmlfooter.inc.php');
 ?>

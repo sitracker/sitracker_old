@@ -15,11 +15,11 @@
 @include ('../set_include_path.inc.php');
 $permission = 37; // Run Reports
 
-require ('db_connect.inc.php');
-require ('functions.inc.php');
+require ($lib_path.'db_connect.inc.php');
+require ($lib_path.'functions.inc.php');
 
 // This page requires authentication
-require ('auth.inc.php');
+require ($lib_path.'auth.inc.php');
 
 $startdate = strtotime(cleanvar($_REQUEST['startdate']));
 $enddate = strtotime(cleanvar($_REQUEST['enddate']));
@@ -29,7 +29,7 @@ if (empty($output)) $output = 'html';
 
 if (empty($mode))
 {
-    include ('htmlheader.inc.php');
+    include ('./inc/htmlheader.inc.php');
 
     echo "<h2>{$strBillableIncidentsReport}<h2>";
 
@@ -50,7 +50,7 @@ if (empty($mode))
     echo "<input type='hidden' name='mode' id='mode' value='report' />";
     echo "</form>";
 
-    include ('htmlfooter.inc.php');
+    include ('./inc/htmlfooter.inc.php');
 }
 elseif ($mode == 'report')
 {
@@ -66,7 +66,7 @@ elseif ($mode == 'report')
 
     if ($output == 'html')
     {
-        include ('htmlheader.inc.php');
+        include ('./inc/htmlheader.inc.php');
     }
 
     $sqlsite = "SELECT DISTINCT m.site FROM `{$dbMaintenance}` AS m WHERE expirydate >= {$startdate}";
@@ -129,7 +129,7 @@ elseif ($mode == 'report')
 
     if ($output == 'html')
     {
-        include ('htmlfooter.inc.php');
+        include ('./inc/htmlfooter.inc.php');
     }
 
 }

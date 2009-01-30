@@ -10,12 +10,12 @@
 @include ('set_include_path.inc.php');
 $permission = 0;
 
-require ('db_connect.inc.php');
-require ('functions.inc.php');
+require ($lib_path.'db_connect.inc.php');
+require ($lib_path.'functions.inc.php');
 // This page requires authentication
-require ('auth.inc.php');
+require ($lib_path.'auth.inc.php');
 
-include ('htmlheader.inc.php');
+include ('./inc/htmlheader.inc.php');
 
 if (is_numeric($_GET['site']) AND empty($_GET['action']) AND empty($_GET['edit']))
 {
@@ -130,7 +130,7 @@ if (is_numeric($_GET['site']) AND empty($_GET['action']) AND empty($_GET['edit']
     {
         echo "<p class='info'>{$strNoRecords}</p>";
     }
-    include ('htmlfooter.inc.php');
+    include ('./inc/htmlfooter.inc.php');
 }
 elseif(is_numeric($_GET['edit']) OR $_GET['action'] == 'new')
 {
@@ -342,7 +342,7 @@ elseif(is_numeric($_GET['edit']) OR $_GET['action'] == 'new')
         {
             echo "<a href='{$_SERVER['PHP_SELF']}?site={$siteid}'>{$strBackToList}</a>";
         }
-        include ('htmlfooter.inc.php');
+        include ('./inc/htmlfooter.inc.php');
     }
 }
 else
@@ -374,7 +374,7 @@ else
     
     echo "<p align='center'><a href='{$_SERVER['PHP_SELF']}?action=new&newsite=true'>";
     echo "{$strSiteNotListed}</a></p>";
-    include ('htmlfooter.inc.php');
+    include ('./inc/htmlfooter.inc.php');
 }
 
 

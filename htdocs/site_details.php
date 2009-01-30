@@ -14,17 +14,17 @@
 
 @include ('set_include_path.inc.php');
 $permission = 11; // View Sites
-require ('db_connect.inc.php');
-require ('functions.inc.php');
+require ($lib_path.'db_connect.inc.php');
+require ($lib_path.'functions.inc.php');
 require_once ($lib_path . 'billing.inc.php');
 
 // This page requires authentication
-require ('auth.inc.php');
+require ($lib_path.'auth.inc.php');
 
 // External variables
 $id = cleanvar($_REQUEST['id']);
 
-include ('htmlheader.inc.php');
+include ('./inc/htmlheader.inc.php');
 
 if ($id=='')
 {
@@ -319,6 +319,6 @@ if (user_permission($sit[2],19)) // View contracts
     echo "<p align='center'><a href='contract_add.php?action=showform&amp;siteid=$id'>{$strAddContract}</a></p>";
 }
 
-include ('htmlfooter.inc.php');
+include ('./inc/htmlfooter.inc.php');
 
 ?>

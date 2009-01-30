@@ -14,11 +14,11 @@
 @include ('set_include_path.inc.php');
 $permission=70;
 
-require ('db_connect.inc.php');
-require ('functions.inc.php');
+require ($lib_path.'db_connect.inc.php');
+require ($lib_path.'functions.inc.php');
 
 // This page requires authentication
-require ('auth.inc.php');
+require ($lib_path.'auth.inc.php');
 if (!$CONFIG['tasks_enabled'])
 {
     header("Location: main.php");
@@ -99,7 +99,7 @@ else
             if ($startdate > $duedate AND $duedate != '' AND $duedate > 0 ) $startdate=$duedate. " ".$duetime;
             if ($errors != 0)
             {
-                include ('htmlheader.inc.php');
+                include ('./inc/htmlheader.inc.php');
                 html_redirect($_SERVER['PHP_SELF'], FALSE);
             }
             else
@@ -123,7 +123,7 @@ else
 
         case '':
         default:
-            include ('htmlheader.inc.php');
+            include ('./inc/htmlheader.inc.php');
             echo show_form_errors('add_task');
             clear_form_errors('add_task');
 
@@ -225,7 +225,7 @@ else
             clear_form_errors('add_site');
 
 
-            include ('htmlfooter.inc.php');
+            include ('./inc/htmlfooter.inc.php');
     }
 }
 

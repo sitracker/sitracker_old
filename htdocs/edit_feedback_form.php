@@ -12,10 +12,10 @@
 @include ('set_include_path.inc.php');
 $permission = 49; // Edit Feedback Forms
 
-require ('db_connect.inc.php');
-require ('functions.inc.php');
+require ($lib_path.'db_connect.inc.php');
+require ($lib_path.'functions.inc.php');
 // This page requires authentication
-require ('auth.inc.php');
+require ($lib_path.'auth.inc.php');
 
 // External Variables
 $formid = cleanvar($_REQUEST['formid']);
@@ -55,7 +55,7 @@ switch ($_REQUEST['action'])
     break;
 
     case 'new':
-        include ('htmlheader.inc.php');
+        include ('./inc/htmlheader.inc.php');
         echo "<h3>{$strAddFeedbackForm}</h3>";
         echo "<form action='{$_SERVER['PHP_SELF']}' method='post'>";
         echo "<table summary='Form' align='center' class='vertical'>";
@@ -98,14 +98,14 @@ switch ($_REQUEST['action'])
         echo "</tr>";
         echo "</table>";
         echo "</form>";
-        include ('htmlfooter.inc.php');
+        include ('./inc/htmlfooter.inc.php');
         break;
     default:
         $sql = "SELECT * FROM `{$dbFeedbackForms}` WHERE id='{$formid}'";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
-        include ('htmlheader.inc.php');
+        include ('./inc/htmlheader.inc.php');
         echo "<h3>{$title}</h3>";
 
         $sql = "SELECT * FROM `{$dbFeedbackForms}` WHERE id = '$formid'";
@@ -181,7 +181,7 @@ switch ($_REQUEST['action'])
             }
         }
         else echo "<p class='error'>{$strNoRecords}</p>";
-        include ('htmlfooter.inc.php');
+        include ('./inc/htmlfooter.inc.php');
     break;
 }
 ?>

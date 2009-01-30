@@ -13,11 +13,11 @@
 
 @include ('set_include_path.inc.php');
 $permission = 44; // ftp publishing
-require ('db_connect.inc.php');
-require ('functions.inc.php');
+require ($lib_path.'db_connect.inc.php');
+require ($lib_path.'functions.inc.php');
 
 // This page requires authentication
-require ('auth.inc.php');
+require ($lib_path.'auth.inc.php');
 
 // External variables
 $file = cleanvar($_REQUEST['file']);
@@ -28,7 +28,7 @@ $max_filesize = return_bytes($CONFIG['upload_max_filesize']);
 
 if (empty($action))
 {
-    include ('htmlheader.inc.php');
+    include ('./inc/htmlheader.inc.php');
  
     echo "<h2>Upload Public File</h2>";
     
@@ -94,7 +94,7 @@ if (empty($action))
     echo "<p align='center'><a href='ftp_list_files.php'>{$strBackToList}</a></p>";
     echo "</form>";
     
-    include ('htmlfooter.inc.php');
+    include ('./inc/htmlfooter.inc.php');
 }
 else
 {

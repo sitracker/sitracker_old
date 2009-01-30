@@ -87,5 +87,5 @@ else
     echo "<p class='info'>{$strNone}</p>";
 }
 
-include 'htmlfooter.inc.php';
+include './inc/htmlfooter.inc.php';
 ?>

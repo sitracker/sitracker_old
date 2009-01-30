@@ -25,5 +25,5 @@ if (isset($_POST['submit']))
 
 echo show_add_contact($_SESSION['siteid'], 'external');
 
-include 'htmlfooter.inc.php';
+include './inc/htmlfooter.inc.php';
 ?>

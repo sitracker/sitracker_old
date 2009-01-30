@@ -22,15 +22,15 @@
 @include ('../set_include_path.inc.php');
 $permission = 37; // Run Reports
 $title = 'Yearly Engineer/Incident Report';
-require ('db_connect.inc.php');
-require ('functions.inc.php');
+require ($lib_path.'db_connect.inc.php');
+require ($lib_path.'functions.inc.php');
 
 // This page requires authentication
-require ('auth.inc.php');
+require ($lib_path.'auth.inc.php');
 
 if (empty($_REQUEST['mode']))
 {
-    include ('htmlheader.inc.php');
+    include ('./inc/htmlheader.inc.php');
     echo "<h2>{$title}</h2>";
     echo "<form action='{$_SERVER['PHP_SELF']}' method='post' id='incidentsbyengineer'>";
     echo "<table align='center' class='vertical'>";
@@ -75,7 +75,7 @@ if (empty($_REQUEST['mode']))
     echo "<input type='submit' value=\"{$strRunReport}\" />";
     echo "</p>";
     echo "</form>";
-    include ('htmlfooter.inc.php');
+    include ('./inc/htmlfooter.inc.php');
 }
 elseif ($_REQUEST['statistics'] == 'on')
 {
@@ -301,10 +301,10 @@ elseif ($_REQUEST['statistics'] == 'on')
 
     if ($_POST['output'] == 'screen')
     {
-        include ('htmlheader.inc.php');
+        include ('./inc/htmlheader.inc.php');
         echo "<h2>".sprintf($strEngineersStatisticsForXMonths, 12)."</h2>";
         echo $html;
-        include ('htmlfooter.inc.php');
+        include ('./inc/htmlfooter.inc.php');
     }
     elseif ($_POST['output'] == 'csv')
     {
@@ -450,9 +450,9 @@ elseif ($_REQUEST['mode'] == 'report')
 
     if ($_POST['output'] == 'screen')
     {
-        include ('htmlheader.inc.php');
+        include ('./inc/htmlheader.inc.php');
         echo $html;
-        include ('htmlfooter.inc.php');
+        include ('./inc/htmlfooter.inc.php');
     }
     elseif ($_POST['output'] == 'csv')
     {

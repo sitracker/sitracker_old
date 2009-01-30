@@ -63,6 +63,6 @@ echo "<h2>".icon('contract', 32)." {$GLOBALS['strContract']}</h2>";
 
 echo contract_details($id, 'external');
 
-include 'htmlfooter.inc.php'
+include './inc/htmlfooter.inc.php'
 
 ?>

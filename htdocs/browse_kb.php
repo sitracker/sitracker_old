@@ -13,18 +13,18 @@
 
 @include ('set_include_path.inc.php');
 $permission = 54; // View KB
-require ('db_connect.inc.php');
-require ('functions.inc.php');
+require ($lib_path.'db_connect.inc.php');
+require ($lib_path.'functions.inc.php');
 
 // This page requires authentication
-require ('auth.inc.php');
+require ($lib_path.'auth.inc.php');
 
 // External variables
 $search_string = cleanvar($_REQUEST['search_string']);
 $mode = cleanvar($_REQUEST['mode']);
 
 $title = $strBrowseKB;
-include ('htmlheader.inc.php');
+include ('./inc/htmlheader.inc.php');
 if (empty($mode) && empty($search_string)) $mode='RECENT';
 if (empty($search_string) AND empty($mode)) $search_string='a';
 echo "<h2>".icon('kb', 32, $title)." ";
@@ -163,6 +163,6 @@ else
 // echo "<!---SQL === $sql --->";
 echo "<p align='center'><a href='kb_article.php'>{$strAddNew}</a></p>";
 
-include ('htmlfooter.inc.php');
+include ('./inc/htmlfooter.inc.php');
 
 ?>

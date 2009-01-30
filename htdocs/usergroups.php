@@ -13,13 +13,13 @@
 @include ('set_include_path.inc.php');
 $permission = 23; // Edit user
 
-require ('db_connect.inc.php');
-require ('functions.inc.php');
+require ($lib_path.'db_connect.inc.php');
+require ($lib_path.'functions.inc.php');
 
 $title = $strUserGroups;
 
 // This page requires authentication
-require ('auth.inc.php');
+require ($lib_path.'auth.inc.php');
 
 $action = cleanvar($_REQUEST['action']);
 
@@ -66,7 +66,7 @@ switch ($action)
     break;
 
     default:
-        include ('htmlheader.inc.php');
+        include ('./inc/htmlheader.inc.php');
 
         echo "<h2>{$strUserGroups}</h2>";
 
@@ -117,6 +117,6 @@ switch ($action)
             echo "<p><input type='hidden' name='action' value='savemembers' /><input type='submit' value='{$strSave}' /></p>";
             echo "</form>";
         }
-        include ('htmlfooter.inc.php');
+        include ('./inc/htmlfooter.inc.php');
 }
 ?>

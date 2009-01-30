@@ -19,13 +19,13 @@
 
 $permission = 37; // Run Reports
 
-require ('db_connect.inc.php');
-require ('functions.inc.php');
+require ($lib_path.'db_connect.inc.php');
+require ($lib_path.'functions.inc.php');
 
 // This page requires authentication
-require ('auth.inc.php');
+require ($lib_path.'auth.inc.php');
 
-include ('htmlheader.inc.php');
+include ('./inc/htmlheader.inc.php');
 
 echo "<h2>Report: Email Address of Supported Customers</h2>";
 echo "<h4><em>(Doesn't check for expiry)</em></h4>";
@@ -54,6 +54,6 @@ else
 mysql_free_result($result);
 mysql_close($db);
 
-include ('htmlfooter.inc.php');
+include ('./inc/htmlfooter.inc.php');
 
 ?>

@@ -188,10 +188,10 @@ else
 
 if ($display == 'html')
 {
-    include ('htmlheader.inc.php');
+    include ('./inc/htmlheader.inc.php');
     echo "<h2>{$strBillingSummary}</h2>";
     echo $str;
-    include ('htmlfooter.inc.php');
+    include ('./inc/htmlfooter.inc.php');
 }
 elseif ($display == 'csv')
 {

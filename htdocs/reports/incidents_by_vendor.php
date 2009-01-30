@@ -13,17 +13,17 @@
 @include ('../set_include_path.inc.php');
 $permission = 37; // Run Reports
 
-require ('db_connect.inc.php');
-require ('functions.inc.php');
+require ($lib_path.'db_connect.inc.php');
+require ($lib_path.'functions.inc.php');
 
 // This page requires authentication
-require ('auth.inc.php');
+require ($lib_path.'auth.inc.php');
 
 $title = $strIncidentsByVendor;
 
 if (empty($_REQUEST['mode']))
 {
-    include ('htmlheader.inc.php');
+    include ('./inc/htmlheader.inc.php');
 
     echo "<h2>{$title}</h2>";
     echo "<form action='{$_SERVER['PHP_SELF']}' id='incidentsbyvendor' method='post'>";
@@ -43,7 +43,7 @@ if (empty($_REQUEST['mode']))
     echo "</p>";
     echo "</form>";
 
-    include ('htmlfooter.inc.php');
+    include ('./inc/htmlfooter.inc.php');
 }
 else
 {
@@ -57,7 +57,7 @@ else
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
 
-    include ('htmlheader.inc.php');
+    include ('./inc/htmlheader.inc.php');
 
     echo "<h2>{$title}</h2>";
 
@@ -76,7 +76,7 @@ else
         echo "</p>";
     }
 
-    include ('htmlfooter.inc.php');
+    include ('./inc/htmlfooter.inc.php');
 
 }
 

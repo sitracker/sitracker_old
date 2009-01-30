@@ -13,10 +13,10 @@
 @include ('set_include_path.inc.php');
 $permission = 22; // Administrate
 
-require ('db_connect.inc.php');
-require ('functions.inc.php');
+require ($lib_path.'db_connect.inc.php');
+require ($lib_path.'functions.inc.php');
 // This page requires authentication
-require ('auth.inc.php');
+require ($lib_path.'auth.inc.php');
 
 // External variables
 $tag = mysql_real_escape_string($_REQUEST['tag']);
@@ -26,7 +26,7 @@ $action = $_REQUEST['action'];
 if (empty($action) OR $action == "showform")
 {
     $title = $strAddServiceLevel;
-    include ('htmlheader.inc.php');
+    include ('./inc/htmlheader.inc.php');
     
     echo show_form_errors('add_servicelevel');
     clear_form_errors('add_servicelevel');
@@ -116,7 +116,7 @@ if (empty($action) OR $action == "showform")
     echo "<input type='hidden' name='action' value='edit' />";
     echo "<p align='center'><input type='submit' value='{$strSave}' /></p>";
     echo "</form>";
-    include ('htmlfooter.inc.php');
+    include ('./inc/htmlfooter.inc.php');
     
     clear_form_data('add_servicelevel');
 }
@@ -185,7 +185,7 @@ elseif ($action == "edit")
     if ($errors >= 1)
     {
         // show error message if errors
-        include ('htmlheader.inc.php');
+        include ('./inc/htmlheader.inc.php');
         html_redirect($_SERVER['PHP_SELF'], FALSE);
     }
     else

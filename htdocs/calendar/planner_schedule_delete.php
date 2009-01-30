@@ -11,9 +11,9 @@
 
 @include ('../set_include_path.inc.php');
 $permission = 27; // View your calendar
-require ('db_connect.inc.php');
-require ('functions.inc.php');
-require ('auth.inc.php');
+require ($lib_path.'db_connect.inc.php');
+require ($lib_path.'functions.inc.php');
+require ($lib_path.'auth.inc.php');
 
 $eventToDelete = cleanvar($_GET['eventToDeleteId']);
 

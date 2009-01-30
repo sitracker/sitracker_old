@@ -13,10 +13,10 @@
 @include ('set_include_path.inc.php');
 $permission = 56; // Add Software
 
-require ('db_connect.inc.php');
-require ('functions.inc.php');
+require ($lib_path.'db_connect.inc.php');
+require ($lib_path.'functions.inc.php');
 // This page requires authentication
-require ('auth.inc.php');
+require ($lib_path.'auth.inc.php');
 
 // External variables
 $id = cleanvar($_REQUEST['id']);
@@ -26,7 +26,7 @@ if (empty($action) OR $action=='edit')
 {
     $title = $strEditSkill;
     // Show add product form
-    include ('htmlheader.inc.php');
+    include ('./inc/htmlheader.inc.php');
 
     echo "<h2>".icon('skill', 32)." ";
     echo "{$title}</h2>";
@@ -66,7 +66,7 @@ if (empty($action) OR $action=='edit')
     echo "<p align='center'><input name='submit' type='submit' value='{$strSave}' /></p>";
     echo "</form>\n";
     echo "<p align='center'><a href='products.php'>{$strReturnWithoutSaving}</a></p>";
-    include ('htmlfooter.inc.php');
+    include ('./inc/htmlfooter.inc.php');
 }
 elseif ($action=='delete')
 {
@@ -78,10 +78,10 @@ elseif ($action=='delete')
     list($countincidents) = mysql_fetch_row($result);
     if ($countincidents >=1)
     {
-        include ('htmlheader.inc.php');
+        include ('./inc/htmlheader.inc.php');
         echo "<p class='error'>{$strCannotDeleteSkill}</p>";
         echo "<p align='center'><a href='products.php?display=skills'>{$strReturnToProductList}</a></p>";
-        include ('htmlfooter.inc.php');
+        include ('./inc/htmlfooter.inc.php');
     }
     else
     {
@@ -141,9 +141,9 @@ else
     }
     else
     {
-        include ('htmlheader.inc.php');
+        include ('./inc/htmlheader.inc.php');
         echo $errors_string;
-        include ('htmlfooter.inc.php');
+        include ('./inc/htmlfooter.inc.php');
     }
 }
 ?>

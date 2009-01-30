@@ -11,8 +11,8 @@
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>, June 2004
 
 @include ('set_include_path.inc.php');
-require ('db_connect.inc.php');
-require ('functions.inc.php');
+require ($lib_path.'db_connect.inc.php');
+require ($lib_path.'functions.inc.php');
 
 // External variables
 $hashcode=$_REQUEST['ax'];
@@ -358,7 +358,7 @@ body { font:10pt Arial, Helvetica, sans-serif; }
     break;
 
     default:
-        if ($_REQUEST['mode']!='bare') include ('htmlheader.inc.php');
+        if ($_REQUEST['mode']!='bare') include ('./inc/htmlheader.inc.php');
         else echo "<html>\n<head>\n<title>Feedback Form</title>\n</head>\n<body>\n<div id='pagecontent'>\n\n";
         $errorfields = explode(",",urldecode($_REQUEST['error']));
         $fielddata = unserialize(base64_decode($errorfields[0])); // unserialize(
@@ -459,7 +459,7 @@ body { font:10pt Arial, Helvetica, sans-serif; }
         
         if ($_REQUEST['mode']!='bare')
         {
-            include ('htmlfooter.inc.php');
+            include ('./inc/htmlfooter.inc.php');
         }
         else echo "\n</div>\n</body>\n</html>\n";
     break;

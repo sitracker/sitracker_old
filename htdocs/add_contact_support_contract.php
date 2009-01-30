@@ -12,11 +12,11 @@
 
 @include ('set_include_path.inc.php');
 $permission = 32;  // Edit Supported Products
-require ('db_connect.inc.php');
-require ('functions.inc.php');
+require ($lib_path.'db_connect.inc.php');
+require ($lib_path.'functions.inc.php');
 
 // This page requires authentication
-require ('auth.inc.php');
+require ($lib_path.'auth.inc.php');
 
 // External Variables
 $maintid = cleanvar($_REQUEST['maintid']);
@@ -27,7 +27,7 @@ $action = $_REQUEST['action'];
 // Valid user, check permissions
 if (empty($action) || $action == "showform")
 {
-    include ('htmlheader.inc.php');
+    include ('./inc/htmlheader.inc.php');
     echo "<h2>{$strAssociateContactWithContract}</h2>";
 
     echo "<form action='{$_SERVER['PHP_SELF']}?action=add' method='post'>";
@@ -68,7 +68,7 @@ if (empty($action) || $action == "showform")
     echo "<p align='center'><input name='submit' type='submit' value='{$strContinue}' /></p>";
     echo "</form>";
 
-    include ('htmlfooter.inc.php');
+    include ('./inc/htmlfooter.inc.php');
 }
 else if ($action == "add")
 {
@@ -107,9 +107,9 @@ else if ($action == "add")
         // show error message if addition failed
         if (!$result)
         {
-            include ('htmlheader.inc.php');
+            include ('./inc/htmlheader.inc.php');
             echo "<p class='error'>Addition of support contact failed</p>\n";
-            include ('htmlfooter.inc.php');
+            include ('./inc/htmlfooter.inc.php');
         }
         // update database and show success message
         else
@@ -121,11 +121,11 @@ else if ($action == "add")
     else
     {
         // show error message if errors
-        include ('htmlheader.inc.php');
+        include ('./inc/htmlheader.inc.php');
         echo $errors_string;
 
         echo "<p align='center'><a href='contract_details.php?id={$maintid}'>Return</a></p>";
-        include ('htmlfooter.inc.php');
+        include ('./inc/htmlfooter.inc.php');
     }
 }
 ?>

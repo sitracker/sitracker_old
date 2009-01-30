@@ -11,10 +11,10 @@
 @include ('set_include_path.inc.php');
 $permission = 21; // Edit Contracts
 
-require ('db_connect.inc.php');
-require ('functions.inc.php');
+require ($lib_path.'db_connect.inc.php');
+require ($lib_path.'functions.inc.php');
 // This page requires authentication
-require ('auth.inc.php');
+require ($lib_path.'auth.inc.php');
 
 $title = $strEditContract;
 
@@ -25,7 +25,7 @@ $changeproduct = cleanvar($_REQUEST['changeproduct']);
 
 if (empty($action) OR $action == "showform")
 {
-    include ('htmlheader.inc.php');
+    include ('./inc/htmlheader.inc.php');
     echo "<h2>".icon('contract', 32)." ";
     echo "Select Contract to Edit</h2>";
     echo "<form action='{$_SERVER['PHP_SELF']}?action=edit' method='post'>";
@@ -36,14 +36,14 @@ if (empty($action) OR $action == "showform")
     echo "</table>\n";
     echo "<p align='center'><input name='submit' type='submit' value=\"$strContinue\" /></p>\n";
     echo "</form>\n";
-    include ('htmlfooter.inc.php');
+    include ('./inc/htmlfooter.inc.php');
 }
 
 
 if ($action == "edit")
 {
     // Show edit maintenance form
-    include ('htmlheader.inc.php');
+    include ('./inc/htmlheader.inc.php');
     if ($maintid == 0) echo "<p class='error'>You must select a contract</p>\n";
     else
     {
@@ -161,7 +161,7 @@ if ($action == "edit")
         echo "<p align='center'><a href='contract_details.php?id={$maintid}'>{$strReturnWithoutSaving}</a></p>";
         mysql_free_result($result);
     }
-    include ('htmlfooter.inc.php');
+    include ('./inc/htmlfooter.inc.php');
 }
 else if ($action == "update")
 {
@@ -251,9 +251,9 @@ else if ($action == "update")
         // show error message if addition failed
         if (!$result)
         {
-            include ('htmlheader.inc.php');
+            include ('./inc/htmlheader.inc.php');
             echo "<p class='error'>Maintenance update failed)\n";
-            include ('htmlfooter.inc.php');
+            include ('./inc/htmlfooter.inc.php');
         }
         // show success message
         else
@@ -265,9 +265,9 @@ else if ($action == "update")
     // show error message if errors
     else
     {
-        include ('htmlheader.inc.php');
+        include ('./inc/htmlheader.inc.php');
         echo $errors_string;
-        include ('htmlfooter.inc.php');
+        include ('./inc/htmlfooter.inc.php');
     }
 }
 ?>

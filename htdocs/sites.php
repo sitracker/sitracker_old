@@ -13,10 +13,10 @@
 
 @include ('set_include_path.inc.php');
 $permission = 11; // View Sites
-require ('db_connect.inc.php');
-require ('functions.inc.php');
+require ($lib_path.'db_connect.inc.php');
+require ($lib_path.'functions.inc.php');
 // This page requires authentication
-require ('auth.inc.php');
+require ($lib_path.'auth.inc.php');
 
 $pagescripts = array('dojo/dojo.js');
 
@@ -73,7 +73,7 @@ if ($submit_value == "go")
     }
 }
 
-include ('htmlheader.inc.php');
+include ('./inc/htmlheader.inc.php');
 if ($search_string=='') $search_string='a';
 ?>
 <script type="text/javascript">
@@ -243,5 +243,5 @@ if ($errors == 0)
     }
 }
 
-include ('htmlfooter.inc.php');
+include ('./inc/htmlfooter.inc.php');
 ?>

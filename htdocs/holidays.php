@@ -12,11 +12,11 @@
 @include ('set_include_path.inc.php');
 $permission = 4; // Edit your profile
 
-require ('db_connect.inc.php');
-require ('functions.inc.php');
+require ($lib_path.'db_connect.inc.php');
+require ($lib_path.'functions.inc.php');
 
 // This page requires authentication
-require ('auth.inc.php');
+require ($lib_path.'auth.inc.php');
 
 $approver = user_permission($sit[2], 50); // Approve holidays
 
@@ -38,7 +38,7 @@ else
     $title = sprintf($strUsersHolidays, user_realname($user));
 }
 
-include ('htmlheader.inc.php');
+include ('./inc/htmlheader.inc.php');
 echo "<h2>".icon('holiday', 32)." ";
 echo "$title</h2>";
 
@@ -238,5 +238,5 @@ if ($user == $sit[2])
     else echo "<tr class='shade2'><td><em>{$strNobody}</em></td></tr>\n";
     echo "</table>";
 }
-include ('htmlfooter.inc.php');
+include ('./inc/htmlfooter.inc.php');
 ?>

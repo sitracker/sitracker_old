@@ -13,11 +13,11 @@
 
 @include ('set_include_path.inc.php');
 $permission = 27; // View your calendar
-require ('db_connect.inc.php');
-require ('functions.inc.php');
+require ($lib_path.'db_connect.inc.php');
+require ($lib_path.'functions.inc.php');
 
 // This page requires authentication
-require ('auth.inc.php');
+require ($lib_path.'auth.inc.php');
 include ('calendar/calendar.inc.php');
 
 $groupid = cleanvar($_REQUEST['gid']);
@@ -35,7 +35,7 @@ foreach (array(
 if (empty($length)) $length='day';
 $title = $strCalendar;
 $pagecss = array('calendar/planner.css.php');
-include ('htmlheader.inc.php');
+include ('./inc/htmlheader.inc.php');
 
 if (empty($user) || $user=='current') $user = $sit[2];
 elseif ($user == 'all') $user = '';
@@ -84,5 +84,5 @@ echo "</p>";
 
 include ("calendar/{$display}.inc.php");
 
-include ('htmlfooter.inc.php');
+include ('./inc/htmlfooter.inc.php');
 ?>

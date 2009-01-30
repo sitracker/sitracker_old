@@ -14,10 +14,10 @@
 @include ('set_include_path.inc.php');
 $permission = 64; // Manage escalation paths
 
-require ('db_connect.inc.php');
-require ('functions.inc.php');
+require ($lib_path.'db_connect.inc.php');
+require ($lib_path.'functions.inc.php');
 // This page requires authentication
-require ('auth.inc.php');
+require ($lib_path.'auth.inc.php');
 
 $submit = $_REQUEST['submit'];
 
@@ -25,7 +25,7 @@ $title = $strNewEscalationPath;
 
 if (empty($submit))
 {
-    include ('htmlheader.inc.php');
+    include ('./inc/htmlheader.inc.php');
 
     echo show_form_errors('add_escalation_path');
     clear_form_errors('add_escalation_path');
@@ -81,7 +81,7 @@ if (empty($submit))
 
     echo "</form>";
 
-    include ('htmlfooter.inc.php');
+    include ('./inc/htmlfooter.inc.php');
     clear_form_data('add_escalation_path');
 
 }
@@ -124,7 +124,7 @@ else
     }
     else
     {
-        include 'htmlheader.inc.php';
+        include './inc/htmlheader.inc.php';
         html_redirect("escalation_path_add.php", FALSE);
     }
 }

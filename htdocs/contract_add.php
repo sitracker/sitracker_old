@@ -14,10 +14,10 @@
 @include ('set_include_path.inc.php');
 $permission = 39; // Add Maintenance Contract
 
-require ('db_connect.inc.php');
-require ('functions.inc.php');
+require ($lib_path.'db_connect.inc.php');
+require ($lib_path.'functions.inc.php');
 // This page requires authentication
-require ('auth.inc.php');
+require ($lib_path.'auth.inc.php');
 
 $title = $strAddContract;
 
@@ -28,7 +28,7 @@ $siteid = cleanvar($_REQUEST['siteid']);
 // Show add maintenance form
 if ($action == "showform" OR $action=='')
 {
-    include ('htmlheader.inc.php');
+    include ('./inc/htmlheader.inc.php');
 
     echo show_form_errors('add_contract');
     clear_form_errors('add_contract');
@@ -197,7 +197,7 @@ if ($action == "showform" OR $action=='')
     echo "<input type='hidden' id='timed' name='timed' value='{$timed}' />";
     echo "<p align='center'><input name='submit' type='submit' value=\"{$strAddContract}\" /></p>";
     echo "</form>";
-    include ('htmlfooter.inc.php');
+    include ('./inc/htmlfooter.inc.php');
 
     clear_form_data('add_contract');
 
@@ -369,9 +369,9 @@ elseif ($action == "add")
         if ($addition_errors == 1)
         {
             // show addition error message
-            include ('htmlheader.inc.php');
+            include ('./inc/htmlheader.inc.php');
             echo $addition_errors_string;
-            include ('htmlfooter.inc.php');
+            include ('./inc/htmlfooter.inc.php');
         }
         else
         {
@@ -384,7 +384,7 @@ elseif ($action == "add")
     else
     {
         // show error message if errors
-        include ('htmlheader.inc.php');
+        include ('./inc/htmlheader.inc.php');
         html_redirect("contract_add.php", FALSE);
     }
 }

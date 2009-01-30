@@ -13,10 +13,10 @@
 @include ('set_include_path.inc.php');
 $permission = 27; // view your calendar
 
-require ('db_connect.inc.php');
-require ('functions.inc.php');
+require ($lib_path.'db_connect.inc.php');
+require ($lib_path.'functions.inc.php');
 // This page requires authentication
-require ('auth.inc.php');
+require ($lib_path.'auth.inc.php');
 
 // External variables
 $step = $_REQUEST['step'];
@@ -32,7 +32,7 @@ else
 
 if (empty($step))
 {
-    include ('htmlheader.inc.php');
+    include ('./inc/htmlheader.inc.php');
     // The JavaScript date picker used on this page came from an article at
     // http://www.dagblastit.com/~tmcclure/dhtml/calendar.html
     // The website states
@@ -66,7 +66,7 @@ if (empty($step))
     echo "<input type='submit' value=\"{$strBookHoliday}\" /></p>";
     echo "<p align='center'><a href='holidays.php?user={$user}'>{$strBackToList}</a></p>";
     echo "</form>";
-    include ('htmlfooter.inc.php');
+    include ('./inc/htmlfooter.inc.php');
 }
 elseif ($step == '1')
 {
@@ -75,7 +75,7 @@ elseif ($step == '1')
     $end = cleanvar($_REQUEST['end']);
     $type = cleanvar($_REQUEST['type']);
 
-    include ('htmlheader.inc.php');
+    include ('./inc/htmlheader.inc.php');
     $start = strtotime("{$start} 09:00");
     $end = strtotime($end);
     if ($start == 0 && $end == 0)
@@ -283,7 +283,7 @@ elseif ($step == '1')
     echo "<br />";
 
     echo "<p align='center'><a href='book_holidays.php?user={$user}'>{$strReturnWithoutSaving}</a></p>";
-    include ('htmlfooter.inc.php');
+    include ('./inc/htmlfooter.inc.php');
 }
 else
 {

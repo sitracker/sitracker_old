@@ -10,17 +10,17 @@
 
 @include ('set_include_path.inc.php');
 $permission = 26; // Help
-require ('db_connect.inc.php');
-require ('functions.inc.php');
+require ($lib_path.'db_connect.inc.php');
+require ($lib_path.'functions.inc.php');
 $title = "Help";
 
 // This page requires authentication
-require ('auth.inc.php');
+require ($lib_path.'auth.inc.php');
 
 // External variables
 $id = cleanvar($_REQUEST['id']);
 
-include ('htmlheader.inc.php');
+include ('./inc/htmlheader.inc.php');
 journal(CFG_LOGGING_MAX, 'Help Viewed', "Help document $id was viewed", CFG_JOURNAL_OTHER, $id);
 echo "<h2>".icon('help', 32, $strHelp)." ";
 if ($id > 0) echo permission_name($id).' ';
@@ -39,5 +39,5 @@ echo $helptext;
 
 echo "</div>";
 
-include ('htmlfooter.inc.php');
+include ('./inc/htmlfooter.inc.php');
 ?>

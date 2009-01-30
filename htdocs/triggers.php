@@ -13,10 +13,10 @@
 
 @include ('set_include_path.inc.php');
 $permission = 71;
-require ('db_connect.inc.php');
-require ('functions.inc.php');
+require ($lib_path.'db_connect.inc.php');
+require ($lib_path.'functions.inc.php');
 // This page requires authentication
-require ('auth.inc.php');
+require ($lib_path.'auth.inc.php');
 
 $adminuser = user_permission($sit[2],22); // Admin user
 
@@ -86,7 +86,7 @@ switch ($_REQUEST['mode'])
             exit;
         }
 
-        include ('htmlheader.inc.php');
+        include ('./inc/htmlheader.inc.php');
         ?>
         <script type="text/javascript">
         //<![CDATA[
@@ -249,7 +249,7 @@ switch ($_REQUEST['mode'])
         echo "</form>";
 
         echo "<p align='center'><a href='{$_SERVER['PHP_SELF']}'>{$strBackToList}</a></p>\n";
-        include ('htmlfooter.inc.php');
+        include ('./inc/htmlfooter.inc.php');
         break;
 
     case 'save':
@@ -295,7 +295,7 @@ switch ($_REQUEST['mode'])
     case 'list':
     default:
         //display the list
-        include ('htmlheader.inc.php');
+        include ('./inc/htmlheader.inc.php');
 
         echo "<h2>".icon('trigger', 32)." ";
         echo "$title</h2>";
@@ -420,6 +420,6 @@ switch ($_REQUEST['mode'])
         }
         echo "</table>";
         echo "<p align='center'><a href='triggertest.php'>{$strTestTriggers}</a></p>";
-        include ('htmlfooter.inc.php');
+        include ('./inc/htmlfooter.inc.php');
 }
 ?>

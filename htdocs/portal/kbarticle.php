@@ -31,6 +31,6 @@ if (empty($id))
 echo "<h2>".icon('kb', 32)." {$strKnowledgeBaseArticle}</h2>";
 echo kb_article($id, 'external');
 
-include ('htmlfooter.inc.php');
+include ('./inc/htmlfooter.inc.php');
 
 ?>

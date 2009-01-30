@@ -13,10 +13,10 @@
 @include ('set_include_path.inc.php');
 $permission = 53; // Edit Service Levels
 
-require ('db_connect.inc.php');
-require ('functions.inc.php');
+require ($lib_path.'db_connect.inc.php');
+require ($lib_path.'functions.inc.php');
 // This page requires authentication
-require ('auth.inc.php');
+require ($lib_path.'auth.inc.php');
 
 $title = $strEditServiceLevel;
 
@@ -27,7 +27,7 @@ $action = $_REQUEST['action'];
 
 if (empty($action) OR $action == "showform")
 {
-    include ('htmlheader.inc.php');
+    include ('./inc/htmlheader.inc.php');
 
     echo "<h2>".icon('sla', 32)." {$title}</h2>";
     echo "<p align='center'>{$tag} ".priority_name($priority)."</p>";
@@ -83,7 +83,7 @@ if (empty($action) OR $action == "showform")
     echo "<input type='hidden' name='id' value='{$sla->id}' />";
     echo "<p align='center'><input type='submit' value='{$strSave}' /></p>";
     echo "</form>";
-    include ('htmlfooter.inc.php');
+    include ('./inc/htmlfooter.inc.php');
 }
 elseif ($action == "edit")
 {

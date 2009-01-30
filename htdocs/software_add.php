@@ -13,10 +13,10 @@
 @include ('set_include_path.inc.php');
 $permission = 56; // Add Skills
 
-require ('db_connect.inc.php');
-require ('functions.inc.php');
+require ($lib_path.'db_connect.inc.php');
+require ($lib_path.'functions.inc.php');
 // This page requires authentication
-require ('auth.inc.php');
+require ($lib_path.'auth.inc.php');
 
 $title = $strAddSkill;
 
@@ -26,7 +26,7 @@ $submit = $_REQUEST['submit'];
 if (empty($submit))
 {
     // Show add product form
-    include ('htmlheader.inc.php');
+    include ('./inc/htmlheader.inc.php');
 
     $_SESSION['formerrors']['add_software'] = NULL;
     echo "<h2>".icon('skill', 32)." ";
@@ -68,7 +68,7 @@ if (empty($submit))
     echo "<p class='warning'>{$strAvoidDupes}</p>";
     echo "</form>\n";
     echo "<p align='center'><a href='products.php'>{$strReturnWithoutSaving}</a></p>";
-    include ('htmlfooter.inc.php');
+    include ('./inc/htmlfooter.inc.php');
 
     $_SESSION['formdata']['add_software'] = NULL;
 }
@@ -140,7 +140,7 @@ else
     }
     else
     {
-        include ('htmlheader.inc.php');
+        include ('./inc/htmlheader.inc.php');
         html_redirect($_SERVER['PHP_SELF'], FALSE);
     }
 }

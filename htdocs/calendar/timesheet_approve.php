@@ -11,12 +11,12 @@
 
 @include ('../set_include_path.inc.php');
 $permission = 50; /* Approve holidays */
-require ('db_connect.inc.php');
-require ('functions.inc.php');
+require ($lib_path.'db_connect.inc.php');
+require ($lib_path.'functions.inc.php');
 $title = $strApproveTimesheets;
 
 // This page requires authentication
-require ('auth.inc.php');
+require ($lib_path.'auth.inc.php');
 
 foreach (array('user', 'date', 'approve' ) as $var)
 {
@@ -25,7 +25,7 @@ foreach (array('user', 'date', 'approve' ) as $var)
 
 if ($user == '')
 {
-    include ('htmlheader.inc.php');
+    include ('./inc/htmlheader.inc.php');
     echo "<h2>".icon('holiday', 32)." ";
     echo $strTimesheets;
     echo "</h2>";
@@ -82,12 +82,12 @@ if ($user == '')
     {
         echo "<p class='info'>There are currently no timesheets waiting for your approval</p>";
     }
-    include ('htmlfooter.inc.php');
+    include ('./inc/htmlfooter.inc.php');
 }
 else if ($approve == '')
 {
     include ('calendar.inc.php');
-    include ('htmlheader.inc.php');
+    include ('./inc/htmlheader.inc.php');
     echo "<h2>$strTimesheet - " . user_realname($user) . "</h2>";
     echo "<p align='center'>" . date($CONFIG['dateformat_date'], $date) . " - " . date($CONFIG['dateformat_date'], $date + 86400 * 6) . "</p>";
     echo "<table align='center'>";
@@ -124,7 +124,7 @@ else if ($approve == '')
     }
     echo "</table>";
     echo "<p align = 'center'><a href='{$_SERVER['PHP_SELF']}?user=$user&amp;date=$date&amp;approve=1'>$strApprove</a></p>";
-    include ('htmlfooter.inc.php');
+    include ('./inc/htmlfooter.inc.php');
 }
 else
 {

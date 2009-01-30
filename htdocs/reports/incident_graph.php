@@ -12,11 +12,11 @@
 
 @include ('../set_include_path.inc.php');
 $permission = 37; // Run Reports
-require ('db_connect.inc.php');
-require ('functions.inc.php');
+require ($lib_path.'db_connect.inc.php');
+require ($lib_path.'functions.inc.php');
 
 // This page requires authentication
-require ('auth.inc.php');
+require ($lib_path.'auth.inc.php');
 
 // External variables
 $startyear = cleanvar($_REQUEST['startyear']);
@@ -29,7 +29,7 @@ $closedcolour = '#72B8B8';
 $currentcolour = '#1CA772';
 
 $currentyear = date('Y');
-include ('htmlheader.inc.php');
+include ('./inc/htmlheader.inc.php');
 $currentyear = date('Y');
 $currentmonth = date('n');
 $daysinyear = date('z',mktime(0,0,0,12,31,$year));
@@ -176,5 +176,5 @@ else
 
 echo "<h3>Grand Total: <u style='color: $openedcolour;'>$grandtotal</u> incidents opened and <u style='color: $closedcolour;'>$grandtotalclosed</u> closed during the year, difference <u>$diff</u></h3>";
 
-include ('htmlfooter.inc.php');
+include ('./inc/htmlfooter.inc.php');
 ?>

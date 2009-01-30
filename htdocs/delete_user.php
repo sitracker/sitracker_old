@@ -13,11 +13,11 @@
 // TODO 3.40 if we user MYSQL 5's relation functions, we can simply delete the user
 @include ('set_include_path.inc.php');
 $permission = 20;  // Manage users
-require ('db_connect.inc.php');
-require ('functions.inc.php');
+require ($lib_path.'db_connect.inc.php');
+require ($lib_path.'functions.inc.php');
 
 // This page requires authentication
-require ('auth.inc.php');
+require ($lib_path.'auth.inc.php');
 
 // External variables
 $userid = cleanvar($_REQUEST['userid']);
@@ -78,10 +78,10 @@ if (!empty($userid))
     }
     else
     {
-        include ('htmlheader.inc.php');
+        include ('./inc/htmlheader.inc.php');
         echo "<p class='error'>{$strCannotDeleteUser}</p>";
         echo "<p align='center'><a href='users.php#{$userid}'>{$strBackToList}</a></p>";
-        include ('htmlfooter.inc.php');
+        include ('./inc/htmlfooter.inc.php');
     }
 }
 else

@@ -12,12 +12,12 @@
 // Comments: Shows a list of incidents that each site has logged
 
 @include ('../set_include_path.inc.php');
-require ('db_connect.inc.php');
-require ('functions.inc.php');
+require ($lib_path.'db_connect.inc.php');
+require ($lib_path.'functions.inc.php');
 
 // This page requires authentication
-require ('auth.inc.php');
-include ('htmlheader.inc.php');
+require ($lib_path.'auth.inc.php');
+include ('./inc/htmlheader.inc.php');
 echo "<script type='text/javascript'>";
 ?>
 //<![CDATA[
@@ -105,5 +105,5 @@ foreach ($totals AS $site => $val)
 }
 */
 
-include ('htmlfooter.inc.php');
+include ('./inc/htmlfooter.inc.php');
 ?>

@@ -11,8 +11,8 @@
 
 @include ('set_include_path.inc.php');
 $permission = 0; // not required
-require ('db_connect.inc.php');
-require ('functions.inc.php');
+require ($lib_path.'db_connect.inc.php');
+require ($lib_path.'functions.inc.php');
 
 // This page requires authentication
 if ($_REQUEST['action'] == 'contexthelp' AND $_REQUEST['auth'] == 'portal')
@@ -24,7 +24,7 @@ if ($_REQUEST['action'] == 'contexthelp' AND $_REQUEST['auth'] == 'portal')
 }
 else
 {
-    require ('auth.inc.php');
+    require ($lib_path.'auth.inc.php');
 }
 $action = cleanvar($_REQUEST['action']);
 $selected = cleanvar($_REQUEST['selected']);
@@ -73,7 +73,7 @@ switch ($action)
     break;
 
     case 'dismiss_notice':
-        require ('auth.inc.php');
+        require ($lib_path.'auth.inc.php');
         $noticeid = cleanvar($_REQUEST['noticeid']);
         $userid = cleanvar($_REQUEST['userid']);
         if (is_numeric($noticeid))
@@ -93,7 +93,7 @@ switch ($action)
     break;
 
     case 'dashboard_display':
-        require ('auth.inc.php');
+        require ($lib_path.'auth.inc.php');
         $dashboard = cleanvar($_REQUEST['dashboard']);
         $dashletid = 'win'.cleanvar($_REQUEST['did']);
         // FIXME need some sanitation here
@@ -104,7 +104,7 @@ switch ($action)
 
     case 'dashboard_save':
     case 'dashboard_edit':
-        require ('auth.inc.php');
+        require ($lib_path.'auth.inc.php');
 
         $dashboard = cleanvar($_REQUEST['dashboard']);
         $dashletid = 'win'.cleanvar($_REQUEST['did']);

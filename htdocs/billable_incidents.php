@@ -13,13 +13,13 @@
 @include ('set_include_path.inc.php');
 $permission = 37; // Run Reports // FIXME permissions need defining
 
-require ('db_connect.inc.php');
-require ('functions.inc.php');
+require ($lib_path.'db_connect.inc.php');
+require ($lib_path.'functions.inc.php');
 
 require_once ($lib_path . 'billing.inc.php');
 
 // This page requires authentication
-require ('auth.inc.php');
+require ($lib_path.'auth.inc.php');
 
 $startdateorig = cleanvar($_REQUEST['startdate']);
 $enddateorig = cleanvar($_REQUEST['enddate']);
@@ -53,7 +53,7 @@ if (!empty($sites))
 
 if (empty($mode))
 {
-    include ('htmlheader.inc.php');
+    include ('./inc/htmlheader.inc.php');
 
     echo "<h2>{$strBillableIncidents}</h2>";
 
@@ -151,7 +151,7 @@ if (empty($mode))
     echo "<input type='submit' name='runreport' value='{$strRunReport}' onclick=\"return processForm();\" /></p>";
     echo "</form>";
 
-    include ('htmlfooter.inc.php');
+    include ('./inc/htmlfooter.inc.php');
 }
 elseif ($mode == 'approvalpage')
 {
@@ -172,7 +172,7 @@ elseif ($mode == 'approvalpage')
 
     if ($output == 'html')
     {
-        include ('htmlheader.inc.php');
+        include ('./inc/htmlheader.inc.php');
         echo "<h2>{$strBillableIncidents} - {$strApprove}</h2>";
         ?>
         <script type="text/javascript">
@@ -510,14 +510,14 @@ elseif ($mode == 'approvalpage')
     if ($output == 'html')
     {
         echo "<p align='center'><a href='{$_SERVER['HTTP_REFERER']}'>{$strReturnToPreviousPage}</a></p>";
-        include ('htmlfooter.inc.php');
+        include ('./inc/htmlfooter.inc.php');
     }
 }
 elseif ($mode == 'invoicepage')
 {
     if ($output == 'html')
     {
-        include ('htmlheader.inc.php');
+        include ('./inc/htmlheader.inc.php');
         $str .= "<h2>{$strBillableIncidents} - INVOICE</h2>";
 
         $resultsite = mysql_query($sitelistsql);
@@ -586,7 +586,7 @@ elseif ($mode == 'invoicepage')
     if ($output == 'html')
     {
         echo $str;
-        include ('htmlfooter.inc.php');
+        include ('./inc/htmlfooter.inc.php');
     }
 }
 elseif ($mode == 'summarypage')

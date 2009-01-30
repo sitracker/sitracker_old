@@ -11,11 +11,11 @@
 @include ('set_include_path.inc.php');
 $permission = 17; // Edit Template
 
-require ('db_connect.inc.php');
-require ('functions.inc.php');
+require ($lib_path.'db_connect.inc.php');
+require ($lib_path.'functions.inc.php');
 
 // This page requires authentication
-require ('auth.inc.php');
+require ($lib_path.'auth.inc.php');
 
 // FIXME i18n Whole page
 
@@ -27,7 +27,7 @@ $templatetype = cleanvar($_REQUEST['template']);
 if (empty($action) OR $action == 'showform' OR $action == 'list')
 {
     // Show select email type form
-    include ('htmlheader.inc.php');
+    include ('./inc/htmlheader.inc.php');
 
     echo "<h2>".icon('templates', 32)." ";
     echo "{$strTemplates}</h2>";
@@ -113,7 +113,7 @@ if (empty($action) OR $action == 'showform' OR $action == 'list')
     }
     echo "</table>";
 //     echo "<pre>".print_r($template,true)."</pre>";
-    include ('htmlfooter.inc.php');
+    include ('./inc/htmlfooter.inc.php');
 }
 elseif ($action == "edit")
 {
@@ -174,7 +174,7 @@ elseif ($action == "edit")
     $template = mysql_fetch_object($result);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
 
-    include ('htmlheader.inc.php');
+    include ('./inc/htmlheader.inc.php');
 
     if (mysql_num_rows($result) > 0)
     {
@@ -368,7 +368,7 @@ elseif ($action == "edit")
 
         echo "<p style='clear:both; margin-top: 2em;' align='center'><a href='{$_SERVER['PHP_SELF']}'>{$strBackToList}</a></p>";
 
-        include ('htmlfooter.inc.php');
+        include ('./inc/htmlfooter.inc.php');
     }
     else
     {

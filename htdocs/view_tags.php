@@ -11,11 +11,11 @@
 
 @include ('set_include_path.inc.php');
 $permission = 0; // not required
-require ('db_connect.inc.php');
-require ('functions.inc.php');
+require ($lib_path.'db_connect.inc.php');
+require ($lib_path.'functions.inc.php');
 
 // This page requires authentication
-require ('auth.inc.php');
+require ($lib_path.'auth.inc.php');
 
 $tagid = cleanvar($_REQUEST['tagid']);
 $orderby = cleanvar($_REQUEST['orderby']);
@@ -25,11 +25,11 @@ if (empty($orderby)) $orderby = "name";
 if (empty($tagid))
 {
     //show all tags
-    include ('htmlheader.inc.php');
+    include ('./inc/htmlheader.inc.php');
     echo "<h2>".icon('tag', 32)." ";
     echo "{$strTags}</h2>";
     echo show_tag_cloud($orderby,TRUE);
-    include ('htmlfooter.inc.php');
+    include ('./inc/htmlfooter.inc.php');
 }
 else
 {
@@ -38,7 +38,7 @@ else
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     list($tagname)=mysql_fetch_row($result);
 
-    include ('htmlheader.inc.php');
+    include ('./inc/htmlheader.inc.php');
     echo "<h2>".icon('tag', 32)." <a href='view_tags.php'>{$strTag}</a>: $tagname";
     if (array_key_exists($tagname, $CONFIG['tag_icons'])) echo "&nbsp;<img src='images/icons/{$iconset}/32x32/{$CONFIG['tag_icons'][$tagname]}.png' alt='' />";
     echo "</h2>";
@@ -147,7 +147,7 @@ else
         echo "</table>";
         echo "<p align='center'>".sprintf($strTagsMulti, $num_tags)."</p>";
     }
-    include ('htmlfooter.inc.php');
+    include ('./inc/htmlfooter.inc.php');
 }
 
 ?>

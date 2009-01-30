@@ -13,16 +13,16 @@
 @include ('set_include_path.inc.php');
 $permission = 14; // View Users
 $title = "User Skills";
-require ('db_connect.inc.php');
-require ('functions.inc.php');
+require ($lib_path.'db_connect.inc.php');
+require ($lib_path.'functions.inc.php');
 
 // This page requires authentication
-require ('auth.inc.php');
+require ($lib_path.'auth.inc.php');
 
 // External Variables
 $sort = cleanvar($_REQUEST['sort']);
 
-include ('htmlheader.inc.php');
+include ('./inc/htmlheader.inc.php');
 
 $sql  = "SELECT * FROM `{$dbUsers}` WHERE status!=0";  // status=0 means account disabled
 
@@ -97,5 +97,5 @@ echo "</table>\n";
 // free result and disconnect
 mysql_free_result($result);
 
-include ('htmlfooter.inc.php');
+include ('./inc/htmlfooter.inc.php');
 ?>

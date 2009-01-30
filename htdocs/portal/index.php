@@ -217,6 +217,6 @@ if ($CONFIG['portal_site_incidents'] AND $otherincidents != NULL)
 
 }
 
-include ('htmlfooter.inc.php');
+include ('./inc/htmlfooter.inc.php');
 
 ?>

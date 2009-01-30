@@ -11,12 +11,12 @@
 @include ('set_include_path.inc.php');
 $permission = 4; // Edit your profile
 
-require ('db_connect.inc.php');
-require ('functions.inc.php');
+require ($lib_path.'db_connect.inc.php');
+require ($lib_path.'functions.inc.php');
 // This page requires authentication
-require ('auth.inc.php');
+require ($lib_path.'auth.inc.php');
 
-include ('htmlheader.inc.php');
+include ('./inc/htmlheader.inc.php');
 echo "<h2>".icon('settings', 32, $strControlPanel);
 echo " {$CONFIG['application_shortname']} {$strControlPanel}</h2>";
 echo "<table align='center'>";
@@ -61,5 +61,5 @@ if (user_permission($sit[2],22)) // Administrate
 
 plugin_do('cp_menu');
 echo "</table>\n";
-include ('htmlfooter.inc.php');
+include ('./inc/htmlfooter.inc.php');
 ?>

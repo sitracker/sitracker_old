@@ -11,11 +11,11 @@
 
 @include ('set_include_path.inc.php');
 $permission = 0; // not required
-require ('db_connect.inc.php');
-require ('functions.inc.php');
+require ($lib_path.'db_connect.inc.php');
+require ($lib_path.'functions.inc.php');
 
 // This page requires authentication
-require ('auth.inc.php');
+require ($lib_path.'auth.inc.php');
 
 $legacy = cleanvar($_REQUEST['legacy']);
 $groupid = cleanvar($_REQUEST['gid']);
@@ -27,7 +27,7 @@ else $filtergroup = $groupid;
 
 $title = $strSkillsMatrix;
 
-include ('htmlheader.inc.php');
+include ('./inc/htmlheader.inc.php');
 
 echo "<h2>".icon('skill', 32)." ";
 echo "$title</h2>";
@@ -199,6 +199,6 @@ else
     echo "<p align='center'>{$strNothingToDisplay}</p>";
 }
 
-include ('htmlfooter.inc.php');
+include ('./inc/htmlfooter.inc.php');
 
 ?>

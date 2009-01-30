@@ -11,10 +11,10 @@
 @include ('set_include_path.inc.php');
 $permission = 16; // Add Email Template
 
-require ('db_connect.inc.php');
-require ('functions.inc.php');
+require ($lib_path.'db_connect.inc.php');
+require ($lib_path.'functions.inc.php');
 // This page requires authentication
-require ('auth.inc.php');
+require ($lib_path.'auth.inc.php');
 
 if (!empty($_POST['type']))
 {
@@ -62,7 +62,7 @@ if (!empty($_POST['type']))
         }
     }
 }
-include ('htmlheader.inc.php');
+include ('./inc/htmlheader.inc.php');
 
 echo "<h2>".icon('add', 32)." {$strAddTemplate}</h2>";
 
@@ -77,6 +77,6 @@ echo "<br /><br /><input type='submit' value='{$strAdd}' />";
 echo "</p>";
 echo "</form>";
 
-include ('htmlfooter.inc.php');
+include ('./inc/htmlfooter.inc.php');
 
 ?>

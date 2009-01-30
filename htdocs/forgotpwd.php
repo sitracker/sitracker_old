@@ -13,12 +13,12 @@
 
 @include ('set_include_path.inc.php');
 $permission = 0; // not required
-require ('db_connect.inc.php');
+require ($lib_path.'db_connect.inc.php');
 
 session_name($CONFIG['session_name']);
 session_start();
 require 'strings.inc.php';
-require ('functions.inc.php');
+require ($lib_path.'functions.inc.php');
 
 $title = $strForgottenDetails;
 
@@ -43,7 +43,7 @@ switch ($_REQUEST['action'])
     case 'forgotpwd':
     case 'sendpwd':
     {
-        include ('htmlheader.inc.php');
+        include ('./inc/htmlheader.inc.php');
         // First look to see if this is a SiT user
         if (empty($email) AND !empty($userid))
         {
@@ -115,13 +115,13 @@ switch ($_REQUEST['action'])
                 echo "<p><a href='index.php'>{$strBackToLoginPage}</a></p>";
             }
         }
-        include ('htmlfooter.inc.php');
+        include ('./inc/htmlfooter.inc.php');
         break;
     }
 
     case 'confirmreset':
     {
-        include ('htmlheader.inc.php');
+        include ('./inc/htmlheader.inc.php');
         if ($mode == 'user')
         {
             $sql = "SELECT id, username, password FROM `{$dbUsers}` WHERE id = '{$userid}' LIMIT 1";
@@ -175,12 +175,12 @@ switch ($_REQUEST['action'])
             echo "<p>{$strDidYouPasteFullURL}</p>";
             echo "<p><a href='index.php'>{$strBackToLoginPage}</a></p>";
         }
-        include ('htmlfooter.inc.php');
+        include ('./inc/htmlfooter.inc.php');
     break;
     }
 
     case 'resetpasswordform':
-        include ('htmlheader.inc.php');
+        include ('./inc/htmlheader.inc.php');
         if ($mode == 'user')
         {
             $sql = "SELECT id, username, password FROM `{$dbUsers}` WHERE id = '{$userid}' LIMIT 1";
@@ -237,13 +237,13 @@ switch ($_REQUEST['action'])
             echo "<p>{$strInvalidUserID}</p>";
             echo "<p><a href='index.php'>{$strBackToLoginPage}</a></p>";
         }
-        include ('htmlfooter.inc.php');
+        include ('./inc/htmlfooter.inc.php');
     break;
 
     case 'savepassword':
         $newpassword1 = cleanvar($_REQUEST['newpassword1']);
         $newpassword2 = cleanvar($_REQUEST['newpassword2']);
-        include ('htmlheader.inc.php');
+        include ('./inc/htmlheader.inc.php');
         if ($mode == 'user')
         {
             $sql = "SELECT id, username, password FROM `{$dbUsers}` WHERE id = '{$userid}' LIMIT 1";
@@ -297,12 +297,12 @@ switch ($_REQUEST['action'])
             echo "<p>{$strInvalidUserID}</p>";
             echo "<p><a href='index.php'>{$strBackToLoginPage}</a></p>";
         }
-        include ('htmlfooter.inc.php');
+        include ('./inc/htmlfooter.inc.php');
     break;
 
     case 'form':
     default:
-        include ('htmlheader.inc.php');
+        include ('./inc/htmlheader.inc.php');
         echo "<h2>{$title}</h2>";
         echo "<form action='{$_SERVER['PHP_SELF']}' method='post'>";
 
@@ -313,7 +313,7 @@ switch ($_REQUEST['action'])
         echo "<input type='hidden' name='action' value='forgotpwd' />";
         echo "</form>";
 
-        include ('htmlfooter.inc.php');
+        include ('./inc/htmlfooter.inc.php');
     break;
 }
 

@@ -12,13 +12,13 @@
 
 @include ('set_include_path.inc.php');
 $permission = 61; // View Incident Details
-require ('db_connect.inc.php');
-require ('functions.inc.php');
+require ($lib_path.'db_connect.inc.php');
+require ($lib_path.'functions.inc.php');
 
 require_once ($lib_path . 'billing.inc.php');
 
 // This page requires authentication
-require ('auth.inc.php');
+require ($lib_path.'auth.inc.php');
 
 // External variables
 $incidentid = cleanvar($_REQUEST['id']);

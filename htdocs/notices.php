@@ -12,10 +12,10 @@
 @include ('set_include_path.inc.php');
 
 $permission = 78;
-require ('db_connect.inc.php');
-require ('functions.inc.php');
-require ('auth.inc.php');
-include ('htmlheader.inc.php');
+require ($lib_path.'db_connect.inc.php');
+require ($lib_path.'functions.inc.php');
+require ($lib_path.'auth.inc.php');
+include ('./inc/htmlheader.inc.php');
 
 
 $action = cleanvar($_REQUEST['action']);
@@ -38,7 +38,7 @@ if ($action == 'new')
     echo "<input type='submit' value='{$strSave}' />";
     echo "</form></div>";
     echo "<p align='center'><a href='notices.php'>{$strReturnWithoutSaving}</a></p>";
-    include ('htmlfooter.inc.php');
+    include ('./inc/htmlfooter.inc.php');
 }
 elseif ($action == 'post')
 {
@@ -126,7 +126,7 @@ else
     }
 
     echo "<p align='center'><a href='{$_SERVER[PHP_SELF]}?action=new'>{$strPostNewNotice}</a></p>";
-    include ('htmlfooter.inc.php');
+    include ('./inc/htmlfooter.inc.php');
 }
 
 ?>

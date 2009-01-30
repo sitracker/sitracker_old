@@ -29,7 +29,7 @@ if ($user->contact != $_SESSION['contactid']
     AND !in_array($user->maintenanceid, $_SESSION['contracts']))
 {
     echo "<p class='warning'>$strNoPermission.</p>";
-    include ('htmlfooter.inc.php');
+    include ('./inc/htmlfooter.inc.php');
     exit;
 }
 
@@ -266,5 +266,5 @@ while ($update = mysql_fetch_object($result))
     }
 }
 echo "</div>";
-include 'htmlfooter.inc.php';
+include './inc/htmlfooter.inc.php';
 ?>

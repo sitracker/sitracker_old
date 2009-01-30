@@ -15,10 +15,10 @@
 @include ('set_include_path.inc.php');
 $permission = 19; // View Maintenance Contracts
 
-require ('db_connect.inc.php');
-require ('functions.inc.php');
+require ($lib_path.'db_connect.inc.php');
+require ($lib_path.'functions.inc.php');
 // This page requires authentication
-require ('auth.inc.php');
+require ($lib_path.'auth.inc.php');
 
 $title = $strBrowseContracts;
 $pagescripts = array('dojo/dojo.js');
@@ -31,7 +31,7 @@ $sort = cleanvar($_REQUEST['sort']);
 $order = cleanvar($_REQUEST['order']);
 $activeonly = cleanvar($_REQUEST['activeonly']);
 
-include ('htmlheader.inc.php');
+include ('./inc/htmlheader.inc.php');
 ?>
 <script type="text/javascript">
 //<![CDATA[
@@ -255,6 +255,6 @@ else
     echo "</table>";
     // free result and disconnect
     mysql_free_result($result);
-    include ('htmlfooter.inc.php');
+    include ('./inc/htmlfooter.inc.php');
 }
 ?>

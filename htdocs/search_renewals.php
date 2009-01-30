@@ -12,12 +12,12 @@
 
 @include ('set_include_path.inc.php');
 $permission = 19; // View Maintenance Contracts
-require ('db_connect.inc.php');
-require ('functions.inc.php');
+require ($lib_path.'db_connect.inc.php');
+require ($lib_path.'functions.inc.php');
 $title='Search Renewals';
 
 // This page requires authentication
-require ('auth.inc.php');
+require ($lib_path.'auth.inc.php');
 
 // External variables
 $expire = cleanvar($_REQUEST['expire']);
@@ -25,7 +25,7 @@ $expire = cleanvar($_REQUEST['expire']);
 // show search renewal form
 if (empty($expire))
 {
-    include ('htmlheader.inc.php');
+    include ('./inc/htmlheader.inc.php');
     ?>
     <h2><?php echo $title; ?></h2>
     <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
@@ -34,12 +34,12 @@ if (empty($expire))
     // FIXME i18n
     echo "<p><input name='submit' type='submit' value=\"{$strSearch}\" /></p>";
     echo "</form>\n";
-    include ('htmlfooter.inc.php');
+    include ('./inc/htmlfooter.inc.php');
 }
 else
 {
     // perform search
-    include ('htmlheader.inc.php');
+    include ('./inc/htmlheader.inc.php');
     // check input
     if ($expire == '')
     {
@@ -130,6 +130,6 @@ else
             <?php
         }
     }
-    include ('htmlfooter.inc.php');
+    include ('./inc/htmlfooter.inc.php');
 }
 ?>

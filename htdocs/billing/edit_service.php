@@ -43,7 +43,7 @@ switch ($mode)
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
-            include ('htmlheader.inc.php');
+            include ('./inc/htmlheader.inc.php');
 
             if (mysql_numrows($result) != 1)
             {
@@ -145,7 +145,7 @@ switch ($mode)
 
                 echo "<p align='center'><a href='../contract_details.php?id={$contractid}'>{$strReturnWithoutSaving}</a></p>";
             }
-            include ('htmlfooter.inc.php');
+            include ('./inc/htmlfooter.inc.php');
         }
 
         break;
@@ -263,7 +263,7 @@ switch ($mode)
         }
         else
         {
-            include ('htmlheader.inc.php');
+            include ('./inc/htmlheader.inc.php');
             echo "<h2>{$strOneTimeBillingEditor}</h2>";
 
             echo "<form name='serviceform' action='{$_SERVER['PHP_SELF']}' method='post' onsubmit='return confirm_submit(\"{$strAreYouSureMakeTheseChanges}\");'>";
@@ -317,7 +317,7 @@ switch ($mode)
 
             echo "</form>";
         }
-        include ('htmlfooter.inc.php');
+        include ('./inc/htmlfooter.inc.php');
         break;
     case 'edit':
         if (user_permission($sit[2], 79) == FALSE)

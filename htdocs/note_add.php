@@ -13,11 +13,11 @@
 @include ('set_include_path.inc.php');
 $permission = 0; // Allow all auth users
 
-require ('db_connect.inc.php');
-require ('functions.inc.php');
+require ($lib_path.'db_connect.inc.php');
+require ($lib_path.'functions.inc.php');
 
 // This page requires authentication
-require ('auth.inc.php');
+require ($lib_path.'auth.inc.php');
 
 // External variables
 $action = $_REQUEST['action'];
@@ -39,7 +39,7 @@ switch ($action)
         if (empty($bodytext)) $error[] = 'Note must not be blank';
         if (count($error) >= 1)
         {
-            include ('htmlheader.inc.php');
+            include ('./inc/htmlheader.inc.php');
             echo "<p class='error'>Please check the data you entered</p>";
             echo "<ul class='error'>";
             foreach ($error AS $err)
@@ -47,7 +47,7 @@ switch ($action)
                 echo "<li>$err</li>";
             }
             echo "</ul>";
-            include ('htmlfooter.inc.php');
+            include ('./inc/htmlfooter.inc.php');
         }
         else
         {
@@ -67,9 +67,9 @@ switch ($action)
 
     case '':
     default:
-        include ('htmlheader.inc.php');
+        include ('./inc/htmlheader.inc.php');
         echo add_note_form(0,0);
-        include ('htmlfooter.inc.php');
+        include ('./inc/htmlfooter.inc.php');
 }
 
 ?>

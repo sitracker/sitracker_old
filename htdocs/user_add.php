@@ -11,18 +11,18 @@
 @include ('set_include_path.inc.php');
 $permission = 20; // Add Users
 
-require ('db_connect.inc.php');
-require ('functions.inc.php');
+require ($lib_path.'db_connect.inc.php');
+require ($lib_path.'functions.inc.php');
 
 // This page requires authentication
-require ('auth.inc.php');
+require ($lib_path.'auth.inc.php');
 
 $title = $strAddUser;
 
 // External variables
 $submit = $_REQUEST['submit'];
 
-include ('htmlheader.inc.php');
+include ('./inc/htmlheader.inc.php');
 
 if (empty($submit))
 {
@@ -152,7 +152,7 @@ if (empty($submit))
     echo "</table>\n";
     echo "<p><input name='submit' type='submit' value='{$strAddUser}' /></p>";
     echo "</form>\n";
-    include ('htmlfooter.inc.php');
+    include ('./inc/htmlfooter.inc.php');
 
     clear_form_data('add_user');
 }

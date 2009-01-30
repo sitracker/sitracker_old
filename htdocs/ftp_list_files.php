@@ -14,14 +14,14 @@
 
 @include ('set_include_path.inc.php');
 $permission = 44; // FTP Publishing
-require ('db_connect.inc.php');
-require ('functions.inc.php');
+require ($lib_path.'db_connect.inc.php');
+require ($lib_path.'functions.inc.php');
 
 // This page requires authentication
-require ('auth.inc.php');
+require ($lib_path.'auth.inc.php');
 
 $title = $strFTPFilesDB;
-include ('htmlheader.inc.php');
+include ('./inc/htmlheader.inc.php');
 
 // External Variables
 $orderby = cleanvar($_REQUEST['orderby']);
@@ -133,5 +133,5 @@ else
     echo "<tr><td colspan='8' align='center'>{$strNone}</td></tr>";
 }
 echo "</table>\n";
-include ('htmlfooter.inc.php');
+include ('./inc/htmlfooter.inc.php');
 ?>

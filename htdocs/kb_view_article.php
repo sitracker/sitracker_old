@@ -12,10 +12,10 @@
 @include ('set_include_path.inc.php');
 $permission = 54; // View KB
 
-require ('db_connect.inc.php');
-require ('functions.inc.php');
+require ($lib_path.'db_connect.inc.php');
+require ($lib_path.'functions.inc.php');
 // This page requires authentication
-require ('auth.inc.php');
+require ($lib_path.'auth.inc.php');
 
 
 if (!empty($_REQUEST['id']))
@@ -31,11 +31,11 @@ if (empty($id))
     header("Location: browse_kb.php");
     exit;
 }
-include ('htmlheader.inc.php');
+include ('./inc/htmlheader.inc.php');
 
 echo "<h2>".icon('kb', 32)." {$strKnowledgeBaseArticle}</h2>";
 echo kb_article($id);
 
-include ('htmlfooter.inc.php');
+include ('./inc/htmlfooter.inc.php');
 
 ?>

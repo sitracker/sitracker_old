@@ -16,11 +16,11 @@
 $permission = 19; /* View Maintenance Contracts */
 $title = 'Supported contacts by Contract';
 
-require ('db_connect.inc.php');
-require ('functions.inc.php');
+require ($lib_path.'db_connect.inc.php');
+require ($lib_path.'functions.inc.php');
 
 // This page requires authentication
-require ('auth.inc.php');
+require ($lib_path.'auth.inc.php');
 
 $siteid = cleanvar($_REQUEST['siteid']);
 
@@ -33,7 +33,7 @@ if ($_REQUEST['mode'] == 'csv')
 }
 else
 {
-    include ('htmlheader.inc.php');
+    include ('./inc/htmlheader.inc.php');
 }
 
 $sql = "SELECT *, s.name AS sitename FROM `{$dbSites}` AS s ";
@@ -120,6 +120,6 @@ while ($site = mysql_fetch_object($result))
 if ($_REQUEST['mode']!='csv')
 {
     echo "<p align='center'><a href='{$_SERVER['PHP_SELF']}?siteid={$siteid}&amp;mode=csv'>Download as <abbr title='Comma Seperated Values'>CSV</abbr> File</a></p>";
-    include ('htmlfooter.inc.php');
+    include ('./inc/htmlfooter.inc.php');
 }
 ?>

@@ -20,11 +20,11 @@ set_time_limit(60);
 $title = 'Average Incident Duration';
 $permission = 37; // Run Reports
 
-require ('db_connect.inc.php');
-require ('functions.inc.php');
+require ($lib_path.'db_connect.inc.php');
+require ($lib_path.'functions.inc.php');
 
 // This page requires authentication
-require ('auth.inc.php');
+require ($lib_path.'auth.inc.php');
 
 $id = cleanvar($_REQUEST['id']);
 $mode = cleanvar($_REQUEST['mode']);
@@ -154,7 +154,7 @@ if ($_REQUEST['output'] == 'csv')
 }
 else
 {
-    include ('htmlheader.inc.php');
+    include ('./inc/htmlheader.inc.php');
     echo "<h2>{$title}</h2>";
     echo "<p align='center'>{$strOnlyShowsClosedCalls}</p>";
     echo "<p align='center'>";
@@ -170,7 +170,7 @@ else
     echo create_report($data);
     echo "<p align='center'><a href='{$_SERVER['PHP_SELF']}?mode={$mode}&amp;";
     echo "output=csv'>{$strSaveAsCSV}</a></p>";
-    include ('htmlfooter.inc.php');
+    include ('./inc/htmlfooter.inc.php');
 }
 
 ?>

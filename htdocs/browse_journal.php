@@ -15,13 +15,13 @@
 
 @include ('set_include_path.inc.php');
 $permission = 22; // administrate
-require ('db_connect.inc.php');
-require ('functions.inc.php');
+require ($lib_path.'db_connect.inc.php');
+require ($lib_path.'functions.inc.php');
 
 $title = $strBrowseJournal;
 
 // This page requires authentication
-require ('auth.inc.php');
+require ($lib_path.'auth.inc.php');
 
 // External variables
 $offset = cleanvar($_REQUEST['offset']);
@@ -33,7 +33,7 @@ $order = cleanvar($_REQUEST['order']);
 
 if (empty($search_string)) $search_string='a';
 
-include ('htmlheader.inc.php');
+include ('./inc/htmlheader.inc.php');
 echo "<h2>{$title}</h2>";
 
 if (empty($perpage)) $perpage = 50;
@@ -121,5 +121,5 @@ else
 {
     echo "<p>{$strNoResults}</p>";
 }
-include ('htmlfooter.inc.php');
+include ('./inc/htmlfooter.inc.php');
 ?>

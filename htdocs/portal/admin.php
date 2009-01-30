@@ -191,5 +191,5 @@ if ($result = mysql_query($sql))
     }
 }
 echo "</table>";
-include 'htmlfooter.inc.php';
+include './inc/htmlfooter.inc.php';
 ?>

@@ -12,11 +12,11 @@
 @include ('set_include_path.inc.php');
 $permission = 10; // Edit Contacts
 
-require ('db_connect.inc.php');
-require ('functions.inc.php');
+require ($lib_path.'db_connect.inc.php');
+require ($lib_path.'functions.inc.php');
 
 // This page requires authentication
-require ('auth.inc.php');
+require ($lib_path.'auth.inc.php');
 
 $title = $strEditContact;
 
@@ -24,7 +24,7 @@ $title = $strEditContact;
 $contact = cleanvar($_REQUEST['contact']);
 $action = cleanvar($_REQUEST['action']);
 
-include ('htmlheader.inc.php');
+include ('./inc/htmlheader.inc.php');
 
 // User has access
 if (empty($action) OR $action == "showform" OR empty($contact))
@@ -236,5 +236,5 @@ else if ($action == "update")
         }
     }
 }
-include ('htmlfooter.inc.php');
+include ('./inc/htmlfooter.inc.php');
 ?>

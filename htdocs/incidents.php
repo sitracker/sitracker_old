@@ -15,10 +15,10 @@
 $permission = 6; // View Incidents
 $title = 'Incidents List';
 
-require ('db_connect.inc.php');
-require ('functions.inc.php');
+require ($lib_path.'db_connect.inc.php');
+require ($lib_path.'functions.inc.php');
 // This page requires authentication
-require ('auth.inc.php');
+require ($lib_path.'auth.inc.php');
 
 // External variables
 $type = cleanvar($_REQUEST['type']);
@@ -36,7 +36,7 @@ if (empty($sort)) $sort='priority';
 if (empty($queue)) $queue=1;
 
 $refresh = $_SESSION['incident_refresh'];
-include ('htmlheader.inc.php');
+include ('./inc/htmlheader.inc.php');
 ?>
 <script type="text/javascript">
 //<![CDATA[
@@ -334,5 +334,5 @@ switch ($type)
         }
         echo "</div>";
 }
-include ('htmlfooter.inc.php');
+include ('./inc/htmlfooter.inc.php');
 ?>

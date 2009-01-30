@@ -28,8 +28,8 @@ $DEFAULTS = $CONFIG;
 // {
 //     $permission = 22;
 //     $_REQUEST['config'] = 'advanced'; // set advanced mode
-//     require ('functions.inc.php');
-//     require ('auth.inc.php');
+//     require ($lib_path.'functions.inc.php');
+//     require ($lib_path.'auth.inc.php');
 // }
 
 // These are the required variables we want to configure during installation
@@ -741,7 +741,7 @@ switch ($_REQUEST['action'])
             }
             else
             {
-                require ('functions.inc.php');
+                require ($lib_path.'functions.inc.php');
 
                 // Load the empty schema
                 require ('setup-schema.php');

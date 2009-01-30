@@ -11,8 +11,8 @@
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
 @include ('set_include_path.inc.php');
-require ('db_connect.inc.php');
-require ('functions.inc.php');
+require ($lib_path.'db_connect.inc.php');
+require ($lib_path.'functions.inc.php');
 
 session_name($CONFIG['session_name']);
 session_start();

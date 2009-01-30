@@ -42,10 +42,10 @@ function delete_signature($sig_id)
 $permission = 43; // Edit global signature
 
 
-require ('db_connect.inc.php');
-require ('functions.inc.php');
+require ($lib_path.'db_connect.inc.php');
+require ($lib_path.'functions.inc.php');
 // This page requires authentication
-require ('auth.inc.php');
+require ($lib_path.'auth.inc.php');
 
 $title = $strGlobalSignature;
 
@@ -84,7 +84,7 @@ if (!empty($signature))
 elseif (empty($action))
 {
     //The just view the global signatures
-    include ('htmlheader.inc.php');
+    include ('./inc/htmlheader.inc.php');
 
     echo "<h2>{$title}</h2>";
 
@@ -110,11 +110,11 @@ elseif (empty($action))
     }
     echo "</table>";
 
-    include ('htmlfooter.inc.php');
+    include ('./inc/htmlfooter.inc.php');
 }
 elseif (!empty($action))
 {
-    include ('htmlheader.inc.php');
+    include ('./inc/htmlheader.inc.php');
     switch ($action)
     {
         case 'add':
@@ -162,6 +162,6 @@ elseif (!empty($action))
             echo "</form>\n";
         break;
     }
-    include ('htmlfooter.inc.php');
+    include ('./inc/htmlfooter.inc.php');
 }
 ?>

@@ -15,17 +15,17 @@
 @include ('set_include_path.inc.php');
 $permission = 55; // Delete Sites/Contacts
 
-require ('db_connect.inc.php');
-require ('functions.inc.php');
+require ($lib_path.'db_connect.inc.php');
+require ($lib_path.'functions.inc.php');
 // This page requires authentication
-require ('auth.inc.php');
+require ($lib_path.'auth.inc.php');
 
 // External variables
 $process = $_REQUEST['process'];
 $id = cleanvar($_REQUEST['id']);
 $newcontact = mysql_real_escape_string($_REQUEST['newcontact']);
 
-include ('htmlheader.inc.php');
+include ('./inc/htmlheader.inc.php');
 if (empty($process))
 {
     if (empty($id))
@@ -123,7 +123,7 @@ if (empty($process))
             echo "</form>\n";
         }
     }
-    include ('htmlfooter.inc.php');
+    include ('./inc/htmlfooter.inc.php');
 }
 else
 {

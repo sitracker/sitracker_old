@@ -114,5 +114,5 @@ echo show_edit_site($site, 'external');
 
 
 
-include 'htmlfooter.inc.php';
+include './inc/htmlfooter.inc.php';
 ?>

@@ -55,7 +55,7 @@ if (!$_REQUEST['action'])
 	    if (mysql_num_rows($checkcontract) == 0)
 	    {
 	        echo "<p class='error'>{$strPermissionDenied}</p>";
-	       	include 'htmlfooter.inc.php';
+	       	include './inc/htmlfooter.inc.php';
 	       	exit;
 	    }
 	}
@@ -109,7 +109,7 @@ if (!$_REQUEST['action'])
     echo "<p align='center'><input type='submit' value='{$strAddIncident}' /></p>";
     echo "</form>";
 
-    include ('htmlfooter.inc.php');
+    include ('./inc/htmlfooter.inc.php');
 }
 else //submit
 {

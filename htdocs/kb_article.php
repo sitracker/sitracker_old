@@ -15,10 +15,10 @@
 @include ('set_include_path.inc.php');
 $permission = 54; // view KB
 
-require ('db_connect.inc.php');
-require ('functions.inc.php');
+require ($lib_path.'db_connect.inc.php');
+require ($lib_path.'functions.inc.php');
 // This page requires authentication
-require ('auth.inc.php');
+require ($lib_path.'auth.inc.php');
 
 if (!empty($_REQUEST['id']))
 {
@@ -125,7 +125,7 @@ else
     //show form
     $title = $strEditKBArticle;
     $pagescripts = array('scriptaculous/scriptaculous.js','scriptaculous/effects.js');
-    require 'htmlheader.inc.php';
+    require './inc/htmlheader.inc.php';
 
     if ($mode == 'edit')
     {
@@ -339,6 +339,6 @@ else
     echo "</form></div>";
     echo "<p align='center'><a href='kb_view_article.php?id=$kbid'>{$strReturnWithoutSaving}</a></p>";
     echo "<script type='text/javascript'>\n//<![CDATA[\nkbSectionCollapse();\n//]]>\n</script>";
-    include ('htmlfooter.inc.php');
+    include ('./inc/htmlfooter.inc.php');
 }
 ?>

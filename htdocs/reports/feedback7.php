@@ -15,13 +15,13 @@
 @include ('../set_include_path.inc.php');
 $permission = 37; // Run Reports
 
-require ('db_connect.inc.php');
-require ('functions.inc.php');
+require ($lib_path.'db_connect.inc.php');
+require ($lib_path.'functions.inc.php');
 
 // This page requires authentication
-require ('auth.inc.php');
+require ($lib_path.'auth.inc.php');
 
-include ('htmlheader.inc.php');
+include ('./inc/htmlheader.inc.php');
 
 $formid=$CONFIG['feedback_form'];
 $now = time();
@@ -124,6 +124,6 @@ while ($mrow = mysql_fetch_object($mresult))
 echo "<h2>$survcount Surveys</h2>";
 
 echo "</div>\n";
-include ('htmlfooter.inc.php');
+include ('./inc/htmlfooter.inc.php');
 
 ?>
