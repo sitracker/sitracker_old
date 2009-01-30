@@ -98,6 +98,8 @@ function html_redirect($url, $success = TRUE, $message='')
 /**
     * Prints the HTML for a checkbox, the 'state' value should be a 1, yes, true or 0, no, false
     * @author Ivan Lucas
+    * @param string $name The HTML name attribute
+    * @param mixed $state
     * @returns string HTML
 */
 function html_checkbox($name, $state, $return = FALSE)
