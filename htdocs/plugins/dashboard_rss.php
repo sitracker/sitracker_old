@@ -51,7 +51,7 @@ function dashboard_rss_install()
 
 function dashboard_rss_display($dashletid)
 {
-    global $CONFIG, $dbInterfaceStyles, $dbDashboardRSS, $sit;
+    global $CONFIG, $dbInterfaceStyles, $dbDashboardRSS, $sit, $lib_path;
 
     if ($_SESSION['auth'] == TRUE) $styleid = $_SESSION['style'];
     else $styleid = $CONFIG['default_interface_style'];
@@ -65,7 +65,7 @@ function dashboard_rss_display($dashletid)
     Originally from dashboard/dashboard.inc.php
     */
 
-    require_once('magpierss/rss_fetch.inc');
+    require_once($lib_path.'magpierss/rss_fetch.inc');
 
     $sql = "SELECT url, items FROM `{$CONFIG['db_tableprefix']}dashboard_rss` WHERE owner = {$sit[2]} AND enabled = 'true'";
     $result = mysql_query($sql);
