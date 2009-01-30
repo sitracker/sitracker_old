@@ -12,13 +12,13 @@
 
 @include ('set_include_path.inc.php');
 // Load config defaults
-@include ("defaults.inc.php");
+@include ($lib_path.'defaults.inc.php');
 // Keep the defaults as a seperate array
 $DEFAULTS = $CONFIG;
 
 // Load config file with customisations
 // @include ("config.inc-dist.php");
-@include ("config.inc.php");
+@include ("./config.inc.php");
 // Server Configuration
 @include ('/etc/webtrack.conf'); // for legacy systems
 @include ('/etc/sit.conf');
@@ -35,10 +35,10 @@ $DEFAULTS = $CONFIG;
 // These are the required variables we want to configure during installation
 $SETUP = array('db_hostname','db_database','db_username','db_password','db_tableprefix','application_fspath','application_webpath');
 
-require('configvars.inc.php');
+require($lib_path.'configvars.inc.php');
 
 $upgradeok = FALSE;
-$config_filename='../includes/config.inc.php';
+$config_filename='./config.inc.php';
 
 $configfiles = get_included_files();
 
@@ -686,7 +686,7 @@ switch ($_REQUEST['action'])
 
 
     default:
-        require ('tablenames.inc.php');
+        require ($lib_path.'tablenames.inc.php');
         // Connect to Database server
         $db = @mysql_connect($CONFIG['db_hostname'], $CONFIG['db_username'], $CONFIG['db_password']);
         if (@mysql_error())

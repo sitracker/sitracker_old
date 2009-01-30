@@ -9,7 +9,7 @@
 //
 
 // Load config defaults
-include ("defaults.inc.php");
+include ($lib_path.'defaults.inc.php');
 // Server Configuration
 @include ('/etc/webtrack.conf');  // Legacy, for compatibility
 @include ('/etc/sit.conf');

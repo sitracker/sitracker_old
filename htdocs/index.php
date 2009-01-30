@@ -11,7 +11,7 @@
 
 @include ('set_include_path.inc.php');
 
-if (!@include ('db_connect.inc.php'))
+if (!@include ($lib_path.'db_connect.inc.php'))
 {
     $msg = urlencode(base64_encode("Could not find database connection information (db_connect.inc.php), the php include path is probably wrong"));
     header("Location: {$CONFIG['application_webpath']}setup.php?msg={$msg}");
@@ -20,7 +20,7 @@ if (!@include ('db_connect.inc.php'))
 
 session_name($CONFIG['session_name']);
 session_start();
-include ('strings.inc.php');
+include ($lib_path.'strings.inc.php');
 require ('functions.inc.php');
 
 if ($_SESSION['auth'] != TRUE)
