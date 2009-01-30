@@ -19,7 +19,7 @@ require ($lib_path.'functions.inc.php');
 require ($lib_path.'auth.inc.php');
 include ('./inc/htmlheader.inc.php');
 
-$i18npath = '../includes/i18n/';
+$i18npath = './i18n/';
 
 $languages = array('ar' => 'Arabic',
                    'bg-BG' => 'Bulgarian',
