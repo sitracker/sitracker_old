@@ -28,7 +28,7 @@ $result = mysql_query($sql);
 if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 while ($dashboard = mysql_fetch_object($result))
 {
-   include ("{$CONFIG['application_fspath']}dashboard{$fsdelim}dashboard_{$dashboard->name}.php");
+   include (".{$fsdelim}plugins{$fsdelim}dashboard_{$dashboard->name}.php");
    $DASHBOARDCOMP["dashboard_{$dashboard->name}"]="dashboard_{$dashboard->name}";
 }
 
