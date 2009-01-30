@@ -7719,7 +7719,7 @@ if (is_array($CONFIG['plugins']))
         $plugin = str_replace('/','',$plugin);
         if ($plugin != '')
         {
-            include ("{$CONFIG['application_fspath']}plugins/{$plugin}.php");
+            include ("{$CONFIG['application_fspath']}htdocs/plugins/{$plugin}.php");
         }
     }
 }
