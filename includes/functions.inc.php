@@ -471,6 +471,7 @@ function contact_count_incidents($id)
     return $count;
 }
 
+
 /**
     * Return the number of incidents ever logged against a site
     * @author Kieran
@@ -2359,6 +2360,12 @@ function sit_error_handler($errno, $errstr, $errfile, $errline, $errcontext)
                 echo "<p class='tip'>The SiT schema may need updating to fix this problem.";
                 if (user_permission($sit[2], 22)) echo "Visit <a href='setup.php'>Setup</a>"; // Only show this to admin
                 echo "</p>";
+            }
+            if (strpos($errstr, 'headers already sent') !== FALSE)
+            {
+                echo "<p class='tip'>This warning may be caused by a problem that occurred before the ";
+                echo "page was displayed, or sometimes by a syntax error or ";
+                echo "extra whitespace in your config file.</p>";
             }
 
             if (strpos($errstr, 'You have an error in your SQL syntax') !== FALSE OR
