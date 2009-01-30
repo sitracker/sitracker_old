@@ -153,7 +153,7 @@ switch ($_REQUEST['action'])
             $obj = mysql_fetch_object($result);
 
             $version = 1;
-            include ("{$CONFIG['application_fspath']}dashboard/dashboard_{$obj->name}.php");
+            include ("{$CONFIG['application_fspath']}htdocs/plugins/dashboard_{$obj->name}.php");
             $func = "dashboard_{$obj->name}_get_version";
 
             if (function_exists($func))
