@@ -33,7 +33,7 @@ $DEFAULTS = $CONFIG;
 // }
 
 // These are the required variables we want to configure during installation
-$SETUP = array('db_hostname','db_database','db_username','db_password','db_tableprefix','application_fspath','application_webpath', 'attachment_fspath', 'attachment_webpath');
+$SETUP = array('db_hostname','db_database','db_username','db_password','db_tableprefix','application_fspath','application_webpath');
 
 require('configvars.inc.php');
 
@@ -586,8 +586,11 @@ switch ($_REQUEST['action'])
         {
             $newcfgfile .= "# Nothing configured. This will mean the defaults are used.\n\n";
         }
-        $newcfgfile .= "?";
-        $newcfgfile .= ">";
+
+        // INL if we leave off the php closing tag it saves people having trouble
+        // with whitespace
+        //$newcfgfile .= "?";
+        //$newcfgfile .= ">";
 
         $fp = @fopen($config_filename, 'w');
         if (!$fp)
@@ -1188,7 +1191,17 @@ switch ($_REQUEST['action'])
                     }
                     else
                     {
-                        echo "<p>SiT! v".number_format($installed_version,2)." is installed and ready.<br /><br />";
+                        if ($installed_version < $application_version)
+                        {
+                            echo "<p>SiT! v".number_format($application_version,2)." is installed ";
+                            echo "but the database schema, which is for v".number_format($installed_version,2).", is out of date.";
+                        }
+                        else
+                        {
+                            echo "<p>SiT! v".number_format($installed_version,2)." is installed ";
+                            echo "and ready.";
+                        }
+                        echo "<br /><br />";
                         echo "<form action='index.php' method='get'>";
                         echo "<input type='submit' value=\"Run SiT!\" />";
                         echo "</form>\n";

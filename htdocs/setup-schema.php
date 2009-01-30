@@ -145,9 +145,6 @@ CREATE TABLE `{$dbContacts}` (
   KEY `notify_contactid` (`notify_contactid`)
 ) TYPE=MyISAM ;
 
-INSERT INTO `{$dbContacts}` (`id`, `notify_contactid`, `username`, `password`, `forenames`, `surname`, `jobtitle`, `courtesytitle`, `siteid`, `email`, `phone`, `mobile`, `fax`, `department`, `address1`, `address2`, `city`, `county`, `country`, `postcode`, `dataprotection_email`, `dataprotection_phone`, `dataprotection_address`, `timestamp_added`, `timestamp_modified`, `notes`) VALUES
-(1, '', 'Acme1', MD5(RAND()), 'John', 'Acme', 'Chairman', 'Mr', 1, 'acme@example.com', '0666 222111', '', '', '', '', '', '', '', '', '', 'Yes', 'Yes', 'Yes', 1132930556, 1187360933, '');
-
 
 CREATE TABLE `{$dbDashboard}` (
   `id` int(11) NOT NULL auto_increment,
@@ -235,6 +232,7 @@ INSERT INTO `{$dbEmailTemplates}` (`name`, `type`, `description`, `tofield`, `fr
 INSERT INTO `{$dbEmailTemplates}` (`name`, `type`, `description`, `tofield`, `fromfield`, `replytofield`, `ccfield`, `bccfield`, `subjectfield`, `body`, `customervisibility`, `storeinlog`, `created`, `createdby`, `modified`, `modifiedby`) VALUES('EMAIL_HOLIDAYS_REQUESTED', 'system', 'strEmailHolidaysRequestedDesc', '{approvaluseremail}', '{supportemail}', '{supportemail}', NULL, NULL, '{applicationshortname}: Holiday approval request', 'Hi,\r\n\r\n{userrealname} has requested that you approve the following holidays:\r\n\r\n{listofholidays}\r\n\r\nPlease point your browser to {applicationurl}holiday_request.php?user={userid}&mode=approval to approve or decline these requests.\r\nRegards\r\n{applicationname}\r\n\r\n-- \r\n{todaysdate} - {applicationshortname} {applicationversion}\r\n{globalsignature}\r\n{triggersfooter}', 'hide', 'No', NULL, NULL, NULL, NULL);
 INSERT INTO `{$dbEmailTemplates}` (`name`, `type`, `description`, `tofield`, `fromfield`, `replytofield`, `ccfield`, `bccfield`, `subjectfield`, `body`, `customervisibility`, `storeinlog`, `created`, `createdby`, `modified`, `modifiedby`) VALUES('EMAIL_SERVICE_LEVEL', 'system', 'strEmailServiceLevelDesc', '{salespersonemail}', '{supportemail}', '{supportemail}', NULL, NULL, '{sitename}\'s service credit low', 'Hi, {sitename}''s total service credit is now standing at {serviceremainingstring}.\r\n\r\nRegards\r\n{applicationname}\r\n\r\n-- \r\n{todaysdate} - {applicationshortname} {applicationversion}\r\n{globalsignature}\r\n{triggersfooter}', 'show', 'No', NULL, NULL, NULL, NULL);
 INSERT INTO `{$dbEmailTemplates}` (`name`, `type`, `description`, `tofield`, `fromfield`, `replytofield`, `ccfield`, `bccfield`, `subjectfield`, `body`, `customervisibility`, `storeinlog`, `created`, `createdby`, `modified`, `modifiedby`) VALUES('EMAIL_INCIDENT_UPDATED_CUSTOMER', 'user', 'strEmailIncidentUpdatedCustomerDesc', '{contactemail}', '{supportemail}', '{supportemail}', '', '', '{applicationshortname} [{incidentid}] - {incidenttitle} updated', 'Hi {contactfirstname},\r\n\r\nYour incident [{incidentid}] - {incidentid} has been updated, please log into the portal to view the update and respond.\r\n \r\nDO NOT respond to this e-mail directly, use the portal for your responses.\r\n\r\nLog into the portal at: {applicationurl}, where you can also reset your details if you do not know them.\r\n\r\nRegards,\r\n{signature}\r\n\r\n{globalsignature}', 'hide', 'No', NULL, NULL, NULL, NULL);
+
 
 CREATE TABLE `{$dbEscalationPaths}` (
   `id` int(11) NOT NULL auto_increment,
@@ -471,6 +469,7 @@ CREATE TABLE `{$dbIncidentStatus}` (
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM;
 
+
 INSERT INTO `{$dbIncidentStatus}` VALUES (1, 'strActive', 'strActive');
 INSERT INTO `{$dbIncidentStatus}` VALUES (2, 'strClosed', 'strClosed');
 INSERT INTO `{$dbIncidentStatus}` VALUES (3, 'strResearchNeeded', 'strResearching');
@@ -510,6 +509,7 @@ INSERT INTO `{$dbInterfaceStyles}` (`id`, `name`, `cssurl`, `iconset`, `headerht
 (15, 'Richard', 'sit15.css', 'sit', ''),
 (16, 'Cake', 'sit_cake.css', 'sit', '');
 
+
 CREATE TABLE `{$dbInventory}` (
   `id` int(11) NOT NULL auto_increment,
   `identifier` varchar(255) default NULL,
@@ -531,6 +531,7 @@ CREATE TABLE `{$dbInventory}` (
   PRIMARY KEY  (`id`),
   KEY `siteid` (`siteid`,`contactid`)
 ) ENGINE=MyISAM;
+
 
 CREATE TABLE `{$dbJournal}` (
   `id` int(11) NOT NULL auto_increment,
@@ -637,6 +638,7 @@ VALUES (1,'Task','Subtask','Parent Task','tasks','id','tasks','id','name','','vi
 (5,'Attachments', 'Update', 'File', 'updates', 'id', 'files', 'id', 'filename', '', 'incident_details.php?updateid=%id%&tab=files'),
 (6, 'Incident', 'Transaction', 'Incidents', 'transactions', 'transactionid', 'incidents', 'id', '', '', '');;
 
+
 CREATE TABLE `{$dbMaintenance}` (
   `id` int(11) NOT NULL auto_increment,
   `site` int(11) default NULL,
@@ -694,6 +696,7 @@ CREATE TABLE `{$dbNotices}` (
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=1 ;
 
+
 CREATE TABLE IF NOT EXISTS `{$dbNoticeTemplates}` (
   `id` int(11) NOT NULL auto_increment,
   `name` varchar(255) NOT NULL,
@@ -725,12 +728,12 @@ INSERT INTO `$dbNoticeTemplates` (`name`, `type`, `description`, `text`, `linkte
 INSERT INTO `$dbNoticeTemplates` (`name`, `type`, `description`, `text`, `linktext`, `link`, `durability`, `refid`) VALUES('NOTICE_TASK_DUE', 3, 'strNoticeTaskDueDesc', 'strNoticeTaskDue', 'strViewTask', '{applicationurl}view_task.php?id={taskid}', 'sticky', '{taskid}');
 INSERT INTO `$dbNoticeTemplates` (`name`, `type`, `description`, `text`, `linktext`, `link`, `durability`, `refid`) VALUES('NOTICE_SCHEDULER_TASK_FAILED', 3, 'strNoticeSchedulerTaskFailedDesc', 'strNoticeSchedulerTaskFailed', '', '', 'sticky', '');
 
+
 CREATE TABLE `{$dbPermissions}` (
   `id` int(5) NOT NULL auto_increment,
   `name` varchar(255) NOT NULL default '',
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM;
-
 
 INSERT INTO `{$dbPermissions}` VALUES (1, 'Add new contacts');
 INSERT INTO `{$dbPermissions}` VALUES (2, 'Add new sites');
@@ -845,8 +848,6 @@ CREATE TABLE `{$dbProducts}` (
   KEY `name` (`name`)
 ) ENGINE=MyISAM COMMENT='Current List of Products' ;
 
-INSERT INTO `{$dbProducts}` VALUES (1,1,'Example Product','This is an example product.');
-
 
 CREATE TABLE `{$dbRelatedIncidents}` (
 `id` INT( 5 ) NOT NULL AUTO_INCREMENT ,
@@ -858,6 +859,7 @@ PRIMARY KEY ( `id` ) ,
 INDEX ( `incidentid` , `relatedid` )
 ) ENGINE=MyISAM;
 
+
 CREATE TABLE `{$dbResellers}` (
   `id` tinyint(4) NOT NULL auto_increment,
   `name` varchar(100) default NULL,
@@ -865,7 +867,6 @@ CREATE TABLE `{$dbResellers}` (
 ) ENGINE=MyISAM;
 
 INSERT INTO `{$dbResellers}` VALUES (1,'Us (No Reseller)');
-INSERT INTO `{$dbResellers}` VALUES (2,'Example Reseller');
 
 
 CREATE TABLE `{$dbRoles}` (
@@ -1066,6 +1067,7 @@ INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES 
 INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (3, 70, 'true');
 INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (3, 71, 'true');
 
+
 CREATE TABLE `{$dbScheduler}` (
   `id` int(11) NOT NULL auto_increment,
   `action` varchar(50) NOT NULL,
@@ -1110,9 +1112,9 @@ CREATE TABLE IF NOT EXISTS `{$dbService}` (
   `dailyrate` float NOT NULL default '0',
   `billingmatrix` int(11) NOT NULL default '1',
   `priority` smallint(6) NOT NULL default '0',
-  `cust_ref` VARCHAR( 255 ) NULL AFTER `priority`,
-  `cust_ref_date` DATE NULL AFTER `po_number`,
-  `title` VARCHAR( 255 ) NULL AFTER `po_date`,
+  `cust_ref` VARCHAR( 255 ) NULL,
+  `cust_ref_date` DATE NULL,
+  `title` VARCHAR( 255 ) NULL,
   `notes` TEXT NOT NULL,
   `foc` enum('yes','no') NOT NULL default 'no' COMMENT 'Free of charge (customer not charged)',
     PRIMARY KEY  (`serviceid`)
@@ -1287,6 +1289,7 @@ CREATE TABLE `{$dbTempIncoming}` (
   KEY `updateid` (`updateid`)
 ) ENGINE=MyISAM COMMENT='Temporary store for incoming attachment paths' ;
 
+
  CREATE TABLE `{$dbTransactions}` (
 `transactionid` INT NOT NULL AUTO_INCREMENT ,
 `serviceid` INT NOT NULL ,
@@ -1300,6 +1303,7 @@ CREATE TABLE `{$dbTempIncoming}` (
 `transactionstatus` smallint(6) NOT NULL default '5',
 PRIMARY KEY ( `transactionid` )
 ) ENGINE = MYISAM;
+
 
 CREATE TABLE IF NOT EXISTS `{$dbTriggers}` (
   `id` int(11) NOT NULL auto_increment,
@@ -1350,6 +1354,7 @@ INSERT INTO `{$dbTriggers}` (`triggerid`, `userid`, `action`, `template`, `param
 INSERT INTO `{$dbTriggers}` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_SERVICE_LIMIT' , 0, 'ACTION_EMAIL', 'EMAIL_SERVICE_LEVEL', '', '{serviceremaining} <= 0.2');
 INSERT INTO `{$dbTriggers}` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_SCHEDULER_TASK_FAILED', 1, 'ACTION_NOTICE', 'NOTICE_SCHEDULER_TASK_FAILED', '', '{schedulertask} == \'CheckIncomingMail\'');
 
+
 CREATE TABLE `{$dbUpdates}` (
   `id` int(11) NOT NULL auto_increment,
   `incidentid` int(11) default NULL,
@@ -1376,7 +1381,6 @@ CREATE TABLE `{$dbUserGroups}` (
   `groupid` int(5) NOT NULL default '0',
   PRIMARY KEY  (`userid`,`groupid`)
 ) ENGINE=MyISAM COMMENT='Links users with groups';
-
 
 
 CREATE TABLE `{$dbUserPermissions}` (
@@ -1543,6 +1547,19 @@ CREATE TABLE `{$dbVendors}` (
 
 INSERT INTO `{$dbVendors}` VALUES (1,'Default');
 ";
+
+// ********************************************************************
+// Sample Data
+$sampledata_sql = "
+INSERT INTO `{$dbContacts}` (`id`, `notify_contactid`, `username`, `password`, `forenames`, `surname`, `jobtitle`, `courtesytitle`, `siteid`, `email`, `phone`, `mobile`, `fax`, `department`, `address1`, `address2`, `city`, `county`, `country`, `postcode`, `dataprotection_email`, `dataprotection_phone`, `dataprotection_address`, `timestamp_added`, `timestamp_modified`, `notes`) VALUES
+(1, '', 'Acme1', MD5(RAND()), 'John', 'Acme', 'Chairman', 'Mr', 1, 'acme@example.com', '0666 222111', '', '', '', '', '', '', '', '', '', 'Yes', 'Yes', 'Yes', 1132930556, 1187360933, '');
+
+INSERT INTO `{$dbProducts}` VALUES (1,1,'Example Product','This is an example product.');
+
+INSERT INTO `{$dbResellers}` VALUES (2,'Example Reseller');
+";
+
+
 
 // ********************************************************************
 
@@ -2485,7 +2502,7 @@ ALTER TABLE `{$dbUsers}` ADD `holiday_resetdate` DATE NULL AFTER `holiday_entitl
 ALTER TABLE `{$dbUsers}` ADD `user_startdate` DATE NULL AFTER `accepting` ;
 ALTER TABLE `{$dbHolidays}` ADD `date` DATE NULL AFTER `startdate` ;
 UPDATE `{$dbHolidays}` SET `date` = FROM_UNIXTIME( `startdate` ) WHERE 1 ;
-ALTER TABLE `{$dbHolidays}` DROP `startdate`
+ALTER TABLE `{$dbHolidays}` DROP `startdate` ;
 
 -- PH 2009-01-10
 ALTER TABLE `{$dbService}` ADD `cust_ref` VARCHAR( 255 ) NULL AFTER `priority` ,

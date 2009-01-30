@@ -29,7 +29,7 @@ $exec_time_start = getmicrotime();
 
 if ($CONFIG['db_username'] == '' OR $CONFIG['db_database'] == '')
 {
-    $msg = urlencode(base64_encode("Could not connect to the database because the database configuration is missing. Have you congfigured database settings?  Can your config file be read?"));
+    $msg = urlencode(base64_encode("Could not connect to the database because the database configuration is missing. Have you configured database settings?  Can your config file be read?"));
     header("Location: {$CONFIG['application_webpath']}setup.php?msg={$msg}");
     exit;
 }
@@ -75,9 +75,8 @@ require ('tablenames.inc.php');
 
 // Read config from database (this overrides any config in the config files
 $sql = "SELECT * FROM `{$dbConfig}`";
-$result = mysql_query($sql);
-if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
-if (mysql_num_rows($result) > 0)
+$result = @mysql_query($sql);
+if ($result AND mysql_num_rows($result) > 0)
 {
     while ($conf = mysql_fetch_object($result))
     {
