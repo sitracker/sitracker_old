@@ -69,7 +69,8 @@ $hmenu[1030] = array_merge(array (
                       110=> array ( 'perm'=> 22, 'name'=> $strTriggers, 'url'=>"{$CONFIG['application_webpath']}triggers.php"),
                       120=> array ( 'perm'=> 22, 'name'=> $strSystemActions, 'url'=>"{$CONFIG['application_webpath']}triggers.php?user=0"),
                       130=> array ( 'perm'=> 22, 'name'=> $strScheduler, 'url'=>"{$CONFIG['application_webpath']}scheduler.php"),
-                      140=> array ( 'perm'=> 49, 'name'=> $strFeedbackForms, 'url'=>"", 'submenu'=>"103090", 'enablevar' => 'feedback_enabled')
+                      140=> array ( 'perm'=> 49, 'name'=> $strFeedbackForms, 'url'=>"", 'submenu'=>"103090", 'enablevar' => 'feedback_enabled'),
+                      150=> array ( 'perm'=> 22, 'name'=> $strJournal, 'url'=>"{$CONFIG['application_webpath']}journal.php")
 ), $hmenu[1030]);
 if (!is_array($hmenu[103010])) $hmenu[103010] = array();
 $hmenu[103010] = array_merge(array (10=> array ( 'perm'=> 22, 'name'=> $strManageUsers, 'url'=>"{$CONFIG['application_webpath']}manage_users.php"),
