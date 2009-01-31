@@ -44,10 +44,10 @@ $servicelevel_name = servicelevel_name($servicelevelid);
 $opened_for = format_seconds(time() - $incident->opened);
 
 
-include ('incident_html_top.inc.php');
+include ('inc/incident_html_top.inc.php');
 include ('incident/sla.inc.php');
 
-include ('incident_html_bottom.inc.php');
+include ('inc/incident_html_bottom.inc.php');
 exit;
 
 ?>

@@ -27,13 +27,13 @@ $id = cleanvar($_REQUEST['id']);
 $incidentid=$id;
 
 $title = $strFiles;
-include ('incident_html_top.inc.php');
+include ('inc/incident_html_top.inc.php');
 
 // append incident number to attachment path to show this users attachments
 $incident_attachment_fspath = $CONFIG['attachment_fspath'] . $id;
 
 include ('incident/files.inc.php');
 
-include ('incident_html_bottom.inc.php');
+include ('inc/incident_html_bottom.inc.php');
 
 ?>

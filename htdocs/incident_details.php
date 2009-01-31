@@ -28,7 +28,7 @@ if ($_REQUEST['win'] == 'incomingview')
 {
     $title = 'Incoming';
     $incidentid = '';
-    include ('incident_html_top.inc.php');
+    include ('inc/incident_html_top.inc.php');
     include ('incident/incoming.inc.php');
 }
 elseif ($_REQUEST['win'] == 'jump')
@@ -83,7 +83,7 @@ elseif ($_REQUEST['win'] == 'holdingview')
     $_REQUEST['win'] = 'incomingview';
     $title = $strIncoming;
     $incidentid='';
-    include ('incident_html_top.inc.php');
+    include ('inc/incident_html_top.inc.php');
 
     include ('incident/details.inc.php');
 
@@ -94,12 +94,12 @@ else
 {
     $title = $strDetails;
 
-    include ('incident_html_top.inc.php');
+    include ('inc/incident_html_top.inc.php');
 
     include ('incident/details.inc.php');
 
     include ('incident/log.inc.php');
 }
 
-include ('incident_html_bottom.inc.php');
+include ('inc/incident_html_bottom.inc.php');
 ?>

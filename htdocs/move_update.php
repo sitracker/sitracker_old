@@ -27,7 +27,7 @@ $send_email = cleanvar($_REQUEST['send_email']);
 if ($incidentid == '')
 {
     $title = $strMoveUpdate;
-    include ('incident_html_top.inc.php');
+    include ('inc/incident_html_top.inc.php');
     $incidentid = cleanvar($_REQUEST['incidentid']); // Need to do this here again as incident_html_top changes this to $id which we need above so the menu works
     echo "<h2>{$title}</h2>";
     if ($error == '1')

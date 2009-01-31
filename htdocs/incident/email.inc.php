@@ -38,7 +38,7 @@ if (empty($step))
 
     if (mysql_num_rows($result) > 0)
     {
-        include ('incident_html_top.inc.php');
+        include ('inc/incident_html_top.inc.php');
 
         echo "<h2>{$title}</h2>";
 
@@ -46,7 +46,7 @@ if (empty($step))
 
         echo "<p align='center'><a href='".$_SERVER['PHP_SELF']."?step=1&amp;id={$id}'>{$strNewEmail}</a></p>";
 
-        include ('incident_html_bottom.inc.php');
+        include ('inc/incident_html_bottom.inc.php');
 
         exit;
     }
@@ -60,7 +60,7 @@ switch ($step)
 {
     case 1:
         // show form 1
-        include ('incident_html_top.inc.php');
+        include ('inc/incident_html_top.inc.php');
         ?>
         <script type="text/javascript">
         //<![CDATA[
@@ -305,7 +305,7 @@ switch ($step)
         echo "<input type='hidden' name='menu' value='$menu' />";
         echo "<input name='submit1' type='submit' value='{$strContinue}' /></p>";
         echo "</form>\n";
-        include ('incident_html_bottom.inc.php');
+        include ('inc/incident_html_bottom.inc.php');
     break;
 
     case 2:
@@ -320,7 +320,7 @@ switch ($step)
             $metadata = explode("|",$draftobj->meta);
         }
 
-        include ('incident_html_top.inc.php');
+        include ('inc/incident_html_top.inc.php');
         ?>
         <script type='text/javascript'>
         //<![CDATA[
@@ -543,7 +543,7 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
         echo "<input name='submit2' type='submit' value='{$strSendEmail}' />";
         echo "</p>\n</form>\n";
 
-        include ('incident_html_bottom.inc.php');
+        include ('inc/incident_html_bottom.inc.php');
     break;
 
     case 3:
@@ -855,17 +855,17 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
             }
             else
             {
-                include ('incident_html_top.inc.php');
+                include ('inc/incident_html_top.inc.php');
                 echo "<p class='error'>{$SYSLANG['strErrorSendingEmail']}: $mailerror</p>\n";
-                include ('incident_html_bottom.inc.php');
+                include ('inc/incident_html_bottom.inc.php');
             }
         }
         else
         {
             // there were errors
-            include ('incident_html_top.inc.php');
+            include ('inc/incident_html_top.inc.php');
             echo $error_string;
-            include ('incident_html_bottom.inc.php');
+            include ('inc/incident_html_bottom.inc.php');
         }
     break;
 

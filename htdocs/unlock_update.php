@@ -7,7 +7,7 @@
 // This software may be used and distributed according to the terms
 // of the GNU General Public License, incorporated herein by reference.
 //
-// This page is called from includes/incident_html_top.inc.php
+// This page is called from includes/inc/incident_html_top.inc.php
 
 @include ('set_include_path.inc.php');
 $permission = 42;

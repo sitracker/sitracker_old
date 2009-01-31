@@ -27,7 +27,7 @@ $id = cleanvar($_REQUEST['incident']);
 if (!empty($id))
 {
     $title = $strActivities;
-    include ('incident_html_top.inc.php');
+    include ('inc/incident_html_top.inc.php');
 }
 else
 {
@@ -42,7 +42,7 @@ include ('tasks.inc.php');
 
 if (!empty($id))
 {
-    include ('incident_html_bottom.inc.php');
+    include ('inc/incident_html_bottom.inc.php');
 }
 else
 {

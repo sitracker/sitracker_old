@@ -50,7 +50,7 @@ if ($allow_reopen == 'yes')
         // No submit detected show update form
         $incident_title = incident_title($id);
         $title = "{$strReopen}: ".$id . " - " . $incident_title;
-        include ('incident_html_top.inc.php');
+        include ('inc/incident_html_top.inc.php');
 
         echo "<h2>{$strReopenIncident}</h2>";
         echo "<form action='{$_SERVER['PHP_SELF']}?id={$id}' method='post'>";
@@ -62,7 +62,7 @@ if ($allow_reopen == 'yes')
         echo "</table>";
         echo "<p><input name='submit' type='submit' value='{$strReopen}' /></p>";
         echo "</form>";
-        include ('incident_html_bottom.inc.php');
+        include ('inc/incident_html_bottom.inc.php');
     }
     else
     {
@@ -103,9 +103,9 @@ if ($allow_reopen == 'yes')
 
         if (!$result)
         {
-            include ('incident_html_top.inc.php');
+            include ('inc/incident_html_top.inc.php');
             echo "<p class='error'>{$strUpdateIncidentFailed}</p>\n";
-            include ('incident_html_bottom.inc.php');
+            include ('inc/incident_html_bottom.inc.php');
         }
         else
         {

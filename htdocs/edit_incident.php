@@ -28,7 +28,7 @@ $incidentid = $id;
 if (empty($submit))
 {
     $title = $strEdit;
-    include ('incident_html_top.inc.php');
+    include ('inc/incident_html_top.inc.php');
 
     // extract incident details
     $sql  = "SELECT * FROM `{$dbIncidents}` WHERE id='$id'";
@@ -95,7 +95,7 @@ if (empty($submit))
         echo "<input name='submit' type='reset' value='{$strReset}' /> <input name='submit' type='submit' value='{$strSave}' /></p>";
         echo "</form>\n";
     }
-    include ('incident_html_bottom.inc.php');
+    include ('inc/incident_html_bottom.inc.php');
 }
 else
 {
@@ -274,16 +274,16 @@ else
         }
         else
         {
-            include ('incident_html_top.inc.php');
+            include ('inc/incident_html_top.inc.php');
             echo $addition_errors_string;
-            include ('incident_html_bottom.inc.php');
+            include ('inc/incident_html_bottom.inc.php');
         }
     }
     else
     {
-        include ('incident_html_top.inc.php');
+        include ('inc/incident_html_top.inc.php');
         echo $error_string;
-        include ('incident_html_bottom.inc.php');
+        include ('inc/incident_html_bottom.inc.php');
     }
 
 }

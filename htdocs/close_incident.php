@@ -43,7 +43,7 @@ if (empty($_REQUEST['process']))
         exit;
     }
 
-    include ('incident_html_top.inc.php');
+    include ('inc/incident_html_top.inc.php');
 
     ?>
     <script type="text/javascript">
@@ -273,7 +273,7 @@ if (empty($_REQUEST['process']))
     echo "<input type='hidden' name='process' value='closeincident' />";
     echo "<input name='submit' type='submit' value=\"{$strClose}\" /></p>";
     echo "</form>";
-    include ('incident_html_bottom.inc.php');
+    include ('inc/incident_html_bottom.inc.php');
 }
 else
 {
@@ -582,16 +582,16 @@ else
         }
         else
         {
-            include ('incident_html_top.inc.php');
+            include ('inc/incident_html_top.inc.php');
             echo $addition_errors_string;
-            include ('incident_html_bottom.inc.php');
+            include ('inc/incident_html_bottom.inc.php');
         }
     }
     else
     {
-        include ('incident_html_top.inc.php');
+        include ('inc/incident_html_top.inc.php');
         echo $error_string;
-        include ('incident_html_bottom.inc.php');
+        include ('inc/incident_html_bottom.inc.php');
     }
 }
 ?>

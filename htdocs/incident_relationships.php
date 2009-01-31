@@ -23,9 +23,9 @@ require ($lib_path.'auth.inc.php');
 $id = cleanvar($_REQUEST['id']);
 
 $title = 'Relations';
-include ('incident_html_top.inc.php');
+include ('inc/incident_html_top.inc.php');
 
 include ('incident/relationships.inc.php');
 
-include ('incident_html_bottom.inc.php');
+include ('inc/incident_html_bottom.inc.php');
 ?>

@@ -450,7 +450,7 @@ if (empty($action))
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
-    include ('incident_html_top.inc.php');
+    include ('inc/incident_html_top.inc.php');
 
     if (mysql_num_rows($result) > 0)
     {
@@ -468,7 +468,7 @@ if (empty($action))
 }
 else if ($action == "editdraft")
 {
-    include ('incident_html_top.inc.php');
+    include ('inc/incident_html_top.inc.php');
     $draftid = cleanvar($_REQUEST['draftid']);
     display_update_page($draftid);
 }
@@ -485,7 +485,7 @@ else if ($action == "deletedraft")
 }
 else if ($action == "newupdate")
 {
-    include ('incident_html_top.inc.php');
+    include ('inc/incident_html_top.inc.php');
     display_update_page();
 }
 else
@@ -752,9 +752,9 @@ else
 
     if (!$result)
     {
-        include ('incident_html_top.inc.php');
+        include ('inc/incident_html_top.inc.php');
         echo "<p class='error'>{$strUpdateIncidentFailed}</p>\n";
-        include ('incident_html_bottom.inc.php');
+        include ('inc/incident_html_bottom.inc.php');
     }
     else
     {

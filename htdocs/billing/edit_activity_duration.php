@@ -81,7 +81,7 @@ switch ($mode)
 
         if (mysql_num_rows($result) == 1)
         {
-            include ('incident_html_top.inc.php');
+            include ('inc/incident_html_top.inc.php');
             $obj = mysql_fetch_object($result);
                         
             echo "<h2>{$strAdjustActivityDuration}</h2>";
@@ -101,7 +101,7 @@ switch ($mode)
             echo "<input type='hidden' name='incidentid' id='incidentid' value='{$incidentid}' />";
             echo "</form>";            
             
-            include ('incident_html_bottom.inc.php');
+            include ('inc/incident_html_bottom.inc.php');
         }
         else
         {

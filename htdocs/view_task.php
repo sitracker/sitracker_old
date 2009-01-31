@@ -29,7 +29,7 @@ $mode = cleanvar($_REQUEST['mode']);
 
 if ($mode == 'incident')
 {
-    include ('incident_html_top.inc.php');
+    include ('inc/incident_html_top.inc.php');
 }
 else
 {

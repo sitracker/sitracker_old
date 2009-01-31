@@ -151,7 +151,7 @@ switch ($action)
     default:
         // No submit detected show reassign form
         $title = $strReassign;
-        include ('incident_html_top.inc.php');
+        include ('inc/incident_html_top.inc.php');
 
 
         $sql = "SELECT * FROM `{$dbIncidents}` WHERE id='$id' LIMIT 1";
@@ -381,7 +381,7 @@ switch ($action)
         {
             echo "<p class='warning'>{$strNoRecords}</p>";  // FIXME 3.41 better message here
         }
-        include ('incident_html_bottom.inc.php');
+        include ('inc/incident_html_bottom.inc.php');
 }
 
 ?>
