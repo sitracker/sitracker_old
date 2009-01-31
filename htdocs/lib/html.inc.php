@@ -100,11 +100,15 @@ function html_redirect($url, $success = TRUE, $message='')
     * @author Ivan Lucas
     * @param string $name The HTML name attribute
     * @param mixed $state
+    * @param bool $return. Return HTML as a string when TRUE, echo when FALSE
     * @returns string HTML
 */
 function html_checkbox($name, $state, $return = FALSE)
 {
-    if ($state == 1 || $state == 'Yes' || $state == 'yes' || $state == 'true' || $state == 'TRUE')
+    if ($state === TRUE) $state = 'TRUE';
+    if ($state === FALSE) $state = 'FALSE';
+    if ($state === 1 OR $state === 'Yes' OR $state === 'yes' OR
+        $state === 'true' OR $state === 'TRUE')
     {
         $html = "<input type='checkbox' checked='checked' name='{$name}' id='{$name}' value='{$state}' />" ;
     }

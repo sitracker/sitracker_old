@@ -82,6 +82,7 @@ if (empty($action) OR $action == "showform")
     echo "<input type='hidden' name='priority' value='{$priority}' />";
     echo "<input type='hidden' name='id' value='{$sla->id}' />";
     echo "<p align='center'><input type='submit' value='{$strSave}' /></p>";
+    echo "<p align='center'><a href='service_levels.php'>{$strBackToList}</a></p>";
     echo "</form>";
     include ('./inc/htmlfooter.inc.php');
 }
@@ -97,7 +98,7 @@ elseif ($action == "edit")
     $engineerPeriod = cleanvar($_POST['engineerPeriod']);
     $customerPeriod = cleanvar($_POST['customerPeriod']);
     $allow_reopen = cleanvar($_POST['allow_reopen']);
-    if ($allow_reopen == 'on') 
+    if (!empty($allow_reopen))
     {
         $allow_reopen = 'yes';
     }
@@ -107,13 +108,13 @@ elseif ($action == "edit")
     }
     $limit = cleanvar($_POST['limit']);
     if ($limit == '') $limit = 0;
-    if ($_POST['timed'] != 'on')
+    if (!empty($_POST['timed']))
     {
-        $timed = 0;
+        $timed = 1;
         // Force allow_reopen=no for timed incidents, since reopening will break billing
         $allow_reopen = 'no';
     }
-    else $timed = 1;
+    else $timed = 0;
 
     $sql = "UPDATE `{$dbServiceLevels}` SET initial_response_mins='$initial_response_mins', ";
     $sql .= "prob_determ_mins='$prob_determ_mins', ";
