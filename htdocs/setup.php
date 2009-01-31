@@ -160,6 +160,21 @@ function setup_configure()
             }
             if ($setupvar=='db_password' AND $_REQUEST['action']!='reconfigure') $value='';
         }
+
+        if (!$cfg_file_exists)
+        {
+            // Dynamic defaults
+            if ($setupvar == 'application_fspath')
+            {
+                $value = dirname( __FILE__ ) . DIRECTORY_SEPARATOR;
+            }
+
+            if ($setupvar == 'application_webpath')
+            {
+                $value = dirname( strip_tags( $_SERVER['PHP_SELF'] ) ) . '/';
+            }
+        }
+
         switch ($CFGVAR[$setupvar]['type'])
         {
             case 'select':
@@ -488,7 +503,16 @@ if (!empty($_REQUEST['msg']))
     $msg = strip_tags(base64_decode(urldecode($_REQUEST['msg'])));
     echo "<p class='error'><strong>Configuration Problem</strong>: {$msg}</p>";
     echo "<p class='info'>You have been redirected to this setup page because a serious configuration problem has prevented SiT from running. ";
-    echo "Correct the issue reported and try running SiT again.</p>";
+    if ($_REQUEST['new'] == 1)
+    {
+        echo "<br /><strong>If you are setting up SiT for the first time</strong>, ";
+        echo "you can ignore the message above and proceed with creating a new configuration file.<br />";
+        echo "If SiT was previously installed you should correct the issue reported and try running SiT again.</p>";
+    }
+    else
+    {
+        echo "Correct the issue reported and try running SiT again.</p>";
+    }
 }
 
 
@@ -1217,7 +1241,7 @@ switch ($_REQUEST['action'])
 }
 echo "<div style='margin-top: 50px;'>";
 echo "<hr style='width: 50%; margin-left: 0px;'/>";
-echo "<p><a href='http://sourceforge.net/projects/sitracker'>{$CONFIG['application_name']}</a> Setup | <a href='http://sitracker.org/wiki/Installation'>Installation Help</a></p>";
+echo "<p><a href='http://sitracker.org/'>{$CONFIG['application_name']}</a> Setup | <a href='http://sitracker.org/wiki/Installation'>Installation Help</a></p>";
 echo "<p></p>";
 echo "</div>";
 echo "\n</body>\n</html>";

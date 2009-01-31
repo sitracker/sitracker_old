@@ -1,6 +1,9 @@
 <?php
 // config.php - Interface for configuring SiT
 //
+//     NOTE: This is not the configuration file, see config.inc.php
+//           or config.inc.php-dist
+//
 // SiT (Support Incident Tracker) - Support call tracking system
 // Copyright (C) 2000-2009 Salford Software Ltd. and Contributors
 //

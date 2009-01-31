@@ -30,7 +30,7 @@ $exec_time_start = getmicrotime();
 if ($CONFIG['db_username'] == '' OR $CONFIG['db_database'] == '')
 {
     $msg = urlencode(base64_encode("Could not connect to the database because the database configuration is missing. Have you configured database settings?  Can your config file be read?"));
-    header("Location: {$CONFIG['application_webpath']}setup.php?msg={$msg}");
+    header("Location: setup.php?msg={$msg}&new=1");
     exit;
 }
 
