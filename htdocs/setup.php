@@ -33,7 +33,7 @@ $DEFAULTS = $CONFIG;
 // }
 
 // These are the required variables we want to configure during installation
-$SETUP = array('db_hostname','db_database','db_username','db_password','db_tableprefix','application_fspath','application_webpath');
+$SETUP = array('db_hostname','db_database','db_username','db_password', 'db_tableprefix','application_fspath','application_webpath');
 
 require($lib_path.'configvars.inc.php');
 
@@ -338,7 +338,7 @@ function setup_createdb()
     if (!@mysql_error())
     {
         // Connected to database
-        echo "<h2>Creating database...</h2>";
+        echo "<h2>Creating empty database...</h2>";
         $result = mysql_query($sql);
         if ($result)
         {
@@ -505,6 +505,7 @@ if (!empty($_REQUEST['msg']))
     echo "<p class='info'>You have been redirected to this setup page because a serious configuration problem has prevented SiT from running. ";
     if ($_REQUEST['new'] == 1)
     {
+        $_SESSION['new'] = 1;
         echo "<br /><strong>If you are setting up SiT for the first time</strong>, ";
         echo "you can ignore the message above and proceed with creating a new configuration file.<br />";
         echo "If SiT was previously installed you should correct the issue reported and try running SiT again.</p>";
@@ -620,8 +621,9 @@ switch ($_REQUEST['action'])
         if (!$fp)
         {
             echo "<p class='error'>Could not write {$config_filename}</p>";
-            echo "<p class='help'>Copy this text and paste it into a <var>config.inc.php</var> file in the includes directory or <var>sit.conf</var> in the <var>/etc</var> directory<br />";
-            echo "Or change the permissions on the file so that it is writable and refresh this page to try again (if you do this remember to make it ";
+            echo "<p class='help'>Copy this text and paste it into a <var>config.inc.php</var> file in the <var>sit/htdocs</var> directory<br />";
+            // or <var>sit.conf</var> in the <var>/etc</var> directory
+            echo "Or change the permissions on the file so that it is writable and <a href=\"javascript:location.reload(true)\">refresh</a> this page to try again (if you do this remember to make it ";
             echo "read-only again afterwards)</p>";
             echo "<div id='configfile' style='margin-left: 5%; margin-right: 5%; background-color: #F7FAFF; padding: 1em; border: 1px dashed #ccc;filter:alpha(opacity=75);  opacity: 0.75;  -moz-opacity:0.75; -moz-border-radius: 3px; '>";
             highlight_string($newcfgfile);
@@ -675,7 +677,13 @@ switch ($_REQUEST['action'])
                         $CONFIG['db_database'] = 'sit';
                     }
                     echo "</p>";
+                    if ($_SESSION['new'] == 1)
+                    {
+                        echo "<p class='info'>If this is a new installation of SiT and you would like to use the database name '{$CONFIG['db_database']}', you should proceed and create a database</p>";
+                    }
+
                     echo setup_button('reconfigure', 'Reconfigure SiT!');
+                    echo "<br />or<br /><br />";
                     echo setup_button('createdb', 'Create a database');
                     //echo "<p><a href='{$_SERVER['PHP_SELF']}?action=reconfigure'>Reconfigure</a> SiT!</p>";
                 }
