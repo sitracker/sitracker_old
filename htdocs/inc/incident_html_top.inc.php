@@ -196,13 +196,13 @@ if ($menu != 'hide')
                 FROM `{$dbTempIncoming}` AS ti, `{$dbUpdates}` AS u
                 WHERE ti.id = '{$id}'
                 AND ti.updateid = u.id";
-        $query = mysql_query($insql);
+        $result = mysql_query($insql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
-        if (mysql_num_rows($query) > 0)
+        if (mysql_num_rows($result) > 0)
         {
-            $inupdate = mysql_fetch_object($query);
+            $obj = mysql_fetch_object($result);
 
-            if ($inupdate->locked == $sit[2] OR empty($inupdate->locked))
+            if ($obj->locked == $sit[2] OR empty($obj->locked))
             {
                 echo "<a class='barlink' href='unlock_update.php?id={$id}'>{$strUnlock}</a> | ";
                 echo "<a class='barlink' href=\"javascript:window.location='move_update.php?id={$id}&amp;updateid={$inupdate->updateid}&amp;contactid={$inupdate->contactid}&amp;win=incomingview'\" >{$strAssign}</a> | ";
