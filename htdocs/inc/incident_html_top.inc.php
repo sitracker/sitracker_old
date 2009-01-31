@@ -227,7 +227,7 @@ if ($menu != 'hide')
     }
     else
     {
-        echo "<a class='barlink' href='{$CONFIG['application_webpath']}reopen_incident.php?id={$id}&amp;popup={$popup}'>{$strReopen}</a> | ";
+        echo "<a class='barlink' href='{$CONFIG['application_webpath']}incident_reopen.php?id={$id}&amp;popup={$popup}'>{$strReopen}</a> | ";
         echo "<a class='barlink' href='{$CONFIG['application_webpath']}incident_service_levels.php?id={$id}&amp;popup={$poup}' accesskey='S'>{$strService}</a> | ";
         echo "<a class='barlink' href='{$CONFIG['application_webpath']}incident_relationships.php?id={$id}&amp;tab=relationships'>{$strRelations}</a> | ";
         echo "<a class='barlink' href='{$CONFIG['application_webpath']}incident_attachments.php?id={$id}&amp;popup={$popup}' accesskey='F'>{$strFiles}</a> | ";

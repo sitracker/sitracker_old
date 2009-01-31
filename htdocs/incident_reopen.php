@@ -1,5 +1,5 @@
 <?php
-// reopen_incident.php - Form for re-opening a closed incident
+// incident_reopen.php - Form for re-opening a closed incident
 //
 // SiT (Support Incident Tracker) - Support call tracking system
 // Copyright (C) 2000-2009 Salford Software Ltd. and Contributors
