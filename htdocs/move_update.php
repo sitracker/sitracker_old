@@ -202,7 +202,9 @@ else
             $uresult=mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
             list($oldincidentid, $bodytext, $timestamp)=mysql_fetch_row($uresult);
-            if ($oldincidentid==0) $oldincidentid='Inbox';
+            
+            if ($oldincidentid == 0) $oldincidentid = 'Inbox';
+            
             $prettydate = ldate('r', $timestamp);
             // prepend 'moved' header to bodytext
             $body = sprintf($SYSLANG['strMovedFromXtoXbyX'], "<b>$oldincidentid</b>",
@@ -214,7 +216,7 @@ else
             $bodytext = $body . $bodytext;
             $bodytext = mysql_real_escape_string($bodytext);
             // move the update.
-            $sql = "UPDATE `{$dbUpdates}` SET incidentid='$incidentid', userid='$sit[2]', bodytext='$bodytext', timestamp='$now' WHERE id='$updateid'";
+            $sql = "UPDATE `{$dbUpdates}` SET incidentid='{$incidentid}', userid='{$sit[2]}', bodytext='{$bodytext}', timestamp='{$now}' WHERE id='{$updateid}'";
             mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 

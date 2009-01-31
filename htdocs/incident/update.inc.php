@@ -625,17 +625,19 @@ else
     // Force reviewmet to be visible
     if ($updatetype=='reviewmet') $cust_vis='yes';
 
+    $owner = incident_owner($id);
+
     // visible update
     if ($cust_vis == "yes")
     {
-        $sql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, bodytext, timestamp, currentstatus, customervisibility, nextaction) ";
-        $sql .= "VALUES ('$id', '$sit[2]', '$updatetype', '$bodytext', '$now', '$newstatus', 'show' , '$nextaction')";
+        $sql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, bodytext, timestamp, currentowner, currentstatus, customervisibility, nextaction) ";
+        $sql .= "VALUES ('$id', '$sit[2]', '$updatetype', '$bodytext', '$now', '{$owner}', '$newstatus', 'show' , '$nextaction')";
     }
     // invisible update
     else
     {
-        $sql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, bodytext, timestamp, currentstatus, nextaction) ";
-        $sql .= "VALUES ($id, $sit[2], '$updatetype', '$bodytext', '$now', '$newstatus', '$nextaction')";
+        $sql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, bodytext, timestamp, currentowner, currentstatus, nextaction) ";
+        $sql .= "VALUES ($id, $sit[2], '$updatetype', '$bodytext', '$now', '{$owner}', '$newstatus', '$nextaction')";
     }
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
@@ -716,22 +718,22 @@ else
 
         case 'initialresponse':
             $sql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, timestamp, currentowner, currentstatus, customervisibility, sla, bodytext) ";
-            $sql .= "VALUES ('$id', '".$sit[2]."', 'slamet', '$now', '".$sit[2]."', '$newstatus', 'show', 'initialresponse','The Initial Response has been made.')";
+            $sql .= "VALUES ('$id', '".$sit[2]."', 'slamet', '$now', '{$owner}', '$newstatus', 'show', 'initialresponse','The Initial Response has been made.')";
         break;
 
         case 'probdef':
             $sql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, timestamp, currentowner, currentstatus, customervisibility, sla, bodytext) ";
-            $sql .= "VALUES ('$id', '".$sit[2]."', 'slamet', '$now', '".$sit[2]."', '$newstatus', 'show', 'probdef','The problem has been defined.')";
+            $sql .= "VALUES ('$id', '".$sit[2]."', 'slamet', '$now', '{$owner}', '$newstatus', 'show', 'probdef','The problem has been defined.')";
         break;
 
         case 'actionplan':
             $sql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, timestamp, currentowner, currentstatus, customervisibility, sla, bodytext) ";
-            $sql .= "VALUES ('$id', '".$sit[2]."', 'slamet', '$now', '".$sit[2]."', '$newstatus', 'show', 'actionplan','An action plan has been made.')";
+            $sql .= "VALUES ('$id', '".$sit[2]."', 'slamet', '$now', '{$owner}', '$newstatus', 'show', 'actionplan','An action plan has been made.')";
         break;
 
         case 'solution':
             $sql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, timestamp, currentowner, currentstatus, customervisibility, sla, bodytext) ";
-            $sql .= "VALUES ('$id', '".$sit[2]."', 'slamet', '$now', '".$sit[2]."', '$newstatus', 'show', 'solution','The incident has been resolved or reprioritised.\nThe issue should now be brought to a close or a new problem definition created within the service level.')";
+            $sql .= "VALUES ('$id', '".$sit[2]."', 'slamet', '$now', '{$owner}', '$newstatus', 'show', 'solution','The incident has been resolved or reprioritised.\nThe issue should now be brought to a close or a new problem definition created within the service level.')";
         break;
     }
 

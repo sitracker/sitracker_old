@@ -74,11 +74,12 @@ if ($allow_reopen == 'yes')
         mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
+        $owner = incident_owner($id);
         // add update
         $sql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, ";
         $sql .= "bodytext, timestamp, currentowner, currentstatus) ";
-        $sql .= "VALUES ($id, $sit[2], 'reopening', '$bodytext', $time, ";
-        $sql .= "{$sit[2]}, ".STATUS_ACTIVE.")";
+        $sql .= "VALUES ({$id}, {$sit[2]}, 'reopening', '{$bodytext}', {$time}, ";
+        $sql .= "{$owner}, ".STATUS_ACTIVE.")";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
@@ -89,15 +90,15 @@ if ($allow_reopen == 'yes')
         $sql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, ";
         $sql .= "timestamp, currentowner, currentstatus, customervisibility, ";
         $sql .= "sla, bodytext) ";
-        $sql .= "VALUES ('$id', '".$sit[2]."', 'slamet', '$now', '".$sit[2];
-        $sql .= "', ".STATUS_ACTIVE.", 'show', 'opened','The incident is open and awaiting action.')"; // FIXME i18n
+        $sql .= "VALUES ('{$id}', '{$sit[2]}', 'slamet', '{$now}', '{$owner}'";
+        $sql .= STATUS_ACTIVE.", 'show', 'opened','The incident is open and awaiting action.')"; // FIXME i18n
         mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
         // Insert the first Review update, this indicates the review period of an incident has restarted
         // This insert could possibly be merged with another of the 'updates' records, but for now we keep it seperate for clarity
         $sql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, timestamp, currentowner, currentstatus, customervisibility, sla, bodytext) ";
-        $sql .= "VALUES ('$id', '0', 'reviewmet', '$now', '".$sit[2]."', ".STATUS_ACTIVE.", 'hide', 'opened','')";
+        $sql .= "VALUES ('{$id}', '0', 'reviewmet', '{$now}', '{$owner}', ".STATUS_ACTIVE.", 'hide', 'opened','')";
         mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 

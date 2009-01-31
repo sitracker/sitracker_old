@@ -753,8 +753,8 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
                 $updatebody = $timetext . $updateheader . $bodytext;
                 $updatebody = mysql_real_escape_string($updatebody);
 
-                $sql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, bodytext, type, timestamp, currentstatus,customervisibility) ";
-                $sql .= "VALUES ($id, $sit[2], '$updatebody', 'email', '$now', '$newincidentstatus', '{$emailtype->customervisibility}')";
+                $sql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, bodytext, type, timestamp, currentstatus, customervisibility) ";
+                $sql .= "VALUES ({$id}, {$sit[2]}, '{$updatebody}', 'email', '{$now}', '{$newincidentstatus}', '{$emailtype->customervisibility}')";
                 mysql_query($sql);
                 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
                 $updateid = mysql_insert_id();
@@ -763,6 +763,8 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
                 $sql .= "VALUES (5, '{$updateid}', '{$fileid}', 'left', '{$sit[2]}')";
                 mysql_query($sql);
                 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+
+                $owner = incident_owner($id);
 
                 // Handle meeting of service level targets
                 switch ($target)
@@ -774,22 +776,22 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
 
                     case 'initialresponse':
                         $sql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, timestamp, currentowner, currentstatus, customervisibility, sla, bodytext) ";
-                        $sql .= "VALUES ('$id', '".$sit[2]."', 'slamet', '$now', '".$sit[2]."', '$newincidentstatus', 'show', 'initialresponse','{$SYSLANG['strInitialResponseHasBeenMade']}')";
+                        $sql .= "VALUES ('{$id}', '{$sit[2]}', 'slamet', '{$now}', '{$owner}', '{$newincidentstatus}', 'show', 'initialresponse','{$SYSLANG['strInitialResponseHasBeenMade']}')";
                     break;
 
                     case 'probdef':
                         $sql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, timestamp, currentowner, currentstatus, customervisibility, sla, bodytext) ";
-                        $sql .= "VALUES ('$id', '".$sit[2]."', 'slamet', '$now', '".$sit[2]."', '$newincidentstatus', 'show', 'probdef','{$SYSLANG['strProblemHasBeenDefined']}')";
+                        $sql .= "VALUES ('{$id}', '{$sit[2]}', 'slamet', '{$now}', '{$owner}', '{$newincidentstatus}', 'show', 'probdef','{$SYSLANG['strProblemHasBeenDefined']}')";
                     break;
 
                     case 'actionplan':
                         $sql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, timestamp, currentowner, currentstatus, customervisibility, sla, bodytext) ";
-                        $sql .= "VALUES ('$id', '".$sit[2]."', 'slamet', '$now', '".$sit[2]."', '$newincidentstatus', 'show', 'actionplan','{$SYSLANG['strActionPlanHasBeenMade']}')";
+                        $sql .= "VALUES ('{$id}', '{$sit[2]}', 'slamet', '{$now}', '{$owner}', '{$newincidentstatus}', 'show', 'actionplan','{$SYSLANG['strActionPlanHasBeenMade']}')";
                     break;
 
                     case 'solution':
                         $sql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, timestamp, currentowner, currentstatus, customervisibility, sla, bodytext) ";
-                        $sql .= "VALUES ('$id', '".$sit[2]."', 'slamet', '$now', '".$sit[2]."', '$newincidentstatus', 'show', 'solution','{$SYSLANG['strIncidentResolved']}')";
+                        $sql .= "VALUES ('{$id}', '{$sit[2]}', 'slamet', '{$now}', '{$owner}', '{$newincidentstatus}', 'show', 'solution','{$SYSLANG['strIncidentResolved']}')";
                     break;
                 }
                 if (!empty($sql))
@@ -807,7 +809,8 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
 
                 if (!empty($chase_customer))
                 {
-                    $sql_insert = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, bodytext, timestamp, customervisibility) VALUES ('{$id}','{$sit['2']}','auto_chased_phone','{$SYSLANG['strCustomerHasBeenCalledToChase']}','{$now}','hide')";
+                    $sql_insert = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, currentowner, currentstatus, bodytext, timestamp, customervisibility) ";
+                    $sql_insert .= "VALUES ('{$id}','{$sit['2']}','auto_chased_phone', '{$owner}', '{$newincidentstatus}', '{$SYSLANG['strCustomerHasBeenCalledToChase']}','{$now}','hide')";
                     mysql_query($sql_insert);
                     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
@@ -818,7 +821,8 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
 
                 if (!empty($chase_manager))
                 {
-                    $sql_insert = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, bodytext, timestamp, customervisibility) VALUES ('{$id}','{$sit['2']}','auto_chased_manager','Manager has been called to chase','{$now}','hide')";
+                    $sql_insert = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, currentowner, currentstatus, bodytext, timestamp, customervisibility) ";
+                    $sql_insert .= "VALUES ('{$id}','{$sit['2']}','auto_chased_manager', '{$owner}', '{$newincidentstatus}', 'Manager has been called to chase','{$now}','hide')";
                     mysql_query($sql_insert);
                     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 

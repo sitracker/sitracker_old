@@ -49,8 +49,9 @@ if ($incidentcontact == $_SESSION['contactid'])
         // FIXME i18n ? In db ?
         $reason = "Incident closure requested via the portal by [b]{$user->forenames} {$user->surname}[/b]\n\n";
         $reason .= "<b>Reason:</b> {$_REQUEST['reason']}";
-        $sql = "INSERT into `{$dbUpdates}` (incidentid, userid, type, currentstatus, bodytext, timestamp, customervisibility) ";
-        $sql .= "VALUES('{$_REQUEST['id']}', '0', 'customerclosurerequest',  '1', '{$reason}',
+        $owner = incident_owner($_REQUEST['id']);
+        $sql = "INSERT into `{$dbUpdates}` (incidentid, userid, type, currentowner, currentstatus, bodytext, timestamp, customervisibility) ";
+        $sql .= "VALUES('{$_REQUEST['id']}', '0', 'customerclosurerequest',  '{$owner}', '1', '{$reason}',
         '{$now}', 'show')";
         mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);

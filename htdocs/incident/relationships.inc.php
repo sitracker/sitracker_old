@@ -45,17 +45,18 @@ switch ($action)
                         mysql_query($sql);
                         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
+                        $onwer = incident_owner($id);
                         $status = incident_status($id);
                         // Insert an entry into the update log for this incident
                         $sql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, timestamp, currentowner, currentstatus, customervisibility, sla, bodytext) ";
-                        $sql .= "VALUES ('$id', '".$sit[2]."', 'editing', '$now', '".$sit[2]."', '$status', 'hide', '','Added relationship with Incident $relatedid')"; //FIXME use $SYSLANG
+                        $sql .= "VALUES ('{$id}', '{$sit[2]}', 'editing', '$now', '{$owner}', '{$status}', 'hide', '','Added relationship with Incident {$relatedid}')"; //FIXME use $SYSLANG
                         mysql_query($sql);
                         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
                         $status = incident_status($relatedid);
                         // Insert an entry into the update log for the related incident
                         $sql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, timestamp, currentowner, currentstatus, customervisibility, sla, bodytext) ";
-                        $sql .= "VALUES ('$relatedid', '".$sit[2]."', 'editing', '$now', '".$sit[2]."', '$status', 'hide', '','Added relationship with Incident $id')"; //FIXME use $SYSLANG
+                        $sql .= "VALUES ('{$relatedid}', '{$sit[2]}', 'editing', '{$now}', '{$owner}', '{$status}', 'hide', '','Added relationship with Incident {$id}')"; //FIXME use $SYSLANG
                         mysql_query($sql);
                         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
                     break;
@@ -76,24 +77,26 @@ switch ($action)
 
     case 'delete':
         // Retrieve details of the relationship
-        $sql = "SELECT * FROM `{$dbRelatedIncidents}` WHERE id='$rid'";
+        $sql = "SELECT * FROM `{$dbRelatedIncidents}` WHERE id='{$rid}'";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
         $relation = mysql_fetch_object($result);
 
-        $sql = "DELETE FROM `{$dbRelatedIncidents}` WHERE id='$rid'";
+        $sql = "DELETE FROM `{$dbRelatedIncidents}` WHERE id='{$rid}'";
         mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
+        $onwer = incident_owner($id);
+        $status = incident_status($id);
         // Insert an entry into the update log for this incident
-        $sql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, timestamp, currentowner, customervisibility, sla, bodytext) ";
-        $sql .= "VALUES ('{$relation->incidentid}', '".$sit[2]."', 'editing', '$now', '".$sit[2]."', 'hide', '','Removed relationship with Incident {$relation->relatedid}')";
+        $sql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, timestamp, currentowner, currentstatus, customervisibility, sla, bodytext) ";
+        $sql .= "VALUES ('{$relation->incidentid}', '{$sit[2]}', 'editing', '{$now}', '{$owner}', '{$status}', 'hide', '','Removed relationship with Incident {$relation->relatedid}')";
         mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
         // Insert an entry into the update log for the related incident
-        $sql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, timestamp, currentowner, customervisibility, sla, bodytext) ";
-        $sql .= "VALUES ('{$relation->relatedid}', '".$sit[2]."', 'editing', '$now', '".$sit[2]."', 'hide', '','Removed relationship with Incident {$relation->incidentid}')";
+        $sql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, timestamp, currentowner, currentstatus, customervisibility, sla, bodytext) ";
+        $sql .= "VALUES ('{$relation->relatedid}', '{$sit[2]}', 'editing', '{$now}', '{$owner}', '{$status}', 'hide', '','Removed relationship with Incident {$relation->incidentid}')";
         mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 

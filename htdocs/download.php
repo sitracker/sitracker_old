@@ -88,7 +88,7 @@ if (!file_exists($file_fspath) AND !file_exists($old_style))
     echo "<h3>404 File Not Found</h3>";
     if ($CONFIG['debug'] == TRUE)
     {
-        echo "<p>Path: $file_fspath<br />Old style path: $old_style</p>";
+        echo "<p>Path: {$file_fspath}<br />Old style path: {$old_style}</p>";
     }
     exit;
 }
@@ -125,5 +125,17 @@ elseif ($access == TRUE)
 
         }
     }
+}
+else
+{
+	header('HTTP/1.1 404 Not Found');
+    header('Status: 404 Not Found',1,404);
+    echo "<h3>404 File Not Found</h3>";
+    echo "Please report this message to support";
+    if ($CONFIG['debug'] == TRUE)
+    {
+        echo "<p>Path: {$file_fspath}<br />Old style path: {$old_style}</p>";
+    }
+    exit;
 }
 ?>

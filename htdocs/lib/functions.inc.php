@@ -1757,10 +1757,9 @@ function priority_icon($id)
 */
 function incident_lastupdate($id)
 {
-    global $dbUpdates;
     // Find the most recent update
     $sql = "SELECT userid, type, sla, currentowner, currentstatus, LEFT(bodytext,500) AS body, timestamp, nextaction, id ";
-    $sql .= "FROM `{$dbUpdates}` WHERE incidentid='{$id}' ORDER BY timestamp DESC, id DESC LIMIT 1";
+    $sql .= "FROM `{$GLOBALS['dbUpdates']}` WHERE incidentid='{$id}' ORDER BY timestamp DESC, id DESC LIMIT 1";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
@@ -1777,7 +1776,7 @@ function incident_lastupdate($id)
         {
             //check if the previous update was by userid == 0 if so then we can assume this is a new call
             $sqlPrevious = "SELECT userid, type, currentowner, currentstatus, LEFT(bodytext,500) AS body, timestamp, nextaction, id, sla, type ";
-            $sqlPrevious .= "FROM `{$dbUpdates}` WHERE id < ".$update['id']." AND incidentid = '$id' ORDER BY id DESC";
+            $sqlPrevious .= "FROM `{$GLOBALS['dbUpdates']}` WHERE id < ".$update['id']." AND incidentid = '$id' ORDER BY id DESC";
             $resultPrevious = mysql_query($sqlPrevious);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
@@ -1829,8 +1828,7 @@ function incident_lastupdate($id)
 */
 function incident_firstupdate($id)
 {
-    global $dbUpdates;
-    $sql = "SELECT bodytext FROM `{$dbUpdates}` WHERE incidentid='$id' AND customervisibility='show' ORDER BY timestamp ASC, id ASC LIMIT 1";
+    $sql = "SELECT bodytext FROM `{$GLOBALS['dbUpdates']}` WHERE incidentid='$id' AND customervisibility='show' ORDER BY timestamp ASC, id ASC LIMIT 1";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
@@ -3050,8 +3048,7 @@ function getattachmenticon($filename)
 
 function count_incoming_updates()
 {
-    global $dbUpdates;
-    $sql = "SELECT id FROM `{$dbUpdates}` WHERE incidentid=0";
+    $sql = "SELECT id FROM `{$GLOBALS['dbUpdates']}` WHERE incidentid=0";
     $result = mysql_query($sql);
     $count = mysql_num_rows($result);
     mysql_free_result($result);
@@ -3061,8 +3058,7 @@ function count_incoming_updates()
 
 function global_signature()
 {
-    global $dbEmailSig;
-    $sql = "SELECT signature FROM `{$dbEmailSig}` ORDER BY RAND() LIMIT 1";
+    $sql = "SELECT signature FROM `{$GLOBALS['dbEmailSig']}` ORDER BY RAND() LIMIT 1";
     $result = mysql_query($sql);
     list($signature) = mysql_fetch_row($result);
     mysql_free_result($result);
@@ -3469,12 +3465,13 @@ function check_email($email, $check_dns = FALSE)
 
 function incident_get_next_target($incidentid)
 {
-    global $now, $dbUpdates;
+    global $now;
     // Find the most recent SLA target that was met
-    $sql = "SELECT sla,timestamp FROM `{$dbUpdates}` WHERE incidentid='$incidentid' AND type='slamet' ORDER BY id DESC LIMIT 1";
+    $sql = "SELECT sla,timestamp FROM `{$GLOBALS['dbUpdates']}` WHERE incidentid='{$incidentid}' AND type='slamet' ORDER BY id DESC LIMIT 1";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
+    $target = '';
     if (mysql_num_rows($result) > 0)
     {
         $upd = mysql_fetch_object($result);
@@ -3520,8 +3517,8 @@ function target_type_name($targettype)
 
 function incident_get_next_review($incidentid)
 {
-    global $now, $dbUpdates;
-    $sql = "SELECT timestamp FROM `{$dbUpdates}` WHERE incidentid='$incidentid' AND type='reviewmet' ORDER BY id DESC LIMIT 1";
+    global $now;
+    $sql = "SELECT timestamp FROM `{$GLOBALS['dbUpdates']}` WHERE incidentid='{$incidentid}' AND type='reviewmet' ORDER BY id DESC LIMIT 1";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
@@ -3930,8 +3927,6 @@ function get_public_holidays($startdate, $enddate)
 */
 function calculate_incident_working_time($incidentid, $t1, $t2, $states=array(2,7,8))
 {
-    global $dbHolidays, $dbUpdates;
-
     if ( $t1 > $t2 )
     {
         $t3 = $t2;
@@ -3944,7 +3939,7 @@ function calculate_incident_working_time($incidentid, $t1, $t2, $states=array(2,
 
     $publicholidays = get_public_holidays($startofday, $endofday);
 
-    $sql = "SELECT id, currentstatus, timestamp FROM `{$dbUpdates}` WHERE incidentid='$incidentid' ORDER BY id ASC";
+    $sql = "SELECT id, currentstatus, timestamp FROM `{$GLOBALS['dbUpdates']}` WHERE incidentid='{$incidentid}' ORDER BY id ASC";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 

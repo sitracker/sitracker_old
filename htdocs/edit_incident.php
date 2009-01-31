@@ -244,17 +244,17 @@ else
             }
 
             if (!empty($header)) $header .= "<hr>";
-        //get current incident status
+            // get current incident status
             $sql = "SELECT status FROM `{$dbIncidents}` WHERE id={$id}";
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
             $status = mysql_fetch_object($result);
             $status = $status->status;
-
+            $owner = incident_owner($id);
             $bodytext = $header . $bodytext;
             $bodytext = mysql_real_escape_string($bodytext);
-            $sql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, currentstatus, bodytext, timestamp) ";
-            $sql .= "VALUES ('$id', '$sit[2]', 'editing', '$status', '$bodytext', '$now')";
+            $sql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, currentowner, currentstatus, bodytext, timestamp) ";
+            $sql .= "VALUES ('{$id}', '{$sit[2]}', 'editing', '{$owner}', '{$status}', '{$bodytext}', '{$now}')";
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 

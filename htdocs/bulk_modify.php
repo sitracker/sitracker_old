@@ -73,16 +73,16 @@ External email:  -&gt; <b>foo@pheaney.co.uk</b>
 
             //list incidents with this old email address so we can update them
 
-            $sql = "SELECT id FROM `{$dbIncidents}` WHERE closed = '0' AND externalemail = '".$old_email_address."'";
+            $sql = "SELECT id FROM `{$dbIncidents}` WHERE closed = '0' AND externalemail = '{$old_email_address}'";
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
-            while ($row = mysql_fetch_array($result))
+            while ($row = mysql_fetch_object($result))
             {
                 $bodytext = "{$strExternalEngineer}: ".$old_external_engineer." -&gt; [b]". $new_extenal_engineer."[/b]\n";
                 $bodytext .= "{$strExternalEmail}: ".$old_email_address." -&gt; [b]".$new_external_email."[/b]\n<hr>";
                 $sql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, bodytext, timestamp, currentowner, currentstatus) ";
-                $sql .= "VALUES ('".$row['id']."', '".$sit[2]."', 'editing', '$bodytext', '".time()."', $row['owner'], $row['status'])";
+                $sql .= "VALUES ('{$row->id}', '{$sit[2]}', 'editing', '{$bodytext}', '".time()."', {$row->owner}, {$row->status})";
                 $result = mysql_query($sql);
                 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
             }

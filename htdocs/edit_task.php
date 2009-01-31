@@ -224,11 +224,13 @@ switch ($action)
 
             $updatehtml .= sprintf($SYSLANG['strActivityCompleted'], $enddate, $duration);
 
+            $owner = incident_open(($incident));
+
             //create update
             $sql = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, ";
-            $sql .= "currentstatus, bodytext, timestamp, duration) ";
+            $sql .= "currentowner, currentstatus, bodytext, timestamp, duration) ";
             $sql .= "VALUES('{$incident}', '{$sit[2]}', 'fromtask', ";
-            $sql .= "'{$status}', '{$updatehtml}', '{$now}', '{$duration}')";
+            $sql .= "'{$owner}', '{$status}', '{$updatehtml}', '{$now}', '{$duration}')";
             mysql_query($sql);
             if (mysql_error())
             {

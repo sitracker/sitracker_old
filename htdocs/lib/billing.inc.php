@@ -1077,11 +1077,10 @@ function contract_service_table($contractid)
 **/
 function get_incident_billing_details($incidentid)
 {
-    global $dbUpdates;
     /*
     $array[owner][] = array(owner, starttime, duration)
     */
-    $sql = "SELECT * FROM `{$dbUpdates}` WHERE incidentid = {$incidentid} AND duration IS NOT NULL";
+    $sql = "SELECT * FROM `{$GLOBALS['dbUpdates']}` WHERE incidentid = {$incidentid} AND duration IS NOT NULL";
     $result = mysql_query($sql);
     if (mysql_error())
     {

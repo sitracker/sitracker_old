@@ -26,32 +26,32 @@ if (!empty($userid))
 {
     $errors=0;
     // Check there are no files linked to this user
-    $sql = "SELECT userid FROM `{$dbFiles}` WHERE userid=$userid LIMIT 1";
+    $sql = "SELECT userid FROM `{$dbFiles}` WHERE userid={$userid} LIMIT 1";
     $result = mysql_query($sql);
     if (mysql_num_rows($result) >= 1) $errors++;
 
     // check there are no links linked to this product
-    $sql = "SELECT userid FROM `{$dbLinks}` WHERE userid=$userid LIMIT 1";
+    $sql = "SELECT userid FROM `{$dbLinks}` WHERE userid={$userid} LIMIT 1";
     $result = mysql_query($sql);
     if (mysql_num_rows($result) >= 1) $errors++;
 
     // check there are no notes linked to this product
-    $sql = "SELECT userid FROM `{$dbNotes}` WHERE userid=$userid LIMIT 1";
+    $sql = "SELECT userid FROM `{$dbNotes}` WHERE userid={$userid} LIMIT 1";
     $result = mysql_query($sql);
     if (mysql_num_rows($result) >= 1) $errors++;
 
     // Check there is no software linked to this user
-    $sql = "SELECT softwareid FROM `{$dbUserSoftware}` WHERE userid=$userid LIMIT 1";
+    $sql = "SELECT softwareid FROM `{$dbUserSoftware}` WHERE userid={$userid} LIMIT 1";
     $result = mysql_query($sql);
     if (mysql_num_rows($result) >= 1) $errors++;
 
     // Check there are no incidents linked to this user
-    $sql = "SELECT id FROM `{$dbIncidents}` WHERE owner=$userid OR towner=$userid LIMIT 1";
+    $sql = "SELECT id FROM `{$dbIncidents}` WHERE owner={$userid} OR towner={$userid} LIMIT 1";
     $result = mysql_query($sql);
     if (mysql_num_rows($result) >= 1) $errors++;
 
     // Check there are no updates by this user
-    $sql = "SELECT id FROM `{$dbUpdates}` WHERE userid=$userid LIMIT 1";
+    $sql = "SELECT id FROM `{$dbUpdates}` WHERE userid={$userid} LIMIT 1";
     $result = mysql_query($sql);
     if (mysql_num_rows($result) >= 1) $errors++;
 
@@ -62,10 +62,10 @@ if (!empty($userid))
     if ($errors == 0)
     {
         $sql = Array();
-        $sql[] = "DELETE FROM `{$dbUsers}` WHERE id = $userid LIMIT 1";
-        $sql[] = "DELETE FROM `{$dbHolidays}` WHERE userid = $userid";
-        $sql[] = "DELETE FROM `{$dbUserGroups}` WHERE userid = $userid";
-        $sql[] = "DELETE FROM `{$dbUserPermissions}` WHERE userid = $userid";
+        $sql[] = "DELETE FROM `{$dbUsers}` WHERE id = {$userid} LIMIT 1";
+        $sql[] = "DELETE FROM `{$dbHolidays}` WHERE userid = {$userid}";
+        $sql[] = "DELETE FROM `{$dbUserGroups}` WHERE userid = {$userid}";
+        $sql[] = "DELETE FROM `{$dbUserPermissions}` WHERE userid = {$userid}";
 
         foreach ($sql as $query)
         {

@@ -29,9 +29,8 @@ if (empty($offset))
 */
 function count_updates($incidentid)
 {
-    global $dbUpdates;
     $count_updates = 0;
-    $sql = "SELECT COUNT(id) FROM `{$dbUpdates}` WHERE incidentid='{$incidentid}'";
+    $sql = "SELECT COUNT(id) FROM `{$GLOBALS['dbUpdates']}` WHERE incidentid='{$incidentid}'";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
     list ($count_updates) = mysql_fetch_row($result);

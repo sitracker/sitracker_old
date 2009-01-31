@@ -96,8 +96,10 @@ if ($incidentcontact == $_SESSION['contactid'])
         //add the update
         $updatebody .= $update;
 
-        $sql = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, currentstatus, bodytext, timestamp, customervisibility) ";
-        $sql .= "VALUES('{$id}', '0', 'webupdate', '1', '{$updatebody}', '{$now}', 'show')";
+        $owner = incident_owner($id);
+
+        $sql = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, currentowner, currentstatus, bodytext, timestamp, customervisibility) ";
+        $sql .= "VALUES('{$id}', '0', 'webupdate', '{$owner}', '1', '{$updatebody}', '{$now}', 'show')";
         mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
         else
