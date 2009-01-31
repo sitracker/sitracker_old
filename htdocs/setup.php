@@ -166,7 +166,7 @@ function setup_configure()
             // Dynamic defaults
             if ($setupvar == 'application_fspath')
             {
-                $value = dirname( __FILE__ ) . DIRECTORY_SEPARATOR;
+                $value = str_replace('htdocs' . DIRECTORY_SEPARATOR, '', dirname( __FILE__ ) . DIRECTORY_SEPARATOR);
             }
 
             if ($setupvar == 'application_webpath')
