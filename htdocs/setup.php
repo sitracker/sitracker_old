@@ -85,23 +85,26 @@ function setup_configure()
     global $SETUP, $CFGVAR, $CONFIG, $configfiles, $config_filename, $cfg_file_exists, $cfg_file_writable, $numconfigfiles;
     $html = '';
 
-    if ($cfg_file_exists)
+    if ($cfg_file_exists AND $_REQUEST['configfile'] != 'new')
     {
-        if ($numconfigfiles < 2)
+        if ($_SESSION['new'])
         {
-            $html .= "<h4>Found an existing config file <var>{$config_filename}</var></h4>";
-        }
-        else
-        {
-            $html .= "<p class='error'>Found more than one existing config file</p>";
-            if ($cfg_file_writable)
+            if ($numconfigfiles < 2)
             {
-                $html .= "<ul>";
-                foreach ($configfiles AS $conf_filename)
+                $html .= "<h4>Found an existing config file <var>{$config_filename}</var></h4>";
+            }
+            else
+            {
+                $html .= "<p class='error'>Found more than one existing config file</p>";
+                if ($cfg_file_writable)
                 {
-                    $html .= "<li><var>{$conf_filename}</var></li>";
+                    $html .= "<ul>";
+                    foreach ($configfiles AS $conf_filename)
+                    {
+                        $html .= "<li><var>{$conf_filename}</var></li>";
+                    }
+                    $html .= "</ul>";
                 }
-                $html .= "</ul>";
             }
         }
         //$html .= "<p>Since you already have a config file we assume you are upgrading or reconfiguring, if this is not the case please delete the existing config file.</p>";
@@ -111,115 +114,118 @@ function setup_configure()
         }
         else
         {
-            $html .= "<p class='error'>A config file already exists but it is not writable</p>";
-            $html .= "<p>For security we won't show your existing settings here unless we are able to write to the configuration file automatically.</p>";
+            $html .= "<p><a href='setup.php?configfile=new' >Create a new config file</a>.</p>";
         }
     }
     else $html .= "<h2>New Configuration</h2><p>Please complete this form to create a new configuration file for SiT!</p>";
-    $html .= "\n<form action='setup.php' method='post'>\n";
 
-    if ($_REQUEST['config'] == 'advanced')
+    if ($cfg_file_writable OR $_REQUEST['configfile'] == 'new')
     {
-        $html .= "<input type='hidden' name='config' value='advanced' />\n";
-        foreach ($CFGVAR AS $setupvar => $setupval)
+        $html .= "\n<form action='setup.php' method='post'>\n";
+
+        if ($_REQUEST['config'] == 'advanced')
         {
-            $SETUP[] = $setupvar;
+            $html .= "<input type='hidden' name='config' value='advanced' />\n";
+            foreach ($CFGVAR AS $setupvar => $setupval)
+            {
+                $SETUP[] = $setupvar;
+            }
         }
+
+        $c=1;
+        foreach ($SETUP AS $setupvar)
+        {
+            $html .= "<div class='configvar{$c}'>";
+            if ($CFGVAR[$setupvar]['title']!='') $title = $CFGVAR[$setupvar]['title'];
+            else $title = $setupvar;
+            $html .= "<h4>{$title}</h4>";
+            if ($CFGVAR[$setupvar]['help']!='') $html .= "<p class='helptip'>{$CFGVAR[$setupvar]['help']}</p>\n";
+
+            $html .= "<var>\$CONFIG['$setupvar']</var> = ";
+
+            $value = '';
+            if (!$cfg_file_exists OR ($cfg_file_exists AND $cfg_file_writable))
+            {
+                $value = $CONFIG[$setupvar];
+                if (is_bool($value))
+                {
+                    if ($value==TRUE) $value='TRUE';
+                    else $value='FALSE';
+                }
+                elseif (is_array($value))
+                {
+                    if (is_assoc($value))
+                    {
+                        $value = "array(".implode_assoc('=>',',',$value).")";
+                    }
+                    else
+                    {
+                        $value="array(".implode(',',$value).")";
+                    }
+                }
+                if ($setupvar=='db_password' AND $_REQUEST['action']!='reconfigure') $value='';
+            }
+
+            if (!$cfg_file_exists OR $_REQUEST['configfile'] == 'new')
+            {
+                // Dynamic defaults
+                if ($setupvar == 'application_fspath')
+                {
+                    $value = str_replace('htdocs' . DIRECTORY_SEPARATOR, '', dirname( __FILE__ ) . DIRECTORY_SEPARATOR);
+                }
+
+                if ($setupvar == 'application_webpath')
+                {
+                    $value = dirname( strip_tags( $_SERVER['PHP_SELF'] ) ) . '/';
+                }
+            }
+
+            switch ($CFGVAR[$setupvar]['type'])
+            {
+                case 'select':
+                    $html .= "<select name='$setupvar'>";
+                    if (empty($CFGVAR[$setupvar]['options'])) $CFGVAR[$setupvar]['options'] = "TRUE|FALSE";
+                    $options = explode('|', $CFGVAR[$setupvar]['options']);
+                    foreach ($options AS $option)
+                    {
+                        $html .= "<option value=\"{$option}\"";
+                        if ($option == $value) $html .= " selected='selected'";
+                        $html .= ">{$option}</option>\n";
+                    }
+                    $html .= "</select>";
+                break;
+
+                case 'percent':
+                    $html .= "<select name='$setupvar'>";
+                    for($i = 0; $i <= 100; $i++)
+                    {
+                        $html .= "<option value=\"{$i}\"";
+                        if ($i == $value) $html .= " selected='selected'";
+                        $html .= ">{$i}</option>\n";
+                    }
+                    $html .= "</select>";
+                break;
+
+                case 'text':
+                default:
+                    if (strlen($CONFIG[$setupvar]) < 65)
+                    {
+                        $html .= "<input type='text' name='$setupvar' size='60' value=\"{$value}\" />";
+                    }
+                    else
+                    {
+                        $html .= "<textarea name='$setupvar' cols='60' rows='10'>{$value}</textarea>";
+                    }
+            }
+            if ($setupvar=='db_password' AND $_REQUEST['action']!='reconfigure' AND $value != '') $html .= "<p class='info'>The current password setting is not shown</p>";
+            $html .= "</div>";
+            $html .= "<br />\n";
+            if ($c==1) $c==2; else $c=1;
+        }
+        $html .= "<input type='hidden' name='action' value='save_config' />";
+        $html .= "<br /><input type='submit' name='submit' value='Save Configuration' />";
+        $html .= "</form>\n";
     }
-
-    $c=1;
-    foreach ($SETUP AS $setupvar)
-    {
-        $html .= "<div class='configvar{$c}'>";
-        if ($CFGVAR[$setupvar]['title']!='') $title = $CFGVAR[$setupvar]['title'];
-        else $title = $setupvar;
-        $html .= "<h4>{$title}</h4>";
-        if ($CFGVAR[$setupvar]['help']!='') $html .= "<p class='helptip'>{$CFGVAR[$setupvar]['help']}</p>\n";
-
-        $html .= "<var>\$CONFIG['$setupvar']</var> = ";
-
-        $value = '';
-        if (!$cfg_file_exists OR ($cfg_file_exists AND $cfg_file_writable))
-        {
-            $value = $CONFIG[$setupvar];
-            if (is_bool($value))
-            {
-                if ($value==TRUE) $value='TRUE';
-                else $value='FALSE';
-            }
-            elseif (is_array($value))
-            {
-                if (is_assoc($value))
-                {
-                    $value = "array(".implode_assoc('=>',',',$value).")";
-                }
-                else
-                {
-                    $value="array(".implode(',',$value).")";
-                }
-            }
-            if ($setupvar=='db_password' AND $_REQUEST['action']!='reconfigure') $value='';
-        }
-
-        if (!$cfg_file_exists)
-        {
-            // Dynamic defaults
-            if ($setupvar == 'application_fspath')
-            {
-                $value = str_replace('htdocs' . DIRECTORY_SEPARATOR, '', dirname( __FILE__ ) . DIRECTORY_SEPARATOR);
-            }
-
-            if ($setupvar == 'application_webpath')
-            {
-                $value = dirname( strip_tags( $_SERVER['PHP_SELF'] ) ) . '/';
-            }
-        }
-
-        switch ($CFGVAR[$setupvar]['type'])
-        {
-            case 'select':
-                $html .= "<select name='$setupvar'>";
-                if (empty($CFGVAR[$setupvar]['options'])) $CFGVAR[$setupvar]['options'] = "TRUE|FALSE";
-                $options = explode('|', $CFGVAR[$setupvar]['options']);
-                foreach ($options AS $option)
-                {
-                    $html .= "<option value=\"{$option}\"";
-                    if ($option == $value) $html .= " selected='selected'";
-                    $html .= ">{$option}</option>\n";
-                }
-                $html .= "</select>";
-            break;
-
-            case 'percent':
-                $html .= "<select name='$setupvar'>";
-                for($i = 0; $i <= 100; $i++)
-                {
-                    $html .= "<option value=\"{$i}\"";
-                    if ($i == $value) $html .= " selected='selected'";
-                    $html .= ">{$i}</option>\n";
-                }
-                $html .= "</select>";
-            break;
-
-            case 'text':
-            default:
-                if (strlen($CONFIG[$setupvar]) < 65)
-                {
-                    $html .= "<input type='text' name='$setupvar' size='60' value=\"{$value}\" />";
-                }
-                else
-                {
-                    $html .= "<textarea name='$setupvar' cols='60' rows='10'>{$value}</textarea>";
-                }
-        }
-        if ($setupvar=='db_password' AND $_REQUEST['action']!='reconfigure' AND $value != '') $html .= "<p class='info'>The current password setting is not shown</p>";
-        $html .= "</div>";
-        $html .= "<br />\n";
-        if ($c==1) $c==2; else $c=1;
-    }
-    $html .= "<input type='hidden' name='action' value='save_config' />";
-    $html .= "<br /><input type='submit' name='submit' value='Save Configuration' />";
-    $html .= "</form>\n";
     return $html;
 }
 
@@ -546,6 +552,8 @@ if (version_compare(PHP_VERSION, "5.0.0", "<"))
     echo "<p class='error'>You are running an older PHP version (< PHP 5), SiT v3.35 and later require PHP 5.0.0 or newer, some features may not work properly.</p>";
 }
 
+echo "\n\n<!-- A:".strip_tags($_REQUEST['action'])." -->\n\n";
+
 switch ($_REQUEST['action'])
 {
     case 'save_config':
@@ -655,6 +663,7 @@ switch ($_REQUEST['action'])
         $db = @mysql_connect($CONFIG['db_hostname'], $CONFIG['db_username'], $CONFIG['db_password']);
         if (@mysql_error())
         {
+            echo "<p class='error'>Setup could not connect to the database server '{$CONFIG['db_hostname']}'. MySQL Said: ".mysql_error()."</p>";
             echo setup_configure();
         }
         else
@@ -681,7 +690,6 @@ switch ($_REQUEST['action'])
                     {
                         echo "<p class='info'>If this is a new installation of SiT and you would like to use the database name '{$CONFIG['db_database']}', you should proceed and create a database</p>";
                     }
-
                     echo setup_button('reconfigure', 'Reconfigure SiT!');
                     echo "<br />or<br /><br />";
                     echo setup_button('createdb', 'Create a database');
@@ -707,6 +715,13 @@ switch ($_REQUEST['action'])
                     echo "<p>You need to configure SiT to be able access the MySQL database.</p>";
                     echo setup_configure();
                 }
+            }
+            else
+            {
+                echo "<p class='info'>The database connection now checks out ok, you can now go ahead and run SiT!.</p>";
+                echo "<form action='index.php' method='get'>";
+                echo "<input type='submit' value=\"Run SiT!\" />";
+                echo "</form>\n";
             }
         }
     break;
