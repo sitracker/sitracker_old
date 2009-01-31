@@ -196,11 +196,11 @@ if ($menu != 'hide')
                 FROM `{$dbTempIncoming}` AS ti, `{$dbUpdates}` AS u
                 WHERE ti.id = '{$id}'
                 AND ti.updateid = u.id";
-        $result = mysql_query($insql);
+        $insresult = mysql_query($insql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
-        if (mysql_num_rows($result) > 0)
+        if (mysql_num_rows($insresult) > 0)
         {
-            $obj = mysql_fetch_object($result);
+            $obj = mysql_fetch_object($insresult);
 
             if ($obj->locked == $sit[2] OR empty($obj->locked))
             {
