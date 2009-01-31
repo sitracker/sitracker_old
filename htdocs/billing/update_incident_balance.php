@@ -13,18 +13,17 @@
 @include ('../set_include_path.inc.php');
 $permission = 80; //Set -ve balances
 
-require ($lib_path.'db_connect.inc.php');
-require ($lib_path.'functions.inc.php');
-
+require_once ($lib_path.'db_connect.inc.php');
+require_once ($lib_path.'functions.inc.php');
 // This page requires authentication
-require ($lib_path.'auth.inc.php');
+require_once ($lib_path.'auth.inc.php');
 
 $mode = cleanvar($_REQUEST['mode']);
 $incidentid = cleanvar($_REQUEST['incidentid']);
 
 if (empty($mode))
 {
-    include ('./inc/htmlheader.inc.php');
+    include ('../inc/htmlheader.inc.php');
 
     echo "<h2>".sprintf($strUpdateIncidentXsBalance, $incidentid)."</h2>";
 
@@ -46,7 +45,7 @@ if (empty($mode))
 
     echo "</form>";
 
-    include ('./inc/htmlfooter.inc.php');
+    include ('../inc/htmlfooter.inc.php');
 }
 elseif ($mode == 'update')
 {

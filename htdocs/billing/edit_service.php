@@ -14,11 +14,11 @@
 @include ('../set_include_path.inc.php');
 $permission =  80;
 
-require_once('db_connect.inc.php');
-require_once('functions.inc.php');
+require_once ($lib_path.'db_connect.inc.php');
+require_once ($lib_path.'functions.inc.php');
 require_once ($lib_path . 'billing.inc.php');
 // This page requires authentication
-require_once('auth.inc.php');
+require_once ($lib_path.'auth.inc.php');
 
 $mode = cleanvar($_REQUEST['mode']);
 $amount = cleanvar($_REQUEST['amount']);
@@ -43,7 +43,7 @@ switch ($mode)
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
-            include ('./inc/htmlheader.inc.php');
+            include ('../inc/htmlheader.inc.php');
 
             if (mysql_numrows($result) != 1)
             {
@@ -145,7 +145,7 @@ switch ($mode)
 
                 echo "<p align='center'><a href='../contract_details.php?id={$contractid}'>{$strReturnWithoutSaving}</a></p>";
             }
-            include ('./inc/htmlfooter.inc.php');
+            include ('../inc/htmlfooter.inc.php');
         }
 
         break;
@@ -263,7 +263,7 @@ switch ($mode)
         }
         else
         {
-            include ('./inc/htmlheader.inc.php');
+            include ('../inc/htmlheader.inc.php');
             echo "<h2>{$strOneTimeBillingEditor}</h2>";
 
             echo "<form name='serviceform' action='{$_SERVER['PHP_SELF']}' method='post' onsubmit='return confirm_submit(\"{$strAreYouSureMakeTheseChanges}\");'>";
@@ -317,7 +317,7 @@ switch ($mode)
 
             echo "</form>";
         }
-        include ('./inc/htmlfooter.inc.php');
+        include ('../inc/htmlfooter.inc.php');
         break;
     case 'edit':
         if (user_permission($sit[2], 79) == FALSE)

@@ -14,11 +14,11 @@
 @include('set_include_path.inc.php');
 $permission = 76; // View Transactions
 
-require_once('db_connect.inc.php');
-require_once('functions.inc.php');
+require_once($lib_path.'db_connect.inc.php');
+require_once($lib_path.'functions.inc.php');
 include_once ($lib_path . 'billing.inc.php');
 // This page requires authentication
-require_once('auth.inc.php');
+require_once($lib_path.'auth.inc.php');
 
 $title = $strTransactions;
 

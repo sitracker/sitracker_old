@@ -509,7 +509,7 @@ function transition_reserved_monites($transactionid, $amount, $description='')
     }
     $sql .= "WHERE transactionid = {$transactionid} AND transactionstatus = ".RESERVED;
     mysql_query($sql);
-    echo "E: ".mysql_affected_rows();
+
     if (mysql_error())
     {
         trigger_error(mysql_error(), E_USER_ERROR);
@@ -802,7 +802,12 @@ function update_contract_balance($contractid, $description, $amount, $serviceid=
         else
         {
             $sql = "UPDATE `{$dbTransactions}` SET serviceid = {$serviceid}, totalunits = {$totalunits}, totalbillableunits = {$totalbillableunits}, totalrefunds = {$totalrefunds} ";
-            $sql .= ", amount = {$amount}, description = '{$description}', userid = {$_SESSION['userid']} , dateupdated = '{$date}', transactionstatus = '".APPROVED."' WHERE transactionid = {$transactionid}";
+            $sql .= ", amount = {$amount}, userid = {$_SESSION['userid']} , dateupdated = '{$date}', transactionstatus = '".APPROVED."' ";
+            if (!empty($description))
+            {
+            	$sql .= ", description = '{$description}' ";
+            }
+            $sql .= "WHERE transactionid = {$transactionid}";
             $result = mysql_query($sql);
             $rtnvalue = $transactionid;
         }
@@ -1836,6 +1841,23 @@ function service_dropdown_site($siteid, $name, $selected=0)
     }
     
     return $html;
+}
+
+
+/**
+ * Identify if a transaction has been approved or not
+ * @author Paul Heaney
+ * @param int $transactionid The transaction ID to check
+ * @return bool TRUE if approved FALSE otherwise
+ */
+function is_transaction_approved($transactionid)
+{
+	$sql = "SELECT transactionid FROM `{$GLOBALS['dbTransactions']}` WHERE transactionid = {$transactionid} AND transactionstaus = ".APPROVED;
+    $result = mysql_query($sql);
+    if (mysql_error()) trigger_error("Error getting services. ".mysql_error(), E_USER_WARNING);
+    
+    if (mysql_num_rows($result) > 0) return TRUE;
+    else return FALSE;
 }
 
 ?>

@@ -240,7 +240,7 @@ elseif ($mode == 'approvalpage')
 
             $str = "<form action='{$_SERVER['PHP_SELF']}?mode=approve&amp;startdate={$startdateorig}&amp;enddate={$enddateorig}' name='{$sitenamenospaces}' id='{$sitenamenospaces}'  method='post'>";
 
-            $str .= "<h3>{$sitename}</h3>";
+            // $sitename .= "<h3>{$sitename}</h3>";
 
             $str .= "<table align='center' width='80%'>";
 
@@ -488,6 +488,8 @@ elseif ($mode == 'approvalpage')
 
             $str .= "</table></form>";
 
+            echo "<h3>{$sitename}</h3>";
+
             if ($used)
             {
                 if ($output == 'html')
@@ -506,6 +508,8 @@ elseif ($mode == 'approvalpage')
             }
         }
     }
+    
+    plugin_do('billing_approve_form');
 
     if ($output == 'html')
     {
@@ -591,7 +595,7 @@ elseif ($mode == 'invoicepage')
 }
 elseif ($mode == 'summarypage')
 {
-    include ('billing/summary.php');
+    include ('billing/summary.inc.php');
 }
 elseif ($mode == 'transactions')
 {

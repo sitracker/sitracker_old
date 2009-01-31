@@ -11,10 +11,10 @@
 @include ('../set_include_path.inc.php');
 $permission = 21; // FIXME need a permission for add service
 
-require ($lib_path.'db_connect.inc.php');
-require ($lib_path.'functions.inc.php');
+require_once ($lib_path.'db_connect.inc.php');
+require_once ($lib_path.'functions.inc.php');
 // This page requires authentication
-require ($lib_path.'auth.inc.php');
+require_once ($lib_path.'auth.inc.php');
 
 // External variables
 $contractid = mysql_real_escape_string($_REQUEST['contractid']);
@@ -45,7 +45,7 @@ else
 
 if (empty($submit) OR !empty($_SESSION['formerrors']['add_service']))
 {
-    include ('./inc/htmlheader.inc.php');
+    include ('../inc/htmlheader.inc.php');
     echo show_form_errors('add_service');
     clear_form_errors('add_service');
     echo "<h2> ";
@@ -141,7 +141,7 @@ if (empty($submit) OR !empty($_SESSION['formerrors']['add_service']))
 
     //cleanup form vars
     clear_form_data('add_service');
-    include ('./inc/htmlfooter.inc.php');
+    include ('../inc/htmlfooter.inc.php');
 }
 else
 {

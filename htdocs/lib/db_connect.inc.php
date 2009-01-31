@@ -19,13 +19,16 @@ include ($lib_path.'defaults.inc.php');
 // i18n
 @include ('i18n/en-gb.inc.php');
 
-// Set Start Time for Execution Timing
-function getmicrotime()
+if (!function_exists("getmicrotime"))
 {
-    list($usec, $sec) = explode(" ",microtime());
-    return ((float)$usec + (float)$sec);
+    // Set Start Time for Execution Timing
+    function getmicrotime()
+    {
+        list($usec, $sec) = explode(" ",microtime());
+        return ((float)$usec + (float)$sec);
+    }
+    $exec_time_start = getmicrotime();
 }
-$exec_time_start = getmicrotime();
 
 if ($CONFIG['db_username'] == '' OR $CONFIG['db_database'] == '')
 {
