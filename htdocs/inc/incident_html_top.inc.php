@@ -198,8 +198,10 @@ if ($menu != 'hide')
                 AND ti.updateid = u.id";
         $query = mysql_query($insql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
-        while ($inupdate = mysql_fetch_object($query))
+        if (mysql_num_rows($query) > 0)
         {
+            $inupdate = mysql_fetch_object($query);
+
             if ($inupdate->locked == $sit[2] OR empty($inupdate->locked))
             {
                 echo "<a class='barlink' href='unlock_update.php?id={$id}'>{$strUnlock}</a> | ";
@@ -207,6 +209,10 @@ if ($menu != 'hide')
                 echo "<a class='barlink' href=\"javascript:window.opener.location='incident_add.php?action=findcontact&amp;incomingid={$id}&amp;search_string={$inupdate->emailfrom}&amp;from={$inupdate->from}&amp;contactid={$inupdate->contactid}&amp;win=incomingcreate'; window.close();\">{$strCreate}</a> | ";
                 echo "<a class='barlink' href=\"javascript:window.opener.location='delete_update.php?updateid={$inupdate->updateid}&amp;tempid={$inupdate->id}&amp;timestamp={$inupdate->timestamp}'; window.close(); \">{$strDelete}</a>";
             }
+        }
+        elseif (incident_status($id) != 2)
+        {
+        	echo "<a href= \"javascript:wt_winpopup('reassign_incident.php?id={$id}&amp;reason=Initial%20assignment%20to%20engineer&amp;popup=yes','mini');\" title='Assign this incident'>{$strAssign}</a>";
         }
     }
     elseif (incident_status($id) != 2)
