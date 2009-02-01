@@ -726,3 +726,6 @@ div.tabcontainer { display: block;  }
     background: #EEF6FF;
     padding: 1em;
 }
+
+
+table.vertical td { vertical-align: top; }

@@ -1046,7 +1046,7 @@ function softwareproduct_drop_down($name, $id, $productid, $visibility='internal
 
     if (mysql_num_rows($result) >=1)
     {
-        $html = "<select name='$name'>";
+        $html = "<select name='$name' id='$name'>";
 
         if ($visibility == 'internal' AND $id == 0)
         {
@@ -4726,7 +4726,7 @@ function date_picker($formelement)
     $divid = "datediv".str_replace('.','',$formelement);
     $html = "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/pickdate.png' ";
     $html .= "onmouseup=\"toggleDatePicker('$divid','$formelement')\" width='16' height='16' alt='date picker' style='cursor: pointer; vertical-align: bottom;' />";
-    $html .= "<div id='$divid' style='position: absolute;'></div>";
+    $html .= "\n<div id='$divid' style='position: absolute;'></div>\n";
     return $html;
 }
 
@@ -6565,7 +6565,7 @@ function show_next_action()
 
     $html .= "<label><input type='radio' name='timetonextaction' ";
     $html .= "id='ttna_time' value='time' onchange=\"update_ttna();\" />";
-    $html .= "{$GLOBALS['strForXDaysHoursMinutes']}</label><br />";
+    $html .= "{$GLOBALS['strForXDaysHoursMinutes']}</label><br />\n";
     $html .= "<span id='ttnacountdown'";
     if (empty($na_days) AND
         empty($na_hours) AND
@@ -6574,27 +6574,26 @@ function show_next_action()
         $html .= " style='display: none;'";
     }
     $html .= ">";
-    $html .= "&nbsp;&nbsp;&nbsp;<input maxlength='3' name='timetonextaction_days'";
-    $html .= " id='timetonextaction_days' value='{$na_days}' ";
+    $html .= "&nbsp;&nbsp;&nbsp;<input name='timetonextaction_days' ";
+    $html .= " id='timetonextaction_days' value='{$na_days}' maxlength='3' ";
     $html .= "onclick=\"$('ttna_time').checked = true;\" ";
     $html .= "size='3' /> {$GLOBALS['strDays']}&nbsp;";
     $html .= "<input maxlength='2' name='timetonextaction_hours' ";
     $html .= "id='timetonextaction_hours' value='{$na_hours}' ";
-    $html .= "onclick=\"$('ttna_time').checked = true;\"";
+    $html .= "onclick=\"$('ttna_time').checked = true;\" ";
     $html .= "size='3' /> {$GLOBALS['strHours']}&nbsp;";
     $html .= "<input maxlength='2' name='timetonextaction_minutes' id='";
     $html .= "timetonextaction_minutes' value='{$na_minutes}' ";
-    $html .= "onclick=\"$('ttna_time').checked = true;\"";
+    $html .= "onclick=\"$('ttna_time').checked = true;\" ";
     $html .= "size='3' /> {$GLOBALS['strMinutes']}";
-    $html .= "<br /></span>";
+    $html .= "<br />\n</span>";
 
     $html .= "<label><input type='radio' name='timetonextaction' id='ttna_date' ";
     $html .= "value='date' onchange=\"update_ttna();\" />";
-    $html .= "{$GLOBALS['strUntilSpecificDateAndTime']}</label><br />";
-    $html .= "<span id='ttnadate' style='display: none;'>";
+    $html .= "{$GLOBALS['strUntilSpecificDateAndTime']}</label><br />\n";
+    $html .= "<div id='ttnadate' style='display: none;'>";
     $html .= "<input name='date' id='timetonextaction_date' size='10' value='{$date}' ";
-    $html .= "onclick=\"$('ttna_date').checked = true;\"";
-//     $html .= "\"window.document.updateform.timetonextaction_none[1].checked = true;\"/> ";
+    $html .= "onclick=\"$('ttna_date').checked = true;\" /> ";
     $html .= date_picker('updateform.timetonextaction_date');
     $html .= " <select name='timeoffset' id='timeoffset' ";
     $html .= "onclick=\"$('ttna_date').checked = true;\" >";
@@ -6610,7 +6609,7 @@ function show_next_action()
     $html .= "<option value='8'>4:00 $strPM</option>";
     $html .= "<option value='9'>5:00 $strPM</option>";
     $html .= "</select>";
-    $html .= "<br /></span>";
+    $html .= "<br />\n</div>";
 
     return $html;
 }
