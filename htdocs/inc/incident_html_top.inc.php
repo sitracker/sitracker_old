@@ -184,7 +184,7 @@ if ($_REQUEST['win'] == 'incomingview')
 }
 else
 {
-    echo "<h1 class='$class'>{$title}: {$incidentid} - ".$incident->title."</h1>";
+    echo "<h1 class='$class'>{$title}: {$incidentid} - {$incident->title}</h1>";
 }
 
 echo "<div id='navmenu'>";

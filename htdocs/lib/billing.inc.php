@@ -526,6 +526,40 @@ function transition_reserved_monites($transactionid, $amount, $description='')
 
 
 /**
+ * Unreserve a reserved transaction, this removes the transaction thus removing the reservation
+ * @author Paul Heaney
+ * @param int $transactionid - The transaction to unreserv
+ * @return bool TRUE on sucess FALSE otherwise
+ */
+function unreserve_monies($transactionid, $linktype)
+{
+	$rtnvalue = FALSE;
+    $sql = "DELETE FROM `{$GLOBALS['dbTransactions']}` WHERE transactionid = {$transactionid} AND transactionstatus = ".RESERVED;
+    mysql_query($sql);
+
+    if (mysql_error()) trigger_error("Error unreserving monies ".mysql_error(), E_USER_ERROR);
+    if (mysql_affected_rows() == 1) $rtnvalue = TRUE;
+    
+    if ($rtnvalue != FALSE)
+    {
+    	$sql = "DELETE FROM `{$GLOBALS['dbLinks']}` WHERE linktype =  {$linktype} AND origcolref = {$transactionid}";
+        mysql_query($sql);
+        if (mysql_error())
+        {
+            trigger_error(mysql_error(),E_USER_ERROR);
+            $rtnvalue = FALSE;
+        }
+        if (mysql_affected_rows() < 1)
+        {
+            trigger_error("Link deletion failed",E_USER_ERROR);
+            $rtnvalue = FALSE;
+        }
+    }
+    
+    return $rtnvalue;
+}
+
+/**
  * Updates the amount and optionally the description on a transaction awaiting reservation
  * @author Paul Heaney
  * @param int $transactionid The transaction ID to update
@@ -1837,6 +1871,10 @@ function service_dropdown_site($siteid, $name, $selected=0)
             $html .= " ({$obj->startdate} - {$obj->enddate})</option>";
         }
         $html .= "</select>\n";
+    }
+    else
+    {
+    	$html = "No services currently valid";
     }
     
     return $html;
