@@ -26,7 +26,7 @@ $seltab = cleanvar($_REQUEST['tab']);
 $action = cleanvar($_REQUEST['action']);
 
 
-require('configvars.inc.php');
+require($lib_path.'configvars.inc.php');
 
 if ($action == 'save')
 {
