@@ -461,10 +461,6 @@ elseif ($action=='incidentform')
     echo strip_tags($producttext);
     echo "</td></tr>";
 
-
-
-
-
     if (empty($updateid))
     {
         echo "<tr><td><label for='incidenttitle'>{$strIncidentTitle}</label><br />";
@@ -558,21 +554,22 @@ elseif ($action=='incidentform')
         $mailed_subject=$updaterow['subject'];
 
         echo "<tr><th>{$strIncidentTitle}</th><td><input class='required' name='incidenttitle'";
-        echo " size='40' type='text' value='".htmlspecialchars($mailed_subject,ENT_QUOTES)."'>";
+        echo " size='50' type='text' value='".htmlspecialchars($mailed_subject,ENT_QUOTES)."' />";
         echo "<span class='required'>{$strRequired}</span></td></tr>\n";
         echo "<tr><td colspan='2'>&nbsp;</td></tr>\n";
 
-        echo "<tr><th>{$strProblemDescription}<br />{$strReceivedByEmail}</th>";
+        echo "<tr><th>{$strProblemDescription}<br /><span style='font-weight: normal'>{$strReceivedByEmail}</span></th>";
         echo "<td>".parse_updatebody($mailed_body_text)."</td></tr>\n";
-        echo "<tr><td class='shade1' colspan=2>&nbsp;</td></tr>\n";
+        echo "<tr><td class='shade1' colspan='2'>&nbsp;</td></tr>\n";
     }
     echo "<tr><td><strong>{$strNextAction}</strong><br />";
 //     echo "<input type='text' name='nextaction' maxlength='50' size='30' value='Initial Response' /><br /><br />";
-     echo show_next_action();
-     echo "</td>";
+    echo show_next_action();
+    echo "</td>";
+    echo "<td colspan='2'>";
     if (empty($updateid))
     {
-        echo "<td colspan='2'><strong>{$strVisibleToCustomer}</strong><br />\n";
+        echo "<strong>{$strVisibleToCustomer}</strong><br />\n";
         echo "<label><input name='cust_vis' type='checkbox' checked='checked' /> {$strVisibleToCustomer}</label>";
         echo help_link('VisibleToCustomer')."<br />";
         echo "<label><input name='send_email' type='checkbox' checked='checked' /> ";
