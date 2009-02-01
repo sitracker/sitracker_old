@@ -13,7 +13,7 @@
 
 @include ('set_include_path.inc.php');
 require ($lib_path.'db_connect.inc.php');
-include ('strings.inc.php');
+include ($lib_path.'strings.inc.php');
 require ($lib_path.'functions.inc.php');
 include_once ($lib_path . 'billing.inc.php');
 populate_syslang();
@@ -52,13 +52,13 @@ function saction_CloseIncidents($closure_delay)
         trigger_error(mysql_error(),E_USER_WARNING);
         $success = FALSE;
     }
-    
+
     if ($CONFIG['debug']) debug_log("Found ".mysql_num_rows($result)." Incidents to close");
-    
+
     while ($obj = mysql_fetch_object($result))
     {
         $bill = close_billable_incident($obj->id); // Do the close tasks if necessary
-        
+
         if ($bill)
         {
             $sqlb = "UPDATE `{$dbIncidents}` SET lastupdated='{$now}', ";
@@ -70,9 +70,9 @@ function saction_CloseIncidents($closure_delay)
                 trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
                 $success = FALSE;
             }
-            
-            if ($CONFIG['debug']) debug_log("  Incident {$obj->id closed");
-    
+
+            if ($CONFIG['debug']) debug_log("  Incident {$obj->id} closed");
+
             $sqlc = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, currentowner, currentstatus, bodytext, timestamp, nextaction, customervisibility) ";
             $sqlc .= "VALUES ('{$obj->id}', '0', 'closing', '{$obj->owner}', '{$obj->status}', 'Incident Closed by {$CONFIG['application_shortname']}', '{$now}', '', 'show' ) ";
             $resultc = mysql_query($sqlc);

@@ -14,12 +14,12 @@
 @include ('set_include_path.inc.php');
 require ($lib_path . 'mime_parser.inc.php');
 require ($lib_path . 'rfc822_addresses.inc.php');
-require ('fetchSitMail.class.php');
+require ($lib_path . 'fetchSitMail.class.php');
 
 if (realpath(__FILE__) == realpath($_SERVER['SCRIPT_FILENAME']))
 {
     require ($lib_path.'db_connect.inc.php');
-    include ('strings.inc.php');
+    include ($lib_path.'strings.inc.php');
     require ($lib_path.'functions.inc.php');
     require ($lib_path . 'base.inc.php');
 }
