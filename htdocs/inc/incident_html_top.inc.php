@@ -200,9 +200,9 @@ if ($menu != 'hide')
         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
         if (mysql_num_rows($insresult) > 0)
         {
-            $obj = mysql_fetch_object($insresult);
+            $inupdate = mysql_fetch_object($insresult);
 
-            if ($obj->locked == $sit[2] OR empty($obj->locked))
+            if ($inupdate->locked == $sit[2] OR empty($inupdate->locked))
             {
                 echo "<a class='barlink' href='unlock_update.php?id={$id}'>{$strUnlock}</a> | ";
                 echo "<a class='barlink' href=\"javascript:window.location='move_update.php?id={$id}&amp;updateid={$inupdate->updateid}&amp;contactid={$inupdate->contactid}&amp;win=incomingview'\" >{$strAssign}</a> | ";
