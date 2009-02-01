@@ -7884,8 +7884,9 @@ function gravatar($email, $size = 32)
     $grav_url .= "gravatar_id=".md5(strtolower($email));
     $grav_url .= "&default=".urlencode($CONFIG['default_gravatar']);
     $grav_url .= "&size=".$size;
+    $grav_url .= "&rating=G";
 
-    $html = "<img src='{$grav_url}' />";
+    $html = "<a href='http://site.gravatar.com/'><img src='{$grav_url}' /></a>";
 
     return $html;
 }
