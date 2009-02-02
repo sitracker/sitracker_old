@@ -39,9 +39,12 @@ include ('./inc/htmlheader.inc.php');
 
 if (empty($user) || $user=='current') $user = $sit[2];
 elseif ($user == 'all') $user = '';
-if (empty($type)) $type = 1;
+if (empty($type)) $type = HOL_HOLIDAY;
 if (user_permission($sit[2],50)) $approver = TRUE;
 else $approver = FALSE;
+
+// Force user to 0 (SiT) when setting public holidays
+if ($type == HOL_PUBLIC) $user = 0;
 
 $gidurl = '';
 if (!empty($groupid)) $gidurl = "&amp;gid={$groupid}";
@@ -67,21 +70,23 @@ if ($CONFIG['timesheets_enabled'])
 // where $display == 'chart'
 if (!in_array($display, $calendarTypes)) $display = 'month';
 
-// Navigation
-echo "<p>{$strDisplay}: ";
-foreach ($calendarTypes as $navType)
+// Navigation (Don't show for public holidays)
+if ($type != HOL_PUBLIC)
 {
-    $navHtml[$navType]  = "<a href='{$_SERVER['PHP_SELF']}?display={$navType}";
-    $navHtml[$navType] .= "&amp;year={$year}&amp;month={$month}&amp;day={$day}";
-    $navHtml[$navType] .= "&amp;type={$type}{$gidurl}'>";
-    $navi18n = eval('return $str' . ucfirst($navType) . ';');
-    if ($display == $navType) $navHtml[$navType] .= '<em>' . $navi18n . '</em>';
-    else $navHtml[$navType] .= $navi18n;
-    $navHtml[$navType] .= "</a>";
+    echo "<p>{$strDisplay}: ";
+    foreach ($calendarTypes as $navType)
+    {
+        $navHtml[$navType]  = "<a href='{$_SERVER['PHP_SELF']}?display={$navType}";
+        $navHtml[$navType] .= "&amp;year={$year}&amp;month={$month}&amp;day={$day}";
+        $navHtml[$navType] .= "&amp;type={$type}{$gidurl}'>";
+        $navi18n = eval('return $str' . ucfirst($navType) . ';');
+        if ($display == $navType) $navHtml[$navType] .= '<em>' . $navi18n . '</em>';
+        else $navHtml[$navType] .= $navi18n;
+        $navHtml[$navType] .= "</a>";
+    }
+    echo implode(' | ', $navHtml);
+    echo "</p>";
 }
-echo implode(' | ', $navHtml);
-echo "</p>";
-
 include ("calendar/{$display}.inc.php");
 
 include ('./inc/htmlfooter.inc.php');

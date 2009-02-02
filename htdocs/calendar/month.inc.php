@@ -58,5 +58,5 @@ $numgroups = group_selector($groupid, "display=day&amp;year={$year}&amp;month={$
 if ($groupid == 'all') $groupid = '';
 
 echo draw_chart('month', $year, $month, $day, $groupid, $user);
-
+debug_log("draw_chart('month', $year, $month, $day, $groupid, $user);");
 ?>

@@ -270,9 +270,14 @@ function appointment_popup($mode, $year, $month, $day, $time, $group, $user)
 
 
 /**
-    * Holiday planner chart
+    * Draw a month view Holiday planner chart
     * @author Ivan Lucas
-    * @param $mode string. modes: 'month', 'week', 'day'
+    * @param string $mode. modes: 'month', 'week', 'day'
+    * @param int $year. Year e.g. 2009
+    * @param int $month. Month number
+    * @param int $day.  Day number
+    * @param int $groupid.
+    * @param int $userid
 */
 function draw_chart($mode, $year, $month='', $day='', $groupid='', $userid='')
 {
@@ -320,7 +325,7 @@ function draw_chart($mode, $year, $month='', $day='', $groupid='', $userid='')
     $numgroups = count($grouparr);
 
     $html .= "<table align='center' border='1' cellpadding='0' cellspacing='0' style='border-collapse:collapse; border-color: #AAA; width: 99%;'>";
-    $usql  = "SELECT * FROM `{$GLOBALS['dbUsers']}` WHERE status != 0 "; // status=0 means account disabled
+    $usql  = "SELECT * FROM `{$GLOBALS['dbUsers']}` WHERE status != ".USERSTATUS_ACCOUNT_DISABLED." ";
     if ($groupid == 'allonline')
     {
         $usql .= "AND lastseen > NOW() - (60 * 30) ";
@@ -351,7 +356,7 @@ function draw_chart($mode, $year, $month='', $day='', $groupid='', $userid='')
         {
             unset($hdays);
 
-            $hsql = "SELECT *, UNIX_TIMESTAMP(date) AS startdate FROM `{$GLOBALS['dbHolidays']}` WHERE userid={$user->id} AND date = FROM_UNIXTIME($startdate) ";
+            $hsql = "SELECT *, UNIX_TIMESTAMP(date) AS startdate FROM `{$GLOBALS['dbHolidays']}` WHERE userid={$user->id} AND date = ".date('Y-m-d',$startdate)." ";
             $hsql .= "AND type != ".HOL_PUBLIC;
             $hresult = mysql_query($hsql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
@@ -363,12 +368,12 @@ function draw_chart($mode, $year, $month='', $day='', $groupid='', $userid='')
                 $happroved[$cday] = $holiday->approved;
             }
             // Public holidays
-            $phsql = "SELECT * FROM `{$GLOBALS['dbHolidays']}` WHERE type=".HOL_PUBLIC." AND date = FROM_UNIXTIME($startdate) ";
+            $phsql = "SELECT * FROM `{$GLOBALS['dbHolidays']}` WHERE type=".HOL_PUBLIC." AND date BETWEEN '".date('Y-m-d',$startdate)."' AND '".date('Y-m-d',$enddate)."'";
             $phresult = mysql_query($phsql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
             while ($pubhol = mysql_fetch_object($phresult))
             {
-                $cday = date('j',$pubhol->startdate);
+                $cday = date('j',mysql2date($pubhol->date));
                 $pubholdays[$cday] = $pubhol->length;
             }
 
@@ -781,7 +786,7 @@ function get_users_appointments($user, $start, $end)
                 $startdate = $inf['date'] + $CONFIG['start_working_day'];
                 $enddate = $inf['date'] + $CONFIG['end_working_day'];
             break;
-        }       
+        }
 
         switch ($inf['type'])
         {

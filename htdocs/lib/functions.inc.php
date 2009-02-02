@@ -3883,16 +3883,16 @@ function is_active_status($status, $states)
 
 
 /**
-* Function to get an array of public holdidays
+* Function to get an array of public holidays
 * @author Paul Heaney
-* @param int $startdate - Start of the period to find public holidays in
-* @param int $enddate - Start of the period to find public holidays in
+* @param int $startdate - UNIX Timestamp of start of the period to find public holidays in
+* @param int $enddate - UNIX Timestamp of end of the period to find public holidays in
 * @return array of Holiday
 */
 function get_public_holidays($startdate, $enddate)
 {
     $sql = "SELECT * FROM `{$GLOBALS['dbHolidays']}` ";
-    $sql .= "WHERE type = 10 AND (`date` >= FROM_UNIXTIME({$startdate}) AND `date` <= FROM_UNIXTIME({$enddate}))";
+    $sql .= "WHERE type = ".HOL_PUBLIC." AND (`date` >= FROM_UNIXTIME({$startdate}) AND `date` <= FROM_UNIXTIME({$enddate}))";
 
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
@@ -3911,9 +3911,9 @@ function get_public_holidays($startdate, $enddate)
             $publicholidays[] = $holiday;
         }
     }
-
     return $publicholidays;
 }
+
 
 /**
     * Calculate the engineer working time between two timestamps for a given incident
