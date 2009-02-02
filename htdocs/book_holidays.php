@@ -228,7 +228,7 @@ elseif ($step == '1')
             }
             else
             {
-                $sql = "SELECT * FROM `{$dbHolidays}` WHERE `date` = FROM_UNIXTIME({$day}) AND type='".HOL_PUBLIC."' ";
+                $sql = "SELECT * FROM `{$dbHolidays}` WHERE `date` = '".date('Y-m-d',$day)."' AND type='".HOL_PUBLIC."' ";
                 $result = mysql_query($sql);
                 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
                 if (mysql_num_rows($result) > 0)
