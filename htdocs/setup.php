@@ -1146,8 +1146,13 @@ switch ($_REQUEST['action'])
                     {
 //                         $latest_schema = substr(end(array_keys($upgrade_schema[$application_version*100])),1);
                         echo "<p>Your database schema is v".number_format($installed_version,2);
+//                          . "-{$installed_schema}";
+                        //if ($installed_schema < $latest_schema)
+//                         echo ", the latest available schema is v".number_format($installed_version,2) . "-{$latest_schema}";
+                        if ($installed_version < $application_version) echo ", after making a backup you should upgrade your schema to v{$application_version}";
+                        echo "</p>";
 
-                        // Display
+                        // Display SQL schema changes for svn versions
                         if (substr($application_revision, 0, 3) == 'svn')
                         {
                             echo "<p>You are running an SVN version, you should check that you have all of these schema changes: (some may have been added recently)</p>";
@@ -1155,12 +1160,6 @@ switch ($_REQUEST['action'])
                             echo nl2br($upgrade_schema[$installed_version*100]);
                             echo "</div>";
                         }
-
-//                          . "-{$installed_schema}";
-                        //if ($installed_schema < $latest_schema)
-//                         echo ", the latest available schema is v".number_format($installed_version,2) . "-{$latest_schema}";
-                        if ($installed_version < $application_version) echo ", after making a backup you should upgrade your schema to v{$application_version}";
-                        echo "</p>";
 
                         if (is_array($upgrade_schema[$installed_version*100]))
                         {
