@@ -1146,6 +1146,16 @@ switch ($_REQUEST['action'])
                     {
 //                         $latest_schema = substr(end(array_keys($upgrade_schema[$application_version*100])),1);
                         echo "<p>Your database schema is v".number_format($installed_version,2);
+
+                        // Display
+                        if (substr($application_revision, 0, 3) == 'svn')
+                        {
+                            echo "<p>You are running an SVN version, you should check that you have all of these schema changes: (some may have been added recently)</p>";
+                            echo "<div style='border: 1px solid red;padding:10px; background: #FFFFC0; font-family:monospace; font-size: 80%; height:200px; overflow:scroll;'>";
+                            echo nl2br($upgrade_schema[$installed_version*100]);
+                            echo "</div>";
+                        }
+
 //                          . "-{$installed_schema}";
                         //if ($installed_schema < $latest_schema)
 //                         echo ", the latest available schema is v".number_format($installed_version,2) . "-{$latest_schema}";
