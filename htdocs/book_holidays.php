@@ -233,7 +233,10 @@ elseif ($step == '1')
                 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
                 if (mysql_num_rows($result) > 0)
                 {
-                    echo "<tr><td class='shade1' align='right'>".ldate('l jS M y',$day)."</td><td colspan='4'>{$strPublicHoliday}</td></tr>";
+                    echo "<tr><td class='shade1' align='right'>".ldate('l jS M y',$day)."</td>";
+                    echo "<td colspan='4'>{$strPublicHoliday}";
+                    echo "<input type='hidden' name='length{$daynumber}' value='none' />";
+                    echo "</td></tr>";
                 }
                 else
                 {
