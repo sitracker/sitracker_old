@@ -8255,6 +8255,21 @@ function holding_email_update_id($holding_email)
 }
 
 
+function delete_holding_queue_update($updateid)
+{
+    $sql = "DELETE FROM {$GLOBALS['dbTempIncoming']} WHERE updateid = '{$updateid}'";
+    mysql_query($sql);
+    if (mysql_error())
+    {
+        trigger_error(mysql_error(). "  $sql",E_USER_WARNING);
+        return FALSE;
+    }
+    else
+    {   
+        return TRUE;
+    }
+}
+
 
 // ** Place no more function defs below this **
 

@@ -371,7 +371,68 @@ function reassign_incident($incident, $user, $type = 'full')
     {
         return FALSE;
     }
+}
 
+
+/**
+ * Reopens an incident
+ * @param int $incident incident ID to reopen
+ * @param int $newstatus (optional) status to set the incident to, defaults to active
+ * @param string $message (optional) message to insert when reopening
+ * @return bool TRUE on success, FALSE on failure$dbIncidents
+ * @author Kieran Hogg
+ */
+function reopen_incident($incident, $newstatus = STATUS_ACTIVE, $message = '')
+{
+    global $dbIncidents, $dbUpdates, $now, $sit;
+    $rtn = TRUE;
+
+    $time = time();
+    $sql = "UPDATE `{$dbIncidents}` SET status='$newstatus', ";
+    $sql .= "lastupdated='$time', closed='0' WHERE id='$incident' LIMIT 1";
+    mysql_query($sql);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+
+    $owner = incident_owner($incident);
+    // add update
+    $sql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, ";
+    $sql .= "bodytext, timestamp, currentowner, currentstatus) ";
+    $sql .= "VALUES ({$incident}, {$sit[2]}, 'reopening', '{$bodytext}', {$time}, ";
+    $sql .= "{$owner}, ".STATUS_ACTIVE.")";
+    $result = mysql_query($sql);
+    if (mysql_error())
+    {
+        trigger_error(mysql_error(),E_USER_ERROR);
+        $rtn = FALSE;
+    }
+
+    // Insert the first SLA update for the reopened incident, this indicates
+    // the start of an sla period
+    // This insert could possibly be merged with another of the 'updates'
+    // records, but for now we keep it seperate for clarity
+    $sql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, ";
+    $sql .= "timestamp, currentowner, currentstatus, customervisibility, ";
+    $sql .= "sla, bodytext) ";
+    $sql .= "VALUES ('{$incident}', '{$sit[2]}', 'slamet', '{$now}', '{$owner}', ";
+    $sql .= STATUS_ACTIVE.", 'show', 'opened','{$GLOBALS['strIncidentIsOpen']}')";
+    mysql_query($sql);
+    if (mysql_error())
+    {
+        trigger_error(mysql_error(),E_USER_ERROR);
+        $rtn = FALSE;
+    }
+    // Insert the first Review update, this indicates the review period of an incident has restarted
+    // This insert could possibly be merged with another of the 'updates' records, but for now we keep it seperate for clarity
+    $sql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, timestamp, currentowner, currentstatus, customervisibility, sla, bodytext) ";
+    $sql .= "VALUES ('{$incident}', '0', 'reviewmet', '{$now}', '{$owner}', ".STATUS_ACTIVE.", 'hide', 'opened','')";
+    mysql_query($sql);
+    if (mysql_error())
+    {
+        trigger_error(mysql_error(),E_USER_ERROR);
+        $rtn = FALSE;
+    }
+    
+    return $rtn;
 }
 
 ?>

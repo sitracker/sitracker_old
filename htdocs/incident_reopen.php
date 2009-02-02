@@ -22,8 +22,17 @@ $submit = cleanvar($_REQUEST['submit']);
 $id = cleanvar($_REQUEST['id']);
 $newstatus = cleanvar($_REQUEST['newstatus']);
 $bodytext = cleanvar($_REQUEST['bodytext']);
+$updateid = cleanvar($_REQUEST['updateid']);
 
-$sql = "SELECT * FROM `{$dbIncidents}` WHERE id = $id LIMIT 1";
+if (!empty($updateid)) 
+{
+    $returnurl = 'holding_queue.php';
+}
+else
+{
+    $returnurl = "incident_details.php?id={$id}";
+}
+$sql = "SELECT * FROM `{$dbIncidents}` WHERE id = '$id' LIMIT 1";
 $result = mysql_query($sql);
 if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 if (mysql_num_rows($result) > 0)
@@ -35,13 +44,14 @@ if (mysql_num_rows($result) > 0)
 $slsql = "SELECT allow_reopen FROM `{$dbServiceLevels}` ";
 $slsql .= "WHERE tag = '{$incident->servicelevel}' ";
 $slsql .= "AND priority = '{$incident->priority}' LIMIT 1";
-
 $slresult = mysql_query($slsql);
+
 if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 if (mysql_num_rows($slresult) > 0)
 {
-    list($allow_reopen) = mysql_fetch_row($slresult);
+    $allow_reopen_obj = mysql_fetch_object($slresult);
 }
+$allow_reopen = $allow_reopen_obj->allow_reopen;
 
 if ($allow_reopen == 'yes')
 {
@@ -53,56 +63,38 @@ if ($allow_reopen == 'yes')
         include ('inc/incident_html_top.inc.php');
 
         echo "<h2>{$strReopenIncident}</h2>";
-        echo "<form action='{$_SERVER['PHP_SELF']}?id={$id}' method='post'>";
-        echo "<table class='vertical'>";
-        echo "<tr><th>{$strUpdate}</th><td><textarea name='bodytext' rows='20' ";
-        echo "cols='60'></textarea></td></tr>";
-        echo "<tr><th>{$strStatus}</th><td>".incidentstatus_drop_down("newstatus", 1);
-        echo "</td></tr>\n";
-        echo "</table>";
+        if (!empty($updateid))
+        {
+            $action = "&updateid={$updateid}";
+        }
+        echo "<form action='{$_SERVER['PHP_SELF']}?id={$id}{$action}' method='post'>";
+        if (empty($updateid))
+        {
+          echo "<table class='vertical'>";
+          echo "<tr><th>{$strUpdate}</th><td><textarea name='bodytext' rows='20' ";
+          echo "cols='60'></textarea></td></tr>";
+          echo "<tr><th>{$strStatus}</th><td>".incidentstatus_drop_down("newstatus", 1);
+          echo "</td></tr>\n";
+          echo "</table>";
+        }
+        else
+        {   
+            echo "<p align='center'>{$strReopenIncidentAndAddUpdate}</p>";
+        }
         echo "<p><input name='submit' type='submit' value='{$strReopen}' /></p>";
         echo "</form>";
         include ('inc/incident_html_bottom.inc.php');
     }
     else
     {
-        // Reopen the incident
-        // update incident
-        $time = time();
-        $sql = "UPDATE `{$dbIncidents}` SET status='$newstatus', ";
-        $sql .= "lastupdated='$time', closed='0' WHERE id='$id' LIMIT 1";
-        mysql_query($sql);
-        if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
-
-        $owner = incident_owner($id);
-        // add update
-        $sql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, ";
-        $sql .= "bodytext, timestamp, currentowner, currentstatus) ";
-        $sql .= "VALUES ({$id}, {$sit[2]}, 'reopening', '{$bodytext}', {$time}, ";
-        $sql .= "{$owner}, ".STATUS_ACTIVE.")";
-        $result = mysql_query($sql);
-        if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
-
-        // Insert the first SLA update for the reopened incident, this indicates
-        // the start of an sla period
-        // This insert could possibly be merged with another of the 'updates'
-        // records, but for now we keep it seperate for clarity
-        $sql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, ";
-        $sql .= "timestamp, currentowner, currentstatus, customervisibility, ";
-        $sql .= "sla, bodytext) ";
-        $sql .= "VALUES ('{$id}', '{$sit[2]}', 'slamet', '{$now}', '{$owner}'";
-        $sql .= STATUS_ACTIVE.", 'show', 'opened','The incident is open and awaiting action.')"; // FIXME i18n
-        mysql_query($sql);
-        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-
-        // Insert the first Review update, this indicates the review period of an incident has restarted
-        // This insert could possibly be merged with another of the 'updates' records, but for now we keep it seperate for clarity
-        $sql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, timestamp, currentowner, currentstatus, customervisibility, sla, bodytext) ";
-        $sql .= "VALUES ('{$id}', '0', 'reviewmet', '{$now}', '{$owner}', ".STATUS_ACTIVE.", 'hide', 'opened','')";
-        mysql_query($sql);
-        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-
-        if (!$result)
+        $reopen = reopen_incident($id);
+        
+        if (!empty($updateid))
+        {
+            $move = move_update_to_incident($updateid, $id) AND delete_holding_queue_update($updateid);
+        }
+        
+        if (!($result AND $move))
         {
             include ('inc/incident_html_top.inc.php');
             echo "<p class='error'>{$strUpdateIncidentFailed}</p>\n";
@@ -110,13 +102,13 @@ if ($allow_reopen == 'yes')
         }
         else
         {
-            html_redirect("incident_details.php?id={$id}");
+            html_redirect($returnurl);
         }
     }
 }
 else
 {
-    html_redirect("incident_details.php?id={$id}", FALSE, $strServiceLevelPreventsReopen);
+    html_redirect($returnurl, FALSE, $strServiceLevelPreventsReopen);
 }
 
 ?>

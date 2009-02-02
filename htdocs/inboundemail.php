@@ -442,8 +442,8 @@ if ($emails > 0)
                     {
                         //incident closed
                         $reason = sprintf($SYSLANG['strIncidentXIsClosed'], $oldincidentid);
-                        $sql = "INSERT INTO `{$GLOBALS['dbTempIncoming']}` (updateid, incidentid, emailfrom, subject, reason, contactid) ";
-                        $sql.= "VALUES ('{$updateid}', '0', '{$from_name}', '".mysql_real_escape_string($subject)."', '{$reason}', '$contactid' )";
+                        $sql = "INSERT INTO `{$GLOBALS['dbTempIncoming']}` (updateid, incidentid, emailfrom, subject, reason, reason_id, incident_id, contactid) ";
+                        $sql.= "VALUES ('{$updateid}', '0', '{$from_name}', '".mysql_real_escape_string($subject)."', '{$reason}', ".REASON_INCIDENT_CLOSED.", '{$oldincidentid}', '$contactid' )";
                         mysql_query($sql);
                         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
                     }

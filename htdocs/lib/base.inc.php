@@ -15,6 +15,10 @@ if (realpath(__FILE__) == realpath($_SERVER['SCRIPT_FILENAME']))
 
 //**** Begin constant/variable definitions ****//
 
+// For tempincoming
+define("REASON_POSSIBLE_NEW_INCIDENT", 1);
+define("REASON_INCIDENT_CLOSED", 2);
+
 // Version number of the application, (numbers only)
 $application_version = '3.45';
 

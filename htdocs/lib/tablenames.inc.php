@@ -44,6 +44,7 @@ $dbLicenceTypes = "{$CONFIG['db_tableprefix']}licencetypes";
 $dbLinks = "{$CONFIG['db_tableprefix']}links";
 $dbLinkTypes = "{$CONFIG['db_tableprefix']}linktypes";
 $dbMaintenance = "{$CONFIG['db_tableprefix']}maintenance";
+$dbMailSig = "{$CONFIG['db_tableprefix']}mailsig";
 $dbNotes = "{$CONFIG['db_tableprefix']}notes";
 $dbNotices = "{$CONFIG['db_tableprefix']}notices";
 $dbNoticeTemplates = "{$CONFIG['db_tableprefix']}noticetemplates";

@@ -19,7 +19,7 @@ function dashboard_incoming($dashletid)
     global $dbUpdates, $dbTempIncoming;
     $user = $sit[2];
     echo "<div class='windowbox' style='width: 95%;' id='$dashletid'>";
-    echo "<div class='windowtitle'><a href='review_incoming_updates.php'><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/emailin.png' width='16' height='16' alt='' /> ";
+    echo "<div class='windowtitle'><a href='holding_queue.php'><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/emailin.png' width='16' height='16' alt='' /> ";
 
     // extract updates (query copied from review_incoming_email.php)
     $sql  = "SELECT u.id AS id, u.bodytext AS bodytext, ti.emailfrom AS emailfrom, ti.subject AS subject, ";
@@ -52,11 +52,11 @@ function dashboard_incoming($dashletid)
             {
                 $date = mysql2date($incoming->date);
                 echo "<tr class='$shade'>";
-    #            echo "<td><a href='review_incoming_updates.php' class='info'>".truncate_string($incoming->emailfrom, 15);
+    #            echo "<td><a href='holding_queue.php' class='info'>".truncate_string($incoming->emailfrom, 15);
     #            echo "</a></td>";
-                echo "<td><a href='review_incoming_updates.php' class='info'>".truncate_string($incoming->subject, 25);
+                echo "<td><a href='holding_queue.php' class='info'>".truncate_string($incoming->subject, 25);
                 echo "</a></td>";
-                echo "<td><a href='review_incoming_updates.php' class='info'>".truncate_string($incoming->reason, 25);
+                echo "<td><a href='holding_queue.php' class='info'>".truncate_string($incoming->reason, 25);
                 echo "</a></td>";
                 echo "</tr>\n";
                 if ($shade == 'shade1') $shade = 'shade2';

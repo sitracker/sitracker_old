@@ -62,5 +62,5 @@ if ($deleted_files)
 }
 
 journal(CFG_LOGGING_NORMAL, 'Incident Log Entry Deleted', "Incident Log Entry $updateid was deleted from Incident $incidentid", CFG_JOURNAL_INCIDENTS, $incidentid);
-html_redirect("review_incoming_updates.php");
+html_redirect("holding_queue.php");
 ?>

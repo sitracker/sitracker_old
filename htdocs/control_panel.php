@@ -32,7 +32,7 @@ echo "</tbody>\n";
 if (user_permission($sit[2],42)) // Review/Delete Incident Updates
 {
     echo "<thead><tr><th>{$strTechnicalSupportAdmin}</th></tr></thead>";
-    echo "<tbody><tr><td><a href='review_incoming_updates.php'>{$strHoldingQueue}</a></td></tr></tbody>";
+    echo "<tbody><tr><td><a href='holding_queue.php'>{$strHoldingQueue}</a></td></tr></tbody>";
 }
 
 if (user_permission($sit[2],44)) // FTP Publishing

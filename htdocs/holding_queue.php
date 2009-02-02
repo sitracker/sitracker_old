@@ -118,6 +118,10 @@ function generate_row($update)
             $html_row .= ",'incomingview');\" id='update{$update['id']}' class='info'";
             $html_row .= " title='View and lock this held e-mail'>{$GLOBALS['strView']}</a> | ";
         }
+	if ($update['reason_id'] == 2)
+	{
+	    $html_row .= "<a href='incident_reopen.php?id={$update['incident_id']}&updateid={$update['updateid']}'>{$GLOBALS['strReopen']}</a> | ";
+	}
         $html_row.= "<a href='delete_update.php?updateid=".$update['id']."&amp;tempid=".$update['tempid']."&amp;timestamp=".$update['timestamp']."' title='Remove this item permanently' onclick=\"return confirm_action('{$GLOBALS['strAreYouSureDelete']}');\"> {$GLOBALS['strDelete']}</a>";
     }
     $html_row .= "</td></tr>\n";
@@ -254,12 +258,10 @@ if (!empty($selected))
 <?php
 
 // extract updates
-$sql  = "SELECT u.id AS id, u.bodytext AS bodytext, ti.emailfrom AS emailfrom, ti.subject AS subject, ";
-$sql .= "u.timestamp AS timestamp, ti.incidentid AS incidentid, ti.id AS tempid, ti.locked AS locked, ";
-$sql .= "ti.reason AS reason, ti.reason_user AS reason_user, ti.reason_time AS reason_time, ti.contactid AS contactid, ti.`from` AS fromaddr ";
+$sql  = "SELECT u.id AS id, u.*, ti.* ";
 $sql .= "FROM `{$dbUpdates}` AS u, `{$dbTempIncoming}` AS ti ";
 $sql .= "WHERE u.incidentid = 0 AND ti.updateid = u.id ";
-$sql .= "ORDER BY timestamp ASC, id ASC";
+$sql .= "ORDER BY timestamp ASC, ti.id ASC";
 $result = mysql_query($sql);
 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
 $countresults = mysql_num_rows($result);
