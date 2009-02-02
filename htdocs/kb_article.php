@@ -307,9 +307,9 @@ else
     echo "togglePlusMinus('additionalinfospan');\">";
     echo "{$strAdditionalInfo} <span id='additionalinfospan'>[+]</span></a></h3>";
     echo "<div id='additionalinfosection' style='display: none;'>";
-    echo bbcode_toolbar('additioanlinfo');
+    echo bbcode_toolbar('additionalinfo');
     echo "<textarea id='additionalinfo' name='additionalinfo' cols='100' rows='8'  ";
-    echo "onchange='kbSectionCollapse();'>{$sections['Additional Info']}";
+    echo "onchange='kbSectionCollapse();'>{$sections['Additionalinfo']}";
     echo "</textarea>";
     echo "</div>";
 
