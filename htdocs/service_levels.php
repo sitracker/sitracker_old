@@ -58,7 +58,7 @@ if (mysql_num_rows($tresult) >= 1)
                 echo "<td>{$strYes}</td>";
             }
             else echo "<td>{$strNo}</td>";
-            echo "<td><a href='edit_service_level.php?tag={$sla->tag}&amp;priority={$sla->priority}'>{$strEdit}</a></td>";
+            echo "<td><a href='service_level_edit.php?tag={$sla->tag}&amp;priority={$sla->priority}'>{$strEdit}</a></td>";
             echo "</tr>\n";
         }
     }
