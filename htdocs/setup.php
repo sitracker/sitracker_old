@@ -1297,7 +1297,7 @@ switch ($_REQUEST['action'])
                             echo "<p>SiT! v".number_format($installed_version,2)." is installed ";
                             echo "and ready.";
                         }
-                        echo "<br /><br />";
+                        echo "</p>";
                         echo "<form action='index.php' method='get'>";
                         echo "<input type='submit' value=\"Run SiT!\" />";
                         echo "</form>\n";
