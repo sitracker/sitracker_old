@@ -658,7 +658,7 @@ array('description' => 'Owner of a task',
 
 $ttvararray['{userrealname}'] =
 array('description' => $strFullNameCurrentUser,
-      'replacement' => 'user_realname($paramarray[\'userid\']);'
+      'replacement' => 'user_realname($GLOBALS[\'sit\'][2]);'
       );
 
 $ttvararray['{userstatus}'] =
