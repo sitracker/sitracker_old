@@ -7713,7 +7713,14 @@ if (is_array($CONFIG['plugins']))
         $plugin = str_replace('/','',$plugin);
         if ($plugin != '')
         {
-            include ("{$CONFIG['application_fspath']}htdocs/plugins/{$plugin}.php");
+            if (file_exists("{$CONFIG['application_fspath']}htdocs/plugins/{$plugin}.php"))
+            {
+                include ("{$CONFIG['application_fspath']}htdocs/plugins/{$plugin}.php");
+            }
+            else
+            {
+                trigger_error("Plugin '{$plugin}' could not be found.", E_USER_WARNING);
+            }
         }
     }
 }
@@ -8265,7 +8272,7 @@ function delete_holding_queue_update($updateid)
         return FALSE;
     }
     else
-    {   
+    {
         return TRUE;
     }
 }
