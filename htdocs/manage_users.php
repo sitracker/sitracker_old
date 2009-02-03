@@ -87,7 +87,7 @@ while ($users = mysql_fetch_array($result))
     echo "<td>";
     if (user_permission($sit[2],57))
     {
-        if ($users['status'] > 0) echo "{$strEnabled}"; 
+        if ($users['status'] > 0) echo "{$strEnabled}";
         else echo "{$strDisabled}";
     }
     else echo "-";
@@ -95,7 +95,7 @@ while ($users = mysql_fetch_array($result))
     echo "</td>";
 
     echo "<td>";
-    echo "<a href='edit_profile.php?userid={$users['userid']}'>{$strEdit}</a>";
+    echo "<a href='user_profile_edit.php?userid={$users['userid']}'>{$strEdit}</a>";
     if ($users['status'] > 0)
     {
         echo " | ";
@@ -119,22 +119,22 @@ while ($users = mysql_fetch_array($result))
     if ($users["phone"] == '') echo $strNone;
     else echo $users["phone"];
     echo "</td><td>";
-    
+
     if ($users["mobile"] == '') echo $strNone;
     else echo $users["mobile"];
-    
+
     echo "</td><td>";
-    
+
     if ($users["fax"] == '') echo $strNone;
     else echo $users["fax"];
-    
+
     echo "</td><td>";
     echo userstatus_name($users["status"]);
     echo "</td><td>";
-    
+
     if ($users["accepting"] == 'Yes') echo $strYes;
     else echo "<span class='error'>{$strNo}</span>";
-    
+
     echo "</td></tr>";
     // invert shade
     if ($class == 'shade2') $class = "shade1";

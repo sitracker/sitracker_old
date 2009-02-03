@@ -319,7 +319,7 @@ elseif ($action == "check")
             while ($user = mysql_fetch_object($result))
             {
                 echo "<tr class='$shade'><td>&#10004; ";
-                echo "<a href='edit_profile.php?userid={$user->userid}'>";
+                echo "<a href='user_profile_edit.php?userid={$user->userid}'>";
                 echo "{$user->realname}";
                 echo "</a>";
                 echo " ({$user->username})</td><td>{$user->rolename}</td></tr>\n";

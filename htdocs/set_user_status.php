@@ -95,7 +95,7 @@ switch ($mode)
     break;
 
     case 'editprofile':
-    header('Location: edit_profile.php');
+    header('Location: user_profile_edit.php');
     break;
 
     case 'deleteassign':
