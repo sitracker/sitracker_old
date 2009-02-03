@@ -84,9 +84,9 @@ if (mysql_num_rows($result) >= 1)
         }
         echo "</td></tr>";
         echo "</table>";
-        echo "<p align='center'><a href='edit_task.php?id={$taskid}'>{$strEditTask}</a>";
-        if ($task->owner == $sit[2] AND $task->completion==100) echo " | <a href='edit_task.php?id={$taskid}&amp;action=delete'>{$strDeleteTask}</a>";
-        if ($task->completion < 100) echo " | <a href='edit_task.php?id={$taskid}&amp;action=markcomplete'>{$strMarkComplete}</a>";
+        echo "<p align='center'><a href='task_edit.php?id={$taskid}'>{$strEditTask}</a>";
+        if ($task->owner == $sit[2] AND $task->completion==100) echo " | <a href='task_edit.php?id={$taskid}&amp;action=delete'>{$strDeleteTask}</a>";
+        if ($task->completion < 100) echo " | <a href='task_edit.php?id={$taskid}&amp;action=markcomplete'>{$strMarkComplete}</a>";
         echo "</p>";
 
 //
@@ -127,7 +127,7 @@ if ($mode != 'incident') echo "</div>";
 echo "<div style='clear:both; padding-top: 20px;'>";
 
 if ($mode != 'incident') echo "<p align='center'><a href='tasks.php'>{$strTaskList}</a></p>";
-else echo "<p align='center'><a href=edit_task.php?id={$taskid}&amp;action=markcomplete&amp;incident={$incidentid}>{$strMarkComplete}</a> | <a href='tasks.php?incident={$id}'>{$strActivityList}</a></p>";
+else echo "<p align='center'><a href=task_edit.php?id={$taskid}&amp;action=markcomplete&amp;incident={$incidentid}>{$strMarkComplete}</a> | <a href='tasks.php?incident={$id}'>{$strActivityList}</a></p>";
 echo "</div>";
 
 ?>
