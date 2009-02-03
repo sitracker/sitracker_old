@@ -78,23 +78,23 @@ function feedback_between_dates()
 
 if (empty($type))
 {
-    include ('feedback/form.inc.php');
+    include ('./inc/report_feedback_form.inc.php');
 }
 elseif ($type == 'byengineer')
 {
-    include ('feedback/engineer.inc.php');
+    include ('./inc/report_feedback_engineer.inc.php');
 }
 elseif ($type == 'bycustomer')
 {
-    include ('feedback/contact.inc.php');
+    include ('./inc/report/feedback_contact.inc.php');
 }
 elseif ($type == 'bysite')
 {
-    include ('feedback/site.inc.php');
+    include ('./inc/report_feedback_site.inc.php');
 }
 elseif ($type == 'byproduct')
 {
-    include ('feedback/product.inc.php');
+    include ('./inc/report_feedback_product.inc.php');
 }
 
 include ('./inc/htmlfooter.inc.php');
