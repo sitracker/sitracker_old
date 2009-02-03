@@ -10,7 +10,7 @@
 
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
-@include ('../set_include_path.inc.php');
+@include ('set_include_path.inc.php');
 $permission = 37; // Run Reports
 require ($lib_path.'db_connect.inc.php');
 require ($lib_path.'functions.inc.php');
@@ -81,7 +81,7 @@ for ($year = $startyear; $year < $lastyear; $year++)
         $colspan = ($daysinmonth*2)+1;  // have to calculate number of cols since ie doesn't seem to do colspan=0
         echo "<tr><td align=\"center\" colspan=\"$colspan\"><h2><a href='{$_SERVER['PHP_SELF']}?startyear=$year&startmonth=$month'>$monthname $year</a></h2></td></tr>\n";
         echo "<tr align=\"center\">";
-        echo "<td><img src=\"graph_scale.jpg\" width=\"11\" height=\"279\" alt=\"Graph Scale\"></td>";
+        echo "<td><img src=\"images/graph_scale.jpg\" width=\"11\" height=\"279\" alt=\"Graph Scale\"></td>";
         $monthtotal = 0;
         $monthtotalclosed = 0;
         // loop through days
@@ -129,7 +129,7 @@ for ($year = $startyear; $year < $lastyear; $year++)
         $grandtotalclosed += $monthtotalclosed;
 
         $diff = ($monthtotal - $monthtotalclosed);
-        
+
         if ($diff < 0)
         {
             $diff = "<span style='color: $closedcolour;'>$diff</span>";
@@ -138,13 +138,13 @@ for ($year = $startyear; $year < $lastyear; $year++)
         {
             $diff="<span style='color: $openedcolour;'>$diff</span>";
         }
-        
+
         echo "<tr><td align=\"center\" colspan=\"$colspan\" style='border-bottom: 2px solid #000;'>";
         echo "<p>{$strTotal}: <b style='color: $openedcolour;'>$monthtotal</b>";
         echo "opened and <b style='color: $closedcolour;'>$monthtotalclosed</b> closed during $monthname $year, difference: <b>$diff</b><br />";
-        
+
         $diff = ($grandtotal-$grandtotalclosed);
-        
+
         if ($diff < 0)
         {
             $diff = "<span style='color: $closedcolour;'>$diff</span>";
@@ -153,7 +153,7 @@ for ($year = $startyear; $year < $lastyear; $year++)
         {
             $diff="<span style='color: $openedcolour;'>$diff</span>";
         }
-        
+
         echo "{$strTotal}: <b style='color: $openedcolour;'>$grandtotal</b> opened and <b style='color: $closedcolour;'>$grandtotalclosed</b> closed up to the end of $monthname $year, difference <b>$diff</b></p><br /></td></tr>\n";
     }
     if ($startmonth > 1)
