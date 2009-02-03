@@ -25,7 +25,7 @@ $id = cleanvar($_REQUEST['id']);
 $incidentid = $id;
 $action = cleanvar($_REQUEST['action']);
 
-include ('incident/update.inc.php');
+include ('inc/incident_update.inc.php');
 
 include ('inc/incident_html_bottom.inc.php');
 exit;

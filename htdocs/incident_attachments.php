@@ -10,9 +10,6 @@
 
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
-// INL 2Nov05
-// This file will be superceded by htdocs/incidents/files.inc.php
-
 @include ('set_include_path.inc.php');
 $permission = 62; // View incident attachments
 
@@ -32,7 +29,7 @@ include ('inc/incident_html_top.inc.php');
 // append incident number to attachment path to show this users attachments
 $incident_attachment_fspath = $CONFIG['attachment_fspath'] . $id;
 
-include ('incident/files.inc.php');
+include ('inc/incident_files.inc.php');
 
 include ('inc/incident_html_bottom.inc.php');
 

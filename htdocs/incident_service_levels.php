@@ -17,7 +17,6 @@ require ($lib_path.'db_connect.inc.php');
 require ($lib_path.'functions.inc.php');
 
 require ($lib_path.'auth.inc.php');
-// soon to be replaced by incident/sla.inc.php
 
 $incidentid = cleanvar($_REQUEST['id']);
 $id = $incidentid;
@@ -45,7 +44,7 @@ $opened_for = format_seconds(time() - $incident->opened);
 
 
 include ('inc/incident_html_top.inc.php');
-include ('incident/sla.inc.php');
+include ('inc/incident_sla.inc.php');
 
 include ('inc/incident_html_bottom.inc.php');
 exit;

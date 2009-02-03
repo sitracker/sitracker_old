@@ -27,6 +27,6 @@ if (empty($draftid)) $draftid = -1;
 
 $title = $strEmail;
 
-include ('incident/email.inc.php');
+include ('inc/incident_email.inc.php');
 
 ?>

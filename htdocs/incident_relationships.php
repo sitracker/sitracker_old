@@ -25,7 +25,7 @@ $id = cleanvar($_REQUEST['id']);
 $title = 'Relations';
 include ('inc/incident_html_top.inc.php');
 
-include ('incident/relationships.inc.php');
+include ('inc/incident_relationships.inc.php');
 
 include ('inc/incident_html_bottom.inc.php');
 ?>

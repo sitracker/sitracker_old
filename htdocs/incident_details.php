@@ -29,7 +29,7 @@ if ($_REQUEST['win'] == 'incomingview')
     $title = 'Incoming';
     $incidentid = '';
     include ('inc/incident_html_top.inc.php');
-    include ('incident/incoming.inc.php');
+    include ('inc/incident_incoming.inc.php');
 }
 elseif ($_REQUEST['win'] == 'jump')
 {
@@ -85,9 +85,9 @@ elseif ($_REQUEST['win'] == 'holdingview')
     $incidentid='';
     include ('inc/incident_html_top.inc.php');
 
-    include ('incident/details.inc.php');
+    include ('inc/incident_details.inc.php');
 
-    include ('incident/log.inc.php');
+    include ('inc/incident_log.inc.php');
 }
 
 else
@@ -96,9 +96,9 @@ else
 
     include ('inc/incident_html_top.inc.php');
 
-    include ('incident/details.inc.php');
+    include ('inc/incident_details.inc.php');
 
-    include ('incident/log.inc.php');
+    include ('inc/incident_log.inc.php');
 }
 
 include ('inc/incident_html_bottom.inc.php');
