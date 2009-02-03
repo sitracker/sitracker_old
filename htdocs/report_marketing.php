@@ -1,5 +1,5 @@
 <?php
-// marketing.php - Print/Export a list of contacts by product
+// report_marketing.php - Print/Export a list of contacts by product
 //
 // SiT (Support Incident Tracker) - Support call tracking system
 // Copyright (C) 2000-2009 Salford Software Ltd. and Contributors
@@ -12,7 +12,7 @@
 
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
-@include ('../set_include_path.inc.php');
+@include ('set_include_path.inc.php');
 $permission = 37; // Run Reports
 
 require ($lib_path.'db_connect.inc.php');
@@ -138,7 +138,7 @@ elseif ($_REQUEST['mode'] == 'report')
     {
         $sql .= "WHERE ";
     }
-    
+
     if ($_REQUEST['activeonly'] == 'yes')
     {
         $sql .= "m.term!='yes' AND m.expirydate > '$now' ";
@@ -188,7 +188,7 @@ elseif ($_REQUEST['mode'] == 'report')
             {
                 $html .= "<td><em style='color: red';>{$strWithheld}</em></td>";
             }
-            
+
             $html .= "<td>{$row->sitename}</td>";
             if ($row->dataprotection_address!='Yes')
             {
@@ -201,7 +201,7 @@ elseif ($_REQUEST['mode'] == 'report')
                 $html .= "<td colspan='6'><em style='color: red';>";
                 $html .= "{$strWithheld}</em></td>";
             }
-            
+
             if ($row->dataprotection_phone!='Yes')
             {
                 $html .= "<td>{$row->phone}</td>";
@@ -221,16 +221,16 @@ elseif ($_REQUEST['mode'] == 'report')
             // FIXME dataprotection_address for csv
             $csv .= "\"".strip_comma($row->forenames).'","'
                 . strip_comma($row->surname).'","';
-                
+
             if ($row->dataprotection_email!='Yes')
             {
                 $csv .= strip_comma(strtolower($row->contactemail)).'","';
             }
             else
-            {    
+            {
                 $csv .= '","';
             }
-            
+
             $csv  .= strip_comma($row->sitename).'","'
                 . strip_comma($row->address1).'","'
                 . strip_comma($row->address2).'","'

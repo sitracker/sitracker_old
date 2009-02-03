@@ -13,7 +13,7 @@
 // This Page Is Valid XHTML 1.0 Transitional!  4Feb06
 // FIXME i18n
 
-@include ('../set_include_path.inc.php');
+@include ('set_include_path.inc.php');
 $permission = 37; // Run Reports
 
 require ($lib_path.'db_connect.inc.php');
