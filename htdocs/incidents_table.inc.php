@@ -20,25 +20,16 @@ if (realpath(__FILE__) == realpath($_SERVER['SCRIPT_FILENAME']))
 
 if ($CONFIG['debug']) echo "<!-- Support Incidents Table -->";
 
-if (empty($incidents_minimal)) echo "<table align='center' style='width:95%;'>";
-else echo  "<table align='center' style='width:99%;'>";
-
-if (!empty($incidents_minimal)) echo "<col width='15%'></col>";
-else echo "<col width='10%'></col>";
-if (!empty($incidents_minimal)) echo "<col width='30%'></col>";
-else echo "<col width='23%'></col>";
-if (!empty($incidents_minimal)) echo "<col width='23%'></col>";
-else echo "<col width='17%'></col>";
-if (!empty($incidents_minimal)) echo "<col width='7%'></col>";
-else echo "<col width='7%'></col>";
-if (empty($incidents_minimal)) echo "<col width='10%'></col>";
-if (!empty($incidents_minimal)) echo "<col width='30%'></col>";
-else echo "<col width='15%'></col>";
-if (!empty($incidents_minimal)) echo "<col width='15%'></col>";
-else echo "<col width='10%'></col>";
-if (empty($incidents_minimal)) echo "<col width='10%'></col>";
-if (empty($incidents_minimal)) echo "<col width='8%'></col>";
-
+echo "<table align='center' style='width:95%;'>";
+echo "<col width='7%'></col>";
+echo "<col width='23%'></col>";
+echo "<col width='17%'></col>";
+echo "<col width='5%'></col>";
+echo "<col width='7%'></col>";
+echo "<col width='15%'></col>";
+echo "<col width='17%'></col>";
+echo "<col width='10%'></col>";
+echo "<col width='8%'></col>";
 echo "<tr>";
 
 $filter = array('queue' => $queue,
@@ -48,10 +39,10 @@ echo colheader('id',$strID,$sort, $order, $filter);
 echo colheader('title',$strTitle,$sort, $order, $filter);
 echo colheader('contact',$strContact,$sort, $order, $filter);
 echo colheader('priority',$strPriority,$sort, $order, $filter);
-if (empty($incidents_minimal)) echo colheader('status',$strStatus,$sort, $order, $filter);
+echo colheader('status',$strStatus,$sort, $order, $filter);
 echo colheader('lastupdated',$strLastUpdated,$sort, $order, $filter);
-if (empty($incidents_minimal)) echo colheader('nextaction',$strSLATarget,$sort, $order, $filter);
-if (empty($incidents_minimal)) echo colheader('duration',$strInfo,$sort, $order, $filter);
+echo colheader('nextaction',$strSLATarget,$sort, $order, $filter);
+echo colheader('info', $strInfo, $sort, $order, $filter);
 echo "</tr>";
 // Display the Support Incidents Themselves
 $shade = 0;
@@ -161,10 +152,6 @@ while ($incidents = mysql_fetch_array($result))
     {
         $reviewremain=0;
     }
-
-    ##echo "<!-- target-info: ";
-    ##print_r($target);
-    ##echo "-->";
 
     // Remove Tags from update Body
     $update_body = parse_updatebody($update_body);
@@ -277,20 +264,25 @@ while ($incidents = mysql_fetch_array($result))
     echo htmlspecialchars($site)." </td>";
 
     echo "<td align='center'>";
-    // Service Level / Priority
-    if (!empty($incidents['maintenanceid']))
+    $slsql = "SELECT COUNT(*) AS count FROM `{$dbServiceLevels}`";
+    $slresult = mysql_query($slsql);
+    $count_obj = mysql_fetch_object($slresult);
+    if ($count_obj->count != 4)
     {
-        echo $servicelevel->tag."<br />";
+        // Service Level / Priority
+        if (!empty($incidents['maintenanceid']))
+        {
+            echo $servicelevel->tag."<br />";
+        }
+        elseif (!empty($incidents['servicelevel']))
+        {
+            echo $incidents['servicelevel']."<br />";
+        }
+        else
+        {
+            echo "{$strUnknownServiceLevel}<br />";
+        }
     }
-    elseif (!empty($incidents['servicelevel']))
-    {
-        echo $incidents['servicelevel']."<br />";
-    }
-    else
-    {
-        echo "{$strUnknownServiceLevel}<br />";
-    }
-
     $blinktime = (time() - ($servicelevel->initial_response_mins * 60));
     if ($incidents['priority'] == 4 AND $incidents['lastupdated'] <= $blinktime)
     {
@@ -302,112 +294,95 @@ while ($incidents = mysql_fetch_array($result))
     }
     echo "</td>\n";
 
-    if (empty($incidents_minimal))
+    echo "<td align='center'>";
+    if ($incidents['status'] == 5 AND $incidents['towner'] == $sit[2])
     {
-        echo "<td align='center'>";
-        if ($incidents['status'] == 5 AND $incidents['towner'] == $sit[2])
-        {
-            echo "<strong>{$strAwaitingYourResponse}</strong>";
-        }
-        else
-        {
-            echo incidentstatus_name($incidents["status"]);
-        }
-
-        if ($incidents['status'] == 2)
-        {
-            echo "<br />".closingstatus_name($incidents['closingstatus']);
-        }
-
-        echo "</td>\n";
+        echo "<strong>{$strAwaitingYourResponse}</strong>";
     }
+    else
+    {
+        echo incidentstatus_name($incidents["status"]);
+    }
+
+    if ($incidents['status'] == 2)
+    {
+        echo "<br />".closingstatus_name($incidents['closingstatus']);
+    }
+
+    echo "</td>\n";
+    
     echo "<td align='center'>";
     echo "{$updated}";
-    if (empty($incidents_minimal)) echo "<br />{$strby} {$update_user}";
+    echo " {$strby} {$update_user}";
 
-    if (empty($incidents_minimal))
+    if ($incidents['towner'] > 0 AND $incidents['towner'] != $user)
     {
-        if ($incidents['towner'] > 0 AND $incidents['towner'] != $user)
-        {
-            echo "<br />{$strTemp}: <strong>".user_realname($incidents['towner'],TRUE)."</strong>";
-        }
-        elseif ($incidents['owner'] != $user)
-        {
-            echo "<br />{$strOwner}: <strong>".user_realname($incidents['owner'],TRUE)."</strong>";
-        }
+        echo "<br />{$strTemp}: <strong>".user_realname($incidents['towner'],TRUE)."</strong>";
     }
+    elseif ($incidents['owner'] != $user)
+    {
+        echo "<br />{$strOwner}: <strong>".user_realname($incidents['owner'],TRUE)."</strong>";
+    }
+    
     echo "</td>\n";
 
-    if (empty($incidents_minimal))
+    echo "<td align='center' title='{$explain}'>";
+    // Next Action
+    /*
+        if ($target->time > $now) echo target_type_name($target->type);
+        else echo "<strong style='color: red; background-color: white;'>&nbsp;".target_type_name($target->type)."&nbsp;</strong>";
+    */
+    $targettype = target_type_name($target->type);
+    if ($targettype != '')
     {
-        echo "<td align='center' title='{$explain}'>";
-        // Next Action
-        /*
-            if ($target->time > $now) echo target_type_name($target->type);
-            else echo "<strong style='color: red; background-color: white;'>&nbsp;".target_type_name($target->type)."&nbsp;</strong>";
-        */
-        $targettype = target_type_name($target->type);
-        if ($targettype != '')
+        echo $targettype;  //FIXME this needs to be properly i18n'ed
+        if ($slaremain > 0)
         {
-            echo $targettype;  //FIXME this needs to be properly i18n'ed
-            if ($slaremain > 0)
-            {
-                echo "<br />in ".format_workday_minutes($slaremain);  //  ." left"
-            }
-            elseif ($slaremain < 0)
-            {
-                echo "<br />".sprintf($strXLate, format_workday_minutes((0 - $slaremain)));  //  ." left"
-            }
-            elseif ($slaremain == 0)
-            {
-            	echo "<br />{$strDueNow}";
-            }
+            echo " in ".format_workday_minutes($slaremain);  //  ." left"
+        }
+        elseif ($slaremain < 0)
+        {
+            echo " ".sprintf($strXLate, format_workday_minutes((0 - $slaremain)));  //  ." left"
+        }
+        elseif ($slaremain == 0)
+        {
+            echo " {$strDueNow}";
+        }
+    }
+    else
+    {
+        ## Don't print anything, because there is no target to meet
+        //echo "...";
+    }
+
+    echo "</td>";
+    
+    // Final column
+    if ($reviewremain>0 && $reviewremain<=2400)
+    {
+        // Only display if review is due in the next five days
+        echo "<td align='center'>";
+        echo sprintf($strReviewIn, format_workday_minutes($reviewremain));
+    }
+    elseif ($reviewremain<=0)
+    {
+        echo "<td align='center' class='review'>";
+        if ($reviewremain > -86400)
+        {
+            echo "".icon('review', 16)." {$strReviewDueNow}";
         }
         else
         {
-            ## Don't print anything, because there is no target to meet
-            //echo "...";
+            echo "".icon('review', 16)." ".sprintf($strReviewDueAgo ,format_workday_minutes($reviewremain*-1));
         }
-        ##print_r($target);
-
-        echo "</td>";
     }
-
-
-    ##echo target_type_name($target->type);
-    ##echo "<br />";
-    ##if ($update_nextaction!=target_type_name($target->type))
-    ##  echo "$update_nextaction";
-    ##if (!empty($timetonextactionstring)) echo "<br />$timetonextaction_string";
-    if (empty($incidents_minimal))
+    else
     {
-        // Final column
-        if ($reviewremain>0 && $reviewremain<=2400)
-        {
-            // Only display if review is due in the next five days
-            echo "<td align='center'>";
-            echo sprintf($strReviewIn, format_workday_minutes($reviewremain));
-        }
-        elseif ($reviewremain<=0)
-        {
-            echo "<td align='center' class='review'>";
-            if ($reviewremain > -86400)
-            {
-                echo "".icon('review', 16)." {$strReviewDueNow}";
-            }
-            else
-            {
-                echo "".icon('review', 16)." ".sprintf($strReviewDueAgo ,format_workday_minutes($reviewremain*-1));
-            }
-        }
-        else
-        {
-            echo "<td align='center'>";
-            if ($incidents['status'] == 2) echo "{$strAge}: ".format_seconds($incidents["duration_closed"]);
-            else echo sprintf($strXold, format_seconds($incidents["duration"]));
-        }
-        echo "</td>";
+        echo "<td align='center'>";
+        if ($incidents['status'] == 2) echo "{$strAge}: ".format_seconds($incidents["duration_closed"]);
+        else echo sprintf($strXold, format_seconds($incidents["duration"]));
     }
+    echo "</td>";
     echo "</tr>\n";
 }
 echo "</table><br /><br />\n\n";
@@ -418,8 +393,6 @@ echo "<td class='notice'>{$strSLAApproaching}</td>";
 echo "<td class='urgent'>{$strSLADue}</td>";
 echo "<td class='critical'>{$strSLAMissed}</td>";
 echo "</tr></table>";
-
-if (empty($incidents_minimal) && $user != 'all')
 
 if ($rowcount != 1)
 {
