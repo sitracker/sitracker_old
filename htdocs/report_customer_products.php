@@ -8,7 +8,7 @@
 // of the GNU General Public License, incorporated herein by reference.
 //
 
-@include ('../set_include_path.inc.php');
+@include ('set_include_path.inc.php');
 $permission = 37; // Run Reports
 $title = $strSiteProducts;
 require ($lib_path.'db_connect.inc.php');
