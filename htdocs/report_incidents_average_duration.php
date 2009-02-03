@@ -14,7 +14,7 @@
 //
 // Comments: How long do we take to close incidents?
 
-@include ('../set_include_path.inc.php');
+@include ('set_include_path.inc.php');
 set_time_limit(60);
 
 $title = 'Average Incident Duration';
@@ -121,7 +121,7 @@ while ($current_time < time())
 {
     $current_month = date('m', $current_time);
     $current_year = date('Y', $current_time);
-    
+
     $next_month = $current_month + $increment;
     $next_year = $current_year;
     if ($next_month > 12)
@@ -129,11 +129,11 @@ while ($current_time < time())
         $next_year++;
         $next_month %= 12;
     }
-    
+
     $next_time = mktime(0,0,0,$next_month,1,$next_year);
     $stats = average_incident_duration($current_time,$next_time,$states);
     $row = ldate('F Y',mktime(0,0,0,$current_month,1,$current_year)).",";
-    
+
     if ($next_month > $current_month + 1 AND $next_year == $current_year)
     {
         $row .= " - ".ldate('F Y',mktime(0,0,0,$next_month,1,$next_year)).",";
