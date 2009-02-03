@@ -5360,7 +5360,7 @@ function display_drafts($type, $result)
 
     if ($type == 'update')
     {
-        $page = "update_incident.php";
+        $page = "incident_update.php";
         $editurlspecific = '';
     }
     else if ($type == 'email')
