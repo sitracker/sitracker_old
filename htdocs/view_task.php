@@ -36,7 +36,7 @@ else
     include ('./inc/htmlheader.inc.php');
 }
 
-require ('view_task.inc.php');
+require ('./inc/task_view.inc.php');
 include ('./inc/htmlfooter.inc.php');
 
 ?>
