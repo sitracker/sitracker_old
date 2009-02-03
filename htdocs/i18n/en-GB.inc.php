@@ -724,6 +724,7 @@ $strIncidentsLoggedOpenClosed = 'Incidents Logged (Open/Closed)';
 $strIncidentsLoggedToday = '%s Incidents Logged Today';
 $strIncidentsMulti = '%s Incidents';
 $strIncidentsRequiringChaseByPhone = 'Incidents requiring chasing by phone';
+$strIncidentsDailySummary = 'Daily Incidents Summary';
 # e.g. Incidents opened on 2007-12-03
 $strIncidentsVerbOnDate = 'Incidents %s on %s';
 # e.g. Incidents opened between 2007-12-03 and 2007-12-04

@@ -173,7 +173,8 @@ if (!is_array($hmenu[60])) $hmenu[60] = array();
                     130=> array ( 'perm'=> 37, 'name'=> "{$strIncidentsBySkill}", 'url'=>"{$CONFIG['application_webpath']}report_incidents_by_skill.php"),
                     140=> array ( 'perm'=> 37, 'name'=> "{$strIncidentsByVendor}", 'url'=>"{$CONFIG['application_webpath']}report_incidents_by_vendor.php"),
                     150=> array ( 'perm'=> 37, 'name'=> "{$strEscalatedIncidents}",'url'=>"{$CONFIG['application_webpath']}report_incidents_escalated.php"),
-                    160=> array ( 'perm'=> 37, 'name'=> "{$strBillableIncidents}",'url'=>"{$CONFIG['application_webpath']}report_incidents_billable.php",
+                    160=> array ( 'perm'=> 37, 'name'=> "{$strBillableIncidents}",'url'=>"{$CONFIG['application_webpath']}report_incidents_billable.php"),
+                    170=> array ( 'perm'=> 37, 'name'=> "{$strIncidentsDailySummary}",'url'=>"{$CONFIG['application_webpath']}report_incidents_daily_summary.php",
 )), $hmenu[60]);
 
 if (!is_array($hmenu[70])) $hmenu[70] = array();
