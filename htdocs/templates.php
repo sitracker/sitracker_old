@@ -342,7 +342,14 @@ elseif ($action == "edit")
         foreach ($ttvararray AS $identifier => $ttvar)
         {
             $showtvar = FALSE;
-            if (empty($ttvar['requires'])) $showtvar = TRUE;
+            if (empty($ttvar['requires']) AND empty($ttvar['show']))
+            {
+                $showtvar = TRUE;
+            }
+            elseif ($ttvar['show'] == FALSE)
+            {
+                $showtvar = FALSE;
+            }
             else
             {
                 if (!is_array($ttvar['requires'])) $ttvar['requires'] = array($ttvar['requires']);
@@ -351,6 +358,7 @@ elseif ($action == "edit")
                     if (!is_array($required) OR in_array($needle, $required)) $showtvar = TRUE;
                 }
             }
+
             if ($showtvar)
             {
                 echo "<dt><code><a href=\"javascript:insertTemplateVar('{$identifier}');\">{$identifier}</a></code></dt>";

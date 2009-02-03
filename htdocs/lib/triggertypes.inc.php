@@ -207,7 +207,7 @@ array('description' => $CONFIG['application_name'],
       );
 
 $ttvararray['{applicationpath}'] =
-array('description' => 'System base path',
+array('description' => $strSystemPath,
       'replacement' => '$CONFIG[\'application_webpath\'];'
       );
 
@@ -217,7 +217,7 @@ array('description' => $CONFIG['application_shortname'],
       );
 
 $ttvararray['{applicationurl}'] =
-array('description' => 'System URL',
+array('description' => $strSystemUrl,
       'replacement' => 'application_url();'
       );
 
@@ -227,21 +227,23 @@ array('description' => $application_version_string,
       );
 
 $ttvararray['{approvaluseremail}'] =
-array('description' => 'Email address of the holiday approver',
+array('description' => $strHolidayApproverEmail,
       'replacement' => '$paramarray[\'approvaluseremail\'];',
       'requires' => 'approvaluseremail'
       );
 
 $ttvararray['{awaitingclosure}'] =
-array('description' => 'Whether the incident is being closed now, or being marked for closure',
+array('description' => $strAwaitingClosureVar,
       'replacement' => '$paramarray[\'awaitingclosure\'];',
-      'requires' => 'incidentid'
+      'requires' => 'incidentid',
+      'show' => FALSE
       );
 
 $ttvararray['{contactid}'][] =
 array('description' => 'Contact ID',
       'requires' => 'incidentid',
-      'replacement' => 'incident_contact($paramarray[\'incidentid\']);'
+      'replacement' => 'incident_contact($paramarray[\'incidentid\']);',
+      'show' => FALSE
       );
 
 $ttvararray['{contactemail}'][] =
@@ -259,13 +261,13 @@ array('description' => $strIncidentsContactEmail,
       );
 
 $ttvararray['{contactfirstname}'][] =
-array('description' => 'First Name of contact',
+array('description' => $strContactsForename,
       'requires' => 'contactid',
       'replacement' => 'strtok(contact_realname($paramarray[\'contactid\'])," ");'
       );
 
 $ttvararray['{contactfirstname}'][] =
-array('description' => 'First Name of contact',
+array('description' => $strContactsForename,
       'requires' => 'incidentid',
       'replacement' => 'strtok(contact_realname(incident_contact($paramarray[\'incidentid\']))," ");'
       );
@@ -273,42 +275,43 @@ array('description' => 'First Name of contact',
 $ttvararray['{contactid}'][] =
 array('description' => 'Contact ID',
       'requires' => 'contactid',
-      'replacement' => '$paramarray[\'contactid\'];'
+      'replacement' => '$paramarray[\'contactid\'];',
+      'show' => FALSE
       );
 
 $ttvararray['{contactname}'][] =
-array('description' => 'Full Name of contact',
+array('description' => $strContactsName,
       'requires' => 'contactid',
       'replacement' => 'contact_realname($paramarray[\'contactid\']);'
       );
 
 $ttvararray['{contactname}'][] =
-array('description' => 'Full Name of contact',
+array('description' => $strContactsName,
       'requires' => 'incidentid',
       'replacement' => 'contact_realname(incident_contact($paramarray[\'incidentid\']));'
       );
 
 $ttvararray['{contactnotify}'] =
-array('description' => 'The Notify Contact email address (if set)',
+array('description' => $strNotifyContactEmail,
       'requires' => 'contactid',
       'replacement' => 'contact_notify_email($paramarray[\'contactid\']);'
       );
 
 $ttvararray['{contactphone}'][] =
-array('description' => 'Contact phone number',
+array('description' => $strContactsPhone,
       'requires' => 'contactid',
       'replacement' => 'contact_phone($paramarray[\'contactid\']);'
       );
 
 $ttvararray['{contactphone}'][] =
-array('description' => 'Contact phone number',
+array('description' => $strContactsPhone,
       'requires' => 'incidentid',
       'replacement' => 'contact_phone(incident_contact($paramarray[\'incidentid\']));'
       );
 
 
 $ttvararray['{contactusername}'] =
-array('description' => 'The portal username of a contact',
+array('description' => $strContactsUsername,
       'requires' => 'contactid',
       'replacement' => 'contact_username($paramarray[\'contactid\']);'
       );
@@ -316,29 +319,30 @@ array('description' => 'The portal username of a contact',
 $ttvararray['{contractid}'] =
 array('description' => 'Contact ID',
       'requires' => 'contractid',
-      'replacement' => '$paramarray[\'contractid\'];'
+      'replacement' => '$paramarray[\'contractid\'];',
+      'show' => FALSE
       );
 
 $ttvararray['{contractproduct}'] =
-array('description' => 'Contact Product',
+array('description' => $strContractProduct,
       'replacement' => 'contract_product($paramarray[\'contractid\']);',
       'requires' => 'contractid'
       );
 
 $ttvararray['{contractsla}'] =
-array('description' => 'SLA of the maintenance',
+array('description' => $strContractsSLA,
       'replacement' => 'maintenance_servicelevel($paramarray[\'contractid\']);',
       'requires' => 'contractid'
       );
 
 $ttvararray['{currentlang}'] =
-array('description' => 'The language the user has selected to login using',
+array('description' => $strCurrentLanguage,
       'replacement' => '$paramarray[\'currentlang\'];',
       'requires' => 'currentlang'
       );
 
 $ttvararray['{feedbackurl}'] =
-array('description' => 'Feedback URL',
+array('description' => $strFeedbackURL,
       'requires' => 'incidentid',
       'replacement' => '$baseurl.\'feedback.php?ax=\'.urlencode(trim(base64_encode(gzcompress(str_rot13(urlencode($CONFIG[\'feedback_form\']).\'&&\'.urlencode($contactid).\'&&\'.urlencode($incidentid))))));'
       );
@@ -351,11 +355,12 @@ array('description' => $strGlobalSignature,
 $ttvararray['{holdingemailid}'] =
 array('description' => 'ID of the new email in the holding queue',
       'replacement' => '$paramarray[\'holdingemailid\'];',
-      'requires' => 'holdingemailid'
+      'requires' => 'holdingemailid',
+      'show' => FALSE
       );
 
 $ttvararray['{holdingmins}'] =
-array('description' => 'Number of minutes the email has been in the holding queue',
+array('description' => $strHoldingQueueMinutes,
       'replacement' => '$paramarray[\'holdingmins\'];',
       'requires' => 'holdingmins'
       );
@@ -403,7 +408,7 @@ array('description' => $strIncidentOwnersFullName,
       );
 
 $ttvararray['{incidentowneremail}'] =
-array('description' => 'Incident Owners Email Address',
+array('description' => $strIncidentOwnersEmail,
       'requires' => 'incidentid',
       'replacement' => 'user_email(incident_owner($paramarray[incidentid]));'
       );
@@ -427,7 +432,7 @@ array('description' => $strIncidentTitle,
       );
 
 $ttvararray['{kbid}'] =
-array('description' => 'KB ID',
+array('description' => $strKBID,
       'requires' => 'kbid',
       'replacement' => '$paramarray[\'kbid\'];'
       );
@@ -445,7 +450,7 @@ array('description' => $strKnowledgeBase,
       );
 
 $ttvararray['{listofholidays}'] =
-array('description' => 'List of holidays',
+array('description' => $strListOfHolidays,
       'replacement' => '$paramarray[\'listofholidays\'];',
       'requires' => 'listofholidays'
       );
@@ -457,51 +462,54 @@ array('description' => $strTimeToNextAction,
       );
 
 $ttvararray['{nextsla}'] =
-array('description' => 'Next SLA name',
+array('description' => $strNextSLATarget,
       'replacement' => '$paramarray[\'nextsla\'];',
       'requires' => 'nextsla'
       );
 
 $ttvararray['{notifycontact}'] =
-array('description' => 'Whether to user requested to send a closing email, boolean',
+array('description' => $strNotifyContactOnClose,
       'replacement' => '$paramarray[\'notifycontact\'];',
-      'requires' => 'incidentid'
+      'requires' => 'incidentid',
+      'show' => FALSE
       );
 
 $ttvararray['{notifyexternal}'] =
-array('description' => 'Whether to user requested to notify an external engineer of incident closure, boolean',
+array('description' => $strNotifyExternalEngineerOnClose,
       'replacement' => '$paramarray[\'notifyexternal\'];',
-      'requires' => 'incidentid'
+      'requires' => 'incidentid',
+      'show' => FALSE
       );
 
 $ttvararray['{ownerid}'] =
 array('description' => 'Incident owner ID',
       'replacement' => 'incident_owner($paramarray[\'incidentid\']);',
-      'requires' => 'incidentid'
+      'requires' => 'incidentid',
+      'show' => FALSE
       );
 
 $ttvararray['{passwordreseturl}'] =
-array('description' => 'Hashed URL to reset a password',
+array('description' => $strPasswordResetURL,
       'replacement' => '$paramarray[\'passwordreseturl\'];',
       'requires' => 'passwordreseturl',
       'type' => 'system'
       );
 
 $ttvararray['{prepassword}'] =
-array('description' => 'The plaintext contact password',
+array('description' => $strContactsPassword,
       'replacement' => '$paramarray[\'prepassword\'];',
       'requires' => 'prepassword',
       'type' => 'system'
       );
 
 $ttvararray['{profilelang}'] =
-array('description' => 'The language the user has stored in their profile',
+array('description' => $strProfileLanguage,
       'replacement' => '$paramarray[\'profilelang\'];',
       'requires' => 'profilelang'
       );
 
 $ttvararray['{salesperson}'] =
-array('description' => 'Salesperson',
+array('description' => $strSalesperson,
       'requires' => 'siteid',
       'replacement' => 'user_realname(db_read_column(\'owner\', $GLOBALS[\'dbSites\'], $paramarray[\'siteid\']));'
       );
@@ -519,16 +527,18 @@ array('description' => $strSalespersonAssignedToContactsSiteEmail,
       );
 
 $ttvararray['{schedulertask}'] =
-array('description' => 'The name of the scheduled task',
-      'replacement' => '$paramarray[\'schedulertask\'];');
+array('description' => $strScheduledTask,
+      'replacement' => '$paramarray[\'schedulertask\'];'
+     );
 
 $ttvararray['{sendemail}'] =
-array('description' => 'Whether to send an opening email or not',
-      'replacement' => '$paramarray[\'sendemail\'];'
+array('description' => $strSendOpeningEmailDesc,
+      'replacement' => '$paramarray[\'sendemail\'];',
+      'show' => FALSE
      );
 
 $ttvararray['{serviceremaining}'] =
-array('description' => 'The amount of remaining service i.e. 34%',
+array('description' => $strServiceBalance,
       'requires' => 'contractid',
       'replacement' => 'get_service_percentage($paramarray[\'contractid\']);'
      );
@@ -536,7 +546,8 @@ array('description' => 'The amount of remaining service i.e. 34%',
 $ttvararray['{serviceremainingstring}'] =
 array('description' => 'The amount of remaining service i.e. 0.34',
       'requires' => 'maintid',
-      'replacement' => '(get_service_percentage($paramarray[\'contractid\']) * 100)."%";'
+      'replacement' => '(get_service_percentage($paramarray[\'contractid\']) * 100)."%";',
+      'show' => FALSE
      );
 
 $ttvararray['{signature}'] =
@@ -545,31 +556,32 @@ array('description' => $strCurrentUsersSignature,
       );
 
 $ttvararray['{siteid}'] =
-array('description' => 'Site name',
+array('description' => $strSiteName,
       'requires' => 'siteid',
-      'replacement' => '$paramarray[\'siteid\'];'
+      'replacement' => '$paramarray[\'siteid\'];',
+      'show' => FALSE
       );
 
 $ttvararray['{sitename}'][] =
-array('description' => 'Site name',
+array('description' => $strSiteName,
       'requires' => 'incidentid',
       'replacement' => 'contact_site(incident_contact($paramarray[\'incidentid\']));'
       );
 
 $ttvararray['{sitename}'][] =
-array('description' => 'Site name',
+array('description' => $strSiteName,
       'requires' => 'contactid',
       'replacement' => 'contact_site($paramarray[\'contactid\']);'
       );
 
 $ttvararray['{sitename}'][] =
-array('description' => 'Site name',
+array('description' => $strSiteName,
       'requires' => 'contractid',
       'replacement' => 'contract_site($paramarray[\'contractid\']);'
       );
 
 $ttvararray['{sitename}'][] =
-array('description' => 'Site name',
+array('description' => $strSiteName,
       'requires' => 'siteid',
       'replacement' => 'site_name($paramarray[\'siteid\']);'
       );
@@ -577,11 +589,12 @@ array('description' => 'Site name',
 $ttvararray['{sitesalespersonid}'] =
 array('description' => 'The ID of the site\'s salesperson',
       'replacement' => 'site_salespersonid($paramarray[\'siteid\']);',
-      'requires' => 'siteid'
+      'requires' => 'siteid',
+      'show' => FALSE
       );
 
 $ttvararray['{sitesalesperson}'] =
-array('description' => 'The name of the site\'s salesperson',
+array('description' => $strSalespersonSite,
       'replacement' => 'site_salesperson($paramarray[\'siteid\']);',
       'requires' => 'siteid'
       );
@@ -589,11 +602,12 @@ array('description' => 'The name of the site\'s salesperson',
 $ttvararray['{slaid}'] =
 array('description' => 'ID of the SLA',
       'replacement' => 'contract_slaid($paramarray[\'contractid\']);',
-      'requires' => 'contractid'
+      'requires' => 'contractid',
+      'show' => FALSE
       );
 
 $ttvararray['{slatag}'] =
-array('description' => 'The SLA tag',
+array('description' => $strSLA,
       'replacement' => 'servicelevel_id2tag(contract_slaid($paramarray[\'contractid\']));',
       'requires' => 'contractid'
       );
@@ -610,7 +624,9 @@ array('description' => $strSupportManagersEmailAddress,
 
 $ttvararray['{taskid}'] =
 array('description' => 'ID of the task',
-      'replacement' => '$paramarray[\'taskid\']');
+      'replacement' => '$paramarray[\'taskid\']',
+      'show' => FALSE
+     );
 
 $ttvararray['{todaysdate}'] =
 array('description' => $strCurrentDate,
@@ -620,30 +636,33 @@ array('description' => $strCurrentDate,
 $ttvararray['{townerid}'] =
 array('description' => 'Incident temp owner ID',
       'replacement' => 'incident_towner($paramarray[\'incidentid\']);',
-      'requires' => 'incidentid'
+      'requires' => 'incidentid',
+      'show' => FALSE
       );
 
 $ttvararray['{triggersfooter}'] =
-array('description' => 'The footer at the end of an email which explains where it has come from',
+array('description' => $strTriggersFooter,
       'replacement' => '$SYSLANG[\'strTriggerFooter\'];',
       'requires' => ''
      );
 
 $ttvararray['{triggeruseremail}'] =
-array('description' => 'Email address to send an user trigger email to',
+array('description' => $strTriggerUserEmail,
       'replacement' => 'user_email($paramarray[\'triggeruserid\']);'
       );
 
 $ttvararray['{updateid}'] =
 array('description' => 'The ID of the update',
       'replacement' => 'incoming_email_update_id($paramarray[\'holdingemailid\']);',
-      'requires' => 'holdingemailid'
+      'requires' => 'holdingemailid',
+      'show' => FALSE
       );
 
 $ttvararray['{useraccepting}'] =
 array('description' => 'Whether the user is accepting or not',
       'replacement' => 'user_accepting_status($paramarray[\'userid\']);',
-      'requires' => 'userid'
+      'requires' => 'userid',
+      'show' => FALSE
       );
 
 $ttvararray['{useremail}'] =
@@ -653,13 +672,15 @@ array('description' => $strCurrentUserEmailAddress,
 
 $ttvararray['{userid}'][] =
 array('description' => 'UserID the trigger passes',
-      'replacement' => '$paramarray[\'userid\'];'
+      'replacement' => '$paramarray[\'userid\'];',
+      'show' => FALSE
       );
 
 $ttvararray['{userid}'][] =
 array('description' => 'Owner of a task',
       'replacement' => 'task_owner($paramarray[\'taskid\']);',
-      'requires' => 'taskid'
+      'requires' => 'taskid',
+      'show' => FALSE
       );
 
 $ttvararray['{userrealname}'] =
@@ -668,7 +689,7 @@ array('description' => $strFullNameCurrentUser,
       );
 
 $ttvararray['{userstatus}'] =
-array('description' => 'Status of the user',
+array('description' => $strUserStatus,
       'replacement' => 'user_status_name($paramarray[\'userid\']);',
       'requires' => 'userid'
       );
