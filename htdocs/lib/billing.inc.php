@@ -564,21 +564,42 @@ function unreserve_monies($transactionid, $linktype)
  * @author Paul Heaney
  * @param int $transactionid The transaction ID to update
  * @param int $amount The amount to set the transaction to
- * @param stringd $description (optional) the description to set on the transaction
- * @return mixed TRUE on a sucessful update FALSE otherwise
+ * @param string $description (optional) the description to set on the transaction
+ * @return bool TRUE on a sucessful update FALSE otherwise
  */
 function update_reservation($transactionid, $amount, $description='')
 {
-    $rtnvalue = FALSE;
+    return update_transaction($transactionid, $amount, $description, RESERVED);
+}
+
+
+/**
+ * Updates a transacction which which be either waiting approval or reserved
+ * @author Paul Heaney
+ * @param int $transactionid The transaction ID to update
+ * @param int $amount The amount to set the transaction to
+ * @param string $description (optional) the description to set on the transaction
+ * @param int $status either RESERVERED or AWAITINGAPPROVAL
+ * @return bool TRUE on a sucessful update FALSE otherwise
+ */
+function update_transaction($transactionid, $amount, $description='', $status)
+{
+    if ($status == APPROVED)
+    {
+    	trigger_error("You cant change a approved transaction", E_USER_ERROR);
+        exit;
+    }
+    
+	$rtnvalue = FALSE;
     // Note we dont need to check its awaiting reservation as we check this when doing the update
     if (is_numeric($transactionid))
     {
-    	$sql = "UPDATE `{$GLOBALS['dbTransactions']}` SET amount = '{$amount}' ";
+        $sql = "UPDATE `{$GLOBALS['dbTransactions']}` SET amount = '{$amount}' ";
         if (!empty($description))
         {
-        	$sql .= ", description = '{$description}' ";
+            $sql .= ", description = '{$description}' ";
         }
-        $sql .= "WHERE transactionid = {$transactionid} AND transactionstatus = 10";
+        $sql .= "WHERE transactionid = {$transactionid} AND transactionstatus = {$status}";
         mysql_query($sql);
         if (mysql_error())
         {
@@ -593,7 +614,6 @@ function update_reservation($transactionid, $amount, $description='')
     
     return $rtnvalue;
 }
-
 
 /**
  * Do the necessary tasks to billable incidents on closure, including creating transactions
@@ -985,6 +1005,33 @@ function is_billable_incident_approved($incidentid)
 
     if (mysql_num_rows($result) > 0) return TRUE;
     else return FALSE;
+}
+
+
+/**
+ * Gets the transactionID for an incident
+ * @author paulh Paul Heaney
+ * @param int $incidentid The incidentID
+ * @return mixed the transactionID or FALSE if not found;
+ */
+function get_incident_transactionid($incidentid)
+{
+    $rtnvalue = FALSE;
+    $sql = "SELECT origcolref ";
+    $sql .= "FROM `{$GLOBALS['dbLinks']}` AS l, `{$GLOBALS['dbTransactions']}` AS t ";
+    $sql .= "WHERE l.linktype = 6 ";
+    $sql .= "AND l.origcolref = t.transactionid ";
+    $sql .= "AND linkcolref = {$incidentid} ";
+    $sql .= "AND direction = 'left' ";
+    $result = mysql_query($sql);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+
+    if (mysql_num_rows($result) > 0)
+    {
+    	list($rtnvalue) = mysql_fetch_row($result);
+    }
+    
+    return $rtnvalue;
 }
 
 
