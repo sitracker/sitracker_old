@@ -12,6 +12,13 @@
 //          Paul Heaney Paul Heaney <paulheaney[at]users.sourceforge.net>
 
 
+// Prevent script from being run directly (ie. it must always be included
+if (realpath(__FILE__) == realpath($_SERVER['SCRIPT_FILENAME']))
+{
+    exit;
+}
+
+
 $formid = $CONFIG['feedback_form'];
 
 echo "<div style='margin: 20px'>";

@@ -12,6 +12,12 @@
 // Hacked: Tom Gerrard <tom.gerrard[at]salfordsoftware.co.uk>
 // Converted: Paul Heaney <paulheaney[at]users.sourceforge.net>
 
+// Prevent script from being run directly (ie. it must always be included
+if (realpath(__FILE__) == realpath($_SERVER['SCRIPT_FILENAME']))
+{
+    exit;
+}
+
 
 $maxscore = $CONFIG['feedback_max_score'];
 $formid = $CONFIG['feedback_form'];

@@ -9,6 +9,12 @@
 //
 // This Page Is Valid XHTML 1.0 Transitional! 27Oct05
 
+// Prevent script from being run directly (ie. it must always be included
+if (realpath(__FILE__) == realpath($_SERVER['SCRIPT_FILENAME']))
+{
+    exit;
+}
+
 // Use session language if available, else use default language
 if (!empty($_SESSION['lang'])) $lang = $_SESSION['lang'];
 else $lang = $CONFIG['default_i18n'];

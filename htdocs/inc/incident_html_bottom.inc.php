@@ -1,4 +1,10 @@
 <?php
+// Prevent script from being run directly (ie. it must always be included
+if (realpath(__FILE__) == realpath($_SERVER['SCRIPT_FILENAME']))
+{
+    exit;
+}
+
 if ($CONFIG['debug'] == TRUE)
 {
     echo "\n<div id='tail'><strong>DEBUG</strong><br />";

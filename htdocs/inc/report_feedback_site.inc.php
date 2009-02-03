@@ -1,5 +1,12 @@
 <?php
 
+// Prevent script from being run directly (ie. it must always be included
+if (realpath(__FILE__) == realpath($_SERVER['SCRIPT_FILENAME']))
+{
+    exit;
+}
+
+
 echo "<div style='margin: 20px'>";
 echo "<h2><a href='{$CONFIG['application_webpath']}reports/feedback.php'>Feedback</a> Scores: By Site</h2>";
 echo feedback_between_dates();

@@ -1,4 +1,10 @@
 <?php
+// Prevent script from being run directly (ie. it must always be included
+if (realpath(__FILE__) == realpath($_SERVER['SCRIPT_FILENAME']))
+{
+    exit;
+}
+
 // This Page Is Valid XHTML 1.0 Transitional! 27Oct05
 echo "\n</div>"; // mainframe
 echo "\n<div id='statusbar'>";
