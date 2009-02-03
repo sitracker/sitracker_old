@@ -5365,7 +5365,7 @@ function display_drafts($type, $result)
     }
     else if ($type == 'email')
     {
-        $page = "email_incident.php";
+        $page = "incident_email.php";
         $editurlspecific = "&amp;step=2";
     }
 
