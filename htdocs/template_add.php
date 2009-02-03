@@ -29,7 +29,7 @@ if (!empty($_POST['type']))
         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
         if (mysql_num_rows($result) < 1)
         {
-            $sql = "INSERT INTO `{$dbEmailTemplates}` (name) VALUES('{$name}')";
+            $sql = "INSERT INTO `{$dbEmailTemplates}` (name, type) VALUES('{$name}', 'incident')";
             mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
             $id = mysql_insert_id();
