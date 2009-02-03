@@ -101,7 +101,7 @@ plugin_do('site_details');
 mysql_free_result($siteresult);
 
 echo "</table>\n";
-echo "<p align='center'><a href='edit_site.php?action=edit&amp;site={$id}'>{$strEdit}</a> | ";
+echo "<p align='center'><a href='site_edit.php?action=edit&amp;site={$id}'>{$strEdit}</a> | ";
 echo "<a href='site_delete.php?id={$id}'>{$strDelete}</a>";
 echo "</p>";
 

@@ -233,7 +233,7 @@ if ($errors == 0)
             echo "<td align='center'>{$results->id}</td>";
             echo "<td><a href='site_details.php?id={$results->id}&amp;action=show'>{$results->name}</a></td>";
             echo "<td>".nl2br($results->department)."</td>";
-            echo "<td><a href='edit_site.php?action=edit&amp;site={$results->id}'>{$strEdit}</a></td>";
+            echo "<td><a href='site_edit.php?action=edit&amp;site={$results->id}'>{$strEdit}</a></td>";
             echo "</tr>";
             // invert shade
             if ($shade == 'shade1') $shade = 'shade2';
