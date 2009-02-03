@@ -460,7 +460,8 @@ function saction_ChaseCustomers()
                     //if (not_auto_type($obj_update->type) AND $obj_update->timestamp <= ($now-$CONFIG['chase_email_minutes']*60))
                     if (not_auto_type($obj_update->type) AND (($obj->timeofnextaction == 0 AND calculate_working_time($obj_update->timestamp, $now) >= $CONFIG['chase_email_minutes']) OR ($obj->timeofnextaction != 0 AND calculate_working_time($obj->timeofnextupdate, $now) >= $CONFIG['chase_email_minutes'])))
                     {
-                        send_template_email($CONFIG['chase_email_template'],$obj->id);
+                        $paramarray = array('incidentid' => $obj->id, 'triggeruserid' => $sit[2]);
+                        send_template_email($CONFIG['chase_email_template'], $paramarray);
                         $sql_insert = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, currentowner, currentstatus, bodytext, timestamp, customervisibility) VALUES ('{$obj_update->incidentid}','{$sit['2']}', 'auto_chase_email', '{$obj->owner}', '{$obj->status}', 'Sent auto chase email to customer','{$now}','show')";
                         mysql_query($sql_insert);
                         if (mysql_error())

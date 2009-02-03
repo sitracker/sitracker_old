@@ -7548,8 +7548,9 @@ function contact_username($userid)
     return db_read_column('username', $GLOBALS['dbContacts'], $userid);
 }
 
+
 /**
-* Populates $_SESSION['syslang]
+* Populates $_SESSION['syslang], system language strings
 *
 * @author Kieran Hogg
 */
@@ -7589,10 +7590,9 @@ function populate_syslang()
 
 /**
 * Outputs a contact's contract associate, if the viewing user is allowed
-*
-* @param int $userid ID of the contact
-* @return string output html
 * @author Kieran Hogg
+* @param int $userid ID of the contact
+* @retval string output html
 * @todo TODO should this be renamed, it has nothing to do with users
 */
 function user_contracts_table($userid, $mode = 'internal')
@@ -7725,8 +7725,14 @@ if (is_array($CONFIG['plugins']))
     }
 }
 
+
 /**
-    * @author Ivan Lucas
+  * Register a plugin context handler function
+  * @author Ivan Lucas
+  * @param string $context - A valid plugin context
+  * @param string $action - Your plugin context handler function name
+  * @note see http://sitracker.org/wiki/CreatingPlugins for help and a list
+  *  of contexts
 */
 function plugin_register($context, $action)
 {
@@ -7736,7 +7742,15 @@ function plugin_register($context, $action)
 
 
 /**
+    * Call a plugin function that handles a given context
     * @author Ivan Lucas
+    * @param string $context - Plugin context,
+    * @param string $optparms - Optional parameters
+    * @retval mixed - Whatever the plugin function returns
+    * @note This function calls a plugin function or multiple plugin
+    *  functions, if they exist.
+    *  see http://sitracker.org/wiki/CreatingPlugins for help and a list
+    *  of contexts
 */
 function plugin_do($context, $optparams = FALSE)
 {

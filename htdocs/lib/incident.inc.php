@@ -431,8 +431,75 @@ function reopen_incident($incident, $newstatus = STATUS_ACTIVE, $message = '')
         trigger_error(mysql_error(),E_USER_ERROR);
         $rtn = FALSE;
     }
-    
+
     return $rtn;
 }
+
+
+/**
+    Send a template email without using a trigger
+    @author Ivan Lucas
+    @param int $templateid: The ID number of the template to use
+    @param array $paramarray. An associative array of template parameters
+                 This should at the very least be
+                 array('incidentid' => $id, 'triggeruserid' => $sit[2])
+    @param string $attach. Path and filename of file to attach
+    @param string $attachtype. Type of file to attach (Default 'OCTET')
+    @param string $attachdesc. Description of the attachment, (Default, same as filename)
+    @retval bool TRUE: The email was sent successfully
+    @retval bool FALSE: There was an error sending the mail
+    @note This is v2 of this function, it has different paramters than v1
+**/
+function send_template_email($templateid, $paramarray, $attach='', $attachtype='', $attachdesc='')
+{
+    global $CONFIG, $application_version_string;
+
+    if (!is_array($paramarray))
+    {
+        trigger_error("Invalid Parameter Array", E_USER_NOTICE);
+        $paramarray = array('triggeruserid' => $sit[2]);
+    }
+
+    if (!is_numeric($templateid))
+    {
+        trigger_error("Invalid Template ID '{$templateid}'", E_USER_NOTICE);
+    }
+
+    // Grab the template
+    $tsql = "SELECT * FROM `{$dbEmailTemplates}` WHERE id=$templateid LIMIT 1";
+    $tresult = mysql_query($tsql);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+    if (mysql_num_rows($tresult) > 0) $template = mysql_fetch_object($tresult);
+    $paramarray = array('incidentid' => $id, 'triggeruserid' => $sit[2]);
+    $from = replace_specials($template->fromfield, $paramarray);
+    $replyto = replace_specials($template->replytofield, $paramarray);
+    $ccemail = replace_specials($template->ccfield, $paramarray);
+    $bccemail = replace_specials($template->bccfield, $paramarray);
+    $toemail = replace_specials($template->tofield, $paramarray);
+    $subject = replace_specials($template->subjectfield, $paramarray);
+    $body = replace_specials($template->body, $paramarray);
+    $extra_headers = "Reply-To: $replyto\nErrors-To: ".user_email($sit[2])."\n";
+    $extra_headers .= "X-Mailer: {$CONFIG['application_shortname']} {$application_version_string}/PHP " . phpversion() . "\n";
+    $extra_headers .= "X-Originating-IP: {$_SERVER['REMOTE_ADDR']}\n";
+    if ($ccemail != '')  $extra_headers .= "CC: $ccemail\n";
+    if ($bccemail != '') $extra_headers .= "BCC: $bccemail\n";
+    $extra_headers .= "\n"; // add an extra crlf to create a null line to separate headers from body
+                        // this appears to be required by some email clients - INL
+
+    $mime = new MIME_mail($fromfield, $tofield, html_entity_decode($subjectfield), '', $extra_headers, $mailerror);
+    $mime -> attach($bodytext, '', "text-plain; charset={$GLOBALS['i18ncharset']}", 'quoted-printable');
+
+    if (!empty($attach))
+    {
+        if (empty($attachdesc)) $attachdesc = "Attachment named $attach";
+        $disp = "attachment; filename=\"$attach\"; name=\"$attach\";";
+        $mime -> fattach($filename, $attachdesc, $attachtype, 'base64', $disp);
+    }
+
+    // actually send the email
+    $rtnvalue = $mime -> send_mail();
+    return $rtnvalue;
+}
+
 
 ?>
