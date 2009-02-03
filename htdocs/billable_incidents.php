@@ -55,7 +55,7 @@ if (empty($mode))
 {
     include ('./inc/htmlheader.inc.php');
 
-    echo "<h2>{$strBillableIncidents}</h2>";
+    echo "<h2>{$strBilling}</h2>";
 
     ?>
     <script type="text/javascript">

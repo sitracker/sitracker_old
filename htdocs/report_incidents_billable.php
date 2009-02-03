@@ -1,5 +1,5 @@
 <?php
-// billable_incidents.php - Report for billing incidents
+// billable_incidents.php - List of all billable incidents between two optional datess
 //
 // SiT (Support Incident Tracker) - Support call tracking system
 // Copyright (C) 2000-2009 Salford Software Ltd. and Contributors
@@ -31,7 +31,7 @@ if (empty($mode))
 {
     include ('./inc/htmlheader.inc.php');
 
-    echo "<h2>{$strBillableIncidentsReport}<h2>";
+    echo "<h2>{$strBillableIncidentsReport}</h2>";
 
     echo "<form action='{$_SERVER['PHP_SELF']}' method='post' id='billableincidents'>";
     echo "<table align='center'>";
@@ -67,6 +67,7 @@ elseif ($mode == 'report')
     if ($output == 'html')
     {
         include ('./inc/htmlheader.inc.php');
+        echo "<h2>{$strBillableIncidentsReport}</h2>";
     }
 
     $sqlsite = "SELECT DISTINCT m.site FROM `{$dbMaintenance}` AS m WHERE expirydate >= {$startdate}";
@@ -75,9 +76,9 @@ elseif ($mode == 'report')
 
     if (mysql_num_rows($resultsite) > 0)
     {
+
         while ($objsite = mysql_fetch_object($resultsite))
         {
-            $str = "<p>".site_name($objsite->site)."</p>";
 
             $used = false;
 
@@ -109,19 +110,21 @@ elseif ($mode == 'report')
 
                     if ($a[-1]['totalcustomerperiods'] > 0)
                     {
-                        $str .= "{$obj->id} - {$obj->title} {$a[-1]['totalcustomerperiods']}<br />";
+                        $str .= "<tr><td>{$obj->id}</td><td>{$obj->title}</td><td>{$a[-1]['totalcustomerperiods']}</td></tr>";
                         $used = true;
                     }
                 }
             }
 
-            $str .= "<br /><br />";
-
             if ($used)
             {
                 if ($output == 'html')
                 {
+                    echo "<table align='center'>";
+                    echo "<tr><th colspan='3'>".site_name($objsite->site)."</th></tr>";
+                    echo "<tr><th>{$strIncidentID}</th><th>{$strTitle}</th><th>{$strBillingCustomerPeriod}</th></tr>";                    
                     echo $str;
+                    echo "</table>";
                 }
             }
         }
