@@ -19,7 +19,7 @@
 
 // Requested by Rob Shepley, 3 Oct 05
 
-@include ('../set_include_path.inc.php');
+@include ('set_include_path.inc.php');
 $permission = 37; // Run Reports
 $title = 'Yearly Engineer/Incident Report';
 require ($lib_path.'db_connect.inc.php');
@@ -89,7 +89,7 @@ elseif ($_REQUEST['statistics'] == 'on')
     {
         $_POST['inc']=array_values(array_diff($_POST['inc'],$_POST['exc']));  // don't include anything excluded
     }
-    
+
     $includecount = count($_POST['inc']);
     if ($includecount >= 1)
     {

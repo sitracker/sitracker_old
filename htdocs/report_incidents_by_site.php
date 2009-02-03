@@ -14,7 +14,7 @@
 
 // This Page Is Valid XHTML 1.0 Transitional!   15Mar06
 
-@include ('../set_include_path.inc.php');
+@include ('set_include_path.inc.php');
 $permission = 37; // Run Reports
 
 require ($lib_path.'db_connect.inc.php');
