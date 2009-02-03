@@ -42,6 +42,13 @@ $config_filename='./config.inc.php';
 
 $configfiles = get_included_files();
 
+/**
+    * Array filter callback to check to see if a config file is a recognised file
+    * @author Ivan Lucas
+    * @param string $var. Filename to check
+    * @retval bool TRUE : recognised
+    * @retval bool FALSE : unrecognised
+*/
 function filterconfigfiles($var)
 {
     $poss_config_files = array('config.inc.php', 'sit.conf', 'webtrack.conf');
@@ -52,6 +59,8 @@ function filterconfigfiles($var)
     }
     return $recognised;
 }
+
+
 $configfiles = array_filter($configfiles, 'filterconfigfiles');
 $configfiles = array_values($configfiles);
 $numconfigfiles = count($configfiles);
@@ -80,6 +89,11 @@ foreach ($configfiles AS $conf_filename)
 //    return $a === $b ? $a + 1 : 0;
 //}
 
+/**
+    * Setup configuration form
+    * @author Ivan Lucas
+    * @retval string HTML
+*/
 function setup_configure()
 {
     global $SETUP, $CFGVAR, $CONFIG, $configfiles, $config_filename, $cfg_file_exists, $cfg_file_writable, $numconfigfiles;
@@ -230,6 +244,12 @@ function setup_configure()
 }
 
 
+/**
+    * Execute a list of SQL queries
+    * @author Ivan Lucas
+    * @note Attempts to be clever and print helpful messages in the case
+    * of an error
+*/
 function setup_exec_sql($sqlquerylist)
 {
     global $CONFIG, $dbSystem, $installed_schema, $application_version;
@@ -334,6 +354,12 @@ function setup_exec_sql($sqlquerylist)
 }
 
 
+/**
+    * Create a blank SiT database
+    * @author Ivan Lucas
+    * @retval TRUE database created OK
+    * @retval FALSE database not created, error.
+*/
 function setup_createdb()
 {
     global $CONFIG;
@@ -373,7 +399,13 @@ function setup_createdb()
     return $res;
 }
 
-// Returns TRUE if an admin account exists, or false if not
+
+/**
+    * Check to see whether an admin user exists
+    * @author Ivan Lucas
+    * @retval bool TRUE : an admin account exists
+    * @retval bool FALSE : an admin account doesn't exist
+*/
 function setup_check_adminuser()
 {
     global $dbUsers;
@@ -384,6 +416,14 @@ function setup_check_adminuser()
 }
 
 
+/**
+    * An HTML action button, i.e. a form with a single button
+    * @author Ivan Lucas
+    * @param string $action.    Value for the hidden 'action' field
+    * @param string $label.     Label for the submit button
+    * @returns A form with a button
+    * @retval string HTML form
+*/
 function setup_button($action, $label)
 {
     $html = "\n<form action='{$_SERVER['PHP_SELF']}' method='post'>";

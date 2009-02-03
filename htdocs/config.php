@@ -64,6 +64,11 @@ if ($action == 'save')
 
             }
             $savevar[$catvar] = mysql_real_escape_string($value);
+            if (substr($value, 0, 6)=='array(')
+            {
+                eval("\$val = $value;");
+                $value = $val;
+            }
             $CONFIG[$catvar] = $value;
         }
         if ($CONFIG['debug']) $dbg .= "<pre>".print_r($savevar,true)."</pre>";

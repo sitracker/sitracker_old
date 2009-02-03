@@ -85,6 +85,11 @@ if ($result AND mysql_num_rows($result) > 0)
     {
         if ($conf->value==='TRUE') $conf->value = TRUE;
         if ($conf->value==='FALSE') $conf->value = FALSE;
+        if (substr($conf->value, 0, 6)=='array(')
+        {
+                eval("\$val = {$conf->value};");
+                $conf->value = $val;
+        }
         $CONFIG[$conf->config] = $conf->value;
     }
 }

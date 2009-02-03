@@ -55,7 +55,7 @@ function html_redirect($url, $success = TRUE, $message='')
     $title = $GLOBALS['strPleaseWaitRedirect'];
     if (!$headerdisplayed)
     {
-        include ($lib_path . '/htmlheader.inc.php');
+        include ($lib_path . 'htmlheader.inc.php');
     }
     else
     {
@@ -90,7 +90,7 @@ function html_redirect($url, $success = TRUE, $message='')
 
     if ($headerdisplayed)
     {
-        include ($lib_path . '/htmlfooter.inc.php');
+        include ($lib_path . 'htmlfooter.inc.php');
     }
 }
 
