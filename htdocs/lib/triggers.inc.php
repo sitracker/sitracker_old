@@ -10,6 +10,13 @@
 // Author: Kieran Hogg <kieran[at]sitracker.org>
 //         Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
+// Prevent script from being run directly (ie. it must always be included
+if (realpath(__FILE__) == realpath($_SERVER['SCRIPT_FILENAME']))
+{
+    exit;
+}
+
+
 include ($lib_path . 'incident.inc.php');
 include_once ($lib_path . 'billing.inc.php');
 include ('mime.inc.php');

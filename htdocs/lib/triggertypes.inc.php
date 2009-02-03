@@ -9,6 +9,12 @@
 //
 // Author: Kieran Hogg <kieran[at]sitracker.org>
 
+// Prevent script from being run directly (ie. it must always be included
+if (realpath(__FILE__) == realpath($_SERVER['SCRIPT_FILENAME']))
+{
+    exit;
+}
+
 
 // Define a list of available triggers, trigger() will need to be called in the appropriate
 // place in the code for each of these

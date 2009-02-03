@@ -8,6 +8,13 @@
 // of the GNU General Public License, incorporated herein by reference.
 //
 
+// Prevent script from being run directly (ie. it must always be included
+if (realpath(__FILE__) == realpath($_SERVER['SCRIPT_FILENAME']))
+{
+    exit;
+}
+
+
 //create array of strings in the system's language for updates etc
 $SYSLANG = $_SESSION['syslang'];
 

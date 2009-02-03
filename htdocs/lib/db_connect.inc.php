@@ -8,6 +8,13 @@
 // of the GNU General Public License, incorporated herein by reference.
 //
 
+// Prevent script from being run directly (ie. it must always be included
+if (realpath(__FILE__) == realpath($_SERVER['SCRIPT_FILENAME']))
+{
+    exit;
+}
+
+
 // Load config defaults
 include ($lib_path.'defaults.inc.php');
 // Server Configuration

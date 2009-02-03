@@ -1,6 +1,13 @@
 <?php
 // This script was on the Internet as MIME.def and MIME.class and is assumed to be in the public domain
 
+// Prevent script from being run directly (ie. it must always be included
+if (realpath(__FILE__) == realpath($_SERVER['SCRIPT_FILENAME']))
+{
+    exit;
+}
+
+
 
 // --- From MIME.def
  /* -----------------------------------------------------------

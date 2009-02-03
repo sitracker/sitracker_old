@@ -11,6 +11,13 @@
 // This file is to be included on any portal page that requires authentication
 // This file must be included before any page output
 
+// Prevent script from being run directly (ie. it must always be included
+if (realpath(__FILE__) == realpath($_SERVER['SCRIPT_FILENAME']))
+{
+    exit;
+}
+
+
 session_name($CONFIG['session_name']);
 session_start();
 

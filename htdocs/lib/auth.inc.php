@@ -12,6 +12,13 @@
 // it requires the functions.inc.php file to be already included
 // This file must be included before any page output
 
+// Prevent script from being run directly (ie. it must always be included
+if (realpath(__FILE__) == realpath($_SERVER['SCRIPT_FILENAME']))
+{
+    exit;
+}
+
+
 session_name($CONFIG['session_name']);
 session_start();
 
@@ -52,7 +59,7 @@ if (!is_array($permission))
 {
     $permission = array($permission);
 }
-    
+
 // Valid user, check permissions
 if (user_permission($userid, $permission) == FALSE)
 {

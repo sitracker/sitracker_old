@@ -17,6 +17,13 @@
 // Most are legacy and can replaced by improving the pages that call them to
 // use SQL joins.
 
+// Prevent script from being run directly (ie. it must always be included
+if (realpath(__FILE__) == realpath($_SERVER['SCRIPT_FILENAME']))
+{
+    exit;
+}
+
+
 @include ('set_include_path.inc.php');
 include ('classes.inc.php');
 include ('ldap.inc.php');

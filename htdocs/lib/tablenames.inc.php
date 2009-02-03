@@ -9,6 +9,13 @@
 //
 //  Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
+// Prevent script from being run directly (ie. it must always be included
+if (realpath(__FILE__) == realpath($_SERVER['SCRIPT_FILENAME']))
+{
+    exit;
+}
+
+
 // Database Table Names
 $dbBillingMatrix = "{$CONFIG['db_tableprefix']}billingmatrix";
 $dbBillingPeriods = "{$CONFIG['db_tableprefix']}billing_periods";
