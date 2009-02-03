@@ -170,7 +170,7 @@ echo '<div>
 
 
     <p><strong>Other Updates</strong></p>
-    <ul><li>Added <a href="'.$CONFIG['application_webpath'].'reports/external_engineers.php">external engineer report</a> which shows incidents that have been escalated</li>
+    <ul><li>Added <a href="'.$CONFIG['application_webpath'].'report_incidents_escalated.php">external engineer report</a> which shows incidents that have been escalated</li>
     <li>Software now has a vendor (allows more accurate stats)</li></ul>
     </div>';
 echo "</div>";

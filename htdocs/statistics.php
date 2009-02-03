@@ -514,11 +514,11 @@ switch ($mode)
         $query = $_REQUEST['query'];
         $startdate = $_REQUEST['start'];
         $enddate = $_REQUEST['end'];
-        include ('statistics/breakdown.inc.php');
+        include ('inc/statistics_breakdown.inc.php');
         break;
     case 'daybreakdown':
         $offset = $_REQUEST['offset'];
-        include ('statistics/daybreakdown.inc.php');
+        include ('inc/statistics_daybreakdown.inc.php');
         break;
     case 'overview': //this is the default so just fall though
     default:
