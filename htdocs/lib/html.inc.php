@@ -30,7 +30,7 @@ if (realpath(__FILE__) == realpath($_SERVER['SCRIPT_FILENAME']))
 */
 function html_redirect($url, $success = TRUE, $message='')
 {
-    global $CONFIG, $headerdisplayed, $lib_path;
+    global $CONFIG, $headerdisplayed;
 
     if (!empty($_REQUEST['dashboard']))
     {
@@ -55,7 +55,7 @@ function html_redirect($url, $success = TRUE, $message='')
     $title = $GLOBALS['strPleaseWaitRedirect'];
     if (!$headerdisplayed)
     {
-        include ($lib_path . 'htmlheader.inc.php');
+        include ($CONFIG['application_fspath'] . 'htdocs/inc/htmlheader.inc.php');
     }
     else
     {
@@ -90,7 +90,7 @@ function html_redirect($url, $success = TRUE, $message='')
 
     if ($headerdisplayed)
     {
-        include ($lib_path . 'htmlfooter.inc.php');
+        include ($CONFIG['application_fspath'] . 'htdocs/inc/htmlfooter.inc.php');
     }
 }
 
