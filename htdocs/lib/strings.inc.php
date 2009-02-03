@@ -87,8 +87,8 @@ $hmenu[103010] = array_merge(array (10=> array ( 'perm'=> 22, 'name'=> $strManag
                         50=> array ( 'perm'=> 22, 'name'=> $strEditHolidayEntitlement, 'url'=>"{$CONFIG['application_webpath']}edit_holidays.php", 'enablevar' => 'holidays_enabled')
 ), $hmenu[103010]);
 if (!is_array($hmenu[103090])) $hmenu[103090] = array();
-$hmenu[103090] = array_merge(array (10=> array ( 'perm'=> 49, 'name'=> $strAddFeedbackForm, 'url'=>"{$CONFIG['application_webpath']}edit_feedback_form.php?action=new", 'enablevar' => 'feedback_enabled'),
-                        20=> array ( 'perm'=> 49, 'name'=> $strBrowseFeedbackForms, 'url'=>"{$CONFIG['application_webpath']}browse_feedback_forms.php", 'enablevar' => 'feedback_enabled')
+$hmenu[103090] = array_merge(array (10=> array ( 'perm'=> 49, 'name'=> $strAddFeedbackForm, 'url'=>"{$CONFIG['application_webpath']}feedback_form_edit.php?action=new", 'enablevar' => 'feedback_enabled'),
+                        20=> array ( 'perm'=> 49, 'name'=> $strBrowseFeedbackForms, 'url'=>"{$CONFIG['application_webpath']}feedback_form_list.php", 'enablevar' => 'feedback_enabled')
 ), $hmenu[103090]);
 if (!is_array($hmenu[1040])) $hmenu[1040] = array();
 $hmenu[1040] = array_merge(array (10=> array ( 'perm'=> 0, 'name'=> $strViewUsers, 'url'=>"{$CONFIG['application_webpath']}users.php"),
@@ -106,7 +106,7 @@ $hmenu[20] = array_merge(array (10=> array ( 'perm'=> 0, 'name'=> $strSites, 'ur
                     20=> array ( 'perm'=> 0, 'name'=> $strContacts, 'url'=>"{$CONFIG['application_webpath']}contacts.php?search_string=A", 'submenu'=>"2020"),
                     35=> array ( 'perm'=> 0, 'name'=> $strMaintenance, 'url'=>"{$CONFIG['application_webpath']}contracts.php?search_string=A", 'submenu'=>"2030"),
                     30=> array ( 'perm'=> 0, 'name'=> $strInventory, 'url'=>"{$CONFIG['application_webpath']}inventory.php"),
-                    40=> array ( 'perm'=> 0, 'name'=> $strBrowseFeedback, 'url'=>"{$CONFIG['application_webpath']}browse_feedback.php", 'enablevar' => 'feedback_enabled')
+                    40=> array ( 'perm'=> 0, 'name'=> $strBrowseFeedback, 'url'=>"{$CONFIG['application_webpath']}feedback_browse.php", 'enablevar' => 'feedback_enabled')
 ), $hmenu[20]);
 
 if (!is_array($hmenu[2010])) $hmenu[2010] = array();

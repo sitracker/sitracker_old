@@ -15,9 +15,9 @@ require ($lib_path.'db_connect.inc.php');
 require ($lib_path.'functions.inc.php');
 
 // External variables
-$hashcode=$_REQUEST['ax'];
-$mode=$_REQUEST['mode'];
-$decodehash=str_rot13(gzuncompress(base64_decode(urldecode($hashcode))));
+$hashcode = $_REQUEST['ax'];
+$mode = $_REQUEST['mode'];
+$decodehash = str_rot13(gzuncompress(base64_decode(urldecode($hashcode))));
 
 $hashvars=explode('&&',$decodehash);
 $formid=mysql_real_escape_string($hashvars['0']);
@@ -456,7 +456,7 @@ body { font:10pt Arial, Helvetica, sans-serif; }
                 }
             }
         }
-        
+
         if ($_REQUEST['mode']!='bare')
         {
             include ('./inc/htmlfooter.inc.php');
