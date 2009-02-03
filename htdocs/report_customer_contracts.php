@@ -12,7 +12,7 @@
 // Email:    ivanlucas[at]users.sourceforge.net
 // Comments: List supported contacts by contract
 
-@include ('../set_include_path.inc.php');
+@include ('set_include_path.inc.php');
 $permission = 19; /* View Maintenance Contracts */
 $title = 'Supported contacts by Contract';
 
