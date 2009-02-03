@@ -16,8 +16,8 @@
 @include ('set_include_path.inc.php');
 $permission = 37; // Run Reports
 
-include ('db_connect.inc.php');
-include ('functions.inc.php');
+include ($lib_path.'db_connect.inc.php');
+include ($lib_path.'functions.inc.php');
 require ($lib_path.'auth.inc.php');
 
 
@@ -84,9 +84,9 @@ if (!empty($filterby))
 echo "<form action='{$_SERVER['PHP_SELF']}' method='post' id='filterform'><p align='center'>\n";
 echo "{$strFilter}:\n";
 echo "<label><input type='radio' name='filterby' value='none' checked='checked' onclick=\"hide_filter(true);\" {$nonChecked} />{$strNone}</label> \n";
-echo "<label><input type='radio' name='filterby' value='sla' onclick=\"get_and_display('../ajaxdata.php?action=slas', 'filter'); hide_filter(false);\" {$slaChecked} />{$strBySLA}</label> \n";
-echo "<label><input type='radio' name='filterby' value='softwareid' onclick=\"get_and_display('../ajaxdata.php?action=skills', 'filter'); hide_filter(false);\" {$softwareChecked} />{$strBySkill}</label> \n";
-echo "<label><input type='radio' name='filterby' value='product' onclick=\"get_and_display('../ajaxdata.php?action=products', 'filter'); hide_filter(false);\" {$productCheck} />{$strByProduct}</label> \n";
+echo "<label><input type='radio' name='filterby' value='sla' onclick=\"get_and_display('ajaxdata.php?action=slas', 'filter'); hide_filter(false);\" {$slaChecked} />{$strBySLA}</label> \n";
+echo "<label><input type='radio' name='filterby' value='softwareid' onclick=\"get_and_display('ajaxdata.php?action=skills', 'filter'); hide_filter(false);\" {$softwareChecked} />{$strBySkill}</label> \n";
+echo "<label><input type='radio' name='filterby' value='product' onclick=\"get_and_display('ajaxdata.php?action=products', 'filter'); hide_filter(false);\" {$productCheck} />{$strByProduct}</label> \n";
 echo "<br /><br />\n";
 echo "<select id='filter' name='filter'>\n";
 echo "<option />";
@@ -98,13 +98,13 @@ if (!empty($filterby))
     switch ($filterby)
     {
         case 'sla':
-            echo "get_and_display('../ajaxdata.php?action=slas&selected={$filter}', 'filter'); hide_filter(false);";
+            echo "get_and_display('ajaxdata.php?action=slas&selected={$filter}', 'filter'); hide_filter(false);";
             break;
         case 'softwareid':
-            echo "get_and_display('../ajaxdata.php?action=skills&selected={$filter}', 'filter'); hide_filter(false);";
+            echo "get_and_display('ajaxdata.php?action=skills&selected={$filter}', 'filter'); hide_filter(false);";
             break;
         case 'product':
-            echo "get_and_display('../ajaxdata.php?action=products&selected={$filter}', 'filter'); hide_filter(false);";
+            echo "get_and_display('ajaxdata.php?action=products&selected={$filter}', 'filter'); hide_filter(false);";
             break;
         default:
             echo "hide_filter(true);";

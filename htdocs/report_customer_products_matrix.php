@@ -12,8 +12,8 @@
 @include ('set_include_path.inc.php');
 $permission = 37;  // Run Reports
 
-include ('db_connect.inc.php');
-include ('functions.inc.php');
+include ($lib_path.'db_connect.inc.php');
+include ($lib_path.'functions.inc.php');
 
 // This page requires authentication
 require ($lib_path.'auth.inc.php');

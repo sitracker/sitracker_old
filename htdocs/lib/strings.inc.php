@@ -162,9 +162,9 @@ if (!is_array($hmenu[60])) $hmenu[60] = array();
                     50=> array ( 'perm'=> 37, 'name'=> "{$strIncidentsBySite}", 'url'=>"{$CONFIG['application_webpath']}report_incidents_by_site.php"),
                     55=> array ( 'perm'=> 37, 'name'=> "{$strIncidentsByEngineer}", 'url'=>"{$CONFIG['application_webpath']}report_incidents_by_engineer.php"),
                     60=> array ( 'perm'=> 37, 'name'=> "{$strSiteProducts}", 'url'=>"{$CONFIG['application_webpath']}report_customer_products.php"),
-                    61=> array ( 'perm'=> 37, 'name'=> "{$strSiteProductsMatrix}", 'url'=>"{$CONFIG['application_webpath']}reports_customer_products_matrix.php"),
-                    65=> array ( 'perm'=> 37,  'name'=> "{$strCountContractsByProduct}", 'url'=>"{$CONFIG['application_webpath']}reports_contracts_by_product.php"),
-                    70=> array ( 'perm'=> 37, 'name'=> "{$strSiteContracts}", 'url'=>"{$CONFIG['application_webpath']}reports/supportbycontract.php"),
+                    61=> array ( 'perm'=> 37, 'name'=> "{$strSiteProductsMatrix}", 'url'=>"{$CONFIG['application_webpath']}report_customer_products_matrix.php"),
+                    65=> array ( 'perm'=> 37,  'name'=> "{$strCountContractsByProduct}", 'url'=>"{$CONFIG['application_webpath']}report_contracts_by_product.php"),
+                    70=> array ( 'perm'=> 37, 'name'=> "{$strSiteContracts}", 'url'=>"{$CONFIG['application_webpath']}report_customer_contracts.php"),
                     80=> array ( 'perm'=> 37, 'name'=> "{$strCustomerFeedback}", 'url'=>"{$CONFIG['application_webpath']}report_feedback.php", 'enablevar' => 'feedback_enabled'),
                     90=> array ( 'perm'=> 37, 'name'=> "{$strSiteIncidents}", 'url'=>"{$CONFIG['application_webpath']}reports/site_incidents.php"),
                     100=> array ( 'perm'=> 37, 'name'=> "{$strRecentIncidents}", 'url'=>"{$CONFIG['application_webpath']}report_incidents_recent.php"),
@@ -173,7 +173,7 @@ if (!is_array($hmenu[60])) $hmenu[60] = array();
                     130=> array ( 'perm'=> 37, 'name'=> "{$strIncidentsBySkill}", 'url'=>"{$CONFIG['application_webpath']}report_incidents_by_skill.php"),
                     140=> array ( 'perm'=> 37, 'name'=> "{$strIncidentsByVendor}", 'url'=>"{$CONFIG['application_webpath']}report_incidents_by_vendor.php"),
                     150=> array ( 'perm'=> 37, 'name'=> "{$strEscalatedIncidents}",
-                    'url'=>"{$CONFIG['application_webpath']}reports/external_engineers.php",
+                    'url'=>"{$CONFIG['application_webpath']}report_incidents_escalated.php",
 )), $hmenu[60]);
 
 if (!is_array($hmenu[70])) $hmenu[70] = array();
