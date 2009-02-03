@@ -13,11 +13,13 @@
 // FIXME needs abit of tidying up
 // Report Type: Management report
 
-@include ('../set_include_path.inc.php');
-$permission = 67; // Run Reports
-$title='Incidents open/closed by period';
+@include ('set_include_path.inc.php');
+
 require ($lib_path.'db_connect.inc.php');
 require ($lib_path.'functions.inc.php');
+
+$permission = 67; // Run Reports
+$title = $strIncidentsDailySummary;
 
 // This page requires authentication
 require ($lib_path.'auth.inc.php');
