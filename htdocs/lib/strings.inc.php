@@ -135,7 +135,7 @@ $hmenu[203010] = array_merge(array (10=> array ( 'perm'=> 56, 'name'=> $strAddVe
                         40=> array ( 'perm'=> 56, 'name'=> $strAddSkill, 'url'=>"{$CONFIG['application_webpath']}software_add.php"),
                         50=> array ( 'perm'=> 24, 'name'=> $strLinkProducts, 'url'=>"{$CONFIG['application_webpath']}product_software_add.php"),
                         60=> array ( 'perm'=> 25, 'name'=> $strAddProductQuestion, 'url'=>"{$CONFIG['application_webpath']}product_info_add.php"),
-                        70=> array ('perm'=> 56, 'name'=> $strEditVendor, 'url'=>"{$CONFIG['application_webpath']}edit_vendor.php")
+                        70=> array ('perm'=> 56, 'name'=> $strEditVendor, 'url'=>"{$CONFIG['application_webpath']}vendor_edit.php")
 ), $hmenu[203010]);
 
 // Support
