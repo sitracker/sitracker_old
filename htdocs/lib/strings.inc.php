@@ -170,7 +170,7 @@ if (!is_array($hmenu[60])) $hmenu[60] = array();
                     100=> array ( 'perm'=> 37, 'name'=> "{$strRecentIncidents}", 'url'=>"{$CONFIG['application_webpath']}report_incidents_recent.php"),
                     110=> array ( 'perm'=> 37, 'name'=> "{$strIncidentsLoggedOpenClosed}", 'url'=>"{$CONFIG['application_webpath']}report_incidents_graph.php"),
                     120=> array ( 'perm'=> 37, 'name'=> "{$strAverageIncidentDuration}", 'url'=>"{$CONFIG['application_webpath']}report_incidents_average_duration.php"),
-                    130=> array ( 'perm'=> 37, 'name'=> "{$strIncidentsBySkill}", 'url'=>"{$CONFIG['application_webpath']}reports/incidents_by_software.php"),
+                    130=> array ( 'perm'=> 37, 'name'=> "{$strIncidentsBySkill}", 'url'=>"{$CONFIG['application_webpath']}report_incidents_by_skill.php"),
                     140=> array ( 'perm'=> 37, 'name'=> "{$strIncidentsByVendor}", 'url'=>"{$CONFIG['application_webpath']}reports/incidents_by_vendor.php"),
                     150=> array ( 'perm'=> 37, 'name'=> "{$strEscalatedIncidents}",
                     'url'=>"{$CONFIG['application_webpath']}reports/external_engineers.php",
