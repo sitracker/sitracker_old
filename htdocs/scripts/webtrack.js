@@ -513,7 +513,7 @@ function email_window(incidentid)
 
 function close_window(incidentid)
 {
-  URL = application_webpath + "close_incident.php?menu=hide&id=" + incidentid;
+  URL = application_webpath + "incident_close.php?menu=hide&id=" + incidentid;
   window.open(URL, "email_window", "toolbar=yes,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=700,height=600");
 }
 
