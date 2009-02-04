@@ -18,7 +18,7 @@ require ($lib_path.'functions.inc.php');
 
 $accesslevel = 'any';
 
-require ('portalauth.inc.php');
+require ($lib_path.'portalauth.inc.php');
 // External variables
 $id = cleanvar(intval($_GET['id']));
 

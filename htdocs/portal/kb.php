@@ -15,8 +15,8 @@ require $lib_path.'functions.inc.php';
 
 $accesslevel = 'any';
 
-include 'portalauth.inc.php';
-include 'portalheader.inc.php';
+include $lib_path.'portalauth.inc.php';
+include '../inc/portalheader.inc.php';
 
 echo "<h2>".icon('kb', 32)." {$strKnowledgeBase}</h2>";
 $perpage = 20;
@@ -161,6 +161,6 @@ else
     echo "<p align='center'>{$strNoRecords}</p>";
 }
 
-include ('./inc/htmlfooter.inc.php');
+include ('../inc/htmlfooter.inc.php');
 
 ?>

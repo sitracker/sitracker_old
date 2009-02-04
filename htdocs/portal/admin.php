@@ -15,8 +15,8 @@ require $lib_path.'functions.inc.php';
 
 $accesslevel = 'admin';
 
-include 'portalauth.inc.php';
-include 'portalheader.inc.php';
+include $lib_path.'portalauth.inc.php';
+include '../inc/portalheader.inc.php';
 
 if ($_POST['submit'])
 {
@@ -192,5 +192,5 @@ if ($result = mysql_query($sql))
     }
 }
 echo "</table>";
-include './inc/htmlfooter.inc.php';
+include '../inc/htmlfooter.inc.php';
 ?>

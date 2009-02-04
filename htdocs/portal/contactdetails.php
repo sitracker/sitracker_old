@@ -29,8 +29,8 @@ else
     $accesslevel = 'any';
 }
 
-include 'portalauth.inc.php';
-include 'portalheader.inc.php';
+include $lib_path.'portalauth.inc.php';
+include '../inc/portalheader.inc.php';
 
 
 if ($_SESSION['usertype'] == 'admin')
@@ -174,7 +174,7 @@ else
     if ($user->siteid != $_SESSION['siteid'])
     {
         echo "<p class='error'>{$strPermissionDenied}</p>";
-        include './inc/htmlfooter.inc.php';
+        include '../inc/htmlfooter.inc.php';
         exit;
     }
     echo "<h2>".icon('contact', 32)." {$user->forenames} {$user->surname}";
@@ -282,6 +282,6 @@ else
     $exclude = contact_contracts($id, $_SESSION['siteid'], FALSE);
     echo "<p align='center'>".maintenance_drop_down('maintid', 0, $_SESSION['siteid'], $exclude, TRUE)."<br />";
     echo "<input type='submit' name='add' value='{$strAdd}' /></form></p>";
-    include './inc/htmlfooter.inc.php';
+    include '../inc/htmlfooter.inc.php';
 }
 ?>

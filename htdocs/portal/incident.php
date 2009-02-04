@@ -15,8 +15,8 @@ require $lib_path.'functions.inc.php';
 
 $accesslevel = 'any';
 
-include 'portalauth.inc.php';
-include 'portalheader.inc.php';
+include $lib_path.'portalauth.inc.php';
+include '../inc/portalheader.inc.php';
 
 $incidentid = cleanvar($_REQUEST['id']);
 $sql = "SELECT title, contact, status, opened, maintenanceid FROM `{$dbIncidents}` WHERE id={$incidentid}";
@@ -266,5 +266,5 @@ while ($update = mysql_fetch_object($result))
     }
 }
 echo "</div>";
-include './inc/htmlfooter.inc.php';
+include '../inc/htmlfooter.inc.php';
 ?>

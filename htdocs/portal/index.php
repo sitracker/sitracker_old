@@ -15,8 +15,8 @@ require $lib_path.'functions.inc.php';
 
 $accesslevel = 'any';
 
-include 'portalauth.inc.php';
-include 'portalheader.inc.php';
+include $lib_path.'portalauth.inc.php';
+include '../inc/portalheader.inc.php';
 $showclosed = cleanvar($_REQUEST['showclosed']);
 $site = cleanvar($_REQUEST['site']);
 
@@ -217,6 +217,6 @@ if ($CONFIG['portal_site_incidents'] AND $otherincidents != NULL)
 
 }
 
-include ('./inc/htmlfooter.inc.php');
+include ('../inc/htmlfooter.inc.php');
 
 ?>

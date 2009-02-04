@@ -15,8 +15,8 @@ require $lib_path.'functions.inc.php';
 
 $accesslevel = 'any';
 
-include 'portalauth.inc.php';
-include 'portalheader.inc.php';
+include $lib_path.'portalauth.inc.php';
+include '../inc/portalheader.inc.php';
 
 // External vars
 $id = intval($_REQUEST['id']);
@@ -37,7 +37,7 @@ if ($incidentcontact == $_SESSION['contactid'])
         echo "<p>{$strReason}:</p><textarea name='reason' cols='50' rows='10'></textarea><br />";
         echo "<p><input type='submit' value=\"{$strRequestClosure}\" /></p></form></div>";
 
-        include './inc/htmlfooter.inc.php';
+        include '../inc/htmlfooter.inc.php';
     }
     else
     {
@@ -68,7 +68,7 @@ if ($incidentcontact == $_SESSION['contactid'])
 else
 {
     echo "<p class='warning'>$strNoPermission.</p>";
-    include ('./inc/htmlfooter.inc.php');
+    include ('../inc/htmlfooter.inc.php');
     exit;
 }
 

@@ -15,8 +15,8 @@ require $lib_path.'functions.inc.php';
 
 $accesslevel = 'any';
 
-include 'portalauth.inc.php';
-include 'portalheader.inc.php';
+include $lib_path.'portalauth.inc.php';
+include '../inc/portalheader.inc.php';
 
 echo "<h2>".icon('support', 32, $strYourSupportEntitlement);
 echo " {$strYourSupportEntitlement}</h2>";
@@ -87,5 +87,5 @@ else
     echo "<p class='info'>{$strNone}</p>";
 }
 
-include './inc/htmlfooter.inc.php';
+include '../inc/htmlfooter.inc.php';
 ?>

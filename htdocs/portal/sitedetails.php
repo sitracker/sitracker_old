@@ -15,8 +15,8 @@ require $lib_path.'functions.inc.php';
 
 $accesslevel = 'admin';
 
-include 'portalauth.inc.php';
-include 'portalheader.inc.php';
+include $lib_path.'portalauth.inc.php';
+include '../inc/portalheader.inc.php';
 
 $site = intval($_SESSION['siteid']);
 
@@ -114,5 +114,5 @@ echo show_edit_site($site, 'external');
 
 
 
-include './inc/htmlfooter.inc.php';
+include '../inc/htmlfooter.inc.php';
 ?>

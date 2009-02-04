@@ -15,8 +15,8 @@ require $lib_path.'functions.inc.php';
 
 $accesslevel = 'any';
 
-include 'portalauth.inc.php';
-include 'portalheader.inc.php';
+include $lib_path.'portalauth.inc.php';
+include '../inc/portalheader.inc.php';
 
 // External vars
 $id = intval($_REQUEST['id']);
@@ -191,7 +191,7 @@ if ($incidentcontact == $_SESSION['contactid'])
 else
 {
     echo "<p class='warning'>$strNoPermission.</p>";
-    include ('./inc/htmlfooter.inc.php');
+    include ('../inc/htmlfooter.inc.php');
     exit;
 }
 

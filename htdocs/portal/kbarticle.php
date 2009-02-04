@@ -15,8 +15,8 @@ require $lib_path.'functions.inc.php';
 
 $accesslevel = 'any';
 
-include 'portalauth.inc.php';
-include 'portalheader.inc.php';
+include $lib_path.'portalauth.inc.php';
+include '../inc/portalheader.inc.php';
 
 if (!empty($_REQUEST['id']))
 {
@@ -31,6 +31,6 @@ if (empty($id))
 echo "<h2>".icon('kb', 32)." {$strKnowledgeBaseArticle}</h2>";
 echo kb_article($id, 'external');
 
-include ('./inc/htmlfooter.inc.php');
+include ('../inc/htmlfooter.inc.php');
 
 ?>

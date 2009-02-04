@@ -15,8 +15,8 @@ require $lib_path.'functions.inc.php';
 
 $accesslevel = 'admin';
 
-include 'portalauth.inc.php';
-include 'portalheader.inc.php';
+include $lib_path.'portalauth.inc.php';
+include '../inc/portalheader.inc.php';
 
 
 $id = intval($_GET['id']);
@@ -63,6 +63,6 @@ echo "<h2>".icon('contract', 32)." {$GLOBALS['strContract']}</h2>";
 
 echo contract_details($id, 'external');
 
-include './inc/htmlfooter.inc.php'
+include '../inc/htmlfooter.inc.php'
 
 ?>

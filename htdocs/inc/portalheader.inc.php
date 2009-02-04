@@ -119,7 +119,7 @@ if (!empty($_SESSION['lang']) AND $_SESSION['lang'] != $CONFIG['default_i18n'])
 {
     include ("i18n/{$_SESSION['lang']}.inc.php");
 }
-require ('strings.inc.php');
+require ($lib_path.'strings.inc.php');
 
 // External variables
 $page = cleanvar($_REQUEST['page']);

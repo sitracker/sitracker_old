@@ -15,8 +15,8 @@ require $lib_path.'functions.inc.php';
 
 $accesslevel = 'admin';
 
-include 'portalauth.inc.php';
-include 'portalheader.inc.php';
+include $lib_path.'portalauth.inc.php';
+include '../inc/portalheader.inc.php';
 
 if (isset($_POST['submit']))
 {
@@ -25,5 +25,5 @@ if (isset($_POST['submit']))
 
 echo show_add_contact($_SESSION['siteid'], 'external');
 
-include './inc/htmlfooter.inc.php';
+include '../inc/htmlfooter.inc.php';
 ?>
