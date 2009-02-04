@@ -8278,7 +8278,7 @@ function password_reveal_link($id)
 function holding_email_update_id($holding_email)
 {
     $holding_email = intval($holding_email);
-    return db_read_column('updateid', 'tempincoming', $holding_email);
+    return db_read_column('updateid', $GLOBALS['dbTempIncoming'], $holding_email);
 }
 
 
