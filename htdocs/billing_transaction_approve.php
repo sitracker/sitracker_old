@@ -21,7 +21,7 @@ require_once($lib_path.'auth.inc.php');
 
 $transactiond = cleanvar($_REQUEST['transactionid']);
 
-include ('../inc/htmlheader.inc.php');
+include ('inc/htmlheader.inc.php');
 
 $sql = "SELECT * FROM `{$GLOBALS['dbTransactions']}` WHERE transactionid = {$transactiond}";
 $result = mysql_query($sql);
@@ -48,6 +48,6 @@ else
 	html_redirect("../billable_incidents.php", FALSE, "No transaction found with ID {$transactiond}");
 }
 
-include ('../inc/htmlfooter.inc.php');
+include ('inc/htmlfooter.inc.php');
 
 ?>
