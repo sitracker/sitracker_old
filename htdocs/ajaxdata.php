@@ -20,7 +20,7 @@ if ($_REQUEST['action'] == 'contexthelp' AND $_REQUEST['auth'] == 'portal')
     // Special exception for contexthelp, use the portal authentication for
     // portal help tips
     $accesslevel = 'any';
-    require('portalauth.inc.php');
+    require($lib_path.'/portalauth.inc.php');
 }
 else
 {

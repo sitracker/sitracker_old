@@ -53,7 +53,7 @@ if ($incidentcontact == $_SESSION['contactid'])
         echo "<input type='file' name='attachment' size='20' maxfilesize='{$CONFIG['upload_max_filesize']}' /></p>";
         echo "<p><input type='submit' value=\"{$strUpdate}\"/></p></form></div>";
 
-        include './inc/htmlfooter.inc.php';
+        include '../inc/htmlfooter.inc.php';
     }
     else
     {
