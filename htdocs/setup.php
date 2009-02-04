@@ -750,7 +750,7 @@ switch ($_REQUEST['action'])
             }
             else
             {
-                echo "<p class='info'>The database connection now checks out ok, you can now go ahead and run SiT!.</p>";
+                echo "<p class='info'>Sucessfully connected to your database.  You can now go ahead and run SiT!.</p>";
                 echo "<form action='index.php' method='get'>";
                 echo "<input type='submit' value=\"Run SiT!\" />";
                 echo "</form>\n";
