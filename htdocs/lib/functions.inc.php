@@ -6329,7 +6329,7 @@ function contract_details($id, $mode='internal')
 
             if ($numberofcontacts < $allowedcontacts OR $allowedcontacts == 0 AND $mode == 'internal')
             {
-                $html .= "<p align='center'><a href='add_contact_support_contract.php?maintid={$id}&amp;siteid={$maint->site}&amp;context=maintenance'>";
+                $html .= "<p align='center'><a href='contract_add_contact.php?maintid={$id}&amp;siteid={$maint->site}&amp;context=maintenance'>";
                 $html .= "{$GLOBALS[strAddContact]}</a></p>";
             }
             else
@@ -7695,7 +7695,7 @@ function user_contracts_table($userid, $mode = 'internal')
         if ($mode == 'internal')
         {
             $html .= "<p align='center'>";
-            $html .= "<a href='add_contact_support_contract.php?contactid={$userid}&amp;context=contact'>";
+            $html .= "<a href='contact_add_contact.php?contactid={$userid}&amp;context=contact'>";
             $html .= "{$GLOBALS['strAssociateContactWithContract']}</a></p>\n";
         }
 
