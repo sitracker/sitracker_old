@@ -450,7 +450,7 @@ function reopen_incident($incident, $newstatus = STATUS_ACTIVE, $message = '')
     @retval bool FALSE: There was an error sending the mail
     @note This is v2 of this function, it has different paramters than v1
 **/
-function send_template_email($templateid, $paramarray, $attach='', $attachtype='', $attachdesc='')
+function send_email_template($templateid, $paramarray, $attach='', $attachtype='', $attachdesc='')
 {
     global $CONFIG, $application_version_string;
 
