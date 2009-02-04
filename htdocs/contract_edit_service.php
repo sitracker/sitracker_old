@@ -11,7 +11,7 @@
 
 // Author:  Paul Heaney Paul Heaney <paulheaney[at]users.sourceforge.net>
 
-$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
+$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
 $permission =  80;
 
 require_once ($lib_path.'db_connect.inc.php');
@@ -43,7 +43,7 @@ switch ($mode)
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
-            include ('../inc/htmlheader.inc.php');
+            include ('inc/htmlheader.inc.php');
 
             if (mysql_numrows($result) != 1)
             {
@@ -143,9 +143,9 @@ switch ($mode)
                 echo "<input type='hidden' name='mode' id='mode' value='doupdate' />";
                 echo "</form>\n";
 
-                echo "<p align='center'><a href='../contract_details.php?id={$contractid}'>{$strReturnWithoutSaving}</a></p>";
+                echo "<p align='center'><a href='contract_details.php?id={$contractid}'>{$strReturnWithoutSaving}</a></p>";
             }
-            include ('../inc/htmlfooter.inc.php');
+            include ('inc/htmlfooter.inc.php');
         }
 
         break;
@@ -263,7 +263,7 @@ switch ($mode)
         }
         else
         {
-            include ('../inc/htmlheader.inc.php');
+            include ('inc/htmlheader.inc.php');
             echo "<h2>{$strOneTimeBillingEditor}</h2>";
 
             echo "<form name='serviceform' action='{$_SERVER['PHP_SELF']}' method='post' onsubmit='return confirm_submit(\"{$strAreYouSureMakeTheseChanges}\");'>";
@@ -317,7 +317,7 @@ switch ($mode)
 
             echo "</form>";
         }
-        include ('../inc/htmlfooter.inc.php');
+        include ('inc/htmlfooter.inc.php');
         break;
     case 'edit':
         if (user_permission($sit[2], 79) == FALSE)
