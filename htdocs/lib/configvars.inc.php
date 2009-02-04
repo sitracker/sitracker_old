@@ -310,7 +310,7 @@ $CFGVAR['email_username']['title'] = "Incoming email account username";
 $CFGVAR['email_username']['title'] = "Incoming email account username";
 
 $CFGVAR['enable_inbound_mail']['help'] = "Normal users should choose 'POP/IMAP' and fill in the details below', advanced users can choose to pipe straight to SiT from their MTA, please read the docs for help on this.";
-$CFGVAR['enable_inbound_mail']['options'] = "POP/IMAP|MTA|disabled";
+$CFGVAR['enable_inbound_mail']['options'] = "disabled|POP/IMAP|MTA";
 $CFGVAR['enable_inbound_mail']['title'] = "Enable incoming mail to SiT";
 $CFGVAR['enable_inbound_mail']['type'] = 'select';
 

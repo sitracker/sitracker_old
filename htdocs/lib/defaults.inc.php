@@ -63,7 +63,7 @@ $CONFIG['support_manager'] = 1;
 $CONFIG['incident_number_type'] = 1;
 
 // These are the settings for the account to download incoming mail from, settings POP/IMAP or MTA (for piping message in)
-$CONFIG['enable_inbound_mail'] = 'POP/IMAP';
+$CONFIG['enable_inbound_mail'] = 'disabled';
 $CONFIG['email_username'] = '';
 $CONFIG['email_password'] = '';
 $CONFIG['email_address'] = '';
