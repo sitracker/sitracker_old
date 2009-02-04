@@ -68,16 +68,10 @@ $numconfigfiles = count($configfiles);
 if ($numconfigfiles == 1)
 {
     $config_filename = $configfiles[0];
-    $freshinstall = FALSE;
 }
 elseif ($numconfigfiles < 1)
 {
-    $freshinstall = TRUE;
     $configfiles[] = './config.inc.php';
-}
-else
-{
-    $freshinstall = FALSE;
 }
 
 $cfg_file_exists = FALSE;
@@ -109,7 +103,8 @@ foreach ($configfiles AS $conf_filename)
 */
 function setup_configure()
 {
-    global $SETUP, $CFGVAR, $CONFIG, $configfiles, $config_filename, $cfg_file_exists, $cfg_file_writable, $numconfigfiles;
+    global $SETUP, $CFGVAR, $CONFIG, $configfiles, $config_filename, $cfg_file_exists;
+    global $cfg_file_writable, $numconfigfiles;
     $html = '';
 
     if ($cfg_file_exists AND $_REQUEST['configfile'] != 'new')
@@ -146,7 +141,7 @@ function setup_configure()
     }
     else $html .= "<h2>New Configuration</h2><p>Please complete this form to create a new configuration file for SiT!</p>";
 
-    if ($cfg_file_writable OR $_SESSION['new'] === 1)
+    if ($cfg_file_writable OR $_SESSION['new'] === 1 OR $cfg_file_exists == FALSE)
     {
         $html .= "\n<form action='setup.php' method='post'>\n";
 
@@ -560,7 +555,7 @@ $include_path = ini_get('include_path');
 if (!empty($_REQUEST['msg']))
 {
     $msg = strip_tags(base64_decode(urldecode($_REQUEST['msg'])));
-    if ($freshinstall === TRUE)
+    if ($cfg_file_exists === FALSE)
     {
         echo "<p class='info'><strong>It looks like you are setting up SiT! for the first time</strong> because we could not find a configuration file.<br />";
         echo "Please proceed with creating a new configuration file.</p>";
