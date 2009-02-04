@@ -707,23 +707,30 @@ switch ($_REQUEST['action'])
             {
                 if (!empty($CONFIG['db_username']))
                 {
-                    echo "<p class='error'>".mysql_error()."<br />Could not select database";
-                    if ($CONFIG['db_database']!='')
+                    if ($cfg_file_exists)
                     {
-                        echo " '{$CONFIG['db_database']}', check the database name you have configured matches the database in MySQL";
+                        echo "<p class='error'>".mysql_error()."<br />Could not select database";
+                        if ($CONFIG['db_database']!='')
+                        {
+                            echo " '{$CONFIG['db_database']}', check the database name you have configured matches the database in MySQL";
+                        }
+                        else
+                        {
+                            echo ", the database name was not configured, please set the <code>\$CONFIG['db_database'] config variable";
+                            $CONFIG['db_database'] = 'sit';
+                        }
+                        echo "</p>";
+                        if ($_SESSION['new'] == 1)
+                        {
+                            echo "<p class='info'>If this is a new installation of SiT and you would like to use the database name '{$CONFIG['db_database']}', you should proceed and create a database</p>";
+                        }
+                        echo setup_button('reconfigure', 'Reconfigure SiT!');
+                        echo "<br />or<br /><br />";
                     }
                     else
                     {
-                        echo ", the database name was not configured, please set the <code>\$CONFIG['db_database'] config variable";
-                        $CONFIG['db_database'] = 'sit';
+                        echo "<p class='info'>You can now go ahead and create a database called '{$CONFIG['db_database']}' for SiT! to use.</p>";
                     }
-                    echo "</p>";
-                    if ($_SESSION['new'] == 1)
-                    {
-                        echo "<p class='info'>If this is a new installation of SiT and you would like to use the database name '{$CONFIG['db_database']}', you should proceed and create a database</p>";
-                    }
-                    echo setup_button('reconfigure', 'Reconfigure SiT!');
-                    echo "<br />or<br /><br />";
                     echo setup_button('createdb', 'Create a database');
                     //echo "<p><a href='{$_SERVER['PHP_SELF']}?action=reconfigure'>Reconfigure</a> SiT!</p>";
                 }
