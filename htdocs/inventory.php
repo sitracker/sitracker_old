@@ -7,7 +7,7 @@
 // This software may be used and distributed according to the terms
 // of the GNU General Public License, incorporated herein by reference.
 
-@include ('set_include_path.inc.php');
+$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
 $permission = 0;
 
 require ($lib_path.'db_connect.inc.php');

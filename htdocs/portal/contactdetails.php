@@ -9,9 +9,9 @@
 //
 // Author Kieran Hogg <kieran[at]sitracker.org>
 
-@include ('../set_include_path.inc.php');
-require 'db_connect.inc.php';
-require 'functions.inc.php';
+$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
+require $lib_path.'db_connect.inc.php';
+require $lib_path.'functions.inc.php';
 
 if ($_SESSION['usertype'] == 'admin')
 {
@@ -196,18 +196,18 @@ else
     echo "<tr><th>{$strForenames}</th><td>";
 
 
-    if ( $using_ldap && array_key_exists("forenames",$attrmap) ) 
+    if ( $using_ldap && array_key_exists("forenames",$attrmap) )
     {
         echo "<input type='hidden' name='forenames' value='{$user->forenames}' />".$user->forenames;
     }
-    else   
+    else
     {
         echo "<input class='required' name='forenames' value='{$user->forenames}' />";
         echo " <span class='required'><span>{$strRequired}</span>";
     }
     echo "</td></tr>\n";
     echo "<tr><th>{$strSurname}</th><td>";
-    if ( $using_ldap && array_key_exists("surname",$attrmap) ) 
+    if ( $using_ldap && array_key_exists("surname",$attrmap) )
     {
         echo "<input type='hidden'  name='surname' value='{$user->surname}' />".$user->surname;
     }
@@ -224,7 +224,7 @@ else
     echo "<tr><th>{$strCountry}</th><td><input name='country' value='{$user->country}' /></td></tr>\n";
     echo "<tr><th>{$strPostcode}</th><td><input name='postcode' value='{$user->postcode}' /></td></tr>\n";
     echo "<tr><th>{$strTelephone}</th><td>";
-    if ( $using_ldap && array_key_exists("phone",$attrmap) ) 
+    if ( $using_ldap && array_key_exists("phone",$attrmap) )
     {
         echo "<input type='hidden' name='phone' value='{$user->phone}' />".$user->phone;
     }
@@ -235,7 +235,7 @@ else
     }
     echo "</td></tr>\n";
     echo "<tr><th>{$strMobile}</th><td>";
-    if ( $using_ldap && array_key_exists("mobile",$attrmap) ) 
+    if ( $using_ldap && array_key_exists("mobile",$attrmap) )
     {
         echo "<input type='hidden' name='mobile' value='{$user->mobile}' />".$user->mobile;
     }
@@ -255,7 +255,7 @@ else
     }
 
     echo "<tr><th>{$strEmail}</th><td>";
-    if ( $using_ldap && array_key_exists("email",$attrmap) ) 
+    if ( $using_ldap && array_key_exists("email",$attrmap) )
     {
         echo "<input type='hidden' name='email' value='{$user->email}' />$user->email";
     }

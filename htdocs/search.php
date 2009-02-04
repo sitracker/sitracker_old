@@ -10,7 +10,7 @@
 
 // Author: Kieran Hogg <kieran[at]sitracker.org>
 // TODO eventually this needs refactorising, just couldn't do it well enough for this release
-@include ('set_include_path.inc.php');
+$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
 require ($lib_path.'db_connect.inc.php');
 require ($lib_path.'functions.inc.php');
 

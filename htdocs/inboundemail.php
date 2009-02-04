@@ -11,7 +11,7 @@
 //       with the function in fetchSitMail.class.php
 // Note2: to be called from auto.php
 
-@include ('set_include_path.inc.php');
+$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
 require ($lib_path . 'mime_parser.inc.php');
 require ($lib_path . 'rfc822_addresses.inc.php');
 require ($lib_path . 'fetchSitMail.class.php');

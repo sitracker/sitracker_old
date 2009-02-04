@@ -12,7 +12,7 @@
 
 // This Page Is Valid XHTML 1.0 Transitional!  11Oct06
 
-@include ('set_include_path.inc.php');
+$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
 $permission = 24;  // Add Product
 require ($lib_path.'db_connect.inc.php');
 require ($lib_path.'functions.inc.php');

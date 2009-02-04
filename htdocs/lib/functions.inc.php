@@ -23,8 +23,7 @@ if (realpath(__FILE__) == realpath($_SERVER['SCRIPT_FILENAME']))
     exit;
 }
 
-
-@include ('set_include_path.inc.php');
+$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR;
 include ('classes.inc.php');
 include ('ldap.inc.php');
 include ($lib_path . 'base.inc.php');

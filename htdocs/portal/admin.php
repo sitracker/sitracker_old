@@ -8,9 +8,10 @@
 // of the GNU General Public License, incorporated herein by reference.
 //
 // Author Kieran Hogg <kieran[at]sitracker.org>
-@include ('../set_include_path.inc.php');
-require 'db_connect.inc.php';
-require 'functions.inc.php';
+$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
+
+require $lib_path.'db_connect.inc.php';
+require $lib_path.'functions.inc.php';
 
 $accesslevel = 'admin';
 

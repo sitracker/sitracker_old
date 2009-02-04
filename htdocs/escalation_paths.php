@@ -12,7 +12,7 @@
 
 //// This Page Is Valid XHTML 1.0 Transitional!  (7 Oct 2006)
 
-@include ('set_include_path.inc.php');
+$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
 $permission = 64; // Manage escalation paths
 
 require ($lib_path.'db_connect.inc.php');

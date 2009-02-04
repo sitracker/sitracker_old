@@ -15,7 +15,7 @@
 // Notes:
 //  Counts activate calls within the specified period (i.e. those with a lastupdate time > timespecified)
 
-@include ('set_include_path.inc.php');
+$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
 $permission = 37; // Run Reports
 
 require ($lib_path.'db_connect.inc.php');

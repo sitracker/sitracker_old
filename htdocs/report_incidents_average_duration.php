@@ -14,7 +14,7 @@
 //
 // Comments: How long do we take to close incidents?
 
-@include ('set_include_path.inc.php');
+$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
 set_time_limit(60);
 
 $title = 'Average Incident Duration';

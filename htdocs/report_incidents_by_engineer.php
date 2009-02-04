@@ -19,7 +19,7 @@
 
 // Requested by Rob Shepley, 3 Oct 05
 
-@include ('set_include_path.inc.php');
+$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
 $permission = 37; // Run Reports
 $title = 'Yearly Engineer/Incident Report';
 require ($lib_path.'db_connect.inc.php');

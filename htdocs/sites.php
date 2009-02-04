@@ -11,7 +11,7 @@
 
 // TODO This page fails XHTML validation because of dojo attributes - INL 12/12/07
 
-@include ('set_include_path.inc.php');
+$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
 $permission = 11; // View Sites
 require ($lib_path.'db_connect.inc.php');
 require ($lib_path.'functions.inc.php');

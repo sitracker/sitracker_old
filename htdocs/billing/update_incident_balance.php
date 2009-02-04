@@ -10,7 +10,7 @@
 
 // Author:  Paul Heaney Paul Heaney <paulheaney[at]users.sourceforge.net>
 
-@include ('../set_include_path.inc.php');
+$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
 $permission = 80; //Set -ve balances
 
 require_once ($lib_path.'db_connect.inc.php');
@@ -76,13 +76,13 @@ elseif ($mode == 'update')
         if ($success)
         {
             $bills = get_incident_billable_breakdown_array($incidentid);
-    
+
             $multipliers = get_all_available_multipliers();
-    
+
             $totalunits = 0;
             $totalbillableunits = 0;
             $totalrefunds = 0;
-    
+
             foreach ($bills AS $bill)
             {
                 foreach ($multipliers AS $m)
@@ -90,23 +90,23 @@ elseif ($mode == 'update')
                     $a[$m] += $bill[$m]['count'];
                 }
             }
-    
+
             foreach ($multipliers AS $m)
             {
                 $s .= sprintf($GLOBALS['strXUnitsAtX'], $a[$m], $m);
                 $totalunits += $a[$m];
                 $totalbillableunits += ($m * $a[$m]);
             }
-    
+
             $unitrate = get_unit_rate(incident_maintid($incidentid));
-    
+
             $totalrefunds = $bills['refunds'];
             // $numberofunits += $bills['refunds'];
-    
+
             $cost = (($totalbillableunits + $totalrefunds)  * $unitrate) * -1;
-    
+
             $desc = trim("{$numberofunits} {$strUnits} @ {$CONFIG['currency_symbol']}{$unitrate} for incident {$incidentid}. {$s}"); //FIXME i18n
-        
+
             $transactionid = get_incident_transactionid($incidentid);
             if ($transactionid != FALSE)
             {

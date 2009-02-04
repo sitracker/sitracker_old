@@ -11,7 +11,7 @@
 
 // This file should be called from a cron job (or similar) to run tasks periodically
 
-@include ('set_include_path.inc.php');
+$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
 require ($lib_path.'db_connect.inc.php');
 include ($lib_path.'strings.inc.php');
 require ($lib_path.'functions.inc.php');

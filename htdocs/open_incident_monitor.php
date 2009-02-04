@@ -8,7 +8,7 @@
 // of the GNU General Public License, incorporated herein by reference.
 //
 
-@include ('set_include_path.inc.php');
+$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
 $permission = 14; // View Users
 $title="Open Incident Monitor";
 require ($lib_path.'db_connect.inc.php');

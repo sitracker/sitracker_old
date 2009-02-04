@@ -12,7 +12,7 @@
 // TODO should this update the tasks table?
 // Author:  Paul Heaney Paul Heaney <paulheaney[at]users.sourceforge.net>
 
-@include ('../set_include_path.inc.php');
+$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
 $permission =  81;
 
 require_once('db_connect.inc.php');
@@ -30,11 +30,11 @@ switch ($mode)
 {
     case 'edit':
         $sql = "SELECT bodytext, duration FROM `{$dbUpdates}` WHERE id = {$updateid} AND duration IS NOT NULL AND duration != 0";
-        
+
         $oldduration = cleanvar($_REQUEST['oldduration']);
         $reason = cleanvar($_REQUEST['reason']);
         $newduration = cleanvar($_REQUEST['newduration']); // In minutes
-        
+
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
@@ -49,7 +49,7 @@ switch ($mode)
                 $usql = "UPDATE `{$dbUpdates}` SET bodytext = '".mysql_real_escape_string($text)."', duration = '{$newduration}' WHERE id = '{$updateid}'";
                 mysql_query($usql);
                 if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
-                
+
                 // Some error checking
                 if (mysql_affected_rows() < 1)
                 {
@@ -71,7 +71,7 @@ switch ($mode)
         	// No matching incident found (updateID and a duration with a value)
             html_redirect("{$CONFIG['application_webpath']}incident_details.php?id={$incidentid}", FALSE, $strNoDurationOnActivity);
         }
-        
+
         break;
 	case 'showform':
     default:
@@ -83,24 +83,24 @@ switch ($mode)
         {
             include ('inc/incident_html_top.inc.php');
             $obj = mysql_fetch_object($result);
-                        
+
             echo "<h2>{$strAdjustActivityDuration}</h2>";
-            
+
             echo "<form name='editduration' action='{$_SERVER['PHP_SELF']}?mode=edit' method='post' onsubmit='return confirm_submit(\"{$strAreYouSureMakeTheseChanges}\");'>";
             echo "<table align='center' class='vertical'>";
-            
+
             echo "<tr><th>{$strDuration}</th><td>".sprintf($strXMinutes, ceil($obj->duration/60))."</d></tr>";
             echo "<tr><th>{$strNewDuration}</th><td><input type='text' size='10' name='newduration' id='newduration' />{$strMinutes}</d></tr>";
             echo "<tr><th>{$strReason}</th><td><textarea rows='3' cols='6' name='reason' id='reason' ></textarea></td></tr>";
-            
+
             echo "</table>";
             echo "<p align='center'><input type='submit' name='editduration' value='{$strEdit}' /></p>";
 
             echo "<input type='hidden' name='oldduration' id='oldduration' value='{$obj->duration}' />";
             echo "<input type='hidden' name='updateid' id='updateid' value='{$updateid}' />";
             echo "<input type='hidden' name='incidentid' id='incidentid' value='{$incidentid}' />";
-            echo "</form>";            
-            
+            echo "</form>";
+
             include ('inc/incident_html_bottom.inc.php');
         }
         else

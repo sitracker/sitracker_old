@@ -10,7 +10,7 @@
 
 // Author: Ivan Lucas, <ivanlucas[at]users.sourceforge.net
 
-@include ('../set_include_path.inc.php');
+$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
 $permission = 0; // no permission required
 
 require ($lib_path.'db_connect.inc.php');
@@ -74,7 +74,7 @@ elseif ($access == TRUE)
 {
     $file_size = filesize($file_fspath);
     $fp = fopen($file_fspath, 'r');
-    
+
     if ($fp && ($file_size !=-1))
     {
         if (file_exists($file_fspath))
@@ -91,7 +91,7 @@ elseif ($access == TRUE)
             header("Content-Disposition-Type: attachment\r\n");
             header("Content-Disposition: filename={$old_style}\r\n");
         }
-        
+
         $buffer = '';
         while (!feof($fp))
         {

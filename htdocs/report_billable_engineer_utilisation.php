@@ -9,7 +9,7 @@
 //
 //  Author:   Paul Heaney
 
-@include ('set_include_path.inc.php');
+$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
 $permission = 37;  // Run Reports // TODO perhaps should have own permission
 
 include ($lib_path.'db_connect.inc.php');

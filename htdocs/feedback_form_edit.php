@@ -9,7 +9,7 @@
 //
 
 // by Ivan Lucas, June 2004
-@include ('set_include_path.inc.php');
+$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
 $permission = 49; // Edit Feedback Forms
 
 require ($lib_path.'db_connect.inc.php');

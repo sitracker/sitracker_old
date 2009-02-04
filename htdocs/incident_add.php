@@ -11,7 +11,7 @@
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>, Tom Gerrard
 // 7Oct02 INL  Added support for maintenanceid to be put into incidents table
 
-@include ('set_include_path.inc.php');
+$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
 $permission = 5;
 require ($lib_path.'db_connect.inc.php');
 require ($lib_path.'functions.inc.php');

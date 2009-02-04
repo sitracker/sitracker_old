@@ -12,7 +12,7 @@
 
 // FIXME i18n Whole Page
 
-@include ('set_include_path.inc.php');
+$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
 $permission = 48; // Add Feedback Forms
 
 require ($lib_path.'db_connect.inc.php');

@@ -11,7 +11,7 @@
 // This Page fails XHTML validation because of collapsable tbody in the table - INL 12/12/07
 // FIXME make XHTML complient - PH 13/12/07
 
-@include ('set_include_path.inc.php');
+$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
 $permission = 39; // Add Maintenance Contract
 
 require ($lib_path.'db_connect.inc.php');

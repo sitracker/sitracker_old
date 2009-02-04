@@ -11,7 +11,7 @@
 // Author: Kieran Hogg <kieran[at]sitracker.org
 // This Page Is Valid XHTML 1.0 Transitional!
 
-@include ('set_include_path.inc.php');
+$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
 require ($lib_path.'db_connect.inc.php');
 require ($lib_path.'functions.inc.php');
 require_once ($lib_path . 'billing.inc.php');

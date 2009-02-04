@@ -9,7 +9,7 @@
 //
 // Author: Tom Gerrard <tom.gerrard[at]salfordsoftware.co.uk>
 
-@include ('../set_include_path.inc.php');
+$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
 $permission = 50; /* Approve holidays */
 require ($lib_path.'db_connect.inc.php');
 require ($lib_path.'functions.inc.php');
@@ -39,7 +39,7 @@ if ($user == '')
     if (mysql_num_rows($uresult) > 0)
     {
     	// User is in a group. only approve there groups
-    	$sql .= "u.groupid = {$mygroup->groupid} AND "; 
+    	$sql .= "u.groupid = {$mygroup->groupid} AND ";
     }
     $sql .= "u.id = t.owner ORDER BY owner";
     $result = mysql_query($sql);

@@ -9,9 +9,9 @@
 // of the GNU General Public License, incorporated herein by reference.
 //
 // Author Kieran Hogg <kieran[at]sitracker.org>
-@include ('../set_include_path.inc.php');
-require 'db_connect.inc.php';
-require 'functions.inc.php';
+$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
+require $lib_path.'db_connect.inc.php';
+require $lib_path.'functions.inc.php';
 
 $accesslevel = 'any';
 
@@ -39,19 +39,19 @@ if (!$_REQUEST['action'])
 	    $sql .= "WHERE m.product=p.id ";
 	    $sql .= "AND s.contactid='{$_SESSION['contactid']}' AND s.maintenanceid=m.id ";
 	    $sql .= "AND m.id='{$contractid}' ";
-	
+
 	    $sql .= "UNION SELECT *, p.id AS productid, m.id AS id, ";
 	    $sql .= "(m.incident_quantity - m.incidents_used) AS availableincidents ";
 	    $sql .= "FROM `{$dbSupportContacts}` AS s, `{$dbMaintenance}` AS m, `{$dbProducts}` AS p ";
 	    $sql .= "WHERE m.product=p.id ";
 	    $sql .= "AND m.allcontactssupported='yes' ";
 	    $sql .= "AND m.id='{$contractid}'";
-	
+
 	    $checkcontract = mysql_query($sql);
 	    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
 	    $contract = mysql_fetch_object($checkcontract);
 	    $productid = $contract->productid;
-	
+
 	    if (mysql_num_rows($checkcontract) == 0)
 	    {
 	        echo "<p class='error'>{$strPermissionDenied}</p>";
@@ -163,13 +163,13 @@ else //submit
         {
             $updatetext .= "[b]{$SYSLANG['strProblemDescription']}[/b]\n{$probdesc}\n\n";
         }
-        
+
 		if ($CONFIG['portal_creates_incidents'])
 		{
-			$incidentid = create_incident($incidenttitle, $contactid, $servicelevel, 
+			$incidentid = create_incident($incidenttitle, $contactid, $servicelevel,
 			                          $contractid, $productid, $software);
 		    $_SESSION['incidentid'] = $incidentid;
-	
+
 	        // Save productinfo if there is some
 	        $sql = "SELECT * FROM `{$dbProductInfo}` WHERE productid='{$productid}'";
 	        $result = mysql_query($sql);
@@ -191,9 +191,9 @@ else //submit
 		{
 			$incidentid = 0;
 		}
-		
+
 		$update_id = new_update($incidentid, $updatetext, 'opening');
-		
+
 		if ($CONFIG['portal_creates_incidents'])
 		{
 	        // get the service level
@@ -208,28 +208,28 @@ else //submit
 	        {
 	            $sql = "SELECT * FROM `{$dbServiceLevels}` WHERE tag='{$servicelevel}' AND priority='{$priority}' ";
 	        }
-	
+
 	        $result = mysql_query($sql);
 	        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
 	        $level = mysql_fetch_object($result);
-	
+
 	        $targetval = $level->initial_response_mins * 60;
 	        $initialresponse = $now + $targetval;
-	
+
 	        // Insert the first SLA update, this indicates the start of an incident
 	        // This insert could possibly be merged with another of the 'updates' records, but for now we keep it seperate for clarity
 	        $sql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, timestamp, currentowner, currentstatus, customervisibility, sla, bodytext) ";
 	        $sql .= "VALUES ('{$incidentid}', '0', 'slamet', '{$now}', '0', '1', 'hide', 'opened','The incident is open and awaiting action.')";
 	        mysql_query($sql);
 	        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-	
+
 	        // Insert the first Review update, this indicates the review period of an incident has started
 	        // This insert could possibly be merged with another of the 'updates' records, but for now we keep it seperate for clarity
 	        $sql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, timestamp, currentowner, currentstatus, customervisibility, sla, bodytext) ";
 	        $sql .= "VALUES ('{$incidentid}', '0', 'reviewmet', '{$now}', '0', '1', 'hide', 'opened','')";
 	        mysql_query($sql);
 	        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-	
+
 	        trigger('TRIGGER_INCIDENT_CREATED', array('incidentid' => $incidentid));
 	        $_SESSION['formdata']['portaladdincident'] = NULL;
 	        $_SESSION['formerrors']['portaladdincident'] = NULL;

@@ -11,7 +11,7 @@
 
 // Author:  Paul Heaney Paul Heaney <paulheaney[at]users.sourceforge.net>
 
-@include ('../set_include_path.inc.php');
+$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
 $permission =  80;
 
 require_once ($lib_path.'db_connect.inc.php');
@@ -272,15 +272,15 @@ switch ($mode)
             echo "<tr><th>{$strEdit}</th><td>{$sourceservice}</td></tr>";
             echo "<tr><th></th><td>";
             echo "<input type='radio' name='mode' id='edit' value='edit' checked='checked' onclick=\"$('transfersection').hide(); $('transfersectionbtn').hide(); $('editsection').show(); \" /> {$strEdit} ";
-            
+
             // Only allow transfers on the same contractid
             $sql = "SELECT * FROM `{$dbService}` WHERE contractid = '{$contractid}' AND serviceid != {$sourceservice}";
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
-            
+
             if (mysql_numrows($result) > 0)
             {
-                
+
                 echo "<input type='radio' name='mode' id='transfer' value='transfer' onclick=\"$('transfersection').show(); $('transfersectionbtn').show(); $('editsection').hide(); \" /> {$strTransfer} ";
                 echo "</td></tr>";
                 echo "<tbody  style='display:none' id='transfersection' >";

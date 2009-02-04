@@ -11,7 +11,7 @@
 //          Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 //          Kieran Hogg <kieran[at]sitracker.org>
 
-@include ('set_include_path.inc.php');
+$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
 $permission = 0; // not required
 require ($lib_path.'db_connect.inc.php');
 

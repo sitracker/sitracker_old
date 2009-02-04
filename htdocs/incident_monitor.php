@@ -12,7 +12,7 @@
 
 // FIXME target 3.24 this page needs serious tidying up
 
-@include ('set_include_path.inc.php');
+$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
 $permission = 14; // View Users
 // $title = "Incident Monitor";
 require ($lib_path.'db_connect.inc.php');

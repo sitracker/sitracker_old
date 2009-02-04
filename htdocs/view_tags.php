@@ -9,7 +9,7 @@
 //
 // Author: Paul Heaney <paulheaney[at]users.sourceforge.net>
 
-@include ('set_include_path.inc.php');
+$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
 $permission = 0; // not required
 require ($lib_path.'db_connect.inc.php');
 require ($lib_path.'functions.inc.php');

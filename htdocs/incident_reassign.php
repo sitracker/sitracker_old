@@ -9,7 +9,7 @@
 //
 
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
-@include ('set_include_path.inc.php');
+$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
 
 $permission = 13; // Reassign Incident
 require ($lib_path.'db_connect.inc.php');

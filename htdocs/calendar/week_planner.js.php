@@ -10,7 +10,7 @@
 
 // Author: Tom Gerrard <tom.gerrard[at]salfordsoftware.co.uk>
 
-@include ('../set_include_path.inc.php');
+$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
 $permission = 27; // View your calendar
 require ($lib_path.'db_connect.inc.php');
 $headerdisplayed = 1;

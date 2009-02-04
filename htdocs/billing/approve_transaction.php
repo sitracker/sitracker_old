@@ -10,7 +10,7 @@
 
 // Authors: Paul Heaney <paulheaney[at]users.sourceforge.net>
 
-@include('../set_include_path.inc.php');
+$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
 $permission = 73; // Approve billable incidents
 
 require_once($lib_path.'db_connect.inc.php');
@@ -34,7 +34,7 @@ if (mysql_num_rows($result) > 0)
     {
     	// function update_contract_balance($contractid, $description, $amount, $serviceid='', $transactionid='', $totalunits=0, $totalbillableunits=0, $totalrefunds=0)
         $r = update_contract_balance('', '', $obj->amount, $obj->serviceid, $obj->transactionid);
-        
+
         if ($r) html_redirect("../billable_incidents.php", TRUE, "Transaction approved");
         else html_redirect("../billable_incidents.php", FALSE, "Failed to approve transaction ID {$transactiond}");
     }

@@ -13,7 +13,7 @@
 // Purpose: Show All Contact Details
 // This Page Is Valid XHTML 1.0 Transitional! 27Oct05
 
-@include ('set_include_path.inc.php');
+$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
 $permission = 12;  // view contacts
 
 require ($lib_path.'db_connect.inc.php');

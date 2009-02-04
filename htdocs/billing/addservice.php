@@ -8,7 +8,7 @@
 // of the GNU General Public License, incorporated herein by reference.
 //
 
-@include ('../set_include_path.inc.php');
+$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
 $permission = 21; // FIXME need a permission for add service
 
 require_once ($lib_path.'db_connect.inc.php');
@@ -119,7 +119,7 @@ if (empty($submit) OR !empty($_SESSION['formerrors']['add_service']))
     echo "<td>{$CONFIG['currency_symbol']} ";
     echo "<input class='required' type='text' name='incidentrate' size='5' />";
     echo " <span class='required'>{$strRequired}</span></td></tr>";
-    
+
     echo "<tr>";
     echo "<th>{$strFreeOfCharge}</th>";
     echo "<td><input type='checkbox' id='foc' name='foc' value='yes' /> {$strAboveMustBeCompletedToAllowDeductions}</td>";
@@ -159,12 +159,12 @@ else
     if ($unitrate == '') $unitrate = 0;
     $incidentrate =  cleanvar($_POST['incidentrate']);
     if ($incidentrate == '') $incidentrate = 0;
-    
+
     $billtype = cleanvar($_REQUEST['billtype']);
     $notes = cleanvar($_REQUEST['notes']);
     $foc = cleanvar($_REQUEST['foc']);
     if (empty($foc)) $foc = 'no';
-    
+
     if ($billtype == 'billperunit') $incidentrate = 0;
     elseif ($billtype == 'billperincident') $unitrate = 0;
 
