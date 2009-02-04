@@ -1278,6 +1278,8 @@ CREATE TABLE `{$dbTempIncoming}` (
   `reason` varchar(255) default NULL,
   `reason_user` int(11) NOT NULL,
   `reason_time` datetime NOT NULL,
+  `reason_id` tinyint(1) default 1,
+  `incident_id` int(11) default NULL,
   `contactid` int(11) default NULL,
   PRIMARY KEY  (`id`),
   KEY `updateid` (`updateid`)
