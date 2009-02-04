@@ -13,7 +13,7 @@
 //       to enable us to pass variables from PHP to Javascript.
 //
 
-$lib_path = dirname( __FILE__ ).'..'.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
+$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
 
 $permission=0; // not required
 require ($lib_path.'db_connect.inc.php');

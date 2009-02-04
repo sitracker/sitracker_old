@@ -134,7 +134,7 @@ function setup_configure()
     }
     else $html .= "<h2>New Configuration</h2><p>Please complete this form to create a new configuration file for SiT!</p>";
 
-    if ($cfg_file_writable OR $_REQUEST['configfile'] == 'new')
+    if ($cfg_file_writable OR $_SESSION['new'] === 1)
     {
         $html .= "\n<form action='setup.php' method='post'>\n";
 
