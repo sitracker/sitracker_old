@@ -975,8 +975,8 @@ elseif ($action == 'reassign')
 
     include ('./inc/htmlheader.inc.php');
     echo "<h2>{$strIncidentAdded} - {$strSummary}</h2>";
-    echo "<p align='center'>{$strIncident} <a href=\"javascript:incident_details_window('$incidentid','incident{$incidentid}');\">";
-    echo "{$incidentid}</a> has been moved to ";
+    echo "<p align='center'><a href=\"javascript:incident_details_window('$incidentid','incident{$incidentid}');\">";
+    echo "{$strIncident} {$incidentid}</a> has been moved to ";
     echo user_realname($uid)."'s <strong style='color: red'>{$strActionNeeded}</strong> queue</p>";
     $userphone = user_phone($userid);
     if ($userphone!='') echo "<p align='center'>{$strTelephone}: {$userphone}</p>";

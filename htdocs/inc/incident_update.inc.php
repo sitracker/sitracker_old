@@ -187,7 +187,7 @@ function display_update_page($draftid=-1)
 
         if (toPass != '')
         {
-            xmlhttp.open("GET", "auto_save.php?userid="+<?php echo $_SESSION['userid']; ?>+"&type=update&incidentid="+<?php echo $id; ?>+"&draftid="+draftid+"&meta="+meta+"&content="+escape(toPass), true);
+            xmlhttp.open("GET", "ajaxdata.php?action=auto_save&userid="+<?php echo $_SESSION['userid']; ?>+"&type=update&incidentid="+<?php echo $id; ?>+"&draftid="+draftid+"&meta="+meta+"&content="+escape(toPass), true);
 
             xmlhttp.onreadystatechange=function() {
                 //remove this in the future after testing
@@ -224,7 +224,7 @@ function display_update_page($draftid=-1)
     //-->
     </script>
     <?php
-    
+
     echo show_form_errors('update');
     clear_form_errors('update');
 

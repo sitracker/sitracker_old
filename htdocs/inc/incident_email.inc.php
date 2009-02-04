@@ -390,7 +390,7 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
 
             if (toPass != '')
             {
-                xmlhttp.open("GET", "auto_save.php?userid="+<?php echo $_SESSION['userid']; ?>+
+                xmlhttp.open("GET", "ajaxdata.php?action=auto_save&userid="+<?php echo $_SESSION['userid']; ?>+
                              "&type=email&incidentid="+<?php echo $id; ?>+
                              "&draftid="+draftid+"&meta="+meta+"&content="+
                              escape(toPass), true);

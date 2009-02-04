@@ -45,6 +45,30 @@ list($iconset) = mysql_fetch_row($iconresult);
 
 switch ($action)
 {
+    case 'auto_save':
+        $userid = cleanvar($_REQUEST['userid']);
+        $incidentid = cleanvar($_REQUEST['incidentid']);
+        $type = cleanvar($_REQUEST['type']);
+        $draftid = cleanvar($_REQUEST['draftid']);
+        $meta = cleanvar($_REQUEST['meta']);
+        $content = cleanvar($_REQUEST['content']);
+
+        if ($userid == $_SESSION['userid'])
+        {
+            if ($draftid == -1)
+            {
+                $sql = "INSERT INTO `{$dbDrafts}` (userid,incidentid,type,meta,content,lastupdate) VALUES ('{$userid}','{$incidentid}','{$type}','{$meta}','{$content}','{$now}')";
+            }
+            else
+            {
+                $sql = "UPDATE `{$dbDrafts}` SET content = '{$content}', meta = '{$meta}', lastupdate = '{$now}' WHERE id = {$draftid}";
+            }
+            $result = mysql_query($sql);
+            if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+            echo mysql_insert_id();
+        }
+    break;
+
     case 'servicelevel_timed':
         $sltag = servicelevel_id2tag(cleanvar($_REQUEST['servicelevel']));
         if (servicelevel_timed($sltag))
