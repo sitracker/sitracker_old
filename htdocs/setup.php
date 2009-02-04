@@ -973,23 +973,23 @@ switch ($_REQUEST['action'])
                                 }
                             }
                         }
-                        
+
                         if ($installed_version < 3.45)
                         {
-                        	$sql = "SELECT i.id FROM `{$GLOBALS['dbIncidents']}` AS i, `{$GLOBALS['dbContacts']}` AS c, `{$dbServiceLevels}` AS sl ";
+                            $sql = "SELECT i.id FROM `{$GLOBALS['dbIncidents']}` AS i, `{$GLOBALS['dbContacts']}` AS c, `{$dbServiceLevels}` AS sl ";
                             $sql .= "WHERE c.id = i.contact ";
                             $sql .= "AND sl.tag = i.servicelevel AND sl.priority = i.priority AND sl.timed = 'yes' ";
                             $sql .= "AND i.status = 2 "; // Only want closed incidents, dont want awaiting closure as they could be reactivated
-                        
+
                             $result = mysql_query($sitelistsql);
                             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
                             if (mysql_num_rows($result) > 0)
                             {
-                            	while ($obj = mysql_fetch_object($result))
+                                while ($obj = mysql_fetch_object($result))
                                 {
-                                	if (!$is_billable_incident_approved($obj->id))
+                                    if (!$is_billable_incident_approved($obj->id))
                                     {
-                                    	$billing_upgrade[] = $obj->id;s
+                                        $billing_upgrade[] = $obj->id;
                                     }
                                 }
                             }
@@ -1115,15 +1115,15 @@ switch ($_REQUEST['action'])
                                     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
                                 }
                             }
-                            
+
                             if (is_array($billing_upgrade))
                             {
-                            	foreach ($$billing_upgrade AS $incident)
+                                foreach ($billing_upgrade AS $incident)
                                 {
-                                	$r = close_billable_incident($obj->id);
+                                    $r = close_billable_incident($obj->id);
                                     if (!$r)
                                     {
-                                    	trigger_error("Error upgrading {$obj->id} to new billing format", E_USER_WARNING);
+                                        trigger_error("Error upgrading {$obj->id} to new billing format", E_USER_WARNING);
                                     }
                                 }
                             }
