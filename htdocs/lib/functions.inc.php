@@ -7695,7 +7695,7 @@ function user_contracts_table($userid, $mode = 'internal')
         if ($mode == 'internal')
         {
             $html .= "<p align='center'>";
-            $html .= "<a href='contact_add_contact.php?contactid={$userid}&amp;context=contact'>";
+            $html .= "<a href='contract_add_contact.php?contactid={$userid}&amp;context=contact'>";
             $html .= "{$GLOBALS['strAssociateContactWithContract']}</a></p>\n";
         }
 
