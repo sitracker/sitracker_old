@@ -6304,7 +6304,7 @@ function contract_details($id, $mode='internal')
 
                         if ($mode == 'internal')
                         {
-                            $html .= "<td><a href=\"delete_maintenance_support_contact.php?contactid=".$contact."&amp;maintid=$id&amp;context=maintenance\">{$GLOBALS[strRemove]}</a></td></tr>\n";
+                            $html .= "<td><a href=\"contract_delete_contact.php?contactid=".$contact."&amp;maintid=$id&amp;context=maintenance\">{$GLOBALS[strRemove]}</a></td></tr>\n";
                         }
                         else
                         {
