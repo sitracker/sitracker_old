@@ -187,7 +187,7 @@ if (!is_array($hmenu[60])) $hmenu[60] = array();
 
 if (!is_array($hmenu[70])) $hmenu[70] = array();
 $hmenu[70] = array_merge(array (10=> array ( 'perm'=> 0, 'name'=> "{$strHelpContents}...", 'url'=>"{$CONFIG['application_webpath']}help.php"),
-                    15=> array ( 'perm'=> 0, 'name'=> "{$strGetHelpOnline}", 'url'=>"http://sitracker.org/wiki/Documentation".strtoupper(substr($_SESSION['lang'],0,2))),
+                    15=> array ( 'perm'=> 0, 'name'=> "{$strGetHelpOnline}", 'url'=>"http://sitracker.org/wiki/Documentation"),
                     20=> array ( 'perm'=> 0, 'name'=> "{$strTranslate}", 'url'=>"{$CONFIG['application_webpath']}translate.php"),
                     30=> array ( 'perm'=> 0, 'name'=> "{$strReportBug}", 'url'=>$CONFIG['bugtracker_url']),
                     40=> array ( 'perm'=> 0, 'name'=> "{$strReleaseNotes}", 'url'=>"{$CONFIG['application_webpath']}releasenotes.php"),
