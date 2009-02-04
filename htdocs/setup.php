@@ -546,7 +546,6 @@ echo "<title>Support Incident Tracker Setup</title>\n";
 echo "</head>\n<body>\n";
 
 echo "<h1>Support Incident Tracker - Installation &amp; Setup</h1>";
-$include_path = ini_get('include_path');
 
 //
 // Pre-flight Checks
@@ -571,18 +570,7 @@ if (!empty($_REQUEST['msg']))
 // Check that includes worked and that we have some config variables set, these two should always be set
 if ($CONFIG['application_name'] == '' AND $CONFIG['application_shortname'] == '')
 {
-    echo "<p class='error'>We couldn't find configuration defaults, this probably means your include_path is wrong. ";
-    echo "Your current include path is <code>{$include_path}</code><br />";
-    echo "SiT! Requires its libraries to be in the include path which is specified in your php.ini file, modify your php.ini and set the new include path ";
-    if (file_exists('../includes'))
-    {
-        $curdir = getcwd();
-        $include_path .= ":".substr($curdir,0,strrpos($curdir,'/'))."/includes";
-        // $include_path .= ":../includes";
-        echo "to be <code>$include_path</code></p>";
-    }
-    else echo "to point to the includes directory";
-    echo "</p>";
+    echo "<p class='error'>SiT! Setup couldn't find configuration defaults (defaults.inc.php). Is your lib/ directory missing?</p>";
 }
 
 // Check we have the mysql extension
