@@ -11,7 +11,7 @@
 
 // Author:  Paul Heaney Paul Heaney <paulheaney[at]users.sourceforge.net>
 
-$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
+$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
 $permission =  37; // Run Reports  // FIXME might need its own
 
 require_once ($lib_path.'db_connect.inc.php');
@@ -81,7 +81,7 @@ if (mysql_numrows($result) > 0)
 			$obj->creditamount = 0;
 			$obj->balance = 0;
         }
-        
+
         $totalcredit += $obj->creditamount;
         $totalbalance += $obj->balance;
         $awaitingapproval = service_transaction_total($obj->serviceid, AWAITINGAPPROVAL)  * -1;
@@ -95,7 +95,7 @@ if (mysql_numrows($result) > 0)
         if ($obj->unitrate != 0) $unitsat1times = round(($actual/$obj->unitrate), 2);
         else $unitsat1times = 0;
 
-        $remainingunits += $unitsat1times;        
+        $remainingunits += $unitsat1times;
 
         if ($display == 'html')
         {

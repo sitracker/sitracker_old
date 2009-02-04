@@ -590,12 +590,12 @@ elseif ($mode == 'invoicepage')
     if ($output == 'html')
     {
         echo $str;
-        include ('./inc/htmlfooter.inc.php');
+        include ('inc/htmlfooter.inc.php');
     }
 }
 elseif ($mode == 'summarypage')
 {
-    include ('billing/summary.inc.php');
+    include ('inc/billing_summary.inc.php');
 }
 elseif ($mode == 'transactions')
 {
