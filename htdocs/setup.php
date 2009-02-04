@@ -548,19 +548,18 @@ $include_path = ini_get('include_path');
 if (!empty($_REQUEST['msg']))
 {
     $msg = strip_tags(base64_decode(urldecode($_REQUEST['msg'])));
-    echo "<p class='error'><strong>Configuration Problem</strong>: {$msg}</p>";
-    echo "<p class='info'>You have been redirected to this setup page because a serious configuration problem has prevented SiT from running. ";
     if ($_REQUEST['new'] == 1)
     {
         $_SESSION['new'] = 1;
-        echo "<br /><strong>If you are setting up SiT for the first time</strong>, ";
-        echo "you can ignore the message above and proceed with creating a new configuration file.<br />";
+        echo "<p class='info'><strong>If you are setting up SiT for the first time</strong>, ";
+        echo "you can ignore the message below and proceed with creating a new configuration file.<br />";
         echo "If SiT was previously installed you should correct the issue reported and try running SiT again.</p>";
     }
     else
     {
-        echo "Correct the issue reported and try running SiT again.</p>";
+        echo "Correct the issue reported below and try running SiT again.</p>";
     }
+    echo "<p class='error'><strong>Configuration Problem</strong>: {$msg}</p>";    
 }
 
 
