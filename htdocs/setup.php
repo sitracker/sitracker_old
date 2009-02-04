@@ -65,8 +65,20 @@ function filterconfigfiles($var)
 $configfiles = array_filter($configfiles, 'filterconfigfiles');
 $configfiles = array_values($configfiles);
 $numconfigfiles = count($configfiles);
-if ($numconfigfiles == 1) $config_filename = $configfiles[0];
-elseif ($numconfigfiles < 1) $configfiles[] = '../includes/config.inc.php';
+if ($numconfigfiles == 1)
+{
+    $config_filename = $configfiles[0];
+    $freshinstall = FALSE;
+}
+elseif ($numconfigfiles < 1)
+{
+    $freshinstall = TRUE;
+    $configfiles[] = './config.inc.php';
+}
+else
+{
+    $freshinstall = FALSE;
+}
 
 $cfg_file_exists = FALSE;
 $cfg_file_writable = FALSE;
@@ -548,18 +560,15 @@ $include_path = ini_get('include_path');
 if (!empty($_REQUEST['msg']))
 {
     $msg = strip_tags(base64_decode(urldecode($_REQUEST['msg'])));
-    if ($_REQUEST['new'] == 1)
+    if ($freshinstall === TRUE)
     {
-        $_SESSION['new'] = 1;
-        echo "<p class='info'><strong>If you are setting up SiT for the first time</strong>, ";
-        echo "you can ignore the message below and proceed with creating a new configuration file.<br />";
-        echo "If SiT was previously installed you should correct the issue reported and try running SiT again.</p>";
+        echo "<p class='info'><strong>It looks like you are setting up SiT! for the first time</strong> because we could not find a configuration file.<br />";
+        echo "Please proceed with creating a new configuration file.</p>";
     }
     else
     {
-        echo "Correct the issue reported below and try running SiT again.</p>";
+        echo "<p class='error'><strong>Configuration Problem</strong>: {$msg}</p>";
     }
-    echo "<p class='error'><strong>Configuration Problem</strong>: {$msg}</p>";    
 }
 
 
