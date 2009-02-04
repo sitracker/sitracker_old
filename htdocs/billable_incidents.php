@@ -281,7 +281,7 @@ elseif ($mode == 'approvalpage')
              * WORKED
              * SELECT * FROM `transactions` t, `links` l, `incidents` i, `contacts` c WHERE t.transactionid = l.origcolref AND t.status = 5 AND linktype= 6 AND l.linkcolref = i.id AND i.contact = c.id
              */
-            
+
             // TODO FIXME only retrieve necessary fields
             $sql = "SELECT i.id, i.owner, i.contact, i.title, i.closed, i.opened, t.transactionid FROM `{$GLOBALS['dbTransactions']}` AS t, `{$GLOBALS['dbLinks']}` AS l, `{$GLOBALS['dbIncidents']}` AS i ";
             $sql .= ", `{$GLOBALS['dbContacts']}` AS c WHERE ";
@@ -402,12 +402,12 @@ elseif ($mode == 'approvalpage')
                         }
                         elseif ($unapprovable)
                         {
-                        	$line .= $strUnapprovable; 
+                        	$line .= $strUnapprovable;
                         }
                         else
                         {
                             $line .= "<a href='{$_SERVER['PHP_SELF']}?mode=approve&amp;transactionid={$obj->transactionid}&amp;startdate={$startdateorig}&amp;enddate={$enddateorig}&amp;showonlyapproved={$showonlyapproved}'>{$strApprove}</a> | ";
-                            $line .= "<a href='billing/update_incident_balance.php?incidentid={$obj->id}'>{$strAdjust}</a>";
+                            $line .= "<a href='billing_update_incident_balance.php?incidentid={$obj->id}'>{$strAdjust}</a>";
                             $sitetotalawaitingapproval += $cost;
 
                             $sitetotalsawaitingapproval += $a[-1]['totalcustomerperiods'];
@@ -434,14 +434,14 @@ elseif ($mode == 'approvalpage')
                     }
                 }
             }
-            
+
             $str .= "<tr><td><input type='submit' value='{$strApprove}' />";
             $str .= "</td><td colspan='5'></td>";
 
-            if (!$showonlyapproved) 
+            if (!$showonlyapproved)
             {
                 $str .= "<td>{$strTOTALS}</td>";
-    
+
                 foreach ($multipliers AS $m)
                 {
                     $str .= "<td>";
@@ -449,20 +449,20 @@ elseif ($mode == 'approvalpage')
                     else $str .= "0";
                     $str .= "</td>";
                 }
-    
+
                 $str .= "<td>{$sitetotals}</td>";
                 $str .= "<td>{$sitetotalsbillable}</td>";
                 $str .= "<td>{$sitetotalrefunds}</td>";
-    
+
                 $cost = ($sitetotalsbillable + $sitetotalrefunds) * $unitrate;
-    
+
                 $str.= "<td>{$CONFIG['currency_symbol']}".number_format($cost, 2)."</td><td></td>";
-    
+
                 $str .= "</tr>\n";
-    
+
                 $str .= "<tr><td align='right' colspan='6'></td>";
             }
-            
+
             $str .= "<td>{$strAwaitingApproval}</td>";
 
             foreach ($multipliers AS $m)
@@ -495,7 +495,7 @@ elseif ($mode == 'approvalpage')
                 if ($output == 'html')
                 {
                     echo $str;
-                    
+
                     if ($unapprovable)
                     {
                     	echo "<p align='center'>{$strUnapprovableBilledIncidentsDesc}</p>";
@@ -508,7 +508,7 @@ elseif ($mode == 'approvalpage')
             }
         }
     }
-    
+
     plugin_do('billing_approve_form');
 
     if ($output == 'html')
@@ -621,7 +621,7 @@ elseif ($mode == 'approve')
     if (!empty($transactionid))
     {
         $status = approve_incident_transaction($transactionid);
-        
+
         $maintid = maintid_from_transaction($transactionid);
         $percent = get_service_percentage($maintid);
     }
@@ -633,20 +633,20 @@ elseif ($mode == 'approve')
             $l = approve_incident_transaction($s);
 
             $status = $status AND $l;
-            
+
             $maintid = maintid_from_transaction($s);
             $p = get_service_percentage($maintid);
             if (p == FALSE) $percent = true;
         }
     }
-    
-    
+
+
     if ($percent !== FALSE)
     {
         //FIXME workarund for Mantis 198
     	//trigger('TRIGGER_SERVICE_LIMIT', array('contractid' => $maintid));
     }
-    
+
     if ($status)
     {
         html_redirect("{$_SERVER['PHP_SELF']}?mode=approvalpage&amp;startdate={$startdateorig}&amp;enddate={$enddateorig}&amp;showonlyapproved={$showonlyapproved}");
