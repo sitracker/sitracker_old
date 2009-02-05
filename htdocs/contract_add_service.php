@@ -84,47 +84,58 @@ if (empty($submit) OR !empty($_SESSION['formerrors']['add_service']))
     echo "<tr><th>{$strNotes}</th><td>";
     echo "<textarea rows='5' cols='20' name='notes'></textarea></td></tr>";
 
+    $timed = is_contract_timed($contractid);
     echo "<tr><th>{$strBilling}</th>";
     echo "<td>";
-    echo "<label>";
-    echo "<input type='radio' name='billtype' value='billperunit' onchange=\"addservice_showbilling('serviceform');\" checked /> ";
-    echo "{$strPerUnit}</label>";
-    echo "<label>";
-    echo "<input type='radio' name='billtype' value='billperincident' onchange=\"addservice_showbilling('serviceform');\" /> ";
-    echo "{$strPerIncident}</label>";
+    if ($timed)
+    {
+        echo "<label>";
+        echo "<input type='radio' name='billtype' value='billperunit' onchange=\"addservice_showbilling('serviceform');\" checked='checked' /> ";
+        echo "{$strPerUnit}</label>";
+        echo "<label>";
+        echo "<input type='radio' name='billtype' value='billperincident' onchange=\"addservice_showbilling('serviceform');\" /> ";
+        echo "{$strPerIncident}</label>";
+    }
+    else
+    {
+        echo "<label>";
+        echo "<input type='radio' name='billtype' value='' checked='checked' disabled='disabled' /> ";
+        echo "{$strNone}</label>";
+    }
     echo "</td></tr>\n";
+    if ($timed)
+    {
+        echo "<tbody id='billingsection'>"; //FIXME not XHTML
 
-    echo "<tbody id='billingsection'>"; //FIXME not XHTML
+        echo "<tr><th>{$strCustomerReference}</th>";
+        echo "<td><input type='text' id='cust_ref' name='cust_ref' /></td></tr>";
 
-    echo "<tr><th>{$strCustomerReference}</th>";
-    echo "<td><input type='text' id='cust_ref' name='cust_ref' /></td></tr>";
+        echo "<tr><th>{$strCustomerReferenceDate}</th>";
+        echo "<td><input type='text' name='cust_ref_date' id='cust_ref_date' size='10'";
+        echo "value='".date('Y-m-d', $now)."' />";
+        echo date_picker('serviceform.cust_ref_date');
+        echo " </td></tr>";
 
-    echo "<tr><th>{$strCustomerReferenceDate}</th>";
-    echo "<td><input type='text' name='cust_ref_date' id='cust_ref_date' size='10'";
-    echo "value='".date('Y-m-d', $now)."' />";
-    echo date_picker('serviceform.cust_ref_date');
-    echo " </td></tr>";
+        echo "<tr><th>{$strCreditAmount}</th>";
+        echo "<td>{$CONFIG['currency_symbol']} ";
+        echo "<input class='required' type='text' name='amount' size='5' />";
+        echo " <span class='required'>{$strRequired}</span></td></tr>";
 
-    echo "<tr><th>{$strCreditAmount}</th>";
-    echo "<td>{$CONFIG['currency_symbol']} ";
-    echo "<input class='required' type='text' name='amount' size='5' />";
-    echo " <span class='required'>{$strRequired}</span></td></tr>";
+        echo "<tr id='unitratesection'><th>{$strUnitRate}</th>";
+        echo "<td>{$CONFIG['currency_symbol']} ";
+        echo "<input class='required' type='text' name='unitrate' size='5' />";
+        echo " <span class='required'>{$strRequired}</span></td></tr>";
 
-    echo "<tr id='unitratesection'><th>{$strUnitRate}</th>";
-    echo "<td>{$CONFIG['currency_symbol']} ";
-    echo "<input class='required' type='text' name='unitrate' size='5' />";
-    echo " <span class='required'>{$strRequired}</span></td></tr>";
+        echo "<tr id='incidentratesection' style='display:none'><th>{$strIncidentRate}</th>";
+        echo "<td>{$CONFIG['currency_symbol']} ";
+        echo "<input class='required' type='text' name='incidentrate' size='5' />";
+        echo " <span class='required'>{$strRequired}</span></td></tr>";
 
-    echo "<tr id='incidentratesection' style='display:none'><th>{$strIncidentRate}</th>";
-    echo "<td>{$CONFIG['currency_symbol']} ";
-    echo "<input class='required' type='text' name='incidentrate' size='5' />";
-    echo " <span class='required'>{$strRequired}</span></td></tr>";
-
-    echo "<tr>";
-    echo "<th>{$strFreeOfCharge}</th>";
-    echo "<td><input type='checkbox' id='foc' name='foc' value='yes' /> {$strAboveMustBeCompletedToAllowDeductions}</td>";
-    echo "</tr>";
-
+        echo "<tr>";
+        echo "<th>{$strFreeOfCharge}</th>";
+        echo "<td><input type='checkbox' id='foc' name='foc' value='yes' /> {$strAboveMustBeCompletedToAllowDeductions}</td>";
+        echo "</tr>";
+    }
     echo "</tbody>"; //FIXME not XHTML
 
 //  Not sure how applicable daily rate is, INL 4Apr08
@@ -159,21 +170,29 @@ else
     if ($unitrate == '') $unitrate = 0;
     $incidentrate =  cleanvar($_POST['incidentrate']);
     if ($incidentrate == '') $incidentrate = 0;
-
-    $billtype = cleanvar($_REQUEST['billtype']);
     $notes = cleanvar($_REQUEST['notes']);
-    $foc = cleanvar($_REQUEST['foc']);
-    if (empty($foc)) $foc = 'no';
-
-    if ($billtype == 'billperunit') $incidentrate = 0;
-    elseif ($billtype == 'billperincident') $unitrate = 0;
-
-    $cust_ref = cleanvar($_REQUEST['cust_ref']);
-    $cust_ref_date = cleanvar($_REQUEST['cust_ref_date']);
     $title = cleanvar($_REQUEST['title']);
 
-    $sql = "INSERT INTO `{$dbService}` (contractid, startdate, enddate, creditamount, unitrate, incidentrate, cust_ref, cust_ref_date, title, notes, foc) ";
-    $sql .= "VALUES ('{$contractid}', '{$startdate}', '{$enddate}', '{$amount}', '{$unitrate}', '{$incidentrate}', '{$cust_ref}', '{$cust_ref_date}', '{$title}', '{$notes}', '{$foc}')";
+    $billtype = cleanvar($_REQUEST['billtype']);
+    if (!empty($billtype))
+    {
+        $foc = cleanvar($_REQUEST['foc']);
+        if (empty($foc)) $foc = 'no';
+
+        if ($billtype == 'billperunit') $incidentrate = 0;
+        elseif ($billtype == 'billperincident') $unitrate = 0;
+
+        $cust_ref = cleanvar($_REQUEST['cust_ref']);
+        $cust_ref_date = cleanvar($_REQUEST['cust_ref_date']);
+
+        $sql = "INSERT INTO `{$dbService}` (contractid, startdate, enddate, creditamount, unitrate, incidentrate, cust_ref, cust_ref_date, title, notes, foc) ";
+        $sql .= "VALUES ('{$contractid}', '{$startdate}', '{$enddate}', '{$amount}', '{$unitrate}', '{$incidentrate}', '{$cust_ref}', '{$cust_ref_date}', '{$title}', '{$notes}', '{$foc}')";
+    }
+    else
+    {
+        $sql = "INSERT INTO `{$dbService}` (contractid, startdate, enddate, title, notes) ";
+        $sql .= "VALUES ('{$contractid}', '{$startdate}', '{$enddate}', '{$title}', '{$notes}')";
+    }
 
     mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);

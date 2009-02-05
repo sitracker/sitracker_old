@@ -95,7 +95,7 @@ function get_billable_contract_id($contactid)
 /**
 * Returns the percentage remaining for ALL services on a contract
 * @author Kieran Hogg
-* @param string $mainid - contract ID
+* @param int $mainid - contract ID
 * @return mixed - percentage between 0 and 1 if services, FALSE if not
 */
 function get_service_percentage($maintid)
@@ -103,7 +103,7 @@ function get_service_percentage($maintid)
     global $dbService;
 
     $sql = "SELECT * FROM `{$dbService}` ";
-    $sql .= "WHERE contractid = '{$maintid}'";
+    $sql .= "WHERE contractid = {$maintid}";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
 
@@ -124,6 +124,36 @@ function get_service_percentage($maintid)
 
     return $return;
 }
+
+
+/**
+* Does a contract have a service level which is timed / billed
+* @author Ivan Lucas
+* @param int $contractid
+* @return Whether the contract should be billed
+* @retval bool TRUE:    Yes timed. should be billed
+* @retval bool FALSE:   No, not timed. Should not be billed
+*/
+function is_contract_timed($contractid)
+{
+    global $dbMaintenance, $dbServiceLevels;
+    $timed = FALSE;
+    $sql = "SELECT timed FROM `$dbMaintenance` AS m, `$dbServiceLevels` AS sl ";
+    $sql .= "WHERE m.servicelevelid = sl.id AND m.id = $contractid";
+    $result = mysql_query($sql);
+    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
+
+    list($timed) = mysql_fetch_row($result);
+    if ($timed == 'yes')
+    {
+        return TRUE;
+    }
+    else
+    {
+        return FALSE;
+    }
+}
+
 
 
 /**
