@@ -1088,8 +1088,9 @@ function contract_service_table($contractid, $billing)
         $html .= "<th>{$GLOBALS['strStartDate']}</th><th>{$GLOBALS['strEndDate']}</th>";
         if ($billing)
         {
-            $html .= "<th>{$GLOBALS['strAvailableBalance']}</th><th>{$GLOBALS['strOperation']}</th>";
+            $html .= "<th>{$GLOBALS['strAvailableBalance']}</th>";
         }
+        $html .= "<th>{$GLOBALS['strOperation']}</th>";
         $html .= "</tr>\n";
         while ($service = mysql_fetch_object($result))
         {
@@ -1177,12 +1178,12 @@ function contract_service_table($contractid, $billing)
             $html .= ldate($CONFIG['dateformat_date'], $service->enddate)."</td>";
 
             $html .= "<td>{$CONFIG['currency_symbol']}".number_format($balance, 2)."</td>";
+            $html .= "<td><a href='contract_edit_service.php?mode=editservice&amp;serviceid={$service->serviceid}&amp;contractid={$contractid}'>{$GLOBALS['strEditService']}</a>";
             if ($billing)
             {
-                $html .= "<td><a href='contract_edit_service.php?mode=editservice&amp;serviceid={$service->serviceid}&amp;contractid={$contractid}'>{$GLOBALS['strEditService']}</a> | ";
-                $html .= "<a href='contract_edit_service.php?mode=showform&amp;sourceservice={$service->serviceid}&amp;contractid={$contractid}'>{$GLOBALS['strEditBalance']}</a></td>";
+                $html .= " | <a href='contract_edit_service.php?mode=showform&amp;sourceservice={$service->serviceid}&amp;contractid={$contractid}'>{$GLOBALS['strEditBalance']}</a>";
             }
-            $html .= "</tr>\n";
+            $html .= "</td></tr>\n";
         }
         $html .= "</table>\n";
         if ($shade == 'shade1') $shade = 'shade2';

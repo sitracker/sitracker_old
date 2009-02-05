@@ -32,9 +32,9 @@ if (empty($mode)) $mode = 'showform';
 switch ($mode)
 {
     case 'editservice':
-        if (user_permission($sit[2], 80) == FALSE)
+        if (user_permission($sit[2], $permission) == FALSE)
         {
-            header("Location: {$CONFIG['application_webpath']}noaccess.php?id=80");
+            header("Location: {$CONFIG['application_webpath']}noaccess.php?id=$permission");
             exit;
         }
         else
@@ -60,81 +60,91 @@ switch ($mode)
 
                 echo "<tr><th>{$strStartDate}</th>";
                 echo "<td><input class='required' type='text' name='startdate' id='startdate' size='10'";
-                echo "value='{$obj->startdate}' />";
+                echo "value='{$obj->startdate}' /> ";
                 echo date_picker('serviceform.startdate');
                 echo " <span class='required'>{$strRequired}</span></td></tr>";
 
                 echo "<tr><th>{$strEndDate}</th>";
                 echo "<td><input class='required' type='text' name='enddate' id='enddate' size='10'";
-                echo "value='{$obj->enddate}' />";
+                echo "value='{$obj->enddate}' /> ";
                 echo date_picker('serviceform.enddate');
                 echo " <span class='required'>{$strRequired}</span></td></tr>\n";
 
                 echo "<tr><th>{$strNotes}</th><td>";
                 echo "<textarea rows='5' cols='20' name='notes'>{$obj->notes}</textarea></td></tr>";
 
-                if ($obj->balance == $obj->creditamount)
+                $timed = is_contract_timed($contractid);
+                echo "<tr><th>{$strBilling}</th>";
+                if ($timed)
                 {
-                    echo "<input type='hidden' name='editbilling' id='editbilling' value='true' />";
-                    echo "<input type='hidden' name='originalcredit' id='originalcredit' value='{$obj->creditamount}' />";
-                    echo "<tr><th>{$strBilling}</th>";
-                    echo "<td>";
-                    echo "<label>";
-                    echo "<input type='radio' name='billtype' value='billperunit' onchange=\"addservice_showbilling('serviceform');\" ";
-                    if (!empty($obj->unitrate) AND $obj->unitrate > 0)
+                    if ($obj->balance == $obj->creditamount)
                     {
-                        echo "checked ";
-                        $unitstyle = "";
-                        $incidentstyle = "style='display:none'";
+                        echo "<td>";
+                        echo "<input type='hidden' name='editbilling' id='editbilling' value='true' />";
+                        echo "<input type='hidden' name='originalcredit' id='originalcredit' value='{$obj->creditamount}' />";
+                        echo "<label>";
+                        echo "<input type='radio' name='billtype' value='billperunit' onchange=\"addservice_showbilling('serviceform');\" ";
+                        if (!empty($obj->unitrate) AND $obj->unitrate > 0)
+                        {
+                            echo "checked='checked' ";
+                            $unitstyle = "";
+                            $incidentstyle = "style='display:none'";
+                        }
+                        echo "/> {$strPerUnit}</label>";
+                        echo "<label>";
+                        echo "<input type='radio' name='billtype' value='billperincident' onchange=\"addservice_showbilling('serviceform');\" ";
+                        if (!empty($obj->incidentrate) AND $obj->incidentrate > 0)
+                        {
+                            echo "checked='checked' ";
+                            $unitstyle = "style='display:none'";
+                            $incidentstyle = "";
+                        }
+                        echo "/> {$strPerIncident}</label>";
+                        echo "</td></tr>\n";
+
+                        echo "<tbody id='billingsection'>"; //FIXME not XHTML
+
+                        echo "<tr><th>{$strCreditAmount}</th>";
+                        echo "<td>{$CONFIG['currency_symbol']} ";
+                        echo "<input class='required' type='text' name='amount' size='5' value='{$obj->creditamount}' />";
+                        echo " <span class='required'>{$strRequired}</span></td></tr>";
+
+                        echo "<tr id='unitratesection' {$unitstyle}><th>{$strUnitRate}</th>";
+                        echo "<td>{$CONFIG['currency_symbol']} ";
+                        echo "<input class='required' type='text' name='unitrate' size='5' value='{$obj->unitrate}' />";
+                        echo " <span class='required'>{$strRequired}</span></td></tr>";
+
+                        echo "<tr id='incidentratesection' {$incidentstyle}><th>{$strIncidentRate}</th>";
+                        echo "<td>{$CONFIG['currency_symbol']} ";
+                        echo "<input class='required' type='text' name='incidentrate' size='5' value='{$obj->incidentrate}' />";
+                        echo " <span class='required'>{$strRequired}</span></td></tr>";
+
+                        $fochecked = '';
+                        if ($obj->foc == 'yes') $fochecked = "checked='checked'";
+
+                        echo "<tr>";
+                        echo "<th>{$strFreeOfCharge}</th>";
+                        echo "<td><input type='checkbox' id='foc' name='foc' value='yes'  '{$fochecked}' /> {$strAboveMustBeCompletedToAllowDeductions}</td>";
+                        echo "</tr>";
+
+                        echo "</tbody>"; //FIXME not XHTML
                     }
-                    echo "/> {$strPerUnit}</label>";
-                    echo "<label>";
-                    echo "<input type='radio' name='billtype' value='billperincident' onchange=\"addservice_showbilling('serviceform');\" ";
-                    if (!empty($obj->incidentrate) AND $obj->incidentrate > 0)
+                    else
                     {
-                        echo "checked ";
-                        $unitstyle = "style='display:none'";
-                        $incidentstyle = "";
+                        echo "<input type='hidden' name='editbilling' id='editbilling' value='false' />";
+                        echo "<tr><th colspan='2'>Unable to change amounts or rates as the service has been used.</th></tr>";
                     }
-                    echo "/> {$strPerIncident}</label>";
-                    echo "</td></tr>\n";
-
-                    echo "<tbody id='billingsection'>"; //FIXME not XHTML
-
-                    echo "<tr><th>{$strCreditAmount}</th>";
-                    echo "<td>{$CONFIG['currency_symbol']} ";
-                    echo "<input class='required' type='text' name='amount' size='5' value='{$obj->creditamount}' />";
-                    echo " <span class='required'>{$strRequired}</span></td></tr>";
-
-                    echo "<tr id='unitratesection' {$unitstyle}><th>{$strUnitRate}</th>";
-                    echo "<td>{$CONFIG['currency_symbol']} ";
-                    echo "<input class='required' type='text' name='unitrate' size='5' value='{$obj->unitrate}' />";
-                    echo " <span class='required'>{$strRequired}</span></td></tr>";
-
-                    echo "<tr id='incidentratesection' {$incidentstyle}><th>{$strIncidentRate}</th>";
-                    echo "<td>{$CONFIG['currency_symbol']} ";
-                    echo "<input class='required' type='text' name='incidentrate' size='5' value='{$obj->incidentrate}' />";
-                    echo " <span class='required'>{$strRequired}</span></td></tr>";
-
-                    $fochecked = '';
-                    if ($obj->foc == 'yes') $fochecked = 'checked';
-
-                    echo "<tr>";
-                    echo "<th>{$strFreeOfCharge}</th>";
-                    echo "<td><input type='checkbox' id='foc' name='foc' value='yes'  '{$fochecked}' /> {$strAboveMustBeCompletedToAllowDeductions}</td>";
-                    echo "</tr>";
-
-                    echo "</tbody>"; //FIXME not XHTML
+                //  Not sure how applicable daily rate is, INL 4Apr08
+                //     echo "<tr><th>{$strDailyRate}</th>";
+                //     echo "<td>{$CONFIG['currency_symbol']} <input type='text' name='dailyrate' size='5' />";
+                //     echo "</td></tr>";
                 }
                 else
                 {
-                    echo "<input type='hidden' name='editbilling' id='editbilling' value='false' />";
-                    echo "<tr><th colspan='2'>Unable to change amounts or rates as the service has been used.</th></tr>";
+                    echo "<td><label>";
+                    echo "<input type='radio' name='billtype' value='' checked='checked' disabled='disabled' /> ";
+                    echo "{$strNone}</label></td>";
                 }
-            //  Not sure how applicable daily rate is, INL 4Apr08
-            //     echo "<tr><th>{$strDailyRate}</th>";
-            //     echo "<td>{$CONFIG['currency_symbol']} <input type='text' name='dailyrate' size='5' />";
-            //     echo "</td></tr>";
 
                 echo "</table>\n\n";
                 echo "<input type='hidden' name='contractid' value='{$contractid}' />";
