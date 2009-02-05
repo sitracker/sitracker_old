@@ -1484,6 +1484,7 @@ CREATE TABLE `{$dbUsers}` (
   `status` tinyint(4) default NULL,
   `message` varchar(150) default NULL,
   `accepting` enum('No','Yes') default 'Yes',
+  `user_startdate` DATE NULL,
   `var_incident_refresh` int(11) default '60',
   `var_update_order` enum('desc','asc') default 'desc',
   `var_num_updates_view` int(11) NOT NULL default '15',
