@@ -6122,6 +6122,7 @@ function readable_file_size($filesize)
 * @param int $maintid - ID of the contract
 * @param string $mode. 'internal' or 'external'
 * @returns array of supported contracts, NULL if none
+* @todo FIXME not quite generic enough for a function ?
 **/
 function contract_details($id, $mode='internal')
 {
@@ -6143,25 +6144,25 @@ function contract_details($id, $mode='internal')
     $maint = mysql_fetch_object($maintresult);
 
     $html = "<table align='center' class='vertical'>";
-    $html .= "<tr><th>{$GLOBALS[strContract]} {$GLOBALS[strID]}:</th>";
+    $html .= "<tr><th>{$GLOBALS['strContract']} {$GLOBALS['strID']}:</th>";
     $html .= "<td><h3>".icon('contract', 32)." ";
     $html .= "{$maint->id}</h3></td></tr>";
-    $html .= "<tr><th>{$GLOBALS[strStatus]}:</th><td>";
+    $html .= "<tr><th>{$GLOBALS['strStatus']}:</th><td>";
     if ($maint->term == 'yes')
     {
-        $html .= "<strong>{$GLOBALS[strTerminated]}</strong>";
+        $html .= "<strong>{$GLOBALS['strTerminated']}</strong>";
     }
     else
     {
-        $html .= $GLOBALS[strActive];
+        $html .= $GLOBALS['strActive'];
     }
 
     if ($maint->expirydate < $now AND $maint->expirydate != '-1')
     {
-        $html .= "<span class='expired'>, {$GLOBALS[strExpired]}</span>";
+        $html .= "<span class='expired'>, {$GLOBALS['strExpired']}</span>";
     }
     $html .= "</td></tr>\n";
-    $html .= "<tr><th>{$GLOBALS[strSite]}:</th>";
+    $html .= "<tr><th>{$GLOBALS['strSite']}:</th>";
 
     if ($mode == 'internal')
     {
@@ -6171,7 +6172,7 @@ function contract_details($id, $mode='internal')
     {
         $html .= "<td><a href=\"sitedetails.php\">".$maint->sitename."</a></td></tr>";
     }
-    $html .= "<tr><th>{$GLOBALS[strAdminContact]}:</th>";
+    $html .= "<tr><th>{$GLOBALS['strAdminContact']}:</th>";
 
     if ($mode == 'internal')
     {
@@ -6185,50 +6186,50 @@ function contract_details($id, $mode='internal')
         $html .= contact_realname($maint->admincontact)."</a></td></tr>";
     }
 
-    $html .= "<tr><th>{$GLOBALS[strReseller]}:</th><td>";
+    $html .= "<tr><th>{$GLOBALS['strReseller']}:</th><td>";
 
     if (empty($maint->resellername))
     {
-        $html .= $GLOBALS[strNoReseller];
+        $html .= $GLOBALS['strNoReseller'];
     }
     else
     {
         $html .= $maint->resellername;
     }
     $html .= "</td></tr>";
-    $html .= "<tr><th>{$GLOBALS[strProduct]}:</th><td>".product_name($maint->product)."</td></tr>";
-    $html .= "<tr><th>{$GLOBALS[strIncidents]}:</th>";
+    $html .= "<tr><th>{$GLOBALS['strProduct']}:</th><td>".product_name($maint->product)."</td></tr>";
+    $html .= "<tr><th>{$GLOBALS['strIncidents']}:</th>";
     $html .= "<td>";
     $incidents_remaining = $maint->incident_quantity - $maint->incidents_used;
 
     if ($maint->incident_quantity == 0)
     {
-        $quantity = $GLOBALS[strUnlimited];
+        $quantity = $GLOBALS['strUnlimited'];
     }
     else
     {
         $quantity = $maint->incident_quantity;
     }
 
-    $html .= sprintf($GLOBALS[strUsedNofN], $maint->incidents_used, $quantity);
+    $html .= sprintf($GLOBALS['strUsedNofN'], $maint->incidents_used, $quantity);
     if ($maint->incidents_used >= $maint->incident_quantity AND
         $maint->incident_quantity != 0)
     {
-        $html .= " ($GLOBALS[strZeroRemaining])";
+        $html .= " ($GLOBALS['strZeroRemaining'])";
     }
 
     $html .= "</td></tr>";
     if ($maint->licence_quantity != '0')
     {
-        $html .= "<tr><th>{$GLOBALS[strLicense]}:</th>";
+        $html .= "<tr><th>{$GLOBALS['strLicense']}:</th>";
         $html .= "<td>{$maint->licence_quantity} {$maint->licensetypename}</td></tr>\n";
     }
 
-    $html .= "<tr><th>{$GLOBALS[strServiceLevel]}:</th><td>".servicelevel_name($maint->servicelevelid)."</td></tr>";
-    $html .= "<tr><th>{$GLOBALS[strExpiryDate]}:</th><td>";
+    $html .= "<tr><th>{$GLOBALS['strServiceLevel']}:</th><td>".servicelevel_name($maint->servicelevelid)."</td></tr>";
+    $html .= "<tr><th>{$GLOBALS['strExpiryDate']}:</th><td>";
     if ($maint->expirydate == '-1')
     {
-        $html .= "{$GLOBALS[strUnlimited]}";
+        $html .= "{$GLOBALS['strUnlimited']}";
     }
     else
     {
@@ -6252,14 +6253,14 @@ function contract_details($id, $mode='internal')
 
     if ($maint->maintnotes != '' AND $mode == 'internal')
     {
-        $html .= "<tr><th>{$GLOBALS[strNotes]}:</th><td>{$maint->maintnotes}</td></tr>";
+        $html .= "<tr><th>{$GLOBALS['strNotes']}:</th><td>{$maint->maintnotes}</td></tr>";
     }
     $html .= "</table>";
 
     if ($mode == 'internal')
     {
         $html .= "<p align='center'>";
-        $html .= "<a href=\"contract_edit.php?action=edit&amp;maintid=$id\">{$GLOBALS[strEditContract]}</a> | ";
+        $html .= "<a href=\"contract_edit.php?action=edit&amp;maintid=$id\">{$GLOBALS['strEditContract']}</a> | ";
         $html .= "<a href='contract_add_service.php?contractid={$id}'>{$GLOBALS['strAddService']}</a></p>";
     }
     $html .= "<h3>{$GLOBALS['strContacts']}</h3>";
@@ -6289,7 +6290,7 @@ function contract_details($id, $mode='internal')
                 {
                     foreach ($supportedcontacts AS $contact)
                     {
-                        $html .= "<tr><th>{$GLOBALS[strContact]} #{$supportcount}:</th>";
+                        $html .= "<tr><th>{$GLOBALS['strContact']} #{$supportcount}:</th>";
                         $html .= "<td>".icon('contact', 16)." ";
                         if ($mode == 'internal')
                         {
@@ -6304,11 +6305,11 @@ function contract_details($id, $mode='internal')
 
                         if ($mode == 'internal')
                         {
-                            $html .= "<td><a href=\"contract_delete_contact.php?contactid=".$contact."&amp;maintid=$id&amp;context=maintenance\">{$GLOBALS[strRemove]}</a></td></tr>\n";
+                            $html .= "<td><a href=\"contract_delete_contact.php?contactid=".$contact."&amp;maintid=$id&amp;context=maintenance\">{$GLOBALS['strRemove']}</a></td></tr>\n";
                         }
                         else
                         {
-                            $html .= "<td><a href=\"{$_SERVER['PHP_SELF']}?id={$id}&amp;contactid=".$contact."&amp;action=remove\">{$GLOBALS[strRemove]}</a></td></tr>\n";
+                            $html .= "<td><a href=\"{$_SERVER['PHP_SELF']}?id={$id}&amp;contactid=".$contact."&amp;action=remove\">{$GLOBALS['strRemove']}</a></td></tr>\n";
                         }
                         $supportcount++;
                     }
@@ -6316,7 +6317,7 @@ function contract_details($id, $mode='internal')
                 }
                 else
                 {
-                    $html .= "<p class='info'>{$GLOBALS[strNoRecords]}<p>";
+                    $html .= "<p class='info'>{$GLOBALS['strNoRecords']}<p>";
                 }
         }
         if ($maint->allcontactssupported != 'yes')
@@ -6330,7 +6331,7 @@ function contract_details($id, $mode='internal')
             if ($numberofcontacts < $allowedcontacts OR $allowedcontacts == 0 AND $mode == 'internal')
             {
                 $html .= "<p align='center'><a href='contract_add_contact.php?maintid={$id}&amp;siteid={$maint->site}&amp;context=maintenance'>";
-                $html .= "{$GLOBALS[strAddContact]}</a></p>";
+                $html .= "{$GLOBALS['strAddContact']}</a></p>";
             }
             else
             {
@@ -6353,7 +6354,7 @@ function contract_details($id, $mode='internal')
         }
 
         $html .= "<br />";
-        $html .= "<h3>{$GLOBALS[strSkillsSupportedUnderContract]}:</h3>";
+        $html .= "<h3>{$GLOBALS['strSkillsSupportedUnderContract']}:</h3>";
         // supported software
         $sql = "SELECT * FROM `{$GLOBALS[dbSoftwareProducts]}` AS sp, `{$GLOBALS[dbSoftware]}` AS s ";
         $sql .= "WHERE sp.softwareid = s.id AND productid='{$maint->product}' ";
@@ -6381,10 +6382,10 @@ function contract_details($id, $mode='internal')
         }
         else
         {
-            $html .= "<p align='center'>{$GLOBALS[strNone]} / {$GLOBALS[strUnknown]}<p>";
+            $html .= "<p align='center'>{$GLOBALS['strNone']} / {$GLOBALS['strUnknown']}<p>";
         }
     }
-    else $html = "<p align='center'>{$GLOBALS[strNothingToDisplay]}</p>";
+    else $html = "<p align='center'>{$GLOBALS['strNothingToDisplay']}</p>";
 
     return $html;
 }
