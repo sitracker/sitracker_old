@@ -662,14 +662,14 @@ switch ($_REQUEST['action'])
         if (!$fp)
         {
             echo "<p class='error'>Could not write {$config_filename}</p>";
-            echo "<p class='help'>Copy this text and paste it into a <var>config.inc.php</var> file in the <var>sit/htdocs</var> directory<br />";
+            echo "<p class='help'>Copy this text and paste it into a <var>config.inc.php</var> file in the SiT root directory (the folder than contains setup.php for example)<br />";
             // or <var>sit.conf</var> in the <var>/etc</var> directory
             echo "Or change the permissions on the file so that it is writable and <a href=\"javascript:location.reload(true)\">refresh</a> this page to try again (if you do this remember to make it ";
             echo "read-only again afterwards)</p>";
             echo "<div id='configfile' style='margin-left: 5%; margin-right: 5%; background-color: #F7FAFF; padding: 1em; border: 1px dashed #ccc;filter:alpha(opacity=75);  opacity: 0.75;  -moz-opacity:0.75; -moz-border-radius: 3px; '>";
             highlight_string($newcfgfile);
             echo "</div>";
-            echo "<p>After creating your <var>{$config_filename}</var> file click the 'Next' button below.</p>";
+            echo "<p>After creating your config file click the 'Next' button below.</p>";
         }
         else
         {
