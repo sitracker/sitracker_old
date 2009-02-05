@@ -7571,7 +7571,7 @@ function populate_syslang()
 {
     global $CONFIG;
     // Populate $SYSLANG with system lang
-    $file = dirname( __FILE__ ).DIRECTORY_SEPARATOR."i18n/{$CONFIG['default_i18n']}.inc.php";
+    $file = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR."i18n/{$CONFIG['default_i18n']}.inc.php";
     if (file_exists($file))
     {
         $fh = fopen($file, "r");
