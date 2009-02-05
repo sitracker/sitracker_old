@@ -1039,9 +1039,10 @@ function get_incident_transactionid($incidentid)
     * HTML table showing a summary of current contract service periods
     * @author Ivan Lucas
     * @param int $contractid. Contract ID of the contract to show service for
+    * @param bool $billing. Show billing info when TRUE, hide it when FALSE
     * @returns string. HTML table
 */
-function contract_service_table($contractid)
+function contract_service_table($contractid, $billing)
 {
     global $CONFIG, $dbService;
 
@@ -1052,7 +1053,13 @@ function contract_service_table($contractid)
     {
         $shade = '';
         $html = "\n<table align='center'>";
-        $html .= "<tr><th></th><th>{$GLOBALS['strStartDate']}</th><th>{$GLOBALS['strEndDate']}</th><th>{$GLOBALS['strAvailableBalance']}</th><th></th>";
+        $html .= "<tr>";
+        if ($billing) $html .= "<th></th>";
+        $html .= "<th>{$GLOBALS['strStartDate']}</th><th>{$GLOBALS['strEndDate']}</th>";
+        if ($billing)
+        {
+            $html .= "<th>{$GLOBALS['strAvailableBalance']}</th><th>{$GLOBALS['strOperation']}</th>";
+        }
         $html .= "</tr>\n";
         while ($service = mysql_fetch_object($result))
         {
@@ -1061,84 +1068,90 @@ function contract_service_table($contractid)
             $service->lastbilled = mysql2date($service->lastbilled);
             $html .= "<tr class='{$shade}'>";
 
-            $balance = get_service_balance($service->serviceid);
-            $awaitingapproval = service_transaction_total($service->serviceid, AWAITINGAPPROVAL) * -1;
-            $reserved = service_transaction_total($service->serviceid, RESERVED) * -1;
-
-            $span = '';
-            if (!empty($service->title))
+            if ($billing)
             {
-                $span .= "<strong>{$GLOBALS['strTitle']}</strong>: {$service->title}<br />";
-            }
+                $balance = get_service_balance($service->serviceid);
+                $awaitingapproval = service_transaction_total($service->serviceid, AWAITINGAPPROVAL) * -1;
+                $reserved = service_transaction_total($service->serviceid, RESERVED) * -1;
 
-            if (!empty($service->notes))
-            {
-                $span .= "<strong>{$GLOBALS['strNotes']}</strong>: {$service->notes}<br />";
-            }
-
-            if (!empty($service->cust_ref))
-            {
-                $span .= "<strong>{$GLOBALS['strCustomerReference']}</strong>: {$service->cust_ref}";
-                if ($service->cust_ref_date != "1970-01-01")
+                $span = '';
+                if (!empty($service->title))
                 {
-                    $span .= " - <strong>{$GLOBALS['strCustomerReferenceDate']}</strong>: {$service->cust_ref_date}";
-                }
-                $span .= "<br />";
-            }
-
-            if ($service->creditamount != 0)
-            {
-                $span .= "<strong>{$GLOBALS['strCreditAmount']}</strong>: {$CONFIG['currency_symbol']}".number_format($service->creditamount, 2)."<br />";
-            }
-
-            if ($service->unitrate != 0)
-            {
-                $span .= "<strong>{$GLOBALS['strUnitRate']}</strong>: {$CONFIG['currency_symbol']}{$service->unitrate}<br />";
-            }
-
-            if ($balance != $service->balance)
-            {
-                $span .= "<strong>{$GLOBALS['strBalance']}</strong>: {$CONFIG['currency_symbol']}".number_format($service->balance, 2)."<br />";
-                if ($awaitingapproval != FALSE)
-                {
-                    $span .= "<strong>{$GLOBALS['strAwaitingApproval']}</strong>: {$CONFIG['currency_symbol']}".number_format($awaitingapproval, 2)."<br />";
+                    $span .= "<strong>{$GLOBALS['strTitle']}</strong>: {$service->title}<br />";
                 }
 
-                if ($reserved != FALSE)
+                if (!empty($service->notes))
                 {
-                    $span .= "<strong>{$GLOBALS['strReserved']}</strong>: {$CONFIG['currency_symbol']}".number_format($reserved, 2)."<br />";
+                    $span .= "<strong>{$GLOBALS['strNotes']}</strong>: {$service->notes}<br />";
                 }
-                $span .= "<strong>{$GLOBALS['strAvailableBalance']}</strong>: {$CONFIG['currency_symbol']}".number_format($balance, 2)."<br />";
-            }
 
-            if ($service->lastbilled > 0)
-            {
-                $span .= "<strong>{$GLOBALS['strLastBilled']}</strong>: ".ldate($CONFIG['dateformat_date'], $service->lastbilled)."<br />";
-            }
+                if (!empty($service->cust_ref))
+                {
+                    $span .= "<strong>{$GLOBALS['strCustomerReference']}</strong>: {$service->cust_ref}";
+                    if ($service->cust_ref_date != "1970-01-01")
+                    {
+                        $span .= " - <strong>{$GLOBALS['strCustomerReferenceDate']}</strong>: {$service->cust_ref_date}";
+                    }
+                    $span .= "<br />";
+                }
 
-            if ($service->foc == 'yes')
-            {
-                $span .= "<strong>{$GLOBALS['strFreeOfCharge']}</strong>";
-            }
+                if ($service->creditamount != 0)
+                {
+                    $span .= "<strong>{$GLOBALS['strCreditAmount']}</strong>: {$CONFIG['currency_symbol']}".number_format($service->creditamount, 2)."<br />";
+                }
 
-            $html .= "<td><a href='transactions.php?serviceid={$service->serviceid}' class='info'>".icon('billing', 16);
-            if (!empty($span))
-            {
-                    $html .= "<span>{$span}</span>";
+                if ($service->unitrate != 0)
+                {
+                    $span .= "<strong>{$GLOBALS['strUnitRate']}</strong>: {$CONFIG['currency_symbol']}{$service->unitrate}<br />";
+                }
+
+                if ($balance != $service->balance)
+                {
+                    $span .= "<strong>{$GLOBALS['strBalance']}</strong>: {$CONFIG['currency_symbol']}".number_format($service->balance, 2)."<br />";
+                    if ($awaitingapproval != FALSE)
+                    {
+                        $span .= "<strong>{$GLOBALS['strAwaitingApproval']}</strong>: {$CONFIG['currency_symbol']}".number_format($awaitingapproval, 2)."<br />";
+                    }
+
+                    if ($reserved != FALSE)
+                    {
+                        $span .= "<strong>{$GLOBALS['strReserved']}</strong>: {$CONFIG['currency_symbol']}".number_format($reserved, 2)."<br />";
+                    }
+                    $span .= "<strong>{$GLOBALS['strAvailableBalance']}</strong>: {$CONFIG['currency_symbol']}".number_format($balance, 2)."<br />";
+                }
+
+                if ($service->lastbilled > 0)
+                {
+                    $span .= "<strong>{$GLOBALS['strLastBilled']}</strong>: ".ldate($CONFIG['dateformat_date'], $service->lastbilled)."<br />";
+                }
+
+                if ($service->foc == 'yes')
+                {
+                    $span .= "<strong>{$GLOBALS['strFreeOfCharge']}</strong>";
+                }
+
+                $html .= "<td><a href='transactions.php?serviceid={$service->serviceid}' class='info'>".icon('billing', 16);
+                if (!empty($span))
+                {
+                        $html .= "<span>{$span}</span>";
+                }
+                $html .= "</a></td>";
+                $html .= "<td><a href='transactions.php?serviceid={$service->serviceid}' class='info'>".ldate($CONFIG['dateformat_date'],$service->startdate);
+                if (!empty($span))
+                {
+                        $html .= "<span>{$span}</span>";
+                }
+                $html .= "</a></td>";
             }
-            $html .= "</a></td>";
-            $html .= "<td><a href='transactions.php?serviceid={$service->serviceid}' class='info'>".ldate($CONFIG['dateformat_date'],$service->startdate);
-            if (!empty($span))
-            {
-                    $html .= "<span>{$span}</span>";
-            }
-            $html .= "</a></td>";
             $html .= "<td>";
             $html .= ldate($CONFIG['dateformat_date'], $service->enddate)."</td>";
 
             $html .= "<td>{$CONFIG['currency_symbol']}".number_format($balance, 2)."</td>";
-            $html .= "<td><a href='contract_edit_service.php?mode=editservice&amp;serviceid={$service->serviceid}&amp;contractid={$contractid}'>{$GLOBALS['strEditService']}</a> | ";
-            $html .= "<a href='contract_edit_service.php?mode=showform&amp;sourceservice={$service->serviceid}&amp;contractid={$contractid}'>{$GLOBALS['strEditBalance']}</a></td>";
+            if ($billing)
+            {
+                $html .= "<td><a href='contract_edit_service.php?mode=editservice&amp;serviceid={$service->serviceid}&amp;contractid={$contractid}'>{$GLOBALS['strEditService']}</a> | ";
+                $html .= "<a href='contract_edit_service.php?mode=showform&amp;sourceservice={$service->serviceid}&amp;contractid={$contractid}'>{$GLOBALS['strEditBalance']}</a></td>";
+            }
             $html .= "</tr>\n";
         }
         $html .= "</table>\n";

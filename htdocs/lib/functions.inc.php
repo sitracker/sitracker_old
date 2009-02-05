@@ -6215,7 +6215,7 @@ function contract_details($id, $mode='internal')
     if ($maint->incidents_used >= $maint->incident_quantity AND
         $maint->incident_quantity != 0)
     {
-        $html .= " ($GLOBALS['strZeroRemaining'])";
+        $html .= " ({$GLOBALS['strZeroRemaining']})";
     }
 
     $html .= "</td></tr>";
@@ -6240,15 +6240,21 @@ function contract_details($id, $mode='internal')
 
     if ($mode == 'internal')
     {
+        $timed = db_read_column('timed', $GLOBALS['dbServiceLevels'], $maint->servicelevelid);
+        if ($timed == 'yes') $timed = TRUE;
+        else $timed = FALSE;
         $html .= "<tr><th>{$GLOBALS['strService']}</th><td>";
-        $html .= contract_service_table($id);
+        $html .= contract_service_table($id, $timed);
         $html .= "</td></tr>\n";
 
         // FIXME not sure if this should be here
-        $html .= "<tr><th>{$GLOBALS['strBalance']}</th><td>{$CONFIG['currency_symbol']}".number_format(get_contract_balance($id, TRUE, TRUE), 2);
-        $multiplier = get_billable_multiplier(strtolower(date('D', $now)), date('G', $now));
-        $html .= " (&cong;".contract_unit_balance($id, TRUE, TRUE)." units)";
-        $html .= "</td></tr>";
+        if ($timed)
+        {
+            $html .= "<tr><th>{$GLOBALS['strBalance']}</th><td>{$CONFIG['currency_symbol']}".number_format(get_contract_balance($id, TRUE, TRUE), 2);
+            $multiplier = get_billable_multiplier(strtolower(date('D', $now)), date('G', $now));
+            $html .= " (&cong;".contract_unit_balance($id, TRUE, TRUE)." units)";
+            $html .= "</td></tr>";
+        }
     }
 
     if ($maint->maintnotes != '' AND $mode == 'internal')
