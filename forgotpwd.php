@@ -17,7 +17,7 @@ require ($lib_path.'db_connect.inc.php');
 
 session_name($CONFIG['session_name']);
 session_start();
-require 'strings.inc.php';
+require $lib_path.'strings.inc.php';
 require ($lib_path.'functions.inc.php');
 
 $title = $strForgottenDetails;
