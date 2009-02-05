@@ -2524,7 +2524,7 @@ ALTER TABLE `{$dbTransactions}` ADD `totalrefunds` INT NOT NULL AFTER `totalbill
 ALTER TABLE `{$dbTransactions}` CHANGE `date` `dateupdated` DATETIME NOT NULL ;
 
 -- KMH 2009-01-30
-UPDATE `{$dbMailSig}` SET `signature` = '-- ... Powered by Open Source Software: Support Incident Tracker (SiT!) is available free from http://sitracker.org/' WHERE `id` =1;
+UPDATE `{$dbEmailSig}` SET `signature` = '-- ... Powered by Open Source Software: Support Incident Tracker (SiT!) is available free from http://sitracker.org/' WHERE `id` =1;
 
 -- KMH 2009-01-31
 ALTER TABLE `{$dbTempIncoming}` ADD `reason_id` TINYINT( 1 ) NOT NULL DEFAULT '1' AFTER `reason_time` ,
