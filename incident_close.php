@@ -364,7 +364,8 @@ else
         // add update(s)
         if ($addition_errors == 0)
         {
-            $sql = "SELECT owner, status FROM `{$dbIncidents} WHERE id = {$id}`";
+            $sql = "SELECT owner, status ";
+            $sql .= "FROM `{$dbIncidents}` WHERE id = {$id}";
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
             
