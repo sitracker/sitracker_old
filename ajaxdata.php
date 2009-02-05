@@ -83,9 +83,9 @@ switch ($action)
 
     case 'contexthelp':
         $context = cleanvar($_REQUEST['context']);
-        $helpfile = "{$CONFIG['application_fspath']}help/{$_SESSION['lang']}/{$context}.txt";
+        $helpfile = dirname( __FILE__ ).DIRECTORY_SEPARATOR."help/{$_SESSION['lang']}/{$context}.txt";
         // Default back to english if language helpfile isn't found
-        if (!file_exists($helpfile)) $helpfile = "{$CONFIG['application_fspath']}help/en-GB/{$context}.txt";
+        if (!file_exists($helpfile)) $helpfile = dirname( __FILE__ ).DIRECTORY_SEPARATOR."help/en-GB/{$context}.txt";
         if (file_exists($helpfile))
         {
             $fp = fopen($helpfile, 'r', TRUE);
@@ -121,7 +121,7 @@ switch ($action)
         $dashboard = cleanvar($_REQUEST['dashboard']);
         $dashletid = 'win'.cleanvar($_REQUEST['did']);
         // FIXME need some sanitation here
-        include ("{$CONFIG['application_fspath']}plugins{$fsdelim}dashboard_{$dashboard}.php");
+        include (dirname( __FILE__ ).DIRECTORY_SEPARATOR."plugins{$fsdelim}dashboard_{$dashboard}.php");
         $dashfn = "dashboard_{$dashboard}_display";
         echo $dashfn($dashletid);
     break;

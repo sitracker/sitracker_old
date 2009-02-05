@@ -22,8 +22,8 @@ function dashboard_random_tip_display($dashletid)
     global $CONFIG;
 
     $delim="\n";
-    $tipsfile = "{$CONFIG['application_fspath']}help/{$_SESSION['lang']}/tips.txt";
-    if (!file_exists($tipsfile)) $tipsfile = "{$CONFIG['application_fspath']}help/en-GB/tips.txt";
+    $tipsfile = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR."help/{$_SESSION['lang']}/tips.txt";
+    if (!file_exists($tipsfile)) $tipsfile = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR."help/en-GB/tips.txt";
     if (!file_exists($tipsfile))
     {
         trigger_error("Tips file '{$tipsfile}' was not found!",E_USER_WARNING);

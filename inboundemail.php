@@ -34,7 +34,7 @@ function populate_syslang2()
 {
     global $CONFIG;
     // Populate $SYSLANG with system lang
-    $file = "{$CONFIG['application_fspath']}i18n/{$CONFIG['default_i18n']}.inc.php";
+    $file = dirname( __FILE__ ).DIRECTORY_SEPARATOR."i18n/{$CONFIG['default_i18n']}.inc.php";
     if (file_exists($file))
     {
         $fh = fopen($file, "r");

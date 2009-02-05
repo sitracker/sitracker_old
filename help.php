@@ -27,8 +27,8 @@ if ($id > 0) echo permission_name($id).' ';
 echo "{$strHelp}</h2>";
 echo "<div id='help'>";
 
-$helpfile = "{$CONFIG['application_fspath']}help/{$_SESSION['lang']}/help.html";
-if (!file_exists($helpfile)) $helpfile = "{$CONFIG['application_fspath']}help/en-GB/help.html";
+$helpfile = dirname( __FILE__ ).DIRECTORY_SEPARATOR."help/{$_SESSION['lang']}/help.html";
+if (!file_exists($helpfile)) $helpfile = dirname( __FILE__ ).DIRECTORY_SEPARATOR."help/en-GB/help.html";
 if (file_exists($helpfile))
 {
     $helptext = file_get_contents($helpfile);

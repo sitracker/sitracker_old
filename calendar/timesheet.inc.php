@@ -90,13 +90,13 @@ else
     ";
 
     // Build up activity types
-    $activity_files['$strSupport'] = $CONFIG['application_fspath'] . 'calendar/activity_support.inc.php';
-    $activity_files['$strTravelling'] = $CONFIG['application_fspath'] . 'calendar/activity_travelling.inc.php';
-    $activity_files['$strResearch'] = $CONFIG['application_fspath'] . 'calendar/activity_research.inc.php';
-    $activity_files['$strDevelopment'] = $CONFIG['application_fspath'] . 'calendar/activity_development.inc.php';
-    $activity_files['$PreSales'] = $CONFIG['application_fspath'] . 'calendar/activity_presales.inc.php';
-    $activity_files['$strTraining'] = $CONFIG['application_fspath'] . 'calendar/activity_training.inc.php';
-    $activity_files['$strManagement'] = $CONFIG['application_fspath'] . 'calendar/activity_managerial.inc.php';
+    $activity_files['$strSupport'] = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR . 'calendar/activity_support.inc.php';
+    $activity_files['$strTravelling'] = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR . 'calendar/activity_travelling.inc.php';
+    $activity_files['$strResearch'] = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR . 'calendar/activity_research.inc.php';
+    $activity_files['$strDevelopment'] = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR . 'calendar/activity_development.inc.php';
+    $activity_files['$PreSales'] = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR . 'calendar/activity_presales.inc.php';
+    $activity_files['$strTraining'] = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR . 'calendar/activity_training.inc.php';
+    $activity_files['$strManagement'] = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR . 'calendar/activity_managerial.inc.php';
     plugin_do('activity_types');
 
     foreach ($activity_files as $activity_name => $activity_file)

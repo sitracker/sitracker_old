@@ -61,7 +61,7 @@ switch ($_REQUEST['action'])
             $dashboard[$dashboardnames->name] = $dashboardnames->name;
         }
 
-        $path = "{$CONFIG['application_fspath']}plugins/";
+        $path = dirname( __FILE__ ).DIRECTORY_SEPARATOR."plugins/";
 
         $dir_handle = @opendir($path) or trigger_error("Unable to open dashboard directory $path", E_USER_ERROR);
 
@@ -126,7 +126,7 @@ switch ($_REQUEST['action'])
                 // run the post install components
                 foreach ($dashboardcomponents AS $comp)
                 {
-                    include ("{$CONFIG['application_fspath']}plugins/dashboard_{$comp}.php");
+                    include (dirname( __FILE__ ).DIRECTORY_SEPARATOR."plugins/dashboard_{$comp}.php");
                     $func = "dashboard_".$comp."_install";
                     if (function_exists($func)) $installed = $func();
                     if ($installed !== TRUE)
@@ -153,7 +153,7 @@ switch ($_REQUEST['action'])
             $obj = mysql_fetch_object($result);
 
             $version = 1;
-            include ("{$CONFIG['application_fspath']}plugins/dashboard_{$obj->name}.php");
+            include (dirname( __FILE__ ).DIRECTORY_SEPARATOR."plugins/dashboard_{$obj->name}.php");
             $func = "dashboard_{$obj->name}_get_version";
 
             if (function_exists($func))
@@ -248,7 +248,7 @@ switch ($_REQUEST['action'])
             echo "<td>";
 
             $version = 1;
-            include ("{$CONFIG['application_fspath']}plugins/dashboard_{$dashboardnames->name}.php");
+            include (dirname( __FILE__ ).DIRECTORY_SEPARATOR."plugins/dashboard_{$dashboardnames->name}.php");
             $func = "dashboard_{$dashboardnames->name}_get_version";
 
             if (function_exists($func))

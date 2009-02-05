@@ -58,15 +58,15 @@ error_reporting(E_ALL);
 $oldeh = set_error_handler("sit_error_handler");
 
 // Decide which language to use and setup internationalisation
-require ($CONFIG['application_fspath'].'i18n/en-GB.inc.php');
+require (dirname( __FILE__ ).DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'i18n/en-GB.inc.php');
 if ($CONFIG['default_i18n'] != 'en-GB')
 {
-    include ($CONFIG['application_fspath']."i18n/{$CONFIG['default_i18n']}.inc.php");
+    include (dirname( __FILE__ ).DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR."i18n/{$CONFIG['default_i18n']}.inc.php");
 }
 if (!empty($_SESSION['lang'])
     AND $_SESSION['lang'] != $CONFIG['default_i18n'])
 {
-    include ($CONFIG['application_fspath']."i18n/{$_SESSION['lang']}.inc.php");
+    include (dirname( __FILE__ ).DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR."i18n/{$_SESSION['lang']}.inc.php");
 }
 ini_set('default_charset', $i18ncharset);
 

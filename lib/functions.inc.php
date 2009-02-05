@@ -5152,7 +5152,7 @@ function draw_chart_image($type, $width, $height, $data, $legends, $title='', $u
     // Graph settings
     if (empty($width)) $width = 500;
     if (empty($height)) $height = 150;
-    $fontfile="{$CONFIG['application_fspath']}FreeSans.ttf";
+    $fontfile = dirname( __FILE__ ).DIRECTORY_SEPARATOR."FreeSans.ttf"; // FIXME font file!
 
     if (!empty($fontfile) AND file_exists($fontfile)) $use_ttf = TRUE;
     else $use_ttf = FALSE;
@@ -6650,7 +6650,7 @@ function icon($filename, $size='', $alt='', $title='', $id='')
         $size = 16;
     }
 
-    $file = "{$CONFIG['application_fspath']}images/icons/{$iconset}";
+    $file = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR."images/icons/{$iconset}";
     $file .= "/{$size}x{$size}/{$filename}.png";
 
     $urlpath = "{$CONFIG['application_webpath']}images/icons/{$iconset}";
@@ -6660,7 +6660,7 @@ function icon($filename, $size='', $alt='', $title='', $id='')
     {
         $alt = "Missing icon: '$filename.png', ($file) size {$size}";
         if ($CONFIG['debug']) trigger_error($alt, E_USER_WARNING);
-        $urlpath = "{$CONFIG['application_webpath']}images/icons/sit";
+        $urlpath = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR."images/icons/sit";
         $urlpath .= "/16x16/blank.png";
     }
     $icon = "<img src=\"{$urlpath}\"";
@@ -7571,7 +7571,7 @@ function populate_syslang()
 {
     global $CONFIG;
     // Populate $SYSLANG with system lang
-    $file = "{$CONFIG['application_fspath']}i18n/{$CONFIG['default_i18n']}.inc.php";
+    $file = dirname( __FILE__ ).DIRECTORY_SEPARATOR."i18n/{$CONFIG['default_i18n']}.inc.php";
     if (file_exists($file))
     {
         $fh = fopen($file, "r");
@@ -7726,9 +7726,9 @@ if (is_array($CONFIG['plugins']))
         $plugin = str_replace('/','',$plugin);
         if ($plugin != '')
         {
-            if (file_exists("{$CONFIG['application_fspath']}plugins/{$plugin}.php"))
+            if (file_exists(dirname( __FILE__ ).DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR."plugins/{$plugin}.php"))
             {
-                include ("{$CONFIG['application_fspath']}plugins/{$plugin}.php");
+                include (dirname( __FILE__ ).DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR."plugins/{$plugin}.php");
             }
             else
             {
