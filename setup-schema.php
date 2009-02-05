@@ -385,7 +385,6 @@ CREATE TABLE `{$dbHolidays}` (
   `date` DATE NULL,
   PRIMARY KEY  (`id`),
   KEY `userid` (`userid`),
-  KEY `startdate` (`startdate`),
   KEY `type` (`type`),
   KEY `approved` (`approved`)
 ) ENGINE=MyISAM;
