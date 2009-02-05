@@ -365,8 +365,8 @@ function setup_exec_sql($sqlquerylist)
 /**
     * Create a blank SiT database
     * @author Ivan Lucas
-    * @retval TRUE database created OK
-    * @retval FALSE database not created, error.
+    * @retval bool TRUE database created OK
+    * @retval bool FALSE database not created, error.
 */
 function setup_createdb()
 {
@@ -429,10 +429,11 @@ function setup_check_adminuser()
     * @author Ivan Lucas
     * @param string $action.    Value for the hidden 'action' field
     * @param string $label.     Label for the submit button
+    * @param string $extrahtml. Extra HTML to display on the form
     * @returns A form with a button
     * @retval string HTML form
 */
-function setup_button($action, $label)
+function setup_button($action, $label, $extrahtml='')
 {
     $html = "\n<form action='{$_SERVER['PHP_SELF']}' method='post'>";
     if (!empty($action))
@@ -440,11 +441,11 @@ function setup_button($action, $label)
         $html .= "<input type='hidden' name='action' value=\"{$action}\" />";
     }
     $html .= "<input type='submit' value=\"{$label}\" />";
+    if (!empty($extrahtml)) $html .= $extrahtml;
     $html .= "</form>\n";
 
     return $html;
 }
-
 
 session_name($CONFIG['session_name']);
 session_start();
@@ -731,7 +732,7 @@ switch ($_REQUEST['action'])
                     {
                         echo "<p class='info'>You can now go ahead and create a database called '{$CONFIG['db_database']}' for SiT! to use.</p>";
                     }
-                    echo setup_button('createdb', 'Create a database');
+                    echo setup_button('createdb', 'Create a database', "<br /><label><input type='checkbox' name='sampledata' value='yes' checked='checked' /> With sample data</label>");
                     //echo "<p><a href='{$_SERVER['PHP_SELF']}?action=reconfigure'>Reconfigure</a> SiT!</p>";
                 }
                 else
@@ -767,6 +768,7 @@ switch ($_REQUEST['action'])
 
 
     case 'createdb':
+        if ($_REQUEST['sampledata']) $_SESSION['sampledata'] = TRUE;
         setup_createdb();
     break;
 
@@ -849,6 +851,12 @@ switch ($_REQUEST['action'])
 //                     $installed_schema = 0;
 //                     $installed_schema = substr(end(array_keys($upgrade_schema[$application_version*100])),1);
                     $errors = setup_exec_sql($schema);
+                    if ($_SESSION['sampledata'] == TRUE)
+                    {
+                        // Install sample data
+                        echo "<p>Installing sample data...</p>";
+                        $errors = $errors + setup_exec_sql($sampledata_sql);
+                    }
                     // Update the system version
                     if ($errors < 1)
                     {
