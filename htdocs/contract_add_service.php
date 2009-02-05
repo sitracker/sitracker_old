@@ -8,7 +8,7 @@
 // of the GNU General Public License, incorporated herein by reference.
 //
 
-$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
+$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
 $permission = 21; // FIXME need a permission for add service
 
 require_once ($lib_path.'db_connect.inc.php');
@@ -24,7 +24,7 @@ $submit = $_REQUEST['submit'];
 // Contract ID must not be blank
 if (empty($contractid))
 {
-    html_redirect('../main.php', FALSE);
+    html_redirect('main.php', FALSE);
     exit;
 }
 
@@ -45,7 +45,7 @@ else
 
 if (empty($submit) OR !empty($_SESSION['formerrors']['add_service']))
 {
-    include ('../inc/htmlheader.inc.php');
+    include ('inc/htmlheader.inc.php');
     echo show_form_errors('add_service');
     clear_form_errors('add_service');
     echo "<h2> ";
@@ -137,11 +137,11 @@ if (empty($submit) OR !empty($_SESSION['formerrors']['add_service']))
     echo "<p><input name='submit' type='submit' value=\"{$strAdd}\" /></p>";
     echo "</form>\n";
 
-    echo "<p align='center'><a href='../contract_details.php?id={$contractid}'>{$strReturnWithoutSaving}</a></p>";
+    echo "<p align='center'><a href='contract_details.php?id={$contractid}'>{$strReturnWithoutSaving}</a></p>";
 
     //cleanup form vars
     clear_form_data('add_service');
-    include ('../inc/htmlfooter.inc.php');
+    include ('inc/htmlfooter.inc.php');
 }
 else
 {
@@ -204,6 +204,6 @@ else
         }
     }
 
-    html_redirect("../contract_details.php?id={$contractid}", TRUE);
+    html_redirect("contract_details.php?id={$contractid}", TRUE);
 }
 ?>
