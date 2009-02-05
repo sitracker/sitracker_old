@@ -1285,7 +1285,7 @@ switch ($_REQUEST['action'])
                         echo "<p class='warning'>Important: The file permissions on the configuration file <var>{$config_filename}</var> file allow it to be modified, we recommend you make this file read-only.</p>";
                     }
 
-                    if ($CONFIG['attachment_fspath'] == '')
+/*                    if ($CONFIG['attachment_fspath'] == '')
                     {
                         echo "<p class='error'>Attachment path must not be empty, please set the \$CONFIG['attachment_fspath'] configuration variable</p>";
                     }
@@ -1304,7 +1304,7 @@ switch ($_REQUEST['action'])
                         echo "<code>chmod -R 777 {$CONFIG['attachment_fspath']}</code>";
                         echo "</p>";
                         echo "<p>After fixing this, please re-run <a href='{$_SERVER[PHP_SELF]}?checkinstallcomplete' class='button'>setup</a> to create an admin account.</p>";
-                    }
+                    }*/
                     elseif (!isset($_REQUEST))
                     {
                         echo "<p class='error'>SiT! requires PHP 5.0.0 or later</p>";
