@@ -153,9 +153,9 @@ $CONFIG['spam_email_subject'] = 'SPAMASSASSIN';
 $CONFIG['feedback_max_score'] = 9;
 
 // Paths to various required files
-$CONFIG['licensefile']= '../doc/LICENSE';
-$CONFIG['changelogfile']= '../doc/Changelog';
-$CONFIG['creditsfile']= '../doc/CREDITS';
+$CONFIG['licensefile']= 'doc/LICENSE';
+$CONFIG['changelogfile']= 'doc/Changelog';
+$CONFIG['creditsfile']= 'doc/CREDITS';
 
 // The session name for use in cookies and URL's, Must contain alphanumeric characters only
 $CONFIG['session_name'] = 'SiTsessionID';
