@@ -214,6 +214,7 @@ $strBackToSites = 'Back to sites';
 $strBackOneYear = 'Back One Year';
 $strBalance = 'Balance';
 $strBCC = 'BCC';
+# noun, a bill to pay money
 $strBill = 'Bill';
 $strBillableIncidentApproved = 'Billable Incident Approved';
 $strBillableIncidentApproved = 'Occurs when an billable incident is approved';
