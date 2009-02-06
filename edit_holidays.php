@@ -67,7 +67,7 @@ switch ($_REQUEST['action'])
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
-        echo "<form name='editholidays' action='{$_SERVER['PHP_SELF']}' method='post'>";
+        echo "<form name='editholidays' action='{$_SERVER['PHP_SELF']}?action=save' method='post'>";
         echo "<p>{$strResetHolidayEntitlementCarryOverNDaysOfUnusedHoliday}</p>";
         echo "<div align='center'><label>{$strDefaultNewEntitlement}: ";
         echo "<input type='text' name='default_entitlement' value='{$CONFIG['default_entitlement']}' size='4' /></label>, ";
