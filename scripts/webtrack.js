@@ -14,7 +14,16 @@ dashletrefresh = new Array();
 var isIE = /*@cc_on!@*/false;
 var mainframe = '50%';
 
-function incident_details_window(incidentid,win,rtn)
+/**
+  * Open a popup window to show incident details
+  * @author Ivan Lucas
+  * @param string incidentid. The ID of the incident to display
+  * @param string win. Window reference
+  * @param rtn. Decides whether the window is unique
+  * FIXME I can't remember how the 'rtn' param works, you'll have to figure it
+  * out yourself, sorry.
+**/
+function incident_details_window(incidentid, win, rtn)
 {
     // URL = "incident.php?popup=yes&id=" + incidentid;
     URL = application_webpath + "incident_details.php?id=" + incidentid + "&win=" + win;
@@ -24,7 +33,13 @@ function incident_details_window(incidentid,win,rtn)
 }
 
 
-function wt_winpopup(url,mini)
+/**
+  * Open a popup window
+  * @author Ivan Lucas
+  * @param string url. The URL to open in the popup window
+  * @param string mini. set to 'mini' to open a compact window
+**/
+function wt_winpopup(url, mini)
 {
     if (mini=='mini')
     {
@@ -37,9 +52,11 @@ function wt_winpopup(url,mini)
 }
 
 
-// Yes/No dialog
-// @param msg string - A message to display
-// @returns bool TRUE or false, depending on which button was pressed, yes = true, false = no
+/**
+  * Yes/No dialog
+  * @param msg string - A message to display
+  * @returns bool TRUE or false, depending on which button was pressed, yes = true, false = no
+**/
 function confirm_action(msg)
 {
     if (msg == '') msg = 'Are you sure?';
@@ -47,13 +64,11 @@ function confirm_action(msg)
 }
 
 
-function message_window(userid)
-{
-    URL = application_webpath + "messages.php?userid=" + userid;
-    window.open(URL, "message_window", "toolbar=yes,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=700,height=600");
-}
-
-
+/**
+  * Open a popup window showing help
+  * @author Ivan Lucas
+  * @param int helpid. The help ID to display
+**/
 function help_window(helpid)
 {
     URL = application_webpath + "help.php?id=" + helpid;
@@ -61,6 +76,12 @@ function help_window(helpid)
 }
 
 
+/**
+  *
+  * @author Tom Gerrard
+  * @param int id
+  * @note Related to the calendar
+**/
 function appointment(id)
 {
 
@@ -79,19 +100,13 @@ function appointment(id)
 }
 
 
-// www.sean.co.uk
-function pausecomp(millis)
-{
-    var date = new Date();
-    var curDate = null;
-
-    do
-    {
-        curDate = new Date();
-    } while (curDate-date < millis);
-}
-
-
+/**
+  * Get some text and display it
+  * @author Paul Heaney, Ivan Lucas
+  * @param string page
+  * @param string component
+  * @param string update
+**/
 function get_and_display(page, component, update)
 {
     // Do certain special things for dashlets
@@ -154,15 +169,12 @@ function get_and_display(page, component, update)
 }
 
 
-function ajaxfetch(url, element, unused)
-{
-    new Ajax.Updater(element, url, {
-    method: 'get',
-    parameters: { text: $F('text') }
-    });
-}
-
-
+/**
+  *
+  * @author Unknown ???
+  * @param string page
+  * @param string component
+**/
 function ajax_save(page, component)
 {
     new Ajax.Request(page, {
@@ -172,14 +184,26 @@ function ajax_save(page, component)
 }
 
 
-// This Javascript code placed in the public domain at http://www.irt.org/script/1265.htm
-// "Code examples on irt.org can be freely copied and used."
-
+/**
+  * Delete an option from a HTML select tag
+  * @author Unknown ???
+  * @note This Javascript code placed in the public domain
+          at http://www.irt.org/script/1265.htm
+          "Code examples on irt.org can be freely copied and used."
+**/
 function deleteOption(object,index)
 {
     object.options[index] = null;
 }
 
+
+/**
+  * Add an option to a HTML select tag
+  * @author Unknown ???
+  * @note This Javascript code placed in the public domain
+          at http://www.irt.org/script/1265.htm
+          "Code examples on irt.org can be freely copied and used."
+**/
 function addOption(object,text,value)
 {
     var defaultSelected = true;
@@ -189,6 +213,13 @@ function addOption(object,text,value)
 }
 
 
+/**
+  * Copy selected options from one HTML select tag to another
+  * @author Unknown ???
+  * @note This Javascript code placed in the public domain
+          at http://www.irt.org/script/1265.htm
+          "Code examples on irt.org can be freely copied and used."
+**/
 function copySelected(fromObject,toObject)
 {
     for (var i=0, l=fromObject.options.length;i < l;i++)
@@ -205,6 +236,13 @@ function copySelected(fromObject,toObject)
 }
 
 
+/**
+  * Copy all options from one HTML select tag to another
+  * @author Unknown ???
+  * @note This Javascript code placed in the public domain
+          at http://www.irt.org/script/1265.htm
+          "Code examples on irt.org can be freely copied and used."
+**/
 function copyAll(fromObject,toObject)
 {
     for (var i=0, l=fromObject.options.length;i < l;i++)
@@ -217,7 +255,12 @@ function copyAll(fromObject,toObject)
     }
 }
 
-
+/**
+  * @author Unknown ???
+  * @note This Javascript code placed in the public domain
+          at http://www.irt.org/script/1265.htm
+          "Code examples on irt.org can be freely copied and used."
+**/
 function populateHidden(fromObject,toObject)
 {
     var output = '';
@@ -228,7 +271,6 @@ function populateHidden(fromObject,toObject)
     // alert(output);
     toObject.value = output;
 }
-// ========== END irt.org code
 
 
 var MIN_ROWS = 3 ;
@@ -236,6 +278,11 @@ var MAX_ROWS = 10 ;
 var MIN_COLS = 40 ;
 var MAX_COLS = 80 ;
 
+
+/**
+  * Change the length of a text area
+  * @author Unknown ???
+**/
 function changeTextAreaLength( e )
 {
     var txtLength = e.value.length;
@@ -269,14 +316,20 @@ function changeTextAreaLength( e )
     }
 }
 
-
+/**
+  * @author Unknown ???
+**/
 function resetTextAreaLength ( e )
 {
     e.cols = MIN_COLS ;
     e.rows = MIN_ROWS ;
 }
 
-
+/**
+  * Return a random number
+  * @author Ivan Lucas
+  * @retval int Random number
+**/
 function get_random()
 {
     var ranNum= Math.floor(Math.random()*1000000000000);
@@ -284,8 +337,11 @@ function get_random()
 }
 
 
-// Display/Hide the time to next action fields
-// Author: Ivan Lucas
+/**
+  * Display/Hide the time to next action fields
+  * @author Ivan Lucas
+  *
+**/
 function update_ttna() {
     if ($('ttna_time').checked)
     {
@@ -310,7 +366,12 @@ function update_ttna() {
     }
 }
 
-// Check whether a service level is timed when adding a contract
+
+/**
+  * Check whether a service level is timed when adding a contract
+  * @author Unknown ???
+  *
+**/
 function addcontract_sltimed(servicelevel)
 {
     new Ajax.Request(application_webpath + 'ajaxdata.php?action=servicelevel_timed&servicelevel=' + servicelevel + '&rand=' + get_random(),
@@ -338,6 +399,9 @@ function addcontract_sltimed(servicelevel)
 }
 
 
+/**
+  * @author Paul Heaney
+**/
 function addservice_showbilling(form)
 {
     /*var a = $('billtype');
@@ -363,7 +427,12 @@ function addservice_showbilling(form)
 }
 
 
-function hidecontexthelp(event) {
+/**
+  * Hide context help [?] popups
+  * @author Ivan Lucas
+**/
+function hidecontexthelp(event)
+{
     var element = event.element();
     if (element.up(1).hasClassName('helplink'))
     {
@@ -380,8 +449,10 @@ function hidecontexthelp(event) {
 }
 
 
-// find the real position of an element
-// http://www.quirksmode.org/js/findpos.html
+/**
+  * find the real position of an element
+  * @author http://www.quirksmode.org/js/findpos.html
+**/
 function findPos(obj) {
     var curleft = curtop = 0;
     if (obj.offsetParent) {
@@ -394,6 +465,11 @@ function findPos(obj) {
     return [curleft,curtop];
 }
 
+
+/**
+  * Show context help [?] popups
+  * @author Ivan Lucas
+**/
 function contexthelp(elem, context, auth)
 {
     var epos = findPos(elem);
@@ -456,7 +532,12 @@ function clearjumpto()
     $('searchfield').value = "";
 }
 
-// Unfinished - INL 14May08
+
+/**
+  * Autocompletion
+  * @author Ivan Lucas
+  * @note FIXME Unfinished - INL 14May08
+**/
 function autocomplete(elem, id)
 {
     // create a new div if it doesn't already exist
