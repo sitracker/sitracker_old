@@ -32,7 +32,7 @@ if (empty($submit))
     clear_form_errors('add_vendor');
     echo "<h2>{$strAddVendor}</h2>";
     echo "<h5>".sprintf($strMandatoryMarked,"<sup class='red'>*</sup>")."</h5>";
-    echo "<form action='{$_SERVER['PHP_SELF']}' method='post' onsubmit='return confirm_action(\"{$strAreYouSureAddVendor}\")'>";
+    echo "<form action='{$_SERVER['PHP_SELF']}' method='post' onsubmit='return confirm_action(\"{$strAreYouSureAdd}\")'>";
     echo "<table align='center' class='vertical'>";
     echo "<tr><th>{$strVendor}<sup class='red'>*</sup></th><td><input maxlength='50' name='name' size='30' /></td></tr>\n";
     echo "</table>";

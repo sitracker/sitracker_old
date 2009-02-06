@@ -32,7 +32,7 @@ if (empty($submit))
     echo "<h2>".icon('skill', 32)." ";
     echo "{$strNewSkill}</h2>";
     echo "<h5>".sprintf($strMandatoryMarked, "<sup class='red'>*</sup></h5>");
-    echo "<form name='addsoftware' action='{$_SERVER['PHP_SELF']}' method='post' onsubmit='return confirm_action(\"{$strAreYouSureAddSkill}\");'>";
+    echo "<form name='addsoftware' action='{$_SERVER['PHP_SELF']}' method='post' onsubmit='return confirm_action(\"{$strAreYouSureAdd}\");'>";
     echo "<table class='vertical'>";
     echo "<tr><th>{$strVendor}:</th><td>";
     if ($_SESSION['formdata']['add_software']['vendor'] != '')

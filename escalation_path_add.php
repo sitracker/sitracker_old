@@ -32,7 +32,7 @@ if (empty($submit))
 
     echo "<h2>{$title}</h2>";
 
-    echo "<form action='".$_SERVER['PHP_SELF']."' method='post' onsubmit='return confirm_action(\"{$strAreYouSureAddEscalationPath}\")'>";
+    echo "<form action='".$_SERVER['PHP_SELF']."' method='post' onsubmit='return confirm_action(\"{$strAreYouSureAdd}\")'>";
     echo "<table class='vertical'>";
 
     echo "<tr><th>{$strName}</th><td><input name='name' class='required' ";

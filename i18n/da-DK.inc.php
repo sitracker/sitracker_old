@@ -1,7 +1,7 @@
 <?php
 
 ## Translation to Danish by Carsten Jensen aka Tomse Latest rev 4312
-## Translation started 14. Oct. 2008 
+## Translation started 14. Oct. 2008
 
 $languagestring = 'Danish (DK)';
 $i18ncharset = 'UTF-8';
@@ -151,15 +151,6 @@ $strArticlesPublishedToday = 'Nye artikler udgivet i dag';
 # Which area of the product does the problem occur in?
 $strArea = 'Område';
 $strAreYouSureAdd = 'Er du sikker på, du vil tilføje dette?';
-$strAreYouSureAddContract = 'Er du sikker på, du vil tilføje denne kontrakt?';
-$strAreYouSureAddEscalationPath = 'Er du sikker på, du vil tilføje denne eskalerings sti?';
-$strAreYouSureAddReseller = 'Er du sikker på, du vil tilføje denne forhandler?';
-$strAreYouSureAddProduct = 'Er du sikker på, du vil tilføje dette produkt?';
-$strAreYouSureAddProductInfo = 'Er du sikker på, du vil tilføje denne produkt information?';
-$strAreYouSureAddSite = 'Er du sikker på, du vil tilføje denne afdeling?';
-$strAreYouSureAddSkill = 'Er du sikker på, du vil tilføje denne færdighed?';
-$strAreYouSureAddUser = 'Er du sikker på, du vil tilføje denne bruger?';
-$strAreYouSureAddVendor = 'Er du sikker på, du vil tilføje denne sælger?';
 $strAreYouSureDelete = 'Dette emne vil blive slettet permanent.  Er du sikker på at fortsætte?';
 $strAreYouSureDeleteMaintenceContract = 'Dette vil fjerne muligheden for at logge hændelser af denne kontaktperson vedrørende den pågældende vare, som denne kontrakt er for. Er du sikker på du vil slette kontaktpersonen til denne kontrakt?';
 $strAreYouSureEditEmailTemplate = 'Er du sikker på du vil editere denne email skabelon?';

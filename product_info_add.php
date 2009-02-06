@@ -32,7 +32,7 @@ if (empty($_REQUEST['submit']))
     include ('./inc/htmlheader.inc.php');
     echo "<h2>{$strAddProductQuestion}</h2>";
     echo "<h5>".sprintf($strMandatoryMarked,"<sup class='red'>*</sup>")."</h5>";
-    echo "<form action='{$_SERVER['PHP_SELF']}' method='post' onsubmit='return confirm_action(\"{$strAreYouSureAddProductInfo}\")'>";
+    echo "<form action='{$_SERVER['PHP_SELF']}' method='post' onsubmit='return confirm_action(\"{$strAreYouSureAdd}\")'>";
     echo "<table class='vertical' align='center'>";
     echo "<tr><th>{$strProduct}: <sup class='red'>*</sup></th><td>".product_drop_down("product", $product)."</td></tr>";
     echo "<tr><th>{$strQuestion}: <sup class='red'>*</sup></th><td><input name='information' size='30' /></td></tr>";

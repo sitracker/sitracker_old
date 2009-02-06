@@ -34,7 +34,7 @@ if ($action == "showform" OR $action=='')
     clear_form_errors('add_contract');
     echo "<h2>".icon('contract', 32)." ";
     echo "{$strAddContract}</h2>";
-    echo "<form id='add_contract' name='add_contract' action='{$_SERVER['PHP_SELF']}?action=add' method='post' onsubmit='return confirm_action(\"{$strAreYouSureAddContract}\");'>";
+    echo "<form id='add_contract' name='add_contract' action='{$_SERVER['PHP_SELF']}?action=add' method='post' onsubmit='return confirm_action(\"{$strAreYouSureAdd}\");'>";
     echo "<table align='center' class='vertical'>";
 
     echo "<tr><th>{$strSite}</th><td>";

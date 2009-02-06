@@ -144,6 +144,7 @@ $strApprovedFree = 'Approved Free';
 $strApproveHolidays = 'Approve Holidays';
 # Short for April
 $strAprAbbr = 'Apr';
+# Month number 4: April
 $strApril = 'April';
 $strArchivedApproved = 'Archived. Approved';
 $strArchivedApprovedFree = 'Archived. Approved \'Free\'';
@@ -156,15 +157,6 @@ $strArticlesPublishedToday = 'Articles Published Today';
 # Which area of the product does the problem occur in?
 $strArea = 'Area';
 $strAreYouSureAdd = 'Are you sure you want to add this?';
-$strAreYouSureAddContract = 'Are you sure you want to add this contract?';
-$strAreYouSureAddEscalationPath = 'Are you sure you want to add this escalation path?';
-$strAreYouSureAddReseller = 'Are you sure you want to add this reseller?';
-$strAreYouSureAddProduct = 'Are you sure you want to add this product?';
-$strAreYouSureAddProductInfo = 'Are you sure you want to add this product information?';
-$strAreYouSureAddSite = 'Are you sure you want to add this site?';
-$strAreYouSureAddSkill = 'Are you sure you want to add this skill?';
-$strAreYouSureAddUser = 'Are you sure you want to add this user?';
-$strAreYouSureAddVendor = 'Are you sure you want to add this vendor?';
 $strAreYouSureDelete = 'This item will be permanently deleted.  Are you sure you want to continue?';
 $strAreYouSureDeleteMaintenceContract = 'This will remove the ability to log incidents for this contact regarding the product which this contract is for. Are you sure you want to delete this maintenance support contact?';
 $strAreYouSureEditEmailTemplate = 'Are you sure you want to edit this email template?';
@@ -187,6 +179,7 @@ $strAttachments = 'Attachments';
 $strAttachedIsBillableIncidentsForAbovePeriod ='Attached is the billable incidents for the above period';
 # Short for August
 $strAugAbbr = 'Aug';
+# Month number 8: August
 $strAugust = 'August';
 $strAuthor = 'Author';
 $strAuthors = 'Authors';
@@ -403,6 +396,7 @@ $strdaysworkingaway = 'days working away';
 $strDebit = 'Debit';
 # Short for December
 $strDecAbbr = 'Dec';
+# Month number 12: December
 $strDecember = 'December';
 $strDecline = 'Decline';
 $strDeclined = 'Declined';
@@ -584,6 +578,7 @@ $strFax = 'Fax';
 $strFeatures = 'Features';
 # Short for February
 $strFebAbbr = 'Feb';
+# Month number 2: February
 $strFebruary = 'February';
 $strFeedback = 'Feedback';
 $strFeedbackForms = 'Feedback Forms';
@@ -790,15 +785,19 @@ $strIgnore = 'Ignore';
 
 # short for January
 $strJanAbbr = 'Jan';
+# Month number 1: January
 $strJanuary = 'January';
 $strJobTitle = 'Job Title';
 $strJournal = 'Journal';
+# Short for July
 $strJulAbbr = 'Jul';
+# Month number 7: July
 $strJuly = 'July';
 $strJumpTo = 'Jump to';
 $strJumpToIncident = 'Jump to Incident';
 # Short for June
 $strJunAbbr = 'Jun';
+# Month number 6: June
 $strJune = 'June';
 $strJustNow = 'Just Now';
 
@@ -877,6 +876,7 @@ $strMandatoryMarked = 'Mandatory fields are marked %s';
 $strManyThanks = 'Many thanks to everybody that has offered comments, ideas, suggestions, bug reports and helped with testing or has contributed code. In particular thanks go to: (in random order)';
 # Short for March
 $strMarAbbr = 'Mar';
+# Month number 3: March
 $strMarch = 'March';
 $strMarkComplete = 'Mark Complete';
 $strMarkedComplete = 'Marked Complete';
@@ -886,8 +886,9 @@ $strMarketingMailshotDesc = 'This report is a list of details for all customers 
 $strMarkForClosure = 'Mark for Closure';
 $strMaxCarryOverXDays = 'Max Carry-over %s days';
 $strMaxResults = 'A maximum of %d results are displayed, your search might have returned more.';
-# Short for May (these happen to be the same in english)
+# Short for the month of May (these happen to be the same in english)
 $strMayAbbr = 'May';
+# Month number 5: May
 $strMay = 'May';
 $strMaxVersion = 'Maximum Version';
 $strMBytes = 'MBytes';
@@ -1090,6 +1091,7 @@ $strNoUpgradesForDashboardComponent = 'No upgrades for %s dashboard component';
 # Short for November
 $strNovAbbr = 'Nov';
 $strNoVendorsDefined = 'No Vendors Defined';
+# Month number 11: November
 $strNovember = 'November';
 $strNow = 'Now';
 $strNumOfIncidents = 'There are %s incidents in this list';
@@ -1100,6 +1102,7 @@ $strNumOpenIncidents = '%s open';
 $strOccurance = 'Occurance';
 # Short for October
 $strOctAbbr = 'Oct';
+# Month number 10: October
 $strOctober = 'October';
 $strOffset = 'Offset';
 $strOK = 'OK';
@@ -1346,6 +1349,7 @@ $strSentInformation = 'Sent Information';
 $strSendTranslation = 'Save the text below as %s and place in the %s directory to use it. Send it to %s for it to be included with future SiT! releases for the benefit of other users.';
 # Short for September
 $strSepAbbr = 'Sep';
+# Month number 9: September
 $strSeptember = 'September';
 $strService = 'Service';
 $strServiceBalance = 'The amount of remaining service balance i.e. 34%';
@@ -1714,13 +1718,15 @@ $strXIncidentsLeft = '%s Incidents Left';
 $strXHasAction = '%s Has Action';
 $strXHour = '%s Hour';
 $strXHours = '%s Hours';
+# e.g. '5 minutes late'
 $strXLate = '%s late';
 $strXMinutes = '%s Minutes';
 $strXMonths = '%s Months';
 # e.g. '5 days old'
 $strXold = '%s old';
-# e.g. 'Fred of ACME Inc'. i.e. Name of Site
+# e.g. 'Fred of ACME Inc'. i.e. 'Name' of 'Site'
 $strXofX = '%s of %s';
+# e.g. '5 Records'
 $strXRecords = '%s Records';
 # e.g. John's Activities
 $strXsActivities = '%s\'s Activities';
@@ -1740,6 +1746,7 @@ $strYearly = 'Yearly';
 $strYearView = 'Year View';
 $strYes = 'Yes';
 $strYesterday = 'Yesterday';
+# Second person, singular
 $strYou = 'You';
 $strYouShouldNowDefineSubstituteEngineers = 'You should now define a substitute engineer for each skill';
 $strYouACurrentlyNotAccepting = 'You are currently not accepting incidents. You can change this at the bottom of the main page.';

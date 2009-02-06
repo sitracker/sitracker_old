@@ -31,7 +31,7 @@ if ($action == "showform" OR $action == '')
     echo "<h2>".icon('site', 32)." ";
     echo "{$strNewSite}</h2>";
     echo "<form action='{$_SERVER['PHP_SELF']}?action=add' method='post' ";
-    echo "onsubmit='return confirm_action(\"{$strAreYouSureAddSite}\");'>";
+    echo "onsubmit='return confirm_action(\"{$strAreYouSureAdd}\");'>";
     echo "<table align='center' class='vertical'>";
     echo "<tr><th>{$strName}</th><td><input maxlength='255' class='required' ";
     echo "name='name' size='30' ";

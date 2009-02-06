@@ -44,7 +44,7 @@ if (empty($submit))
     echo "{$strNewUser}</h2>";
     echo "<h5>".sprintf($strMandatoryMarked,"<sup class='red'>*</sup>")."</h5>";
     echo "<form id='adduser' action='{$_SERVER['PHP_SELF']}' method='post' ";
-    echo "onsubmit='return confirm_action(\"{$strAreYouSureAddUser}\");'>";
+    echo "onsubmit='return confirm_action(\"{$strAreYouSureAdd}\");'>";
     echo "<table align='center' class='vertical'>\n";
     echo "<tr><th>{$strRealName} <sup class='red'>*</sup></th>";
     echo "<td><input maxlength='50' name='realname' size='30'";
