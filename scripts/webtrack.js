@@ -26,7 +26,8 @@ var mainframe = '50%';
 function incident_details_window(incidentid, win, rtn)
 {
     // URL = "incident.php?popup=yes&id=" + incidentid;
-    URL = application_webpath + "incident_details.php?id=" + incidentid + "&win=" + win;
+    // URL = application_webpath + "incident_details.php?id=" + incidentid + "&win=" + win;
+    URL = "incident_details.php?id=" + incidentid + "&win=" + win;
     if (popwin) { popwin.close(); }
     popwin = window.open(URL, "sit_popup", "toolbar=yes,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=700,height=600");
     if (rtn == true) return popwin;

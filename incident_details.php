@@ -56,7 +56,8 @@ elseif ($_REQUEST['win'] == 'jump')
             echo "<script type='text/javascript'>\n//<![CDATA[\n";
             echo "var popwin = incident_details_window($incidentid,'win', true);\n";
             echo "if (!popwin) alert('Did your browser block the popup window?');\n";
-            echo "else window.location='{$_SERVER['HTTP_REFERER']}';\n";
+            //echo "else window.location='{$_SERVER['HTTP_REFERER']}';\n";
+            echo "else history.go(-1);\n";
             echo "\n//]]>\n</script>\n";
             echo "</body></html>";
         }
@@ -77,6 +78,7 @@ elseif ($_REQUEST['win'] == 'jump')
             echo "</head><body onload=\"incident_details_window($incidentid,'win');window.location='{$_SERVER['HTTP_REFERER']}';\"></body></html>";
         }
     }
+    exit;
 }
 elseif ($_REQUEST['win'] == 'holdingview')
 {
@@ -263,7 +265,7 @@ if ($incident->status != 2 AND $incident->status!=7)
         if ($slaremain <> 0) echo "<br />"; // only need a line sometimes
         echo $strReviewDueNow;
     }
-    
+
     if ($servicelevel->timed == 'yes')
     {
         echo "<br />";
