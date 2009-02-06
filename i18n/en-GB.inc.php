@@ -345,7 +345,6 @@ $strContactofSite = '%s of %s';
 $strCompassionateLeave = 'Maternity/Paternity/Compassionate Leave';
 $strCount = 'Count';
 $strCountContractsByProduct = 'Count contracts by product';
-$strCountNotDeleteProductParameterMissing = 'Could not delete product, parameter(s) missing';
 # Region / State
 $strCounty = 'County';
 $strCountry = 'Country';
@@ -426,7 +425,7 @@ $strDismiss = 'Dismiss';
 $strDismissAll = 'Dismiss All';
 # i.e. show
 $strDisplay = 'Display';
-$strDisplayingXcontactMatchingY = 'Displaying %s contact(s) matching <em>$s</em>';
+$strDisplayingXcontactMatchingY = 'Displaying %s contact(s) matching %s';
 $strDisplayPreferences = 'Display Preferences';
 $strDistribution = 'Distribution';
 $strDocumentIDX = 'Document ID %s %s';
@@ -537,11 +536,7 @@ $strEnvironment = 'Environment';
 # Acronym for end of life
 $strEOL = 'EOL';
 $strError = 'Error';
-$strErrorApprovingIncident = 'Error Approving Incident';
-$strErrorAssigningUpdate = 'Error assigning that incident update. Probable cause is that no incident exists with that ID or it has been closed.';
-$strErrorMenuNotDefined = 'Error. Menu not defined';
-$strErrorNoHandlerDefinedForQuestionTypeX = 'Error: Unable to accept a response for this question, no handler for question of type \'%s\'.';
-$strErrorNotUserSelectedToSendApproval = 'Error: You did not select a user to send the request to';
+$strErrorAssigningUpdate = 'Error assigning that incident update. This could be because no incident exists with that ID or the incident has been closed.';
 $strErrorRequiredQuestionsNotCompleted = 'Error: you did not complete all required questions, please check your answers and try again.';
 $strErrorSendingEmail = 'Error sending email';
 $strEscalated = 'Escalated';

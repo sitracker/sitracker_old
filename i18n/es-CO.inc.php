@@ -293,7 +293,6 @@ $strEngineer = 'Ingeniero';
 $strEngineers = 'Ingenieros';
 $strEnglish = 'Inglés';
 $strEnterTheCallID = 'Ingrese el número del incidente';
-$strErrorMenuNotDefined = 'Error. Menú no definido';
 $strEscalated = 'Escalado';
 $strEscalatedIncidents = 'Incidentes Escalados';
 $strEscalation = 'Escalamiento';
