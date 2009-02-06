@@ -225,6 +225,7 @@ $strBilling = 'Billing';
 $strBillingCustomerPeriod = 'Customer Period';
 $strBillingEngineerPeriod = 'Engineer Period';
 $strBillingSummary = 'Billing Summary';
+# verb, to book a holiday
 $strBook = 'Book';
 $strBookHoliday = 'Book Holiday';
 $strBoth = 'Both';
