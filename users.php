@@ -119,7 +119,7 @@ while ($users = mysql_fetch_object($result))
     }
     echo " {$users->realname}";
     echo "<span>";
-    echo gravatar($users->email, 50);
+    echo gravatar($users->email, 50, FALSE);
     if (!empty($users->title))
     {
         echo "<strong>{$users->title}</strong><br />";

@@ -7890,41 +7890,6 @@ function create_report($data, $output = 'table', $filename = 'report.csv')
 }
 
 
-
-
-/**
- * Returns HTML for a gravatar (Globally recognised avatar)
- * @author Ivan Lucas
- * @param string $email - Email address
- * @param int $size - Size in pixels (Default 32)
- * @returns string - HTML img tag
- */
-function gravatar($email, $size = 32)
-{
-    global $CONFIG, $iconset;
-    $default = $CONFIG['default_gravatar'];
-
-    if (isset( $_SERVER['HTTPS']) && (strtolower( $_SERVER['HTTPS'] ) != 'off' ))
-    {
-        // Secure
-        $grav_url = "https://secure.gravatar.com";
-    }
-    else
-    {
-        $grav_url = "http://www.gravatar.com";
-    }
-    $grav_url .= "/avatar.php?";
-    $grav_url .= "gravatar_id=".md5(strtolower($email));
-    $grav_url .= "&default=".urlencode($CONFIG['default_gravatar']);
-    $grav_url .= "&size=".$size;
-    $grav_url .= "&rating=G";
-
-    $html = "<a href='http://site.gravatar.com/'><img src='{$grav_url}' /></a>";
-
-    return $html;
-}
-
-
 /**
 * HTML for an alphabetical index of links
 * @author Ivan Lucas

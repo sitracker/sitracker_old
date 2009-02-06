@@ -129,6 +129,42 @@ function html_checkbox($name, $state, $return = FALSE)
 
 
 /**
+ * Returns HTML for a gravatar (Globally recognised avatar)
+ * @author Ivan Lucas
+ * @param string $email - Email address
+ * @param int $size - Size in pixels (Default 32)
+ * @param bool $hyperlink - Make a link back to gravatar.com, default TRUE
+ * @returns string - HTML img tag
+ */
+function gravatar($email, $size = 32, $hyperlink = TRUE)
+{
+    global $CONFIG, $iconset;
+    $default = $CONFIG['default_gravatar'];
+
+    if (isset( $_SERVER['HTTPS']) && (strtolower( $_SERVER['HTTPS'] ) != 'off' ))
+    {
+        // Secure
+        $grav_url = "https://secure.gravatar.com";
+    }
+    else
+    {
+        $grav_url = "http://www.gravatar.com";
+    }
+    $grav_url .= "/avatar.php?";
+    $grav_url .= "gravatar_id=".md5(strtolower($email));
+    $grav_url .= "&default=".urlencode($CONFIG['default_gravatar']);
+    $grav_url .= "&size=".$size;
+    $grav_url .= "&rating=G";
+
+    if ($hyperlink) $html = "<a href='http://site.gravatar.com/'>";
+    $html .= "<img src='{$grav_url}' width='{$size}' height='{$size}' alt='' />";
+    if ($hyperlink) $html .= "</a>";
+
+    return $html;
+}
+
+
+/**
     * Produces HTML for a percentage indicator
     * @author Ivan Lucas
     * @param int $percent. Number between 0 and 100
