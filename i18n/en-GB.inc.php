@@ -544,15 +544,13 @@ $strEscalatedIncidents = 'Escalated Incidents';
 $strEscalation = 'Escalation';
 $strEscalationPaths = 'Escalation Paths';
 $strEvent = 'Event';
-$strEvery = 'Every';
-$strExact = 'Exact';
 $strExceeded = 'Exceeded';
 $strExclude = 'Exclude';
 $strExcludeSitesWith = 'Exclude sites with';
 $strExpire = 'Expire';
 $strExpired = 'Expired';
 $strExpiryDate = 'Expiry Date';
-$strExpiryDateCannotBeInThePast = 'Expiry Date Cannot be in the pas';
+$strExpiryDateCannotBeInThePast = 'Expiry Date Cannot be in the past';
 $strExternalEmail = 'External Email';
 $strExternalEngineer = 'External Engineers';
 $strExternalEngineerEmail = 'External Engineers Email';
@@ -565,8 +563,6 @@ $strExternalInfo = 'External Information';
 $strExternalInfoAddedBy = 'External Information added by %s';
 
 $strFailed = 'Failed';
-$strFailedToUpdateDuration = 'Failed to update duration';
-$strFAILED = 'FAILED';
 $strFatalError = 'Fatal Error';
 $strFax = 'Fax';
 $strFeatures = 'Features';
@@ -624,7 +620,7 @@ $strFriday = 'Friday';
 # e.g. from x to y
 $strFrom = 'From';
 $strFromXResults = 'from %s results';
-$strFTPFailedCreatingDirectoryX = 'FTP Faled creating directory %s';
+$strFTPFailedCreatingDirectoryX = 'FTP Failed creating directory %s';
 $strFTPFilesDB = 'FTP Files DB';
 $strFTPPublish = 'FTP Publish';
 $strFullDay = 'Full Day';
@@ -757,9 +753,7 @@ $strInMeeting = 'In Meeting';
 $strInMinutes = 'in minutes';
 $strInOffice = 'In Office';
 $strInstall = 'Install';
-$strInstallOpensearch = 'If you\'re using a browsers that support OpenSearch e.g. Firefox 2 / IE 7 and later you can %s to make searching easier.';
 $strInstallDashboardComponents = 'Install new dashboard component';
-$strInstallDashboardComponentFailed = 'Installation of dashboard component(s) failed';
 $strInterfaceStyle = 'Interface Style (Theme)';
 $strInternalEngineer = 'Internal Engineer';
 $strInternalEscalation = 'Internal Escalation';
@@ -793,6 +787,7 @@ $strJumpToIncident = 'Jump to Incident';
 $strJunAbbr = 'Jun';
 # Month number 6: June
 $strJune = 'June';
+# i.e. A moment ago
 $strJustNow = 'Just Now';
 
 # Abbreviation for Knowledge base
@@ -816,7 +811,9 @@ $strLastMonth = 'Last month';
 # Last time an action was executed
 $strLastRan = 'Last Ran';
 $strLastUpdated = 'Last Updated';
+# The previous week to this one
 $strLastWeek = 'Last week';
+# The previous year to this one
 $strLastYear = 'Last year';
 $strLength = 'Length';
 $strLicense = 'Licence';
@@ -851,8 +848,11 @@ $strLogged = 'Logged';
 # E.g. Logged in as: admin, currently On Holiday and Not Accepting calls
 $strLoggedInAsXAndCurrentlyXAndX = 'Logged in as: %s, currently %s and %s';
 $strLoggedUnder = 'This incident is logged under contract %d';
+# Title for sign in page
 $strLogIn = 'Log In';
+# Label on sign in button
 $strLogin = 'Login';
+# Label on sign out button
 $strLogout = 'Logout';
 $strLogTriggerInJournal = 'Log the trigger in the system journal';
 $strLow = 'Low';

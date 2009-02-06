@@ -233,7 +233,6 @@ $strEscalatedIncidents = 'Segnalazioni scalate';
 $strEscalation = 'Escalation';
 $strEscalationPaths = 'Percorso di escalation';
 $strEvent = 'Evento';
-$strExact = 'Preciso';
 $strExclude = 'Escludere';
 $strExpired = 'Scaduto';
 $strExpiryDate = 'Data di Scadenza';

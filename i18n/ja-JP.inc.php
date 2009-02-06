@@ -209,7 +209,6 @@ $strError = 'エラー';
 $strEscalation = 'エスカレーション';
 $strEscalationPaths = 'エスカレーションパス';
 $strEvent = 'イベント';
-$strExact = 'ちょど';
 $strExternalEmail = 'エクスターナルメール';
 $strExternalEngineer = 'エクスターナルエンジニア';
 $strExternalEngineerEmail = 'エクスターナルエンジニアのメール';

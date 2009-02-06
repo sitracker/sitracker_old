@@ -329,7 +329,6 @@ $strExpiryDate = 'Ablaufdatum';
 $strExternalEmail = 'Externe Mail';
 
 $strFailed = 'Misslungen';
-$strFAILED = 'MISSLUNGEN';
 $strFebruary = 'Februar';
 $strFewMinutesAgo = 'Ein paar Minuten sp&auml;ter';
 $strField1 = 'Feld 1';
