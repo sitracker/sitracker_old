@@ -250,6 +250,7 @@ $availablelanguages = array('en-GB' => 'English (British)',
                             'it-IT' => 'Italiano',
                             'ja-JP' => '日本語',
                             'lt-LT' => 'Lietuvių',
+                            'nl-NL' => 'Nederlands',
                             'pt-PT' => 'Português',
                             'zh-TW' => '繁體中文',
                            );
