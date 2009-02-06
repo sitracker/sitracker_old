@@ -184,8 +184,6 @@ elseif ($_REQUEST['mode'] == "show")
         $meta[] = "SiT! Language File - {$languages[$tolang]} ($tolang) by {$_SESSION['realname']} <{$_SESSION['email']}>";
     }
 
-    echo "<pre>".print_r($meta,TRUE)."</pre>";
-
     echo "<h2>{$strWordList}</h2>";
     echo "<p align='center'>{$strTranslateTheString}<br/>";
     echo "<strong>{$strCharsToKeepWhenTranslating}</strong></p>";
