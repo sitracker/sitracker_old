@@ -30,7 +30,7 @@ if (empty($mode))
 
     echo "<form action='{$_SERVER['PHP_SELF']}' method='post' id='modifyincidentbalance'>";
 
-    echo "<table class='vertical'><tr><td>{$strAmount0}<br />{$strForRefundsThisShouldBeNegative}</td><td>";
+    echo "<table class='vertical'><tr><td>{$strAmount}<br />{$strForRefundsThisShouldBeNegative}</td><td>";
     echo "<input type='text' name='amount' id='amount' size='10' /> {$strMinutes}</td></tr>";
 
     echo "<tr><td>{$strDescription}</td><td>";
