@@ -253,6 +253,7 @@ $availablelanguages = array('en-GB' => 'English (British)',
                             'lt-LT' => 'Lietuvių',
                             'nl-NL' => 'Nederlands',
                             'pt-PT' => 'Português',
+                            'sl-SL' => 'Slovenščina',
                             'zh-TW' => '繁體中文',
                            );
 
