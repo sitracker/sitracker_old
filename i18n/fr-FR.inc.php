@@ -109,7 +109,6 @@ $strArticlesPublishedRecently = 'Articles publiés récement';
 $strArticlesPublishedToday = 'Articles publiés aujourd\'hui';
 $strArea = 'Domaine';
 $strAreYouSureAdd = 'Etes vous sûr de vouloir ajouter ceci ?';
-$strAreYouSureEditEmailTemplate = 'Etes vous sûr de vouloir éditer ce formulaire email ?';
 $strAreYouSureMakeTheseChanges = 'Etes vous sûr de vouloir faire ces modifications ?';
 $strAreYouSureSendEmail = 'Etes vous sûr de vouloir envoyer cet email ?';
 $strArticle = 'Article';
