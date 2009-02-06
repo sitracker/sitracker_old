@@ -368,14 +368,14 @@ else
             $sql .= "FROM `{$dbIncidents}` WHERE id = {$id}";
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-            
+
             $currentowner = $sit[2];
             $currentstatus = 1;
             if (mysql_num_rows($result) > 0)
             {
                 list($currentowner, $currentstatus) = mysql_fetch_row($result);
-            } 
-                    
+            }
+
             ## if ($cust_vis == "yes") $show='show'; else $show='hide';
             if ($_REQUEST['kbarticle'] != 'yes')
             {
@@ -576,6 +576,7 @@ else
                 }
 
                 //html_redirect("incident_details.php?id={$id}", TRUE, "Knowledge Base Article {$CONFIG['kb_id_prefix']}{$docid} created");
+                plugin_do('incident_closing');
 
                 echo "<html>";
                 echo "<head></head>";
@@ -585,6 +586,8 @@ else
             }
             else
             {
+                plugin_do('incident_closing');
+
                 echo "<html>";
                 echo "<head></head>";
                 echo "<body onload=\"close_page_redirect('incident_details.php?id={$id}');\">";
