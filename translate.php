@@ -21,6 +21,8 @@ include ('./inc/htmlheader.inc.php');
 
 $i18npath = './i18n/';
 
+$tolang = cleanvar($_REQUEST['lang']);
+
 $languages = array('ar' => 'Arabic',
                    'bg-BG' => 'Bulgarian',
                    'bn-IN' => 'Bengali',
@@ -99,6 +101,7 @@ elseif ($_REQUEST['mode'] == "show")
     $lines = explode("\n", $theData);
     $langstrings['en-GB'];
     $englishvalues = array();
+
     foreach ($lines as $values)
     {
         $badchars = array("$", "\"", "\\", "<?php", "?>");
@@ -135,7 +138,7 @@ elseif ($_REQUEST['mode'] == "show")
     unset($lines);
 
     //open foreign file
-    $myFile = "$i18npath/{$_REQUEST['lang']}.inc.php";
+    $myFile = "$i18npath/{$tolang}.inc.php";
     if (file_exists($myFile))
     {
         $foreignvalues = array();
@@ -145,6 +148,16 @@ elseif ($_REQUEST['mode'] == "show")
         fclose($fh);
         $lines = explode("\n", $theData);
         //print_r($lines);
+        foreach ($lines AS $introcomment)
+        {
+            if (substr($introcomment, 0, 2) == "//")
+            {
+                $meta[] = substr($introcomment, 3);
+            }
+            if (trim($introcomment) == '') break;
+        }
+
+
         foreach ($lines as $values)
         {
             $badchars = array("$", "\"", "\\", "<?php", "?>");
@@ -159,17 +172,32 @@ elseif ($_REQUEST['mode'] == "show")
             }
         }
     }
+    else
+    {
+        $meta[] = "SiT! Language File - {$languages[$tolang]} ($tolang) by {$_SESSION['realname']} <{$_SESSION['email']}>";
+    }
+
+    echo "<pre>".print_r($meta,TRUE)."</pre>";
+
     echo "<h2>{$strWordList}</h2>";
     echo "<p align='center'>{$strTranslateTheString}<br/>";
     echo "<strong>{$strCharsToKeepWhenTranslating}</strong></p>";
     echo "<form method='post' action='{$_SERVER[PHP_SELF]}?mode=save'>";
-    echo "<table align='center'><tr><th>{$strVariable}</th><th>en-GB ({$strEnglish})</th><th>{$_REQUEST['lang']}</th></tr>";
+    echo "<table align='center'>";
+    echo "<tr class='shade2'><td colspan='3'>";
+    foreach ($meta AS $metaline)
+    {
+        echo "<input type='text' name='meta[]' value=\"{$metaline}\" size='80' style='width: 100%;' /><br />";
+    }
+    echo "</td></tr>";
+    echo "<tr><th>{$strVariable}</th><th>en-GB ({$strEnglish})</th><th>{$tolang}</th></tr>";
 
     $shade = 'shade1';
     foreach (array_keys($englishvalues) as $key)
     {
         if ($_REQUEST['lang'] == 'zz') $foreignvalues[$key] = $key;
-        echo "<tr class='$shade'><td><label for=\"{$key}\"><code>{$key}</code></td><td><input name='english_{$key}' value=\"".htmlentities($englishvalues[$key], ENT_QUOTES, 'UTF-8')."\" size=\"45\" readonly='readonly' /></td>";
+        echo "<tr class='$shade'><td><label for=\"{$key}\"><code>{$key}</code></td>";
+        echo "<td><input name='english_{$key}' value=\"".htmlentities($englishvalues[$key], ENT_QUOTES, 'UTF-8')."\" size=\"45\" readonly='readonly' /></td>";
         echo "<td><input id=\"{$key}\" name=\"{$key}\" value=\"".htmlentities($foreignvalues[$key], ENT_QUOTES, 'UTF-8')."\" size=\"45\" /></td></tr>\n";
         if ($shade=='shade1') $shade='shade2';
         else $shade='shade1';
@@ -184,13 +212,23 @@ elseif ($_REQUEST['mode'] == "show")
 }
 elseif ($_REQUEST['mode'] == "save")
 {
+    $badchars = array('.','/','\\');
+
     $lang = cleanvar($_REQUEST['lang']);
+    $lang = str_replace($badchars, '', $lang);
     $origcount = cleanvar($_REQUEST['origcount']);
+
     $filename = "{$lang}.inc.php";
-    echo "<p>".sprintf($strSendTranslation, "<code>{$filename}</code>", "<code>{$i18npath}</code>", 'ivanlucas[at]users.sourceforge.net')." </p>";
+    echo "<p>".sprintf($strSendTranslation, "<code>{$filename}</code>", "<code>{$i18npath}</code>", 'sitracker-devel-discuss@lists.sourceforge.net')." </p>";
     $i18nfile = '';
     $i18nfile .= "<?php\n";
-    $i18nfile .= "// SiT! Language File - {$languages[$lang]} ($lang) by {$_SESSION['realname']}\n\n";
+    foreach ($_REQUEST['meta'] AS $meta)
+    {
+        $meta = cleanvar($meta);
+        $i18nfile .= "// $meta\n";
+    }
+    $i18nfile .= "\n";
+    //$i18nfile .= "// SiT! Language File - {$languages[$lang]} ($lang) by {$_SESSION['realname']}\n\n";
     $i18nfile .= "\$languagestring = '{$languages[$lang]} ($lang)';\n";
     $i18nfile .= "\$i18ncharset = 'UTF-8';\n\n";
     //$i18nfile .= "// list of strings (Alphabetical)\n";
