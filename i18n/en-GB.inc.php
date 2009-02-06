@@ -823,7 +823,6 @@ $strLastRan = 'Last Ran';
 $strLastUpdated = 'Last Updated';
 $strLastWeek = 'Last week';
 $strLastYear = 'Last year';
-$strLengend = 'Lengend';
 $strLength = 'Length';
 $strLicense = 'Licence';
 $strLicenseAndCopyright = 'Licence &amp; Copyright Information';
