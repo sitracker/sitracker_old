@@ -94,7 +94,7 @@ if (!$_REQUEST['mode'])
 elseif ($_REQUEST['mode'] == "show")
 {
     //open english file
-    $englishfile = "{$i18npath}/en-GB.inc.php";
+    $englishfile = "{$i18npath}en-GB.inc.php";
     $fh = fopen($englishfile, 'r');
     $theData = fread($fh, filesize($englishfile));
     fclose($fh);
@@ -129,7 +129,7 @@ elseif ($_REQUEST['mode'] == "show")
         {
             if (substr($values, 0, 4) == "lang")
                 $languagestring=$values;
-            if (substr($values, 0, 4) == "i18n")
+            if (substr($values, 0, 8) == "i18nchar")
                 $i18ncharset=$values;
         }
         $lastkey = $vars[0];
@@ -138,7 +138,7 @@ elseif ($_REQUEST['mode'] == "show")
     unset($lines);
 
     //open foreign file
-    $myFile = "$i18npath/{$tolang}.inc.php";
+    $myFile = "{$i18npath}{$tolang}.inc.php";
     if (file_exists($myFile))
     {
         $foreignvalues = array();
@@ -170,6 +170,13 @@ elseif ($_REQUEST['mode'] == "show")
                 $vars[1] = substr_replace($vars[1], "",0, 1);
                 $foreignvalues[$vars[0]] = $vars[1];
             }
+            elseif (substr($values, 0, 12) == "i18nAlphabet")
+            {
+                $values = explode('=',$values);
+                $delims = array("'", ';');
+                $i18nalphabet=str_replace($delims,'',$values[1]);;
+            }
+
         }
     }
     else
@@ -184,12 +191,14 @@ elseif ($_REQUEST['mode'] == "show")
     echo "<strong>{$strCharsToKeepWhenTranslating}</strong></p>";
     echo "<form method='post' action='{$_SERVER[PHP_SELF]}?mode=save'>";
     echo "<table align='center'>";
-    echo "<tr class='shade2'><td colspan='3'>";
+    echo "<tr class='shade1'><td colspan='3'>";
     foreach ($meta AS $metaline)
     {
         echo "<input type='text' name='meta[]' value=\"{$metaline}\" size='80' style='width: 100%;' /><br />";
     }
     echo "</td></tr>";
+    echo "<tr class='shade2'><td><code>i18nAlphabet</code></td>";
+    echo "<td colspan='2'><input type='text' name='i18nalphabet' value=\"{$i18nalphabet}\" size='80' style='width: 100%;' /></td></tr>";
     echo "<tr><th>{$strVariable}</th><th>en-GB ({$strEnglish})</th><th>{$tolang}</th></tr>";
 
     $shade = 'shade1';
@@ -206,7 +215,16 @@ elseif ($_REQUEST['mode'] == "show")
     echo "</table>";
     echo "<input type='hidden' name='origcount' value='{$origcount}' />";
     echo "<input name='lang' value='{$_REQUEST['lang']}' type='hidden' /><input name='mode' value='save' type='hidden' />";
-    echo "<div align='center'><input type='submit' value='{$strSave}' /></div>";
+    echo "<div align='center'>";
+    if (is_writable($myFile))
+    {
+        echo "<input type='submit' value='{$strSave}' />";
+    }
+    else
+    {
+        echo "<input type='submit' value='{$strSave} / $strDisplay' />";
+    }
+    echo "</div>";
 
     echo "</form>\n";
 }
@@ -217,9 +235,10 @@ elseif ($_REQUEST['mode'] == "save")
     $lang = cleanvar($_REQUEST['lang']);
     $lang = str_replace($badchars, '', $lang);
     $origcount = cleanvar($_REQUEST['origcount']);
+    $i18nalphabet = cleanvar($_REQUEST['i18nalphabet']);
 
     $filename = "{$lang}.inc.php";
-    echo "<p>".sprintf($strSendTranslation, "<code>{$filename}</code>", "<code>{$i18npath}</code>", 'sitracker-devel-discuss@lists.sourceforge.net')." </p>";
+    echo "<p>".sprintf($strSendTranslation, "<code>{$filename}</code>", "<code>{$i18npath}</code>", "<a href='mailto:sitracker-devel-discuss@lists.sourceforge.net'>sitracker-devel-discuss@lists.sourceforge.net</a>")." </p>";
     $i18nfile = '';
     $i18nfile .= "<?php\n";
     foreach ($_REQUEST['meta'] AS $meta)
@@ -228,10 +247,17 @@ elseif ($_REQUEST['mode'] == "save")
         $i18nfile .= "// $meta\n";
     }
     $i18nfile .= "\n";
-    //$i18nfile .= "// SiT! Language File - {$languages[$lang]} ($lang) by {$_SESSION['realname']}\n\n";
     $i18nfile .= "\$languagestring = '{$languages[$lang]} ($lang)';\n";
     $i18nfile .= "\$i18ncharset = 'UTF-8';\n\n";
-    //$i18nfile .= "// list of strings (Alphabetical)\n";
+
+    if (!empty($i18nalphabet))
+    {
+        $i18nfile .= "// List of letters of the alphabet for this language\n";
+        $i18nfile .= "// in standard alphabetical order (upper case, where applicable)\n";
+        $i18nfile .= "\$i18nAlphabet = '{$i18nalphabet}';\n\n";
+    }
+
+    $i18nfile .= "// list of strings (Alphabetical by key)\n";
 
     $lastchar='';
     $translatedcount=0;
@@ -248,6 +274,20 @@ elseif ($_REQUEST['mode'] == "save")
     $percent = number_format($translatedcount / $origcount * 100,2);
     echo "<p>{$strTranslation}: <strong>{$translatedcount}</strong>/{$origcount} = {$percent}% {$strComplete}.</p>";
     $i18nfile .= "?>\n";
+
+    $myFile = "$i18npath/{$filename}";
+    $fp = @fopen($myFile, 'w');
+    if (!$fp)
+    {
+        echo "<p class='warn'>Can't write to <code>$myFile</code>, you'll have to save the file manually.</p>";
+    }
+    else
+    {
+        fwrite($fp, $i18nfile);
+        fclose($fp);
+        echo "<p class='info'>File saved as: <code>$myFile</code></p>";
+    }
+
     echo "<div style='margin-left: 5%; margin-right: 5%; background-color: white; border: 1px solid #ccc; padding: 1em;'>";
     highlight_string($i18nfile);
     echo "</div>";
