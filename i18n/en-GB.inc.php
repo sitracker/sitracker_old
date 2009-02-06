@@ -339,7 +339,8 @@ $strCredits = 'Credits';
 $strCreateANotice = 'Create a notice based on %s';
 $strCriteria = 'Criteria';
 $strCritical = 'Critical';
-# e.g. JJohn Acme of ACME Widgets Co.
+$strCriticalPriority = 'Critical Priority';
+# e.g. John Acme of ACME Widgets Co.
 $strContactofSite = '%s of %s';
 $strCompassionateLeave = 'Maternity/Paternity/Compassionate Leave';
 $strCount = 'Count';

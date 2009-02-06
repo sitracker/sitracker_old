@@ -325,7 +325,7 @@ function dashboard_watch_incidents_edit($dashletid)
             }
             else
             {
-                html_redirect("edit_watch_incidents.php", TRUE, $GLOBALS['strRemovedSuccessful']);
+                html_redirect("edit_watch_incidents.php", TRUE);
             }
             break;
         default:

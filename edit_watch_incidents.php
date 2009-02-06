@@ -84,7 +84,7 @@ switch ($action)
         }
         else
         {
-            html_redirect("edit_watch_incidents.php", TRUE, $strRemovedSuccessful);
+            html_redirect("edit_watch_incidents.php", TRUE);
         }
         break;
     default:

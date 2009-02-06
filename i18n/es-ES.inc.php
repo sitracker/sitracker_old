@@ -901,7 +901,6 @@ $strReleaseNotes = 'Notas de la release';
 $strReleaseNotesFor = 'Notas de la release para %s';
 $strRemaining = '%s pendientes';
 $strRemove = 'Quitar';
-$strRemovedSuccessfully = 'Quitado correctamente';
 $strRemoveTemporaryOwner = 'Quitar el propietario temporal';
 $strReopen = 'Reabrir';
 $strReopenedby = 'Reabierto por %s';

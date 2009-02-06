@@ -567,7 +567,6 @@ $strRecent = 'neu';
 $strRecentIncidents = 'neue Auftr&auml;ge';
 $strReferences = 'Hinweise';
 $strRemove = 'Entfernen';
-$strRemovedSuccessfully = 'Erfolgreich entfernt';
 $strReopen = 'wieder &ouml;ffnen';
 $strReopenedby = 'wieder ge&ouml;ffnet durch %s';
 $strRequested = 'gefordert';
