@@ -126,7 +126,7 @@ $strAvoidDupes = 'Bitte &uuml;berpr&uuml;fen Sie, ob der Eintrag nicht bereits e
 
 $strBackToList = 'Zur&uuml;ck zur Liste';
 $strBackToLoginPage = 'Zur&uuml;ck zur Login Seite';
-$strBackOnYear = 'Ein Jahr Zur&uuml;ck';
+$strBackOneYear = 'Ein Jahr Zur&uuml;ck';
 $strBCC = 'BCC';
 $strBillingCustomerPeriod = 'Zeitraum (Kunde)';
 $strBillingEngineerPeriod = 'Zeitraum (Techniker)';
