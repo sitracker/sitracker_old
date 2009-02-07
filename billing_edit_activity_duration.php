@@ -53,7 +53,7 @@ switch ($mode)
                 // Some error checking
                 if (mysql_affected_rows() < 1)
                 {
-                	html_redirect("{$CONFIG['application_webpath']}incident_details.php?id={$incidentid}", FALSE, $strFailedToUpdateDuration);
+                	html_redirect("{$CONFIG['application_webpath']}incident_details.php?id={$incidentid}", FALSE, $strFailed);
                 }
                 else
                 {

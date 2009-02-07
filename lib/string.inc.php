@@ -131,9 +131,9 @@ function truncate_string($text, $maxlength=255, $html = TRUE)
 
 
 /**
-* UTF8 substr() replacement
-* @author Anon / Public Domain
-* @note see http://www.php.net/manual/en/function.substr.php#57899
+  * UTF8 substr() replacement
+  * @author Anon / Public Domain
+  * @note see http://www.php.net/manual/en/function.substr.php#57899
 */
 function utf8_substr($str, $from, $len)
 {
@@ -146,9 +146,9 @@ function utf8_substr($str, $from, $len)
 
 
 /**
-* UTF8 strlen() replacement
-* @author anpaza at mail dot ru / Public Domain
-* @note see http://www.php.net/manual/en/function.strlen.php#59258
+  * UTF8 strlen() replacement
+  * @author anpaza at mail dot ru / Public Domain
+  * @note see http://www.php.net/manual/en/function.strlen.php#59258
 */
 function utf8_strlen($str)
 {
@@ -174,6 +174,65 @@ function utf8_strlen($str)
     }
     }
     return $count;
+}
+
+
+/**
+  * Array filter callback to list only valid language files
+  * @author Ivan Lucas
+  * @param string $var. Filename to check
+  * @retval bool TRUE : valid
+  * @retval bool FALSE : invalid
+*/
+function filter_i18n_filenames($var)
+{
+    $validity = FALSE;
+    if (substr($var, -8) === '.inc.php') $validity = TRUE;
+    else $validity = FALSE;
+
+    return $validity;
+}
+
+
+/**
+  * Array walk callback convert an i18n filename to a language code
+  * @author Ivan Lucas
+  * @param string $filename. Filename of i18n file (opt. with path)
+  * @returns nothing
+*/
+function i18n_filename_to_code(&$elem, $key)
+{
+    $elem = substr($elem, strrpos($elem,'/')+1, -8);
+}
+
+
+/**
+  * Convert an i18n code to a localised language name
+  * @author Ivan Lucas
+  * @param mixed $code. string i18n code (e.g. 'en-GB'), or array of strings
+  * @returns mixed.
+  * @note if working on an array returns a string Language name,
+          or code if language not recognised
+  * @note if working on an array, returns an associative array with code
+  *       as the key and lang name as the value
+*/
+function i18n_code_to_name($code)
+{
+    global $i18n_codes;
+    if (is_array($code))
+    {
+        foreach ($code AS $c => $v)
+        {
+            if (isset($i18n_codes[$v])) $codearr[$v] = $i18n_codes[$v];
+            else $codearr[$v] = $c;
+        }
+        return $codearr;
+    }
+    else
+    {
+        if (isset($i18n_codes[$code])) return $i18n_codes[$code];
+        else return $code;
+    }
 }
 
 

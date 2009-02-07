@@ -360,11 +360,11 @@ switch ($mode)
             if ($status)
             {
                 $status = update_contract_balance($contractid, $reason, $amount, $destinationservice);
-                if ($status) html_redirect("{$CONFIG['application_webpath']}contract_details.php?id={$contractid}", TRUE, $strTransferSucessful);
-                else html_redirect("{$CONFIG['application_webpath']}contract_details.php?id={$contractid}", FALSE, $strTransferFailed);
+                if ($status) html_redirect("{$CONFIG['application_webpath']}contract_details.php?id={$contractid}", TRUE);
+                else html_redirect("{$CONFIG['application_webpath']}contract_details.php?id={$contractid}", FALSE);
                 exit;
             }
-            html_redirect('main.php', FALSE, $strTransferFailed);
+            html_redirect('main.php', FALSE, $strFailed);
             exit;
         }
         break;

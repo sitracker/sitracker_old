@@ -31,7 +31,7 @@ function setup_exec_sql($sqlquerylist)
             mysql_query($sql);
             if (mysql_error())
             {
-                $html .= "<p><strong>{$strFAILED}:</strong> ".htmlspecialchars($sql)."</p>";
+                $html .= "<p><strong>{$strFailed}:</strong> ".htmlspecialchars($sql)."</p>";
                 // FIXME i18n
                 $html .= "<p class='error'>".mysql_error()."<br />A MySQL error occurred, this could be because the MySQL user '{$CONFIG['db_username']}' does not have appropriate permission to modify the database schema.<br />";
                 //echo "The SQL command was:<br /><code>$sql</code><br />";
@@ -118,7 +118,7 @@ switch ($_REQUEST['action'])
 
             if (!$result)
             {
-                echo "<p class='error'>{$strInstallDashboardComponentFailed}</p>";
+                echo "<p class='error'>{$strFailed}</p>";
             }
             else
             {

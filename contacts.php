@@ -163,7 +163,7 @@ else
 
         if (mysql_num_rows($result) == 0)
         {
-            echo "<p align='center'>".sprintf($strSorryUnableToFindAnyContactsMatchingX, $search_string)."</p>\n";
+            echo "<p align='center'>".sprintf($strSorryUnableToFindAnyContactsMatchingX, "<em>{$search_string}</em>")."</p>\n";
         }
         else
         {

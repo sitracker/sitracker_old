@@ -229,7 +229,7 @@ else
 {
     if (empty($approvaluser))
     {
-        echo "<p class='error'>{$strErrorNotUserSelectedToSendApproval}</p>";
+        html_redirect('holiday_request.php', FALSE);
     }
     else
     {

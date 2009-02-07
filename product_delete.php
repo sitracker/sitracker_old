@@ -62,6 +62,6 @@ if (!empty($productid))
 }
 else
 {
-    trigger_error($strCountNotDeleteProductParameterMissing.mysql_error(), E_USER_WARNING);
+    trigger_error($strInvalidParameter, E_USER_ERROR);
 }
 ?>

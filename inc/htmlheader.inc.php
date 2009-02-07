@@ -103,7 +103,7 @@ if ($sit[0] != '')
     $hmenu;
     if (!is_array($hmenu))
     {
-        echo "<p class='error'>{$strErrorMenuNotDefined}</p>";
+        trigger_error("Menu array not defined", E_USER_ERROR);
     }
 
 //     if ($CONFIG['debug'])

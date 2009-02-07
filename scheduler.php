@@ -64,7 +64,7 @@ switch ($_REQUEST['mode'])
             {
                 $enddate = '';
             }
-            
+
             if (mysql2date($saction->end) > 0)
             {
                 $endtime = date('H:i',mysql2date($saction->end));
@@ -73,15 +73,15 @@ switch ($_REQUEST['mode'])
             {
                 $endtime = '';
             }
-            
+
             echo "<td><input type='text' id='enddate' name='enddate' value='{$enddate}' size='10' /> ";
             echo date_picker('scheduleform.enddate');
             echo " <input type='text' id='endtime' name='endtime' value='{$endtime}' size='5' /> ";
             echo "</td></tr>\n";
-            
+
             echo "<tr>";
             echo "<th>{$strType}</th><td>";
-            
+
             if ($saction->type == 'interval')
             {
             	$interval = "checked='checked'";
@@ -92,23 +92,23 @@ switch ($_REQUEST['mode'])
             	$date = "checked='checked'";
                 $visibilityinterval = "style='display:none'";
             }
-            
+
             echo "<input type='radio' name='type' value='interval' id='interval' onclick=\"$('intervalsection').show(); $('datesection').hide();\" {$interval} />{$strInterval} ";
             echo "<input type='radio' name='type' value='date' id='date' onclick=\"$('intervalsection').hide(); $('datesection').show();\" {$date} />{$strDate} ";
             echo "</td></tr>";
-            
+
             echo "<tbody id='intervalsection' {$visibilityinterval}>";
             echo "<tr><th><label for='interval'>{$strInterval}</label></th>";
             echo "<td><input type='text' id='interval' name='interval' value='{$saction->interval}' size='5' /> ({$strSeconds})";
             echo "</td></tr>\n";
             echo "</tbody>";
-            
+
             echo "<tbody id='datesection' {$visibilitydate}>";
             // date_type - month, year
             // date_offset
             // date_time
             echo "<tr><th>{$strFrequency}</th><td>";
-            
+
             if (empty($saction->date_type) OR $saction->date_type == 'month')
             {
                 $month = " selected='selected' ";
@@ -117,25 +117,25 @@ switch ($_REQUEST['mode'])
             {
                 $year = " selected='selected' ";
             }
-            
+
             echo "<select name='frequency'><option value='month' {$month}>{$strMonthly}</option>";
             echo "<option value='year' {$year}>{$strYearly}</option></select>";
             echo "</td></tr>";
             echo "<tr><th>{$strOffset}</th><td><input type='text' id='date_offset' name='date_offset' value='{$saction->date_offset}' size='5' /> ({$strDays})</td></tr>";
             echo "<tr><th>{$strTime}</th><td>";
-            $dates = array(0 => $strMidnight, 1 => "1:00 AM", 2 => "2:00 AM", 3 => "3:00 AM", 
+            $dates = array(0 => $strMidnight, 1 => "1:00 AM", 2 => "2:00 AM", 3 => "3:00 AM",
                                 4 => "4:00 AM", 5 => "5:00 AM", 6 => "6:00 AM", 7 => "7:00 AM", 8 => "8:00 AM",
-                                9 => "9:00 AM", 10 => "10:00 AM", 11 => "11:00 AM", 12 => "12:00 PM", 
-                                13 => "1:00 PM", 14 => "2:00 PM", 15 => "3:00 PM", 
+                                9 => "9:00 AM", 10 => "10:00 AM", 11 => "11:00 AM", 12 => "12:00 PM",
+                                13 => "1:00 PM", 14 => "2:00 PM", 15 => "3:00 PM",
                                 16 => "4:00 PM", 17 => "5:00 PM", 18 => "6:00 PM", 19 => "7:00 PM", 20 => "8:00 PM",
                                 21 => "9:00 PM", 22 => "10:00 PM", 23 => "11:00 PM",);
             $selected = substr($saction->date_time, 0, 2);
             if ($selected[0] == '0') $selected = $selected[1];
             echo array_drop_down($dates, 'date_time', $selected);
-    
+
             echo "</td></tr>";
             echo "</tbody>";
-            
+
             echo "</table>";
             echo "<input type='hidden' name='mode' value='save' />";
             echo "<input type='hidden' name='id' value='{$id}' />";
@@ -151,7 +151,7 @@ switch ($_REQUEST['mode'])
     break;
 
     case 'save':
-        
+
         if (!empty($_REQUEST['startdate']))
         {
             $start = strtotime($_REQUEST['startdate'].' '.$_REQUEST['starttime']);
@@ -161,7 +161,7 @@ switch ($_REQUEST['mode'])
         {
             $start = date('Y-m-d H:i', $now);
         }
-        
+
         if (!empty($_REQUEST['enddate']))
         {
             $end = strtotime($_REQUEST['enddate'].' '.$_REQUEST['endtime']);
@@ -171,7 +171,7 @@ switch ($_REQUEST['mode'])
         {
             $end = '0000-00-00 00:00';
         }
-        
+
         $status = cleanvar($_REQUEST['status']);
 
         $params = cleanvar($_REQUEST['params']);
@@ -185,10 +185,10 @@ switch ($_REQUEST['mode'])
         $frequency = cleanvar($_REQUEST['frequency']);
         $date_offset = cleanvar($_REQUEST['date_offset']);
         $date_time = cleanvar($_REQUEST['date_time']);
-        
+
         if ($date_time < 10) $date_time = "0{$date_time}:00:00";
         else $date_time = "{$date_time}:00:00";
-        
+
         if ($type == 'interval')
         {
             $setsql = " `interval` = '{$interval}', `type` = 'interval'  ";
@@ -204,7 +204,7 @@ switch ($_REQUEST['mode'])
         {
             $sql .= " , `success` = '1'";
         }
-        
+
         if (!empty($params))
         {
             $sql .= " , `params` = '{$params}'";
@@ -227,7 +227,7 @@ switch ($_REQUEST['mode'])
     default:
         $refresh = 60;
         include ('./inc/htmlheader.inc.php');
-        
+
         echo "<h2>{$strScheduler}".help_link('Scheduler')."</h2>";
         echo "<h3>".ldate($CONFIG['dateformat_datetime'], $GLOBALS['now'], FALSE)."</h3>";
         $sql = "SELECT * FROM `{$dbScheduler}` ORDER BY action";
@@ -255,7 +255,7 @@ switch ($_REQUEST['mode'])
                 {
                     $shade = 'notice';
                 }
-                
+
                 echo "<tr class='{$shade}'>";
                 echo "<td><a class='info' href='{$_SERVER['PHP_SELF']}?mode=edit&amp;id={$schedule->id}'>{$schedule->action}";
                 echo "<span>";
@@ -264,12 +264,12 @@ switch ($_REQUEST['mode'])
                 {
                     echo "\n<br /><strong>{$schedule->paramslabel} = {$schedule->params}</strong>";
                 }
-                
+
                 echo "</span></a></td>";
                 echo "<td>{$schedule->start}</td>";
                 if ($schedule->type == 'interval')
                 {
-                    echo "<td>{$strEvery} ".format_seconds($schedule->interval, TRUE)."</td>";
+                    echo "<td>".format_seconds($schedule->interval, TRUE)."</td>";
                 }
                 elseif ($schedule->type == 'date')
                 {
@@ -286,7 +286,7 @@ switch ($_REQUEST['mode'])
                             echo sprintf($strXth, $schedule->date_offset);
                             break;
                     }
-                    
+
                     if ($schedule->date_type == 'month')
                     {
                         echo " of month";
@@ -307,7 +307,7 @@ switch ($_REQUEST['mode'])
                 {
                     echo ldate($CONFIG['dateformat_datetime'], $lastruntime);
                 }
-                    
+
                 else echo $strNever;
                 echo "</td>";
                 echo "<td>";
@@ -340,7 +340,7 @@ switch ($_REQUEST['mode'])
                         }
                         elseif ($schedule->type == 'date')
                         {
-                            $nextruntime = 1;    
+                            $nextruntime = 1;
                             // TODO
                             /*
                             if over schedule
@@ -350,14 +350,14 @@ switch ($_REQUEST['mode'])
                              */
                         }
                     }
-                    
+
                     echo ldate($CONFIG['dateformat_datetime'], $nextruntime);
-                }                
+                }
                 else
                 {
                     echo $strNever;
                 }
-                
+
                 echo "</td>";
                 echo "</tr>";
                 if ($shade == 'shade1') $shade = 'shade2';

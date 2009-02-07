@@ -653,7 +653,7 @@ elseif ($mode == 'approve')
     }
     else
     {
-        html_redirect("{$_SERVER['PHP_SELF']}?mode=approvalpage&amp;startdate={$startdateorig}&amp;enddate={$enddateorig}&amp;showonlyapproved={$showonlyapproved}", FALSE, $strErrorApprovingIncident);
+        html_redirect("{$_SERVER['PHP_SELF']}?mode=approvalpage&amp;startdate={$startdateorig}&amp;enddate={$enddateorig}&amp;showonlyapproved={$showonlyapproved}", FALSE, $strError);
     }
 }
 
