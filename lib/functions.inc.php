@@ -8013,7 +8013,6 @@ function is_assoc_callback($a, $b)
 function cfgVarInput($setupvar, $showvarnames = FALSE)
 {
     global $CONFIG, $CFGVAR;
-    global $availablelanguages;
 
     if ($CFGVAR[$setupvar]['type'] == 'languageselect'
         OR $CFGVAR[$setupvar]['type'] == 'languagemultiselect')

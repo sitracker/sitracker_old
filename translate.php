@@ -23,56 +23,6 @@ $i18npath = './i18n/';
 
 $tolang = cleanvar($_REQUEST['lang']);
 
-$languages = array('ar' => 'Arabic',
-                   'bg-BG' => 'Bulgarian',
-                   'bn-IN' => 'Bengali',
-                   'ca-ES' => 'Catalan',
-                   'cs-CZ' => 'Czech',
-                   'cy-GB' => 'Welsh',
-                   'da-DK' => 'Danish',
-                   'de-DE' => 'German',
-                   'el-GR' => 'Greek',
-                   'en-GB' => 'English (British)',
-                   'en-US' => 'English (US)',
-                   'es-ES' => 'Spanish',
-                   'es-CO' => 'Spanish (Colombia)',
-                   'et-EE' => 'Estonian',
-                   'eu-ES' => 'Basque',
-                   'fa-IR' => 'Farsi',
-                   'fi-FI' => 'Finish',
-                   'fo-FO' => 'Faroese',
-                   'fr-FR' => 'French',
-                   'he-IL' => 'Hebrew',
-                   'hr-HR' => 'Croation',
-                   'hu-HU' => 'Hungarian',
-                   'id-ID' => 'Indonesian',
-                   'is-IS' => 'Icelandic',
-                   'it-IT' => 'Italian',
-                   'ja-JP' => 'Japanese',
-                   'ka' => 'Georgian',
-                   'ko-KR' => 'Korean',
-                   'lt-LT' => 'Lithuanian',
-                   'ms-MY' => 'Malay',
-                   'nb-NO' => 'Norwegian (Bokmål)',
-                   'nl-NL' => 'Dutch',
-                   'nn-NO' => 'Norwegian (Nynorsk)',
-                   'pl-PL' => 'Polish',
-                   'pt-BR' => 'Portuguese (Brazil)',
-                   'pt-PT' => 'Portuguese (Portugal)',
-                   'ro-RO' => 'Romanian',
-                   'ru-UA' => 'Ukrainian Russian',
-                   'ru-RU' => 'Russian',
-                   'sk-SK' => 'Slovak',
-                   'sl-SL' => 'Slovenian',
-                   'sr-YU' => 'Serbian',
-                   'sv-SE' => 'Swedish',
-                   'th-TH' => 'Thai',
-                   'tr_TR' => 'Turkish',
-                   'uk-UA' => 'Ukrainian',
-                   'zh-CN' => 'Chinese (Simplified)',
-                   'zh-TW' => 'Chinese (Traditional)'
-                  );
-
 if (!$_REQUEST['mode'])
 {
     echo "<h2>{$strTranslation}</h2>";
@@ -83,7 +33,7 @@ if (!$_REQUEST['mode'])
     echo "<input name='mode' value='show' type='hidden' />";
 
     echo "<select name='lang'>";
-    foreach ($languages AS $langcode => $language)
+    foreach ($i18n_codes AS $langcode => $language)
     {
         if ($langcode!='en-GB') echo "<option value='{$langcode}'>{$langcode} - {$language}</option>\n";
     }
