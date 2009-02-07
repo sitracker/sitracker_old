@@ -236,7 +236,7 @@ elseif ($_REQUEST['mode'] == "save")
     $lang = cleanvar($_REQUEST['lang']);
     $lang = str_replace($badchars, '', $lang);
     $origcount = cleanvar($_REQUEST['origcount']);
-    $i18nalphabet = cleanvar($_REQUEST['i18nalphabet']);
+    $i18nalphabet = cleanvar($_REQUEST['i18nalphabet'], TRUE, FALSE);
 
     $filename = "{$lang}.inc.php";
     echo "<p>".sprintf($strSendTranslation, "<code>{$filename}</code>", "<code>{$i18npath}</code>", "<a href='mailto:sitracker-devel-discuss@lists.sourceforge.net'>sitracker-devel-discuss@lists.sourceforge.net</a>")." </p>";
