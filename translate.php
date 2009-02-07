@@ -190,9 +190,12 @@ elseif ($_REQUEST['mode'] == "show")
     echo "<form method='post' action='{$_SERVER[PHP_SELF]}?mode=save'>";
     echo "<table align='center'>";
     echo "<tr class='shade1'><td colspan='3'>";
-    foreach ($meta AS $metaline)
+    if (is_array($meta))
     {
-        echo "<input type='text' name='meta[]' value=\"{$metaline}\" size='80' style='width: 100%;' /><br />";
+        foreach ($meta AS $metaline)
+        {
+            echo "<input type='text' name='meta[]' value=\"{$metaline}\" size='80' style='width: 100%;' /><br />";
+        }
     }
     echo "</td></tr>";
     echo "<tr class='shade2'><td><code>i18nAlphabet</code></td>";
@@ -273,7 +276,7 @@ elseif ($_REQUEST['mode'] == "save")
     echo "<p>{$strTranslation}: <strong>{$translatedcount}</strong>/{$origcount} = {$percent}% {$strComplete}.</p>";
     $i18nfile .= "?>\n";
 
-    $myFile = "$i18npath/{$filename}";
+    $myFile = "{$i18npath}{$filename}";
     $fp = @fopen($myFile, 'w');
     if (!$fp)
     {
