@@ -1346,7 +1346,7 @@ $strSepAbbr = 'Sep';
 # Month number 9: September
 $strSeptember = 'September';
 $strService = 'Service';
-$strServiceBalance = 'The amount of remaining service balance i.e. 34%';
+$strServiceBalance = 'The amount of remaining service balance e.g. 34%';
 $strServiceHistory = 'Service History';
 $strServiceID = 'Service ID';
 $strServiceLevel = 'Service Level';
@@ -1562,8 +1562,6 @@ $strTransfer = 'Transfer';
 # An example of transfering amounts between services
 $strTransferExamplePositiveService = 'Select the service which has a negative balance and transfer the amount from here, e.g. Service A is -100 to resolve this transfer 100 from here.';
 $strTransferExampleNegativeService = 'Select a service which has a positive balance and transfer the amount from here, e.g. Service A is 100 to resolve this transfer -100 from here.';
-$strTransferFailed = 'Transfer Failed';
-$strTransferSucessful = 'Transfer Sucessful';
 $strTranslate = 'Translate';
 $strTranslateTheString = 'Translate the english string on the left to your requested language on the right';
 $strTranslation = 'Translation';
