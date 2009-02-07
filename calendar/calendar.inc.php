@@ -356,13 +356,14 @@ function draw_chart($mode, $year, $month='', $day='', $groupid='', $userid='')
         {
             unset($hdays);
 
-            $hsql = "SELECT *, UNIX_TIMESTAMP(date) AS startdate FROM `{$GLOBALS['dbHolidays']}` WHERE userid={$user->id} AND date = ".date('Y-m-d',$startdate)." ";
+            $hsql = "SELECT *, UNIX_TIMESTAMP(date) AS startdate FROM `{$GLOBALS['dbHolidays']}` WHERE userid={$user->id} AND date BETWEEN '".date('Y-m-d',$startdate)."' AND '".date('Y-m-d',$enddate)."'";
             $hsql .= "AND type != ".HOL_PUBLIC;
+
             $hresult = mysql_query($hsql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
             while ($holiday = mysql_fetch_object($hresult))
             {
-                $cday = date('j',$holiday->startdate);
+                $cday = date('j',mysql2date($holiday->date));
                 $hdays[$cday] = $holiday->length;
                 $htypes[$cday] = $holiday->type;
                 $happroved[$cday] = $holiday->approved;
