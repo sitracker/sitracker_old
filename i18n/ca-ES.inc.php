@@ -4,6 +4,11 @@
 $languagestring = 'Catalan (ca-ES)';
 $i18ncharset = 'UTF-8';
 
+// List of letters of the alphabet for this language
+// in standard alphabetical order (upper case, where applicable)
+$i18nAlphabet = 'ABC&Ccedil;DEFGHIJKLMNOPQRSTUVWXYZ';
+
+// list of strings (Alphabetical by key)
 $strAdd = 'Afegir';
 $strAddress = 'Adreça';
 $strAddress1 = 'Adreça1';
