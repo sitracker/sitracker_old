@@ -222,7 +222,15 @@ if (empty($mode))
 
     echo "<tr><th colspan='2'>{$strDisplayPreferences}</th></tr>\n";
     echo "<tr><th>{$strLanguage}</th><td>";
-    echo "<select name='vari18n' id='vari18n'>";
+    if (!empty($CONFIG['available_i18n']))
+    {
+        $available_languages = i18n_code_to_name($CONFIG['available_i18n']);
+    }
+    else
+    {
+        $available_languages = available_languages();
+    }
+    $available_languages = array_merge(array('default'=>$strDefault),$available_languages);
     if (!empty($user->var_i18n))
     {
         $selectedlang = $user->var_i18n;
@@ -231,19 +239,7 @@ if (empty($mode))
     {
         $selectedlang = $_SESSION['lang'];
     }
-
-    foreach ($availablelanguages AS $langcode => $language)
-    {
-        if ($langcode == $selectedlang)
-        {
-            echo "<option value='{$langcode}' selected='selected'>{$language}</option>\n";
-        }
-        else
-        {
-            echo "<option value='{$langcode}'>{$language}</option>\n";
-        }
-    }
-    echo "</select>";
+    echo array_drop_down($available_languages, 'vari18n',$selectedlang, '', TRUE);
     echo "</td></tr>\n";
 
     if ($user->var_utc_offset == '') $user->var_utc_offset = 0;

@@ -84,7 +84,7 @@ if ($_SESSION['auth'] != TRUE)
     if (!empty($_SESSION['lang'])) $setting = $_SESSION['lang'];
     else $setting = 'default';
 
-    echo array_drop_down($available_languages, 'lang', $_SESSION['lang'], "onchange='this.form.submit();'", TRUE);
+    echo array_drop_down($available_languages, 'lang', $setting, "onchange='this.form.submit();'", TRUE);
     echo "</form>";
     echo "</div>";
     echo "<div class='windowbox' style='width: 220px;'>\n";
