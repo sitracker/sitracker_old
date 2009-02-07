@@ -50,7 +50,8 @@ $CFGCAT['locale'] = array('home_country',
                           'dateformat_shortdate',
                           'dateformat_shorttime',
                           'dateformat_time',
-                          'default_i18n');
+                          'default_i18n',
+                          'available_i18n');
 
 $CFGCAT['sla'] = array('default_service_level',
                        'start_working_day',
@@ -195,11 +196,14 @@ $CFGVAR['attachment_fspath']['help'] = "The full absolute file system path to a 
 $CFGVAR['attachment_webpath']['title'] = "Attachment Web Path";
 $CFGVAR['attachment_webpath']['help'] = 'The path to the attachments directory from the browsers perspective with a trailing slash. e.g. /sit/';
 
-
 $CFGVAR['auto_assign_incidents']['help'] = "incidents are automatically assigned based on a lottery weighted towards who are less busy, assumes everyone set to accepting is an engineer and willing to take incidents";
 $CFGVAR['auto_assign_incidents']['options'] = 'TRUE|FALSE';
 $CFGVAR['auto_assign_incidents']['title'] = "Auto-assign incidents";
 $CFGVAR['auto_assign_incidents']['type'] = 'select';
+
+$CFGVAR['available_i18n']['title'] = "Languages Available";
+$CFGVAR['available_i18n']['help'] = "The languages available for users to select at login or in their profile.";
+$CFGVAR['available_i18n']['type'] = 'languagemultiselect';
 
 $CFGVAR['bugtracker_url']['title'] = 'Bug tracker URL';
 $CFGVAR['bugtracker_url']['help'] = "The <abbr title='Uniform Resource Locator'>URL</abbr> of a web page to report bugs with SiT!  We recommend you don't alter this setting unless you really need to.";

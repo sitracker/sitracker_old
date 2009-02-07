@@ -62,6 +62,13 @@ if ($action == 'save')
                     $value = 'array(' . implode(',', $parts) . ')';
                 break;
 
+                case 'languagemultiselect':
+                    foreach ($value AS $k => $v)
+                    {
+                        $parts[$k] = "'{$v}'";
+                    }
+                    $value = 'array(' . implode(',', $parts) . ')';
+                break;
             }
             $savevar[$catvar] = mysql_real_escape_string($value);
             if (substr($value, 0, 6)=='array(')

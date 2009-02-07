@@ -66,37 +66,25 @@ if ($_SESSION['auth'] != TRUE)
     }
 
     // Language selector
+    if (!empty($CONFIG['available_i18n']))
+    {
+        $available_languages = i18n_code_to_name($CONFIG['available_i18n']);
+    }
+    else
+    {
+        $available_languages = available_languages();
+    }
+    $available_languages = array_merge(array('default'=>$strDefault),$available_languages);
     echo "<div style='margin-left: auto; margin-right: auto; width: 380px;";
     echo " text-align: center; margin-top: 3em;'>";
     echo "<form id='langselectform' action='login.php' method='post'>";
     echo icon('language', 16, $strLanguage)." <label for='lang'>";
-    echo "{$strLanguage}:  <select name='lang' id='lang' onchange=";
-    echo "'this.form.submit();'>";
-    echo "<option value='default'";
-    if (empty($_SESSION['lang']))
-    {
-        echo " selected='selected'";
-    }
+    echo "{$strLanguage}:  ";
 
-    echo ">{$strDefault}</option>\n";
-    if ($_GET['lang'] == 'zz')
-    {
-        $availablelanguages['zz'] = 'Test Language (zz)';
-    }
+    if (!empty($_SESSION['lang'])) $setting = $_SESSION['lang'];
+    else $setting = 'default';
 
-    foreach ($availablelanguages AS $langcode => $language)
-    {
-        if ($langcode == $_SESSION['lang'])
-        {
-            echo "<option value='{$langcode}' selected='selected'>{$language}";
-            echo "</option>\n";
-        }
-        else
-        {
-            echo "<option value='{$langcode}'>{$language}</option>\n";
-        }
-    }
-    echo "</select></label>";
+    echo array_drop_down($available_languages, 'lang', $_SESSION['lang'], "onchange='this.form.submit();'", TRUE);
     echo "</form>";
     echo "</div>";
     echo "<div class='windowbox' style='width: 220px;'>\n";

@@ -94,4 +94,97 @@ function stripslashes_array($data)
     }
 }
 
+
+/**
+    * Make an external variable safe for database and HTML display
+    * @author Ivan Lucas, Kieran Hogg
+    * @param mixed $var variable to replace
+    * @param bool $striphtml whether to strip html
+    * @param bool $transentities whether to translate all aplicable chars (true) or just special chars (false) into html entites
+    * @param bool $mysqlescape whether to mysql_escape()
+    * @param array $disallowedchars array of chars to remove
+    * @param array $replacechars array of chars to replace as $orig => $replace
+    * @returns variable
+*/
+function cleanvar($vars, $striphtml = TRUE, $transentities = TRUE,
+                $mysqlescape = TRUE, $disallowedchars = array(),
+                $replacechars = array())
+{
+    if (is_array($vars))
+    {
+        foreach ($vars as $key => $singlevar)
+        {
+            $var[$key] = cleanvar($singlevar, $striphtml, $transentities, $mysqlescape,
+                    $disallowedchars, $replacechars);
+        }
+    }
+    else
+    {
+        $var = $vars;
+        if ($striphtml === TRUE)
+        {
+            $var = strip_tags($var);
+        }
+
+        if (!empty($disallowedchars))
+        {
+            $var = str_replace($disallowedchars, '', $var);
+        }
+
+        if (!empty($replacechars))
+        {
+            foreach ($replacechars as $orig => $replace)
+            {
+                $var = str_replace($orig, $replace, $var);
+            }
+        }
+
+        if ($transentities)
+        {
+            $var = htmlentities($var, ENT_COMPAT, $GLOBALS['i18ncharset']);
+        }
+        else
+        {
+            $var = htmlspecialchars($var, ENT_COMPAT, $GLOBALS['i18ncharset']);
+        }
+
+        if ($mysqlescape)
+        {
+            $var = mysql_real_escape_string($var);
+        }
+
+        $var = trim($var);
+    }
+    return $var;
+}
+
+
+/**
+  * Return an array of available languages codes by looking at the files
+  * in the i18n directory
+  * @author Ivan Lucas
+  * @param bool $test - (optional) Include test language (zz) in results
+  * @retval array Language codes
+**/
+function available_languages($test = FALSE)
+{
+    $i18nfiles = list_dir('.'.DIRECTORY_SEPARATOR.'i18n');
+    $i18nfiles = array_filter($i18nfiles, 'filter_i18n_filenames');
+    array_walk($i18nfiles, 'i18n_filename_to_code');
+    asort($i18nfiles);
+    foreach ($i18nfiles AS $code)
+    {
+        if ($code != 'zz')
+        {
+            $available[$code] = i18n_code_to_name($code);
+        }
+        elseif ($code == 'zz' AND $test === TRUE)
+        {
+            $available[$code] = 'Test Language (zz)';
+        }
+    }
+
+    return $available;
+}
+
 ?>

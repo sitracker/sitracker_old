@@ -258,6 +258,29 @@ $availablelanguages = array('en-GB' => 'English (British)',
                             'zh-TW' => '繁體中文',
                            );
 
+// Language codes and language name in local language
+// Aphabetical by language code
+$i18n_codes = array('bg-BG' => 'български',
+                    'en-GB' => 'English (British)',
+                    'en-US' => 'English (US)',
+                    'ca-ES' => 'Català',
+                    'cy-GB' => 'Cymraeg',
+                    'da-DK' => 'Dansk',
+                    'de-DE' => 'Deutsch',
+                    'es-ES' => 'Español',
+                    'es-CO' => 'Español (Colombia)',
+                    'fr-FR' => 'Français',
+                    'it-IT' => 'Italiano',
+                    'ja-JP' => '日本語',
+                    'lt-LT' => 'Lietuvių',
+                    'nl-NL' => 'Nederlands',
+                    'pt-PT' => 'Português',
+                    'ru-RU' => 'Русский',
+                    'sl-SL' => 'Slovenščina',
+                    'zh-CN' => '简体中文',
+                    'zh-TW' => '繁體中文',
+                    );
+
 
 // List of timezones, with UTC offset in minutes
 // Source: http://en.wikipedia.org/wiki/List_of_time_zones (where else?)

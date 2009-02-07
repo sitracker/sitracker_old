@@ -2833,7 +2833,7 @@ if (!function_exists('list_dir'))
         $dirname .= $delim;
 
         $handle = opendir($dirname);
-        if ($handle == FALSE) trigger_error('Error in list_dir() Problem attempting to open directory: {$dirname}',E_USER_WARNING);
+        if ($handle == FALSE) trigger_error("Error in list_dir() Problem attempting to open directory: {$dirname}",E_USER_WARNING);
 
         $result_array = array();
 
@@ -4544,68 +4544,6 @@ function file_permissions_info($perms)
 }
 
 
-/**
-    * Make an external variable safe for database and HTML display
-    * @author Ivan Lucas, Kieran Hogg
-    * @param mixed $var variable to replace
-    * @param bool $striphtml whether to strip html
-    * @param bool $transentities whether to translate all aplicable chars (true) or just special chars (false) into html entites
-    * @param bool $mysqlescape whether to mysql_escape()
-    * @param array $disallowedchars array of chars to remove
-    * @param array $replacechars array of chars to replace as $orig => $replace
-    * @returns variable
-*/
-function cleanvar($vars, $striphtml = TRUE, $transentities = TRUE,
-                $mysqlescape = TRUE, $disallowedchars = array(),
-                $replacechars = array())
-{
-    if (is_array($vars))
-    {
-        foreach ($vars as $key => $singlevar)
-        {
-            $var[$key] = cleanvar($singlevar, $striphtml, $transentities, $mysqlescape,
-                    $disallowedchars, $replacechars);
-        }
-    }
-    else
-    {
-        $var = $vars;
-        if ($striphtml === TRUE)
-        {
-            $var = strip_tags($var);
-        }
-
-        if (!empty($disallowedchars))
-        {
-            $var = str_replace($disallowedchars, '', $var);
-        }
-
-        if (!empty($replacechars))
-        {
-            foreach ($replacechars as $orig => $replace)
-            {
-                $var = str_replace($orig, $replace, $var);
-            }
-        }
-
-        if ($transentities)
-        {
-            $var = htmlentities($var, ENT_COMPAT, $GLOBALS['i18ncharset']);
-        }
-        else
-        {
-            $var = htmlspecialchars($var, ENT_COMPAT, $GLOBALS['i18ncharset']);
-        }
-
-        if ($mysqlescape)
-        {
-            $var = mysql_real_escape_string($var);
-        }
-
-        $var = trim($var);
-    }
-    return $var;
-}
 
 
 function external_escalation($escalated, $incid)
@@ -8076,6 +8014,13 @@ function cfgVarInput($setupvar, $showvarnames = FALSE)
 {
     global $CONFIG, $CFGVAR;
     global $availablelanguages;
+
+    if ($CFGVAR[$setupvar]['type'] == 'languageselect'
+        OR $CFGVAR[$setupvar]['type'] == 'languagemultiselect')
+    {
+        $available_languages = available_languages();
+    }
+
     $html .= "<div class='configvar'>";
     if ($CFGVAR[$setupvar]['title']!='') $title = $CFGVAR[$setupvar]['title'];
     else $title = $setupvar;
@@ -8135,20 +8080,19 @@ function cfgVarInput($setupvar, $showvarnames = FALSE)
         break;
 
         case 'languageselect':
-            $html .= "<select name='{$setupvar}'>";
-            foreach ($availablelanguages AS $langcode => $language)
+            if (empty($value)) $value = $_SESSION['lang'];
+            $html .= array_drop_down($available_languages, $setupvar, $value, '', TRUE);
+        break;
+
+        case 'languagemultiselect':
+            if (empty($value)) $value = $_SESSION['lang'];
+            else
             {
-                if ($langcode == $_SESSION['lang'])
-                {
-                    $html .= "<option value='{$langcode}' selected='selected'>{$language}";
-                    $html .= "</option>\n";
-                }
-                else
-                {
-                    $html .= "<option value='{$langcode}'>{$language}</option>\n";
-                }
+                $replace = array('array(', ')', "'");
+                $value = str_replace($replace, '',  $value);
+                $value = explode(',', $value);
             }
-            $html .= "</select>";
+            $html .= array_drop_down($available_languages, $setupvar, $value, '', TRUE, TRUE);
         break;
 
         case 'slaselect':

@@ -18,15 +18,19 @@ if (realpath(__FILE__) == realpath($_SERVER['SCRIPT_FILENAME']))
     * Generate HTML for a redirect/confirmation page
     * @author Ivan Lucas
     * @param string $url. URL to redirect to
-    * @param bool $success. TRUE = Success, FALSE = Failure
-    * @param string $message. HTML message to display on the page before redirection
+    * @param bool $success. (optional) TRUE = Success, FALSE = Failure
+    * @param string $message. (optional) HTML message to display on the page
+    *               before redirection.
+    *               This parameter is optional and only required if the default
+    *               success/failure will not suffice
     * @returns string HTML page with redirect
     * @note Replaces confirmation_page() from versions prior to 3.35
-    * @note If a header HTML has already been displayed a continue link is printed
-    * @note a meta redirect will also be inserted, which is invalid HTML but appears
-    * @note to work in most browswers.
+    *       If a header HTML has already been displayed a continue link is printed
+    *       a meta redirect will also be inserted, which is invalid HTML but appears
+    *       to work in most browswers.
+    *
     * @note The recommended way to use this function is to call it without headers/footers
-    * @note already displayed.
+    *       already displayed.
 */
 function html_redirect($url, $success = TRUE, $message='')
 {
@@ -238,12 +242,37 @@ function colheader($colname, $coltitle, $sort = FALSE, $order='', $filter='', $d
 /**
     * Takes an array and makes an HTML selection box
     * @author Ivan Lucas
+    * @param array $array - The array of options to display in the drop-down
+    * @param string $name - The HTML name attribute (also used for id)
+    * @param mixed $setting - The value to pre-select
+    * @param string $attributes - Extra attributes for the select tag
+    * @param mixed $usekey - (optional) Set the option value to be the array key instead
+    *                        of the array value.
+    *                        When TRUE the array key will be used as the option value
+    *                        When FALSE the array value will be usedoption value
+    *                        When NULL the function detects which is most appropriate
+    * @param bool $multi - When TRUE a multiple selection box is returned and $setting
+    *                      can be an array of values to pre-select
+    * @retval string HTML select element
 */
-function array_drop_down($array, $name, $setting='', $enablefield='', $usekey = '')
+function array_drop_down($array, $name, $setting='', $attributes='', $usekey = NULL, $multi = FALSE)
 {
-    $html = "<select name='$name' id='$name' $enablefield>\n";
+    if ($multi AND substr($name, -2) != '[]') $name .= '[]';
+    $html = "<select name='$name' id='$name' ";
+    if (!empty($attributes))
+    {
+         $html .= "$attributes ";
+    }
+    if ($multi)
+    {
+        $items = count($array);
+        if ($items > 5) $size = floor($items / 3);
+        if ($size > 10) $size = 10;
+        $html .= "multiple='multiple' size='$size' ";
+    }
+    $html .= ">\n";
 
-    if ($usekey == '')
+    if ($usekey === '')
     {
         if ((array_key_exists($setting, $array) AND
             in_array((string)$setting, $array) == FALSE) OR
@@ -263,7 +292,14 @@ function array_drop_down($array, $name, $setting='', $enablefield='', $usekey = 
         if ($usekey)
         {
             $html .= "<option value='$key'";
-            if ($key == $setting)
+            if ($multi === TRUE AND is_array($setting))
+            {
+                if (in_array($key, $setting))
+                {
+                    $html .= " selected='selected'";
+                }
+            }
+            elseif ($key == $setting)
             {
                 $html .= " selected='selected'";
             }
@@ -272,7 +308,14 @@ function array_drop_down($array, $name, $setting='', $enablefield='', $usekey = 
         else
         {
             $html .= "<option value='$value'";
-            if ($value == $setting)
+            if ($multi === TRUE AND is_array($setting))
+            {
+                if (in_array($value, $setting))
+                {
+                    $html .= " selected='selected'";
+                }
+            }
+            elseif ($value == $setting)
             {
                 $html .= " selected='selected'";
             }
