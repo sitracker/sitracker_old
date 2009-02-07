@@ -417,7 +417,7 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
                             {
                                 seconds = "0" + seconds;
                             }
-                            $('updatestr').innerHTML = "<?php echo icon('info', 16, $GLOBALS['strDraftLastSaved']) ?>" + hours + ':' + minutes + ':' + seconds;
+                            $('updatestr').innerHTML = '<?php echo icon('info', 16, $GLOBALS['strDraftLastSaved']) ?>' + hours + ':' + minutes + ':' + seconds;
                             $('draftid').value = draftid;
                         }
                     }
