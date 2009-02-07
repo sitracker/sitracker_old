@@ -4,6 +4,11 @@
 $languagestring = 'Russian (ru-RU)';
 $i18ncharset = 'UTF-8';
 
+// List of letters of the alphabet for this language
+// in standard alphabetical order (upper case, where applicable)
+$i18nAlphabet = 'AБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ';
+
+// list of strings (Alphabetical by key)
 $strAnswer = 'Ответ';
 $strAttachment = 'Присоединен';
 $strAttachments = 'Присоединены';
