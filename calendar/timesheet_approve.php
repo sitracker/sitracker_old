@@ -123,12 +123,21 @@ else if ($approve == '')
         $date += 86400;
     }
     echo "</table>";
-    echo "<p align = 'center'><a href='{$_SERVER['PHP_SELF']}?user=$user&amp;date=$date&amp;approve=1'>$strApprove</a></p>";
+    echo "<p align = 'center'><a href='{$_SERVER['PHP_SELF']}?user=$user&amp;date=$date&amp;approve=1'>$strApprove</a> | ";
+    echo "<a href='{$_SERVER['PHP_SELF']}?user=$user&amp;date=$date&amp;approve=2'>$strDecline</a></p>";
     include ('../inc/htmlfooter.inc.php');
 }
 else
 {
-    $sql = "UPDATE `{$dbTasks}` SET completion = 2 WHERE distribution = 'event' AND owner = $user ";
+    if ($approve == 1)
+    {
+        $newCompletion = 2;
+    }
+    else
+    {
+        $newCompletion = 0;
+    }
+    $sql = "UPDATE `{$dbTasks}` SET completion = {$newCompletion} WHERE distribution = 'event' AND owner = $user ";
     $sql.= "AND UNIX_TIMESTAMP(startdate) >= ($date - 86400 * 7) AND UNIX_TIMESTAMP(startdate) < $date";
     mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
