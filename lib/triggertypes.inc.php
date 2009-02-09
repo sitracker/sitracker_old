@@ -545,7 +545,7 @@ array('description' => $strServiceBalance,
 
 $ttvararray['{serviceremainingstring}'] =
 array('description' => 'The amount of remaining service i.e. 0.34',
-      'requires' => 'maintid',
+      'requires' => 'contractid',
       'replacement' => '(get_service_percentage($paramarray[\'contractid\']) * 100)."%";',
       'show' => FALSE
      );

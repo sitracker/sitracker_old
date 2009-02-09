@@ -643,8 +643,7 @@ elseif ($mode == 'approve')
 
     if ($percent !== FALSE)
     {
-        //FIXME workarund for Mantis 198
-    	//trigger('TRIGGER_SERVICE_LIMIT', array('contractid' => $maintid));
+    	trigger('TRIGGER_SERVICE_LIMIT', array('contractid' => $maintid, 'serviceremaining' => $percent));
     }
 
     if ($status)
