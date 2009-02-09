@@ -182,7 +182,7 @@ else
                 $psql .= "r.name AS reseller, licence_quantity, lt.name AS licence_type, expirydate, admincontact, c.forenames AS admincontactsforenames, c.surname AS admincontactssurname, m.notes AS maintnotes ";
                 $psql .= "FROM `{$dbMaintenance}` AS m, `{$dbContacts}` AS c, `{$dbProducts}` AS p, `{$dbLicenceTypes}` AS lt, `{$dbResellers}` AS r ";
                 $psql .= "WHERE m.product = p.id AND m.reseller = r.id AND licence_type = lt.id AND admincontact = c.id ";
-                $psql .= "AND m.site = '{$site->id}' ";
+                $psql .= "AND m.site = '{$site->id}' AND m.expirydate > '{$now}' AND term != 'yes' ";
                 $psql .= "ORDER BY p.name ASC";
                 $presult = mysql_query($psql);
                 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
