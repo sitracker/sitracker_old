@@ -171,6 +171,7 @@ else
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     if (mysql_num_rows($result) > 0)
     {
+        $shade = 'shade1';
         while ($site = mysql_fetch_object($result))
         {
             if ($showproducts == 'on')
@@ -217,7 +218,7 @@ else
                         }
                         else
                         {
-                            $csv .= "<tr><td>{$count}</td><td>{$site->name}</td><td>{$site->realname}</td><td>{$site->resel}</td>";
+                            $csv .= "<tr class='{$shade}'><td>{$count}</td><td>{$site->name}</td><td>{$site->realname}</td><td>{$site->resel}</td>";
                             $rowshowed = true;
                         }
                         if ($showproducts == 'on')
@@ -235,7 +236,7 @@ else
                         }
                         else
                         {
-                            $csv .= "<tr><td>{$count}</td><td>{$site->name}</td><td>{$site->realname}</td><td>{$site->resel}</td>";
+                            $csv .= "<tr class='{$shade}'><td>{$count}</td><td>{$site->name}</td><td>{$site->realname}</td><td>{$site->resel}</td>";
                             $rowshowed = true;
                         }
 
@@ -259,7 +260,7 @@ else
                         }
                         else
                         {
-                            $csv .= "<tr><td>{$count}</td><td>{$site->name}</td><td>{$site->realname}</td><td>{$site->resel}</td>";
+                            $csv .= "<tr class='{$shade}'><td>{$count}</td><td>{$site->name}</td><td>{$site->realname}</td><td>{$site->resel}</td>";
                             $rowshowed = true;
                         }
                     }
@@ -290,11 +291,11 @@ else
                     $csv .= "<table width='100%'><th>{$strID}</th><th>{$strTitle}</th><th>{$strContact}</th><th>{$strSkill}</th><th>{$strStatus}</th>";
                     $csv .= "<th>{$strEngineer}</th><th>{$strOpened}</th><th>{$strClosed}</th><th>{$strDuration}</th><th>{$strSLA}</th></tr>";
 
-                    $shade = 'shade1';
+                    $shade1 = 'shade1';
 
                     while ($obj = mysql_fetch_object($iresult))
                     {
-                        $csv .= "<tr class='{$shade}'>";
+                        $csv .= "<tr class='{$shade1}'>";
                         $csv .= "<td>{$obj->id}</td><td>{$obj->title}</td>";
                         $csv .= "<td>{$obj->forenames} {$obj->surname}</td>";
                         $csv .= "<td>".software_name($obj->softwareid)."</td>";
@@ -311,14 +312,17 @@ else
                         $csv .= "<td>{$obj->servicelevel}</td>";
                         $csv .= "</tr>";
 
-                        if ($shade == 'shade1') $shade = 'shade2';
-                        else $shade = 'shade1';
+                        if ($shade1 == 'shade1') $shade1 = 'shade2';
+                        else $shade1 = 'shade1';
                     }
 
                     $csv .= "</table>";
                     $csv .= "</td></tr>";
                 }
             }
+            
+            if ($shade == 'shade1') $shade = 'shade2';
+            else $shade = 'shade1';
         }
 
         if ($output == 'csv')
