@@ -582,11 +582,6 @@ function autocomplete(elem, id)
 }
 
 
-function confirm_addword()
-{
-  return window.confirm("If you add this word to the dictionary, all future spell checks will use this as the correct spelling for all users.  Are you sure you want to continue?");
-}
-
 function email_window(incidentid)
 {
   URL = application_webpath + "incident_email.php?menu=hide&id=" + incidentid;
@@ -656,16 +651,18 @@ function togglePlusMinus(div)
     }
 }
 
-/*
-    Collapses or expands kb article sections as needed during edit
-    Requires scriptaculous/effects.js
-*/
+
+/**
+  * Collapses or expands kb article sections as needed during edit
+  * Requires scriptaculous/effects.js
+  * @author Ivan Lucas
+**/
 function kbSectionCollapse()
 {
     var sections = ['summary', 'symptoms', 'cause', 'question', 'answer', 'solution',
                     'workaround', 'status', 'additionalinfo', 'references'];
 
-    for (var i=0; i <sections.length; i++)
+    for (var i=0; i < sections.length; i++)
     {
         var span = sections[i] + 'span';
         var section = sections[i] + 'section';
@@ -684,9 +681,15 @@ function kbSectionCollapse()
     }
 }
 
-/*
-    Inserts BBCode to a textarea or input
-*/
+
+/**
+  * Insert BBCode to a textarea or input at the caret point or around current
+  * selection
+  * @author Ivan Lucas
+  * @param string element. ID of the HTML input or textarea
+  * @param string The tag to insert
+  * @param string the end tag to insert
+**/
 function insertBBCode(element, tag, endtag)
 {
     if (element.length > 0)
@@ -703,6 +706,12 @@ function insertBBCode(element, tag, endtag)
 }
 
 
+/**
+  * Dismiss a notice without refreshing the page
+  * @author Ivan Lucas
+  * @param int noticeid. The ID of the notice to dismiss
+  * @param int userid The current user ID
+**/
 function dismissNotice(noticeid, userid)
 {
     if (noticeid == 'all') var div = 'noticearea';
@@ -772,6 +781,12 @@ function enableBillingPeriod()
 }
 
 
+/**
+  * Display/Hide contents of a password field
+  * (converts from a password to text field and back)
+  * @author Ivan Lucas
+  * @param string elem. The ID of the password input HTML element
+**/
 function password_reveal(elem)
 {
     var elemlink = 'link' + elem;
@@ -785,9 +800,6 @@ function password_reveal(elem)
         $(elem).type = 'password';
         $(elemlink).innerHTML = 'Reveal'; // FIXME i18n
     }
-
-
-
 }
 
 

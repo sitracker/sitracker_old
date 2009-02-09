@@ -40,6 +40,7 @@ echo "</td></tr>";
 echo "<tr><td valign='middle'>";
 echo "<a href='{$_SERVER['PHP_SELF']}?mode=RECENT'>{$strRecent}</a> | ";
 echo alpha_index("{$_SERVER['PHP_SELF']}?search_string=");
+echo "<a href='kb_article.php'>{$strAdd}</a>";
 echo "</tr>";
 echo "</table>";
 echo "</form>";
@@ -54,7 +55,7 @@ if (strlen($search_string) > 4)
     $sql = "SELECT * FROM `{$dbSoftware}` WHERE name LIKE '%{$search_string}%' LIMIT 20";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
-    echo "<p align='center'><strong>Matching Skills</strong>: ";
+    echo "<p align='center'><strong>Matching Skills</strong>: "; // FIXME i18n matching skills
     $softcount=mysql_num_rows($result);
     $count=1;
     $colcount=1;
