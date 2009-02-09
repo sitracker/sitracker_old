@@ -136,7 +136,7 @@ while ($users = mysql_fetch_object($result))
     }
     if (strlen($users->icq) > 3)
     {
-        echo icon('icq', 16, $users['icq']);
+        echo icon('icq', 16, $users->icq);
         echo " <strong>ICQ</strong>: {$users->icq}<br />";
     }
     if (strlen($users->msn) > 3)
