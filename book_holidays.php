@@ -322,6 +322,6 @@ else
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
         }
     }
-    header("location:holiday_request.php?user={$user}");
+    header("Location:holiday_request.php?user={$user}");
 }
 ?>

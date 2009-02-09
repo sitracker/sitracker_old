@@ -28,7 +28,7 @@ if (empty($step))
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
         }
-        html_redirect("email_incident.php?id={$id}");
+        html_redirect("incident_email.php?id={$id}");
         exit;
     }
 
@@ -417,7 +417,7 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
                             {
                                 seconds = "0" + seconds;
                             }
-                            $('updatestr').innerHTML = '<?php echo icon('info', 16, $GLOBALS['strDraftLastSaved']) ?>' + hours + ':' + minutes + ':' + seconds;
+                            $('updatestr').innerHTML = '<?php echo "<a href=\"javascript:save_content();\">".icon('save', 16, $GLOBALS['strSaveDraft'])."</a> ".icon('info', 16, $GLOBALS['strDraftLastSaved'])." "; ?>' + hours + ':' + minutes + ':' + seconds;
                             $('draftid').value = draftid;
                         }
                     }
@@ -523,7 +523,7 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
         echo "<textarea name='bodytext' id='bodytext' rows='20' cols='65'>";
         echo $body;
         echo "</textarea>";
-        echo "<div id='updatestr'></div>";
+        echo "<div id='updatestr'><a href='javascript:save_content();'>".icon('save', 16, $strSaveDraft)."</a></div>";
         echo "</td></tr>";
         echo "</table>";
         echo "<p align='center'>";

@@ -1305,6 +1305,7 @@ $strSaturday = 'Saturday';
 $strSave = 'Save';
 $strSaveAsCSV = 'Save as CSV';
 $strSaveDashbaordLayout = 'Save Dashboard Layout';
+$strSaveDraft = 'Save Draft';
 $strSaveTheMainFormFirst = 'Save the main form before adding questions';
 $strScheduledTask = 'Name of the scheduler task';
 $strScheduler = 'Scheduler';
