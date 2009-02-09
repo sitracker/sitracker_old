@@ -27,7 +27,7 @@ if (empty($action) OR $action == "showform")
 {
     $title = $strAddServiceLevel;
     include ('./inc/htmlheader.inc.php');
-    
+
     echo show_form_errors('add_servicelevel');
     clear_form_errors('add_servicelevel');
 
@@ -36,19 +36,19 @@ if (empty($action) OR $action == "showform")
     if (empty($_SESSION['formdata']['add_servicelevel']['low_action_plan_mins'])) $_SESSION['formdata']['add_servicelevel']['low_action_plan_mins'] = 960;
     if (empty($_SESSION['formdata']['add_servicelevel']['low_resolution_days'])) $_SESSION['formdata']['add_servicelevel']['low_resolution_days'] = 14;
     if (empty($_SESSION['formdata']['add_servicelevel']['low_review_days'])) $_SESSION['formdata']['add_servicelevel']['low_review_days'] = 28;
-    
+
     if (empty($_SESSION['formdata']['add_servicelevel']['med_initial_response_mins'])) $_SESSION['formdata']['add_servicelevel']['med_initial_response_mins'] = 240;
     if (empty($_SESSION['formdata']['add_servicelevel']['med_prob_determ_mins'])) $_SESSION['formdata']['add_servicelevel']['med_prob_determ_mins'] = 320;
     if (empty($_SESSION['formdata']['add_servicelevel']['med_action_plan_mins'])) $_SESSION['formdata']['add_servicelevel']['med_action_plan_mins'] = 960;
     if (empty($_SESSION['formdata']['add_servicelevel']['med_resolution_days'])) $_SESSION['formdata']['add_servicelevel']['med_resolution_days'] = 10;
     if (empty($_SESSION['formdata']['add_servicelevel']['med_review_days'])) $_SESSION['formdata']['add_servicelevel']['med_review_days'] = 20;
-    
+
     if (empty($_SESSION['formdata']['add_servicelevel']['hi_initial_response_mins'])) $_SESSION['formdata']['add_servicelevel']['hi_initial_response_mins'] = 120;
     if (empty($_SESSION['formdata']['add_servicelevel']['hi_prob_determ_mins'])) $_SESSION['formdata']['add_servicelevel']['hi_prob_determ_mins'] = 180;
     if (empty($_SESSION['formdata']['add_servicelevel']['hi_action_plan_mins'])) $_SESSION['formdata']['add_servicelevel']['hi_action_plan_mins'] = 480;
     if (empty($_SESSION['formdata']['add_servicelevel']['hi_resolution_days'])) $_SESSION['formdata']['add_servicelevel']['hi_resolution_days'] = 7;
     if (empty($_SESSION['formdata']['add_servicelevel']['hi_review_days'])) $_SESSION['formdata']['add_servicelevel']['hi_review_days'] = 14;
-    
+
     if (empty($_SESSION['formdata']['add_servicelevel']['crit_initial_response_mins'])) $_SESSION['formdata']['add_servicelevel']['crit_initial_response_mins'] = 60;
     if (empty($_SESSION['formdata']['add_servicelevel']['crit_prob_determ_mins'])) $_SESSION['formdata']['add_servicelevel']['crit_prob_determ_mins'] = 120;
     if (empty($_SESSION['formdata']['add_servicelevel']['crit_action_plan_mins'])) $_SESSION['formdata']['add_servicelevel']['crit_action_plan_mins'] = 240;
@@ -68,7 +68,7 @@ if (empty($action) OR $action == "showform")
 
     echo "<table align='center'>";
     echo "<tr><th>{$strTimed}</th><td class='shade1'><input type='checkbox' id='timed' name='timed' value='yes' onchange='enableBillingPeriod();' {$timedchecked} />".help_link('ServiceLevelTimed')."</td></tr>";
-    echo "<tr><th>{$strAllowIncidentReopen}</th><td class='shade2'>".html_checkbox('allow_reopen', $sla->allow_reopen, TRUE)."</td></tr>\n";
+    echo "<tr><th>{$strAllowIncidentReopen}</th><td class='shade2'>".html_checkbox('allow_reopen', $sla->allow_reopen)."</td></tr>\n";
     echo "<tr id='engineerBillingPeriod'><th>{$strBillingEngineerPeriod}</th><td class='shade1'><input type='text' size='5' name='engineerPeriod' maxlength='5' value='{$_SESSION['formdata']['add_servicelevel']['engineerPeriod']}' /> {$strMinutes}</td></tr>";
     echo "<tr id='customerBillingPeriod'><th>{$strBillingCustomerPeriod}</th><td  class='shade2'><input type='text' size='5' name='customerPeriod' maxlength='5' value='{$_SESSION['formdata']['add_servicelevel']['customerPeriod']}' /> {$strMinutes}</td></tr>";
     echo "<tr id='limit'><th>{$strLimit}</th><td  class='shade1' >{$CONFIG['currency_symbol']} <input type='text' size='5' name='limit' maxlength='5' value='{$_SESSION['formdata']['add_servicelevel']['limit']}' /></td></tr>";
@@ -117,7 +117,7 @@ if (empty($action) OR $action == "showform")
     echo "<p align='center'><input type='submit' value='{$strSave}' /></p>";
     echo "</form>";
     include ('./inc/htmlfooter.inc.php');
-    
+
     clear_form_data('add_servicelevel');
 }
 elseif ($action == "edit")
@@ -152,11 +152,11 @@ elseif ($action == "edit")
     if ($allow_reopen != 'yes') $allow_reopen = 'no';
     $limit = cleanvar($_POST['limit']);
     if ($limit == '') $limit = 0;
-    
+
     if (empty($timed))
     {
     	$timed = 'no';
-        $allow_reopen = 'yes';  
+        $allow_reopen = 'yes';
     }
 
     $_SESSION['formdata']['add_servicelevel'] = cleanvar($_POST, TRUE, FALSE, FALSE,
@@ -169,19 +169,19 @@ elseif ($action == "edit")
         $errors++;
         $_SESSION['formerrors']['add_servicelevel']['tag'] = 'You must enter an tag';
     }
-    
+
     if (empty($engineerPeriod) AND $timed == 'yes')
     {
     	$errors++;
         $_SESSION['formerrors']['add_servicelevel']['engineerPeriod'] = 'You must enter an engineer period';
     }
-    
+
     if (empty($customerPeriod) AND $timed == 'yes')
     {
         $errors++;
         $_SESSION['formerrors']['add_servicelevel']['customerPeriod'] = 'You must enter an customer period';
     }
-    
+
     if ($errors >= 1)
     {
         // show error message if errors
@@ -197,7 +197,7 @@ elseif ($action == "edit")
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
         list($newslid) = mysql_fetch_row($result);
         $newslid++;
-    
+
         // Insert low
         $sql = "INSERT INTO `{$dbServiceLevels}` (id, tag, priority, initial_response_mins, prob_determ_mins, action_plan_mins, resolution_days, review_days, timed, allow_reopen) VALUES (";
         $sql .= "'$newslid', '$tag', '1', ";
@@ -211,7 +211,7 @@ elseif ($action == "edit")
         mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
         if (mysql_affected_rows() == 0) trigger_error("INSERT affected zero rows",E_USER_WARNING);
-    
+
         // Insert medium
         $sql = "INSERT INTO `{$dbServiceLevels}` (id, tag, priority, initial_response_mins, prob_determ_mins, action_plan_mins, resolution_days, review_days, timed, allow_reopen) VALUES (";
         $sql .= "'$newslid', '$tag', '2', ";
@@ -225,7 +225,7 @@ elseif ($action == "edit")
         mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
         if (mysql_affected_rows() == 0) trigger_error("INSERT affected zero rows",E_USER_WARNING);
-    
+
         // Insert high
         $sql = "INSERT INTO `{$dbServiceLevels}` (id, tag, priority, initial_response_mins, prob_determ_mins, action_plan_mins, resolution_days, review_days, timed, allow_reopen) VALUES (";
         $sql .= "'$newslid', '$tag', '3', ";
@@ -239,7 +239,7 @@ elseif ($action == "edit")
         mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
         if (mysql_affected_rows() == 0) trigger_error("INSERT affected zero rows",E_USER_WARNING);
-    
+
         // Insert critical
         $sql = "INSERT INTO `{$dbServiceLevels}` (id, tag, priority, initial_response_mins, prob_determ_mins, action_plan_mins, resolution_days, review_days, timed, allow_reopen) VALUES (";
         $sql .= "'$newslid', '$tag', '4', ";
@@ -253,7 +253,7 @@ elseif ($action == "edit")
         mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
         if (mysql_affected_rows() == 0) trigger_error("INSERT affected zero rows",E_USER_WARNING);
-    
+
         for ($i = 1; $i <=4; $i++)
         {
             $sql = "INSERT INTO `{$dbBillingPeriods}` (servicelevelid, priority, tag, customerperiod, engineerperiod, `limit`) ";
@@ -261,7 +261,7 @@ elseif ($action == "edit")
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
         }
-    
+
         header("Location: service_levels.php");
         exit;
     }

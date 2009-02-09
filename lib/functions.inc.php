@@ -6996,7 +6996,7 @@ function show_add_contact($siteid = 0, $mode = 'internal')
     $html .= "/><span class='required'>{$GLOBALS['strRequired']}</span> ";
 
     $html .= "<label>";
-    $html .= html_checkbox('dataprotection_email', 'No', TRUE);
+    $html .= html_checkbox('dataprotection_email', 'No');
     $html .= "{$GLOBALS['strEmail']} {$GLOBALS['strDataProtection']}</label>".help_link("EmailDataProtection");
     $html .= "</td></tr>\n";
 
@@ -7008,7 +7008,7 @@ function show_add_contact($siteid = 0, $mode = 'internal')
     $html .= "/> ";
 
     $html .= "<label>";
-    $html .= html_checkbox('dataprotection_phone', 'No', TRUE);
+    $html .= html_checkbox('dataprotection_phone', 'No');
     $html .= "{$GLOBALS['strTelephone']} {$GLOBALS['strDataProtection']}</label>".help_link("TelephoneDataProtection");
     $html .= "</td></tr>\n";
 
@@ -7027,7 +7027,7 @@ function show_add_contact($siteid = 0, $mode = 'internal')
     $html .= "/></td></tr>\n";
 
     $html .= "<tr><th>{$GLOBALS['strAddress']}</th><td><label>";
-    $html .= html_checkbox('dataprotection_address', 'No', TRUE);
+    $html .= html_checkbox('dataprotection_address', 'No');
     $html .= " {$GLOBALS['strAddress']} {$GLOBALS['strDataProtection']}</label>";
     $html .= help_link("AddressDataProtection")."</td></tr>\n";
     $html .= "<tr><th></th><td><label><input type='checkbox' name='usesiteaddress' value='yes' onclick=\"$('hidden').toggle();\" /> {$GLOBALS['strSpecifyAddress']}</label></td></tr>\n";
@@ -8084,14 +8084,21 @@ function cfgVarInput($setupvar, $showvarnames = FALSE)
         break;
 
         case 'languagemultiselect':
-            if (empty($value)) $value = $_SESSION['lang'];
+            if (empty($value))
+            {
+                $value = $_SESSION['lang'];
+                $checked = TRUE;
+            }
             else
             {
+                $checked = FALSE;
                 $replace = array('array(', ')', "'");
                 $value = str_replace($replace, '',  $value);
                 $value = explode(',', $value);
             }
             $html .= array_drop_down($available_languages, $setupvar, $value, '', TRUE, TRUE);
+            $html .= "<label>".html_checkbox($setupvar.'checkbox', $checked, "onchange=\"toggle_multiselect('{$setupvar}[]')\"");
+            $html .= $GLOBALS['strAll']."</label>";
         break;
 
         case 'slaselect':

@@ -856,3 +856,27 @@ ResizeableTextarea.prototype = {
         }
     }
 }
+
+
+/**
+  * Toggle the enabled/disabled (read-only) state of a multi-select
+  * @author Ivan Lucas
+
+*/
+function toggle_multiselect(elem)
+{
+    if ($(elem).disabled)
+    {
+        alert('enable');
+        $(elem).enable();
+    }
+    else
+    {
+        $(elem).disable();
+    }
+}
+
+
+
+
+

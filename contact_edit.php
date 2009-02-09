@@ -71,13 +71,13 @@ elseif ($action == "edit" && isset($contact))
         echo "<tr><th>{$strEmail}: <sup class='red'>*</sup></th><td>";
         echo "<input maxlength='100' name='email' size='40' value='{$contactrow['email']}' />";
         echo "<label>";
-        html_checkbox('dataprotection_email', $contactrow['dataprotection_email']);
+        echo html_checkbox('dataprotection_email', $contactrow['dataprotection_email']);
         echo "{$strEmail} {$strDataProtection}</label>";
         echo "</td></tr>\n";
         echo "<tr><th>{$strTelephone}:</th><td>";
         echo "<input maxlength='50' name='phone' size='40' value='{$contactrow['phone']}' />";
         echo "<label>";
-        html_checkbox('dataprotection_phone', $contactrow['dataprotection_phone']);
+        echo html_checkbox('dataprotection_phone', $contactrow['dataprotection_phone']);
         echo "{$strTelephone} {$strDataProtection}</label>";
         echo "</td></tr>\n";
         echo "<tr><th>{$strMobile}:</th><td>";
@@ -100,7 +100,7 @@ elseif ($action == "edit" && isset($contact))
         echo "/> ";
         echo "{$strSpecifyAddress}</td></tr>\n";
         echo "<tr><th>{$strAddress}:</th><td><label>";
-        html_checkbox('dataprotection_address', $contactrow['dataprotection_address']);
+        echo html_checkbox('dataprotection_address', $contactrow['dataprotection_address']);
         echo " {$strAddress} {$strDataProtection}</label></td></tr>\n";
         echo "<tr><th>{$strAddress1}:</th><td>";
         echo "<input maxlength='255' name='address1' size='40' value='{$contactrow['address1']}' {$extraattributes} />";

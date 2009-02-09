@@ -100,35 +100,28 @@ function html_redirect($url, $success = TRUE, $message='')
 
 
 /**
-    * Prints the HTML for a checkbox, the 'state' value should be a 1, yes, true or 0, no, false
+    * Returns a HTML string for a checkbox
     * @author Ivan Lucas
     * @param string $name The HTML name attribute
     * @param mixed $state
-    * @param bool $return. Return HTML as a string when TRUE, echo when FALSE
+    * @param string $attributes. Extra attributes for input tag
+    * @note the 'state' value should be a 1, yes, true or 0, no, false
     * @returns string HTML
 */
-function html_checkbox($name, $state, $return = FALSE)
+function html_checkbox($name, $state, $attributes = '')
 {
     if ($state === TRUE) $state = 'TRUE';
     if ($state === FALSE) $state = 'FALSE';
     if ($state === 1 OR $state === 'Yes' OR $state === 'yes' OR
         $state === 'true' OR $state === 'TRUE')
     {
-        $html = "<input type='checkbox' checked='checked' name='{$name}' id='{$name}' value='{$state}' />" ;
+        $html = "<input type='checkbox' checked='checked' name='{$name}' id='{$name}' value='{$state}' {$attributes} />" ;
     }
     else
     {
-        $html = "<input type='checkbox' name='{$name}' id='{$name}' value='{$state}' />" ;
+        $html = "<input type='checkbox' name='{$name}' id='{$name}' value='{$state}' {$attributes} />" ;
     }
-
-    if ($return)
-    {
-        return $html;
-    }
-    else
-    {
-        echo $html;
-    }
+    return $html;
 }
 
 
