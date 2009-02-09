@@ -77,7 +77,7 @@ elseif ($step == '1')
 
     include ('./inc/htmlheader.inc.php');
     $start = strtotime("{$start} 09:00");
-    $end = strtotime($end);
+    $end = strtotime("{$end} 09:00");
     if ($start == 0 && $end == 0)
     {
         $start = $today;
