@@ -38,7 +38,7 @@ $hmenu[0] = array_merge(array (10=> array ( 'perm'=> 0, 'name'=> $CONFIG['applic
                    20=> array ( 'perm'=> 11, 'name'=> $strCustomers, 'url'=>"{$CONFIG['application_webpath']}sites.php", 'submenu'=>"20"),
                    30=> array ( 'perm'=> 6, 'name'=> $strSupport, 'url'=>"{$CONFIG['application_webpath']}incidents.php?user=current&amp;queue=1&amp;type=support", 'submenu'=>"30"),
                    40=> array ( 'perm'=> 0, 'name'=> $strTasks, 'url'=>"{$CONFIG['application_webpath']}tasks.php", 'submenu'=>"40", 'enablevar' => 'tasks_enabled'),
-                   50=> array ( 'perm'=> 54, 'name'=> $strKnowledgeBase, 'url'=>"{$CONFIG['application_webpath']}browse_kb.php", 'submenu'=>"50", 'enablevar' => 'kb_enabled'),
+                   50=> array ( 'perm'=> 54, 'name'=> $strKnowledgeBase, 'url'=>"{$CONFIG['application_webpath']}kb.php", 'submenu'=>"50", 'enablevar' => 'kb_enabled'),
                    60=> array ( 'perm'=> 37, 'name'=> $strReports, 'url'=>"", 'submenu'=>"60"),
                    70=> array ( 'perm'=> 0, 'name'=> $strHelp, 'url'=>"{$CONFIG['application_webpath']}help.php", 'submenu'=>"70")
 ), $hmenu[0]);
@@ -157,7 +157,7 @@ $hmenu[40] = array_merge(array (10=> array ( 'perm'=> 0, 'name'=> $strAddTask, '
 // KB
 if (!is_array($hmenu[50])) $hmenu[50] = array();
 $hmenu[50] = array_merge(array (10=> array ( 'perm'=> 54, 'name'=> $strNewKBArticle, 'url'=>"{$CONFIG['application_webpath']}kb_article.php"),
-                    20=> array ( 'perm'=> 54, 'name'=> $strBrowse, 'url'=>"{$CONFIG['application_webpath']}browse_kb.php")
+                    20=> array ( 'perm'=> 54, 'name'=> $strBrowse, 'url'=>"{$CONFIG['application_webpath']}kb.php")
 ), $hmenu[50]);
 
 

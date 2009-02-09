@@ -28,7 +28,7 @@ if (!empty($_REQUEST['kbid']))
 }
 if (empty($id))
 {
-    header("Location: browse_kb.php");
+    header("Location: kb.php");
     exit;
 }
 include ('./inc/htmlheader.inc.php');

@@ -63,7 +63,7 @@ function dashboard_statistics_display()
     echo "{$todaysclosed} {$GLOBALS['strClosed']}<br />";
     echo "{$supportopen} {$GLOBALS['strCurrentlyOpen']}<br />";
 
-    echo "<br /><strong><a href='browse_kb.php?mode=today'>";
+    echo "<br /><strong><a href='kb.php?mode=today'>";
     echo "{$GLOBALS['strKnowledgeBaseArticles']}</a></strong><br />";
     echo "{$kbpublished} {$GLOBALS['strPublishedToday']}</a><br />";
 }

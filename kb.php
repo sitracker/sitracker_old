@@ -1,5 +1,5 @@
 <?php
-// browse_kb.php - Browse knowledge base articles
+// kb.php - Browse knowledge base articles
 //
 // SiT (Support Incident Tracker) - Support call tracking system
 // Copyright (C) 2000-2009 Salford Software Ltd. and Contributors
@@ -44,7 +44,7 @@ echo "</tr>";
 echo "</table>";
 echo "</form>";
 echo "<br />";
-    
+
 // ---------------------------------------------
 // SQL Queries:
 
