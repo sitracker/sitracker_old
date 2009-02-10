@@ -224,7 +224,7 @@ switch ($action)
 
             $updatehtml .= sprintf($SYSLANG['strActivityCompleted'], $enddate, $duration);
 
-            $owner = incident_open(($incident));
+            $owner = incident_owner($incident);
 
             //create update
             $sql = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, ";
