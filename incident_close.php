@@ -383,7 +383,7 @@ else
                 if (strlen($_REQUEST['summary']) > 3)
                 {
                     // Problem Definition
-                    $sql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, currentowner, currentstaus, bodytext, timestamp, customervisibility) ";
+                    $sql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, currentowner, currentstatus, bodytext, timestamp, customervisibility) ";
                     $sql .= "VALUES ('$id', '$sit[2]', 'probdef', '{$currentowner}', '{$currentstatus}', '$summary', '$now', 'hide')";
                     $result = mysql_query($sql);
                     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
