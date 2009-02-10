@@ -988,13 +988,13 @@ switch ($_REQUEST['action'])
                             $sql .= "AND sl.tag = i.servicelevel AND sl.priority = i.priority AND sl.timed = 'yes' ";
                             $sql .= "AND i.status = 2 "; // Only want closed incidents, dont want awaiting closure as they could be reactivated
 
-                            $result = mysql_query($sitelistsql);
+                            $result = mysql_query($sql);
                             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
                             if (mysql_num_rows($result) > 0)
                             {
                                 while ($obj = mysql_fetch_object($result))
                                 {
-                                    if (!$is_billable_incident_approved($obj->id))
+                                    if (!is_billable_incident_approved($obj->id))
                                     {
                                         $billing_upgrade[] = $obj->id;
                                     }
@@ -1127,10 +1127,10 @@ switch ($_REQUEST['action'])
                             {
                                 foreach ($billing_upgrade AS $incident)
                                 {
-                                    $r = close_billable_incident($obj->id);
+                                    $r = close_billable_incident($incident);
                                     if (!$r)
                                     {
-                                        trigger_error("Error upgrading {$obj->id} to new billing format", E_USER_WARNING);
+                                        trigger_error("Error upgrading {$incident} to new billing format", E_USER_WARNING);
                                     }
                                 }
                             }
