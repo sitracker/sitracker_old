@@ -1462,7 +1462,7 @@ function closingstatus_drop_down($name, $id, $required = FALSE)
         }
         else
         {
-            $html .= $statuses['name'];
+            $html .= $statuses->name;
         }
         $html .= "</option>\n";
     }
@@ -8086,7 +8086,10 @@ function cfgVarInput($setupvar, $showvarnames = FALSE)
         case 'languagemultiselect':
             if (empty($value))
             {
-                $value = $_SESSION['lang'];
+                foreach ($available_languages AS $code => $lang)
+                {
+                    $value[] = $code;
+                }
                 $checked = TRUE;
             }
             else
@@ -8097,7 +8100,8 @@ function cfgVarInput($setupvar, $showvarnames = FALSE)
                 $value = explode(',', $value);
             }
             $html .= array_drop_down($available_languages, $setupvar, $value, '', TRUE, TRUE);
-            $html .= "<label>".html_checkbox($setupvar.'checkbox', $checked, "onchange=\"toggle_multiselect('{$setupvar}[]')\"");
+            $attributes = "onchange=\"toggle_multiselect('{$setupvar}[]')\"";
+            $html .= "<label>".html_checkbox($setupvar.'checkbox', $checked, "");
             $html .= $GLOBALS['strAll']."</label>";
         break;
 

@@ -63,11 +63,18 @@ if ($action == 'save')
                 break;
 
                 case 'languagemultiselect':
-                    foreach ($value AS $k => $v)
+                    if ($_REQUEST['available_i18ncheckbox'] != '')
                     {
-                        $parts[$k] = "'{$v}'";
+                        $value = '';
                     }
-                    $value = 'array(' . implode(',', $parts) . ')';
+                    else
+                    {
+                        foreach ($value AS $k => $v)
+                        {
+                            $parts[$k] = "'{$v}'";
+                        }
+                        $value = 'array(' . implode(',', $parts) . ')';
+                    }
                 break;
             }
             $savevar[$catvar] = mysql_real_escape_string($value);
@@ -136,6 +143,7 @@ if (!empty($selcat))
 }
 echo "</fieldset>";
 echo "<input type='hidden' name='cat' value='{$selcat}' />";
+echo "<input type='hidden' name='tab' value='{$seltab}' />";
 echo "<input type='hidden' name='action' value='save' />";
 echo "<p><input type='reset' value=\"{$strReset}\" /> <input type='submit' value=\"{$strSave}\" /></p>";
 echo "</form>";
