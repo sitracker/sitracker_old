@@ -367,7 +367,7 @@ function get_serviceid($contractid, $date = '')
     $sql = "SELECT serviceid FROM `{$GLOBALS['dbService']}` AS s ";
     $sql .= "WHERE contractid = {$contractid} AND UNIX_TIMESTAMP(startdate) <= {$date} ";
     $sql .= "AND UNIX_TIMESTAMP(enddate) > {$date} ";
-    $sql .= "AND (balance > 0 OR (select count(1) FROM `{$GLOBALS['dbService']}` WHERE contractid = s.contractid and balance > 0) = 0) ";
+    $sql .= "AND (balance > 0 OR (select count(1) FROM `{$GLOBALS['dbService']}` WHERE contractid = s.contractid AND balance > 0) = 0) ";
 
     if (!$CONFIG['billing_allow_incident_approval_against_overdrawn_service'])
     {
@@ -1315,9 +1315,9 @@ function make_incident_billing_array($incidentid, $totals=TRUE)
 {
     $billing = get_incident_billing_details($incidentid);
 
-//echo "<pre>";
-//print_r($billing);
-//echo "</pre><hr />";
+// echo "<pre>";
+// print_r($billing);
+// echo "</pre><hr />";
 
     $sql = "SELECT servicelevel, priority FROM `{$GLOBALS['dbIncidents']}` WHERE id = {$incidentid}";
     $result = mysql_query($sql);

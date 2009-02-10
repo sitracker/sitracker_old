@@ -381,7 +381,7 @@ elseif ($action == "edit")
     else
     {
         // FIXME 3.35 fix this i18n wording, remove debug
-        echo "<p class='error'>{$strMustSelectEmailTemplate} $sql</p>\n";
+        echo "<p class='error'>{$strMustSelectEmailTemplate}</p>\n";
     }
 }
 elseif ($action == "delete")

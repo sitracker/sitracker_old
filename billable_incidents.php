@@ -83,7 +83,7 @@ if (empty($mode))
     <?php
 
     echo "<form action='{$_SERVER['PHP_SELF']}' method='post' id='billableincidents'>";
-    echo "<table align='center'>";
+    echo "<table class='vertical'>";
 
     echo "<tr><th>{$strType}:</th><td>";
     echo "<input type='radio' name='mode' value='summarypage' id='summarypage' onclick=\"$('startdatesection').hide();" .
@@ -119,10 +119,10 @@ if (empty($mode))
 //    echo "</td></tr></tbody>\n";
 
     echo "<tbody id='showfoc'><tr><th>{$strShowFreeOfCharge}</th>";
-    echo "<td><input type='checkbox' id='foc' name='foc' value='show' checked /></td></tr></tbody>";
+    echo "<td><input type='checkbox' id='foc' name='foc' value='show' checked='checked' /></td></tr></tbody>";
 
     echo "<tbody id='showfocaszero'><tr><th>{$strShowFreeOfChargeAsZero}</th>";
-    echo "<td><input type='checkbox' id='focaszero' name='focaszero' value='show' checked /></td></tr></tbody>";
+    echo "<td><input type='checkbox' id='focaszero' name='focaszero' value='show' checked='checked' /></td></tr></tbody>";
 
     echo "<tbody id='displaysection' ><tr><th>{$strOutput}:</th>";
     echo "<td><input type='radio' name='display' value='html' checked='checked' /> {$strScreen}";
@@ -296,7 +296,7 @@ elseif ($mode == 'approvalpage')
                 $sql .= "AND i.closed <= {$enddate} ";
             }
             $sql .= "ORDER BY i.closed";
-            // echo $sql."<br />";
+//              echo $sql."<br />";
             $result = mysql_query($sql);
             if (mysql_error())
             {

@@ -34,9 +34,9 @@ if (mysql_num_rows($result) >= 1)
     elseif ($mode != 'incident')
     {
         echo "<div style='width: 48%; float: left;'>";
-        $startdate=mysql2date($task->startdate);
-        $duedate=mysql2date($task->duedate);
-        $enddate=mysql2date($task->enddate);
+        $startdate = mysql2date($task->startdate);
+        $duedate = mysql2date($task->duedate);
+        $enddate = mysql2date($task->enddate);
         echo "<table class='vertical' width='100%'>";
         echo "<tr><th>{$strTitle}</th>";
         echo "<td>{$task->name}</td></tr>";

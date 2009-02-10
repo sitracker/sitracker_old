@@ -24,7 +24,7 @@ $sent = cleanvar($_REQUEST['sent']);
 $mode = cleanvar($_REQUEST['mode']);
 $action = cleanvar($_REQUEST['action']);
 $type = cleanvar($_REQUEST['type']);
-$memo = cleanvar($_REQUEST['memo']);
+$memo = cleanvar($_REQUEST['memo'], TRUE, FALSE, FALSE);
 $approvaluser = cleanvar($_REQUEST['approvaluser']);
 
 include ('./inc/htmlheader.inc.php');
@@ -246,7 +246,7 @@ else
                 $holidaylist .= ldate('l j F Y', mysql2date($holiday->date)).", ";
                 if ($holiday->length == 'am') $holidaylist .= $strMorning;
                 if ($holiday->length == 'pm') $holidaylist .= $strAfternoon;
-                if ($holiday->length == 'day') $holidaylist .= $strFullDaye;
+                if ($holiday->length == 'day') $holidaylist .= $strFullDay;
                 $holidaylist .= ", ";
                 $holidaylist .= holiday_type($holiday->type)."\n";
             }

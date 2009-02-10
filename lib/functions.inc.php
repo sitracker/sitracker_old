@@ -2786,7 +2786,7 @@ function send_email($to, $from, $subject, $body, $replyto='', $cc='', $bcc='')
     $extra_headers .= "X-Mailer: {$CONFIG['application_shortname']} {$application_version_string}/PHP " . phpversion()."\n";
     $extra_headers .= "X-Originating-IP: {$_SERVER['REMOTE_ADDR']}\n";
     $extra_headers .= "MIME-Version: 1.0\n";
-    $extra_headers .= "Content-type: text/plain; charset={$GLOBALS['i18ncharset']}";
+    $extra_headers .= "Content-type: text/plain; charset={$GLOBALS['i18ncharset']}\n";
     $extra_headers .= "\r\n";
 
     if ($CONFIG['demo'])
