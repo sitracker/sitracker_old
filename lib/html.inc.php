@@ -347,6 +347,7 @@ function array_drop_down($array, $name, $setting='', $attributes='', $usekey = N
   *                      E_USER_NOTICE / 1024
   * @param string $helpcontext (optional) - will display a help link. [?]
   *              to the given help context
+  * @returns string HTML
   * @note user_alert message should be displayed in the users local language
   * and should offer a 'next step' or help, where appropriate
   *
@@ -374,10 +375,12 @@ function user_alert($message, $severity, $helpcontext = '')
             $class = 'alert info';
             $info = $GLOBALS['strInfo'];
     }
-    echo "<p class='{$class}'>";
-    if (!empty($helpcontext)) echo help_link($helpcontext);
-    echo "<strong>{$info}</strong>: {$message}";
-    echo "</p>";
+    $html = "<p class='{$class}'>";
+    if (!empty($helpcontext)) $html .= help_link($helpcontext);
+    $html .= "<strong>{$info}</strong>: {$message}";
+    $html .= "</p>";
+
+    return $html;
 }
 
 

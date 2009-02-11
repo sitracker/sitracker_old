@@ -63,7 +63,7 @@ if (empty($process))
         $totalincidents=contact_count_incidents($id);
         if ($totalincidents > 0)
         {
-            user_alert("There are $totalincidents incidents assigned to this contact", E_USER_WARNING);
+            echo user_alert("There are $totalincidents incidents assigned to this contact", E_USER_WARNING);
         }
         $sql  = "SELECT sc.maintenanceid AS maintenanceid, m.product, p.name AS productname, ";
         $sql .= "m.expirydate, m.term ";
@@ -74,7 +74,7 @@ if (empty($process))
         $totalcontracts=mysql_num_rows($result);
         if ($totalcontracts>0)
         {
-            user_alert("There are $totalcontracts contracts assigned to this person", E_USER_WARNING);
+            echo user_alert("There are $totalcontracts contracts assigned to this person", E_USER_WARNING);
         }
 
         if ($totalincidents > 0 || $totalcontracts > 0)

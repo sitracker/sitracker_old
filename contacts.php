@@ -122,7 +122,7 @@ else
     if ($search_string == '')
     {
         $errors = 1;
-        echo "<p class='error'>{$strMustEnterASearchString}</p>\n";
+        echo user_alert($strMustEnterASearchString, E_USER_ERROR);
     }
     // search for criteria
     if ($errors == 0)

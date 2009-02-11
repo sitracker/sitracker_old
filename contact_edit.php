@@ -172,25 +172,25 @@ else if ($action == "update")
     if ($surname == '')
     {
         $errors = 1;
-        echo "<p class='error'>{$strMustEnterSurname}</p>\n";
+        echo user_alert($strMustEnterSurname, E_USER_ERROR);
     }
     // check for blank site
     if ($siteid == '')
     {
         $errors = 1;
-        echo "<p class='error'>{$strMustEnterSiteName}</p>\n";
+        echo user_alert($strMustEnterSiteName, E_USER_ERROR);
     }
     // check for blank name
     if ($email == '' OR $email=='none' OR $email=='n/a')
     {
         $errors = 1;
-        echo "<p class='error'>{$strMustEnterEmail}</p>\n";
+        echo user_alert($strMustEnterEmail, E_USER_ERROR);
     }
     // check for blank contact id
     if ($contact == '')
     {
         $errors = 1;
-        echo "<p class='error'>Something weird has happened, better call technical support</p>\n";
+        trigger_error("Something weird has happened, better call technical support", E_USER_ERROR);
     }
 
     // edit contact if no errors
