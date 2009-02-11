@@ -620,6 +620,8 @@ $strFriday = 'Friday';
 # e.g. from x to y
 $strFrom = 'From';
 $strFromXResults = 'from %s results';
+# FTP - File Transfer Protocol
+$strFTP = 'FTP';
 $strFTPFailedCreatingDirectoryX = 'FTP Failed creating directory %s';
 $strFTPFilesDB = 'FTP Files DB';
 $strFTPPublish = 'FTP Publish';
@@ -815,6 +817,8 @@ $strLastUpdated = 'Last Updated';
 $strLastWeek = 'Last week';
 # The previous year to this one
 $strLastYear = 'Last year';
+# LDAP - Lightweight Directory Access Protocol
+$strLDAP = 'LDAP';
 $strLength = 'Length';
 $strLicense = 'Licence';
 $strLicenseAndCopyright = 'Licence &amp; Copyright Information';
