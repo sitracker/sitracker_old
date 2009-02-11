@@ -108,7 +108,7 @@ function trigger($triggerid, $paramarray='')
             {
                 $checks = trigger_replace_specials($triggerid, $triggerobj->checks, $paramarray);
                 $eresult = @eval("\$value = $checks;return TRUE;");
-                if (!$eresult) trigger_error("Error in trigger rule for {$triggerid}, check your rules", E_USER_WARNING);
+                if (!$eresult) trigger_error("Error in trigger rule for {$triggerid}, check your <a href='triggers.php'>trigger rules</a>.", E_USER_WARNING);
                 if ($value === FALSE)
                 {
                     continue;
