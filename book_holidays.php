@@ -76,18 +76,20 @@ elseif ($step == '1')
     $type = cleanvar($_REQUEST['type']);
 
     include ('./inc/htmlheader.inc.php');
-    $start = strtotime("{$start} 09:00");
-    $end = strtotime("{$end} 09:00");
-    if ($start == 0 && $end == 0)
+    if (!empty($start)) $start = strtotime("{$start} 09:00");
+    else $start = 0;
+    if (!empty($end)) $end = strtotime("{$end} 09:00");
+    else $end = 0;
+    if ($start == 0 AND $end == 0)
     {
         $start = $today;
         $end = $today;
     }
-    elseif ($end == 0 && $start>0)
+    elseif ($end == 0 AND $start > 0)
     {
-        $end=$start;
+        $end = $start;
     }
-    elseif ($start == 0 && $end > 0)
+    elseif ($start == 0 AND $end > 0)
     {
         $start = $end;
     }

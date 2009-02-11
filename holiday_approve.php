@@ -37,7 +37,7 @@ switch (strtolower($approve))
         $sql = "UPDATE `{$dbHolidays}` SET approved='".HOL_APPROVAL_DENIED."' ";
     break;
     case 'free':
-        $sql = "UPDATE `{$dbHolidays}` SET approved='".HOL_APPROVAL_GRANTED."', type='5' ";
+        $sql = "UPDATE `{$dbHolidays}` SET approved='".HOL_APPROVAL_GRANTED."', type='".HOL_FREE."' ";
     break;
 }
 
@@ -50,10 +50,11 @@ if ($user != 'all')
 
 if ($startdate != 'all')
 {
-    $sql.="AND `date` = FROM_UNIXTIME($startdate) AND type='$type' AND length='$length'";
+    $sql.="AND `date` = '$startdate' AND type='$type' AND length='$length'";
 }
 
 $result = mysql_query($sql);
+//  echo $sql;
 if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
 $bodytext = "Message from {$CONFIG['application_shortname']}: ".user_realname($sit[2])." has ";
@@ -70,10 +71,7 @@ else
 $email_from = user_email($sit[2]);
 $email_to = user_email($user);
 $email_subject = "Re: {$CONFIG['application_shortname']}: Holiday Approval Request";
-$extra_headers  = "From: $email_from\nReply-To: $email_from\nErrors-To: {$CONFIG['support_email']}\n";
-$extra_headers .= "X-Mailer: {$CONFIG['application_shortname']} {$application_version_string}/PHP " . phpversion()."\n";
-$extra_headers .= "X-Originating-IP: {$_SERVER['REMOTE_ADDR']}\n";
-$rtnvalue = mail($email_to, $email_subject, $bodytext, $extra_headers);
+$rtnvalue = send_email($email_to, $email_from, $email_subject, $bodytext);
 
 //if ($rtnvalue===TRUE) echo "<p align='center'>".user_realname($user)." has been notified of your decision</p>";
 //else echo "<p class='error'>There was a problem sending your notification</p>";

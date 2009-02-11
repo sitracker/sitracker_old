@@ -73,14 +73,15 @@ else
         {
             if ($length == '0')
             {
+                // Cancel Holiday
                 // FIXME: doesn't check permission or anything
                 $sql = "DELETE FROM `{$dbHolidays}` ";
                 $sql .= "WHERE userid='$user' AND `date` = '{$year}-{$month}-{$day}' AND type='$type' ";
                 $result = mysql_query($sql);
-                // echo $sql;
                 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-                $dlength=0;
-                $dapproved=0;
+                $dlength = 0;
+                $dapproved = 0;
+                plugin_do('holiday_cancelled');
             }
             else
             {

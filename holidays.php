@@ -178,7 +178,7 @@ foreach ($holidaytype AS $htypeid => $htype)
 {
     $sql = "SELECT *, UNIX_TIMESTAMP(`date`) AS date FROM `{$dbHolidays}` ";
     $sql .= "WHERE userid='{$user}' AND type={$htypeid} ";
-    $sql.= "AND (approved=".HOL_HOLIDAY." OR (approved=".HOL_APPROVAL_GRANTED_ARCHIVED." AND date >= FROM_UNIXTIME($now))) ORDER BY date ASC ";
+    $sql.= "AND (approved=".HOL_APPROVAL_GRANTED." OR (approved=".HOL_APPROVAL_GRANTED_ARCHIVED." AND date >= FROM_UNIXTIME($now))) ORDER BY date ASC ";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
     $numtaken = mysql_num_rows($result);
@@ -194,9 +194,27 @@ foreach ($holidaytype AS $htypeid => $htype)
             if ($dates->length == 'pm') echo "<u>{$strAfternoon}</u> ";
             echo ldate('jS F Y', $dates->date);
             echo "</td>";
-            echo "<td colspan='2'>";
+            echo "<td";
+            if ($dates->approved == HOL_APPROVAL_GRANTED_ARCHIVED
+               OR ($dates->approved == HOL_APPROVAL_GRANTED AND $dates->date < $today))
+            {
+               echo " colspan='2'";
+            }
+            echo ">";
             echo holiday_approval_status($dates->approved, $dates->approvedby);
-            echo "</td></tr>\n";
+            echo "</td>";
+            if ($dates->approved == HOL_APPROVAL_GRANTED AND $dates->date >= $today)
+            {
+                echo "<td>";
+                echo "<a href='holiday_add.php?year=".date('Y',$dates->date);
+                echo "&amp;month=".date('m',$dates->date)."&amp;day=";
+                echo date('d',$dates->date)."&amp;user={$sit[2]}&amp;type=";
+                echo "{$dates->type}&amp;length=0&amp;return=holidays' ";
+                echo "onclick=\"return window.confirm('".date('l jS F Y', $dates->date);
+                echo ": {$strHolidayCancelConfirm}');\" title='{$strHolidayCancel}'>{$strCancel}</a>";
+                echo "</td>";
+            }
+            echo "</tr>\n";
         }
     }
     mysql_free_result($result);

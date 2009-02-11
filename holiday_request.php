@@ -73,11 +73,11 @@ function display_holiday_table($result)
                 echo "<td>";
                 $approvetext = $GLOBALS['strApprove'];
                 if ($holiday->type == HOL_SICKNESS) $approvetext = $GLOBALS['strAcknowledge'];
-                echo "<a href=\"holiday_approve.php?approve=TRUE&amp;user={$holiday->userid}&amp;view={$user}&amp;startdate={$holiday->startdate}&amp;type={$holiday->type}&amp;length={$holiday->length}\">{$approvetext}</a> | ";
-                echo "<a href=\"holiday_approve.php?approve=FALSE&amp;user={$holiday->userid}&amp;view={$user}&amp;startdate={$holiday->startdate}&amp;type={$holiday->type}&amp;length={$holiday->length}\">{$GLOBALS['strDecline']}</a>";
+                echo "<a href=\"holiday_approve.php?approve=TRUE&amp;user={$holiday->userid}&amp;view={$user}&amp;startdate={$holiday->date}&amp;type={$holiday->type}&amp;length={$holiday->length}\">{$approvetext}</a> | ";
+                echo "<a href=\"holiday_approve.php?approve=FALSE&amp;user={$holiday->userid}&amp;view={$user}&amp;startdate={$holiday->date}&amp;type={$holiday->type}&amp;length={$holiday->length}\">{$GLOBALS['strDecline']}</a>";
                 if ($holiday->type == HOL_HOLIDAY)
                 {
-                    echo " | <a href=\"holiday_approve.php?approve=FREE&amp;user={$holiday->userid}&amp;view={$user}&amp;startdate={$holiday->startdate}&amp;type={$holiday->type}&amp;length={$holiday->length}\">{$GLOBALS['strApproveFree']}</a>";
+                    echo " | <a href=\"holiday_approve.php?approve=FREE&amp;user={$holiday->userid}&amp;view={$user}&amp;startdate={$holiday->date}&amp;type={$holiday->type}&amp;length={$holiday->length}\">{$GLOBALS['strApproveFree']}</a>";
                 }
                 echo "</td>";
             }
@@ -99,7 +99,7 @@ function display_holiday_table($result)
             if ($approver == TRUE AND $mode == 'approval')
             {
                 echo "<td>";
-                echo check_group_holiday($holiday->userid, $holiday->startdate, $holiday->length);
+                echo check_group_holiday($holiday->userid, $holiday->date, $holiday->length);
                 echo "</td>";
             }
         }
@@ -253,7 +253,7 @@ else
 
             if (strlen($memo) > 3)
             {
-                $holidaylist .= "{$SYSLANG['strCommentsSentWithRequest']}:\n\n";
+                $holidaylist .= "\n{$SYSLANG['strCommentsSentWithRequest']}:\n\n";
                 $holidaylist .= "---\n{$memo}\n---\n\n";
             }
         }
@@ -267,7 +267,7 @@ else
 
         if ($rtnvalue === TRUE)
         {
-            echo "<p align='center'>{$strRequestSent}</p>";
+            echo "<h2>{$strRequestSent}</h2>";
             echo "<p align='center'>".nl2br($holidaylist)."</p>";
         }
         else
