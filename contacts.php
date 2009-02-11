@@ -113,7 +113,7 @@ echo "</td></tr></table>";
 
 if (empty($search_string))
 {
-    trigger_error($strMustEnterASearchString, E_USER_WARNING);
+    echo user_alert(sprintf($strFieldMustNotBeBlank, "'{$strSearch}'"), E_USER_ERROR);
 }
 else
 {
@@ -122,7 +122,7 @@ else
     if ($search_string == '')
     {
         $errors = 1;
-        echo user_alert($strMustEnterASearchString, E_USER_ERROR);
+        echo user_alert(sprintf($strFieldMustNotBeBlank, "'{$strSearch}'"), E_USER_ERROR);
     }
     // search for criteria
     if ($errors == 0)

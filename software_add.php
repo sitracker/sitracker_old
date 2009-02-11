@@ -105,7 +105,7 @@ else
     if ($name == '')
     {
         $errors++;
-        $_SESSION['formerrors']['add_software']['name'] = $strMustEnterSkillName;
+        $_SESSION['formerrors']['add_software']['name'] = user_alert(sprintf($strFieldMustNotBeBlank, "'{$strName}'"), E_USER_ERROR);
     }
     // Check this is not a duplicate
     $sql = "SELECT id FROM `{$dbSoftware}` WHERE LCASE(name)=LCASE('$name') LIMIT 1";

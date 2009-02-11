@@ -135,7 +135,7 @@ echo "</td></tr></table>";
 if ($search_string == '')
 {
         $errors = 1;
-        echo "<p class='error'>{$strMustEnterASearchString}</p>\n";
+        echo user_alert(sprintf($strFieldMustNotBeBlank, "'{$strSearch}'"), E_USER_ERROR);
 }
 
 // search for criteria

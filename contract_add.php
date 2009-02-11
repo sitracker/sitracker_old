@@ -263,25 +263,25 @@ elseif ($action == "add")
     if ($site == 0)
     {
         $errors++;
-        $_SESSION['formerrors']['add_contract']['site'] = "{$strMustSelectSite}\n";
+        $_SESSION['formerrors']['add_contract']['site'] = user_alert(sprintf($strFieldMustNotBeBlank, "'{$strSite}'"), E_USER_ERROR);
     }
     // check for blank product
     if ($product == 0)
     {
         $errors++;
-        $_SESSION['formerrors']['add_contract']['product'] = "{$strMustEnterProduct}\n";
+        $_SESSION['formerrors']['add_contract']['product'] = user_alert(sprintf($strFieldMustNotBeBlank, "'{$strProduct}'"), E_USER_ERROR);
     }
     // check for blank admin contact
     if ($admincontact == 0)
     {
         $errors++;
-        $_SESSION['formerrors']['add_contract']['admincontact'] = "{$strMustSelectAdminContact}\n";
+        $_SESSION['formerrors']['add_contract']['admincontact'] = user_alert(sprintf($strFieldMustNotBeBlank, "'{$strAdminContact}'"), E_USER_ERROR);
     }
     // check for blank expiry day
     if (!isset($expirydate))
     {
         $errors++;
-        $_SESSION['formerrors']['add_contract']['expirydate'] = "{$strMustEnterExpiryDate}\n";
+        $_SESSION['formerrors']['add_contract']['expirydate'] = user_alert(sprintf($strFieldMustNotBeBlank, "'{$strExpiryDate}'"), E_USER_ERROR);
     }
     elseif ($expirydate < $now AND $expirydate != -1)
     {
@@ -353,7 +353,7 @@ elseif ($action == "add")
         if (!$result)
         {
             $addition_errors = 1;
-            $addition_errors_string .= "<p class='error'>{$strAdditionFail}</p>\n";
+            $addition_errors_string .= user_alert($strAdditionFail, E_USER_WARNING);
         }
 
         // Add service

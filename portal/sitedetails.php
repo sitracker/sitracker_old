@@ -50,7 +50,7 @@ if (isset($_POST['submit']))
     if ($name == '')
     {
         $errors = 1;
-        $errors_string .= "<p class='error'>{$strMustEnterName}</p>\n";
+        $errors_string .= user_alert(sprintf($strFieldMustNotBeBlank, "'{$strName}'"), E_USER_ERROR);;
     }
 
     if ($email == '')
@@ -62,7 +62,7 @@ if (isset($_POST['submit']))
     if ($telephone == '')
     {
         $errors = 1;
-    	$errors_string .= "<p class='error'>{$strMustEnterPhoneNum}</p>\n";
+    	$errors_string .= user_alert(sprintf($strFieldMustNotBeBlank, "'{$strTelephone}'"), E_USER_ERROR);
     }
 
     // edit site if no errors

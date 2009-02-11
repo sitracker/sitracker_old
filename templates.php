@@ -380,7 +380,7 @@ elseif ($action == "edit")
     }
     else
     {
-        echo "<p class='error'>{$strMustSelectEmailTemplate}</p>\n";
+        echo user_alert(sprintf($strFieldMustNotBeBlank, "'{$strEmailTemplate}'"), E_USER_ERROR);
     }
 }
 elseif ($action == "delete")

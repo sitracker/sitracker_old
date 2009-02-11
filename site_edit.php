@@ -41,7 +41,7 @@ elseif ($action == "edit")
 {
     if ($site == 0)
     {
-        echo "<p class='error'>{$strMustSelectSite}</p>";
+        user_alert(sprintf($strFieldMustNotBeBlank, "'{$strSite}'"), E_USER_ERROR);
     }
     else
     {
@@ -79,7 +79,7 @@ elseif ($action == "update")
     if ($name == '')
     {
         $errors = 1;
-        $errors_string .= "<p class='error'>{$strMustEnterName}</p>\n";
+        $errors_string .= user_alert(sprintf($strFieldMustNotBeBlank, "'{$strName}'"), E_USER_ERROR);
     }
 
     // edit site if no errors

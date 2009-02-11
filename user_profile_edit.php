@@ -387,7 +387,7 @@ elseif ($mode=='save')
     if ($realname == '')
     {
         $errors = 1;
-        $error_string .= "<h5 class='error'>{$strMustEnterName}</h5>\n";
+        $error_string .= user_alert(sprintf($strFieldMustNotBeBlank, "'{$strName}'"), E_USER_ERROR);
     }
     // check for blank email address
     if ($email == '')

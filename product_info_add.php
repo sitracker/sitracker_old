@@ -53,13 +53,13 @@ else
     if ($product == 0)
     {
         $errors = 1;
-        echo "<p class='error'>{$strMustEnterProduct}</p>\n";
+        echo user_alert(sprintf($strFieldMustNotBeBlank, "'{$strProduct}'"), E_USER_ERROR);
     }
     // check for blank information
     if ($information == '')
     {
         $errors = 1;
-        echo "<p class='error'>{$strMustEnterProductInformation}</p>\n";
+        echo user_alert(sprintf($strFieldMustNotBeBlank, "'{$strQuestion}'"), E_USER_ERROR);
     }
 
     // add product information if no errors

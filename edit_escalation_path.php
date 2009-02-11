@@ -66,7 +66,7 @@ else
     if (empty($name))
     {
         $errors++;
-        echo "<p class='error'>{$strMustEnterNameEscalationPath}</p>\n";
+        echo user_alert(sprintf($strFieldMustNotBeBlank, "'{$strName}'"), E_USER_ERROR);
     }
 
     if ($errors == 0)

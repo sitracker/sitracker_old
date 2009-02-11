@@ -44,7 +44,7 @@ if ($action == "edit")
 {
     // Show edit maintenance form
     include ('./inc/htmlheader.inc.php');
-    if ($maintid == 0) echo "<p class='error'>You must select a contract</p>\n";
+    if ($maintid == 0) echo user_alert(sprintf($strFieldMustNotBeBlank, "'{$strContract}'"), E_USER_ERROR);
     else
     {
         $sql = "SELECT * FROM `{$dbMaintenance}` WHERE id='$maintid'";
@@ -193,25 +193,25 @@ else if ($action == "update")
     if ($reseller == 0)
     {
         $errors = 1;
-        $errors_string .= "<p class='error'>You must select a reseller</p>\n";
+        $errors_string .= user_alert(sprintf($strFieldMustNotBeBlank, "'{$strReseller}'"), E_USER_ERROR);
     }
     // check for blank licence quantity
     if ($licence_quantity == '')
     {
         $errors = 1;
-        $errors_string .= "<p class='error'>You must enter a licence quantity</p>\n";
+        $errors_string .= user_alert(sprintf($strFieldMustNotBeBlank, "'{$strLicenseQuantity}'"), E_USER_ERROR);
     }
     // check for blank admin contact
     if ($admincontact == 0)
     {
         $errors = 1;
-        $errors_string .= "<p class='error'>You must select an admin contact</p>\n";
+        $errors_string .= user_alert(sprintf($strFieldMustNotBeBlank, "'{$strAdminContact}'"), E_USER_ERROR);
     }
     // check for blank expiry day
     if ($expirydate == 0)
     {
         $errors = 1;
-        $errors_string .= "<p class='error'>You must enter an expiry date</p>\n";
+        $errors_string .= user_alert(sprintf($strFieldMustNotBeBlank, "'{$strExpiryDate}'"), E_USER_ERROR);
     }
 
     // update maintenance if no errors
@@ -252,7 +252,7 @@ else if ($action == "update")
         if (!$result)
         {
             include ('./inc/htmlheader.inc.php');
-            echo "<p class='error'>Maintenance update failed)\n";
+            echo user_alert("Update failed", E_USER_WARNING);
             include ('./inc/htmlfooter.inc.php');
         }
         // show success message

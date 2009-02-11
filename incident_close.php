@@ -305,13 +305,13 @@ else
     if ($closingstatus == 0)
     {
         $errors = 1;
-        $error_string = "<p class='error'>{$strMustSelectClosingStatus}</p>\n";
+        $error_string = user_alert(sprintf($strFieldMustNotBeBlank, "'{$strClosingStatus}'"), E_USER_ERROR);
     }
 
     if ($_REQUEST['summary'] == '' && $_REQUEST['solution'] == '')
     {
         $errors = 1;
-        $error_string = "<p class='error'>{$strMustEnterTextInBothSummaryAndSolution}</P>\n";
+        $error_string = user_alert(sprintf($strFieldMustNotBeBlank, "'{$strSummary}' / '$strSolution'"), E_USER_ERROR);
     }
 
     if ($errors == 0)

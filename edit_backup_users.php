@@ -46,7 +46,7 @@ if (empty($save))
     {
         $user = mysql_real_escape_string($_REQUEST['user']);
     }
-    
+
     $default = cleanvar($_REQUEST['default']);
     $softlist = $_REQUEST['softlist'];
 
@@ -63,7 +63,7 @@ if (empty($save))
     $sql .= "WHERE us.softwareid = s.id AND userid='{$user}' ORDER BY name";
     $result = mysql_query($sql);
     $countsw = mysql_num_rows($result);
-    
+
     if ($countsw >= 1)
     {
         echo "<form action='{$_SERVER['PHP_SELF']}' method='post'>\n";
@@ -78,7 +78,7 @@ if (empty($save))
             {
                 $software->backupid=$default;
             }
-            
+
             echo "<td>".software_backup_dropdown('backup[]', $user, $software->id, $software->backupid)."</td>";
             echo "</tr>\n";
             if ($class == 'shade2') $class = "shade1";
@@ -96,7 +96,7 @@ if (empty($save))
     }
     else
     {
-        echo "<h5 class='error'>{$strNoResults}</h5>";
+        echo user_alert($strNoResults, E_USER_WARNING);
     }
     include ('./inc/htmlfooter.inc.php');
 }

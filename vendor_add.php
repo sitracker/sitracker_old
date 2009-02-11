@@ -54,7 +54,7 @@ else
     if ($name == '')
     {
         $errors++;
-        $_SESSION['formerrors']['name'] = $strMustEnterName;
+        $_SESSION['formerrors']['name'] = user_alert(sprintf($strFieldMustNotBeBlank, "'{$strName}'"), E_USER_ERROR);
     }
 
     // add product if no errors

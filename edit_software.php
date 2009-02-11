@@ -120,7 +120,7 @@ else
     if ($name == '')
     {
         $errors = 1;
-        $errors_string .= "<p class='error'>{$strMustEnterName}</p>\n";
+        $errors_string .= user_alert(sprintf($strFieldMustNotBeBlank, "'{$strName}'"), E_USER_ERROR);
     }
     // add product if no errors
     if ($errors == 0)
