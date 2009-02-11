@@ -85,7 +85,7 @@ if ($_SESSION['auth'] != TRUE)
         echo " text-align: center; margin-top: 3em;'>";
         echo "<form id='langselectform' action='login.php' method='post'>";
         echo icon('language', 16, $strLanguage)." <label for='lang'>";
-        echo "{$strLanguage}:  ";
+        echo "{$strLanguage}</label>:  ";
 
         if (!empty($_SESSION['lang'])) $setting = $_SESSION['lang'];
         else $setting = 'default';
