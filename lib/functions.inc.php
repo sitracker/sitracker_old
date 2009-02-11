@@ -2770,24 +2770,29 @@ function send_email($to, $from, $subject, $body, $replyto='', $cc='', $bcc='')
 {
     global $CONFIG, $application_version_string;
 
+    $crlf = "\r\n";
+
     if (empty($to)) trigger_error('Empty TO address in email', E_USER_WARNING);
 
-    $extra_headers  = "From: {$from}\n";
-    if (!empty($replyto)) $extra_headers .= "Reply-To: {$replyto}\n";
+    $extra_headers  = "From: {$from}" . $crlf;
+    if (!empty($replyto)) $extra_headers .= "Reply-To: {$replyto}" . $crlf;
     if (!empty($email_cc))
     {
-        $extra_headers .= "CC: {$cc}\n";
+        $extra_headers .= "CC: {$cc}" . $crlf;
     }
     if (!empty($email_bcc))
     {
-        $extra_headers .= "BCC: {$bcc}\n";
+        $extra_headers .= "BCC: {$bcc}" . $crlf;
     }
-    if (!empty($CONFIG['support_email'])) $extra_headers .= "Errors-To: {$CONFIG['support_email']}\n";
-    $extra_headers .= "X-Mailer: {$CONFIG['application_shortname']} {$application_version_string}/PHP " . phpversion()."\n";
-    $extra_headers .= "X-Originating-IP: {$_SERVER['REMOTE_ADDR']}\n";
-    $extra_headers .= "MIME-Version: 1.0\n";
-    $extra_headers .= "Content-type: text/plain; charset={$GLOBALS['i18ncharset']}\n";
-    $extra_headers .= "\r\n";
+    if (!empty($CONFIG['support_email']))
+    {
+        $extra_headers .= "Errors-To: {$CONFIG['support_email']}" . $crlf;
+    }
+    $extra_headers .= "X-Mailer: {$CONFIG['application_shortname']} {$application_version_string}/PHP " . phpversion() . $crlf;
+    $extra_headers .= "X-Originating-IP: {$_SERVER['REMOTE_ADDR']}" . $crlf;
+    $extra_headers .= "MIME-Version: 1.0" . $crlf;
+    $extra_headers .= "Content-type: text/plain; charset={$GLOBALS['i18ncharset']}" . $crlf;
+//     $extra_headers .= "\r\n";
 
     if ($CONFIG['demo'])
     {

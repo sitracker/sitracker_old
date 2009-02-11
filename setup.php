@@ -1002,7 +1002,9 @@ switch ($_REQUEST['action'])
                             }
                         }
 
-                        // Upgrade schema
+                        /*****************************
+                         * UPGRADE THE SCHEMA        *
+                         *****************************/
                         for ($v=(($installed_version*100)+1); $v<=($application_version*100); $v++)
                         {
                             $html = '';
@@ -1036,7 +1038,9 @@ switch ($_REQUEST['action'])
                             }
                         }
 
-                        // Other special tasks
+                        /******************************
+                         * Do Post-upgrade tasks here *
+                         ******************************/
                         if ($installed_version < 3.21)
                         {
                             echo "<p>Upgrading incidents data from version prior to 3.21...</p>";
