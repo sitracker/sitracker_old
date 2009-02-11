@@ -48,7 +48,7 @@ if ($incidentcontact == $_SESSION['contactid'])
 
         // FIXME i18n ? In db ?
         $reason = "Incident closure requested via the portal by [b]{$user->forenames} {$user->surname}[/b]\n\n";
-        $reason .= "<b>{$SYSLANG['Reason']}:</b> {$_REQUEST['reason']}";
+        $reason .= "<b>{$SYSLANG['Reason']}:</b> ".cleanvar($_REQUEST['reason']);
         $owner = incident_owner($_REQUEST['id']);
         $sql = "INSERT into `{$dbUpdates}` (incidentid, userid, type, currentowner, currentstatus, bodytext, timestamp, customervisibility) ";
         $sql .= "VALUES('{$_REQUEST['id']}', '0', 'customerclosurerequest',  '{$owner}', '1', '{$reason}',
