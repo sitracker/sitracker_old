@@ -117,6 +117,7 @@ $strAListOfAvailableTriggers = 'A list of available triggers and the actions tha
 $strAll = 'All';
 $strAllActivities = 'All Activities';
 $strAllClosed = 'All Closed';
+$strAllContacts = 'All Contacts';
 $strAllDay = 'all day';
 $strAllIncidents = 'All Incidents';
 $strAllOnline = 'All Online';

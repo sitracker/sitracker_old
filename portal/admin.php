@@ -124,27 +124,27 @@ if ($CONFIG['portal_site_incidents'])
             }
             else
             {
-	            echo "<select name='visibility[$row->id]'>";
-	            echo "<option value='no-one'";
-	            if ($row->var_incident_visible_contacts == 'no' AND $row->var_incident_visible_all == 'no')
-	            {
-	            	echo " selected='selected'";
-	            }
-	            echo ">No-one</option>";
-	            echo "<option value='named'";
+                echo "<select name='visibility[$row->id]'>";
+                echo "<option value='no-one'";
+                if ($row->var_incident_visible_contacts == 'no' AND $row->var_incident_visible_all == 'no')
+                {
+                    echo " selected='selected'";
+                }
+                echo ">{$strNobody}</option>";
+                echo "<option value='named'";
                     if ($row->var_incident_visible_contacts == 'yes')
-	            {
-	            	echo " selected='selected'";
-	            }
-	            echo ">{$strNamedContacts}</option>";
-	            echo "<option value='all'";
+                {
+                    echo " selected='selected'";
+                }
+                echo ">{$strNamedContacts}</option>";
+                echo "<option value='all'";
                     if ($row->var_incident_visible_all == 'yes')
-	            {
-	            	echo " selected='selected'";
-	            }
-	            echo ">All Contacts</option></select>";
-	            echo " ".help_link('SiteIncidentVisibility');
-	            echo "</td>";
+                {
+                    echo " selected='selected'";
+                }
+                echo ">{$strAllContacts}</option></select>";
+                echo " ".help_link('SiteIncidentVisibility');
+                echo "</td>";
             }
             echo "<td><a href='contracts.php?id={$row->id}'>{$strViewContract}</a></td></tr>";
         }
