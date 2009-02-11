@@ -83,8 +83,8 @@ switch ($_REQUEST['action'])
         echo colheader('entitlement', $strEntitlement, FALSE);
         echo colheader('holidaysused', $strUsed, FALSE);
         echo colheader('holidaysremaining', sprintf($strRemaining, ''), FALSE);
-        echo colheader('resetdate', "Reset Date", FALSE); // FIXME i18n
-        echo colheader('newentitlement', $strNewEntitlement, FALSE);
+        //echo colheader('resetdate', "Reset Date", FALSE); // FIXME i18n
+        //echo colheader('newentitlement', $strNewEntitlement, FALSE);
         echo "</tr>";
         while ($users = mysql_fetch_object($result))
         {
@@ -102,8 +102,8 @@ switch ($_REQUEST['action'])
             echo "<td style='text-align: right;'>{$entitlement}</td>";
             echo "<td style='text-align: right;'>{$used_holidays}</td>";
             echo "<td style='text-align: right;'>{$remaining_holidays}</td>";
-            echo "<td style='text-align: right;'>{$users->holiday_resetdate}</td>";
-            echo "<td style='text-align: right;'><input type='text' size='4' maxlength='5' value='{$newentitlement}' /></td>";
+            //echo "<td style='text-align: right;'>{$users->holiday_resetdate}</td>";
+            //echo "<td style='text-align: right;'><input type='text' size='4' maxlength='5' value='{$newentitlement}' /></td>";
             echo "</tr>";
         }
         echo "</table>";

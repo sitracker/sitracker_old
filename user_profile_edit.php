@@ -49,7 +49,7 @@ if (empty($mode))
     $user = mysql_fetch_object($result);
 
     echo "<h2>".icon('user', 32)." ";
-    echo sprintf($strEditProfileFor, $user->realname)."</h2>";
+    echo sprintf($strEditProfileFor, $user->realname).' '.gravatar($user->email)."</h2>";
     echo "<form id='edituser' action='{$_SERVER['PHP_SELF']}' method='post'>";
     echo "<table align='center' class='vertical'>";
     echo "<col width='250'></col><col width='*'></col>";

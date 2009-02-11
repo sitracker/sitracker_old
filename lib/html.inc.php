@@ -149,9 +149,9 @@ function gravatar($email, $size = 32, $hyperlink = TRUE)
     }
     $grav_url .= "/avatar.php?";
     $grav_url .= "gravatar_id=".md5(strtolower($email));
-    $grav_url .= "&default=".urlencode($CONFIG['default_gravatar']);
-    $grav_url .= "&size=".$size;
-    $grav_url .= "&rating=G";
+    $grav_url .= "&amp;default=".urlencode($CONFIG['default_gravatar']);
+    $grav_url .= "&amp;size=".$size;
+    $grav_url .= "&amp;rating=G";
 
     if ($hyperlink) $html = "<a href='http://site.gravatar.com/'>";
     $html .= "<img src='{$grav_url}' width='{$size}' height='{$size}' alt='' />";
