@@ -172,18 +172,19 @@ else if ($action == "update")
     if ($surname == '')
     {
         $errors = 1;
-        echo user_alert($strMustEnterSurname, E_USER_ERROR);
+        echo user_alert(sprintf($strFieldMustNotBeBlank, "'{$strSurname}'"), E_USER_ERROR);
     }
     // check for blank site
     if ($siteid == '')
     {
         $errors = 1;
-        echo user_alert($strMustEnterSiteName, E_USER_ERROR);
+        echo user_alert(sprintf($strFieldMustNotBeBlank, "'{$strSiteName}'"), E_USER_ERROR);
     }
     // check for blank name
     if ($email == '' OR $email=='none' OR $email=='n/a')
     {
         $errors = 1;
+        echo user_alert(sprintf($strFieldMustNotBeBlank, "'{$strEmail}'"), E_USER_ERROR);
         echo user_alert($strMustEnterEmail, E_USER_ERROR);
     }
     // check for blank contact id

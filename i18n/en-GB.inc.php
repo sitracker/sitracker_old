@@ -583,6 +583,7 @@ $strFeedIcon = 'Feed Icon';
 $strFewMinutesAgo = 'A few minutes ago';
 # e.g. spreadsheet field
 $strField = 'Field';
+$strFieldMustNotBeBlank = 'The form field %s must not be left blank';
 # e.g. form fields
 $strFields = 'Fields';
 $strFileManagement = 'File Management';
@@ -917,7 +918,6 @@ $strMoveUpdate = 'Move Update';
 $strMovedFromXtoXbyX = 'Moved from %s -&gt; %s by %s';
 $strMultipleActivitiesRunning = 'Multiple Activities Running';
 $strMustCompleteActivitiesBeforeClosure = 'You must complete all activities for the incident before closure.';
-$strMustEnterEmail = 'You must enter an email address';
 $strMustEnterExpiryDate = 'You must enter an expiry date';
 $strMustEnterName = 'You must enter a name';
 $strMustEnterNameEscalationPath = 'You must enter a name for the escalation path';
@@ -926,9 +926,6 @@ $strMustEnterProduct = 'You must select a product';
 $strMustEnterProductInformation = 'You must enter some product information';
 $strMustEnterASearchString = 'You must enter a search string';
 $strMustEnterSkillName = 'You must enter a skill name';
-$strMustEnterSurname = 'You must enter a Surname';
-$strMustEnterSiteName = 'You must enter a site name';
-$strMustSelectASite = 'You must select a site';
 $strMustSelectAdminContact = 'You must select a admin contact';
 $strMustSelectCustomerSite = 'You must select a site for this customer';
 $strMustSelectEmailTemplate = 'You must select an email template';

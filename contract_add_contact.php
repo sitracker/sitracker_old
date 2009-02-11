@@ -78,13 +78,13 @@ else if ($action == "add")
     if ($contactid == 0)
     {
         $errors = 1;
-        $errors_string .= "<p class='error'>You must select a contact</p>\n";
+        $errors_string .= user_alert("You must select a contact", E_USER_ERROR);
     }
     // check for blank maintenance id
     if ($maintid == 0)
     {
         $errors = 1;
-        $errors_string .= "<p class='error'>Something weird has happened, better call technical support</p>\n";
+        trigger_error("Something weird has happened, better call technical support", E_USER_ERROR);
     }
 
     $sql = "SELECT * FROM `{$dbSupportContacts}` WHERE maintenanceid = '{$maintid}' AND contactid = '{$contactid}'";
@@ -94,7 +94,7 @@ else if ($action == "add")
     if (mysql_num_rows($result) > 0)
     {
         $errors = 1;
-        $errors_string .= "<p class='error'>A contact can only be listed once per support contract</p>\n";
+        $errors_string .= user_alert("A contact can only be listed once per support contract", E_USER_ERROR;
     }
 
     // add maintenance support contact if no errors
@@ -108,7 +108,7 @@ else if ($action == "add")
         if (!$result)
         {
             include ('./inc/htmlheader.inc.php');
-            echo "<p class='error'>Addition of support contact failed</p>\n";
+            echo user_alert("Addition of support contact failed", E_USER_WARNING);
             include ('./inc/htmlfooter.inc.php');
         }
         // update database and show success message

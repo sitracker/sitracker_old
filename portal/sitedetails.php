@@ -56,7 +56,7 @@ if (isset($_POST['submit']))
     if ($email == '')
     {
     	$errors = 1;
-    	$errors_string .= "<p class='error'>{$strMustEnterEmail}</p>\n";
+    	$errors_string .= user_alert(sprintf($strFieldMustNotBeBlank, "'{$strEmail}'"), E_USER_ERROR);
     }
 
     if ($telephone == '')

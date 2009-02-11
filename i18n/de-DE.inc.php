@@ -452,7 +452,6 @@ $strMonthView = 'Monats Ansicht';
 $strMore = 'Mehr...';
 $strMorning = 'Morgen';
 $strMultiIncidents = '%d Aufgaben';
-$strMustEnterEmail = 'Email Adresse eingeben';
 $strMustEnterName = 'Name eingeben';
 $strMustEnterProduct = 'Produkt w&auml;hlen';
 $strMustEnterProductInformation = 'Produktinformationen eingeben';

@@ -393,7 +393,7 @@ elseif ($mode=='save')
     if ($email == '')
     {
         $errors = 1;
-        $error_string .= "<h5 class='error'>{$strMustEnterEmail}</h5>\n";
+        $error_string .= user_alert(sprintf($strFieldMustNotBeBlank, "'{$strEmail}'"), E_USER_ERROR);
     }
 
     // Check email address is unique (discount disabled accounts)

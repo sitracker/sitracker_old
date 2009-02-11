@@ -59,7 +59,7 @@ function html_redirect($url, $success = TRUE, $message='')
     $title = $GLOBALS['strPleaseWaitRedirect'];
     if (!$headerdisplayed)
     {
-        if ($_SESSION['portalauth'] = TRUE)
+        if ($_SESSION['portalauth'] == TRUE)
         {
             include ('../inc/portalheader.inc.php');
         }
@@ -101,7 +101,7 @@ function html_redirect($url, $success = TRUE, $message='')
 
     if ($headerdisplayed)
     {
-        if ($_SESSION['portalauth'] = TRUE)
+        if ($_SESSION['portalauth'] == TRUE)
         {
             include ('../inc/htmlfooter.inc.php');
         }
@@ -355,6 +355,7 @@ function array_drop_down($array, $name, $setting='', $attributes='', $usekey = N
   *  E_USER_WARNING would indicate that something is wrong, but nothing needs correcting
   *  E_USER_ERROR would indicate that something is wrong and needs to be corrected
   *               (not a system problem though!)
+  *
 */
 function user_alert($message, $severity, $helpcontext = '')
 {

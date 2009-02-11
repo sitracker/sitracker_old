@@ -81,13 +81,13 @@ elseif ($action == "delete")
     if ($contactid == 0)
     {
         $errors = 1;
-        $errors_string .= "<p class='error'>You must select a support contact</p>\n";
+        $errors_string .= user_alert("You must select a support contact", E_USER_ERROR);
     }
     // check for blank maintenance id
     if ($maintid == 0)
     {
         $errors = 1;
-        $errors_string .= "<p class='error'>You must select a maintenance contract</p>\n";
+        $errors_string .= user_alert("You must select a maintenance contract", E_USER_ERROR);
     }
     // delete maintenance support contact if no errors
     if ($errors == 0)

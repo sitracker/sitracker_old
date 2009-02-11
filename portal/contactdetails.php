@@ -114,7 +114,7 @@ if (cleanvar($_REQUEST['action']) == 'update')
     if ($email == '' OR $email=='none' OR $email=='n/a')
     {
         $errors++;
-        $_SESSION['formerrors']['portalcontactdetails'] .= "<p class='error'>{$strMustEnterEmail}</p>\n";
+        $_SESSION['formerrors']['portalcontactdetails'] .= user_alert(sprintf($strFieldMustNotBeBlank, "'{$strEmail}'"), E_USER_ERROR);
     }
 
     if ($errors == 0)
