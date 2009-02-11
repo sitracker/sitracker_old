@@ -356,7 +356,7 @@ if ($sit[0] != '')
                 if ($key != 'sit' AND $key != 'SiTsessionID')
                 {
                     //$url[]= "{$key}=".$_REQUEST[$key];
-                    $link .= $key."=".$_REQUEST[$key]."&amp;";
+                    $link .= $key."=".strip_tags($_REQUEST[$key])."&amp;";
                 }
             }
             $alink = $file."?".$link.$end;
