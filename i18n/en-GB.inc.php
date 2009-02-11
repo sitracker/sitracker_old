@@ -11,15 +11,15 @@ $i18nAlphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 // list of strings (*ALPHABETICAL ORDER BY (KEY) VARIABLE NAME* - ABCDEFGHIJKLMNOPQRSTUVWXYZ 0123456789)
 
 $str0MeansUnlimited = '0 Means Unlimited';
-$str1Day = '1 Day';
-$str1Minute = '1 Minute';
-$str1Month = '1 Month';
-$str1Hour = '1 Hour';
+$str1Day = '1 day';
+$str1Minute = '1 minute';
+$str1Month = '1 month';
+$str1Hour = '1 hour';
 $str1IncidentsLoggedViaPortal = '1 Incident Logged via the Portal';
-$str1Second = '1 Second';
+$str1Second = '1 second';
 # e.g 1st day of month
 $str1st = '1st';
-$str1Year = '1 Year';
+$str1Year = '1 year';
 # e.g 2nd day of month
 $str2nd = '2nd';
 # e.g 3rd day of month
@@ -29,7 +29,7 @@ $str3rd = '3rd';
 $strAbout = 'About';
 # e.g. About John Smith
 $strAboutPerson = 'About %s';
-$strAboutXMinutesAgo = 'About %d Mins Ago';
+$strAboutXMinutesAgo = 'About %d minutes ago';
 $strAboveMustBeCompletedToAllowDeductions = 'Above must be completed to allow deductions';
 $strAbsentSick = 'Absent Sick';
 $strAcceptingIncidents = 'Accepting Incidents';
@@ -1705,16 +1705,16 @@ $strWorkStatus = 'Work Status';
 $strWebsite = 'Website';
 $strWithheld = 'Withheld';
 
-$strXDays = '%s Days';
+$strXDays = '%s days';
 $strXIncidentsLoggedViaPortal = '%s Incidents Logged via the Portal';
 $strXIncidentsLeft = '%s Incidents Left';
 $strXHasAction = '%s Has Action';
-$strXHour = '%s Hour';
-$strXHours = '%s Hours';
+$strXHour = '%s hour';
+$strXHours = '%s hours';
 # e.g. '5 minutes late'
 $strXLate = '%s late';
-$strXMinutes = '%s Minutes';
-$strXMonths = '%s Months';
+$strXMinutes = '%s minutes';
+$strXMonths = '%s months';
 # e.g. '5 days old'
 $strXold = '%s old';
 # e.g. 'Fred of ACME Inc'. i.e. 'Name' of 'Site'
@@ -1723,7 +1723,7 @@ $strXofX = '%s of %s';
 $strXRecords = '%s Records';
 # e.g. John's Activities
 $strXsActivities = '%s\'s Activities';
-$strXSeconds = '%s Seconds';
+$strXSeconds = '%s seconds';
 # e.g. John's Tasks
 $strXsTasks = '%s\'s Tasks';
 # e.g. 10th day of month
@@ -1732,7 +1732,7 @@ $strXth = '%sth';
 $strXUnitsAtX = '%d units @ %dx';
 $strXWorkingDay = '%s working day';
 $strXWorkingDays = '%s working days';
-$strXYears = '%s Years';
+$strXYears = '%s years';
 
 $strYear = 'Year';
 $strYearly = 'Yearly';
