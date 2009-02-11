@@ -48,7 +48,7 @@ if ($incidentcontact == $_SESSION['contactid'])
 
         // FIXME i18n ? In db ?
         $reason = "Incident closure requested via the portal by [b]{$user->forenames} {$user->surname}[/b]\n\n";
-        $reason .= "<b>{$SYSLANG['Reason']}:</b> ".cleanvar($_REQUEST['reason']);
+        $reason .= "<b>{$SYSLANG['strReason']}:</b> ".cleanvar($_REQUEST['reason']);
         $owner = incident_owner($_REQUEST['id']);
         $sql = "INSERT into `{$dbUpdates}` (incidentid, userid, type, currentowner, currentstatus, bodytext, timestamp, customervisibility) ";
         $sql .= "VALUES('{$_REQUEST['id']}', '0', 'customerclosurerequest',  '{$owner}', '1', '{$reason}',
@@ -57,7 +57,7 @@ if ($incidentcontact == $_SESSION['contactid'])
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
         //set incident back to active
-        $sql = "UPDATE `{$dbIncidents}` SET status=1, lastupdated={$now} WHERE id=$id}";
+        $sql = "UPDATE `{$dbIncidents}` SET status=".STATUS_ACTIVE.", lastupdated={$now} WHERE id=$id}";
         mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 

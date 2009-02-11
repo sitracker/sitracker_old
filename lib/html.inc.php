@@ -59,7 +59,14 @@ function html_redirect($url, $success = TRUE, $message='')
     $title = $GLOBALS['strPleaseWaitRedirect'];
     if (!$headerdisplayed)
     {
-        include ('inc/htmlheader.inc.php');
+        if ($_SESSION['portalauth'] = TRUE)
+        {
+            include ('../inc/portalheader.inc.php');
+        }
+        else
+        {
+            include ('inc/htmlheader.inc.php');
+        }
     }
     else
     {
@@ -94,7 +101,14 @@ function html_redirect($url, $success = TRUE, $message='')
 
     if ($headerdisplayed)
     {
-        include ('inc/htmlfooter.inc.php');
+        if ($_SESSION['portalauth'] = TRUE)
+        {
+            include ('../inc/htmlfooter.inc.php');
+        }
+        else
+        {
+            include ('inc/htmlfooter.inc.php');
+        }
     }
 }
 
