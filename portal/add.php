@@ -128,13 +128,13 @@ else //submit
     $errors = 0;
     if (empty($incidenttitle))
     {
-        $_SESSION['formerrors']['portaladdincident'] .= "<p class='error'>{$strYouMustEnterAnIncidentTitle}</p>";
+        $_SESSION['formerrors']['portaladdincident'] .= user_alert(sprintf($strFieldMustNotBeBlank, "'{$strIncidentTitle}'"), E_USER_ERROR);
         $errors = 1;
     }
 
     if (empty($probdesc))
     {
-        $_SESSION['formerrors']['portaladdincident'] .= "<p class='error'>{$strYouMustEnterAProblemDescription}</p>";
+        $_SESSION['formerrors']['portaladdincident'] .= user_alert(sprintf($strFieldMustNotBeBlank, "'{$strProblemDescription}'"), E_USER_ERROR);
         $errors = 1;
     }
 
@@ -149,8 +149,7 @@ else //submit
             $fieldobj = mysql_fetch_object($result);
             $field = $fieldobj->information;
 
-            $_SESSION['formerrors']['portaladdincident'] .=
-            "<p class='error'>{$strYouMissedARequiredField}: {$field}</p>";
+            $_SESSION['formerrors']['portaladdincident'] .= user_alert(sprintf($strFieldMustNotBeBlank, "'{$field}'"), E_USER_ERROR); // i18n fieldname
             $errors = 1;
         }
     }

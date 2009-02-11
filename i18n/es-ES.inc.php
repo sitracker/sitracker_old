@@ -449,7 +449,6 @@ $strGo = 'Ir';
 $strGroup = 'Grupo';
 $strGroupMembersAway = 'Miembros del grupo fuera';
 $strGroupMembership = 'Miembro del Grupo';
-$strGroupNameMustNotBeEmpty = 'El nombre del grupo no debe estar vacío';
 
 $strHandled = 'Manejado';
 $strHAVESkills = 'TIENE habilidades';
@@ -1248,8 +1247,6 @@ $strYouShouldNowDefineSubstituteEngineers = 'Ahora deberá definir un ingeniero 
 $strYouACurrentlyNotAccepting = 'Usted no está aceptando incidentes actualmente. Puede cambiar esto en el pie de la página principal';
 $strYouMissedARequiredField = 'No informó un campo requerido';
 $strYouMustEnterYourNewPasswordTwice = 'Debe introducir su nueva contraseña dos vces';
-$strYouMustEnterAProblemDescription = 'Debe introducir una descripción del problema';
-$strYouMustEnterAnIncidentTitle = 'Debe introducir un título de incidente';
 $strYourClosedIncidents = 'Sus incidentes cerrados';
 $strYourCurrentIncidents = 'Sus incidentes actuales';
 $strYourCurrentOpenIncidents = 'Sus incidentes abiertos actualmente';

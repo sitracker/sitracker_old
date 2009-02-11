@@ -293,13 +293,13 @@ elseif ($action == "add")
     if ($timed == 'yes' AND ($billtype == 'billperunit' AND ($unitrate == 0 OR trim($unitrate) == '')))
     {
         $errors++;
-        $_SESSION['formerrors']['add_contract']['unitrate'] = "{$strUnitRateMustNotBeBlank}\n";
+        $_SESSION['formerrors']['add_contract']['unitrate'] = user_alert(sprintf($strFieldMustNotBeBlank, "'{$strUnitRate}'"), E_USER_ERROR);
     }
 
     if ($timed == 'yes' AND ($billtype == 'billperincident' AND ($incidentrate == 0 OR trim($incidentrate) == '')))
     {
         $errors++;
-        $_SESSION['formerrors']['add_contract']['incidentrate'] = "{$strIncidentRateMustNotBeBlank}\n";
+        $_SESSION['formerrors']['add_contract']['incidentrate'] = user_alert(sprintf($strFieldMustNotBeBlank, "'{$strIncidentRate}'"), E_USER_ERROR);
     }
 
 

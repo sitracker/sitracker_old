@@ -355,7 +355,6 @@ $strGo = 'Ir';
 $strGroup = 'Grupo';
 $strGroupMembership = 'Membresía de Grupo';
 $strGroupMembersAway = 'Miembros del Grupo afuera';
-$strGroupNameMustNotBeEmpty = 'El nombre del grupo no puede estar vacío';
 
 $strHandled = 'Manejado';
 $strHAVESkills = 'TIENE Habilidades';

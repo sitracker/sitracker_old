@@ -408,7 +408,6 @@ $strGo = '确定';
 $strGroup = '组';
 $strGroupMembership = '组成员';
 $strGroupMembersAway = '离开的组成员';
-$strGroupNameMustNotBeEmpty = '组名不能为空';
 
 $strHandled = '已处理';
 $strHAVESkills = '有技能';

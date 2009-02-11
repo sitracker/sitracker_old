@@ -538,7 +538,6 @@ $strGracePeriod = 'Afdragsfri periode';
 $strGroup = 'Gruppe';
 $strGroupMembersAway = 'Gruppe medlemmer ikke tilstede';
 $strGroupMembership = 'Gruppe medlemsskab';
-$strGroupNameMustNotBeEmpty = 'Gruppenavn må ikke være tomt';
 
 $strHandled = 'Håndteret';
 $strHAVESkills = 'HAR færdigheder';
@@ -1473,8 +1472,6 @@ $strYouShouldNowDefineSubstituteEngineers = 'Du skal nu definere en afløser tek
 $strYouACurrentlyNotAccepting = 'Du accepterer i øjeblikket ingen hændelser. Du kan ændre dette i bunden af din hoved side.';
 $strYouMissedARequiredField = 'Du mangler et påkrævet feldt';
 $strYouMustEnterYourNewPasswordTwice = 'Du skal angive din adgangskode 2 gange';
-$strYouMustEnterAProblemDescription = 'Du skal angive en problem beskrivelse';
-$strYouMustEnterAnIncidentTitle = 'Du skal angive en hændelses titel';
 $strYourClosedIncidents = 'Dine lukkede hændelser';
 $strYourCurrentIncidents = 'Dine aktuelle hændelser';
 $strYourCurrentOpenIncidents = 'Dine aktuelle åbne hændelser';

@@ -258,7 +258,6 @@ $strGo = 'Вперед';
 $strGracePeriod = 'Льготный период';
 $strGroup = 'Группа';
 $strGroupMembership = 'Членство в группе';
-$strGroupNameMustNotBeEmpty = 'Имя группы не может быть пустым';
 
 $strHelp = 'Справка';
 $strHelpAbout = 'О программе';
@@ -653,7 +652,6 @@ $strYesterday = 'Вчера';
 $strYou = 'Вас';
 $strYouMissedARequiredField = 'Вы пропустили обязательное поле';
 $strYouMustEnterYourNewPasswordTwice = 'Вы должны ввести ваш новый пароль дважды';
-$strYouMustEnterAProblemDescription = 'Вы должны ввести описание проблемы';
 $strYourClosedIncidents = 'Ваши закрытые инциденты';
 $strYourCurrentIncidents = 'Ваши текущие инциденты';
 $strYourCurrentOpenIncidents = 'Ваши текущие открытые инциденты';

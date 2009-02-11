@@ -603,19 +603,19 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
         if ($tofield == '')
         {
             $errors = 1;
-            $error_string .= "<p class='error'>{$strYouMissedARequiredField}: '{$strTo}'</p>\n";
+            $error_string .= user_alert(sprintf($strFieldMustNotBeBlank, "'{$strTo}'"), E_USER_ERROR);
         }
         // check from field
         if ($fromfield == '')
         {
             $errors = 1;
-            $error_string .= "<p class='error'>{$strYouMissedARequiredField}: '{$strFrom}'</p>\n";
+            $error_string .= user_alert(sprintf($strFieldMustNotBeBlank, "'{$strFrom}'"), E_USER_ERROR);
         }
         // check reply to field
         if ($replytofield == '')
         {
             $errors = 1;
-            $error_string .= "<p class='error'>{$strYouMissedARequiredField}: '{$strReplyTo}' field</p>\n";
+            $error_string .= user_alert(sprintf($strFieldMustNotBeBlank, "'{$strReplyTo}'"), E_USER_ERROR);
         }
         // Store email body in session if theres been an error
         if ($errors > 0) $_SESSION['temp-emailbody'] = $bodytext;

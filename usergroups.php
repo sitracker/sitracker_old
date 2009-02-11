@@ -42,7 +42,7 @@ switch ($action)
         $group = cleanvar($_REQUEST['group']);
         if (empty($group))
         {
-            html_redirect("usergroups.php", FALSE, $strGroupNameMustNotBeEmpty);
+            html_redirect("usergroups.php", FALSE, sprintf($strFieldMustNotBeBlank, "'{$strName}'"));
             exit;
         }
         $sql = "INSERT INTO `{$dbGroups}` (name) VALUES ('{$group}')";
