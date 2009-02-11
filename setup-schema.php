@@ -1491,7 +1491,7 @@ CREATE TABLE `{$dbUsers}` (
   `var_hideautoupdates` enum('true','false') NOT NULL default 'false',
   `var_hideheader` enum('true','false') NOT NULL default 'false',
   `var_monitor` enum('true','false') NOT NULL default 'true',
-  `var_i18n` varchar(20) default NULL,
+  `var_i18n` varchar(5) NOT NULL default 'en-GB',
   `var_utc_offset` int(11) NOT NULL default '0' COMMENT 'Offset from UTC (timezone)',
   `var_emoticons` enum('true','false') NOT NULL default 'false',
   `listadmin` tinytext,
@@ -2530,6 +2530,9 @@ WHERE `id` =1 AND `signature` LIKE '%Powered by Open Source Software: Support In
 -- KMH 2009-01-31
 ALTER TABLE `{$dbTempIncoming}` ADD `reason_id` TINYINT( 1 ) NOT NULL DEFAULT '1' AFTER `reason_time` ,
  ADD `incident_id` INT( 11 ) NOT NULL DEFAULT '0' AFTER `reason_id` ;
+
+-- KMH 2009-02-11
+ ALTER TABLE `{$dbUsers}` CHANGE `var_i18n` `var_i18n` VARCHAR( 5 ) NOT NULL DEFAULT 'en-GB' 
 ";
 
 // Important: When making changes to the schema you must add SQL to make the alterations
