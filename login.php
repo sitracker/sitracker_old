@@ -75,6 +75,7 @@ elseif (authenticate($username, $_REQUEST['password']) == 1)
     $_SESSION['num_update_view'] = $user->var_num_updates_view;
     $_SESSION['groupid'] = is_null($user->groupid) ? 0 : $user->groupid;
     $_SESSION['utcoffset'] = $user->var_utc_offset;
+    $_SESSION['portalauth'] = FALSE;
 
     // Delete any old session user notices
     $sql = "DELETE FROM `{$dbNotices}` WHERE durability='session' AND userid={$_SESSION['userid']}";
@@ -148,7 +149,7 @@ elseif ($CONFIG['portal'] == TRUE)
 {
     // Invalid user and portal enabled
 
-    // Have a look if this is a contact trying to login 
+    // Have a look if this is a contact trying to login
     $portalpassword = cleanvar($_REQUEST['password']);
 
     // Have a look if this is a contact trying to login via ldap
@@ -169,6 +170,7 @@ elseif ($CONFIG['portal'] == TRUE)
         $_SESSION['siteid'] = $contact->siteid;
         $_SESSION['style'] = $CONFIG['portal_interface_style'];
         $_SESSION['contracts'] = array();
+        $_SESSION['auth'] = FALSE;
 
         //get admin contracts
         if (admin_contact_contracts($_SESSION['contactid'], $_SESSION['siteid']) != NULL)
