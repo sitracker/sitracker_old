@@ -74,19 +74,26 @@ if ($_SESSION['auth'] != TRUE)
     {
         $available_languages = available_languages();
     }
-    $available_languages = array_merge(array('default'=>$strDefault),$available_languages);
-    echo "<div style='margin-left: auto; margin-right: auto; width: 380px;";
-    echo " text-align: center; margin-top: 3em;'>";
-    echo "<form id='langselectform' action='login.php' method='post'>";
-    echo icon('language', 16, $strLanguage)." <label for='lang'>";
-    echo "{$strLanguage}:  ";
+    if (count($available_languages) == 1 AND array_key_exists($CONFIG['default_i18n'], $available_languages))
+    {
+        echo "<!-- Language: {$CONFIG['default_i18n']} -->";
+    }
+    else
+    {
+        $available_languages = array_merge(array('default'=>$strDefault),$available_languages);
+        echo "<div style='margin-left: auto; margin-right: auto; width: 380px;";
+        echo " text-align: center; margin-top: 3em;'>";
+        echo "<form id='langselectform' action='login.php' method='post'>";
+        echo icon('language', 16, $strLanguage)." <label for='lang'>";
+        echo "{$strLanguage}:  ";
 
-    if (!empty($_SESSION['lang'])) $setting = $_SESSION['lang'];
-    else $setting = 'default';
+        if (!empty($_SESSION['lang'])) $setting = $_SESSION['lang'];
+        else $setting = 'default';
 
-    echo array_drop_down($available_languages, 'lang', $setting, "onchange='this.form.submit();'", TRUE);
-    echo "</form>";
-    echo "</div>";
+        echo array_drop_down($available_languages, 'lang', $setting, "onchange='this.form.submit();'", TRUE);
+        echo "</form>";
+        echo "</div>";
+    }
     echo "<div class='windowbox' style='width: 220px;'>\n";
     echo "<div class='windowtitle'>{$CONFIG['application_shortname']} - ";
     echo "{$strLogin}</div>\n";
