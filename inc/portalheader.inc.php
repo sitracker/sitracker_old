@@ -117,7 +117,7 @@ echo "<body>\n";
 echo "<div id='masthead'><h1 id='apptitle'>{$CONFIG['application_name']}</h1></div>\n";
 if (!empty($_SESSION['lang']) AND $_SESSION['lang'] != $CONFIG['default_i18n'])
 {
-    include ("i18n/{$_SESSION['lang']}.inc.php");
+    include ("../i18n/{$_SESSION['lang']}.inc.php");
 }
 require ($lib_path.'strings.inc.php');
 
