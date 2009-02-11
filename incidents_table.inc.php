@@ -219,11 +219,6 @@ while ($incidents = mysql_fetch_array($result))
 
     echo "<tr class='{$class}'>";
     echo "<td align='center'>";
-    // Note: Sales incident type is obsolete
-    if ($incidents['type'] != 'Support')
-    {
-        echo "<strong>".ucfirst($incidents['type'])."</strong>: ";
-    }
 
     echo "<a href='incident_details.php?id={$incidents['id']}' class='direct'>{$incidents['id']}</a>";
     if ($externalid != '') echo "<br />{$externalid}";
@@ -264,6 +259,7 @@ while ($incidents = mysql_fetch_array($result))
     echo htmlspecialchars($site)." </td>";
 
     echo "<td align='center'>";
+    //FIXME functionise
     $slsql = "SELECT COUNT(*) AS count FROM `{$dbServiceLevels}`";
     $slresult = mysql_query($slsql);
     $count_obj = mysql_fetch_object($slresult);
@@ -335,18 +331,18 @@ while ($incidents = mysql_fetch_array($result))
     $targettype = target_type_name($target->type);
     if ($targettype != '')
     {
-        echo $targettype;  //FIXME this needs to be properly i18n'ed
         if ($slaremain > 0)
         {
-            echo " in ".format_workday_minutes($slaremain);  //  ." left"
+            echo sprintf($strSLAInX, $targettype."<br />", format_workday_minutes($slaremain));
         }
         elseif ($slaremain < 0)
         {
-            echo " ".sprintf($strXLate, format_workday_minutes((0 - $slaremain)));  //  ." left"
+            echo $targettype."<br />";
+            echo sprintf($strXLate, format_workday_minutes((0 - $slaremain)));
         }
         elseif ($slaremain == 0)
         {
-            echo " {$strDueNow}";
+            echo $targettype."<br />".$strDueNow;
         }
     }
     else
