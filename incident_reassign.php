@@ -195,7 +195,7 @@ switch ($action)
         }
         echo "</p>";
 
-        if ($countusers > 0)
+        if ($countusers > 0 OR ($countusers == 0 AND $suggested > 0))
         {
             echo "<div id='reassignlist'>";
             echo "<table align='center'>";
