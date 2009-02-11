@@ -335,4 +335,50 @@ function array_drop_down($array, $name, $setting='', $attributes='', $usekey = N
 }
 
 
+/**
+  * Prints a user alert message, these are errors caused by users
+  * that can be corrected by users, as opposed to system errors that should
+  * use trigger_error() instead
+  * @author Ivan Lucas
+  * @param string $message The message to display
+  * @param int severity. Same as php error constants so
+  *                      E_USER_ERROR / 256
+  *                      E_USER_WARNING / 512
+  *                      E_USER_NOTICE / 1024
+  * @param string $helpcontext (optional) - will display a help link. [?]
+  *              to the given help context
+  * @note user_alert message should be displayed in the users local language
+  * and should offer a 'next step' or help, where appropriate
+  *
+  *  E_USER_NOTICE would indicate pure information, nothing is wrong
+  *  E_USER_WARNING would indicate that something is wrong, but nothing needs correcting
+  *  E_USER_ERROR would indicate that something is wrong and needs to be corrected
+  *               (not a system problem though!)
+*/
+function user_alert($message, $severity, $helpcontext = '')
+{
+    switch ($severity)
+    {
+        case E_USER_ERROR:
+            $class = 'alert error';
+            $info = $GLOBALS['strError'];
+        break;
+
+        case E_USER_WARNING:
+            $class = 'alert warning';
+            $info = $GLOBALS['strWarning'];
+        break;
+
+        case E_USER_NOTICE:
+        default:
+            $class = 'alert info';
+            $info = $GLOBALS['strInfo'];
+    }
+    echo "<p class='{$class}'>";
+    if (!empty($helpcontext)) echo help_link($helpcontext);
+    echo "<strong>{$info}</strong>: {$message}";
+    echo "</p>";
+}
+
+
 ?>

@@ -236,6 +236,8 @@ strong.info,em.info,u.info,span.info
 h2.error,h3.error,h4.error,h5.error,p.error { color: red; }
 input.error, textarea.error, select.error { border: 2px solid red; }
 
+p.alert { border-style: inset; }
+
 /* Classes, try and avoid these where possible use other selectors instead  */
 
 /* bright red #FF4433; */

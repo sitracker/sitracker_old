@@ -295,6 +295,9 @@ strong.info,em.info,u.info,span.info
 {
    background: #E1FFFF; border: 1px solid #BFD8D8; padding: 2px; cursor: help;
 }
+
+p.alert { border-style: inset; }
+
 p.trigger
 {
   background-image: url('../images/icons/oxygen/16x16/trigger.png');

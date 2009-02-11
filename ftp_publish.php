@@ -54,15 +54,15 @@ if (!isset($temp_directory))
     echo "<tr><th>{$strDescription}:</th><td><textarea name='longdescription' cols='40' rows='3'></textarea></td></tr>";
     echo "<tr><th>{$strFileVersion}:</th><td><input type='text' name='fileversion' maxlength='50' size='10' /></td></tr>";
     echo "<tr><th>{$strValid}:</th><td>";
-    echo "<input type='radio' name='expiry_none' value='time'> {$strForXDaysHoursMinutes}<br />&nbsp;&nbsp;&nbsp;"; 
+    echo "<input type='radio' name='expiry_none' value='time'> {$strForXDaysHoursMinutes}<br />&nbsp;&nbsp;&nbsp;";
     echo "<input maxlength='3' name='expiry_days' value='{$na_days}' onclick=\"window.document.publishform.expiry_none[0].checked = true;\" size='3' /> {$strDays}&nbsp;";
     echo "<input maxlength='2' name='expiry_hours' value='{$na_hours}' onclick=\"window.document.publishform.expiry_none[0].checked = true;\" size='3' /> {$strHours}&nbsp;";
     echo "<input maxlength='2' name='expiry_minutes' value='{$na_minutes}' onclick=\"window.document.publishform.expiry_none[0].checked = true;\" size='3' /> {$strMinutes}<br />";
     echo "<input type='radio' name='expiry_none' value='date'>{$strUntilSpecificDateAndTime}<br />&nbsp;&nbsp;&nbsp;";
 
-    // Print Listboxes for a date selection    
+    // Print Listboxes for a date selection
     echo "<select name='day' onclick=\"window.document.publishform.expiry_none[1].checked = true;\">";
-    
+
     for ($t_day = 1; $t_day <= 31; $t_day++)
     {
         echo "<option value=\"$t_day\" ";
@@ -72,9 +72,9 @@ if (!isset($temp_directory))
         }
         echo ">$t_day</option>\n";
     }
-    
+
     echo "</select><select name='month' onclick=\"window.document.publishform.expiry_none[1].checked = true;\">";
-    
+
     for ($t_month = 1; $t_month <= 12; $t_month++)
     {
         echo "<option value=\"$t_month\"";
@@ -84,9 +84,9 @@ if (!isset($temp_directory))
         }
         echo ">". date ("F", mktime(0,0,0,$t_month,1,2000)) ."</option>\n";
     }
-    
+
     echo "</select><select name='year' onclick=\"window.document.publishform.expiry_none[1].checked = true;\">";
-    
+
     for ($t_year=(date("Y")-1); $t_year <= (date("Y")+5); $t_year++)
     {
         echo "<option value=\"$t_year\" ";
@@ -96,7 +96,7 @@ if (!isset($temp_directory))
         }
         echo ">$t_year\n";
     }
-    
+
     echo "</select>";
     echo "</td></tr>";
     echo "</table>";

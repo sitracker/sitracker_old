@@ -33,7 +33,7 @@ if (file_exists($helpfile))
 {
     $helptext = file_get_contents($helpfile);
 }
-else echo "<p class='error'>Error: Missing helpfile 'help.html'</p>";
+else trigger_error("Error: Missing helpfile 'help.html'", E_USER_ERROR);
 
 echo $helptext;
 

@@ -105,7 +105,7 @@ elseif ($step == '1')
 
     if ($type == HOL_SICKNESS)
     {
-        echo "<p class='error'>Sickness, can of course only be booked for today or days that have passed.</p>";// FIXME i18n
+        user_alert('Sickness, can of course only be booked for today or days that have passed', E_USER_ERROR); // FIXME i18n
     }
 
     if ($type == HOL_HOLIDAY)
@@ -115,7 +115,7 @@ elseif ($step == '1')
         $holidaystaken = user_count_holidays($user, HOL_HOLIDAY, $holiday_resetdate);
         if (($entitlement - $holidaystaken) <= 0 )
         {
-            echo "<p class='error'>{$strNoHolidayEntitlement}</p>";
+            user_alert($strNoHolidayEntitlement, E_USER_WARNING);
         }
     }
 
