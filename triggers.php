@@ -310,7 +310,7 @@ switch ($_REQUEST['mode'])
                 $result = mysql_query($sql);
                 if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
-                $userarr[0] = $strAll;
+                $userarr[-1] = $strAll;
                 //$userarr[0] = $CONFIG['application_shortname'];
 
                 while ($userobj = mysql_fetch_object($result))
