@@ -322,7 +322,8 @@ switch ($_REQUEST['mode'])
                 echo array_drop_down($userarr, 'user', $selecteduser,
                                     "onchange=\"window.location.href='".
                                     "{$_SERVER['PHP_SELF']}?user=' + ".
-                                    "this.options[this.selectedIndex].value;\"");
+                                    "this.options[this.selectedIndex].value;\"",
+                                    TRUE);
                 echo "</p></form>\n";
             }
             else
@@ -419,7 +420,7 @@ switch ($_REQUEST['mode'])
             }
         }
         echo "</table>";
-        echo "<p align='center'><a href='triggertest.php'>{$strTestTriggers}</a></p>";
+        if ($CONFIG['debug']) echo "<p align='center'><a href='triggertest.php'>{$strTestTriggers}</a></p>";
         include ('./inc/htmlfooter.inc.php');
 }
 ?>
