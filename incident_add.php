@@ -165,6 +165,7 @@ elseif ($action == 'findcontact')
     // Filter by contact
     $contactsql .= "AND (c.surname LIKE '%$search_string%' OR c.forenames LIKE '%$search_string%' ";
     $contactsql .= "OR SOUNDEX('$search_string') = SOUNDEX(CONCAT_WS(' ', c.forenames, c.surname)) ";
+    $contactsql .= "OR SOUNDEX('$search_string') = SOUNDEX(CONCAT_WS(', ', c.surname, c.forenames)) ";
     $contactsql .= "OR s.name LIKE '%$search_string%') ";
 
     $sql  = "SELECT p.name AS productname, p.id AS productid, c.surname AS surname, ";
