@@ -22,7 +22,7 @@ if (empty($_REQUEST['mode']))
     include ('./inc/htmlheader.inc.php');
     echo "<h2>{$title}</h2>";
     echo "<form action='{$_SERVER['PHP_SELF']}' method='post'>";
-    echo "<table align='center'>";
+    echo "<table class='vertical'>";
 
     echo "<tr><th>{$strSiteType}:</td>";
     echo "<td>";

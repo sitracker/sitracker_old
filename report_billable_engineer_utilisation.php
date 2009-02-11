@@ -37,7 +37,7 @@ if (empty($mode) OR $mode == 'showform')
     echo date_picker('report.enddate');
     echo "</td></tr>\n";
 
-    echo "<tr><th>Calculate OTE</th><td>";
+    echo "<tr><th>Calculate Units</th><td>";
     echo "<input type='checkbox' name='calcote' value='yes' />\n";
     echo "</td></tr>";
 

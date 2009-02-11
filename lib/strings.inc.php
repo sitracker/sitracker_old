@@ -73,7 +73,6 @@ $hmenu[1030] = array_merge(array (
                       80=> array ( 'perm'=> 64, 'name'=> $strEscalationPaths, 'url'=>"{$CONFIG['application_webpath']}escalation_paths.php"),
                       90=> array ( 'perm'=> 66, 'name'=> $strManageDashboardComponents, 'url'=>"{$CONFIG['application_webpath']}manage_dashboard.php"),
                       100=> array ( 'perm'=> 78, 'name'=> $strNotices, 'url'=>"{$CONFIG['application_webpath']}notices.php"),
-                      110=> array ( 'perm'=> 22, 'name'=> $strTriggers, 'url'=>"{$CONFIG['application_webpath']}triggers.php"),
                       120=> array ( 'perm'=> 22, 'name'=> $strSystemActions, 'url'=>"{$CONFIG['application_webpath']}triggers.php?user=0"),
                       130=> array ( 'perm'=> 22, 'name'=> $strScheduler, 'url'=>"{$CONFIG['application_webpath']}scheduler.php"),
                       140=> array ( 'perm'=> 49, 'name'=> $strFeedbackForms, 'url'=>"", 'submenu'=>"103090", 'enablevar' => 'feedback_enabled'),

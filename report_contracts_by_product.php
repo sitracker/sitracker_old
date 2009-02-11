@@ -45,7 +45,7 @@ $count = 1;
 $shade = 'shade1';
 foreach ($productlist AS $prod => $contcount)
 {
-    echo "<tr class='$shade'><td>{$count}</td><td>".product_name($prod)."</td><td><a href='../contracts.php?activeonly=yes&amp;productid={$prod}'>{$contcount}</a></td></tr>\n";
+    echo "<tr class='$shade'><td>{$count}</td><td>".product_name($prod)."</td><td><a href='contracts.php?activeonly=yes&amp;productid={$prod}'>{$contcount}</a></td></tr>\n";
     $count++;
     if ($shade=='shade1') $shade='shade2';
     else $shade='shade1';

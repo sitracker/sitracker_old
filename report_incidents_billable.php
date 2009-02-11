@@ -34,7 +34,7 @@ if (empty($mode))
     echo "<h2>{$strBillableIncidentsReport}</h2>";
 
     echo "<form action='{$_SERVER['PHP_SELF']}' method='post' id='billableincidents'>";
-    echo "<table align='center'>";
+    echo "<table class='vertical'>";
     echo "<tr><th>{$strStartDate}:</th>";
     echo "<td><input type='text' name='startdate' id='startdate' size='10' /> ";
     echo date_picker('billableincidents.startdate');
@@ -122,7 +122,7 @@ elseif ($mode == 'report')
                 {
                     echo "<table align='center'>";
                     echo "<tr><th colspan='3'>".site_name($objsite->site)."</th></tr>";
-                    echo "<tr><th>{$strIncidentID}</th><th>{$strTitle}</th><th>{$strBillingCustomerPeriod}</th></tr>";                    
+                    echo "<tr><th>{$strIncidentID}</th><th>{$strTitle}</th><th>{$strBillingCustomerPeriod}</th></tr>";
                     echo $str;
                     echo "</table>";
                 }

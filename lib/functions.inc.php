@@ -4843,7 +4843,7 @@ function dashlet($dashboard, $dashletid, $icon, $title='', $link='', $content=''
 
     $html .= "<div class='windowbox' id='{$dashletid}'>";
     $html .= "<div class='windowtitle'>";
-    $html .= "<div>";
+    $html .= "<div class='innerwindow'>";
     if (function_exists($displayfn))
     {
         $html .= "<a href=\"javascript:get_and_display('ajaxdata.php?action=dashboard_display&amp;dashboard={$dashboard}&amp;did={$dashletid}','win{$dashletid}',true);\">";
