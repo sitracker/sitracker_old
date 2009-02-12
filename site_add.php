@@ -149,17 +149,17 @@ elseif ($action == "add")
     if ($name == '')
     {
         $errors++;
-        $_SESSION['formerrors']['add_site']['name'] = "Site name cannot be blank";
+        $_SESSION['formerrors']['add_site']['name'] = user_alert(sprintf($strFieldMustNotBeBlank, "'{$strSiteName}'"), E_USER_ERROR);
     }
     if ($address1 == '')
     {
         $errors++;
-        $_SESSION['formerrors']['add_site']['address1'] = "Address1 cannot be blank";
+        $_SESSION['formerrors']['add_site']['address1'] = user_alert(sprintf($strFieldMustNotBeBlank, "'{$strAddress1}'"), E_USER_ERROR);
     }
     if ($email == '')
     {
         $errors++;
-        $_SESSION['formerrors']['add_site']['email'] = "Email cannot be blank";
+        $_SESSION['formerrors']['add_site']['email'] = user_alert(sprintf($strFieldMustNotBeBlank, "'{$strEmail}'"), E_USER_ERROR);
     }
 
     // add site if no errors

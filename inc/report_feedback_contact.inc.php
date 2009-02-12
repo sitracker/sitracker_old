@@ -33,7 +33,7 @@ function incident_details_window(incidentid,win)
 ";
 echo "\n//]]>\n</script>";
 echo "<div style='margin: 20px'>";
-echo "<h2><a href='{$CONFIG['application_webpath']}reports/feedback.php'>Feedback</a> Scores: By Contact</h2>";
+echo "<h2><a href='{$CONFIG['application_webpath']}report_feedback.php'>Feedback</a> Scores: By Contact</h2>";
 echo feedback_between_dates();
 echo "<p>This report shows customer responses and a percentage figure indicating the overall positivity of customers toward ";
 echo "incidents logged by the user(s) shown:</p>";
@@ -276,7 +276,7 @@ if (mysql_num_rows($mresult) >= 1)
 
         $prevcontactid=$mrow->contactid;
     }
-    echo "<h2>Summary</h2><p>This graph shows different levels of positivity of the contacts shown above:</p>";
+    echo "<h2>{$strSummary}</h2><p>This graph shows different levels of positivity of the contacts shown above:</p>";
 
 
     $adjust=13;
@@ -300,7 +300,7 @@ if (mysql_num_rows($mresult) >= 1)
 }
 else
 {
-    echo "<p class='error'>No feedback found</p>";
+    echo user_alert("No feedback found", E_USER_WARNING);
 }
 
 echo "</div>\n";

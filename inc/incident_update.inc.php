@@ -755,7 +755,7 @@ else
     if (!$result)
     {
         include ('inc/incident_html_top.inc.php');
-        echo "<p class='error'>{$strUpdateIncidentFailed}</p>\n";
+        echo user_alert($strUpdateIncidentFailed, E_USER_WARNING);
         include ('inc/incident_html_bottom.inc.php');
     }
     else

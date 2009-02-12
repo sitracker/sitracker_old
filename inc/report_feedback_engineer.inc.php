@@ -127,13 +127,13 @@ if (mysql_num_rows($uresult) >= 1)
         }
         else
         {
-            echo "<p class='error'>No feedback found for ".ucfirst($user->realname)."</p>";
+            echo user_alert('No feedback found for '.ucfirst($user->realname), E_USER_WARNING);
         }
     }
 }
 else
 {
-    echo "<p class='error'>Found no users to report on</p>";
+    echo user_alert('Found no users to report on', E_USER_WARNING);;
 }
 echo "</div>\n";
 

@@ -272,7 +272,10 @@ if (mysql_num_rows($mresult) >= 1)
     echo "<div style='background: #99FF00; color: #000; float:left; width: ".($min + ($hundred * $adjust))."px;'>&nbsp;</div>&nbsp; 100% ({$hundred}%)<br />";
     */
 }
-else echo "<p class='error'>No feedback found</p>";
+else
+{
+    echo user_alert('No feedback found', E_USER_WARNING);
+}
 echo "</div>\n";
 
 ?>

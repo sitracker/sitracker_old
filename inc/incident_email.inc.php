@@ -624,14 +624,19 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
         // send email if no errors
         if ($errors == 0)
         {
-            $extra_headers = "Reply-To: $replytofield\nErrors-To: ".user_email($sit[2])."\n";
-            $extra_headers .= "X-Mailer: {$CONFIG['application_shortname']} {$application_version_string}/PHP " . phpversion() . "\n";
-            $extra_headers .= "X-Originating-IP: {$_SERVER['REMOTE_ADDR']}\n";
-            if ($ccfield != '')  $extra_headers .= "CC: $ccfield\n";
-            if ($bccfield != '') $extra_headers .= "BCC: $bccfield\n";
-            $extra_headers .= "\n"; // add an extra crlf to create a null line to separate headers from body
-                                // this appears to be required by some email clients - INL
+            $crlf = "\n";
+            $extra_headers = "Reply-To: $replytofield" . $crlf;
+            $extra_headers .= "Errors-To: ".user_email($sit[2]) . $crlf;
+            if ($ccfield != '')  $extra_headers .= "CC: $ccfield" . $crlf;
+            if ($bccfield != '') $extra_headers .= "BCC: $bccfield" . $crlf;
+            $extra_headers .= "X-Mailer: {$CONFIG['application_shortname']} {$application_version_string}/PHP " . phpversion() . $crlf;
+            $extra_headers .= "X-SiT-User: {$_SESSION['username']}" . $crlf;
+            $extra_headers .= "X-Originating-IP: {$_SERVER['REMOTE_ADDR']}" . $crlf;
 
+            $extra_headers .= $crlf; //"\n"; // add an extra crlf to create a null line to separate headers from body
+                                // this appears to be required by some email clients - INL
+debug_log($extra_headers);
+debug_log($bodytext);
             $mime = new MIME_mail($fromfield, $tofield, html_entity_decode($subjectfield), '', $extra_headers, $mailerror);
             $mime -> attach($bodytext, '', "text-plain; charset={$GLOBALS['i18ncharset']}", 'quoted-printable');
 
@@ -646,7 +651,7 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
                 // Check file size before sending
                 if (filesize($filename) > $CONFIG['upload_max_filesize'] || filesize($filename)==FALSE)
                 {
-                    trigger_error("User Error: Attachment too large or file upload error, filename: $filename,  perms: ".fileperms($filename).", size:",filesize($filename), E_USER_WARNING);
+                    trigger_error("User Error: Attachment too large or file upload error, filename: $filename,  perms: ".fileperms($filename).", size:".filesize($filename), E_USER_WARNING);
                     // throwing an error isn't the nicest thing to do for the user but there seems to be no way of
                     // checking file sizes at the client end before the attachment is uploaded. - INL
                 }
@@ -860,7 +865,7 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
             else
             {
                 include ('inc/incident_html_top.inc.php');
-                echo "<p class='error'>{$SYSLANG['strErrorSendingEmail']}: $mailerror</p>\n";
+                echo user_alert("{$strErrorSendingEmail}: {$mailerror}", E_USER_WARNING);
                 include ('inc/incident_html_bottom.inc.php');
             }
         }
@@ -868,7 +873,7 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
         {
             // there were errors
             include ('inc/incident_html_top.inc.php');
-            echo $error_string;
+            echo user_alert("There were errors: $error_string", E_USER_WARNING);
             include ('inc/incident_html_bottom.inc.php');
         }
     break;

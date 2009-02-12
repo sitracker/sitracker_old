@@ -187,7 +187,7 @@ elseif ($action == "update")
             $aresult = mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
-            if (!$aresult) echo "<p class='error'>Update of role permissions failed on pass 1\n";
+            if (!$aresult) echo user_alert("Update of role permissions failed on pass 1", E_USER_WARNING);
 
             // Second pass, loop through checkbox array setting access to true where boxes are checked
             if (is_array($_POST["{$rolerow->id}perm"]))
@@ -208,7 +208,7 @@ elseif ($action == "update")
                         $isql .= "VALUES ('{$rolerow->id}', '".$x[1]."', 'true')";
                         $iresult = mysql_query($isql);
                         if (mysql_error()) trigger_error(mysql_error(), E_USER_ERROR);
-                        if (mysql_affected_rows() < 1) echo "<p class='error'>Update of user permission ".$x[1]." failed on pass 2\n";
+                        if (mysql_affected_rows() < 1) echo user_alert("Update of user permission ".$x[1]." failed on pass 2", E_USER_WARNING);
                     }
                 }
             }
@@ -249,7 +249,7 @@ elseif ($action == "update")
                     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
                     if (mysql_affected_rows() < 1)
                     {
-                        echo "<p class='error'>Update of user permission ".$x[1]." failed on pass 2\n";
+                        echo user_alert("Update of user permission ".$x[1]." failed on pass 2", E_USER_WARNING);
                     }
                 }
             }
@@ -265,7 +265,7 @@ elseif ($action == "update")
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
-        if (!$result) echo "<p class='error'>Update of role permissions failed on pass 1\n";
+        if (!$result) echo user_alert("Update of role permissions failed on pass 1", E_USER_WARNING);
         else
         {
             html_redirect("manage_users.php");
@@ -291,7 +291,7 @@ elseif ($action == "update")
                     $isql .= "VALUES ('$role', '".$x[1]."', 'true')";
                     $iresult = mysql_query($isql);
                     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
-                    if (mysql_affected_rows() < 1) echo "<p class='error'>Update of user permission ".$x[1]." failed on pass 2\n";
+                    if (mysql_affected_rows() < 1) echo user_alert("Update of user permission ".$x[1]." failed on pass 2", E_USER_WARNING);
                 }
             }
         }
@@ -352,11 +352,14 @@ elseif ($action == "check")
             echo "</table>";
         } else echo "<p align='center'>{$strNone}</p>";
     }
-    else echo "<p class='error'>No permission specified</p>";
+    else
+    {
+        echo user_alert(sprintf($strFieldMustNotBeBlank, "'{$strPermission}'"), E_USER_ERROR);
+    }
 }
 else
 {
-    echo "<p class='error'>No changes to make</p>";
+    echo user_alert("No changes to make", E_USER_WARNING);
 }
 include ('./inc/htmlfooter.inc.php');
 ?>

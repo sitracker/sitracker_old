@@ -86,7 +86,7 @@ elseif ($type == 'byengineer')
 }
 elseif ($type == 'bycustomer')
 {
-    include ('./inc/report/feedback_contact.inc.php');
+    include ('./inc/report_feedback_contact.inc.php');
 }
 elseif ($type == 'bysite')
 {

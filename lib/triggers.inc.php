@@ -317,7 +317,7 @@ function replace_vars(&$ttvar, &$triggerid, &$identifier, &$paramarray, $require
     //if we're able to use this variable
     if ($usetvar)
     {
-        debug_log("Using $identifier");
+        //debug_log("Using $identifier");
         $trigger_regex = "/{$identifier}/s";
         if (!empty($ttvar['replacement']))
         {

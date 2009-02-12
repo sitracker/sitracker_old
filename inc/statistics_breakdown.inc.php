@@ -77,7 +77,7 @@ if (mysql_num_rows($result) > 0)
 }
 else
 {
-    echo "<p class='error'>{$strNoRecords}</p>";
+    echo user_alert($strNoRecords, E_USER_WARNING);
 }
 
 ?>

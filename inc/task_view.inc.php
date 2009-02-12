@@ -29,7 +29,7 @@ if (mysql_num_rows($result) >= 1)
     $task = mysql_fetch_object($result);
     if ($task->distribution == 'private' AND $task->owner != $sit[2])
     {
-        echo "<p class='error'>{$strTaskPrivateError}</p>";
+        echo user_alert($strTaskPrivateError, E_USER_ERROR);
     }
     elseif ($mode != 'incident')
     {
@@ -121,7 +121,10 @@ if (mysql_num_rows($result) >= 1)
         echo "</div>";
     }
 }
-else echo "<p class='error'>{$strNoMatchingTask}</p>";
+else
+{
+    echo user_alert($strNoMatchingTask, E_USER_WARNING);
+}
 
 if ($mode != 'incident') echo "</div>";
 echo "<div style='clear:both; padding-top: 20px;'>";
