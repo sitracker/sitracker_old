@@ -10,6 +10,9 @@
 
 // Author: Ivan Lucas, <ivanlucas[at]users.sourceforge.net
 
+// Turn off all error reporting so we don't publish directory structs
+error_reporting(0);
+
 $lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
 $permission = 0; // no permission required
 
@@ -19,6 +22,7 @@ require ($lib_path.'functions.inc.php');
 $accesslevel = 'any';
 
 require ($lib_path.'portalauth.inc.php');
+
 // External variables
 $id = cleanvar(intval($_GET['id']));
 
@@ -72,6 +76,8 @@ if (!file_exists($file_fspath) AND !file_exists($old_style))
 }
 elseif ($access == TRUE)
 {
+    if (file_exists($old_style)) $file_fspath = $old_style;
+
     $file_size = filesize($file_fspath);
     $fp = fopen($file_fspath, 'r');
 
