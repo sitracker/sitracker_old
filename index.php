@@ -45,12 +45,12 @@ if ($_SESSION['auth'] != TRUE)
 
     if ($id == 2)
     {
-        echo "<p class='error'>{$strSessionExpired}</p><br />";
+        echo user_alert($strSessionExpired, E_USER_ERROR);
     }
 
     if ($id == 3)
     {
-        throw_user_error("{$strInvalidCredentials}");
+        echo user_alert($strInvalidCredentials, E_USER_ERROR);
     }
 
     // Check this is current

@@ -86,18 +86,18 @@ if (empty($mode))
     echo "<table class='vertical'>";
 
     echo "<tr><th>{$strType}:</th><td>";
-    echo "<input type='radio' name='mode' value='summarypage' id='summarypage' onclick=\"$('startdatesection').hide();" .
-            " $('enddatesection').hide(); $('sitebreakdownsection').hide(); $('displaysection').show(); $('showfoc').show(); $('showfocaszero').show();\" checked='checked' />{$strSummary} ";
+    echo "<label><input type='radio' name='mode' value='summarypage' id='summarypage' onclick=\"$('startdatesection').hide();" .
+            " $('enddatesection').hide(); $('sitebreakdownsection').hide(); $('displaysection').show(); $('showfoc').show(); $('showfocaszero').show();\" checked='checked' />{$strSummary}</label> ";
     if (user_permission($sit[2], 73) == TRUE)
     {
-        echo "<input type='radio' name='mode' value='approvalpage' id='approvalpage' onclick=\"$('startdatesection').show();" .
-                " $('enddatesection').show(); $('sitebreakdownsection').hide(); $('displaysection').hide(); $('showfoc').hide(); $('showfocaszero').hide();\" />{$strApprove} ";
+        echo "<label><input type='radio' name='mode' value='approvalpage' id='approvalpage' onclick=\"$('startdatesection').show();" .
+                " $('enddatesection').show(); $('sitebreakdownsection').hide(); $('displaysection').hide(); $('showfoc').hide(); $('showfocaszero').hide();\" />{$strApprove}</label> ";
     }
 
     if (user_permission($sit[2], 76) == TRUE)
     {
-        echo "<input type='radio' name='mode' value='transactions' id='transactions' onclick=\"$('startdatesection').show(); " .
-                "$('enddatesection').show(); $('sitebreakdownsection').show(); $('displaysection').show(); $('showfoc').show(); $('showfocaszero').show();\" />{$strTransactions} ";
+        echo "<label><input type='radio' name='mode' value='transactions' id='transactions' onclick=\"$('startdatesection').show(); " .
+                "$('enddatesection').show(); $('sitebreakdownsection').show(); $('displaysection').show(); $('showfoc').show(); $('showfocaszero').show();\" />{$strTransactions}</label> ";
     }
     echo "</td></tr>\n";
 
@@ -285,7 +285,7 @@ elseif ($mode == 'approvalpage')
             // TODO FIXME only retrieve necessary fields
             $sql = "SELECT i.id, i.owner, i.contact, i.title, i.closed, i.opened, t.transactionid FROM `{$GLOBALS['dbTransactions']}` AS t, `{$GLOBALS['dbLinks']}` AS l, `{$GLOBALS['dbIncidents']}` AS i ";
             $sql .= ", `{$GLOBALS['dbContacts']}` AS c WHERE ";
-            $sql .= "t.transactionid = l.origcolref AND t.transactionstatus = ".AWAITINGAPPROVAL." AND linktype= 6 AND l.linkcolref = i.id AND i.contact = c.id AND c.siteid = {$objsite->site} ";
+            $sql .= "t.transactionid = l.origcolref AND t.transactionstatus = ".BILLING_AWAITINGAPPROVAL." AND linktype= 6 AND l.linkcolref = i.id AND i.contact = c.id AND c.siteid = {$objsite->site} ";
             if ($startdate != 0)
             {
                 $sql .= "AND i.closed >= {$startdate} ";

@@ -2426,36 +2426,6 @@ function debug_log($logentry)
 }
 
 
-/**
-    * Displays user errors
-    * @param mixed $message An error string or an array of error strings
-    * @returns string HTML
-*/
-function throw_user_error($message, $details='')
-{
-    $html = "<div class='error'>";
-    if (is_array($message)) echo "<p class='error'>{$GLOBALS['strError']}</p>";
-
-    if (is_array($message))
-    {
-        $html .= "<ul>";
-        // Loop through the array
-        foreach ($message AS $msg)
-        {
-            $html .= "<li>{$msg}</li>";
-        }
-        $html .- "</ul>";
-    }
-    else
-    {
-        $html .= "<p class='error'>{$message}</p>";
-    }
-
-    $html .= "</div>\n";
-
-    echo $html;
-}
-
 
 /*  prints the HTML for a drop down list of     */
 /* sites, with the given name and with the given id selected. */

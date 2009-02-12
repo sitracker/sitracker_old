@@ -522,12 +522,18 @@ function contexthelp(elem, context, auth)
 }
 
 
+/**
+  * Open an incident window for the incident number specified in the 'jump to' search field
+*/
 function jumpto()
 {
     incident_details_window(document.jumptoincident.incident.value, 'incident'+document.jumptoincident.incident.value);
 }
 
 
+/**
+  * Clear/reset the 'jump to' search field
+*/
 function clearjumpto()
 {
     $('searchfield').value = "";
@@ -731,6 +737,11 @@ function dismissNotice(noticeid, userid)
 }
 
 
+/**
+  * Toggle the display of an experimental menu panel
+  * @author Ivan Lucas
+  * FIXME experimental
+*/
 function toggleMenuPanel()
 {
     if ($('menupanel').style.display == 'block')

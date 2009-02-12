@@ -30,7 +30,7 @@ if (mysql_error()) trigger_error("Error getting transaction ".mysql_error());
 if (mysql_num_rows($result) > 0)
 {
 	$obj = mysql_fetch_object($result);
-    if ($obj->transactionstatus == AWAITINGAPPROVAL)
+    if ($obj->transactionstatus == BILLING_AWAITINGAPPROVAL)
     {
     	// function update_contract_balance($contractid, $description, $amount, $serviceid='', $transactionid='', $totalunits=0, $totalbillableunits=0, $totalrefunds=0)
         $r = update_contract_balance('', '', $obj->amount, $obj->serviceid, $obj->transactionid);

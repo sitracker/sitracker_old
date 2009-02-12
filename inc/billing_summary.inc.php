@@ -84,9 +84,9 @@ if (mysql_numrows($result) > 0)
 
         $totalcredit += $obj->creditamount;
         $totalbalance += $obj->balance;
-        $awaitingapproval = service_transaction_total($obj->serviceid, AWAITINGAPPROVAL)  * -1;
+        $awaitingapproval = service_transaction_total($obj->serviceid, BILLING_AWAITINGAPPROVAL)  * -1;
         $totalawaitingapproval += $awaitingapproval;
-        $reserved = service_transaction_total($obj->serviceid, RESERVED) * -1;
+        $reserved = service_transaction_total($obj->serviceid, BILLING_RESERVED) * -1;
         $totalreserved += $reserved;
 
         $actual = ($obj->balance - $awaitingapproval) - $reserved;

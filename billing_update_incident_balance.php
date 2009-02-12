@@ -24,7 +24,7 @@ $incidentid = cleanvar($_REQUEST['incidentid']);
 
 if (empty($mode))
 {
-    include ('../inc/htmlheader.inc.php');
+    include ('inc/htmlheader.inc.php');
 
     echo "<h2>".sprintf($strUpdateIncidentXsBalance, $incidentid)."</h2>";
 
@@ -46,7 +46,7 @@ if (empty($mode))
 
     echo "</form>";
 
-    include ('../inc/htmlfooter.inc.php');
+    include ('inc/htmlfooter.inc.php');
 }
 elseif ($mode == 'update')
 {
@@ -110,23 +110,23 @@ elseif ($mode == 'update')
             $transactionid = get_incident_transactionid($incidentid);
             if ($transactionid != FALSE)
             {
-            	$r = update_transaction($transactionid, $cost, $desc, AWAITINGAPPROVAL);
-                if ($r) html_redirect('../billable_incidents.php', TRUE, $strUpdateSuccessful);
-                else html_redirect('../billable_incidents.php', FALSE, $strUpdateFailed);
+            	$r = update_transaction($transactionid, $cost, $desc, BILLING_AWAITINGAPPROVAL);
+                if ($r) html_redirect('billable_incidents.php', TRUE, $strUpdateSuccessful);
+                else html_redirect('billable_incidents.php', FALSE, $strUpdateFailed);
             }
             else
             {
-            	html_redirect('../billable_incidents.php', FALSE, $strUpdateFailed);
+            	html_redirect('billable_incidents.php', FALSE, $strUpdateFailed);
             }
         }
         else
         {
-            html_redirect('../billable_incidents.php', FALSE, $strUpdateFailed);
+            html_redirect('billable_incidents.php', FALSE, $strUpdateFailed);
         }
     }
     else
     {
-        html_redirect('../billable_incidents.php', FALSE, "Failed to find date incident closed");
+        html_redirect('billable_incidents.php', FALSE, "Failed to find date incident closed");
     }
 }
 

@@ -13,14 +13,15 @@ if (realpath(__FILE__) == realpath($_SERVER['SCRIPT_FILENAME']))
     exit;
 }
 
-define ("APPROVED", 0);
-define ("AWAITINGAPPROVAL", 5);
-define ("RESERVED", 10);
+define ("BILLING_APPROVED", 0);
+define ("BILLING_AWAITINGAPPROVAL", 5);
+define ("BILLING_RESERVED", 10);
 
 /**
-* Returns if the contact has a timed contract or if the site does in the case of the contact not.
-* @author Paul Heaney
-* @return either NO_BILLABLE_CONTRACT, CONTACT_HAS_BILLABLE_CONTRACT or SITE_HAS_BILLABLE_CONTRACT the latter is if the site has a billable contract by the contact isn't a named contact
+  * Returns if the contact has a timed contract or if the site does in the case of the contact not.
+  * @author Paul Heaney
+  * @param int $contactid
+  * @return either NO_BILLABLE_CONTRACT, CONTACT_HAS_BILLABLE_CONTRACT or SITE_HAS_BILLABLE_CONTRACT the latter is if the site has a billable contract by the contact isn't a named contact
 */
 function does_contact_have_billable_contract($contactid)
 {
@@ -425,7 +426,7 @@ function get_contract_balance($contractid, $includenonapproved = FALSE, $showonl
     if ($includenonapproved)
     {
         // Need to get sum of non approved incidents for this contract and deduct
-        $balance += contract_transaction_total($contractid, AWAITINGAPPROVAL);
+        $balance += contract_transaction_total($contractid, BILLING_AWAITINGAPPROVAL);
     }
 
     if ($includereserved)
@@ -489,7 +490,7 @@ function reserve_monies($serviceid, $linktype, $linkref, $amount, $description)
     if ($balance != FALSE)
     {
     	$sql = "INSERT INTO `{$GLOBALS['dbTransactions']}` (serviceid, amount, description, userid, dateupdated, transactionstatus) ";
-        $sql .= "VALUES ('{$serviceid}', '{$amount}', '{$description}', '{$_SESSION['userid']}', '".date('Y-m-d H:i:s', $now)."', '".RESERVED."')";
+        $sql .= "VALUES ('{$serviceid}', '{$amount}', '{$description}', '{$_SESSION['userid']}', '".date('Y-m-d H:i:s', $now)."', '".BILLING_RESERVED."')";
         $result = mysql_query($sql);
         if (mysql_error())
         {
@@ -532,12 +533,12 @@ function reserve_monies($serviceid, $linktype, $linkref, $amount, $description)
 function transition_reserved_monites($transactionid, $amount, $description='')
 {
     $rtnvalue = TRUE;
-	$sql = "UPDATE `{$GLOBALS['dbTransactions']}` SET amount = {$amount}, transactionstatus = ".AWAITINGAPPROVAL." ";
+	$sql = "UPDATE `{$GLOBALS['dbTransactions']}` SET amount = {$amount}, transactionstatus = ".BILLING_AWAITINGAPPROVAL." ";
     if (!empty($description))
     {
     	$sql .= ", description = '{$description}' ";
     }
-    $sql .= "WHERE transactionid = {$transactionid} AND transactionstatus = ".RESERVED;
+    $sql .= "WHERE transactionid = {$transactionid} AND transactionstatus = ".BILLING_RESERVED;
     mysql_query($sql);
 
     if (mysql_error())
@@ -564,7 +565,7 @@ function transition_reserved_monites($transactionid, $amount, $description='')
 function unreserve_monies($transactionid, $linktype)
 {
 	$rtnvalue = FALSE;
-    $sql = "DELETE FROM `{$GLOBALS['dbTransactions']}` WHERE transactionid = {$transactionid} AND transactionstatus = ".RESERVED;
+    $sql = "DELETE FROM `{$GLOBALS['dbTransactions']}` WHERE transactionid = {$transactionid} AND transactionstatus = ".BILLING_RESERVED;
     mysql_query($sql);
 
     if (mysql_error()) trigger_error("Error unreserving monies ".mysql_error(), E_USER_ERROR);
@@ -599,7 +600,7 @@ function unreserve_monies($transactionid, $linktype)
  */
 function update_reservation($transactionid, $amount, $description='')
 {
-    return update_transaction($transactionid, $amount, $description, RESERVED);
+    return update_transaction($transactionid, $amount, $description, BILLING_RESERVED);
 }
 
 
@@ -609,12 +610,12 @@ function update_reservation($transactionid, $amount, $description='')
  * @param int $transactionid The transaction ID to update
  * @param int $amount The amount to set the transaction to
  * @param string $description (optional) the description to set on the transaction
- * @param int $status either RESERVERED or AWAITINGAPPROVAL
+ * @param int $status either RESERVERED or BILLING_AWAITINGAPPROVAL
  * @return bool TRUE on a sucessful update FALSE otherwise
  */
 function update_transaction($transactionid, $amount, $description='', $status)
 {
-    if ($status == APPROVED)
+    if ($status == BILLING_APPROVED)
     {
     	trigger_error("You cant change a approved transaction", E_USER_ERROR);
         exit;
@@ -721,7 +722,7 @@ function close_billable_incident($incidentid)
             $date = date('Y-m-d H:i:s', $now);
 
             $sql = "INSERT INTO `{$GLOBALS['dbTransactions']}` (serviceid, totalunits, totalbillableunits, totalrefunds, amount, description, userid, dateupdated, transactionstatus) ";
-            $sql .= "VALUES ('{$serviceid}', '{$totalunits}',  '{$totalbillableunits}', '{$totalrefunds}', '{$cost}', '{$desc}', '{$_SESSION['userid']}', '{$date}', '".AWAITINGAPPROVAL."')";
+            $sql .= "VALUES ('{$serviceid}', '{$totalunits}',  '{$totalbillableunits}', '{$totalrefunds}', '{$cost}', '{$desc}', '{$_SESSION['userid']}', '{$date}', '".BILLING_AWAITINGAPPROVAL."')";
 
             $result = mysql_query($sql);
             if (mysql_error())
@@ -768,7 +769,7 @@ function approve_incident_transaction($transactionid)
 
     // Check transaction exists, and is awaiting approval and is an incident
     $sql = "SELECT l.linkcolref, t.serviceid FROM `{$GLOBALS['dbLinks']}` AS l, `{$GLOBALS['dbTransactions']}` AS t ";
-    $sql .= "WHERE t.transactionid = l.origcolref AND t.transactionstatus = ".AWAITINGAPPROVAL." AND l.linktype = 6 AND t.transactionid = {$transactionid}";
+    $sql .= "WHERE t.transactionid = l.origcolref AND t.transactionstatus = ".BILLING_AWAITINGAPPROVAL." AND l.linktype = 6 AND t.transactionid = {$transactionid}";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("Error identify incident transaction. ".mysql_error(), E_USER_WARNING);
     if (mysql_num_rows($result) > 0)
@@ -878,7 +879,7 @@ function update_contract_balance($contractid, $description, $amount, $serviceid=
         if (empty($transactionid))
         {
             $sql = "INSERT INTO `{$dbTransactions}` (serviceid, totalunits, totalbillableunits, totalrefunds, amount, description, userid, dateupdated, transactionstatus) ";
-            $sql .= "VALUES ('{$serviceid}', '{$totalunits}', '{$totalbillableunits}', '{$totalrefunds}', '{$amount}', '{$description}', '{$_SESSION['userid']}', '{$date}', '".APPROVED."')";
+            $sql .= "VALUES ('{$serviceid}', '{$totalunits}', '{$totalbillableunits}', '{$totalrefunds}', '{$amount}', '{$description}', '{$_SESSION['userid']}', '{$date}', '".BILLING_APPROVED."')";
             $result = mysql_query($sql);
 
             $rtnvalue = mysql_insert_id();
@@ -886,7 +887,7 @@ function update_contract_balance($contractid, $description, $amount, $serviceid=
         else
         {
             $sql = "UPDATE `{$dbTransactions}` SET serviceid = {$serviceid}, totalunits = {$totalunits}, totalbillableunits = {$totalbillableunits}, totalrefunds = {$totalrefunds} ";
-            $sql .= ", amount = {$amount}, userid = {$_SESSION['userid']} , dateupdated = '{$date}', transactionstatus = '".APPROVED."' ";
+            $sql .= ", amount = {$amount}, userid = {$_SESSION['userid']} , dateupdated = '{$date}', transactionstatus = '".BILLING_APPROVED."' ";
             if (!empty($description))
             {
             	$sql .= ", description = '{$description}' ";
@@ -939,7 +940,7 @@ function maintid_from_transaction($transactionid)
  * Returns the total value of inicidents in a particular status
  * @author Paul Heaney
  * @param int $contractid. Contract ID of the contract to find total value of inicdents awaiting approval
- * @param int $status The type you are after e.g. AWAITINGAPPROVAL, APPROVED, RESERVED
+ * @param int $status The type you are after e.g. BILLING_AWAITINGAPPROVAL, BILLING_APPROVED, BILLING_RESERVED
  * @return int The total value of all incidents awaiting approval logged against the contract
  */
 function contract_transaction_total($contractid, $status)
@@ -1004,12 +1005,12 @@ function get_service_balance($serviceid, $includeawaitingapproval = TRUE, $inclu
         list($balance) = mysql_fetch_row($result);
         if ($includeawaitingapproval)
         {
-        	$balance += service_transaction_total($serviceid, AWAITINGAPPROVAL);
+        	$balance += service_transaction_total($serviceid, BILLING_AWAITINGAPPROVAL);
         }
 
         if ($includereserved)
         {
-        	$balance += service_transaction_total($serviceid, RESERVED);
+        	$balance += service_transaction_total($serviceid, BILLING_RESERVED);
         }
     }
     return $balance;
@@ -1029,7 +1030,7 @@ function is_billable_incident_approved($incidentid)
     $sql .= "AND l.origcolref = t.transactionid ";
     $sql .= "AND linkcolref = {$incidentid} ";
     $sql .= "AND direction = 'left' ";
-    $sql .= "AND t.transactionstatus = '".APPROVED."'";
+    $sql .= "AND t.transactionstatus = '".BILLING_APPROVED."'";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
@@ -1102,8 +1103,8 @@ function contract_service_table($contractid, $billing)
             if ($billing)
             {
                 $balance = get_service_balance($service->serviceid);
-                $awaitingapproval = service_transaction_total($service->serviceid, AWAITINGAPPROVAL) * -1;
-                $reserved = service_transaction_total($service->serviceid, RESERVED) * -1;
+                $awaitingapproval = service_transaction_total($service->serviceid, BILLING_AWAITINGAPPROVAL) * -1;
+                $reserved = service_transaction_total($service->serviceid, BILLING_RESERVED) * -1;
 
                 $span = '';
                 if (!empty($service->title))
@@ -1583,13 +1584,13 @@ function contract_unit_balance($contractid, $includenonapproved = FALSE, $includ
 
     if ($includenonapproved)
     {
-        $awaiting = contract_transaction_total($contractid, AWAITINGAPPROVAL);
+        $awaiting = contract_transaction_total($contractid, BILLING_AWAITINGAPPROVAL);
         if ($awaiting != 0) $unitbalance += round($awaiting / $unitamount);
     }
 
     if ($includereserved)
     {
-        $reserved = contract_transaction_total($contractid, RESERVED);
+        $reserved = contract_transaction_total($contractid, BILLING_RESERVED);
         if ($reserved != 0) $unitbalance += round($reserved / $unitamount);
     }
 
@@ -1626,9 +1627,9 @@ function transactions_report($serviceid, $startdate, $enddate, $sites, $display,
     if ($serviceid > 0) $sql .= "AND t.serviceid = {$serviceid} ";
     if (!empty($startdate)) $sql .= "AND t.dateupdated >= '{$startdate}' ";
     if (!empty($enddate)) $sql .= "AND t.dateupdated <= '{$enddate}' ";
-    $orsql[] = "t.transactionstatus = ".APPROVED;
-    if ($includeawaitingapproval) $orsql[] = "t.transactionstatus = ".AWAITINGAPPROVAL;
-    if ($includereserved) $orsql[] = "t.transactionstatus = ".RESERVED;
+    $orsql[] = "t.transactionstatus = ".BILLING_APPROVED;
+    if ($includeawaitingapproval) $orsql[] = "t.transactionstatus = ".BILLING_AWAITINGAPPROVAL;
+    if ($includereserved) $orsql[] = "t.transactionstatus = ".BILLING_RESERVED;
     $o = implode(" OR ", $orsql);
     $sql .= "AND ($o) ";
 
@@ -1701,11 +1702,11 @@ function transactions_report($serviceid, $startdate, $enddate, $sites, $display,
                 $str .= "<td>";
                 switch ($transaction->transactionstatus)
                 {
-                    case APPROVED: $str .= $GLOBALS['strApproved'];
+                    case BILLING_APPROVED: $str .= $GLOBALS['strApproved'];
                         break;
-                    case AWAITINGAPPROVAL: $str .= $GLOBALS['strAwaitingApproval'];
+                    case BILLING_AWAITINGAPPROVAL: $str .= $GLOBALS['strAwaitingApproval'];
                         break;
-                    case RESERVED: $str .= $GLOBALS['strReserved'];
+                    case BILLING_RESERVED: $str .= $GLOBALS['strReserved'];
                         break;
                 }
                 $str .= "</td>";
@@ -1743,11 +1744,11 @@ function transactions_report($serviceid, $startdate, $enddate, $sites, $display,
                 $str .= "\"";
                 switch ($transaction->transactionstatus)
                 {
-                    case APPROVED: $str .= $GLOBALS['strApproved'];
+                    case BILLING_APPROVED: $str .= $GLOBALS['strApproved'];
                         break;
-                    case AWAITINGAPPROVAL: $str .= $GLOBALS['strAwaitingApproval'];
+                    case BILLING_AWAITINGAPPROVAL: $str .= $GLOBALS['strAwaitingApproval'];
                         break;
-                    case RESERVED: $str .= $GLOBALS['strReserved'];
+                    case BILLING_RESERVED: $str .= $GLOBALS['strReserved'];
                         break;
                 }
                 $str .= "\",";
@@ -1980,7 +1981,7 @@ function service_dropdown_site($siteid, $name, $selected=0)
  */
 function is_transaction_approved($transactionid)
 {
-	$sql = "SELECT transactionid FROM `{$GLOBALS['dbTransactions']}` WHERE transactionid = {$transactionid} AND transactionstaus = ".APPROVED;
+	$sql = "SELECT transactionid FROM `{$GLOBALS['dbTransactions']}` WHERE transactionid = {$transactionid} AND transactionstaus = ".BILLING_APPROVED;
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("Error getting services. ".mysql_error(), E_USER_WARNING);
 
