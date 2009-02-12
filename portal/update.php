@@ -73,7 +73,7 @@ if ($incidentcontact == $_SESSION['contactid'])
         }
         else
         {
-            $updatebody = "<hr>".sprintf($SYSLANG['strUpdatedViaThePortalBy'], "[b]{$strCustomer}[/b]")."\n\n";
+            $updatebody = "<hr>".sprintf($SYSLANG['strUpdatedViaThePortalBy'], "[b]{$strCustomer}[/b]", '')."\n\n";
         }
 
         if (!empty($_FILES['attachment']['name']))
