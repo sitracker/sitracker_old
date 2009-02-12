@@ -34,7 +34,7 @@ if (realpath(__FILE__) == realpath($_SERVER['SCRIPT_FILENAME']))
 */
 function html_redirect($url, $success = TRUE, $message='')
 {
-    global $CONFIG, $headerdisplayed;
+    global $CONFIG, $headerdisplayed, $siterrors;
 
     if (!empty($_REQUEST['dashboard']))
     {
@@ -52,6 +52,12 @@ function html_redirect($url, $success = TRUE, $message='')
     else
     {
         $refreshtime = 6;
+    }
+
+    // Catch all, make refresh time slow if errors are detected
+    if ($siterrors > 0)
+    {
+        $refreshtime = 10;
     }
 
     $refresh = "{$refreshtime}; url={$url}";

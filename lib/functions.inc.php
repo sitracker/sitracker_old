@@ -2302,6 +2302,8 @@ function sit_error_handler($errno, $errstr, $errfile, $errline, $errcontext)
         return;
     }
 
+    $siterrors++;
+
     $errortype = array(
     E_ERROR           => 'Fatal Error',
     E_WARNING         => 'Warning',
@@ -2366,7 +2368,6 @@ function sit_error_handler($errno, $errstr, $errfile, $errline, $errcontext)
                 || $errno==E_COMPILE_WARNING) $logentry .= "Context:\n".print_r($errcontext, TRUE)."\n----------\n\n";
 
             debug_log($logentry);
-            $siterrors++;
             echo "</p>";
             // Tips, to help diagnose errors
             if (strpos($errstr, 'Unknown column') !== FALSE OR
