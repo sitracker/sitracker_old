@@ -132,7 +132,7 @@ function setup_configure()
         //$html .= "<p>Since you already have a config file we assume you are upgrading or reconfiguring, if this is not the case please delete the existing config file.</p>";
         if ($cfg_file_writable)
         {
-            $html .= "<p class='warning'>Important: The file permissions on the configuration file allow it to be modified, we recommend you make this file read-only once SiT! is configured.</p>";
+            $html .= "<p class='error'>Important: The file permissions on the configuration file allow it to be modified, we recommend you make this file read-only once SiT! is configured.</p>";
         }
         else
         {
@@ -610,6 +610,16 @@ switch ($_REQUEST['action'])
             $CONFIG[$setupvar]=$_POST[$setupvar];
         }
 
+        // Set up a hard to find attachment path
+        if ($CONFIG['attachment_fspath'] == '')
+        {
+            // We generate a path based on some semi-static values so that it's hard to guess,
+            // but will still probably be the same if setup is run again the same day
+            $CONFIG['attachment_fspath'] = "./attachments-" . md5(date('Y-m-d')
+                . $_SERVER['REMOTE_ADDR'] . $_SERVER['SCRIPT_FILENAME'] . $_SERVER['HTTP_USER_AGENT']
+                . $CONFIG['attachment_fspath'] .= $_SERVER['SERVER_SIGNATURE'] ) . '/';
+        }
+
         // Extract the differences between the defaults and the newly configured items
         $CFGDIFF = array_diff_assoc($CONFIG, $DEFAULTS);
 
@@ -679,7 +689,7 @@ switch ($_REQUEST['action'])
             echo "<p>Config file modified</p>";
             if (!@chmod($config_filename, 0640))
             {
-                echo "<p class='warning'>Important: The file permissions on the file <var>{$config_filename}</var> allow the file to be modified, we recommend you now make this file read-only.</p>";
+                echo "<p class='error'>Important: The file permissions on the file <var>{$config_filename}</var> allow the file to be modified, we recommend you now make this file read-only.</p>";
             }
         }
         echo setup_button('checkdbstate', 'Next');
@@ -758,10 +768,8 @@ switch ($_REQUEST['action'])
             }
             else
             {
-                echo "<p class='info'>Sucessfully connected to your database.  You can now go ahead and run SiT!.</p>";
-                echo "<form action='index.php' method='get'>";
-                echo "<input type='submit' value=\"Run SiT!\" />";
-                echo "</form>\n";
+                echo "<p class='info'>Sucessfully connected to your database.</p>";
+                echo setup_button('checkatttdir', 'Next');
             }
         }
     break;
@@ -772,6 +780,58 @@ switch ($_REQUEST['action'])
         setup_createdb();
     break;
 
+    case 'checkatttdiragain':
+        $again = TRUE;
+    case 'checkatttdir':
+        if (file_exists($CONFIG['attachment_fspath']) == FALSE)
+        {
+            echo "<h2>Attachments Directory</h2>";
+            echo "<p>SiT! requires a directory to store attachments.</p>";
+
+            echo setup_button('createattdir', "Create attachments directory");
+            echo "<br />";
+            if ($again)
+            {
+                echo setup_button('checkatttdiragain', 'Next');
+                echo "<p class='error'>The directory <code>{$CONFIG['attachment_fspath']}</code> must be created before setup can continue.</p>";
+            }
+        }
+        elseif (is_writable($CONFIG['attachment_fspath']) == FALSE)
+        {
+            echo "<h2>Attachments Directory</h2>";
+            echo "<p>SiT! requires that the attachments directory is writable by the web server (php).</p>";
+            echo setup_button('checkatttdiragain', 'Next');
+        }
+        else
+        {
+            echo "<p class='info'>You can now go ahead and run SiT!.</p>";
+            echo "<form action='index.php' method='get'>";
+            echo "<input type='submit' value=\"Run SiT!\" />";
+            echo "</form>\n";
+        }
+    break;
+
+
+    case 'createattdir':
+        // Note this creates a directory with 777 permissions!
+        $dir = @mkdir($CONFIG['attachment_fspath'], '0777');
+        if ($dir)
+        {
+            echo setup_button('checkatttdir', 'Next');
+        }
+        else
+        {
+            echo "<p class='error'>Sorry, the attachment directory could not be created for you.</p>"; // FIXME more help
+            echo "<p>Please manually create a directory named <code>{$CONFIG['attachment_fspath']}</code></p>";
+
+            if (substr($CONFIG['attachment_fspath'], 0, 14) == './attachments-')
+            {
+                echo "<p class='info'>Setup has chosen this random looking directory name on purpose, ";
+                echo "please create the directory named exactly as shown above.</p>";
+            }
+            echo setup_button('checkatttdiragain', 'Next');
+        }
+    break;
 
     default:
         require ($lib_path.'tablenames.inc.php');
@@ -1286,29 +1346,8 @@ switch ($_REQUEST['action'])
                     echo "<h2>Checking installation...</h2>";
                     if ($cfg_file_writable)
                     {
-                        echo "<p class='warning'>Important: The file permissions on the configuration file <var>{$config_filename}</var> file allow it to be modified, we recommend you make this file read-only.</p>";
+                        echo "<p class='error'>Important: The file permissions on the configuration file <var>{$config_filename}</var> file allow it to be modified, we recommend you make this file read-only.</p>";
                     }
-
-/*                    if ($CONFIG['attachment_fspath'] == '')
-                    {
-                        echo "<p class='error'>Attachment path must not be empty, please set the \$CONFIG['attachment_fspath'] configuration variable</p>";
-                    }
-                    elseif (file_exists($CONFIG['attachment_fspath']) == FALSE)
-                    {
-                        echo "<p class='error'>The attachment path that you have configured ({$CONFIG['attachment_fspath']}) does not exist, please create this directory or alter the \$CONFIG['attachment_fspath'] configuration variable to point to a directory that does exist.</p>";
-                        echo "<p>After fixing this problem, you must check the installation again, once all problems are corrected, you will be prompted to create an admin account.</p>";
-                        echo setup_button('checkinstallcomplete', 'Check Installation');
-                    }
-                    elseif (is_writable($CONFIG['attachment_fspath']) == FALSE)
-                    {
-                        echo "<p class='error'>Attachment path '{$CONFIG['attachment_fspath']}' not writable<br />";
-                        echo "Permissions:  <code>{$CONFIG['attachment_fspath']} ".file_permissions_info(fileperms($CONFIG['attachment_fspath']));
-                        echo " (".substr(sprintf('%o', fileperms($CONFIG['attachment_fspath'])), -4).")</code><br />";
-                        echo "If installing on Linux you can run the following command at the console (or set other appropriate permissions to allow write access)<br /><br />";
-                        echo "<code>chmod -R 777 {$CONFIG['attachment_fspath']}</code>";
-                        echo "</p>";
-                        echo "<p>After fixing this, please re-run <a href='{$_SERVER[PHP_SELF]}?checkinstallcomplete' class='button'>setup</a> to create an admin account.</p>";
-                    }*/
                     elseif (!isset($_REQUEST))
                     {
                         echo "<p class='error'>SiT! requires PHP 5.0.0 or later</p>";

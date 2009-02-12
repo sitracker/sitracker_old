@@ -92,7 +92,7 @@ $CONFIG['working_days'] = array(1,2,3,4,5);
 $CONFIG['start_working_day'] = (9 * 3600);
 $CONFIG['end_working_day'] = (17 * 3600);
 
-$CONFIG['attachment_fspath'] = "/var/www/sit/attachments/";
+$CONFIG['attachment_fspath'] = "";
 $CONFIG['attachment_webpath'] = "attachments/";
 
 $CONFIG['upload_max_filesize'] = get_cfg_var('upload_max_filesize');
