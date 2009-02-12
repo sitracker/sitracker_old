@@ -615,9 +615,9 @@ switch ($_REQUEST['action'])
         {
             // We generate a path based on some semi-static values so that it's hard to guess,
             // but will still probably be the same if setup is run again the same day
-            $CONFIG['attachment_fspath'] = "./attachments-" . md5(date('Y-m-d')
+            $CONFIG['attachment_fspath'] = dirname( __FILE__ ) . DIRECTORY_SEPARATOR . "attachments-" . md5(date('Y-m-d')
                 . $_SERVER['REMOTE_ADDR'] . $_SERVER['SCRIPT_FILENAME'] . $_SERVER['HTTP_USER_AGENT']
-                . $CONFIG['attachment_fspath'] .= $_SERVER['SERVER_SIGNATURE'] ) . '/';
+                . $CONFIG['attachment_fspath'] .= $_SERVER['SERVER_SIGNATURE'] ) . DIRECTORY_SEPARATOR;
         }
 
         // Extract the differences between the defaults and the newly configured items
