@@ -176,20 +176,23 @@ if ($emails > 0)
         switch ($results['Type'])
         {
             case 'html':
-                foreach ($results['To'] as $var)
+                if (is_array($results['To']))
                 {
-                    $num = sizeof($results['To']);
-                    $cur = 1;
-                    if (!empty($var['name']))
+                    foreach ($results['To'] as $var)
                     {
-                        $to .= $var['name']. " <".$var['address'].">";
-                        if ($cur != $num) $cc .= ", ";
+                        $num = sizeof($results['To']);
+                        $cur = 1;
+                        if (!empty($var['name']))
+                        {
+                            $to .= $var['name']. " <".$var['address'].">";
+                            if ($cur != $num) $cc .= ", ";
+                        }
+                        else
+                        {
+                            $to .= $var['address'];
+                        }
+                        $cur++;
                     }
-                    else
-                    {
-                        $to .= $var['address'];
-                    }
-                    $cur++;
                 }
 
                 if (is_array($results['Cc']))
@@ -215,18 +218,20 @@ if ($emails > 0)
                 break;
 
             case 'text':
-                foreach ($results['To'] as $var)
-                {
-                    $num = sizeof($results['To']);
-                    $cur = 1;
-                    if (!empty($var['name']))
+                if (is_array($results['To']))
+                    foreach ($results['To'] as $var)
                     {
-                        $to .= $var['name']. " <".$var['address'].">";
-                        if ($cur != $num) $cc .= ", ";
-                    }
-                    else
-                    {
-                        $to .= $var['address'];
+                        $num = sizeof($results['To']);
+                        $cur = 1;
+                        if (!empty($var['name']))
+                        {
+                            $to .= $var['name']. " <".$var['address'].">";
+                            if ($cur != $num) $cc .= ", ";
+                        }
+                        else
+                        {
+                            $to .= $var['address'];
+                        }
                     }
                 }
 
