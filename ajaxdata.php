@@ -133,7 +133,7 @@ switch ($action)
         $dashboard = cleanvar($_REQUEST['dashboard']);
         $dashletid = 'win'.cleanvar($_REQUEST['did']);
         // FIXME need some sanitation here
-        include ("{$CONFIG['application_fspath']}htdocs{$fsdelim}plugins{$fsdelim}dashboard_{$dashboard}.php");
+        include ("htdocs{$fsdelim}plugins{$fsdelim}dashboard_{$dashboard}.php");
         $dashfn = "dashboard_{$dashboard}_edit";
         echo $dashfn($dashletid);
     break;

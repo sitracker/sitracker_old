@@ -27,8 +27,7 @@ $TABI18n['email'] = $strEmail;
 $TABI18n['features'] = $strFeatures;
 $TABI18n['system'] = $strSystem;
 
-$CFGCAT['paths'] = array('application_fspath',
-                         'application_webpath',
+$CFGCAT['paths'] = array('application_webpath',
                          'access_logfile',
                          'attachment_fspath',
                          'attachment_webpath');
@@ -175,6 +174,7 @@ $CATINTRO['sla'] = "This section allows you to configure how service levels are 
 $CFGVAR['access_logfile']['title'] = 'Path to an access log file';
 $CFGVAR['access_logfile']['help'] = "The filesystem path and filename of a file that already exist and is writable to log authentication messages into.";
 
+// DEPRECATED leaving here just in case, can be removed >= 3.50 - INL
 $CFGVAR['application_fspath']['help']="The full absolute filesystem path to the SiT! directory with trailing slash. e.g. '/var/www/sit/'";
 $CFGVAR['application_fspath']['title'] = 'Filesystem Path';
 

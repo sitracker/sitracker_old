@@ -34,7 +34,7 @@ $DEFAULTS = $CONFIG;
 // }
 
 // These are the required variables we want to configure during installation
-$SETUP = array('db_hostname','db_database','db_username','db_password', 'db_tableprefix','application_fspath','application_webpath');
+$SETUP = array('db_hostname','db_database','db_username','db_password', 'db_tableprefix','application_webpath');
 
 require($lib_path.'configvars.inc.php');
 
@@ -191,6 +191,8 @@ function setup_configure()
             if (!$cfg_file_exists OR $_REQUEST['configfile'] == 'new')
             {
                 // Dynamic defaults
+                    // application_fspath was removed, leaving this code just-in-case
+                    // DEPRECATED - remove for >= 3.50
                 if ($setupvar == 'application_fspath')
                 {
                     $value = str_replace('htdocs' . DIRECTORY_SEPARATOR, '', dirname( __FILE__ ) . DIRECTORY_SEPARATOR);
@@ -1233,7 +1235,7 @@ switch ($_REQUEST['action'])
                             while ($dashboardnames = mysql_fetch_object($result))
                             {
                                 $version = 1;
-                                include ("{$CONFIG['application_fspath']}dashboard/dashboard_{$dashboardnames->name}.php");
+                                include ("dashboard/dashboard_{$dashboardnames->name}.php");
                                 $func = "dashboard_{$dashboardnames->name}_get_version";
 
                                 if (function_exists($func))

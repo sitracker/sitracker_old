@@ -34,8 +34,6 @@ if (realpath(__FILE__) == realpath($_SERVER['SCRIPT_FILENAME']))
 $CONFIG['application_name'] = 'SiT! Support Incident Tracker';
 $CONFIG['application_shortname'] = 'SiT!';
 
-// The path to SiT! in your filesystem (e.g. /var/www/vhtdocs/sit/
-$CONFIG['application_fspath'] = '';
 $CONFIG['application_webpath'] = '/';
 
 // The URI prefix to use when referring to this application (in emails etc.)

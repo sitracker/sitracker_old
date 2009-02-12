@@ -22,11 +22,6 @@ $CONFIG['db_username'] = '';
 $CONFIG['db_password'] = '';
 $CONFIG['db_database'] = '';
 
-// We recommend you set the following variables too (uncomment first)
-
-// The path to SiT! in your filesystem (e.g. /var/www/vhtdocs/sit/
-// $CONFIG['application_fspath'] = '';
-
 
 // For more config variables see the file defaults.inc.php for examples and make your changes
 // in this file
