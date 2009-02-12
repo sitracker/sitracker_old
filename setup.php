@@ -801,7 +801,7 @@ switch ($_REQUEST['action'])
         elseif (is_writable($CONFIG['attachment_fspath']) == FALSE)
         {
             echo "<h2>Attachments Directory</h2>";
-            echo "<p>SiT! requires that the attachments directory is writable by the web server (php).</p>";
+            echo "<p>SiT! requires that the attachments directory is writable by the web server.</p>";
             echo setup_button('checkatttdiragain', 'Next');
         }
         else
