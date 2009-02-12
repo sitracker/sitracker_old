@@ -144,6 +144,9 @@ define ('NO_BILLABLE_CONTRACT', 0);
 define ('CONTACT_HAS_BILLABLE_CONTRACT', 1);
 define ('SITE_HAS_BILLABLE_CONTRACT', 2);
 
+// The number of errors that have occurred
+$siterrors = 0;
+
 //Prevent Magic Quotes from affecting scripts, regardless of server settings
 //Make sure when reading file data,
 //PHP doesn't "magically" mangle backslashes!
@@ -2291,7 +2294,14 @@ function increment_incidents_used($maintid)
 **/
 function sit_error_handler($errno, $errstr, $errfile, $errline, $errcontext)
 {
-    global $CONFIG, $sit;
+    global $CONFIG, $sit, $siterrors;
+
+    // if error has been supressed with an @
+    if (error_reporting() == 0)
+    {
+        return;
+    }
+
     $errortype = array(
     E_ERROR           => 'Fatal Error',
     E_WARNING         => 'Warning',
@@ -2356,6 +2366,7 @@ function sit_error_handler($errno, $errstr, $errfile, $errline, $errcontext)
                 || $errno==E_COMPILE_WARNING) $logentry .= "Context:\n".print_r($errcontext, TRUE)."\n----------\n\n";
 
             debug_log($logentry);
+            $siterrors++;
             echo "</p>";
             // Tips, to help diagnose errors
             if (strpos($errstr, 'Unknown column') !== FALSE OR
