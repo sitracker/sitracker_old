@@ -16,11 +16,10 @@ if (realpath(__FILE__) == realpath($_SERVER['SCRIPT_FILENAME']))
     exit;
 }
 
-
 include ($lib_path . 'incident.inc.php');
 include_once ($lib_path . 'billing.inc.php');
-include ('mime.inc.php');
-include ('triggertypes.inc.php');
+include ($lib_path . 'mime.inc.php');
+include ($lib_path . 'triggertypes.inc.php');
 
 //set up all the action types
 // define ('ACTION_NONE', 1);
@@ -321,7 +320,8 @@ function replace_vars(&$ttvar, &$triggerid, &$identifier, &$paramarray, $require
         $trigger_regex = "/{$identifier}/s";
         if (!empty($ttvar['replacement']))
         {
-            eval("\$res = {$ttvar[replacement]};");
+            $eresult = @eval("\$res = {$ttvar[replacement]};return TRUE;");
+            if (!$eresult) trigger_error("Error in variable replacement for <strong>{$identifier}</strong>", E_USER_WARNING);
         }
         $trigger_replace = $res;
         unset($res);
