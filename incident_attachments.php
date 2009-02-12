@@ -230,17 +230,13 @@ function draw_file_row($file, $fsdelim, $incidentid, $path)
     $fileobj = mysql_fetch_object($result);
     $fileid = $fileobj->id;
 
-    // FIXME url
-
-    //$url = $path.$fsdelim.$filename;
-    
+    //new-style, can assume the filename is fileid-filename.ext
     if (is_numeric($filenameparts[0]))
     {
         $sql = "SELECT *, f.id AS fileid FROM `{$GLOBALS['dbLinks']}` AS l, ";
         $sql .= "`{$GLOBALS['dbFiles']}` as f, ";
         $sql .= "`{$GLOBALS['dbUpdates']}` as u ";
-        $sql .= "WHERE f.filename = '{$newfilename}' ";
-        $sql .= "AND u.incidentid = '{$incidentid}' ";
+        $sql .= "WHERE f.id = '{$filenameparts[0]}' ";
         $sql .= "AND l.origcolref = u.id ";
         $sql .= "AND l.linkcolref = f.id";
         $result = mysql_query($sql);
