@@ -1056,7 +1056,15 @@ switch ($_REQUEST['action'])
                             {
                                 while ($obj = mysql_fetch_object($result))
                                 {
-                                    if (!is_billable_incident_approved($obj->id))
+                                    $asql = "SELECT DISTINCT origcolref, linkcolref ";
+                                    $asql .= "FROM `{$dbLinks}` AS l, `{$dbLinkTypes}` AS lt ";
+                                    $asql .= "WHERE l.linktype = 6 ";
+                                    $asql .= "AND linkcolref = {$obj->id} ";
+                                    $asql .= "AND direction = 'left'";
+                                    $aresult = mysql_query($asql);
+                                    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+                                    
+                                    if (mysql_num_rows($aresult) == 0)
                                     {
                                         $billing_upgrade[] = $obj->id;
                                     }
