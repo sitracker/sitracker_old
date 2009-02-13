@@ -23,6 +23,7 @@ require_once ($lib_path.'auth.inc.php');
 $display = cleanvar($_REQUEST['display']);
 $showfoc = cleanvar($_REQUEST['foc']);
 $focaszero = cleanvar($_REQUEST['focaszero']);
+$expiredaszero = cleanvar($_REQUEST['expiredaszero']);
 
 if (empty($display)) $display = 'html';
 
@@ -81,7 +82,7 @@ if (mysql_numrows($result) > 0)
 			$obj->creditamount = 0;
 			$obj->balance = 0;
         }
-
+        
         $totalcredit += $obj->creditamount;
         $totalbalance += $obj->balance;
         $awaitingapproval = service_transaction_total($obj->serviceid, BILLING_AWAITINGAPPROVAL)  * -1;
@@ -94,6 +95,13 @@ if (mysql_numrows($result) > 0)
 
         if ($obj->unitrate != 0) $unitsat1times = round(($actual/$obj->unitrate), 2);
         else $unitsat1times = 0;
+
+        if (!empty($expiredaszero) AND strtotime($obj->enddate) < $now)
+        {
+            $obj->balance = 0;
+            $unitsat1times = 0;
+            $actual = 0;
+        }
 
         $remainingunits += $unitsat1times;
 

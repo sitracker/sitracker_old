@@ -1354,6 +1354,7 @@ $strShowApproved = 'Show Approved';
 $strShowClosedIncidents = 'Show closed incidents';
 $strShowEmoticons = 'Show Emoticons';
 $strShowExpired = 'Show Expired';
+$strShowExpiredAsZero = 'Show Expired As Zero';
 $strShowingAllArticles = 'Showing all articles';
 $strShowingAllClosedIncidents = 'Showing all closed incidents';
 $strShowingXtoXofX = 'Showing %s to %s of %s';
