@@ -53,26 +53,35 @@ while ($incident = mysql_fetch_object($result))
 
     if ($count == 0) $pubdate = date('r',$update_timestamp);
 
+    $authorname = user_realname($update_userid);
+    $author = user_email($update_userid)." (".$authorname. ")";
+
     $itemxml .= "<item>\n";
-    $itemxml .= "<title>{$incident->id} {$update_type}: {$incident->title}</title>\n";
+    $itemxml .= "<title>[{$incident->id}] - {$incident->title} ({$update_type})</title>\n";
+    $itemxml .= "<author>{$author}</author>\n";
     $itemxml .= "<link>{$CONFIG['application_uriprefix']}{$CONFIG['application_webpath']}incident_details.php?id={$incident->id}</link>\n";
-    $itemxml .= "<description>Incident updated ".date($CONFIG['dateformat_datetime'],$update_timestamp).". Status: ".incidentstatus_name($update_currentstatus)."</description>\n";
+    $itemxml .= "<description>{$strUpdated} ".date($CONFIG['dateformat_datetime'],$update_timestamp) . ' ';
+    $itemxml .= " {$strby} &lt;strong&gt;{$authorname}&lt;/strong&gt;. \n";
+    $itemxml .= "{$strStatus}: ".incidentstatus_name($update_currentstatus).". &lt;br /&gt;\n\n";
+    $itemxml .= strip_tags($update_body);
+    $itemxml .= "</description>\n";
     $itemxml .= "<pubDate>".date('r',$update_timestamp)."</pubDate>\n";
-    $itemxml .= "<guid>{$CONFIG['application_uriprefix']}{$CONFIG['application_webpath']}incident_details.php?id={$incident->id}#{$update_id}</guid>\n";
+    $itemxml .= "<guid isPermaLink=\"false\">{$CONFIG['application_uriprefix']}{$CONFIG['application_webpath']}incident_details.php?id={$incident->id}#{$update_id}</guid>\n";
     $itemxml .= "</item>\n";
     $count++;
 }
 
-$xml = '<rss version="2.0">';
-$xml .= "<channel><title>{$CONFIG['application_shortname']}: {$strIncidents}</title>\n";
-$xml .= '<link>http://localhost/sit/</link>';
-$xml .= "<description>SiT incidents list for ".user_realname($userid)."</description>\n";
+$xml = '<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">';
+$xml .= "<channel><title>{$CONFIG['application_shortname']} {$strIncidents}</title>\n";
+$xml .= '<link>'.application_url()."</link>\n";
+$xml .= '<atom:link href="'.application_url()."incidents_rss.php?c={$c}\" rel=\"self\" type=\"application/rss+xml\" />\n";
+$xml .= "<description>{$CONFIG['application_name']}: {$strIncidents} {$strFor} ".user_realname($userid)." ({$strActionNeeded}).</description>\n";
 $xml .= "<language>{$lang}</language>\n";
 $xml .= "<pubDate>{$pubdate}</pubDate>\n";
 $xml .= "<lastBuildDate>{$pubdate}</lastBuildDate>\n";
 $xml .= '<docs>http://blogs.law.harvard.edu/tech/rss</docs>';
 $xml .= "<generator>{$CONFIG['application_name']} {$application_version_string}</generator>\n";
-$xml .= "<webMaster>".user_email($CONFIG['support_manager'])."</webMaster>\n";
+$xml .= "<webMaster>".user_email($CONFIG['support_manager'])." (Support Manager)</webMaster>\n";
 
 $xml .= $itemxml;
 

@@ -36,6 +36,12 @@ if (empty($sort)) $sort='priority';
 if (empty($queue)) $queue=1;
 
 $refresh = $_SESSION['incident_refresh'];
+
+if ($user == 'current' OR $user == $_SESSION['userid'])
+{
+    $rssfeedurl = "incidents_rss.php?c=".md5($_SESSION['username'] . $_SESSION['email']);
+    $rssfeedtitle = $strIncidents;
+}
 include ('./inc/htmlheader.inc.php');
 ?>
 <script type="text/javascript">

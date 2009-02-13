@@ -125,8 +125,8 @@ if (empty($mode))
     echo "<td><input type='checkbox' id='focaszero' name='focaszero' value='show' checked='checked' /></td></tr></tbody>";
 
     echo "<tbody id='displaysection' ><tr><th>{$strOutput}:</th>";
-    echo "<td><input type='radio' name='display' value='html' checked='checked' /> {$strScreen}";
-    echo "<input type='radio' name='display' value='csv' /> $strCSVfile ";
+    echo "<td><label><input type='radio' name='display' value='html' checked='checked' /> {$strScreen}</label>";
+    echo "<label><input type='radio' name='display' value='csv' /> {$strCSVfile}</label> ";
     echo "</td></tr></tbody>\n";
 
     $sitelistsql .= " ORDER BY s.name";

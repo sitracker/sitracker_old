@@ -40,7 +40,11 @@ else
 
 echo "</title>\n";
 echo "<link rel='SHORTCUT ICON' href='{$CONFIG['application_webpath']}images/sit_favicon.png' />\n";
-echo "<link rel='alternate' type='application/rss+xml' title='Sit RSS Feed' href='incidents_rss.php?c=".md5($_SESSION['username'] . $_SESSION['email'])."' />\n";
+if (!empty($rssfeedurl))
+{
+    if (empty($rssfeedtitle)) $rssfeedtitle = "{$CONFIG['application_shortname']}";
+    echo "<link rel='alternate' type='application/rss+xml' title='{$rssfeedtitle}' href=\"{$rssfeedurl}\" />\n";
+}
 echo "<style type='text/css'>@import url('{$CONFIG['application_webpath']}styles/sitbase.css');</style>\n";
 if ($_SESSION['auth'] == TRUE)
 {
