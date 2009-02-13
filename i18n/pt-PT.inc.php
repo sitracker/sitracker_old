@@ -118,8 +118,8 @@ $strChangePassword = 'Alterar Password';
 $strChangeTemporaryOwner = 'Alterar responsável temporário';
 
 $strChangingContact = 'Alterar o contacto ou habilitação não irá reatribuir este incidente a outro contrato.';
-$strChase = 'Perseguir';
-$strChased = 'Perseguido';
+$strRemind = 'Perseguir';
+$strReminded = 'Perseguido';
 $strChooseLanguage = 'P.f.f., escolha a sua lingua';
 $strCity = 'Cidade';
 # e.g. close an incident

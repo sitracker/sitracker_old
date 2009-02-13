@@ -454,7 +454,7 @@ if (mysql_num_rows($resultchase) >= 1)
             if (empty($html_chase))
             {
                 $html_chase .= "<br />";
-                $html_chase .= "<h2>{$strIncidentsRequiringChaseByPhone}</h2>";
+                $html_chase .= "<h2>{$strIncidentsRequiringReminderByPhone}</h2>";
                 $html_chase .= "<table align='center' style='width: 95%'>";
                 $html_chase .= "<tr><th>{$strIncident} {$strID}</th>";
                 $html_chase .= "<th>{$strIncidentTitle}</th><th>{$strContact}</th>";
@@ -463,11 +463,11 @@ if (mysql_num_rows($resultchase) >= 1)
 
             if ($obj_update->type == "auto_chase_phone")
             {
-                $type = $strChasePhone;
+                $type = $strRemindByPhone;
             }
             else
             {
-                $type = $strChaseManager;
+                $type = $strRemindCustomer;
             }
 
             // show

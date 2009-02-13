@@ -271,7 +271,7 @@ switch ($step)
 
             if ($obj->type == 'auto_chase_phone')
             {
-                echo "<tr><th>{$strCustomerChaseUpdate}</th><td>";
+                echo "<tr><th>{$strCustomerReminderUpdate}</th><td>";
                 echo "<label><input type='radio' name='chase_customer' ";
                 echo "value='no' checked='yes' />{$strNo}</label> ";
                 echo "<label><input type='radio' name='chase_customer' ";
@@ -281,7 +281,7 @@ switch ($step)
 
             if ($obj->type == 'auto_chase_manager')
             {
-                echo "<tr><th>{$strManagerChaseUpdate}</th>";
+                echo "<tr><th>{$strCustomerReminderUpdate}</th>";
                 echo "<label><input type='radio' name='chase_manager' ";
                 echo "value='no' checked='yes' />{$strNo}</label> ";
                 echo "<label><input type='radio' name='chase_manager' ";
@@ -815,7 +815,7 @@ debug_log($bodytext);
                 if (!empty($chase_customer))
                 {
                     $sql_insert = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, currentowner, currentstatus, bodytext, timestamp, customervisibility) ";
-                    $sql_insert .= "VALUES ('{$id}','{$sit['2']}','auto_chased_phone', '{$owner}', '{$newincidentstatus}', '{$SYSLANG['strCustomerHasBeenCalledToChase']}','{$now}','hide')";
+                    $sql_insert .= "VALUES ('{$id}','{$sit['2']}','auto_chased_phone', '{$owner}', '{$newincidentstatus}', '{$SYSLANG['strCustomerRemindedByPhone']}','{$now}','hide')";
                     mysql_query($sql_insert);
                     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
@@ -827,7 +827,7 @@ debug_log($bodytext);
                 if (!empty($chase_manager))
                 {
                     $sql_insert = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, currentowner, currentstatus, bodytext, timestamp, customervisibility) ";
-                    $sql_insert .= "VALUES ('{$id}','{$sit['2']}','auto_chased_manager', '{$owner}', '{$newincidentstatus}', 'Manager has been called to chase','{$now}','hide')";
+                    $sql_insert .= "VALUES ('{$id}','{$sit['2']}','auto_chased_manager', '{$owner}', '{$newincidentstatus}', '{$SYSLANG['strCustomerReminded']}','{$now}','hide')";
                     mysql_query($sql_insert);
                     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 

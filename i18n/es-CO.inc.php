@@ -135,10 +135,7 @@ $strChangeStateFailed = 'Falló el cambio de estado';
 $strChangePassword = 'Cambie Contraseña';
 $strChangeTemporaryOwner = 'Cambie dueño temporal';
 $strChangingContact = 'Cambiar el contacto o la habilidad no reasignará este incidente a otro contrato';
-$strChase = 'Chase'; //*******
-$strChased = 'Chased';
-$strChaseManager = 'Chase manager';
-$strChasePhone = 'Chase phone';
+
 $strChooseLanguage = 'Por favor seleccione su idioma';
 $strCity = 'Ciudad';
 # e.g. close an incident
@@ -195,7 +192,6 @@ $strCurrentlyNoOpenEscalatedIncidentsToModify = 'Actualmente no hay incidentes e
 $strCustomer = 'Cliente';
 $strCustomerFeedback = 'Realimentación de Cliente';
 $strCustomers = 'Clientes';
-$strCustomerChaseUpdate = 'Was this a cliente chase?';
 $strCustomerExport = 'Exportar Cliente';
 $strCustomerImpact = 'Impacto en el Cliente';
 $strCustomerImpactEngineerText = '¿Cuántos usuarios están afectados por este problema? Es un asunto que impide la operación o un inconveniente menor? ¿Es un problema que impide que la gente trabaje?';
@@ -419,7 +415,7 @@ $strIncidentsForEngineer = 'Incidentes para %s (Ingeniero)';
 $strIncidentsinQueue = 'Incidentes en Cola';
 $strIncidentsLoggedOpenClosed = 'Incidentes Registrados (Abiertos/Cerrados)';
 $strIncidentsLoggedToday = '%s Incidentes Registrados Hoy';
-$strIncidentsRequiringChaseByPhone = 'Incidentes que requieren chasing por teléfono'; //*********
+$strIncidentsRequiringReminderByPhone = 'Incidentes que requieren chasing por teléfono'; //*********
 # e.g. Incidentes opened on 2007-12-03
 $strIncidentsVerbOnDate = 'Incidentes %s en %s';
 # e.g. Incidentes opened between 2007-12-03 and 2007-12-04
@@ -489,7 +485,7 @@ $strManageEmailTemplates = 'Administrar Plantillas de Email';
 $strManageFTPFiles = 'Administrar archivos FTP';
 $strManageUsers = 'Administrar Usuarios';
 $strManageYourDashboard = 'Administrar su Tablero';
-$strManagerChaseUpdate = 'Fue este un seguimiento del Gerente?';
+$strCustomerReminderUpdate = 'Fue este un seguimiento del Gerente?';
 $strMandatoryMarked = 'Campos obligatorios están marcados con %s';
 $strMarkComplete = 'Marcar como Completo';
 $strMarkForClosure = 'Marcar para Cierre';

@@ -404,7 +404,7 @@ function saction_SetUserStatus()
 }
 
 
-/** Chase customers
+/** Chase / Remind customers
     * @author Paul Heaney
     * @note Moved from htdocs/auto/chase_customer.php by INL for 3.40
 */

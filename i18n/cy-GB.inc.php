@@ -16,7 +16,7 @@ $strAuthor = 'Awdur';
 
 $strBrowse = 'Pori';
 
-$strChase = 'Ymlidiad';
+$strRemind = 'Ymlidiad';
 $strClosed = 'Argau';
 $strContact = 'Cyffyrddiad';
 $strCustomer = 'Cwsmer';

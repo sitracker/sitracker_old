@@ -219,11 +219,11 @@ $updatetypes['reopening'] = array('icon' => 'reopen', 'text' => sprintf($strReop
 $updatetypes['slamet'] = array('icon' => 'sla', 'text' => sprintf($strSLAby,'updatesla', 'updateuser'));
 $updatetypes['solution'] = array('icon' => 'solution', 'text' => sprintf($strResolvedby, 'updateuser'));
 $updatetypes['webupdate'] = array('icon' => 'webupdate', 'text' => sprintf($strWebupdate));
-$updatetypes['auto_chase_phone'] = array('icon' => 'chase', 'text' => $strChase);
-$updatetypes['auto_chase_manager'] = array('icon' => 'chase', 'text' => $strChase);
-$updatetypes['auto_chase_email'] = array('icon' => 'chased', 'text' => $strChased);
-$updatetypes['auto_chased_phone'] = array('icon' => 'chased', 'text' => $strChased);
-$updatetypes['auto_chased_manager'] = array('icon' => 'chased', 'text' => $strChased);
+$updatetypes['auto_chase_phone'] = array('icon' => 'chase', 'text' => $strRemind);
+$updatetypes['auto_chase_manager'] = array('icon' => 'chase', 'text' => $strRemind);
+$updatetypes['auto_chase_email'] = array('icon' => 'chased', 'text' => $strReminded);
+$updatetypes['auto_chased_phone'] = array('icon' => 'chased', 'text' => $strReminded);
+$updatetypes['auto_chased_manager'] = array('icon' => 'chased', 'text' => $strReminded);
 $updatetypes['auto_chased_managers_manager'] = array('icon' => 'chased', 'text' => $strChased);
 $updatetypes['customerclosurerequest'] = array('icon' => 'close', 'text' => $strCustomerRequestedClosure);
 $updatetypes['fromtask'] = array('icon' => 'timer', 'text' => sprintf($strUpdatedFromActivity, 'updateuser'));
