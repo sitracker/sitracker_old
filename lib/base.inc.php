@@ -23,7 +23,7 @@ define("REASON_INCIDENT_CLOSED", 2);
 $application_version = '3.45';
 
 // Revision string, e.g. 'beta2' or 'svn' or ''
-$application_revision = 'svn';
+$application_revision = 'beta1';
 
 // Clean PHP_SELF server variable to avoid potential XSS security issue
 $_SERVER['PHP_SELF'] = substr($_SERVER['PHP_SELF'], 0,
