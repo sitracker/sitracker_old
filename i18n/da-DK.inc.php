@@ -2,12 +2,12 @@
 // Translation to Danish by Carsten Jensen aka Tomse Latest rev 4312
 // Translation started 14. Oct. 2008
 
-$languagestring = 'Danish (da-DK)';
+$languagestring = ' (da-DK)';
 $i18ncharset = 'UTF-8';
 
 // List of letters of the alphabet for this language
 // in standard alphabetical order (upper case, where applicable)
-$i18nAlphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ&AElig;&Oslash;&Aring;';
+$i18nAlphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZÆØÅ';
 
 // list of strings (Alphabetical by key)
 $str0MeansUnlimited = '0 Betyder Uendeligt';
@@ -233,10 +233,6 @@ $strChangePassword = 'Skift adgangskode';
 $strChangeTemporaryOwner = 'Skift midlertidig ejer';
 $strChangingContact = 'Ændring af kontakt eller færdighed til ikke at redelegere denne hændelse til en anden kontrakt';
 $strCharsToKeepWhenTranslating = 'Ved oversættelse, oversæt venligst ikke noget der ligner: [b] {word} %s. Disse er specielle parametre, efterlad dem i de respektive steder i den oversatte tekst';
-$strRemind = 'Påmind';
-$strReminded = 'Påmindet';
-$strRemindCustomer = 'Påmindelses manager';
-$strRemindByPhone = 'Påmindelses telefon';
 $strChooseLanguage = 'Vælg venligst dit sprog';
 $strCity = 'By';
 $strClearFilter = 'Fjern filter';
@@ -303,12 +299,12 @@ $strCurrentUsersSignature = 'Aktuelle brugers signatur';
 $strCurrentlyOpen = 'I øjeblikket åben';
 $strCurrentlyNoOpenEscalatedIncidentsToModify = 'Der er ingen åbne eskalerede redigerbare hændelser';
 $strCustomer = 'Kunde';
-$strCustomerReminderUpdate = 'Var dette en kunde påmindelse?';
 $strCustomerFeedback = 'Kunde feedback';
 $strCustomerExport = 'Kunde export';
-$strCustomerRemindedByPhone = 'Kunde har fået påmindelse via opkald';
 $strCustomerImpact = 'Kunde indvirkning';
 $strCustomerImpactCustomerText = 'Hvor mange brugere er påvirkert af dette problem? Er dette et problem af nedetid, eller til mindre irritation? Er problemet så omfangsrigt at folk ikke kan arbejde?';
+$strCustomerRemindedByPhone = 'Kunde har fået påmindelse via opkald';
+$strCustomerReminderUpdate = 'Var dette en manager opfølgning?';
 $strCustomerRequestedClosure = 'Kunden anmodede om lukning af hændelse';
 $strCustomers = 'Kunder';
 
@@ -720,7 +716,6 @@ $strMakeVisibleInPortal = 'Vis i portalen';
 $strManageDashboardComponents = 'Håndter Dashboard komponenter';
 $strManageEmailTemplates = 'Håndter Email skabeloner';
 $strManageFTPFiles = 'Håndter FTP filer';
-$strCustomerReminderUpdate = 'Var dette en manager opfølgning?';
 $strManageUsers = 'Håndter brugere';
 $strManageYourDashboard = 'Håndter dit Dashboard';
 $strMandatoryMarked = 'Obligatoriske felter er markeret %s';
@@ -1036,6 +1031,10 @@ $strReleaseNotes = 'Udgivelses noter';
 $strReleaseNotesFor = 'Udgivelses noter for %s';
 $strRemaining = '%s tilbage';
 $strRemainingBalance = 'Restbeløb';
+$strRemind = 'Påmind';
+$strRemindByPhone = 'Påmindelses telefon';
+$strRemindCustomer = 'Påmindelses manager';
+$strReminded = 'Påmindet';
 $strRemove = 'Fjern';
 $strRemoveTemporaryOwner = 'Fjern midlertidig ejer';
 $strReopen = 'Genåben';

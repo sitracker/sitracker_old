@@ -1,12 +1,15 @@
 <?php
-// SiT! Language File - French (fr-FR) By Gabriel RIAM <GRIAM[at]ville-francois.fr>
-//                                    and Pauline <pauline177[at]hotmail.com>
+// SiT! Language File - French (fr-FR) By Gabriel RIAM
+// and Pauline
 
-$languagestring = 'French (fr-FR)';
+$languagestring = ' (fr-FR)';
 $i18ncharset = 'UTF-8';
 
+// List of letters of the alphabet for this language
+// in standard alphabetical order (upper case, where applicable)
 $i18nAlphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
+// list of strings (Alphabetical by key)
 $str1Day = '1 Jour';
 $str1Minute = '1 Minute';
 $str1Month = '1 Mois';

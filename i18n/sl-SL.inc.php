@@ -1,7 +1,7 @@
 <?php
 // SiT! Language File - Slovenian (sl-SL)
 
-$languagestring = 'Slovenian (sl-SL)';
+$languagestring = ' (sl-SL)';
 $i18ncharset = 'UTF-8';
 
 // List of letters of the alphabet for this language

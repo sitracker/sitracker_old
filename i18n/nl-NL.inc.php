@@ -1,9 +1,10 @@
 <?php
 // SiT! Language File - Dutch (nl-NL)
 
-$languagestring = 'Dutch (nl-NL)';
+$languagestring = ' (nl-NL)';
 $i18ncharset = 'UTF-8';
 
+// list of strings (Alphabetical by key)
 $strAnswer = 'Antwoord';
 $strAttachment = 'Bijlage';
 $strAwaitingApproval = 'Wacht op goedkeuring';

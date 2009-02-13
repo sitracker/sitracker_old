@@ -1,5 +1,5 @@
 <?php
-// SiT! Language File - Russian (ru-RU) by Nikolay Parukhin <parukhin[at]gmail.com>
+// SiT! Language File - Russian (ru-RU) by Nikolay Parukhin
 
 $languagestring = ' (ru-RU)';
 $i18ncharset = 'UTF-8';

@@ -1,7 +1,7 @@
 <?php
 // SiT! Language File - Japanese (ja-JP) by Eliza Galang
 
-$languagestring = 'Japanese (ja-JP)';
+$languagestring = ' (ja-JP)';
 $i18ncharset = 'UTF-8';
 
 // list of strings (Alphabetical by key)

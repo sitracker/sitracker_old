@@ -1,9 +1,10 @@
 <?php
-// SiT! Language File - Welsh (cy-GB) by Peter Hughes <peter.hughes[at]salfordsoftware.co.uk>
+// SiT! Language File - Welsh (cy-GB) by Peter Hughes
 
-$languagestring = 'Welsh (cy-GB)';
+$languagestring = ' (cy-GB)';
 $i18ncharset = 'UTF-8';
 
+// list of strings (Alphabetical by key)
 $strAbsentSick = 'Absennol';
 $strAdd = 'Adio';
 $strAddress = 'Cyfeiriad';
@@ -16,13 +17,12 @@ $strAuthor = 'Awdur';
 
 $strBrowse = 'Pori';
 
-$strRemind = 'Ymlidiad';
 $strClosed = 'Argau';
 $strContact = 'Cyffyrddiad';
-$strCustomer = 'Cwsmer';
 $strCounty = 'Sir';
 $strCountry = 'Gwledig';
 $strCreate = 'Creu';
+$strCustomer = 'Cwsmer';
 
 $strDate = 'Dyddiad';
 $strDay = 'Dydd';
@@ -31,4 +31,6 @@ $strDelete = 'Dileu';
 $strDescription = 'Darluniad';
 
 $strEmail = 'E-bost';
+
+$strRemind = 'Ymlidiad';
 ?>
