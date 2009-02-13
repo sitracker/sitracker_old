@@ -865,7 +865,7 @@ switch ($_REQUEST['action'])
                     echo "</p>";
                     echo setup_button('reconfigure', 'Reconfigure SiT!');
                     echo "<p>or</p>";
-                    echo setup_button('createdb', 'Create a database');
+                    echo setup_button('createdb', 'Create a database', "<br /><label><input type='checkbox' name='sampledata' value='yes' checked='checked' /> With sample data</label>");
                     //echo "<p><a href='{$_SERVER['PHP_SELF']}?action=reconfigure'>Reconfigure</a> SiT!</p>";
                 }
                 else
@@ -1063,7 +1063,7 @@ switch ($_REQUEST['action'])
                                     $asql .= "AND direction = 'left'";
                                     $aresult = mysql_query($asql);
                                     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
-                                    
+
                                     if (mysql_num_rows($aresult) == 0)
                                     {
                                         $billing_upgrade[] = $obj->id;
