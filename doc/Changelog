@@ -1,3 +1,136 @@
+Changes in v3.45 - Unreleased
+-----------------------------------------------------------------------
+- 0000480: [other] Rename 'chase' (ivan) - resolved.
+- 0000495: [i18n] i18n missing for TRIGGER_HIDDEN_ERROR (kieran) - resolved.
+- 0000492: [other] Need to secure attachments dir (ivan) - resolved.
+- 0000490: [other] Attachments via updates use old method (kieran) - resolved.
+- 0000491: [other] Can't turn errors off (ivan) - resolved.
+- 0000456: [portal] Portal uses unchecked variables (ivan) - resolved.
+- 0000219: [i18n] Hardcoded text in : Triggers --> Add trigger --> template pull down menu (kieran) - resolved.
+- 0000257: [inbound email] No contract found matching <name of sender> (ivan) - resolved.
+- 0000340: [holidays] Holiday requests are broken by various email clients (ivan) - resolved.
+- 0000278: [incidents] Finding contracts when adding incidents does not find "Pan, Peter" (ivan) - resolved.
+- 0000482: [incidents] Related incident shows this incident's title (ivan) - resolved.
+- 0000437: [reports] SQL error reported on External Engineer Call Distribution report (ivan) - resolved.
+- 0000479: [other] oxygen/16x16/messageflag.png missing (kieran) - resolved.
+- 0000473: [holidays] Booking one days holiday tries to book two (ivan) - resolved.
+- 0000476: [knowledge base] kbarticles.published is 0000-00-00 00:00:00 (ivan) - resolved.
+- 0000471: [setup/config] When changing settings on the "Service levels" page, the incorrect flags are written to the DB - resolved.
+- 0000467: [other] Gravatars broken (ivan) - resolved.
+- 0000280: [setup/config] in reconfigure - option to remove the example data (ivan) - resolved.
+- 0000307: [reports] feedback6.php and feedback7.php should be renamed (ivan) - resolved.
+- 0000416: [other] {userrealname} replaces incorrectly (kieran) - resolved.
+- 0000317: [outbound email] Unable to set visibility on manually created emails (ivan) - resolved.
+- 0000320: [outbound email] cant create templates of type incident (ivan) - resolved.
+- 0000134: [scheduler] auto_chase uses deprecated send_template_email() function (ivan) - resolved.
+- 0000460: [other] html_redirect problems outside of htdocs (ivan) - resolved.
+- 0000452: [setup/config] Array type config variables broken (ivan) - resolved.
+- 0000459: [knowledge base] Editing kb articles removes Additional Infos (ivan) - resolved.
+- 0000477: [timesheet] unable to decline timesheets (paulh) - resolved.
+- 0000469: [reports] Links from within the Reports pages do not redirect correctly - resolved.
+- 0000214: [incidents] Re-arrange add-incident form to avoid scrolling (ivan) - resolved.
+- 0000417: [other] Journal is not linked on menu (ivan) - resolved.
+- 0000431: [setup/config] Setup gets stuck in a loop (ivan) - resolved.
+- 0000410: [inbound email] Portal created incident popup from the holding que does not allow it to be assigned. (paulh) - resolved.
+- 0000036: [incidents] updates.currentstatus not always set (paulh) - resolved.
+- 0000391: [incidents] current owner not populated (paulh) - resolved.
+- 0000451: [timesheet] Unable to approve timesheets in SVN (paulh) - resolved.
+- 0000448: [reports] Site products matrix report not on menu (ivan) - resolved.
+- 0000196: [setup/config] We should use set_include_path.inc.php instead of modifying php.ini (ivan) - resolved.
+ - 0000390: [timesheet] Cant add entries to timesheet (paulh) - resolved.
+- 0000438: [billing] Billing 'limit' unclear (paulh) - resolved.
+- 0000442: [billing] update_contract_balance called incorrectly (paulh) - resolved.
+- 0000440: [billing] edit_service button always says transfer (paulh) - resolved.
+- 0000429: [billing] Move billing functions to lib/ (paulh) - resolved.
+ - 0000401: [billing] After approving a billable incident you get a SQL error (paulh) - resolved.
+ - 0000428: [billing] Billing functions need documenting (paulh) - resolved.
+ - 0000436: [billing] Update transactions on adjusting a incident (paulh) - resolved.
+- 0000433: [billing] Update shows billing time inseconds (paulh) - resolved.
+- 0000434: [billing] Prevent engineer starting multiple activities (paulh) - resolved.
+- 0000430: [portal] contracts.php viewable without auth (paulh) - resolved.
+- 0000082: [other] Tabbed configuration page (ivan) - resolved.
+- 0000415: [triggers] {contactphone} not replaced (ivan) - resolved.
+- 0000420: [search] Search box doesn't work outside of root (paulh) - resolved.
+- 0000421: [incidents] Autosave emails misisng reply to address (paulh) - resolved.
+- 0000324: [outbound email] Tidy email.inc.php (ivan) - resolved.
+- 0000331: [setup/config] Config page should hide passwords (ivan) - resolved.
+- 0000237: [tasks] Ability to change task ownership (ivan) - resolved.
+- 0000373: [holidays] Booking holidays in the future gives them a day early (ivan) - resolved.
+- 0000314: [reports] Report showing more details of site usage of service (paulh) - resolved.
+- 0000245: [reports] "SYLK: File format is not valid" error message when you open csv in Excel (paulh) - resolved.
+- 0000379: [billing] Example of transfers (paulh) - resolved.
+- 0000407: [billing] Show FoC column in summary report (paulh) - resolved.
+- 0000356: [dashboard] watch_incidents adding a incident (ivan) - resolved.
+- 0000388: [notices] Incident assignment notices dont work if your in a subdir of htdocs (ivan) - resolved.
+- 0000188: [other] Remove spellchecking code (ivan) - resolved.
+- 0000367: [inbound email] Mail connection failures result in blank emails (kieran) - resolved.
+- 0000369: [contracts] contracts page does not show reseller (paulh) - resolved.
+- 0000386: [billing] Transactions.php show more details (paulh) - resolved.
+- 0000378: [billing] Store PO number on service (paulh) - resolved.
+- 0000380: [billing] Title on service (paulh) - resolved.
+- 0000358: [incidents] Remove incidents/action.inc.php (paulh) - resolved.
+- 0000368: [other] Write trigger_errors to disk (ivan) - resolved.
+- 0000363: [calendar] From April 2009 beginning of week starts on a Sunday (ivan) - resolved.
+- 0000339: [incidents] Reopen page broken (kieran) - resolved.
+- 0000138: [incidents] Emoticons (kieran) - resolved.
+- 0000353: [other] Statistics total for vendor blank (paulh) - resolved.
+- 0000348: [incidents] Timeof next action interface problem (paulh) - resolved.
+- 0000351: [holidays] Unable to book holidays as free (paulh) - resolved.
+- 0000347: [incidents] Time to next action controls act strangely (ivan) - resolved.
+- 0000341: [setup/config] Register globals error should be fatal (ivan) - resolved.
+- 0000226: [i18n] Hardcoded language --> You are using a pre-release version (ivan) - resolved.
+- 0000325: [setup/config] Type error in set_include_path.inc.php-dist (paulh) - resolved.
+- 0000301: [reports] site_incidents.php incorrect (paulh) - resolved.
+- 0000275: [inbound email] imap choice of sub-folder (kieran) - resolved.
+- 0000215: [i18n] Language hardcoded - Dashboard -> Statistics of the day (ivan) - resolved.
+- 0000240: [contracts] Changing the product assigned to a contract breaks the contract (ivan) - resolved.
+- 0000299: [incidents] Add incident doesn't move attachments correctly (ivan) - resolved.
+- 0000296: [other] Log 'hidden' errors (ivan) - resolved.
+- 0000300: [incidents] Column 'type' specified twice (ivan) - resolved.
+- 0000269: [inbound email] Mime decoding not up to scratch (kieran) - resolved.
+ - 0000270: [inbound email] Accented characters truncate inbound email body (kieran) - resolved.
+- 0000297: [inbound email] Email connection ignores user (kieran) - resolved.
+- 0000298: [inbound email] Be able to specify incomingmail 'inbox' (kieran) - resolved.
+- 0000068: [outbound email] Support Manager config (ivan) - resolved.
+- 0000292: [other] Rename "View Incidents" and "Watch Incidents" (kieran) - resolved.
+- 0000177: [billing] one click start/stop activity (paulh) - resolved.
+- 0000218: [i18n] Hardcoded text in the triggers page (kieran) - resolved.
+- 0000229: [billing] Ability to edit duration on activities (paulh) - resolved.
+- 0000266: [portal] Make portal creating incidents optional (kieran) - resolved.
+
+
+Changes in v3.41 - Released 17 December 2008
+-----------------------------------------------------------------------
+- 0000339: [incidents] Reopen page broken (kieran) - resolved.
+- 0000322: [other] bbcode [[att = should be optional (ivan) - resolved.
+- 0000262: [profiles] finish bracket shows up in when editing a user & Email shown outside box layout (ivan) - resolved.
+- 0000321: [outbound email] autosave notice icon missing (paulh) - resolved.
+- 0000310: [dashboard] Cannot remove items from Watch Incidents dashlet (ivan) - resolved.
+- 0000283: [incidents] After sending an e-mail to a client from the incident details page, redirect fails (ivan) - resolved.
+- 0000287: [profiles] Password for engineers cannot be changed from their profile (ivan) - resolved.
+- 0000279: [incidents] Creating a new user from the add-incident page returns back to wrong page (ivan) - resolved.
+- 0000223: [i18n] $strCancel missing (paulh) - resolved.
+- 0000261: [incidents] When trying to close an open incident javascript is not found (ivan) - resolved.
+- 0000268: [incidents] Forename is missing on the find contact stage of add incident (kieran) - resolved.
+- 0000247: [billing] Completing activity doesn't update incidents table (paulh) - resolved.
+- 0000256: [inbound email] Assigning a mail to a fictive incident number --> reassign causes an error (paulh) - resolved.
+- 0000263: [inbound email] Inbound email uses the wrong port by default (kieran) - resolved.
+- 0000253: [scheduler] auto.php doesn't call inboundemail.php when.. (ivan) - resolved.
+- 0000259: [portal] Help tooltips are broken in the portal (ivan) - resolved.
+- 0000258: [portal] Portal edit user details doesn't check permissions properly (ivan) - resolved.
+- 0000241: [portal] can't change password in portal (ivan) - resolved.
+- 0000236: [setup] $CONFIG['closure_delay'] missing from defaults (ivan) - resolved.
+- 0000251: [portal] Customer admins can associate contracts of other companies (ivan) - resolved.
+- 0000246: [incidents] Malformed sql query in reopen_incident.php module (paulh) - resolved.
+- 0000225: [i18n] "Day View" is hardcoded (ivan) - resolved.
+- 0000230: [billing] Permission for editing duration of activities (paulh) - resolved.
+- 0000239: [billing] One time service balance editor should hide Transfer when N/A (paulh) - resolved.
+- 0000106: [other] Merge autocomplete.php into ajaxdata.php (paulh) - resolved.
+- 0000242: [sites & contacts] Problems editing contacts (ivan) - resolved.
+- 0000222: [i18n] $strHolidayAfternoonOnly not defined in language file (kieran) - resolved.
+- 0000243: [sites & contacts] browse_sites search box shows "Code not yet finished" (ivan)
+
+
 Changes in v3.40 - Released 21 November 2008
 -----------------------------------------------------------------------
 - 0000238: [contracts] Contracts from other sites do not show in a supported contacts' list (ivan) - resolved.
