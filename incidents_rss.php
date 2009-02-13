@@ -18,9 +18,9 @@ require ($lib_path.'functions.inc.php');
 // The information it reveals should not be sensitive
 
 $c = cleanvar($_GET['c']);
+$usql = "SELECT id FROM `{$dbUsers}` WHERE MD5(CONCAT(`username`, `email`)) = '$c' LIMIT 1";
+$uresult = mysql_query($usql);
 
-$usql = "SELECT id FROM users WHERE MD5(CONCAT(`username`, `email`)) = '$c' LIMIT 1";
-$uresult = @mysql_query($usql);
 if ($uresult)
 {
     list($userid) = mysql_fetch_row($uresult);
@@ -37,7 +37,6 @@ if (!is_numeric($userid))
 
 $sql = "SELECT * FROM `{$dbIncidents}` WHERE (owner='$userid' OR towner='$userid') ";
 $sql .= "AND (status!='".STATUS_CLOSED."') ORDER BY lastupdated DESC LIMIT 5";  // not closed
-
 $result = mysql_query($sql);
 if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
