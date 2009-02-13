@@ -100,6 +100,7 @@ if ($sit[0] != '')
 
 echo "</head>\n";
 echo "<body>\n";
+echo $_SESSION['startdate'];
 echo "<div id='masthead'><h1 id='apptitle'><span>{$CONFIG['application_name']}</span></h1></div>\n";
 // Show menu if logged in
 if ($sit[0] != '')

@@ -18,7 +18,8 @@ require ($lib_path.'functions.inc.php');
 // The information it reveals should not be sensitive
 
 $c = cleanvar($_GET['c']);
-$usql = "SELECT id FROM `{$dbUsers}` WHERE MD5(CONCAT(`username`, `email`)) = '$c' LIMIT 1";
+$salt = md5($CONFIG['db_password']);
+$usql = "SELECT id FROM `{$dbUsers}` WHERE MD5(CONCAT(`username`, '{$salt}')) = '$c' LIMIT 1";
 $uresult = mysql_query($usql);
 
 if ($uresult)

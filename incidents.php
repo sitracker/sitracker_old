@@ -39,7 +39,7 @@ $refresh = $_SESSION['incident_refresh'];
 
 if ($user == 'current' OR $user == $_SESSION['userid'])
 {
-    $rssfeedurl = "incidents_rss.php?c=".md5($_SESSION['username'] . $_SESSION['email']);
+    $rssfeedurl = "incidents_rss.php?c=".md5($_SESSION['username'] . md5($CONFIG['db_password']));
     $rssfeedtitle = $strIncidents;
 }
 include ('./inc/htmlheader.inc.php');

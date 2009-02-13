@@ -76,6 +76,7 @@ elseif (authenticate($username, $_REQUEST['password']) == 1)
     $_SESSION['groupid'] = is_null($user->groupid) ? 0 : $user->groupid;
     $_SESSION['utcoffset'] = $user->var_utc_offset;
     $_SESSION['portalauth'] = FALSE;
+    $_SESSION['startdate'] = $user->user_startdate;
 
     // Delete any old session user notices
     $sql = "DELETE FROM `{$dbNotices}` WHERE durability='session' AND userid={$_SESSION['userid']}";
