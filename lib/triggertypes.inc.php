@@ -32,13 +32,6 @@ array('name' => $strContactResetPassword,
       'type' => 'system'
       );
 
-$triggerarray['TRIGGER_HIDDEN_ERROR'] =
-array('name' => $strHiddenError,
-      'description' => $strTriggerHiddenErrorDesc,
-      'required' => array('errortype','errorstring','errorfile','errorline',
-                          'backtrace')
-      );
-
 $triggerarray['TRIGGER_HOLIDAY_REQUESTED'] =
 array('name' => $strHolidayRequested,
       'description' => $strTriggerHolidayRequestedDesc,
