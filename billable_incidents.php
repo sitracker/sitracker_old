@@ -87,17 +87,18 @@ if (empty($mode))
 
     echo "<tr><th>{$strType}:</th><td>";
     echo "<label><input type='radio' name='mode' value='summarypage' id='summarypage' onclick=\"$('startdatesection').hide();" .
-            " $('enddatesection').hide(); $('sitebreakdownsection').hide(); $('displaysection').show(); $('showfoc').show(); $('showfocaszero').show();\" checked='checked' />{$strSummary}</label> ";
+            " $('enddatesection').hide(); $('sitebreakdownsection').hide(); $('displaysection').show(); $('showfoc').show(); $('showfocaszero').show(); $('showexpiredaszero').show();\" checked='checked' />{$strSummary}</label> ";
+
     if (user_permission($sit[2], 73) == TRUE)
     {
         echo "<label><input type='radio' name='mode' value='approvalpage' id='approvalpage' onclick=\"$('startdatesection').show();" .
-                " $('enddatesection').show(); $('sitebreakdownsection').hide(); $('displaysection').hide(); $('showfoc').hide(); $('showfocaszero').hide();\" />{$strApprove}</label> ";
+                " $('enddatesection').show(); $('sitebreakdownsection').hide(); $('displaysection').hide(); $('showfoc').hide(); $('showfocaszero').hide(); $('showexpiredaszero').hide();\" />{$strApprove}</label> ";
     }
 
     if (user_permission($sit[2], 76) == TRUE)
     {
         echo "<label><input type='radio' name='mode' value='transactions' id='transactions' onclick=\"$('startdatesection').show(); " .
-                "$('enddatesection').show(); $('sitebreakdownsection').show(); $('displaysection').show(); $('showfoc').show(); $('showfocaszero').show();\" />{$strTransactions}</label> ";
+                "$('enddatesection').show(); $('sitebreakdownsection').show(); $('displaysection').show(); $('showfoc').show(); $('showfocaszero').show(); $('showexpiredaszero').hide();\" />{$strTransactions}</label> ";
     }
     echo "</td></tr>\n";
 
@@ -123,6 +124,9 @@ if (empty($mode))
 
     echo "<tbody id='showfocaszero'><tr><th>{$strShowFreeOfChargeAsZero}</th>";
     echo "<td><input type='checkbox' id='focaszero' name='focaszero' value='show' checked='checked' /></td></tr></tbody>";
+
+    echo "<tbody id='showexpiredaszero'><tr><th>{$strShowExpiredAsZero}</th>";
+    echo "<td><input type='checkbox' id='expiredaszero' name='expiredaszero' value='show' checked /></td></tr></tbody>";
 
     echo "<tbody id='displaysection' ><tr><th>{$strOutput}:</th>";
     echo "<td><label><input type='radio' name='display' value='html' checked='checked' /> {$strScreen}</label>";
