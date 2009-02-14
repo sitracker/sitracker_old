@@ -1245,7 +1245,7 @@ switch ($_REQUEST['action'])
                             while ($dashboardnames = mysql_fetch_object($result))
                             {
                                 $version = 1;
-                                include ("dashboard/dashboard_{$dashboardnames->name}.php");
+                                include (dirname( __FILE__ ).DIRECTORY_SEPARATOR."plugins/dashboard_{$dashboardnames->name}.php");
                                 $func = "dashboard_{$dashboardnames->name}_get_version";
 
                                 if (function_exists($func))
