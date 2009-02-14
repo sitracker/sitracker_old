@@ -48,7 +48,7 @@ function portal_incident_table($sql)
         $html .=  "</tr>\n";
         while ($incident = mysql_fetch_object($result))
         {
-            $html .=  "<tr class='$shade'><td>";
+            $html .=  "<tr class='$shade'><td align='center'>";
             $html .=  "<a href='incident.php?id={$incident->id}'>{$incident->id}</a></td>";
             $html .=  "<td>";
             if (!empty($incident->softwareid))
@@ -57,14 +57,14 @@ function portal_incident_table($sql)
             }
 
             $html .= "<strong><a href='incident.php?id={$incident->id}'>{$incident->title}</a></strong></td>";
-            $html .= "<td>".user_realname($incident->owner)."</td>";
-            $html .= "<td>".ldate($CONFIG['dateformat_datetime'], $incident->lastupdated)."</td>";
-            $html .= "<td><a href='contactdetails.php?id={$incident->contactid}'>";
+            $html .= "<td align='center'>".user_realname($incident->owner)."</td>";
+            $html .= "<td align='center'>".ldate($CONFIG['dateformat_datetime'], $incident->lastupdated)."</td>";
+            $html .= "<td align='center'><a href='contactdetails.php?id={$incident->contactid}'>";
             $html .= "{$incident->forenames} {$incident->surname}</a></td>";
-            $html .= "<td>".incidentstatus_name($incident->status, external)."</td>";
+            $html .= "<td align='center'>".incidentstatus_name($incident->status, external)."</td>";
             if ($showclosed != "true")
             {
-                $html .=  "<td><a href='update.php?id={$incident->id}'>{$GLOBALS['strUpdate']}</a> | ";
+                $html .=  "<td align='center'><a href='update.php?id={$incident->id}'>{$GLOBALS['strUpdate']}</a> | ";
 
                 //check if the customer has requested a closure
                 $lastupdate = list($update_userid, $update_type, $update_currentowner, $update_currentstatus, $update_body, $update_timestamp, $update_nextaction, $update_id)=incident_lastupdate($incident->id);
