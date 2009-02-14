@@ -633,9 +633,9 @@ INSERT INTO `{$dbLinkTypes}`
 VALUES (1,'Task','Subtask','Parent Task','tasks','id','tasks','id','name','','view_task.php?id=%id%'),
 (2,'Contact','Contact','Contact Task','tasks','id','contacts','id','CONCAT(forenames, \" \", surname)','','contact_details.php?id=%id%'),
 (3,'Site','Site','Site Task','tasks','id','sites','id','name','','site_details.php?id=%id%'),
-(4,'Incident','Incident','Task','tasks','id','incidents','id','title','','incident_details.php?id=%id%'),
+(4,'Incident','Incident','Task','incidents','id','tasks','id','title','','incident_details.php?id=%id%'),
 (5,'Attachments', 'Update', 'File', 'updates', 'id', 'files', 'id', 'filename', '', 'incident_details.php?updateid=%id%&tab=files'),
-(6, 'Incident', 'Transaction', 'Incidents', 'transactions', 'transactionid', 'incidents', 'id', '', '', '');;
+(6, 'Incident', 'Transaction', 'Incidents', 'transactions', 'transactionid', 'incidents', 'id', '', '', '');
 
 
 CREATE TABLE `{$dbMaintenance}` (
@@ -2532,7 +2532,10 @@ ALTER TABLE `{$dbTempIncoming}` ADD `reason_id` TINYINT( 1 ) NOT NULL DEFAULT '1
  ADD `incident_id` INT( 11 ) NOT NULL DEFAULT '0' AFTER `reason_id` ;
 
 -- KMH 2009-02-11
- ALTER TABLE `{$dbUsers}` CHANGE `var_i18n` `var_i18n` VARCHAR( 5 ) NOT NULL DEFAULT 'en-GB' 
+ ALTER TABLE `{$dbUsers}` CHANGE `var_i18n` `var_i18n` VARCHAR( 5 ) NOT NULL DEFAULT 'en-GB'
+
+-- INL 2009-02-14
+UPDATE `{$dbLinkTypes}` SET origtab = 'incidents', linktab='tasks' WHERE id = 4;
 ";
 
 // Important: When making changes to the schema you must add SQL to make the alterations
