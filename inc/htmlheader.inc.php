@@ -265,9 +265,10 @@ if ($sit[0] != '')
         echo "<p class='error'><strong>IMPORTANT</strong> The SiT database schema needs to be updated";
         if (user_permission($sit[2], 22))
         {
-            echo "from v{$dbversion} to v{$application_version}</p>";
+            echo " from v{$dbversion} to v{$application_version}</p>";
             echo "<p class='tip'>Visit <a href='setup.php'>Setup</a> to update the schema";
         }
+        echo "</p>";
     }
 
     // Check users email address

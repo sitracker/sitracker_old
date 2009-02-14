@@ -1255,13 +1255,13 @@ switch ($_REQUEST['action'])
 
                                 if ($version > $dashboardnames->version)
                                 {
-                                    echo "<p>Upgrading {$dashboardnames->name}...</p>";
+                                    echo "<p>Upgrading {$dashboardnames->name} dashlet to v$version...</p>";
                                     // apply all upgrades since running version
                                     $upgrade_func = "dashboard_{$dashboardnames->name}_upgrade";
 
                                     if (function_exists($upgrade_func))
                                     {
-                                        $dashboard_schema = $func();
+                                        $dashboard_schema = $upgrade_func();
                                         for ($i = $dashboardnames->version; $i <= $version; $i++)
                                         {
                                             setup_exec_sql($dashboard_schema[$i]);
