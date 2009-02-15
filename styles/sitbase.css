@@ -37,24 +37,6 @@ fieldset { background: #DEDEFF;}
 legend { border: 1px solid #185594; background: white; padding: 0px 15px;}
 var { font-family: monospace; color: #303030; }
 
-input[type=submit], input[type=button], input[type=reset]
-{
-    margin-top: 4px;
-    background: #185594;
-    color: white; border:
-    1px solid #185594;
-    /*text-transform: uppercase;*/
-    -moz-border-radius: 3px;
-    -webkit-border-radius: 3px;
-    border-radius: 3px;
-}
-input[type=reset] {margin-left: 4px; margin-right:4px;}
-input[type=submit]:hover, input[type=button]:hover, input[type=reset]:hover
-{
-    background: #EEF6FF; border: 1px solid #205D94; color: #185594;
-}
-
-
 /* ID & Class Selectors */
 
 #masthead {

@@ -15,6 +15,7 @@ a:active    { font-family: Tahoma, Helvetica, sans serif; font-size: 8pt; color:
 center      { font-family: Tahoma, Helvetica, sans serif; font-size: 8pt; color: #000000; }
 
 h1 { color: #FFF; background-color: #FFC68C; margin: 0px; }
+h4 {text-align: center;}
 
 /* Shading for tables*/
 .mainshade  { background-color: #FFFFFF; }
@@ -25,7 +26,8 @@ tr.critical   { background-color: #f08080; }
 tr.expired    { background-color: #DDDDDF; }
 tr.idle       { background-color: #CCffCC; } /* #90ee90; */
 
-
+form table.vertical { margin-left: auto; margin-right: auto; }
+form p { text-align:center;}
 
 div.windowbox
 {
@@ -35,4 +37,21 @@ div.windowbox
 div.windowtitle, #statusbar
 {
     background-color: #FFA953;
+}
+
+
+input[type=submit], input[type=button], input[type=reset]
+{
+    margin-top: 4px;
+    background: #FFA953;
+    color: white; border: 1px solid #ccc;
+    /*text-transform: uppercase;*/
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    border-radius: 3px;
+}
+input[type=reset] {margin-left: 4px; margin-right:4px;}
+input[type=submit]:hover, input[type=button]:hover, input[type=reset]:hover
+{
+    background: white; border: 1px solid #FFA953; color: #FFA953;
 }
