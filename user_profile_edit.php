@@ -243,7 +243,7 @@ if (empty($mode))
     echo "</td></tr>\n";
 
     if ($user->var_utc_offset == '') $user->var_utc_offset = 0;
-    echo "<tr><th>{$strUTCOffset}</th><td>".array_drop_down($availabletimezones, 'utcoffset', $user->var_utc_offset)."</td></tr>\n";
+    echo "<tr><th>{$strUTCOffset}</th><td>".array_drop_down($availabletimezones, 'utcoffset', $user->var_utc_offset, '', TRUE)."</td></tr>\n";
 
     echo "<tr><th>{$strInterfaceStyle}</th><td>".interfacestyle_drop_down('style', $user->var_style)."</td></tr>\n";
     echo "<tr><th>{$strIncidentRefresh}</th>";
