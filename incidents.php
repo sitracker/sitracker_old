@@ -331,7 +331,7 @@ switch ($type)
             if ($rowcount >= 1)
             {
                 // Incidents Table
-                include ('incidents_table.inc.php');
+                include ('inc/incidents_table.inc.php');
             }
             else echo "<p class='info'>{$strNoIncidents}</p>";
 
