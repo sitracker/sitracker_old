@@ -165,7 +165,7 @@ elseif ($action == 'findcontact')
     // Filter by contact
     $contactsql .= "AND (c.surname LIKE '%$search_string%' OR c.forenames LIKE '%$search_string%' ";
     $contactsql .= "OR SOUNDEX('$search_string') = SOUNDEX(CONCAT_WS(' ', c.forenames, c.surname)) ";
-    $contactsql .= "OR SOUNDEX('$search_string') = SOUNDEX(CONCAT_WS(', ', c.surname, c.forenames)) ";
+//     $contactsql .= "OR SOUNDEX('$search_string') = SOUNDEX(CONCAT_WS(', ', c.surname, c.forenames)) ";
     $contactsql .= "OR s.name LIKE '%$search_string%') ";
 
     $sql  = "SELECT p.name AS productname, p.id AS productid, c.surname AS surname, ";
@@ -202,10 +202,11 @@ elseif ($action == 'findcontact')
         $sql .= "AND c.id = '$contactid' ";
     }
 
+debug_log($sql);
 
-    $result=mysql_query($sql);
+    $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
-    if (mysql_num_rows($result)>0)
+    if (mysql_num_rows($result) > 0)
     {
         include ('./inc/htmlheader.inc.php');
         ?>
@@ -234,9 +235,10 @@ elseif ($action == 'findcontact')
 
         while ($contactrow = mysql_fetch_array($result))
         {
+            debug_log('hello'.print_r($contactrow, true));
             if (empty($CONFIG['preferred_maintenance']) OR
                 (is_array($CONFIG['preferred_maintenance']) AND
-                in_array(servicelevel_id2tag($contactrow['servicelevelid']),
+                    in_array(servicelevel_id2tag($contactrow['servicelevelid']),
                                              $CONFIG['preferred_maintenance'])))
             {
                 $str_prefered .= to_row($contactrow);
@@ -335,7 +337,7 @@ elseif ($action == 'findcontact')
         }
         else
         {
-            echo "<h3>No matching contacts found</h3>";
+            echo "<h3>".sprintf($strNoResultsFor, $strContacts)."</h3>";
             echo "<p align='center'><a href=\"contact_add.php?name=".urlencode($search_string)."&amp;return=addincident\">{$strAddContact}</a></p>";
         }
         echo "<p align='center'><a href=\"{$_SERVER['PHP_SELF']}?updateid={$updateid}&amp;win={$win}\">{$strSearchAgain}</a></p>";
@@ -402,16 +404,12 @@ elseif ($action == 'findcontact')
         }
         else
         {
-            echo "<h3>No matching contacts found</h3>";
+            echo "<h3>".sprintf($strNoResultsFor, $strContacts)."</h3>";
             echo "<p align='center'><a href=\"contact_add.php?name=".urlencode($search_string)."&amp;return=addincident\">{$strAddContact}</a></p>\n";
         }
 
-
         include ('./inc/htmlfooter.inc.php');
     }
-
-
-
 }
 elseif ($action=='incidentform')
 {

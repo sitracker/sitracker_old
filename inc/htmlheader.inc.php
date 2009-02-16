@@ -257,9 +257,9 @@ if ($sit[0] != '')
 
     // Check this is current
     $sql = "SELECT version FROM `{$dbSystem}` WHERE id = 0";
-    $result = mysql_query($sql);
+    $versionresult = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
-    list($dbversion) = mysql_fetch_row($result);
+    list($dbversion) = mysql_fetch_row($versionresult);
     if ($dbversion < $application_version)
     {
         echo "<p class='error'><strong>IMPORTANT</strong> The SiT database schema needs to be updated";
