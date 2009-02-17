@@ -35,7 +35,7 @@ if (empty($display)) $display = 'html';
 $showfoc = cleanvar($_REQUEST['foc']);
 $focaszero = cleanvar($_REQUEST['focaszero']);
 
-if (empty($showfoc) OR $showfoc != 'show') $showfoc = FALSE;
+if (!empty($showfoc) AND $showfoc != 'show') $showfoc = FALSE;
 else $showfoc = TRUE;
 
 if (!empty($site) AND empty($sites)) $sites = array($site);
