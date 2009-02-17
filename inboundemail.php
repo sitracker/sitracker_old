@@ -219,6 +219,7 @@ if ($emails > 0)
 
             case 'text':
                 if (is_array($results['To']))
+                {
                     foreach ($results['To'] as $var)
                     {
                         $num = sizeof($results['To']);
