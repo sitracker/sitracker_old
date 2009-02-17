@@ -258,7 +258,7 @@ if (!empty($selected))
 <?php
 
 // extract updates
-$sql  = "SELECT u.id AS id, u.*, ti.* ";
+$sql  = "SELECT u.id AS id, ti.id AS tempid, u.*, ti.* ";
 $sql .= "FROM `{$dbUpdates}` AS u, `{$dbTempIncoming}` AS ti ";
 $sql .= "WHERE u.incidentid = 0 AND ti.updateid = u.id ";
 $sql .= "ORDER BY timestamp ASC, ti.id ASC";
