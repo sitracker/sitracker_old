@@ -254,6 +254,7 @@ $i18n_codes = array(
                     'el-GR' => 'Ελληνικά',
                     'es-ES' => 'Español',
                     'es-CO' => 'Español (Colombia)',
+                    'es-MX' => 'Español (Mexicano)',
                     'et-EE' => 'Eesti',
                     'eu-ES' => 'Euskara',
                     'fa-IR' => 'فارسی',
