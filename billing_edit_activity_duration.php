@@ -12,13 +12,12 @@
 // TODO should this update the tasks table?
 // Author:  Paul Heaney Paul Heaney <paulheaney[at]users.sourceforge.net>
 
-$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
 $permission =  81;
 
-require_once('db_connect.inc.php');
-require_once('functions.inc.php');
+require ('core.php');
+require_once (APPLICATION_LIBPATH . 'functions.inc.php');
 // This page requires authentication
-require_once('auth.inc.php');
+require_once (APPLICATION_LIBPATH . 'auth.inc.php');
 
 $mode = cleanvar($_REQUEST['mode']);
 $updateid = cleanvar($_REQUEST['updateid']);
@@ -81,7 +80,7 @@ switch ($mode)
 
         if (mysql_num_rows($result) == 1)
         {
-            include ('inc/incident_html_top.inc.php');
+            include (APPLICATION_INCPATH . 'incident_html_top.inc.php');
             $obj = mysql_fetch_object($result);
 
             echo "<h2>{$strAdjustActivityDuration}</h2>";
@@ -101,7 +100,7 @@ switch ($mode)
             echo "<input type='hidden' name='incidentid' id='incidentid' value='{$incidentid}' />";
             echo "</form>";
 
-            include ('inc/incident_html_bottom.inc.php');
+            include (APPLICATION_INCPATH . 'incident_html_bottom.inc.php');
         }
         else
         {

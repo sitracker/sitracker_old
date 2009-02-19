@@ -10,16 +10,16 @@
 
 // Author:  Paul Heaney Paul Heaney <paulheaney[at]users.sourceforge.net>
 
-$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
+
 $permission = 37; // Run Reports // FIXME permissions need defining
 
-require ($lib_path.'db_connect.inc.php');
-require ($lib_path.'functions.inc.php');
+require ('core.php');
+require (APPLICATION_LIBPATH . 'functions.inc.php');
 
-require_once ($lib_path . 'billing.inc.php');
+require_once (APPLICATION_LIBPATH . 'billing.inc.php');
 
 // This page requires authentication
-require ($lib_path.'auth.inc.php');
+require (APPLICATION_LIBPATH . 'auth.inc.php');
 
 $startdateorig = cleanvar($_REQUEST['startdate']);
 $enddateorig = cleanvar($_REQUEST['enddate']);
@@ -53,7 +53,7 @@ if (!empty($sites))
 
 if (empty($mode))
 {
-    include ('./inc/htmlheader.inc.php');
+    include (APPLICATION_INCPATH . 'htmlheader.inc.php');
 
     echo "<h2>{$strBilling}</h2>";
 
@@ -155,7 +155,7 @@ if (empty($mode))
     echo "<input type='submit' name='runreport' value='{$strRunReport}' onclick=\"return processForm();\" /></p>";
     echo "</form>";
 
-    include ('./inc/htmlfooter.inc.php');
+    include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
 }
 elseif ($mode == 'approvalpage')
 {
@@ -176,7 +176,7 @@ elseif ($mode == 'approvalpage')
 
     if ($output == 'html')
     {
-        include ('./inc/htmlheader.inc.php');
+        include (APPLICATION_INCPATH . 'htmlheader.inc.php');
         echo "<h2>{$strBillableIncidents} - {$strApprove}</h2>";
         ?>
         <script type="text/javascript">
@@ -518,14 +518,14 @@ elseif ($mode == 'approvalpage')
     if ($output == 'html')
     {
         echo "<p align='center'><a href='{$_SERVER['HTTP_REFERER']}'>{$strReturnToPreviousPage}</a></p>";
-        include ('./inc/htmlfooter.inc.php');
+        include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
     }
 }
 elseif ($mode == 'invoicepage')
 {
     if ($output == 'html')
     {
-        include ('./inc/htmlheader.inc.php');
+        include (APPLICATION_INCPATH . 'htmlheader.inc.php');
         $str .= "<h2>{$strBillableIncidents} - INVOICE</h2>";
 
         $resultsite = mysql_query($sitelistsql);
@@ -594,12 +594,12 @@ elseif ($mode == 'invoicepage')
     if ($output == 'html')
     {
         echo $str;
-        include ('inc/htmlfooter.inc.php');
+        include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
     }
 }
 elseif ($mode == 'summarypage')
 {
-    include ('inc/billing_summary.inc.php');
+    include (APPLICATION_INCPATH . 'billing_summary.inc.php');
 }
 elseif ($mode == 'transactions')
 {
