@@ -12,13 +12,13 @@
 
 // This Page Is Valid XHTML 1.0 Transitional! 31Oct05
 
-$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
+
 $permission = 42;
-require ($lib_path.'db_connect.inc.php');
-require ($lib_path.'functions.inc.php');
+require ('core.php');
+require (APPLICATION_LIBPATH . 'functions.inc.php');
 
 // This page requires authentication
-require ($lib_path.'auth.inc.php');
+require (APPLICATION_LIBPATH . 'auth.inc.php');
 
 
 /**
@@ -157,7 +157,7 @@ function deldir($location)
 $title = $strReviewHeldUpdates;
 $refresh = $_SESSION['incident_refresh'];
 $selected = $_POST['selected'];
-include ('./inc/htmlheader.inc.php');
+include (APPLICATION_INCPATH . 'htmlheader.inc.php');
 
 if ($lock = $_REQUEST['lock'])
 {
@@ -563,5 +563,5 @@ if ($show)
     echo $rhtml;
 }
 
-include ('./inc/htmlfooter.inc.php');
+include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
 ?>

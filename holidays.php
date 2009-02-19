@@ -9,14 +9,14 @@
 //
 
 // This Page Is Valid XHTML 1.0 Transitional!  13Sep06
-$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
+
 $permission = 4; // Edit your profile
 
-require ($lib_path.'db_connect.inc.php');
-require ($lib_path.'functions.inc.php');
+require ('core.php');
+require (APPLICATION_LIBPATH . 'functions.inc.php');
 
 // This page requires authentication
-require ($lib_path.'auth.inc.php');
+require (APPLICATION_LIBPATH . 'auth.inc.php');
 
 $approver = user_permission($sit[2], 50); // Approve holidays
 
@@ -38,7 +38,7 @@ else
     $title = sprintf($strUsersHolidays, user_realname($user));
 }
 
-include ('./inc/htmlheader.inc.php');
+include (APPLICATION_INCPATH . 'htmlheader.inc.php');
 echo "<h2>".icon('holiday', 32)." ";
 echo "$title</h2>";
 
@@ -256,5 +256,5 @@ if ($user == $sit[2])
     else echo "<tr class='shade2'><td><em>{$strNobody}</em></td></tr>\n";
     echo "</table>";
 }
-include ('./inc/htmlfooter.inc.php');
+include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
 ?>

@@ -9,14 +9,14 @@
 //
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
-$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
+
 $permission = 27; /* View your calendar */
-require ($lib_path.'db_connect.inc.php');
-require ($lib_path.'functions.inc.php');
+require ('core.php');
+require (APPLICATION_LIBPATH . 'functions.inc.php');
 $title = $strHolidayRequests;
 
 // This page requires authentication
-require ($lib_path.'auth.inc.php');
+require (APPLICATION_LIBPATH . 'auth.inc.php');
 
 // External variables
 $user = cleanvar($_REQUEST['user']);
@@ -27,7 +27,7 @@ $type = cleanvar($_REQUEST['type']);
 $memo = cleanvar($_REQUEST['memo'], TRUE, FALSE, FALSE);
 $approvaluser = cleanvar($_REQUEST['approvaluser']);
 
-include ('./inc/htmlheader.inc.php');
+include (APPLICATION_INCPATH . 'htmlheader.inc.php');
 
 function display_holiday_table($result)
 {
@@ -277,5 +277,5 @@ else
     }
     echo "<p align='center'><a href='holidays.php?user={$user}'>{$strMyHolidays}</p></p>";
 }
-include ('./inc/htmlfooter.inc.php');
+include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
 ?>
