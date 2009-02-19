@@ -13,8 +13,8 @@ if (realpath(__FILE__) == realpath($_SERVER['SCRIPT_FILENAME']))
     exit;
 }
 
-require_once('base.inc.php');
-require_once('contract.inc.php');
+require_once (APPLICATION_LIBPATH . 'base.inc.php');
+require_once (APPLICATION_LIBPATH . 'contract.inc.php');
 
 
 /**

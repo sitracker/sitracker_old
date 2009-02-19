@@ -23,19 +23,18 @@ if (realpath(__FILE__) == realpath($_SERVER['SCRIPT_FILENAME']))
     exit;
 }
 
-$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR;
-include ('classes.inc.php');
-include ('ldap.inc.php');
-include ($lib_path . 'base.inc.php');
-include_once ($lib_path . 'billing.inc.php');
-include_once ($lib_path . 'user.inc.php');
-include_once ($lib_path . 'sla.inc.php');
-include_once ($lib_path . 'ftp.inc.php');
-include_once ($lib_path . 'tags.inc.php');
-include_once ($lib_path . 'string.inc.php');
-include_once ($lib_path . 'html.inc.php');
-include_once ($lib_path . 'tasks.inc.php');
-include_once ($lib_path . 'export.inc.php');
+include (APPLICATION_LIBPATH . 'classes.inc.php');
+include (APPLICATION_LIBPATH . 'ldap.inc.php');
+include (APPLICATION_LIBPATH . 'base.inc.php');
+include_once (APPLICATION_LIBPATH . 'billing.inc.php');
+include_once (APPLICATION_LIBPATH . 'user.inc.php');
+include_once (APPLICATION_LIBPATH . 'sla.inc.php');
+include_once (APPLICATION_LIBPATH . 'ftp.inc.php');
+include_once (APPLICATION_LIBPATH . 'tags.inc.php');
+include_once (APPLICATION_LIBPATH . 'string.inc.php');
+include_once (APPLICATION_LIBPATH . 'html.inc.php');
+include_once (APPLICATION_LIBPATH . 'tasks.inc.php');
+include_once (APPLICATION_LIBPATH . 'export.inc.php');
 
 // function stripslashes_array($data)
 // {
@@ -96,7 +95,7 @@ if (get_magic_quotes_gpc())
 }
 
 
-require ('triggers.inc.php');
+require (APPLICATION_LIBPATH . 'triggers.inc.php');
 
 /**
     * Authenticate a user with a username/password pair
@@ -6545,7 +6544,7 @@ function kb_article($id, $mode='internal')
     if (!is_number($id) OR $id == 0)
     {
         trigger_error("Incorrect KB ID", E_USER_ERROR);
-        include 'htmlfooter.inc.php';
+        include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
         exit;
     }
 
@@ -6599,7 +6598,7 @@ function kb_article($id, $mode='internal')
                 if ($mode != 'internal')
                 {
                     echo "<p class='error'>{$GLOBALS['strPermissionDenied']}</p>";
-                    include 'htmlfooter.inc.php';
+                    include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
                     exit;
                 }
                 $html .= "<div class='kbprivate'><h3>{$kbcontent->header} (private)</h3>";
@@ -6610,7 +6609,7 @@ function kb_article($id, $mode='internal')
                 if ($mode != 'internal')
                 {
                     echo "<p class='error'>{$GLOBALS['strPermissionDenied']}</p>";
-                    include 'htmlfooter.inc.php';
+                    include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
                     exit;
                 }
                 $html .= "<div class='kbrestricted'><h3>{$kbcontent->header}</h3>";
@@ -7409,7 +7408,7 @@ function populate_syslang()
 {
     global $CONFIG;
     // Populate $SYSLANG with system lang
-    $file = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR."i18n/{$CONFIG['default_i18n']}.inc.php";
+    $file = APPLICATION_I18NPATH . "{$CONFIG['default_i18n']}.inc.php";
     if (file_exists($file))
     {
         $fh = fopen($file, "r");
@@ -7564,9 +7563,9 @@ if (is_array($CONFIG['plugins']))
         $plugin = str_replace('/','',$plugin);
         if ($plugin != '')
         {
-            if (file_exists(dirname( __FILE__ ).DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR."plugins/{$plugin}.php"))
+            if (file_exists(APPLICATION_PLUGINPATH . "{$plugin}.php"))
             {
-                include (dirname( __FILE__ ).DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR."plugins/{$plugin}.php");
+                include (APPLICATION_PLUGINPATH . "{$plugin}.php");
             }
             else
             {

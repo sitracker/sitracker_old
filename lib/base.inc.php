@@ -153,15 +153,15 @@ error_reporting(E_ALL);
 $oldeh = set_error_handler("sit_error_handler");
 
 // Decide which language to use and setup internationalisation
-require (dirname( __FILE__ ).DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'i18n/en-GB.inc.php');
+require (APPLICATION_I18NPATH . 'en-GB.inc.php');
 if ($CONFIG['default_i18n'] != 'en-GB')
 {
-    include (dirname( __FILE__ ).DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR."i18n/{$CONFIG['default_i18n']}.inc.php");
+    include (APPLICATION_I18NPATH . "{$CONFIG['default_i18n']}.inc.php");
 }
 if (!empty($_SESSION['lang'])
     AND $_SESSION['lang'] != $CONFIG['default_i18n'])
 {
-    include (dirname( __FILE__ ).DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR."i18n/{$_SESSION['lang']}.inc.php");
+    include (APPLICATION_I18NPATH . "{$_SESSION['lang']}.inc.php");
 }
 ini_set('default_charset', $i18ncharset);
 

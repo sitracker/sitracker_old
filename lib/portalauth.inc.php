@@ -23,16 +23,16 @@ session_start();
 
 if (!isset($accesslevel))
 {
-    include 'portalheader.inc.php';
+    include (APPLICATION_INCPATH . 'portalheader.inc.php');
     echo user_alert("{$strPermissionDenied}: \$accesslevel not set", E_USER_ERROR);
-    include 'htmlfooter.inc.php';
+    include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
     exit;
 }
 elseif ($accesslevel == 'admin' AND $_SESSION['usertype'] != 'admin' AND $_SESSION['portalauth'] == TRUE)
 {
-    include 'portalheader.inc.php';
+    include (APPLICATION_INCPATH . 'portalheader.inc.php');
     echo user_alert($strPermissionDenied, E_USER_ERROR);
-    include 'htmlfooter.inc.php';
+    include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
     exit;
 }
 

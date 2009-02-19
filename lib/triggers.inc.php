@@ -16,10 +16,10 @@ if (realpath(__FILE__) == realpath($_SERVER['SCRIPT_FILENAME']))
     exit;
 }
 
-include ($lib_path . 'incident.inc.php');
-include_once ($lib_path . 'billing.inc.php');
-include ($lib_path . 'mime.inc.php');
-include ($lib_path . 'triggertypes.inc.php');
+include (APPLICATION_LIBPATH . 'incident.inc.php');
+include_once (APPLICATION_LIBPATH . 'billing.inc.php');
+include (APPLICATION_LIBPATH . 'mime.inc.php');
+include (APPLICATION_LIBPATH . 'triggertypes.inc.php');
 
 //set up all the action types
 // define ('ACTION_NONE', 1);

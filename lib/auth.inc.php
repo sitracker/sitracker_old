@@ -46,13 +46,13 @@ else
     // Load session language if it is set and different to the default language
     if (!empty($_SESSION['lang']) AND $_SESSION['lang'] != $CONFIG['default_i18n'])
     {
-        include ("i18n/{$_SESSION['lang']}.inc.php");
+        include (APPLICATION_I18NPATH . "{$_SESSION['lang']}.inc.php");
     }
     elseif (empty($_SESSION['lang']))
     {
     	$_SESSION['lang'] = $CONFIG['default_i18n'];
     }
-    include ('strings.inc.php');
+    include (APPLICATION_LIBPATH . 'strings.inc.php');
 }
 
 if (!is_array($permission))
