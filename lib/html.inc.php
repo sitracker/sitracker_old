@@ -67,11 +67,11 @@ function html_redirect($url, $success = TRUE, $message='')
     {
         if ($_SESSION['portalauth'] == TRUE)
         {
-            include ('../inc/portalheader.inc.php');
+            include (APPLICATION_INCPATH . 'portalheader.inc.php');
         }
         else
         {
-            include ('inc/htmlheader.inc.php');
+            include (APPLICATION_INCPATH . 'htmlheader.inc.php');
         }
     }
     else
@@ -109,11 +109,11 @@ function html_redirect($url, $success = TRUE, $message='')
     {
         if ($_SESSION['portalauth'] == TRUE)
         {
-            include ('../inc/htmlfooter.inc.php');
+            include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
         }
         else
         {
-            include ('inc/htmlfooter.inc.php');
+            include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
         }
     }
 }

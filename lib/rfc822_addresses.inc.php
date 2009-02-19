@@ -1,15 +1,17 @@
 <?php
+// SiT (Support Incident Tracker) - Support call tracking system
+
 // rfc822_addresses.php - Parse e-mail addresses from headers of
 // http://www.ietf.org/rfc/rfc822.txt RFC 822 compliant e-mail messages
+// This software may be used and distributed according to the terms
+// of the GNU General Public License, incorporated herein by reference.
+
 //
-// SiT (Support Incident Tracker) - Support call tracking system
+//
 // Copyright Manuel Lemos 2006 - 2008
 // http://www.phpclasses.org/browse/package/3169.html
 // $Id: rfc822_addresses.php,v 1.11 2008/09/26 00:49:37 mlemos Exp $
 //
-// This software may be used and distributed according to the terms
-// of the GNU General Public License, incorporated herein by reference.
-
 // Prevent script from being run directly (ie. it must always be included
 if (realpath(__FILE__) == realpath($_SERVER['SCRIPT_FILENAME']))
 {

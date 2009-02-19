@@ -13,7 +13,20 @@ if (realpath(__FILE__) == realpath($_SERVER['SCRIPT_FILENAME']))
 {
     exit;
 }
+
+// Define path constants, done here because this file is the first we include
+define ('APPLICATION_FSPATH', realpath(dirname( __FILE__ ) . DIRECTORY_SEPARATOR . '..'.DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR);
+define ('APPLICATION_LIBPATH', realpath(dirname( __FILE__ ).DIRECTORY_SEPARATOR .
+        '..'.DIRECTORY_SEPARATOR . 'lib') . DIRECTORY_SEPARATOR);
+define ('APPLICATION_INCPATH', realpath(dirname( __FILE__ ).DIRECTORY_SEPARATOR .
+        '..'.DIRECTORY_SEPARATOR . 'inc') . DIRECTORY_SEPARATOR);
+define ('APPLICATION_PORTALPATH', realpath(dirname( __FILE__ ).DIRECTORY_SEPARATOR .
+        '..'.DIRECTORY_SEPARATOR . 'portal') . DIRECTORY_SEPARATOR);
+define ('APPLICATION_PLUGINPATH', realpath(dirname( __FILE__ ).DIRECTORY_SEPARATOR .
+        '..'.DIRECTORY_SEPARATOR . 'plugins') . DIRECTORY_SEPARATOR);
+
 $lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR;
+
 
 // Load config defaults
 include ($lib_path.'defaults.inc.php');
@@ -26,7 +39,6 @@ if ($CONFIG['db_username'] == '' OR $CONFIG['db_database'] == '')
 {
     // If config isn't first found, try again in the directory above
     @include (dirname( __FILE__ ).DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'config.inc.php');
-
 }
 // TODO determine which language to use, for now we're hardcoded to English (British)
 // i18n

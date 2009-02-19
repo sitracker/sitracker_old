@@ -1,5 +1,5 @@
 <?php
-// base.inc.php - core constants and files
+// base.inc.php - core constants, core utility functions and files
 //
 // SiT (Support Incident Tracker) - Support call tracking system
 // Copyright (C) 2000-2009 Salford Software Ltd. and Contributors
@@ -13,22 +13,106 @@ if (realpath(__FILE__) == realpath($_SERVER['SCRIPT_FILENAME']))
     exit;
 }
 
-//**** Begin constant/variable definitions ****//
+/**
+  * Begin constant definitions
+**/
+// Journal Logging
+define ('CFG_LOGGING_OFF',0); // 0 = No logging
+define ('CFG_LOGGING_MIN',1); // 1 = Minimal Logging
+define ('CFG_LOGGING_NORMAL',2); // 2 = Normal Logging
+define ('CFG_LOGGING_FULL',3); // 3 = Full Logging
+define ('CFG_LOGGING_MAX',4); // 4 = Maximum/Debug Logging
+
+define ('CFG_JOURNAL_DEBUG', 0);     // 0 = for internal debugging use
+define ('CFG_JOURNAL_LOGIN', 1);     // 1 = Logon/Logoff
+define ('CFG_JOURNAL_SUPPORT', 2);   // 2 = Support Incidents
+define ('CFG_JOURNAL_SALES', 3);     // 3 = Sales Incidents
+define ('CFG_JOURNAL_SITES', 4);     // 4 = Sites
+define ('CFG_JOURNAL_CONTACTS', 5);  // 5 = Contacts
+define ('CFG_JOURNAL_ADMIN', 6);     // 6 = Admin
+define ('CFG_JOURNAL_USER', 7);       // 7 = User Management
+define ('CFG_JOURNAL_MAINTENANCE', 8);  // 8 = Maintenance Contracts
+define ('CFG_JOURNAL_PRODUCTS', 9);
+define ('CFG_JOURNAL_OTHER', 10);
+define ('CFG_JOURNAL_KB', 11);    // Knowledge Base
+
+define ('TAG_CONTACT', 1);
+define ('TAG_INCIDENT', 2);
+define ('TAG_SITE', 3);
+define ('TAG_TASK', 4);
+define ('TAG_PRODUCT', 5);
+define ('TAG_SKILL', 6);
+define ('TAG_KB_ARTICLE', 7);
+define ('TAG_REPORT', 8);
+
+define ('NOTE_TASK', 10);
+
+define ('HOL_HOLIDAY', 1); // Holiday/Leave
+define ('HOL_SICKNESS', 2);
+define ('HOL_WORKING_AWAY', 3);
+define ('HOL_TRAINING', 4);
+define ('HOL_FREE', 5); // Compassionate/Maternity/Paterity/etc/free
+// The holiday archiving assumes standard holidays are < 10
+define ('HOL_PUBLIC', 10);  // Public Holiday (eg. Bank Holiday)
+
+define ('HOL_APPROVAL_NONE', 0); // Not granted or denied
+define ('HOL_APPROVAL_GRANTED', 1);
+define ('HOL_APPROVAL_DENIED', 2);
+// TODO define the other approval (archive) states here, 10, 11 etc.
+define ('HOL_APPROVAL_GRANTED_ARCHIVED', 11);
+define ('HOL_APPROVAL_DENIED_ARCHIVED', 12);
+
+//default notice types
+define ('NORMAL_NOTICE_TYPE', 0);
+define ('WARNING_NOTICE_TYPE', 1);
+define ('CRITICAL_NOTICE_TYPE', 2);
+define ('TRIGGER_NOTICE_TYPE', 3);
+
+// Incident statuses
+define ("STATUS_ACTIVE",1);
+define ("STATUS_CLOSED",2);
+define ("STATUS_RESEARCH",3);
+define ("STATUS_LEFTMESSAGE",4);
+define ("STATUS_COLLEAGUE",5);
+define ("STATUS_SUPPORT",6);
+define ("STATUS_CLOSING",7);
+define ("STATUS_CUSTOMER",8);
+define ("STATUS_UNSUPPORTED",9);
+define ("STATUS_UNASSIGNED",10);
+
+// User statuses
+define ('USERSTATUS_ACCOUNT_DISABLED', 0);
+define ('USERSTATUS_IN_OFFICE', 1);
+define ('USERSTATUS_NOT_IN_OFFICE', 2);
+define ('USERSTATUS_IN_MEETING', 3);
+define ('USERSTATUS_AT_LUNCH', 4);
+define ('USERSTATUS_ON_HOLIDAY', 5);
+define ('USERSTATUS_WORKING_FROM_HOME', 6);
+define ('USERSTATUS_ON_TRAINING_COURSE', 7);
+define ('USERSTATUS_ABSENT_SICK', 8);
+define ('USERSTATUS_WORKING_AWAY', 9);
+
+// BILLING
+define ('NO_BILLABLE_CONTRACT', 0);
+define ('CONTACT_HAS_BILLABLE_CONTRACT', 1);
+define ('SITE_HAS_BILLABLE_CONTRACT', 2);
 
 // For tempincoming
-define("REASON_POSSIBLE_NEW_INCIDENT", 1);
-define("REASON_INCIDENT_CLOSED", 2);
+define ("REASON_POSSIBLE_NEW_INCIDENT", 1);
+define ("REASON_INCIDENT_CLOSED", 2);
 
+
+/**
+  * Begin global variable definitions
+**/
 // Version number of the application, (numbers only)
 $application_version = '3.45';
 
 // Revision string, e.g. 'beta2' or 'svn' or ''
 $application_revision = 'beta2';
 
-// Clean PHP_SELF server variable to avoid potential XSS security issue
-$_SERVER['PHP_SELF'] = substr($_SERVER['PHP_SELF'], 0,
-                            (strlen($_SERVER['PHP_SELF'])
-                            - @strlen($_SERVER['PATH_INFO'])));
+// The number of errors that have occurred
+$siterrors = 0;
 
 $fsdelim = DIRECTORY_SEPARATOR;
 
@@ -52,6 +136,17 @@ if ($application_revision == 'svn')
 
 // Set a string to be the full version number and revision of the application
 $application_version_string = trim("v{$application_version} {$application_revision}");
+
+$ldap_conn = "";
+
+/**
+  * End global variable definitions
+**/
+
+// Clean PHP_SELF server variable to avoid potential XSS security issue
+$_SERVER['PHP_SELF'] = substr($_SERVER['PHP_SELF'], 0,
+                            (strlen($_SERVER['PHP_SELF'])
+                            - @strlen($_SERVER['PATH_INFO'])));
 
 // Report all PHP errors
 error_reporting(E_ALL);
