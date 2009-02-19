@@ -9,8 +9,8 @@
 //
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
-$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
-require ($lib_path.'db_connect.inc.php');
+
+require ('core.php');
 
 session_name($CONFIG['session_name']);
 session_start();
@@ -27,7 +27,7 @@ setcookie(session_name(), session_id(),ini_get("session.cookie_lifetime"), "/");
 
 $language = $_POST['lang'];
 
-require ($lib_path.'functions.inc.php');
+require (APPLICATION_LIBPATH . 'functions.inc.php');
 populate_syslang();
 // External vars
 $password = md5($_REQUEST['password']);

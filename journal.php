@@ -13,15 +13,15 @@
 
 // This Page Is Valid XHTML 1.0 Transitional!   4Nov05
 
-$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
+
 $permission = 22; // administrate
-require ($lib_path.'db_connect.inc.php');
-require ($lib_path.'functions.inc.php');
+require ('core.php');
+require (APPLICATION_LIBPATH . 'functions.inc.php');
 
 $title = $strBrowseJournal;
 
 // This page requires authentication
-require ($lib_path.'auth.inc.php');
+require (APPLICATION_LIBPATH . 'auth.inc.php');
 
 // External variables
 $offset = cleanvar($_REQUEST['offset']);
@@ -33,7 +33,7 @@ $order = cleanvar($_REQUEST['order']);
 
 if (empty($search_string)) $search_string='a';
 
-include ('./inc/htmlheader.inc.php');
+include (APPLICATION_INCPATH . 'htmlheader.inc.php');
 echo "<h2>{$title}</h2>";
 
 if (empty($perpage)) $perpage = 50;
@@ -121,5 +121,5 @@ else
 {
     echo "<p>{$strNoResults}</p>";
 }
-include ('./inc/htmlfooter.inc.php');
+include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
 ?>

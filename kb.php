@@ -11,20 +11,19 @@
 
 // This Page Is Valid XHTML 1.0 Transitional!  1Nov05
 
-$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
 $permission = 54; // View KB
-require ($lib_path.'db_connect.inc.php');
-require ($lib_path.'functions.inc.php');
+require ('core.php');
+require (APPLICATION_LIBPATH . 'functions.inc.php');
 
 // This page requires authentication
-require ($lib_path.'auth.inc.php');
+require (APPLICATION_LIBPATH . 'auth.inc.php');
 
 // External variables
 $search_string = cleanvar($_REQUEST['search_string']);
 $mode = cleanvar($_REQUEST['mode']);
 
 $title = $strBrowseKB;
-include ('./inc/htmlheader.inc.php');
+include (APPLICATION_INCPATH . 'htmlheader.inc.php');
 if (empty($mode) && empty($search_string)) $mode='RECENT';
 if (empty($search_string) AND empty($mode)) $search_string='a';
 echo "<h2>".icon('kb', 32, $title)." ";
@@ -164,6 +163,6 @@ else
 // echo "<!---SQL === $sql --->";
 echo "<p align='center'><a href='kb_article.php'>{$strAddNew}</a></p>";
 
-include ('./inc/htmlfooter.inc.php');
+include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
 
 ?>

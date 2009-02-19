@@ -10,14 +10,14 @@
 
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
-$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
+
 $permission = 0; // Allow all auth users
 
-require ($lib_path.'db_connect.inc.php');
-require ($lib_path.'functions.inc.php');
+require ('core.php');
+require (APPLICATION_LIBPATH . 'functions.inc.php');
 
 // This page requires authentication
-require ($lib_path.'auth.inc.php');
+require (APPLICATION_LIBPATH . 'auth.inc.php');
 
 $title = $strAddLink;
 
@@ -47,7 +47,7 @@ switch ($action)
 
     case '':
     default:
-        include ('./inc/htmlheader.inc.php');
+        include (APPLICATION_INCPATH . 'htmlheader.inc.php');
 
         // Find out what kind of link we are to make
         $sql = "SELECT * FROM `{$dbLinkTypes}` WHERE id='$linktypeid'";
@@ -91,7 +91,7 @@ switch ($action)
             }
             else echo "<p class='error'>Nothing to link</p>";
         }
-        include ('./inc/htmlfooter.inc.php');
+        include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
 }
 
 ?>

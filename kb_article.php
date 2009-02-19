@@ -12,13 +12,13 @@
 //          Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 //          Tom Gerrard <tomgerrard[at]users.sourceforge.net>
 
-$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
+
 $permission = 54; // view KB
 
-require ($lib_path.'db_connect.inc.php');
-require ($lib_path.'functions.inc.php');
+require ('core.php');
+require (APPLICATION_LIBPATH . 'functions.inc.php');
 // This page requires authentication
-require ($lib_path.'auth.inc.php');
+require (APPLICATION_LIBPATH . 'auth.inc.php');
 
 if (!empty($_REQUEST['id']))
 {
@@ -125,7 +125,7 @@ else
     //show form
     $title = $strEditKBArticle;
     $pagescripts = array('scriptaculous/scriptaculous.js','scriptaculous/effects.js');
-    require './inc/htmlheader.inc.php';
+    require (APPLICATION_INCPATH . 'htmlheader.inc.php');
 
     if ($mode == 'edit')
     {
@@ -339,6 +339,6 @@ else
     echo "</form></div>";
     echo "<p align='center'><a href='kb_view_article.php?id=$kbid'>{$strReturnWithoutSaving}</a></p>";
     echo "<script type='text/javascript'>\n//<![CDATA[\nkbSectionCollapse();\n//]]>\n</script>";
-    include ('./inc/htmlfooter.inc.php');
+    include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
 }
 ?>

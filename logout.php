@@ -10,9 +10,9 @@
 
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
-$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
-require ($lib_path.'db_connect.inc.php');
-require ($lib_path.'functions.inc.php');
+
+require ('core.php');
+require (APPLICATION_LIBPATH . 'functions.inc.php');
 
 session_name($CONFIG['session_name']);
 session_start();
