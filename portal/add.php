@@ -9,14 +9,14 @@
 // of the GNU General Public License, incorporated herein by reference.
 //
 // Author Kieran Hogg <kieran[at]sitracker.org>
-$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
-require $lib_path.'db_connect.inc.php';
-require $lib_path.'functions.inc.php';
+
+require ('..'.DIRECTORY_SEPARATOR.'core.php');
+require (APPLICATION_LIBPATH . 'functions.inc.php');
 
 $accesslevel = 'any';
 
-include $lib_path.'portalauth.inc.php';
-include '../inc/portalheader.inc.php';
+include (APPLICATION_LIBPATH . 'portalauth.inc.php');
+include (APPLICATION_INCPATH . 'portalheader.inc.php');
 
 $contractid = cleanvar($_REQUEST['contractid']);
 $productid = cleanvar($_REQUEST['product']);
@@ -55,7 +55,7 @@ if (!$_REQUEST['action'])
         if (mysql_num_rows($checkcontract) == 0)
         {
             echo "<p class='error'>{$strPermissionDenied}</p>";
-            include '../inc/htmlfooter.inc.php';
+            include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
             exit;
         }
     }
@@ -109,7 +109,7 @@ if (!$_REQUEST['action'])
     echo "<p align='center'><input type='submit' value='{$strAddIncident}' /></p>";
     echo "</form>";
 
-    include ('../inc/htmlfooter.inc.php');
+    include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
 }
 else //submit
 {

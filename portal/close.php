@@ -9,14 +9,13 @@
 //
 // Author Kieran Hogg <kieran[at]sitracker.org>
 
-$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
-require $lib_path.'db_connect.inc.php';
-require $lib_path.'functions.inc.php';
+require ('..'.DIRECTORY_SEPARATOR.'core.php');
+require (APPLICATION_LIBPATH . 'functions.inc.php');
 
 $accesslevel = 'any';
 
-include $lib_path.'portalauth.inc.php';
-include '../inc/portalheader.inc.php';
+include (APPLICATION_LIBPATH . 'portalauth.inc.php');
+include (APPLICATION_INCPATH . 'portalheader.inc.php');
 
 // External vars
 $id = intval($_REQUEST['id']);
@@ -37,7 +36,7 @@ if ($incidentcontact == $_SESSION['contactid'])
         echo "<p>{$strReason}:</p><textarea name='reason' cols='50' rows='10'></textarea><br />";
         echo "<p><input type='submit' value=\"{$strRequestClosure}\" /></p></form></div>";
 
-        include '../inc/htmlfooter.inc.php';
+        include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
     }
     else
     {
@@ -68,7 +67,7 @@ if ($incidentcontact == $_SESSION['contactid'])
 else
 {
     echo "<p class='warning'>$strNoPermission.</p>";
-    include ('../inc/htmlfooter.inc.php');
+    include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
     exit;
 }
 

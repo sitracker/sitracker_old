@@ -9,14 +9,13 @@
 //
 // Author Kieran Hogg <kieran[at]sitracker.org>
 
-$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
-require $lib_path.'db_connect.inc.php';
-require $lib_path.'functions.inc.php';
+require ('..'.DIRECTORY_SEPARATOR.'core.php');
+require (APPLICATION_LIBPATH . 'functions.inc.php');
 
 $accesslevel = 'admin';
 
-include $lib_path.'portalauth.inc.php';
-include '../inc/portalheader.inc.php';
+include (APPLICATION_LIBPATH . 'portalauth.inc.php');
+include (APPLICATION_INCPATH . 'portalheader.inc.php');
 
 $site = intval($_SESSION['siteid']);
 
@@ -114,5 +113,5 @@ echo show_edit_site($site, 'external');
 
 
 
-include '../inc/htmlfooter.inc.php';
+include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
 ?>

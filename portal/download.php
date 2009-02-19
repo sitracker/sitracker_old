@@ -13,15 +13,14 @@
 // Turn off all error reporting so we don't publish directory structs
 error_reporting(0);
 
-$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
 $permission = 0; // no permission required
 
-require ($lib_path.'db_connect.inc.php');
-require ($lib_path.'functions.inc.php');
+require ('..'.DIRECTORY_SEPARATOR.'core.php');
+require (APPLICATION_LIBPATH . 'functions.inc.php');
 
 $accesslevel = 'any';
 
-require ($lib_path.'portalauth.inc.php');
+include (APPLICATION_LIBPATH . 'portalauth.inc.php');
 
 // External variables
 $id = cleanvar(intval($_GET['id']));
