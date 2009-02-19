@@ -10,13 +10,13 @@
 
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
-$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
+
 $permission = 32;  // Edit Supported Products
-require ($lib_path.'db_connect.inc.php');
-require ($lib_path.'functions.inc.php');
+require ('core.php');
+require (APPLICATION_LIBPATH . 'functions.inc.php');
 
 // This page requires authentication
-require ($lib_path.'auth.inc.php');
+require (APPLICATION_LIBPATH . 'auth.inc.php');
 
 // External Variables
 $maintid = cleanvar($_REQUEST['maintid']);
@@ -27,7 +27,7 @@ $action = $_REQUEST['action'];
 // Valid user, check permissions
 if (empty($action) || $action == "showform")
 {
-    include ('./inc/htmlheader.inc.php');
+    include (APPLICATION_INCPATH . 'htmlheader.inc.php');
     echo "<h2>{$strAssociateContactWithContract}</h2>";
 
     echo "<form action='{$_SERVER['PHP_SELF']}?action=add' method='post'>";
@@ -68,7 +68,7 @@ if (empty($action) || $action == "showform")
     echo "<p align='center'><input name='submit' type='submit' value='{$strContinue}' /></p>";
     echo "</form>";
 
-    include ('./inc/htmlfooter.inc.php');
+    include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
 }
 else if ($action == "add")
 {
@@ -94,7 +94,7 @@ else if ($action == "add")
     if (mysql_num_rows($result) > 0)
     {
         $errors = 1;
-        $errors_string .= user_alert("A contact can only be listed once per support contract", E_USER_ERROR;
+        $errors_string .= user_alert("A contact can only be listed once per support contract", E_USER_ERROR);
     }
 
     // add maintenance support contact if no errors
@@ -107,9 +107,9 @@ else if ($action == "add")
         // show error message if addition failed
         if (!$result)
         {
-            include ('./inc/htmlheader.inc.php');
+            include (APPLICATION_INCPATH . 'htmlheader.inc.php');
             echo user_alert("Addition of support contact failed", E_USER_WARNING);
-            include ('./inc/htmlfooter.inc.php');
+            include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
         }
         // update database and show success message
         else
@@ -121,11 +121,11 @@ else if ($action == "add")
     else
     {
         // show error message if errors
-        include ('./inc/htmlheader.inc.php');
+        include (APPLICATION_INCPATH . 'htmlheader.inc.php');
         echo $errors_string;
 
         echo "<p align='center'><a href='contract_details.php?id={$maintid}'>Return</a></p>";
-        include ('./inc/htmlfooter.inc.php');
+        include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
     }
 }
 ?>

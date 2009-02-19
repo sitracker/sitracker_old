@@ -17,14 +17,14 @@
 
 // This Page Is Valid XHTML 1.0 Transitional!   31Oct05
 
-$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
+
 $permission=32;  // Edit Supported Products
-require ($lib_path.'db_connect.inc.php');
-require ($lib_path.'functions.inc.php');
+require ('core.php');
+require (APPLICATION_LIBPATH . 'functions.inc.php');
 $title = "Remove a Supported Contact";
 
 // This page requires authentication
-require ($lib_path.'auth.inc.php');
+require (APPLICATION_LIBPATH . 'auth.inc.php');
 
 // External variables
 $action = $_REQUEST['action'];
@@ -35,7 +35,7 @@ $contactid = cleanvar($_REQUEST['contactid']);
 
 if (empty($action) OR $action == "showform")
 {
-    include ('./inc/htmlheader.inc.php');
+    include (APPLICATION_INCPATH . 'htmlheader.inc.php');
 
     echo "<h2>Remove the link between a contract and a support contact</h2>";
     echo "<p align='center'>This will mean that the contact will not be able to log any further support incidents for the related product</p>";
@@ -71,7 +71,7 @@ if (empty($action) OR $action == "showform")
     echo "</table>";
     echo "<p align='center'><input name='submit' type='submit' value='{$strContinue}' /></p>";
     echo "</form>";
-    include ('./inc/htmlfooter.inc.php');
+    include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
 }
 elseif ($action == "delete")
 {
@@ -99,9 +99,9 @@ elseif ($action == "delete")
         // show error message if deletion failed
         if (!$result)
         {
-            include ('./inc/htmlheader.inc.php');
+            include (APPLICATION_INCPATH . 'htmlheader.inc.php');
             trigger_error("Deletion of maintenance support conact failed: {$sql}", E_USER_WARNING);
-            include ('./inc/htmlfooter.inc.php');
+            include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
         }
         // update db and show success message
         else
@@ -115,9 +115,9 @@ elseif ($action == "delete")
     else
     {
         // show error message if errors
-        include ('./inc/htmlheader.inc.php');
+        include (APPLICATION_INCPATH . 'htmlheader.inc.php');
         echo $errors_string;
-        include ('./inc/htmlfooter.inc.php');
+        include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
     }
 }
 ?>

@@ -8,15 +8,15 @@
 // of the GNU General Public License, incorporated herein by reference.
 //
 
-$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
+
 $permission = 4; // Edit your profile
 
-require ($lib_path.'db_connect.inc.php');
-require ($lib_path.'functions.inc.php');
+require ('core.php');
+require (APPLICATION_LIBPATH . 'functions.inc.php');
 // This page requires authentication
-require ($lib_path.'auth.inc.php');
+require (APPLICATION_LIBPATH . 'auth.inc.php');
 
-include ('./inc/htmlheader.inc.php');
+include (APPLICATION_INCPATH . 'htmlheader.inc.php');
 echo "<h2>".icon('settings', 32, $strControlPanel);
 echo " {$CONFIG['application_shortname']} {$strControlPanel}</h2>";
 echo "<table align='center'>";
@@ -61,5 +61,5 @@ if (user_permission($sit[2],22)) // Administrate
 
 plugin_do('cp_menu');
 echo "</table>\n";
-include ('./inc/htmlfooter.inc.php');
+include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
 ?>

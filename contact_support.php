@@ -13,13 +13,13 @@
 // This Page Is Valid XHTML 1.0 Transitional!   4Nov05
 // 24Apr02 INL Fixed a divide by zero bug
 
-$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
+
 $permission = 6; // view incidents
 
-require ($lib_path.'db_connect.inc.php');
-require ($lib_path.'functions.inc.php');
+require ('core.php');
+require (APPLICATION_LIBPATH . 'functions.inc.php');
 // This page requires authentication
-require ($lib_path.'auth.inc.php');
+require (APPLICATION_LIBPATH . 'auth.inc.php');
 
 // External variables
 $id = cleanvar($_REQUEST['id']);
@@ -30,7 +30,7 @@ if (!empty($_REQUEST['end'])) $end = strtotime($_REQUEST['end']);
 else $end=0;
 $status = $_REQUEST['status'];
 
-include ('./inc/htmlheader.inc.php');
+include (APPLICATION_INCPATH . 'htmlheader.inc.php');
 
 if ($mode=='site') echo "<h2>".site_name($id)."</h2>";
 else echo "<h2>".contact_realname($id)."</h2>";
@@ -242,5 +242,5 @@ if ($countproducts >= 1 OR $contactcontacts >= 1)
     }
 }
 
-include ('./inc/htmlfooter.inc.php');
+include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
 ?>

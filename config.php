@@ -12,13 +12,13 @@
 //
 // Author: Ivan Lucas, <ivanlucas[at]users.sourceforge.net
 
-$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
+
 $permission = 22; // Administrate
 
-require ($lib_path.'db_connect.inc.php');
-require ($lib_path.'functions.inc.php');
+require ('core.php');
+require (APPLICATION_LIBPATH . 'functions.inc.php');
 // This page requires authentication
-require ($lib_path.'auth.inc.php');
+require (APPLICATION_LIBPATH . 'auth.inc.php');
 
 // External variables
 $selcat = cleanvar($_REQUEST['cat']);
@@ -26,7 +26,7 @@ $seltab = cleanvar($_REQUEST['tab']);
 $action = cleanvar($_REQUEST['action']);
 
 
-require($lib_path.'configvars.inc.php');
+require(APPLICATION_LIBPATH . 'configvars.inc.php');
 
 if ($action == 'save')
 {
@@ -90,7 +90,7 @@ if ($action == 'save')
     }
 }
 
-include ('./inc/htmlheader.inc.php');
+include (APPLICATION_INCPATH . 'htmlheader.inc.php');
 
 echo "<h2>".icon('settings', 32, $strConfiguration);
 echo " {$CONFIG['application_shortname']} {$strConfiguration}</h2>";
@@ -148,5 +148,5 @@ echo "<input type='hidden' name='action' value='save' />";
 echo "<p><input type='reset' value=\"{$strReset}\" /> <input type='submit' value=\"{$strSave}\" /></p>";
 echo "</form>";
 
-include ('./inc/htmlfooter.inc.php');
+include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
 ?>

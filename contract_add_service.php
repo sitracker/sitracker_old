@@ -8,13 +8,13 @@
 // of the GNU General Public License, incorporated herein by reference.
 //
 
-$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
+
 $permission = 21; // FIXME need a permission for add service
 
-require_once ($lib_path.'db_connect.inc.php');
-require_once ($lib_path.'functions.inc.php');
+require ('core.php');
+require_once (APPLICATION_LIBPATH . 'functions.inc.php');
 // This page requires authentication
-require_once ($lib_path.'auth.inc.php');
+require_once (APPLICATION_LIBPATH . 'auth.inc.php');
 
 // External variables
 $contractid = mysql_real_escape_string($_REQUEST['contractid']);
@@ -45,7 +45,7 @@ else
 
 if (empty($submit) OR !empty($_SESSION['formerrors']['add_service']))
 {
-    include ('inc/htmlheader.inc.php');
+    include (APPLICATION_INCPATH . 'htmlheader.inc.php');
     echo show_form_errors('add_service');
     clear_form_errors('add_service');
     echo "<h2> ";
@@ -152,7 +152,7 @@ if (empty($submit) OR !empty($_SESSION['formerrors']['add_service']))
 
     //cleanup form vars
     clear_form_data('add_service');
-    include ('inc/htmlfooter.inc.php');
+    include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
 }
 else
 {

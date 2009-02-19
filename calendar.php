@@ -11,13 +11,13 @@
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 //         Tom Gerrard <tom.gerrard[at]salfordsoftware.co.uk>
 
-$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
+
 $permission = 27; // View your calendar
-require ($lib_path.'db_connect.inc.php');
-require ($lib_path.'functions.inc.php');
+require ('core.php');
+require (APPLICATION_LIBPATH . 'functions.inc.php');
 
 // This page requires authentication
-require ($lib_path.'auth.inc.php');
+require (APPLICATION_LIBPATH . 'auth.inc.php');
 include ('calendar/calendar.inc.php');
 
 $groupid = cleanvar($_REQUEST['gid']);
@@ -35,7 +35,7 @@ foreach (array(
 if (empty($length)) $length='day';
 $title = $strCalendar;
 $pagecss = array('calendar/planner.css.php');
-include ('./inc/htmlheader.inc.php');
+include (APPLICATION_INCPATH . 'htmlheader.inc.php');
 
 if (empty($user) || $user=='current') $user = $sit[2];
 elseif ($user == 'all') $user = '';
@@ -89,5 +89,5 @@ if ($type != HOL_PUBLIC)
 }
 include ("calendar/{$display}.inc.php");
 
-include ('./inc/htmlfooter.inc.php');
+include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
 ?>

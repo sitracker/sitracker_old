@@ -9,14 +9,14 @@
 //
 
 // This Page Is Valid XHTML 1.0 Transitional!  31Oct05
-$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
+
 $permission = 10; // Edit Contacts
 
-require ($lib_path.'db_connect.inc.php');
-require ($lib_path.'functions.inc.php');
+require ('core.php');
+require (APPLICATION_LIBPATH . 'functions.inc.php');
 
 // This page requires authentication
-require ($lib_path.'auth.inc.php');
+require (APPLICATION_LIBPATH . 'auth.inc.php');
 
 $title = $strEditContact;
 
@@ -24,7 +24,7 @@ $title = $strEditContact;
 $contact = cleanvar($_REQUEST['contact']);
 $action = cleanvar($_REQUEST['action']);
 
-include ('./inc/htmlheader.inc.php');
+include (APPLICATION_INCPATH . 'htmlheader.inc.php');
 
 // User has access
 if (empty($action) OR $action == "showform" OR empty($contact))
@@ -237,5 +237,5 @@ else if ($action == "update")
         }
     }
 }
-include ('./inc/htmlfooter.inc.php');
+include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
 ?>

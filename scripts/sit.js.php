@@ -13,11 +13,9 @@
 //       to enable us to pass variables from PHP to Javascript.
 //
 
-$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
-
-$permission=0; // not required
-require ($lib_path.'db_connect.inc.php');
-require ($lib_path.'functions.inc.php');
+$permission = 0; // not required
+require ('..'.DIRECTORY_SEPARATOR.'core.php');
+require (APPLICATION_LIBPATH . 'functions.inc.php');
 
 header('Content-type: text/javascript');
 

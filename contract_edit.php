@@ -8,13 +8,13 @@
 // of the GNU General Public License, incorporated herein by reference.
 //
 
-$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
+
 $permission = 21; // Edit Contracts
 
-require ($lib_path.'db_connect.inc.php');
-require ($lib_path.'functions.inc.php');
+require ('core.php');
+require (APPLICATION_LIBPATH . 'functions.inc.php');
 // This page requires authentication
-require ($lib_path.'auth.inc.php');
+require (APPLICATION_LIBPATH . 'auth.inc.php');
 
 $title = $strEditContract;
 
@@ -25,7 +25,7 @@ $changeproduct = cleanvar($_REQUEST['changeproduct']);
 
 if (empty($action) OR $action == "showform")
 {
-    include ('./inc/htmlheader.inc.php');
+    include (APPLICATION_INCPATH . 'htmlheader.inc.php');
     echo "<h2>".icon('contract', 32)." ";
     echo "Select Contract to Edit</h2>";
     echo "<form action='{$_SERVER['PHP_SELF']}?action=edit' method='post'>";
@@ -36,14 +36,14 @@ if (empty($action) OR $action == "showform")
     echo "</table>\n";
     echo "<p align='center'><input name='submit' type='submit' value=\"$strContinue\" /></p>\n";
     echo "</form>\n";
-    include ('./inc/htmlfooter.inc.php');
+    include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
 }
 
 
 if ($action == "edit")
 {
     // Show edit maintenance form
-    include ('./inc/htmlheader.inc.php');
+    include (APPLICATION_INCPATH . 'htmlheader.inc.php');
     if ($maintid == 0) echo user_alert(sprintf($strFieldMustNotBeBlank, "'{$strContract}'"), E_USER_ERROR);
     else
     {
@@ -161,7 +161,7 @@ if ($action == "edit")
         echo "<p align='center'><a href='contract_details.php?id={$maintid}'>{$strReturnWithoutSaving}</a></p>";
         mysql_free_result($result);
     }
-    include ('./inc/htmlfooter.inc.php');
+    include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
 }
 else if ($action == "update")
 {
@@ -251,9 +251,9 @@ else if ($action == "update")
         // show error message if addition failed
         if (!$result)
         {
-            include ('./inc/htmlheader.inc.php');
+            include (APPLICATION_INCPATH . 'htmlheader.inc.php');
             echo user_alert("Update failed", E_USER_WARNING);
-            include ('./inc/htmlfooter.inc.php');
+            include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
         }
         // show success message
         else
@@ -265,9 +265,9 @@ else if ($action == "update")
     // show error message if errors
     else
     {
-        include ('./inc/htmlheader.inc.php');
+        include (APPLICATION_INCPATH . 'htmlheader.inc.php');
         echo $errors_string;
-        include ('./inc/htmlfooter.inc.php');
+        include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
     }
 }
 ?>

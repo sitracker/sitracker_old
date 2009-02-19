@@ -11,13 +11,12 @@
 // This Page fails XHTML validation because of collapsable tbody in the table - INL 12/12/07
 // FIXME make XHTML complient - PH 13/12/07
 
-$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
 $permission = 39; // Add Maintenance Contract
 
-require ($lib_path.'db_connect.inc.php');
-require ($lib_path.'functions.inc.php');
+require ('core.php');
+require (APPLICATION_LIBPATH . 'functions.inc.php');
 // This page requires authentication
-require ($lib_path.'auth.inc.php');
+require (APPLICATION_LIBPATH . 'auth.inc.php');
 
 $title = $strAddContract;
 
@@ -28,7 +27,7 @@ $siteid = cleanvar($_REQUEST['siteid']);
 // Show add maintenance form
 if ($action == "showform" OR $action=='')
 {
-    include ('./inc/htmlheader.inc.php');
+    include (APPLICATION_INCPATH . 'htmlheader.inc.php');
 
     echo show_form_errors('add_contract');
     clear_form_errors('add_contract');
@@ -137,7 +136,7 @@ if ($action == "showform" OR $action=='')
     }
     else
     {
-    	echo "value='0' ";
+        echo "value='0' ";
     }
     echo "/></td></tr>";
     echo "<tr id='unitratesection'><th>{$strUnitRate}</th>";
@@ -197,7 +196,7 @@ if ($action == "showform" OR $action=='')
     echo "<input type='hidden' id='timed' name='timed' value='{$timed}' />";
     echo "<p align='center'><input name='submit' type='submit' value=\"{$strAddContract}\" /></p>";
     echo "</form>";
-    include ('./inc/htmlfooter.inc.php');
+    include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
 
     clear_form_data('add_contract');
 
@@ -231,7 +230,7 @@ elseif ($action == "add")
     }
     else
     {
-    	$expirydate = strtotime($_REQUEST['expiry']);
+        $expirydate = strtotime($_REQUEST['expiry']);
     }
     $amount =  cleanvar($_POST['amount']);
     if ($amount == '') $amount = 0;
@@ -369,9 +368,9 @@ elseif ($action == "add")
         if ($addition_errors == 1)
         {
             // show addition error message
-            include ('./inc/htmlheader.inc.php');
+            include (APPLICATION_INCPATH . 'htmlheader.inc.php');
             echo $addition_errors_string;
-            include ('./inc/htmlfooter.inc.php');
+            include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
         }
         else
         {
@@ -384,7 +383,7 @@ elseif ($action == "add")
     else
     {
         // show error message if errors
-        include ('./inc/htmlheader.inc.php');
+        include (APPLICATION_INCPATH . 'htmlheader.inc.php');
         html_redirect("contract_add.php", FALSE);
     }
 }
