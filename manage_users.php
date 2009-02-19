@@ -10,14 +10,14 @@
 
 // This Page Is Valid XHTML 1.0 Transitional! 16Nov05
 
-$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
-$permission = 22; // Administrate
-require ($lib_path.'db_connect.inc.php');
-require ($lib_path.'functions.inc.php');
-// This page requires authentication
-require ($lib_path.'auth.inc.php');
 
-include ('./inc/htmlheader.inc.php');
+$permission = 22; // Administrate
+require ('core.php');
+require (APPLICATION_LIBPATH . 'functions.inc.php');
+// This page requires authentication
+require (APPLICATION_LIBPATH . 'auth.inc.php');
+
+include (APPLICATION_INCPATH . 'htmlheader.inc.php');
 
 $sql  = "SELECT *,u.id AS userid FROM `{$dbUsers}` AS u, `{$dbRoles}` AS r ";
 $sql .= "WHERE u.roleid = r.id ";
@@ -146,5 +146,5 @@ echo "</table>\n";
 // free result and disconnect
 mysql_free_result($result);
 
-include ('./inc/htmlfooter.inc.php');
+include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
 ?>

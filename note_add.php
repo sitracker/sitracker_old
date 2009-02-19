@@ -10,14 +10,14 @@
 
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
-$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
+
 $permission = 0; // Allow all auth users
 
-require ($lib_path.'db_connect.inc.php');
-require ($lib_path.'functions.inc.php');
+require ('core.php');
+require (APPLICATION_LIBPATH . 'functions.inc.php');
 
 // This page requires authentication
-require ($lib_path.'auth.inc.php');
+require (APPLICATION_LIBPATH . 'auth.inc.php');
 
 // External variables
 $action = $_REQUEST['action'];
@@ -39,7 +39,7 @@ switch ($action)
         if (empty($bodytext)) $error[] = 'Note must not be blank';
         if (count($error) >= 1)
         {
-            include ('./inc/htmlheader.inc.php');
+            include (APPLICATION_INCPATH . 'htmlheader.inc.php');
             echo "<p class='error'>Please check the data you entered</p>";
             echo "<ul class='error'>";
             foreach ($error AS $err)
@@ -47,7 +47,7 @@ switch ($action)
                 echo "<li>$err</li>";
             }
             echo "</ul>";
-            include ('./inc/htmlfooter.inc.php');
+            include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
         }
         else
         {
@@ -67,9 +67,9 @@ switch ($action)
 
     case '':
     default:
-        include ('./inc/htmlheader.inc.php');
+        include (APPLICATION_INCPATH . 'htmlheader.inc.php');
         echo add_note_form(0,0);
-        include ('./inc/htmlfooter.inc.php');
+        include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
 }
 
 ?>

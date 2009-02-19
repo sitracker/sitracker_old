@@ -9,13 +9,13 @@
 //
 // Author: Paul Heaney <paulheaney[at]users.sourceforge.net>
 
-$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
+
 $permission = 66; // Install dashboard components
-require ($lib_path.'db_connect.inc.php');
-require ($lib_path.'functions.inc.php');
+require ('core.php');
+require (APPLICATION_LIBPATH . 'functions.inc.php');
 
 // This page requires authentication
-require ($lib_path.'auth.inc.php');
+require (APPLICATION_LIBPATH . 'auth.inc.php');
 
 // A duplicate of that in setup.php - Probably wants moving to functions.inc.php eventually PH 9/12/07
 function setup_exec_sql($sqlquerylist)
@@ -47,7 +47,7 @@ function setup_exec_sql($sqlquerylist)
 switch ($_REQUEST['action'])
 {
     case 'install':
-        include ('./inc/htmlheader.inc.php');
+        include (APPLICATION_INCPATH . 'htmlheader.inc.php');
 
         $sql = "SELECT name FROM `{$dbDashboard}`";
         $result = mysql_query($sql);
@@ -61,7 +61,7 @@ switch ($_REQUEST['action'])
             $dashboard[$dashboardnames->name] = $dashboardnames->name;
         }
 
-        $path = dirname( __FILE__ ).DIRECTORY_SEPARATOR."plugins/";
+        $path = APPLICATION_PLUGINPATH;
 
         $dir_handle = @opendir($path) or trigger_error("Unable to open dashboard directory $path", E_USER_ERROR);
 
@@ -99,7 +99,7 @@ switch ($_REQUEST['action'])
             echo "</form>\n";
         }
 
-        include ('./inc/htmlfooter.inc.php');
+        include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
 
         break;
     case 'installdashboard':
@@ -126,7 +126,7 @@ switch ($_REQUEST['action'])
                 // run the post install components
                 foreach ($dashboardcomponents AS $comp)
                 {
-                    include (dirname( __FILE__ ).DIRECTORY_SEPARATOR."plugins/dashboard_{$comp}.php");
+                    include (APPLICATION_PLUGINPATH . "dashboard_{$comp}.php");
                     $func = "dashboard_".$comp."_install";
                     if (function_exists($func)) $installed = $func();
                     if ($installed !== TRUE)
@@ -153,7 +153,7 @@ switch ($_REQUEST['action'])
             $obj = mysql_fetch_object($result);
 
             $version = 1;
-            include (dirname( __FILE__ ).DIRECTORY_SEPARATOR."plugins/dashboard_{$obj->name}.php");
+            include (APPLICATION_PLUGINPATH . "dashboard_{$obj->name}.php");
             $func = "dashboard_{$obj->name}_get_version";
 
             if (function_exists($func))
@@ -214,7 +214,7 @@ switch ($_REQUEST['action'])
         break;
 
     default:
-        include ('./inc/htmlheader.inc.php');
+        include (APPLICATION_INCPATH . 'htmlheader.inc.php');
 
         $sql = "SELECT * FROM `{$dbDashboard}`";
         $result = mysql_query($sql);
@@ -248,7 +248,7 @@ switch ($_REQUEST['action'])
             echo "<td>";
 
             $version = 1;
-            include (dirname( __FILE__ ).DIRECTORY_SEPARATOR."plugins/dashboard_{$dashboardnames->name}.php");
+            include (APPLICATION_PLUGINPATH . "dashboard_{$dashboardnames->name}.php");
             $func = "dashboard_{$dashboardnames->name}_get_version";
 
             if (function_exists($func))
@@ -271,7 +271,7 @@ switch ($_REQUEST['action'])
 
         echo "<p align='center'><a href='".$_SERVER['PHP_SELF']."?action=install'>{$strInstall}</a></p>";
 
-        include ('./inc/htmlfooter.inc.php');
+        include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
         break;
 }
 

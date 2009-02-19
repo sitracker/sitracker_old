@@ -12,13 +12,13 @@
 
 // This Page Is Valid XHTML 1.0 Transitional!  11Oct06
 
-$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
+
 $permission = 24;  // Add Product
-require ($lib_path.'db_connect.inc.php');
-require ($lib_path.'functions.inc.php');
+require ('core.php');
+require (APPLICATION_LIBPATH . 'functions.inc.php');
 
 // This page requires authentication
-require ($lib_path.'auth.inc.php');
+require (APPLICATION_LIBPATH . 'auth.inc.php');
 
 // External variables
 $action = mysql_real_escape_string($_REQUEST['action']);
@@ -30,7 +30,7 @@ $return = cleanvar($_REQUEST['return']);
 if (empty($action) OR $action == "showform")
 {
     $title = $strAddLink;
-    include ('./inc/htmlheader.inc.php');
+    include (APPLICATION_INCPATH . 'htmlheader.inc.php');
     echo "<h2>{$title}</h2>";
     echo "<form action='{$_SERVER['PHP_SELF']}?action=add' method='post'>\n";
     echo "<input type='hidden' name='context' value='{$context}' />\n";
@@ -71,7 +71,7 @@ if (empty($action) OR $action == "showform")
     echo "</form>";
 
     echo "<p align='center'><a href='products.php?productid={$productid}'>{$strReturnWithoutSaving}</a></p>";
-    include ('./inc/htmlfooter.inc.php');
+    include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
 }
 elseif ($action == "add")
 {
@@ -111,9 +111,9 @@ elseif ($action == "add")
         // show error message if addition failed
         if (!$result)
         {
-            include ('./inc/htmlheader.inc.php');
+            include (APPLICATION_INCPATH . 'htmlheader.inc.php');
             trigger_error("Addition of skill/product failed: {$sql}", E_USER_WARNING);
-            include ('./inc/htmlfooter.inc.php');
+            include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
         }
         // update db and show success message
         else
@@ -126,9 +126,9 @@ elseif ($action == "add")
     else
     {
         // show error message if errors
-        include ('./inc/htmlheader.inc.php');
+        include (APPLICATION_INCPATH . 'htmlheader.inc.php');
         echo $errors_string;
-        include ('./inc/htmlfooter.inc.php');
+        include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
     }
 }
 ?>

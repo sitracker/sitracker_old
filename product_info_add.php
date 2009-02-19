@@ -12,13 +12,13 @@
 
 // Product information is the info related to a product that is requested when adding an incident
 
-$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
+
 $permission = 25; // Add Product Info
 
-require ($lib_path.'db_connect.inc.php');
-require ($lib_path.'functions.inc.php');
+require ('core.php');
+require (APPLICATION_LIBPATH . 'functions.inc.php');
 // This page requires authentication
-require ($lib_path.'auth.inc.php');
+require (APPLICATION_LIBPATH . 'auth.inc.php');
 
 // External variables
 $product = cleanvar($_REQUEST['product']);
@@ -29,7 +29,7 @@ $moreinformation = cleanvar($_POST['moreinformation']);
 // Show add product information form
 if (empty($_REQUEST['submit']))
 {
-    include ('./inc/htmlheader.inc.php');
+    include (APPLICATION_INCPATH . 'htmlheader.inc.php');
     echo "<h2>{$strAddProductQuestion}</h2>";
     echo "<h5>".sprintf($strMandatoryMarked,"<sup class='red'>*</sup>")."</h5>";
     echo "<form action='{$_SERVER['PHP_SELF']}' method='post' onsubmit='return confirm_action(\"{$strAreYouSureAdd}\")'>";
@@ -40,7 +40,7 @@ if (empty($_REQUEST['submit']))
     echo "</table>";
     echo "<p align='center'><input name='submit' type='submit' value='{$strAdd}' /></p>";
     echo "</form>";
-    include ('./inc/htmlfooter.inc.php');
+    include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
 }
 else
 {

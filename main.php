@@ -11,14 +11,14 @@
 // Author: Paul Heaney <paulheaney[at]users.sourceforge.net>
 // This Page Is *NOT* Valid XHTML 1.0 Transitional!
 
-$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
+
 
 $permission=0; // not required
-require ($lib_path.'db_connect.inc.php');
-require ($lib_path.'functions.inc.php');
+require ('core.php');
+require (APPLICATION_LIBPATH . 'functions.inc.php');
 
 // This page requires authentication
-require ($lib_path.'auth.inc.php');
+require (APPLICATION_LIBPATH . 'auth.inc.php');
 
 // --------------------------------------------------------------------------------------------
 // Dashboard widgets
@@ -28,13 +28,13 @@ $result = mysql_query($sql);
 if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 while ($dashboard = mysql_fetch_object($result))
 {
-   include (".{$fsdelim}plugins{$fsdelim}dashboard_{$dashboard->name}.php");
-   $DASHBOARDCOMP["dashboard_{$dashboard->name}"]="dashboard_{$dashboard->name}";
+   include (APPLICATION_PLUGINPATH . "dashboard_{$dashboard->name}.php");
+   $DASHBOARDCOMP["dashboard_{$dashboard->name}"] = "dashboard_{$dashboard->name}";
 }
 
 // Valid user
 $pagescripts = array('dojo/dojo.js');
-include ('./inc/htmlheader.inc.php');
+include (APPLICATION_INCPATH . 'htmlheader.inc.php');
 
 $sql = "SELECT dashboard FROM `{$dbUsers}` WHERE id = '".$_SESSION['userid']."'";
 $result = mysql_query($sql);
@@ -287,5 +287,5 @@ if (isset($sit[2]))
 echo "</form>\n";
 echo "</div>\n";
 if ($CONFIG['debug']) $dbg .= "\nLang: {$_SESSION['lang']}\n";
-include ('./inc/htmlfooter.inc.php');
+include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
 ?>

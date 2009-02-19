@@ -9,13 +9,13 @@
 //
 // Author: Kieran Hogg[at]users.sourceforge.net>
 
-$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
+
 
 $permission = 78;
-require ($lib_path.'db_connect.inc.php');
-require ($lib_path.'functions.inc.php');
-require ($lib_path.'auth.inc.php');
-include ('./inc/htmlheader.inc.php');
+require ('core.php');
+require (APPLICATION_LIBPATH . 'functions.inc.php');
+require (APPLICATION_LIBPATH . 'auth.inc.php');
+include (APPLICATION_INCPATH . 'htmlheader.inc.php');
 
 
 $action = cleanvar($_REQUEST['action']);
@@ -38,7 +38,7 @@ if ($action == 'new')
     echo "<input type='submit' value='{$strSave}' />";
     echo "</form></div>";
     echo "<p align='center'><a href='notices.php'>{$strReturnWithoutSaving}</a></p>";
-    include ('./inc/htmlfooter.inc.php');
+    include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
 }
 elseif ($action == 'post')
 {
@@ -126,7 +126,7 @@ else
     }
 
     echo "<p align='center'><a href='{$_SERVER[PHP_SELF]}?action=new'>{$strPostNewNotice}</a></p>";
-    include ('./inc/htmlfooter.inc.php');
+    include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
 }
 
 ?>

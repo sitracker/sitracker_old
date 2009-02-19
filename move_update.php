@@ -9,13 +9,13 @@
 //
 
 
-$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
+
 $permission = 8; // Update Incidents
-require ($lib_path.'db_connect.inc.php');
-require ($lib_path.'functions.inc.php');
+require ('core.php');
+require (APPLICATION_LIBPATH . 'functions.inc.php');
 
 // This page requires authentication
-require ($lib_path.'auth.inc.php');
+require (APPLICATION_LIBPATH . 'auth.inc.php');
 // External variables
 $incidentid = cleanvar($_REQUEST['incidentid']);
 $updateid = cleanvar($_REQUEST['updateid']);
@@ -27,7 +27,7 @@ $send_email = cleanvar($_REQUEST['send_email']);
 if ($incidentid == '')
 {
     $title = $strMoveUpdate;
-    include ('inc/incident_html_top.inc.php');
+    include (APPLICATION_INCPATH . 'incident_html_top.inc.php');
     $incidentid = cleanvar($_REQUEST['incidentid']); // Need to do this here again as incident_html_top changes this to $id which we need above so the menu works
     echo "<h2>{$title}</h2>";
     if ($error == '1')
@@ -147,7 +147,7 @@ if ($incidentid == '')
         echo "</td></tr>";
         echo "</table>";
 
-        include ('./inc/htmlfooter.inc.php');
+        include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
     }
 }
 else
@@ -202,9 +202,9 @@ else
             $uresult=mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
             list($oldincidentid, $bodytext, $timestamp)=mysql_fetch_row($uresult);
-            
+
             if ($oldincidentid == 0) $oldincidentid = 'Inbox';
-            
+
             $prettydate = ldate('r', $timestamp);
             // prepend 'moved' header to bodytext
             $body = sprintf($SYSLANG['strMovedFromXtoXbyX'], "<b>$oldincidentid</b>",

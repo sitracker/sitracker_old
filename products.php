@@ -10,21 +10,20 @@
 
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
-$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
 $permission = 28; // View Products and Software
 $title = 'Products List';
 
-require ($lib_path.'db_connect.inc.php');
-require ($lib_path.'functions.inc.php');
+require ('core.php');
+require (APPLICATION_LIBPATH.'functions.inc.php');
 
 // This page requires authentication
-require ($lib_path.'auth.inc.php');
+require (APPLICATION_LIBPATH.'auth.inc.php');
 
 // External Variables
 $productid = cleanvar($_REQUEST['productid']);
 $display = cleanvar($_REQUEST['display']);
 
-include ('./inc/htmlheader.inc.php');
+include (APPLICATION_INCPATH . 'htmlheader.inc.php');
 // FIXME @@@ BUGBUG @@@ experimental ivan 10July2008
 // echo "<p id='pageoptions'><a href='javascript:toggleMenuPanel();' title='Menu'>"; // FIXME i18n menu
 // echo "".icon('auto', 16)."</a></p>";
@@ -408,5 +407,5 @@ else
 
 echo "</p>";
 
-include ('./inc/htmlfooter.inc.php');
+include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
 ?>
