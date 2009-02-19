@@ -11,14 +11,14 @@
 // Authors: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 //          Kieran Hogg <kieran[at]sitracker.org>
 
-$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
+
 $permission=70;
 
-require ($lib_path.'db_connect.inc.php');
-require ($lib_path.'functions.inc.php');
+require ('core.php');
+require (APPLICATION_LIBPATH . 'functions.inc.php');
 
 // This page requires authentication
-require ($lib_path.'auth.inc.php');
+require (APPLICATION_LIBPATH . 'auth.inc.php');
 if (!$CONFIG['tasks_enabled'])
 {
     header("Location: main.php");
@@ -42,25 +42,25 @@ if ($incident)
     $sql = "INSERT INTO `{$dbLinks}` VALUES(4, {$taskid}, {$incident}, 'left', {$sit[2]})";
     mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
-    
+
     $sql = "SELECT status FROM `{$dbIncidents}` WHERE id = {$incident}";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
-    
+
     if (($obj = mysql_fetch_object(($result))) AND $obj->status != 1 AND $obj->status != 3)
     {
     	$sql = "UPDATE `{$dbIncidents}` SET status = 1, lastupdated = {$now} WHERE id = {$incident}";
         mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
-        
+
         $bodytext = "Status: ".incidentstatus_name($obj->status)." -&gt; <b>" . incidentstatus_name(1) . "</b>\n\n" . $srtrTaskStarted;
-        
+
         $sql = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, currentowner, currentstatus, bodytext, timestamp) VALUES ";
         $sql .= "({$incident}, {$sit[2]}, 'research', {$sit[2]}, 1, '{$bodytext}', $now)";
         mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
     }
-    
+
     html_redirect("tasks.php?incident={$incident}", TRUE, $strActivityAdded);
 }
 
@@ -99,7 +99,7 @@ else
             if ($startdate > $duedate AND $duedate != '' AND $duedate > 0 ) $startdate=$duedate. " ".$duetime;
             if ($errors != 0)
             {
-                include ('./inc/htmlheader.inc.php');
+                include (APPLICATION_INCPATH . 'htmlheader.inc.php');
                 html_redirect($_SERVER['PHP_SELF'], FALSE);
             }
             else
@@ -123,7 +123,7 @@ else
 
         case '':
         default:
-            include ('./inc/htmlheader.inc.php');
+            include (APPLICATION_INCPATH . 'htmlheader.inc.php');
             echo show_form_errors('add_task');
             clear_form_errors('add_task');
 
@@ -225,7 +225,7 @@ else
             clear_form_errors('add_site');
 
 
-            include ('./inc/htmlfooter.inc.php');
+            include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
     }
 }
 

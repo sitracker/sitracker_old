@@ -8,14 +8,14 @@
 // of the GNU General Public License, incorporated herein by reference.
 //
 
-$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
+
 $permission = 17; // Edit Template
 
-require ($lib_path.'db_connect.inc.php');
-require ($lib_path.'functions.inc.php');
+require ('core.php');
+require (APPLICATION_LIBPATH . 'functions.inc.php');
 
 // This page requires authentication
-require ($lib_path.'auth.inc.php');
+require (APPLICATION_LIBPATH . 'auth.inc.php');
 
 // FIXME i18n Whole page
 
@@ -27,7 +27,7 @@ $templatetype = cleanvar($_REQUEST['template']);
 if (empty($action) OR $action == 'showform' OR $action == 'list')
 {
     // Show select email type form
-    include ('./inc/htmlheader.inc.php');
+    include (APPLICATION_INCPATH . 'htmlheader.inc.php');
 
     echo "<h2>".icon('templates', 32)." ";
     echo "{$strTemplates}</h2>";
@@ -113,7 +113,7 @@ if (empty($action) OR $action == 'showform' OR $action == 'list')
     }
     echo "</table>";
 //     echo "<pre>".print_r($template,true)."</pre>";
-    include ('./inc/htmlfooter.inc.php');
+    include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
 }
 elseif ($action == "edit")
 {
@@ -174,7 +174,7 @@ elseif ($action == "edit")
     $template = mysql_fetch_object($result);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
 
-    include ('./inc/htmlheader.inc.php');
+    include (APPLICATION_INCPATH . 'htmlheader.inc.php');
 
     if (mysql_num_rows($result) > 0)
     {
@@ -376,7 +376,7 @@ elseif ($action == "edit")
 
         echo "<p style='clear:both; margin-top: 2em;' align='center'><a href='{$_SERVER['PHP_SELF']}'>{$strBackToList}</a></p>";
 
-        include ('./inc/htmlfooter.inc.php');
+        include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
     }
     else
     {

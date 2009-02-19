@@ -9,13 +9,13 @@
 //
 // Author: Paul Heaney <paulheaney[at]users.sourceforge.net>
 
-$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
+
 $permission = 0; // not required
-require ($lib_path.'db_connect.inc.php');
-require ($lib_path.'functions.inc.php');
+require ('core.php');
+require (APPLICATION_LIBPATH . 'functions.inc.php');
 
 // This page requires authentication
-require ($lib_path.'auth.inc.php');
+require (APPLICATION_LIBPATH . 'auth.inc.php');
 
 $tagid = cleanvar($_REQUEST['tagid']);
 $orderby = cleanvar($_REQUEST['orderby']);
@@ -25,11 +25,11 @@ if (empty($orderby)) $orderby = "name";
 if (empty($tagid))
 {
     //show all tags
-    include ('./inc/htmlheader.inc.php');
+    include (APPLICATION_INCPATH . 'htmlheader.inc.php');
     echo "<h2>".icon('tag', 32)." ";
     echo "{$strTags}</h2>";
     echo show_tag_cloud($orderby,TRUE);
-    include ('./inc/htmlfooter.inc.php');
+    include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
 }
 else
 {
@@ -38,7 +38,7 @@ else
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     list($tagname)=mysql_fetch_row($result);
 
-    include ('./inc/htmlheader.inc.php');
+    include (APPLICATION_INCPATH . 'htmlheader.inc.php');
     echo "<h2>".icon('tag', 32)." <a href='view_tags.php'>{$strTag}</a>: $tagname";
     if (array_key_exists($tagname, $CONFIG['tag_icons'])) echo "&nbsp;<img src='images/icons/{$iconset}/32x32/{$CONFIG['tag_icons'][$tagname]}.png' alt='' />";
     echo "</h2>";
@@ -147,7 +147,7 @@ else
         echo "</table>";
         echo "<p align='center'>".sprintf($strTagsMulti, $num_tags)."</p>";
     }
-    include ('./inc/htmlfooter.inc.php');
+    include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
 }
 
 ?>

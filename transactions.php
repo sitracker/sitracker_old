@@ -11,14 +11,17 @@
 // Authors: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 //          Paul Heaney <paulheaney[at]users.sourceforge.net>
 
-$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
+
+// included by billable_incidents.php
+
 $permission = 76; // View Transactions
 
-require_once($lib_path.'db_connect.inc.php');
-require_once($lib_path.'functions.inc.php');
-include_once ($lib_path . 'billing.inc.php');
+require ('core.php');
+require_once(APPLICATION_LIBPATH . 'functions.inc.php');
+include_once (APPLICATION_LIBPATH . 'billing.inc.php');
+
 // This page requires authentication
-require_once($lib_path.'auth.inc.php');
+require_once(APPLICATION_LIBPATH.'auth.inc.php');
 
 $title = $strTransactions;
 
@@ -57,14 +60,14 @@ $text = transactions_report($serviceid, $startdate, $enddate, $sites, $display, 
 
 if ($display == 'html')
 {
-    include ('./inc/htmlheader.inc.php');
+    include (APPLICATION_INCPATH . 'htmlheader.inc.php');
 
     echo "<h3>{$strTransactions}</h3>";
 
     echo $text;
     echo "<p align='center'><a href='{$_SERVER['HTTP_REFERER']}'>{$strReturnToPreviousPage}</a></p>";
 
-    include('./inc/htmlfooter.inc.php');
+    include (APPLICATION_I18NPATH . 'htmlfooter.inc.php');
 }
 elseif ($display == 'csv')
 {

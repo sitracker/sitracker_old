@@ -10,19 +10,19 @@
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 // This Page Is Valid XHTML 1.0 Transitional!  31Oct05
 
-$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
+
 $permission = 14; // View Users
 $title = "User Skills";
-require ($lib_path.'db_connect.inc.php');
-require ($lib_path.'functions.inc.php');
+require ('core.php');
+require (APPLICATION_LIBPATH . 'functions.inc.php');
 
 // This page requires authentication
-require ($lib_path.'auth.inc.php');
+require (APPLICATION_LIBPATH . 'auth.inc.php');
 
 // External Variables
 $sort = cleanvar($_REQUEST['sort']);
 
-include ('./inc/htmlheader.inc.php');
+include (APPLICATION_INCPATH . 'htmlheader.inc.php');
 
 $sql  = "SELECT * FROM `{$dbUsers}` WHERE status!=0";  // status=0 means account disabled
 
@@ -97,5 +97,5 @@ echo "</table>\n";
 // free result and disconnect
 mysql_free_result($result);
 
-include ('./inc/htmlfooter.inc.php');
+include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
 ?>

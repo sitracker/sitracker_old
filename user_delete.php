@@ -11,13 +11,13 @@
 // Authors: Valdemaras Pipiras <info[at]ambernet.lt>
 //          Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 // TODO 3.40 if we user MYSQL 5's relation functions, we can simply delete the user
-$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
+
 $permission = 20;  // Manage users
-require ($lib_path.'db_connect.inc.php');
-require ($lib_path.'functions.inc.php');
+require ('core.php');
+require (APPLICATION_LIBPATH . 'functions.inc.php');
 
 // This page requires authentication
-require ($lib_path.'auth.inc.php');
+require (APPLICATION_LIBPATH . 'auth.inc.php');
 
 // External variables
 $userid = cleanvar($_REQUEST['userid']);
@@ -78,10 +78,10 @@ if (!empty($userid))
     }
     else
     {
-        include ('./inc/htmlheader.inc.php');
+        include (APPLICATION_INCPATH . 'htmlheader.inc.php');
         echo "<p class='error'>{$strCannotDeleteUser}</p>";
         echo "<p align='center'><a href='users.php#{$userid}'>{$strBackToList}</a></p>";
-        include ('./inc/htmlfooter.inc.php');
+        include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
     }
 }
 else

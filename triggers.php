@@ -11,12 +11,12 @@
 // Author: Kieran Hogg <kieran[at]sitracker.org>
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
-$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
+
 $permission = 71;
-require ($lib_path.'db_connect.inc.php');
-require ($lib_path.'functions.inc.php');
+require ('core.php');
+require (APPLICATION_LIBPATH . 'functions.inc.php');
 // This page requires authentication
-require ($lib_path.'auth.inc.php');
+require (APPLICATION_LIBPATH . 'auth.inc.php');
 
 $adminuser = user_permission($sit[2],22); // Admin user
 
@@ -86,7 +86,7 @@ switch ($_REQUEST['mode'])
             exit;
         }
 
-        include ('./inc/htmlheader.inc.php');
+        include (APPLICATION_INCPATH . 'htmlheader.inc.php');
         ?>
         <script type="text/javascript">
         //<![CDATA[
@@ -249,7 +249,7 @@ switch ($_REQUEST['mode'])
         echo "</form>";
 
         echo "<p align='center'><a href='{$_SERVER['PHP_SELF']}'>{$strBackToList}</a></p>\n";
-        include ('./inc/htmlfooter.inc.php');
+        include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
         break;
 
     case 'save':
@@ -295,7 +295,7 @@ switch ($_REQUEST['mode'])
     case 'list':
     default:
         //display the list
-        include ('./inc/htmlheader.inc.php');
+        include (APPLICATION_INCPATH . 'htmlheader.inc.php');
 
         echo "<h2>".icon('trigger', 32)." ";
         echo "$title</h2>";
@@ -421,6 +421,6 @@ switch ($_REQUEST['mode'])
         }
         echo "</table>";
         if ($CONFIG['debug']) echo "<p align='center'><a href='triggertest.php'>{$strTestTriggers}</a></p>";
-        include ('./inc/htmlfooter.inc.php');
+        include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
 }
 ?>

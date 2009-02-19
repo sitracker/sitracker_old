@@ -8,13 +8,13 @@
 // of the GNU General Public License, incorporated herein by reference.
 //
 
-$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
+
 $permission = 16; // Add Email Template
 
-require ($lib_path.'db_connect.inc.php');
-require ($lib_path.'functions.inc.php');
+require ('core.php');
+require (APPLICATION_LIBPATH . 'functions.inc.php');
 // This page requires authentication
-require ($lib_path.'auth.inc.php');
+require (APPLICATION_LIBPATH . 'auth.inc.php');
 
 if (!empty($_POST['type']))
 {
@@ -62,7 +62,7 @@ if (!empty($_POST['type']))
         }
     }
 }
-include ('./inc/htmlheader.inc.php');
+include (APPLICATION_INCPATH . 'htmlheader.inc.php');
 
 echo "<h2>".icon('add', 32)." {$strAddTemplate}</h2>";
 
@@ -77,6 +77,6 @@ echo "<br /><br /><input type='submit' value='{$strAdd}' />";
 echo "</p>";
 echo "</form>";
 
-include ('./inc/htmlfooter.inc.php');
+include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
 
 ?>

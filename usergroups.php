@@ -10,16 +10,16 @@
 
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
-$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
+
 $permission = 23; // Edit user
 
-require ($lib_path.'db_connect.inc.php');
-require ($lib_path.'functions.inc.php');
+require ('core.php');
+require (APPLICATION_LIBPATH . 'functions.inc.php');
 
 $title = $strUserGroups;
 
 // This page requires authentication
-require ($lib_path.'auth.inc.php');
+require (APPLICATION_LIBPATH . 'auth.inc.php');
 
 $action = cleanvar($_REQUEST['action']);
 
@@ -66,7 +66,7 @@ switch ($action)
     break;
 
     default:
-        include ('./inc/htmlheader.inc.php');
+        include (APPLICATION_INCPATH . 'htmlheader.inc.php');
 
         echo "<h2>{$strUserGroups}</h2>";
 
@@ -117,6 +117,6 @@ switch ($action)
             echo "<p><input type='hidden' name='action' value='savemembers' /><input type='submit' value='{$strSave}' /></p>";
             echo "</form>";
         }
-        include ('./inc/htmlfooter.inc.php');
+        include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
 }
 ?>

@@ -13,13 +13,13 @@
 // Warning: Unknown: Your script possibly relies on a session side-effect which existed until PHP 4.2.3. Please be advised that the session extension does not consider global variables as a source of data, unless register_globals is enabled. You can disable this functionality and this warning by setting session.bug_compat_42 or session.bug_compat_warn to off, respectively. in Unknown on line 0
 // Not sure why - Ivan 6Sep06
 
-$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
+
 $permission = 14; // View Users
-require ($lib_path.'db_connect.inc.php');
-require ($lib_path.'functions.inc.php');
+require ('core.php');
+require (APPLICATION_LIBPATH . 'functions.inc.php');
 
 // This page requires authentication
-require ($lib_path.'auth.inc.php');
+require (APPLICATION_LIBPATH . 'auth.inc.php');
 
 // External variables
 $sort = cleanvar($_REQUEST['sort']);
@@ -32,7 +32,7 @@ if ($groupid == 'all' OR ($groupid == '' AND $_SESSION['groupid'] == 0)) $filter
 elseif ($groupid == '') $filtergroup = $_SESSION['groupid'];
 else $filtergroup = $groupid;
 
-include ('./inc/htmlheader.inc.php');
+include (APPLICATION_INCPATH . 'htmlheader.inc.php');
 
 echo "<h2>".icon('user', 32)." ";
 echo "{$strUsers}</h2>";
@@ -245,5 +245,5 @@ echo "</tr></table>\n";
 
 mysql_free_result($result);
 
-include ('./inc/htmlfooter.inc.php');
+include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
 ?>

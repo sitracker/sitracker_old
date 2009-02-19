@@ -10,14 +10,14 @@
 
 // Authors: Kieran Hogg <kieran[at]sitracker.org>
 
-$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
+
 $permission = 0; // Allow all auth users
 
-require ($lib_path.'db_connect.inc.php');
-require ($lib_path.'functions.inc.php');
+require ('core.php');
+require (APPLICATION_LIBPATH . 'functions.inc.php');
 
 // This page requires authentication
-require ($lib_path.'auth.inc.php');
+require (APPLICATION_LIBPATH . 'auth.inc.php');
 
 $title = $strViewTask;
 
@@ -29,14 +29,14 @@ $mode = cleanvar($_REQUEST['mode']);
 
 if ($mode == 'incident')
 {
-    include ('inc/incident_html_top.inc.php');
+    include (APPLICATION_INCPATH . 'incident_html_top.inc.php');
 }
 else
 {
-    include ('./inc/htmlheader.inc.php');
+    include (APPLICATION_INCPATH . 'htmlheader.inc.php');
 }
 
-require ('./inc/task_view.inc.php');
-include ('./inc/htmlfooter.inc.php');
+require (APPLICATION_INCPATH . 'task_view.inc.php');
+include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
 
 ?>

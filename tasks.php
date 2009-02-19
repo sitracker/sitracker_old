@@ -11,11 +11,11 @@
 // Author: Kieran Hogg <kieran[at]sitracker.org
 // This Page Is Valid XHTML 1.0 Transitional!
 
-$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
-require ($lib_path.'db_connect.inc.php');
-require ($lib_path.'functions.inc.php');
-require_once ($lib_path . 'billing.inc.php');
-require ($lib_path.'auth.inc.php');
+
+require ('core.php');
+require (APPLICATION_LIBPATH . 'functions.inc.php');
+require_once (APPLICATION_LIBPATH . 'billing.inc.php');
+require (APPLICATION_LIBPATH . 'auth.inc.php');
 
 if (!$CONFIG['tasks_enabled'])
 {
@@ -165,12 +165,12 @@ $id = cleanvar($_REQUEST['incident']);
 if (!empty($id))
 {
     $title = $strActivities;
-    include ('inc/incident_html_top.inc.php');
+    include (APPLICATION_INCPATH . 'incident_html_top.inc.php');
 }
 else
 {
     $title = $strTasks;
-    include ('./inc/htmlheader.inc.php');
+    include (APPLICATION_INCPATH . 'htmlheader.inc.php');
 }
 
 
@@ -838,11 +838,11 @@ else
 
 if (!empty($id))
 {
-    include ('inc/incident_html_bottom.inc.php');
+    include (APPLICATION_INCPATH . 'incident_html_bottom.inc.php');
 }
 else
 {
-    include ('./inc/htmlfooter.inc.php');
+    include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
 }
 
 ?>

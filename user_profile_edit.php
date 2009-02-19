@@ -10,12 +10,12 @@
 
 
 // This Page Is Valid XHTML 1.0 Transitional!  1Nov05
-$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
+
 $permission = 4; // Edit your profile
-require ($lib_path.'db_connect.inc.php');
-require ($lib_path.'functions.inc.php');
+require ('core.php');
+require (APPLICATION_LIBPATH . 'functions.inc.php');
 // This page requires authentication
-require ($lib_path.'auth.inc.php');
+require (APPLICATION_LIBPATH . 'auth.inc.php');
 
 // External variables
 $mode = $_REQUEST['mode'];
@@ -38,7 +38,7 @@ else
 
 if (empty($mode))
 {
-    include ('./inc/htmlheader.inc.php');
+    include (APPLICATION_INCPATH . 'htmlheader.inc.php');
 
     $sql = "SELECT u.*, r.rolename FROM `{$dbUsers}` AS u, `{$dbRoles}` AS r  ";
     $sql .= "WHERE u.id='{$edituserid}' AND u.roleid = r.id LIMIT 1";
@@ -301,7 +301,7 @@ if (empty($mode))
     echo "<p><input name='reset' type='reset' value='{$strReset}' /> <input name='submit' type='submit' value='{$strSave}' /></p>";
     echo "</form>\n";
 
-    include ('./inc/htmlfooter.inc.php');
+    include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
 }
 elseif ($mode=='save')
 {
@@ -474,9 +474,9 @@ elseif ($mode=='save')
 
         if (!$result)
         {
-            include ('./inc/htmlheader.inc.php');
+            include (APPLICATION_INCPATH . 'htmlheader.inc.php');
             trigger_error("!Error while updating users table", E_USER_WARNING);
-            include ('./inc/htmlfooter.inc.php');
+            include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
         }
         else
         {
@@ -493,9 +493,9 @@ elseif ($mode=='save')
     {
         html_redirect($redirecturl, FALSE, $error_string);
 /*        // print error string
-        include ('./inc/htmlheader.inc.php');
+        include (APPLICATION_INCPATH . 'htmlheader.inc.php');
         echo $error_string;
-        include ('./inc/htmlfooter.inc.php');*/
+        include (APPLICATION_INCPATH . 'htmlfooter.inc.php');*/
     }
 }
 elseif ($mode == 'savesessionlang')

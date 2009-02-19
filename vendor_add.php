@@ -10,13 +10,12 @@
 
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
-$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
 $permission = 56; // Add Software
 
-require ($lib_path.'db_connect.inc.php');
-require ($lib_path.'functions.inc.php');
+require ('core.php');
+require (APPLICATION_LIBPATH.'functions.inc.php');
 // This page requires authentication
-require ($lib_path.'auth.inc.php');
+require (APPLICATION_LIBPATH.'auth.inc.php');
 
 $title = $strAddVendor;
 
@@ -26,7 +25,7 @@ $submit = $_REQUEST['submit'];
 if (empty($submit))
 {
     // Show form
-    include ('./inc/htmlheader.inc.php');
+    include (APPLICATION_INCPATH . 'htmlheader.inc.php');
 
     echo show_form_errors('add_vendor');
     clear_form_errors('add_vendor');
@@ -40,7 +39,7 @@ if (empty($submit))
     echo "<p class='warning'>{$strAvoidDupes}</p>";
     echo "</form>\n";
     echo "<p align='center'><a href='products.php'>{$strReturnWithoutSaving}</a></p>";
-    include ('./inc/htmlfooter.inc.php');
+    include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
 }
 else
 {
@@ -79,7 +78,7 @@ else
     }
     else
     {
-        include ('./inc/htmlheader.inc.php');
+        include (APPLICATION_INCPATH . 'htmlheader.inc.php');
         html_redirect($_SERVER['PHP_SELF'], FALSE);
     }
 }

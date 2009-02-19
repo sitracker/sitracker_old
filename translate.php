@@ -11,15 +11,13 @@
 // Authors: Kieran Hogg <kieran[at]sitracker.org>
 //          Ivan Lucas <ivan_lucas[at]users.sourceforge.net>
 
-$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
+
 $permission = 0; // not required
-require ($lib_path.'db_connect.inc.php');
-require ($lib_path.'functions.inc.php');
+require ('core.php');
+require (APPLICATION_LIBPATH . 'functions.inc.php');
 
-require ($lib_path.'auth.inc.php');
-include ('./inc/htmlheader.inc.php');
-
-$i18npath = './i18n/';
+require (APPLICATION_LIBPATH . 'auth.inc.php');
+include (APPLICATION_INCPATH . 'htmlheader.inc.php');
 
 $tolang = cleanvar($_REQUEST['lang']);
 
@@ -44,7 +42,7 @@ if (!$_REQUEST['mode'])
 elseif ($_REQUEST['mode'] == "show")
 {
     //open english file
-    $englishfile = "{$i18npath}en-GB.inc.php";
+    $englishfile = APPLICATION_I18NPATH . "en-GB.inc.php";
     $fh = fopen($englishfile, 'r');
     $theData = fread($fh, filesize($englishfile));
     fclose($fh);
@@ -88,7 +86,7 @@ elseif ($_REQUEST['mode'] == "show")
     unset($lines);
 
     //open foreign file
-    $myFile = "{$i18npath}{$tolang}.inc.php";
+    $myFile = APPLICATION_I18NPATH . "{$tolang}.inc.php";
     if (file_exists($myFile))
     {
         $foreignvalues = array();
@@ -189,7 +187,7 @@ elseif ($_REQUEST['mode'] == "save")
     $i18nalphabet = cleanvar($_REQUEST['i18nalphabet'], TRUE, FALSE);
 
     $filename = "{$lang}.inc.php";
-    echo "<p>".sprintf($strSendTranslation, "<code>{$filename}</code>", "<code>{$i18npath}</code>", "<a href='mailto:sitracker-devel-discuss@lists.sourceforge.net'>sitracker-devel-discuss@lists.sourceforge.net</a>")." </p>";
+    echo "<p>".sprintf($strSendTranslation, "<code>{$filename}</code>", "<code>".APPLICATION_I18NPATH."</code>", "<a href='mailto:sitracker-devel-discuss@lists.sourceforge.net'>sitracker-devel-discuss@lists.sourceforge.net</a>")." </p>";
     $i18nfile = '';
     $i18nfile .= "<?php\n";
     foreach ($_REQUEST['meta'] AS $meta)
@@ -226,7 +224,7 @@ elseif ($_REQUEST['mode'] == "save")
     echo "<p>{$strTranslation}: <strong>{$translatedcount}</strong>/{$origcount} = {$percent}% {$strComplete}.</p>";
     $i18nfile .= "?>\n";
 
-    $myFile = "{$i18npath}{$filename}";
+    $myFile = APPLICATION_I18NPATH."{$filename}";
     $fp = @fopen($myFile, 'w');
     if (!$fp)
     {
@@ -247,5 +245,5 @@ else
 {
     trigger_error('Invalid mode', E_USER_ERROR);
 }
-include ('./inc/htmlfooter.inc.php');
+include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
 ?>

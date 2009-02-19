@@ -10,14 +10,14 @@
 
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
-$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
+
 $permission = 70;
 
-require ($lib_path.'db_connect.inc.php');
-require ($lib_path.'functions.inc.php');
+require ('core.php');
+require (APPLICATION_LIBPATH . 'functions.inc.php');
 
 // This page requires authentication
-require ($lib_path.'auth.inc.php');
+require (APPLICATION_LIBPATH . 'auth.inc.php');
 if (!$CONFIG['tasks_enabled'])
 {
     header("Location: main.php");
@@ -90,7 +90,7 @@ switch ($action)
         if ($startdate > $duedate AND $duedate != '' AND $duedate > 0 ) $startdate = $duedate;
         if (count($error) >= 1)
         {
-            include ('./inc/htmlheader.inc.php');
+            include (APPLICATION_INCPATH . 'htmlheader.inc.php');
             echo "<p class='error'>Please check the data you entered</p>";
             echo "<ul class='error'>";
             foreach ($error AS $err)
@@ -98,7 +98,7 @@ switch ($action)
                 echo "<li>$err</li>";
             }
             echo "</ul>";
-            include ('./inc/htmlfooter.inc.php');
+            include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
         }
         else
         {
@@ -277,7 +277,7 @@ switch ($action)
 
     case '':
     default:
-        include ('./inc/htmlheader.inc.php');
+        include (APPLICATION_INCPATH . 'htmlheader.inc.php');
         echo "<h2>".icon('task', 32)." ";
         echo "$title</h2>";
         $sql = "SELECT * FROM `{$dbTasks}` WHERE id='$id'";
@@ -361,7 +361,7 @@ switch ($action)
         else echo "<p class='error'>{$strNoMatchingTaskFound}</p>";
 
         echo "<p align='center'><a href='tasks.php'>{$strTaskList}</a></p>";
-        include ('./inc/htmlfooter.inc.php');
+        include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
 }
 
 ?>
