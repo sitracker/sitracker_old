@@ -45,7 +45,7 @@ $configfiles = get_included_files();
 
 $systemhash = md5(date('Y-m-d') . $_SERVER['REMOTE_ADDR']
                 . $_SERVER['SCRIPT_FILENAME'] . $_SERVER['HTTP_USER_AGENT']
-                . $CONFIG['attachment_fspath'] .= $_SERVER['SERVER_SIGNATURE'] );
+                . $CONFIG['attachment_fspath'] . $_SERVER['SERVER_SIGNATURE'] );
 
 /**
     * Array filter callback to check to see if a config file is a recognised file
