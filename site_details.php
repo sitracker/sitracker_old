@@ -12,19 +12,19 @@
 // Created: 9th March 2001
 // This Page Is Valid XHTML 1.0 Transitional! 27Oct05
 
-$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
+
 $permission = 11; // View Sites
-require ($lib_path.'db_connect.inc.php');
-require ($lib_path.'functions.inc.php');
-require_once ($lib_path . 'billing.inc.php');
+require ('core.php');
+require (APPLICATION_LIBPATH . 'functions.inc.php');
+require_once (APPLICATION_LIBPATH . 'billing.inc.php');
 
 // This page requires authentication
-require ($lib_path.'auth.inc.php');
+require (APPLICATION_LIBPATH . 'auth.inc.php');
 
 // External variables
 $id = cleanvar($_REQUEST['id']);
 
-include ('./inc/htmlheader.inc.php');
+include (APPLICATION_INCPATH . 'htmlheader.inc.php');
 
 if ($id=='')
 {
@@ -319,6 +319,6 @@ if (user_permission($sit[2],19)) // View contracts
     echo "<p align='center'><a href='contract_add.php?action=showform&amp;siteid=$id'>{$strAddContract}</a></p>";
 }
 
-include ('./inc/htmlfooter.inc.php');
+include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
 
 ?>

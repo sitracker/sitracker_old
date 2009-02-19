@@ -10,14 +10,14 @@
 // Authors: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 //          Paul Heaney <paulheaney[at]users.sourceforge.net>
 
-$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
+
 $permission = 22; // Admin
 
-require ($lib_path.'db_connect.inc.php');
-require ($lib_path.'functions.inc.php');
+require ('core.php');
+require (APPLICATION_LIBPATH . 'functions.inc.php');
 
 // This page requires authentication
-require ($lib_path.'auth.inc.php');
+require (APPLICATION_LIBPATH . 'auth.inc.php');
 
 // External vars
 $id = cleanvar($_REQUEST['id']);
@@ -32,7 +32,7 @@ switch ($_REQUEST['mode'])
         if (mysql_num_rows($result) > 0)
         {
             $saction = mysql_fetch_object($result);
-            include ('./inc/htmlheader.inc.php');
+            include (APPLICATION_INCPATH . 'htmlheader.inc.php');
             echo "<h2>{$strScheduler}".help_link('Scheduler')."</h2>";
             echo "<form name='scheduleform' action='{$_SERVER['PHP_SELF']}' method='post'>";
             echo "<table class='vertical' width='350'>";
@@ -142,7 +142,7 @@ switch ($_REQUEST['mode'])
             echo "<p><input type='reset' value=\"{$strReset}\" /> <input type='submit' value=\"{$strSave}\" /></p>";
             echo "</form>";
             echo "<p align='center'><a href='{$_SERVER['PHP_SELF']}'>{$strReturnWithoutSaving}</a></p>";
-            include ('./inc/htmlfooter.inc.php');
+            include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
         }
         else
         {
@@ -226,7 +226,7 @@ switch ($_REQUEST['mode'])
     case 'list':
     default:
         $refresh = 60;
-        include ('./inc/htmlheader.inc.php');
+        include (APPLICATION_INCPATH . 'htmlheader.inc.php');
 
         echo "<h2>{$strScheduler}".help_link('Scheduler')."</h2>";
         echo "<h3>".ldate($CONFIG['dateformat_datetime'], $GLOBALS['now'], FALSE)."</h3>";
@@ -386,7 +386,7 @@ switch ($_REQUEST['mode'])
             // print a message explaining how to set up cron/scheduling
         }
 
-        include ('./inc/htmlfooter.inc.php');
+        include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
 }
 
 ?>

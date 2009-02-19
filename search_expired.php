@@ -11,14 +11,14 @@
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 // FIXME i18n whole page
 
-$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
+
 $permission = 19; // View Contracts
 
-require ($lib_path.'db_connect.inc.php');
-require ($lib_path.'functions.inc.php');
+require ('core.php');
+require (APPLICATION_LIBPATH . 'functions.inc.php');
 
 // This page requires authentication
-require ($lib_path.'auth.inc.php');
+require (APPLICATION_LIBPATH . 'auth.inc.php');
 
 // External variables
 $expired = cleanvar($_REQUEST['expired']);
@@ -27,7 +27,7 @@ $output = cleanvar($_REQUEST['output']);
 // show search expired maintenance form
 if (empty($expired))
 {
-    include ('./inc/htmlheader.inc.php');
+    include (APPLICATION_INCPATH . 'htmlheader.inc.php');
     
     echo "<h2>Search Expired Contracts</h2>";
     echo "<form action='{$_SERVER['PHP_SELF']}' method='get' >";
@@ -43,7 +43,7 @@ if (empty($expired))
     echo "</p>";
     echo "<p><input name='submit' type='submit' value=\"{$strSearch}\" /></p>\n";
     echo "</form>\n";
-    include ('./inc/htmlfooter.inc.php');
+    include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
 }
 else
 {
@@ -87,17 +87,17 @@ else
 
         if (mysql_num_rows($result) == 0)
         {
-            include ('./inc/htmlheader.inc.php');
+            include (APPLICATION_INCPATH . 'htmlheader.inc.php');
             echo $pagetitle;
             // FIXME i18n
             echo "<p class='error'>Sorry, your search yielded no results</p>\n";
-            include ('./inc/htmlfooter.inc.php');
+            include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
         }
         else
         {
             if ($_REQUEST['output'] == 'screen')
             {
-                include ('./inc/htmlheader.inc.php');
+                include (APPLICATION_INCPATH . 'htmlheader.inc.php');
                 ?>
                 <script type="text/javascript">
                 function support_contacts_window(maintenanceid)
@@ -163,7 +163,7 @@ else
                 }
                 echo "</table>\n";
                 echo "<p align='center'><a href='search.php?query={$search_string}&amp;context=maintenance'>{$strSearchAgain}</a></p>\n";
-                include ('./inc/htmlfooter.inc.php');
+                include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
             }
             else
             {

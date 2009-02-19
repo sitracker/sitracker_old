@@ -12,24 +12,28 @@
 
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
-$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
+
 $permission = 37; // Run Reports
 
-require ($lib_path.'db_connect.inc.php');
-require ($lib_path.'functions.inc.php');
+require ('core.php');
+require (APPLICATION_LIBPATH . 'functions.inc.php');
 
 // This page requires authentication
-require ($lib_path.'auth.inc.php');
+require (APPLICATION_LIBPATH . 'auth.inc.php');
 
 if (empty($_REQUEST['mode']))
 {
-    include ('./inc/htmlheader.inc.php');
+    include (APPLICATION_INCPATH . 'htmlheader.inc.php');
     echo "<h2>{$strMarketingMailshot}</h2>";
     echo "<p align='center'>{$strMarketingMailshotDesc}</p>";
     echo "<form action='{$_SERVER['PHP_SELF']}' method='post'>";
     echo "<table align='center' class='vertical'>";
     echo "<tr><th>{$strFilter}: {$strTag}</th><td><input type='text' ";
     echo "name='filtertags' value='' size='15' /></td></tr>";
+    echo "<tr><th>{$strFilter}: {$strSiteType}:</td>";
+    echo "<td>";
+    echo sitetype_drop_down('filtertype', 0);
+    echo "</td></tr>";
     echo "<tr><th>{$strInclude}: {$strProducts}</th>";
     echo "<td>";
     $sql   = "SELECT * FROM `{$dbProducts}` ORDER BY name";
@@ -87,11 +91,11 @@ if (empty($_REQUEST['mode']))
     echo "<strong>{$strField} 11:</strong> {$strTelephone}<br />";
     echo "<strong>{$strField} 12:</strong> {$strProducts} <em>";
     echo "({$strListsAllTheCustomersProducts})</em></p>";
-    include ('./inc/htmlfooter.inc.php');
+    include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
 }
 elseif ($_REQUEST['mode'] == 'report')
 {
-	// echo "REPORT";
+    // echo "REPORT";
     // don't include anything excluded
     if (is_array($_POST['inc']) && is_array($_POST['exc']))
     {
@@ -99,8 +103,9 @@ elseif ($_REQUEST['mode'] == 'report')
     }
 
     $filtertags = cleanvar($_POST['filtertags']);
+    $filtertype = cleanvar($_POST['filtertype']);
 
-    $includecount=count($_POST['inc']);
+    $includecount = count($_POST['inc']);
     if ($includecount >= 1)
     {
         // $html .= "<strong>Include:</strong><br />";
@@ -113,7 +118,7 @@ elseif ($_REQUEST['mode'] == 'report')
         }
         $incsql .= ")";
     }
-    $excludecount=count($_POST['exc']);
+    $excludecount = count($_POST['exc']);
     if ($excludecount >= 1)
     {
         // $html .= "<strong>Exclude:</strong><br />";
@@ -134,22 +139,36 @@ elseif ($_REQUEST['mode'] == 'report')
     $sql .= "LEFT JOIN `{$dbSites}` AS s ON c.siteid = s.id ";
 
     if (empty($incsql) == FALSE OR empty($excsql) == FALSE OR
-        $_REQUEST['activeonly'] == 'yes')
+        $_REQUEST['activeonly'] == 'yes' OR !empty($filtertype))
     {
         $sql .= "WHERE ";
+        if (!empty($filtertype)) $sql .= "s.typeid = {$filtertype} ";
     }
 
     if ($_REQUEST['activeonly'] == 'yes')
     {
+        if (!empty($filtertype)) $sql .= "AND ";
         $sql .= "m.term!='yes' AND m.expirydate > '$now' ";
-        if (empty($incsql) == FALSE OR empty($excsql) == FALSE) $sql .= "AND ";
     }
-    if (!empty($incsql)) $sql .= "$incsql";
-    if (empty($incsql) == FALSE AND empty($excsql) == FALSE) $sql .= " AND ";
-    if (!empty($excsql)) $sql .= "$excsql";
+    if (!empty($incsql))
+    {
+        if (!empty($filtertype) OR $_REQUEST['activeonly'] == 'yes') $sql .= "AND ";
+        $sql .= "$incsql";
+    }
+    if (!empty($excsql))
+    {
+        if (!empty($filtertype) OR $_REQUEST['activeonly'] == 'yes' OR
+        !empty($incsql)) $sql .= "AND ";
+        $sql .= "$excsql";
+    }
 
     $sql .= " ORDER BY c.email ASC ";
 
+echo "<p><strong>incsql</strong> $incsql</p>";
+echo "<p><strong>excsql</strong> $incsql</p>";
+echo "<p><strong>sql</strong> $sql</p>";
+
+debug_log($sql);
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     $numrows = mysql_num_rows($result);
@@ -165,7 +184,7 @@ elseif ($_REQUEST['mode'] == 'report')
     $csvfieldheaders .= "{$strAddress1}\",\"{$strAddress2}\",\"{$strCity}\",\"{$strCounty}\",\"";
     $csvfieldheaders .= "{$strPostcode}\",\"{$strCountry}\",\"{$strTelephone}\",\"";
     $csvfieldheaders .= "{$strProducts}\"\r\n";
-    $rowcount=0;
+    $rowcount = 0;
     while ($row = mysql_fetch_object($result))
     {
         $tags = list_tags($row->siteid, TAG_SITE, FALSE);
@@ -276,11 +295,11 @@ elseif ($_REQUEST['mode'] == 'report')
 
     if ($_REQUEST['output'] == 'screen')
     {
-        include ('./inc/htmlheader.inc.php');
+        include (APPLICATION_INCPATH . 'htmlheader.inc.php');
         echo "<h2>{$strMarketingMailshot}</h2>";
         echo "<p align='center'>{$strMarketingMailshotDesc}</p>";
         echo $html;
-        include ('./inc/htmlfooter.inc.php');
+        include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
     }
     elseif ($_REQUEST['output'] == 'csv')
     {

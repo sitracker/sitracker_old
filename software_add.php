@@ -10,13 +10,13 @@
 
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
-$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
+
 $permission = 56; // Add Skills
 
-require ($lib_path.'db_connect.inc.php');
-require ($lib_path.'functions.inc.php');
+require ('core.php');
+require (APPLICATION_LIBPATH . 'functions.inc.php');
 // This page requires authentication
-require ($lib_path.'auth.inc.php');
+require (APPLICATION_LIBPATH . 'auth.inc.php');
 
 $title = $strAddSkill;
 
@@ -26,7 +26,7 @@ $submit = $_REQUEST['submit'];
 if (empty($submit))
 {
     // Show add product form
-    include ('./inc/htmlheader.inc.php');
+    include (APPLICATION_INCPATH . 'htmlheader.inc.php');
 
     $_SESSION['formerrors']['add_software'] = NULL;
     echo "<h2>".icon('skill', 32)." ";
@@ -68,7 +68,7 @@ if (empty($submit))
     echo "<p class='warning'>{$strAvoidDupes}</p>";
     echo "</form>\n";
     echo "<p align='center'><a href='products.php'>{$strReturnWithoutSaving}</a></p>";
-    include ('./inc/htmlfooter.inc.php');
+    include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
 
     $_SESSION['formdata']['add_software'] = NULL;
 }
@@ -140,7 +140,7 @@ else
     }
     else
     {
-        include ('./inc/htmlheader.inc.php');
+        include (APPLICATION_INCPATH . 'htmlheader.inc.php');
         html_redirect($_SERVER['PHP_SELF'], FALSE);
     }
 }

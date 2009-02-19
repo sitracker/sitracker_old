@@ -7,10 +7,10 @@
 // This software may be used and distributed according to the terms
 // of the GNU General Public License, incorporated herein by reference.
 
-$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
+
 $permission = 0;
-require ($lib_path.'db_connect.inc.php');
-require ($lib_path.'functions.inc.php');
+require ('core.php');
+require (APPLICATION_LIBPATH . 'functions.inc.php');
 $version = cleanvar($_GET['v']);
 //as passed by triggers
 $version = str_replace("v", "", $version);
@@ -20,8 +20,8 @@ if (!empty($version))
 }
 
 // This page requires authentication
-require ($lib_path.'auth.inc.php');
-include_once('./inc/htmlheader.inc.php');
+require (APPLICATION_LIBPATH . 'auth.inc.php');
+include_once (APPLICATION_INCPATH . 'htmlheader.inc.php');
 echo "<h2>Release Notes</h2>";
 
 echo "<div id='help'>";
@@ -175,6 +175,6 @@ echo '<div>
     </div>';
 echo "</div>";
 
-include_once('./inc/htmlfooter.inc.php');
+include_once (APPLICATION_INCPATH . 'htmlfooter.inc.php');
 
 ?>

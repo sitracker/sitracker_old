@@ -8,14 +8,14 @@
 // of the GNU General Public License, incorporated herein by reference.
 //
 
-$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
+
 $permission = 37; // Run Reports
 
-require ($lib_path.'db_connect.inc.php');
-require ($lib_path.'functions.inc.php');
+require ('core.php');
+require (APPLICATION_LIBPATH . 'functions.inc.php');
 
 // This page requires authentication
-require ($lib_path.'auth.inc.php');
+require (APPLICATION_LIBPATH . 'auth.inc.php');
 
 $title = $strSiteIncidents;
 
@@ -32,7 +32,7 @@ $showproducts = cleanvar($_REQUEST['showproducts']);
 
 if (empty($mode))
 {
-    include ('./inc/htmlheader.inc.php');
+    include (APPLICATION_INCPATH . 'htmlheader.inc.php');
 
     ?>
     <script type='text/javascript'>
@@ -116,7 +116,7 @@ if (empty($mode))
     echo "<input type='submit' value=\"{$strRunReport}\" /></p>";
     echo "</form>";
 
-    include ('./inc/htmlfooter.inc.php');
+    include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
 }
 else
 {
@@ -263,7 +263,7 @@ else
                             $csv .= "<tr class='{$shade}'><td>{$count}</td><td>{$site->name}</td><td>{$site->realname}</td><td>{$site->resel}</td>";
                             $rowshowed = true;
                         }
-                        
+
                         if ($showproducts == 'on')
                         {
                             $colspan = 5;
@@ -320,7 +320,7 @@ else
                     $csv .= "</td></tr>";
                 }
             }
-            
+
             if ($shade == 'shade1') $shade = 'shade2';
             else $shade = 'shade1';
         }
@@ -354,13 +354,13 @@ else
         }
         else
         {
-            include ('./inc/htmlheader.inc.php');
+            include (APPLICATION_INCPATH . 'htmlheader.inc.php');
             echo "<h2>".icon('site', 32)." {$strSiteIncidents}</h2>";
             echo "<p align='center'>{$strStartDate}: {$startdate}. {$strEndDate}: {$enddate}</p>";
 
             echo "<table align='center'>{$csv}</table>";
 
-            include ('./inc/htmlfooter.inc.php');
+            include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
         }
 
 

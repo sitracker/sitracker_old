@@ -19,18 +19,18 @@
 
 // Requested by Rob Shepley, 3 Oct 05
 
-$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
+
 $permission = 37; // Run Reports
 $title = 'Yearly Engineer/Incident Report';
-require ($lib_path.'db_connect.inc.php');
-require ($lib_path.'functions.inc.php');
+require ('core.php');
+require (APPLICATION_LIBPATH . 'functions.inc.php');
 
 // This page requires authentication
-require ($lib_path.'auth.inc.php');
+require (APPLICATION_LIBPATH . 'auth.inc.php');
 
 if (empty($_REQUEST['mode']))
 {
-    include ('./inc/htmlheader.inc.php');
+    include (APPLICATION_INCPATH . 'htmlheader.inc.php');
     echo "<h2>{$title}</h2>";
     echo "<form action='{$_SERVER['PHP_SELF']}' method='post' id='incidentsbyengineer'>";
     echo "<table align='center' class='vertical'>";
@@ -75,7 +75,7 @@ if (empty($_REQUEST['mode']))
     echo "<input type='submit' value=\"{$strRunReport}\" />";
     echo "</p>";
     echo "</form>";
-    include ('./inc/htmlfooter.inc.php');
+    include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
 }
 elseif ($_REQUEST['statistics'] == 'on')
 {
@@ -301,10 +301,10 @@ elseif ($_REQUEST['statistics'] == 'on')
 
     if ($_POST['output'] == 'screen')
     {
-        include ('./inc/htmlheader.inc.php');
+        include (APPLICATION_INCPATH . 'htmlheader.inc.php');
         echo "<h2>".sprintf($strEngineersStatisticsForXMonths, 12)."</h2>";
         echo $html;
-        include ('./inc/htmlfooter.inc.php');
+        include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
     }
     elseif ($_POST['output'] == 'csv')
     {
@@ -440,7 +440,7 @@ elseif ($_REQUEST['mode'] == 'report')
         }
         $ext = external_escalation($escalated_array, $row->incid);
         $html .= "<tr class='shade2'><td>$nicedate</td><td>{$niceclose}</td>";
-        $html .= "<td><a href='../incident_details.php?id={$row->incid}'>{$row->incid}</a></td>";
+        $html .= "<td><a href='incident_details.php?id={$row->incid}'>{$row->incid}</a></td>";
         $html .= "<td>{$row->title}</td><td>{$row->realname}</td><td>$ext</td></tr>";
         $csv .="'".$nicedate."','".$niceclose."', '{$row->incid}','{$row->title}','{$row->realname},'$ext'\n";
     }
@@ -450,9 +450,9 @@ elseif ($_REQUEST['mode'] == 'report')
 
     if ($_POST['output'] == 'screen')
     {
-        include ('./inc/htmlheader.inc.php');
+        include (APPLICATION_INCPATH . 'htmlheader.inc.php');
         echo $html;
-        include ('./inc/htmlfooter.inc.php');
+        include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
     }
     elseif ($_POST['output'] == 'csv')
     {

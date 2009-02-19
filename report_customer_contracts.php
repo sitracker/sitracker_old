@@ -12,15 +12,15 @@
 // Email:    ivanlucas[at]users.sourceforge.net
 // Comments: List supported contacts by contract
 
-$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
+
 $permission = 19; /* View Maintenance Contracts */
 $title = 'Supported contacts by Contract';
 
-require ($lib_path.'db_connect.inc.php');
-require ($lib_path.'functions.inc.php');
+require ('core.php');
+require (APPLICATION_LIBPATH . 'functions.inc.php');
 
 // This page requires authentication
-require ($lib_path.'auth.inc.php');
+require (APPLICATION_LIBPATH . 'auth.inc.php');
 
 $siteid = cleanvar($_REQUEST['siteid']);
 
@@ -33,7 +33,7 @@ if ($_REQUEST['mode'] == 'csv')
 }
 else
 {
-    include ('./inc/htmlheader.inc.php');
+    include (APPLICATION_INCPATH . 'htmlheader.inc.php');
 }
 
 $sql = "SELECT *, s.name AS sitename FROM `{$dbSites}` AS s ";
@@ -120,6 +120,6 @@ while ($site = mysql_fetch_object($result))
 if ($_REQUEST['mode']!='csv')
 {
     echo "<p align='center'><a href='{$_SERVER['PHP_SELF']}?siteid={$siteid}&amp;mode=csv'>Download as <abbr title='Comma Seperated Values'>CSV</abbr> File</a></p>";
-    include ('./inc/htmlfooter.inc.php');
+    include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
 }
 ?>

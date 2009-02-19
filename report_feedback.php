@@ -12,14 +12,13 @@
 
 // Author:  Paul Heaney Paul Heaney <paulheaney[at]users.sourceforge.net>
 
-$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
 $permission = 37; // Run Reports
 
-require ($lib_path.'db_connect.inc.php');
-require ($lib_path.'functions.inc.php');
+require ('core.php');
+require (APPLICATION_LIBPATH . 'functions.inc.php');
 
 // This page requires authentication
-require ($lib_path.'auth.inc.php');
+require (APPLICATION_LIBPATH . 'auth.inc.php');
 
 $type = cleanvar($_REQUEST['type']);
 $dates = cleanvar($_REQUEST['dates']);
@@ -30,7 +29,7 @@ $formid = $CONFIG['feedback_form'];
 
 /// echo "Start: {$startdate}";
 
-include ('./inc/htmlheader.inc.php');
+include (APPLICATION_INCPATH . 'htmlheader.inc.php');
 
 echo "<h2>Feedback Reports</h2>";
 
@@ -78,25 +77,25 @@ function feedback_between_dates()
 
 if (empty($type))
 {
-    include ('./inc/report_feedback_form.inc.php');
+    include (APPLICATION_INCPATH . 'report_feedback_form.inc.php');
 }
 elseif ($type == 'byengineer')
 {
-    include ('./inc/report_feedback_engineer.inc.php');
+    include (APPLICATION_INCPATH . 'report_feedback_engineer.inc.php');
 }
 elseif ($type == 'bycustomer')
 {
-    include ('./inc/report_feedback_contact.inc.php');
+    include (APPLICATION_INCPATH . 'report_feedback_contact.inc.php');
 }
 elseif ($type == 'bysite')
 {
-    include ('./inc/report_feedback_site.inc.php');
+    include (APPLICATION_INCPATH . 'report_feedback_site.inc.php');
 }
 elseif ($type == 'byproduct')
 {
-    include ('./inc/report_feedback_product.inc.php');
+    include (APPLICATION_INCPATH . 'report_feedback_product.inc.php');
 }
 
-include ('./inc/htmlfooter.inc.php');
+include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
 
 ?>

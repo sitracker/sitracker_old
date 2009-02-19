@@ -11,12 +11,12 @@
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 // This Page Is Valid XHTML 1.0 Transitional! 27Oct05
 
-$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
+
 $permission = 2; // Add new site
-require ($lib_path.'db_connect.inc.php');
-require ($lib_path.'functions.inc.php');
+require ('core.php');
+require (APPLICATION_LIBPATH . 'functions.inc.php');
 // This page requires authentication
-require ($lib_path.'auth.inc.php');
+require (APPLICATION_LIBPATH . 'auth.inc.php');
 
 // External variables
 $action = $_REQUEST['action'];
@@ -24,7 +24,7 @@ $action = $_REQUEST['action'];
 if ($action == "showform" OR $action == '')
 {
     // Show add site form
-    include ('./inc/htmlheader.inc.php');
+    include (APPLICATION_INCPATH . 'htmlheader.inc.php');
     echo show_form_errors('add_site');
     clear_form_errors('add_site');
 
@@ -117,7 +117,7 @@ if ($action == "showform" OR $action == '')
     echo "<p><input name='submit' type='submit' value='{$strAddSite}' /></p>";
     echo "<p class='warning'>{$strAvoidDupes}</p>\n";
     echo "</form>\n";
-    include ('./inc/htmlfooter.inc.php');
+    include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
 
     clear_form_data('add_site');
 }
@@ -142,7 +142,7 @@ elseif ($action == "add")
 
     $_SESSION['formdata']['add_site'] = $_REQUEST;
 
-    include ('./inc/htmlheader.inc.php');
+    include (APPLICATION_INCPATH . 'htmlheader.inc.php');
 
     $errors = 0;
     // check for blank name

@@ -13,14 +13,14 @@
 // This Page Is Valid XHTML 1.0 Transitional!  4Feb06
 // FIXME i18n
 
-$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
+
 $permission = 37; // Run Reports
 
-require ($lib_path.'db_connect.inc.php');
-require ($lib_path.'functions.inc.php');
+require ('core.php');
+require (APPLICATION_LIBPATH . 'functions.inc.php');
 
 // This page requires authentication
-require ($lib_path.'auth.inc.php');
+require (APPLICATION_LIBPATH . 'auth.inc.php');
 
 $title = $strCustomerExport;
 
@@ -40,7 +40,7 @@ if (!function_exists('strip_comma'))
 
 if (empty($_REQUEST['mode']))
 {
-    include ('./inc/htmlheader.inc.php');
+    include (APPLICATION_INCPATH . 'htmlheader.inc.php');
     echo "<h2>{$strCustomerExport}</h2>";
     echo "<form action='{$_SERVER['PHP_SELF']}' method='post'>";
     echo "<table class='vertical'>";
@@ -88,7 +88,7 @@ if (empty($_REQUEST['mode']))
     echo "<strong>Field 11:</strong> {$strSite}<br />";
     echo "<strong>Field 12:</strong> {$strProducts} <em>(Lists all the customers products regardless of selections made above)</em><br />"; // FIXME i18n
     echo "</td></tr></table>";
-    include ('./inc/htmlfooter.inc.php');
+    include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
 }
 elseif ($_REQUEST['mode'] == 'report')
 {
@@ -212,9 +212,9 @@ elseif ($_REQUEST['mode'] == 'report')
 
     if ($_POST['output'] == 'screen')
     {
-        include ('./inc/htmlheader.inc.php');
+        include (APPLICATION_INCPATH . 'htmlheader.inc.php');
         echo $html;
-        include ('./inc/htmlfooter.inc.php');
+        include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
     }
     elseif ($_POST['output'] == 'csv')
     {

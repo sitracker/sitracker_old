@@ -9,13 +9,13 @@
 //
 // Author: Paul Heaney <paulheaney[at]users.sourceforge.net>
 
-$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
+
 $permission = 0; // not required
-require ($lib_path.'db_connect.inc.php');
-require ($lib_path.'functions.inc.php');
+require ('core.php');
+require (APPLICATION_LIBPATH . 'functions.inc.php');
 
 // This page requires authentication
-require ($lib_path.'auth.inc.php');
+require (APPLICATION_LIBPATH . 'auth.inc.php');
 
 $legacy = cleanvar($_REQUEST['legacy']);
 $groupid = cleanvar($_REQUEST['gid']);
@@ -27,7 +27,7 @@ else $filtergroup = $groupid;
 
 $title = $strSkillsMatrix;
 
-include ('./inc/htmlheader.inc.php');
+include (APPLICATION_INCPATH . 'htmlheader.inc.php');
 
 echo "<h2>".icon('skill', 32)." ";
 echo "$title</h2>";
@@ -108,7 +108,7 @@ if ($countusers > 0)
     {
         $sql .= "AND (s.lifetime_end > NOW() OR s.lifetime_end = '0000-00-00' OR s.lifetime_end is NULL) ";
     }
-    
+
     if ($numgroups >= 1 AND $filtergroup == '0')
     {
     	$sql .= "AND (u.groupid='0' OR u.groupid='' OR u.groupid IS NULL) ";
@@ -199,6 +199,6 @@ else
     echo "<p align='center'>{$strNothingToDisplay}</p>";
 }
 
-include ('./inc/htmlfooter.inc.php');
+include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
 
 ?>

@@ -15,21 +15,21 @@
 // Notes:
 //  Counts activate calls within the specified period (i.e. those with a lastupdate time > timespecified)
 
-$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
+
 $permission = 37; // Run Reports
 
-require ($lib_path.'db_connect.inc.php');
-require ($lib_path.'functions.inc.php');
+require ('core.php');
+require (APPLICATION_LIBPATH . 'functions.inc.php');
 
 // This page requires authentication
-require ($lib_path.'auth.inc.php');
+require (APPLICATION_LIBPATH . 'auth.inc.php');
 
 $title = $strIncidentsBySkill;
 $pagescripts = array('dojo/dojo.js');
 
 if (empty($_REQUEST['mode']))
 {
-    include ('./inc/htmlheader.inc.php');
+    include (APPLICATION_INCPATH . 'htmlheader.inc.php');
 
     echo "<h2>$title</h2>";
     echo "<form action='{$_SERVER['PHP_SELF']}' id='incidentsbysoftware' method='post'>";
@@ -51,7 +51,7 @@ if (empty($_REQUEST['mode']))
     echo "</p>";
     echo "</form>\n";
 
-    include ('./inc/htmlfooter.inc.php');
+    include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
 }
 else
 {
@@ -84,7 +84,7 @@ else
         $c++;
     }
 
-    include ('./inc/htmlheader.inc.php');
+    include (APPLICATION_INCPATH . 'htmlheader.inc.php');
 
     echo "<h2>{$strIncidentsBySkill}</h2>";
 
@@ -413,7 +413,7 @@ else
             $legend = substr($legend,0,strlen($legend)-1);
             $title = urlencode($strIncidentsBySkill);
             echo "\n<br /><p><div style='text-align:center;'>";
-            echo "\n<img src='../chart.php?type=pie&data=$data&legends=$legend&title=$title' />";
+            echo "\n<img src='chart.php?type=pie&data=$data&legends=$legend&title=$title' />";
             echo "\n</div></p>";
         }
     }
@@ -421,7 +421,7 @@ else
     {
         echo "<p class='error'>{$strNoRecords}</p>";
     }
-    include ('./inc/htmlfooter.inc.php');
+    include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
 
 }
 

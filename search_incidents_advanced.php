@@ -12,13 +12,13 @@
 // Removed mention of contactproducts - INL 08Oct01
 // This Page Is Valid XHTML 1.0 Transitional!   - INL 6Apr06
 
-$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
+
 $permission = 6;  // view incidents
 
-require ($lib_path.'db_connect.inc.php');
-require ($lib_path.'functions.inc.php');
+require ('core.php');
+require (APPLICATION_LIBPATH . 'functions.inc.php');
 // This page requires authentication
-require ($lib_path.'auth.inc.php');
+require (APPLICATION_LIBPATH . 'auth.inc.php');
 
 // Don't return more than this number of results
 $maxresults = 1000;
@@ -36,7 +36,7 @@ $search_user = cleanvar($_REQUEST['search_user']);
 $action = cleanvar($_REQUEST['action']);
 
 
-include ('./inc/htmlheader.inc.php');
+include (APPLICATION_INCPATH . 'htmlheader.inc.php');
 // show search incidents form
 if (empty($action))
 {
@@ -214,5 +214,5 @@ else
         if ($countresults >= $maxresults) printf($strMaxResults, $maxresults);
     }
 }
-include ('./inc/htmlfooter.inc.php');
+include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
 ?>

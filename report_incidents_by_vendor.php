@@ -10,20 +10,20 @@
 
 // Authors: Paul Heaney <paulheaney[at]users.sourceforge.net>
 
-$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
+
 $permission = 37; // Run Reports
 
-require ($lib_path.'db_connect.inc.php');
-require ($lib_path.'functions.inc.php');
+require ('core.php');
+require (APPLICATION_LIBPATH . 'functions.inc.php');
 
 // This page requires authentication
-require ($lib_path.'auth.inc.php');
+require (APPLICATION_LIBPATH . 'auth.inc.php');
 
 $title = $strIncidentsByVendor;
 
 if (empty($_REQUEST['mode']))
 {
-    include ('./inc/htmlheader.inc.php');
+    include (APPLICATION_INCPATH . 'htmlheader.inc.php');
 
     echo "<h2>{$title}</h2>";
     echo "<form action='{$_SERVER['PHP_SELF']}' id='incidentsbyvendor' method='post'>";
@@ -43,7 +43,7 @@ if (empty($_REQUEST['mode']))
     echo "</p>";
     echo "</form>";
 
-    include ('./inc/htmlfooter.inc.php');
+    include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
 }
 else
 {
@@ -57,7 +57,7 @@ else
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
 
-    include ('./inc/htmlheader.inc.php');
+    include (APPLICATION_INCPATH . 'htmlheader.inc.php');
 
     echo "<h2>{$title}</h2>";
 
@@ -76,7 +76,7 @@ else
         echo "</p>";
     }
 
-    include ('./inc/htmlfooter.inc.php');
+    include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
 
 }
 

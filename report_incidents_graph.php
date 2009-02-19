@@ -10,13 +10,13 @@
 
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
-$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
+
 $permission = 37; // Run Reports
-require ($lib_path.'db_connect.inc.php');
-require ($lib_path.'functions.inc.php');
+require ('core.php');
+require (APPLICATION_LIBPATH . 'functions.inc.php');
 
 // This page requires authentication
-require ($lib_path.'auth.inc.php');
+require (APPLICATION_LIBPATH . 'auth.inc.php');
 
 // External variables
 $startyear = cleanvar($_REQUEST['startyear']);
@@ -29,7 +29,7 @@ $closedcolour = '#72B8B8';
 $currentcolour = '#1CA772';
 
 $currentyear = date('Y');
-include ('./inc/htmlheader.inc.php');
+include (APPLICATION_INCPATH . 'htmlheader.inc.php');
 $currentyear = date('Y');
 $currentmonth = date('n');
 $daysinyear = date('z',mktime(0,0,0,12,31,$year));
@@ -176,5 +176,5 @@ else
 
 echo "<h3>Grand Total: <u style='color: $openedcolour;'>$grandtotal</u> incidents opened and <u style='color: $closedcolour;'>$grandtotalclosed</u> closed during the year, difference <u>$diff</u></h3>";
 
-include ('./inc/htmlfooter.inc.php');
+include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
 ?>

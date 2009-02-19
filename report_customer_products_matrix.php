@@ -9,14 +9,13 @@
 //
 //  Author:   Ivan Lucas
 
-$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
 $permission = 37;  // Run Reports
 
-include ($lib_path.'db_connect.inc.php');
-include ($lib_path.'functions.inc.php');
+require ('core.php');
+include (APPLICATION_LIBPATH.'functions.inc.php');
 
 // This page requires authentication
-require ($lib_path.'auth.inc.php');
+require (APPLICATION_LIBPATH.'auth.inc.php');
 
 // show search renewal form
 switch ($_POST['action'])
@@ -133,11 +132,11 @@ switch ($_POST['action'])
             }
             else
             {
-                include ('./inc/htmlheader.inc.php');
+                include (APPLICATION_INCPATH . 'htmlheader.inc.php');
                 echo $html;
 //                 echo "<hr />";
 //                 echo "<pre>{$csv}</pre>";
-                include ('./inc/htmlfooter.inc.php');
+                include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
             }
         }
         else
@@ -147,7 +146,7 @@ switch ($_POST['action'])
         break;
 
     default:
-        include ('./inc/htmlheader.inc.php');
+        include (APPLICATION_INCPATH . 'htmlheader.inc.php');
         echo "<h2>{$strSiteProductsMatrix}</h2>";
         echo "<form name='report' action='{$_SERVER['PHP_SELF']}' method='post'>";
         echo "<table class='vertical'>";
@@ -172,7 +171,7 @@ switch ($_POST['action'])
         echo "<p><input name='submit' type='submit' value=\"{$strRunReport}\" /></p>";
         echo "<input type='hidden' name='action' value='runreport' />";
         echo "</form>\n";
-        include ('./inc/htmlfooter.inc.php');
+        include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
         break;
 }
 ?>

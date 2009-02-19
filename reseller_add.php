@@ -9,13 +9,13 @@
 //
 // Author: Paul Heaney <paulheaney[at]users.sourceforge.net>
 
-$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
+
 $permission = 63;
 
-require ($lib_path.'db_connect.inc.php');
-require ($lib_path.'functions.inc.php');
+require ('core.php');
+require (APPLICATION_LIBPATH . 'functions.inc.php');
 // This page requires authentication
-require ($lib_path.'auth.inc.php');
+require (APPLICATION_LIBPATH . 'auth.inc.php');
 
 // External variables
 $action = $_REQUEST['action'];
@@ -52,9 +52,9 @@ switch ($action)
             if ($addition_errors == 1)
             {
                 // show addition error message
-                include ('./inc/htmlheader.inc.php');
+                include (APPLICATION_INCPATH . 'htmlheader.inc.php');
                 echo $addition_errors_string;
-                include ('./inc/htmlfooter.inc.php');
+                include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
             }
             else
             {
@@ -68,7 +68,7 @@ switch ($action)
         }
         break;
     default:
-        include ('./inc/htmlheader.inc.php');
+        include (APPLICATION_INCPATH . 'htmlheader.inc.php');
         echo show_form_errors('add_reseller');
         clear_form_errors('formerrors');
         echo "<h2>{$strAddReseller}</h2>";
@@ -79,7 +79,7 @@ switch ($action)
         echo "</table>";
         echo "<p align='center'><input name='submit' type='submit' value='{$strAddReseller}' /></p>";
         echo "</form>";
-        include ('./inc/htmlfooter.inc.php');
+        include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
         break;
 }
 

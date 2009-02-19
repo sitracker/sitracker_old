@@ -10,13 +10,13 @@
 
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
-$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
+
 $permission = 53; // Edit Service Levels
 
-require ($lib_path.'db_connect.inc.php');
-require ($lib_path.'functions.inc.php');
+require ('core.php');
+require (APPLICATION_LIBPATH . 'functions.inc.php');
 // This page requires authentication
-require ($lib_path.'auth.inc.php');
+require (APPLICATION_LIBPATH . 'auth.inc.php');
 
 $title = $strEditServiceLevel;
 
@@ -27,7 +27,7 @@ $action = $_REQUEST['action'];
 
 if (empty($action) OR $action == "showform")
 {
-    include ('./inc/htmlheader.inc.php');
+    include (APPLICATION_INCPATH . 'htmlheader.inc.php');
 
     echo "<h2>".icon('sla', 32)." {$title}</h2>";
     echo "<p align='center'>{$tag} ".priority_name($priority)."</p>";
@@ -84,7 +84,7 @@ if (empty($action) OR $action == "showform")
     echo "<p align='center'><input type='submit' value='{$strSave}' /></p>";
     echo "<p align='center'><a href='service_levels.php'>{$strBackToList}</a></p>";
     echo "</form>";
-    include ('./inc/htmlfooter.inc.php');
+    include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
 }
 elseif ($action == "edit")
 {

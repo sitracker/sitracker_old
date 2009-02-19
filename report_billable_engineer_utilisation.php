@@ -9,20 +9,20 @@
 //
 //  Author:   Paul Heaney
 
-$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
+
 $permission = 37;  // Run Reports // TODO perhaps should have own permission
 
-include ($lib_path.'db_connect.inc.php');
-include ($lib_path.'functions.inc.php');
+require ('core.php');
+include (APPLICATION_LIBPATH . 'functions.inc.php');
 
 // This page requires authentication
-require ($lib_path.'auth.inc.php');
+require (APPLICATION_LIBPATH . 'auth.inc.php');
 
 $mode = cleanvar($_REQUEST['mode']);
 
 if (empty($mode) OR $mode == 'showform')
 {
-    include ('./inc/htmlheader.inc.php');
+    include (APPLICATION_INCPATH . 'htmlheader.inc.php');
 
     echo "<h2>Monthly Activity Totals</h2>";
     echo "<form name='report' action='{$_SERVER['PHP_SELF']}' method='post'>";
@@ -50,7 +50,7 @@ if (empty($mode) OR $mode == 'showform')
     echo "<input type='hidden' id='mode' name='mode' value='runreport' />";
     echo "</form>";
 
-    include ('./inc/htmlfooter.inc.php');
+    include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
 }
 elseif ($mode == 'runreport')
 {
@@ -102,7 +102,7 @@ elseif ($mode == 'runreport')
 //    print_r($util);
 //    echo "</pre>";
 
-    include ('./inc/htmlheader.inc.php');
+    include (APPLICATION_INCPATH . 'htmlheader.inc.php');
 
     echo "<h2>Monthly Activity Totals</h2>";
 
@@ -168,7 +168,7 @@ elseif ($mode == 'runreport')
 
     echo "</table>";
 
-    include ('./inc/htmlfooter.inc.php');
+    include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
 }
 
 ?>

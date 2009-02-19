@@ -14,17 +14,16 @@
 //
 // Comments: How long do we take to close incidents?
 
-$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
 set_time_limit(60);
 
 $title = 'Average Incident Duration';
 $permission = 37; // Run Reports
 
-require ($lib_path.'db_connect.inc.php');
-require ($lib_path.'functions.inc.php');
+require ('core.php');
+require (APPLICATION_LIBPATH.'functions.inc.php');
 
 // This page requires authentication
-require ($lib_path.'auth.inc.php');
+require (APPLICATION_LIBPATH.'auth.inc.php');
 
 $id = cleanvar($_REQUEST['id']);
 $mode = cleanvar($_REQUEST['mode']);
@@ -154,7 +153,7 @@ if ($_REQUEST['output'] == 'csv')
 }
 else
 {
-    include ('./inc/htmlheader.inc.php');
+    include (APPLICATION_INCPATH . 'htmlheader.inc.php');
     echo "<h2>{$title}</h2>";
     echo "<p align='center'>{$strOnlyShowsClosedCalls}</p>";
     echo "<p align='center'>";
@@ -170,7 +169,7 @@ else
     echo create_report($data);
     echo "<p align='center'><a href='{$_SERVER['PHP_SELF']}?mode={$mode}&amp;";
     echo "output=csv'>{$strSaveAsCSV}</a></p>";
-    include ('./inc/htmlfooter.inc.php');
+    include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
 }
 
 ?>

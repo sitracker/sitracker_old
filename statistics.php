@@ -9,12 +9,12 @@
 //
 // Author: Paul Heaney <paulheaney[at]users.sourceforge.net>
 
-$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
-require ($lib_path.'db_connect.inc.php');
-require ($lib_path.'functions.inc.php');
+
+require ('core.php');
+require (APPLICATION_LIBPATH . 'functions.inc.php');
 
 // This page requires authentication
-require ($lib_path.'auth.inc.php');
+require (APPLICATION_LIBPATH . 'auth.inc.php');
 
 $title=  $strTodaysStats;
 
@@ -506,7 +506,7 @@ function give_overview()
     return $string;
 }
 
-include ('./inc/htmlheader.inc.php');
+include (APPLICATION_INCPATH . 'htmlheader.inc.php');
 
 switch ($mode)
 {
@@ -514,11 +514,11 @@ switch ($mode)
         $query = $_REQUEST['query'];
         $startdate = $_REQUEST['start'];
         $enddate = $_REQUEST['end'];
-        include ('inc/statistics_breakdown.inc.php');
+        include (APPLICATION_INCPATH . 'statistics_breakdown.inc.php');
         break;
     case 'daybreakdown':
         $offset = $_REQUEST['offset'];
-        include ('inc/statistics_daybreakdown.inc.php');
+        include (APPLICATION_INCPATH . 'statistics_daybreakdown.inc.php');
         break;
     case 'overview': //this is the default so just fall though
     default:
@@ -527,5 +527,5 @@ switch ($mode)
         break;
 }
 
-include ('./inc/htmlfooter.inc.php');
+include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
 ?>

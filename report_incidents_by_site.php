@@ -14,20 +14,20 @@
 
 // This Page Is Valid XHTML 1.0 Transitional!   15Mar06
 
-$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
+
 $permission = 37; // Run Reports
 
-require ($lib_path.'db_connect.inc.php');
-require ($lib_path.'functions.inc.php');
+require ('core.php');
+require (APPLICATION_LIBPATH . 'functions.inc.php');
 
 // This page requires authentication
-require ($lib_path.'auth.inc.php');
+require (APPLICATION_LIBPATH . 'auth.inc.php');
 
 $title = $strIncidentsBySite;
 
 if (empty($_REQUEST['mode']))
 {
-    include ('./inc/htmlheader.inc.php');
+    include (APPLICATION_INCPATH . 'htmlheader.inc.php');
     echo "<h2>{$title}</h2>";
     echo "<p align='center'>".sprintf($strReportListsIncidentsLoggedThatEachSiteLoggedOverPastXMonths, 12)."</p>";
     echo "<form action='{$_SERVER['PHP_SELF']}' method='post'>";
@@ -61,7 +61,7 @@ if (empty($_REQUEST['mode']))
     echo "<input type='submit' value=\"{$strRunReport}\" />";
     echo "</p>";
     echo "</form>";
-    include ('./inc/htmlfooter.inc.php');
+    include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
 }
 elseif ($_REQUEST['mode'] == 'report')
 {
@@ -167,9 +167,9 @@ elseif ($_REQUEST['mode'] == 'report')
 
     if ($_POST['output'] == 'screen')
     {
-        include ('./inc/htmlheader.inc.php');
+        include (APPLICATION_INCPATH . 'htmlheader.inc.php');
         echo $html;
-        include ('./inc/htmlfooter.inc.php');
+        include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
     }
     elseif ($_POST['output'] == 'csv')
     {

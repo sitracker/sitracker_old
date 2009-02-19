@@ -13,15 +13,15 @@
 //          Kieran Hogg <kieran[at]sitracker.org>
 // heavily based on the Salford Report by Paul Heaney
 
-$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
+
 $permission = 37; // Run Reports
 
-include ($lib_path.'db_connect.inc.php');
-include ($lib_path.'functions.inc.php');
-require ($lib_path.'auth.inc.php');
+require ('core.php');
+include (APPLICATION_LIBPATH . 'functions.inc.php');
+require (APPLICATION_LIBPATH . 'auth.inc.php');
 
 
-include ('./inc/htmlheader.inc.php');
+include (APPLICATION_INCPATH . 'htmlheader.inc.php');
 
 $filterby = cleanvar($_REQUEST['filterby']);
 $filter = cleanvar($_REQUEST['filter']);
@@ -243,5 +243,5 @@ while ($escalations = mysql_fetch_object($escs))
     unset($esc);
 }
 echo $html;
-include ('./inc/htmlfooter.inc.php');
+include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
 ?>

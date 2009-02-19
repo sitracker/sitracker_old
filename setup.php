@@ -10,7 +10,7 @@
 
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
-$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
+$lib_path = '.'.DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
 
 // Load config defaults
 @include ($lib_path.'defaults.inc.php');
@@ -29,8 +29,8 @@ $DEFAULTS = $CONFIG;
 // {
 //     $permission = 22;
 //     $_REQUEST['config'] = 'advanced'; // set advanced mode
-//     require ($lib_path.'functions.inc.php');
-//     require ($lib_path.'auth.inc.php');
+//     require (APPLICATION_LIBPATH . 'functions.inc.php');
+//     require (APPLICATION_LIBPATH . 'auth.inc.php');
 // }
 
 // These are the required variables we want to configure during installation
@@ -893,7 +893,7 @@ switch ($_REQUEST['action'])
             }
             else
             {
-                require ($lib_path.'functions.inc.php');
+                require (APPLICATION_LIBPATH . 'functions.inc.php');
 
                 // Load the empty schema
                 require ('setup-schema.php');

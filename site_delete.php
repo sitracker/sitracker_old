@@ -12,13 +12,13 @@
 
 // This Page Is Valid XHTML 1.0 Transitional!
 
-$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
+
 $permission = 55; // Delete Sites/Contacts
 
-require ($lib_path.'db_connect.inc.php');
-require ($lib_path.'functions.inc.php');
+require ('core.php');
+require (APPLICATION_LIBPATH . 'functions.inc.php');
 // This page requires authentication
-require ($lib_path.'auth.inc.php');
+require (APPLICATION_LIBPATH . 'auth.inc.php');
 
 // External variables
 $id = cleanvar($_REQUEST['id']);
@@ -26,7 +26,7 @@ $destinationid = cleanvar($_REQUEST['destinationid']);
 
 if (empty($id))
 {
-    include ('./inc/htmlheader.inc.php');
+    include (APPLICATION_INCPATH . 'htmlheader.inc.php');
     echo "<h2>Select Site To Delete</h2>";
     echo "<form action='{$_SERVER['PHP_SELF']}?action=delete' method='post'>";
     echo "<table>";
@@ -34,13 +34,13 @@ if (empty($id))
     echo "</table>";
     echo "<p><input name='submit' type='submit' value='Continue' /></p>";
     echo "</form>";
-    include ('./inc/htmlfooter.inc.php');
+    include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
 }
 else
 {
     if (empty($destinationid))
     {
-        include ('./inc/htmlheader.inc.php');
+        include (APPLICATION_INCPATH . 'htmlheader.inc.php');
         echo "<h2>{$strDeleteSite}</h2>";
         $sql="SELECT * FROM `{$dbSites}` WHERE id='$id' LIMIT 1";
         $siteresult = mysql_query($sql);
@@ -93,7 +93,7 @@ else
                 html_redirect("browse_sites.php?search_string=A");
             }
         }
-        include ('./inc/htmlfooter.inc.php');
+        include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
     }
     else
     {

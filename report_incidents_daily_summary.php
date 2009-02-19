@@ -13,18 +13,18 @@
 // FIXME needs abit of tidying up
 // Report Type: Management report
 
-$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
 
-require ($lib_path.'db_connect.inc.php');
-require ($lib_path.'functions.inc.php');
+
+require ('core.php');
+require (APPLICATION_LIBPATH . 'functions.inc.php');
 
 $permission = 67; // Run Reports
 $title = $strIncidentsDailySummary;
 
 // This page requires authentication
-require ($lib_path.'auth.inc.php');
+require (APPLICATION_LIBPATH . 'auth.inc.php');
 
-include ('./inc/htmlheader.inc.php');
+include (APPLICATION_INCPATH . 'htmlheader.inc.php');
 $startdate = strtotime($_REQUEST['startdate']);
 $enddate = strtotime($_REQUEST['enddate']);
 
@@ -113,7 +113,7 @@ else
                     */
                     foreach ($d AS $a)
                     {
-                        $right .= "<tr><td>".$a['type']."</td><td><a href='../incident_details.php?id=".$a['id']."' class='direct'>".$a['id']."</td><td>".$a['title']."</a></td><td>".user_realname($a['owner'])."</td></tr>";
+                        $right .= "<tr><td>".$a['type']."</td><td><a href='incident_details.php?id=".$a['id']."' class='direct'>".$a['id']."</td><td>".$a['title']."</a></td><td>".user_realname($a['owner'])."</td></tr>";
                         if ($a['type'] == 'opened')
                         {
                             $opened++;
@@ -159,5 +159,5 @@ else
     }
 }
 
-include ('./inc/htmlfooter.inc.php');
+include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
 ?>
