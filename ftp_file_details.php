@@ -12,18 +12,18 @@
 
 // This Page Is Valid XHTML 1.0 Transitional!   4Nov05
 
-$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
+
 $permission = 44; // Publish Files to FTP site
 
 $title = 'FTP File Details';
-require ($lib_path.'db_connect.inc.php');
-require ($lib_path.'functions.inc.php');
+require ('core.php');
+require (APPLICATION_LIBPATH . 'functions.inc.php');
 
 // This page requires authentication
-require ($lib_path.'auth.inc.php');
+require (APPLICATION_LIBPATH . 'auth.inc.php');
 
 // display file details
-include ('./inc/htmlheader.inc.php');
+include (APPLICATION_INCPATH . 'htmlheader.inc.php');
 
 // External Vars
 $id = cleanvar($_REQUEST['id']);
@@ -62,5 +62,5 @@ echo "</table>\n";
 echo "<p align='center'>";
 echo "<a href='ftp_delete.php?id={$id}'>Delete this file</a> | ";
 echo "<a href='ftp_edit_file.php?id={$id}'>Describe and Publish this file</a></p>";
-include ('./inc/htmlfooter.inc.php');
+include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
 ?>

@@ -8,12 +8,11 @@
 // of the GNU General Public License, incorporated herein by reference.
 //
 
-$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
 $permission = 22; // Administrate
-require ($lib_path.'db_connect.inc.php');
-require ($lib_path.'functions.inc.php');
+require ('core.php');
+require (APPLICATION_LIBPATH.'functions.inc.php');
 // This page requires authentication
-require ($lib_path.'auth.inc.php');
+require (APPLICATION_LIBPATH.'auth.inc.php');
 
 $title = $strEditHolidayEntitlement;
 
@@ -60,7 +59,7 @@ switch ($_REQUEST['action'])
 
     case 'form':
     default:
-        include ('./inc/htmlheader.inc.php');
+        include (APPLICATION_INCPATH . 'htmlheader.inc.php');
         echo "<h2>{$title}</h2>";
 
         $sql = "SELECT * FROM `{$dbUsers}` WHERE status >= 1 ORDER BY realname ASC";
@@ -111,7 +110,7 @@ switch ($_REQUEST['action'])
         echo "<input type='hidden' name='action' value='save' />";
         echo "<input type='submit' name='submit' value='{$strSave}' /></p>";
         echo "</form>";
-        include ('./inc/htmlfooter.inc.php');
+        include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
     break;
 }
 ?>

@@ -11,13 +11,13 @@
 
 //// This Page Is Valid XHTML 1.0 Transitional!  (1 Oct 2006)
 
-$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
+
 $permission = 64; // Manage escalation paths
 
-require ($lib_path.'db_connect.inc.php');
-require ($lib_path.'functions.inc.php');
+require ('core.php');
+require (APPLICATION_LIBPATH . 'functions.inc.php');
 // This page requires authentication
-require ($lib_path.'auth.inc.php');
+require (APPLICATION_LIBPATH . 'auth.inc.php');
 
 $submit = $_REQUEST['submit'];
 
@@ -25,7 +25,7 @@ $title = $strNewEscalationPath;
 
 if (empty($submit))
 {
-    include ('./inc/htmlheader.inc.php');
+    include (APPLICATION_INCPATH . 'htmlheader.inc.php');
 
     echo show_form_errors('add_escalation_path');
     clear_form_errors('add_escalation_path');
@@ -81,7 +81,7 @@ if (empty($submit))
 
     echo "</form>";
 
-    include ('./inc/htmlfooter.inc.php');
+    include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
     clear_form_data('add_escalation_path');
 
 }
@@ -124,7 +124,6 @@ else
     }
     else
     {
-        include './inc/htmlheader.inc.php';
         html_redirect("escalation_path_add.php", FALSE);
     }
 }

@@ -9,13 +9,13 @@
 //
 
 // by Ivan Lucas, June 2004
-$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
+
 $permission = 49; // Edit Feedback Forms
 
-require ($lib_path.'db_connect.inc.php');
-require ($lib_path.'functions.inc.php');
+require ('core.php');
+require (APPLICATION_LIBPATH . 'functions.inc.php');
 // This page requires authentication
-require ($lib_path.'auth.inc.php');
+require (APPLICATION_LIBPATH . 'auth.inc.php');
 
 // External Variables
 $formid = cleanvar($_REQUEST['formid']);
@@ -55,7 +55,7 @@ switch ($_REQUEST['action'])
     break;
 
     case 'new':
-        include ('./inc/htmlheader.inc.php');
+        include (APPLICATION_INCPATH . 'htmlheader.inc.php');
         echo "<h3>{$strAddFeedbackForm}</h3>";
         echo "<form action='{$_SERVER['PHP_SELF']}' method='post'>";
         echo "<table summary='Form' align='center' class='vertical'>";
@@ -98,14 +98,14 @@ switch ($_REQUEST['action'])
         echo "</tr>";
         echo "</table>";
         echo "</form>";
-        include ('./inc/htmlfooter.inc.php');
+        include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
         break;
     default:
         $sql = "SELECT * FROM `{$dbFeedbackForms}` WHERE id='{$formid}'";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
-        include ('./inc/htmlheader.inc.php');
+        include (APPLICATION_INCPATH . 'htmlheader.inc.php');
         echo "<h3>{$title}</h3>";
 
         $sql = "SELECT * FROM `{$dbFeedbackForms}` WHERE id = '$formid'";
@@ -181,7 +181,7 @@ switch ($_REQUEST['action'])
             }
         }
         else echo "<p class='error'>{$strNoRecords}</p>";
-        include ('./inc/htmlfooter.inc.php');
+        include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
     break;
 }
 ?>

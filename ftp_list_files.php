@@ -12,16 +12,16 @@
 
 // This Page Is Valid XHTML 1.0 Transitional!   1Nov05
 
-$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
+
 $permission = 44; // FTP Publishing
-require ($lib_path.'db_connect.inc.php');
-require ($lib_path.'functions.inc.php');
+require ('core.php');
+require (APPLICATION_LIBPATH . 'functions.inc.php');
 
 // This page requires authentication
-require ($lib_path.'auth.inc.php');
+require (APPLICATION_LIBPATH . 'auth.inc.php');
 
 $title = $strFTPFilesDB;
-include ('./inc/htmlheader.inc.php');
+include (APPLICATION_INCPATH . 'htmlheader.inc.php');
 
 // External Variables
 $orderby = cleanvar($_REQUEST['orderby']);
@@ -133,5 +133,5 @@ else
     echo "<tr><td colspan='8' align='center'>{$strNone}</td></tr>";
 }
 echo "</table>\n";
-include ('./inc/htmlfooter.inc.php');
+include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
 ?>

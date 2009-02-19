@@ -10,9 +10,9 @@
 
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>, June 2004
 
-$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
-require ($lib_path.'db_connect.inc.php');
-require ($lib_path.'functions.inc.php');
+
+require ('core.php');
+require (APPLICATION_LIBPATH . 'functions.inc.php');
 
 // External variables
 $hashcode = $_REQUEST['ax'];
@@ -358,7 +358,7 @@ body { font:10pt Arial, Helvetica, sans-serif; }
     break;
 
     default:
-        if ($_REQUEST['mode']!='bare') include ('./inc/htmlheader.inc.php');
+        if ($_REQUEST['mode']!='bare') include (APPLICATION_INCPATH . 'htmlheader.inc.php');
         else echo "<html>\n<head>\n<title>Feedback Form</title>\n</head>\n<body>\n<div id='pagecontent'>\n\n";
         $errorfields = explode(",",urldecode($_REQUEST['error']));
         $fielddata = unserialize(base64_decode($errorfields[0])); // unserialize(
@@ -459,7 +459,7 @@ body { font:10pt Arial, Helvetica, sans-serif; }
 
         if ($_REQUEST['mode']!='bare')
         {
-            include ('./inc/htmlfooter.inc.php');
+            include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
         }
         else echo "\n</div>\n</body>\n</html>\n";
     break;

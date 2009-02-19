@@ -12,9 +12,8 @@
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
 // This Page Is Valid XHTML 1.0 Transitional!   3Nov05
-$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
-require ($lib_path.'db_connect.inc.php');
-require ($lib_path.'functions.inc.php');
+require ('core.php');
+require (APPLICATION_LIBPATH . 'functions.inc.php');
 
 if (empty($_REQUEST['user'])
     OR $_REQUEST['user'] == 'current'
@@ -29,7 +28,7 @@ else
 }
 
 // This page requires authentication
-require ($lib_path.'auth.inc.php');
+require (APPLICATION_LIBPATH.'auth.inc.php');
 
 // Valid user with Permission
 // External variables
@@ -50,7 +49,7 @@ if (empty($save))
     $default = cleanvar($_REQUEST['default']);
     $softlist = $_REQUEST['softlist'];
 
-    include ('./inc/htmlheader.inc.php');
+    include (APPLICATION_INCPATH . 'htmlheader.inc.php');
     echo "<h2>".sprintf($strDefineSubstituteEngineersFor, user_realname($user,TRUE))."</h2>\n";
     echo "<form name='def' action='{$_SERVER['PHP_SELF']}' method='post'>";
     echo "<input type='hidden' name='user' value='{$user}' />";
@@ -98,7 +97,7 @@ if (empty($save))
     {
         echo user_alert($strNoResults, E_USER_WARNING);
     }
-    include ('./inc/htmlfooter.inc.php');
+    include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
 }
 else
 {

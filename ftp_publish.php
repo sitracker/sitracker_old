@@ -10,14 +10,14 @@
 
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
-$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
+
 $permission = 44; // Publish Files to FTP site
 
-require ($lib_path.'db_connect.inc.php');
-require ($lib_path.'functions.inc.php');
+require ('core.php');
+require (APPLICATION_LIBPATH . 'functions.inc.php');
 
 // This page requires authentication
-require ($lib_path.'auth.inc.php');
+require (APPLICATION_LIBPATH . 'auth.inc.php');
 
 // seed with microseconds since last "whole" second
 mt_srand((double)microtime()*1000000);
@@ -39,7 +39,7 @@ $pretty_file_size = readable_file_size($filesize);
 if (!isset($temp_directory))
 {
     // show form
-    include ('./inc/htmlheader.inc.php');
+    include (APPLICATION_INCPATH . 'htmlheader.inc.php');
     echo "<h2>{$strFTPPublish}</h2>";
     echo "<form name='publishform' action='{$_SERVER['PHP_SELF']}' method='post'>";
     echo "<input type='hidden' name='source_file' value='{$source_file}' />";
@@ -103,12 +103,12 @@ if (!isset($temp_directory))
     echo "<p align='center'><input type='submit' value='{$strPublish}' /></p>";
     echo "</form>";
 
-    include ('./inc/htmlfooter.inc.php');
+    include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
 }
 else
 {
     // publish file
-    include ('./inc/htmlheader.inc.php');
+    include (APPLICATION_INCPATH . 'htmlheader.inc.php');
     echo "<h2>{$strFTPPublish}</h2>";
     // set up basic connection
     $conn_id = create_ftp_connection();
@@ -172,6 +172,6 @@ else
     }
     // close the FTP stream
     ftp_close($conn_id);
-    include ('./inc/htmlfooter.inc.php');
+    include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
 }
 ?>

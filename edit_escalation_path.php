@@ -11,13 +11,12 @@
 
 //// This Page Is Valid XHTML 1.0 Transitional!  (7 Oct 2006)
 
-$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
 $permission = 64; // Manage escalation paths
-require ($lib_path.'db_connect.inc.php');
-require ($lib_path.'functions.inc.php');
+require ('core.php');
+require (APPLICATION_LIBPATH.'functions.inc.php');
 
 // This page requires authentication
-require ($lib_path.'auth.inc.php');
+require (APPLICATION_LIBPATH.'auth.inc.php');
 
 if (empty($_REQUEST['mode']))
 {
@@ -28,7 +27,7 @@ if (empty($_REQUEST['mode']))
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
-    include ('./inc/htmlheader.inc.php');
+    include (APPLICATION_INCPATH . 'htmlheader.inc.php');
 
     echo "<h2>{$title}</h2>";
 
@@ -50,7 +49,7 @@ if (empty($_REQUEST['mode']))
 
         echo "</form>";
     }
-    include ('./inc/htmlfooter.inc.php');
+    include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
 }
 else
 {

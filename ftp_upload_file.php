@@ -11,13 +11,12 @@
 
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
-$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
 $permission = 44; // ftp publishing
-require ($lib_path.'db_connect.inc.php');
-require ($lib_path.'functions.inc.php');
+require ('core.php');
+require (APPLICATION_LIBPATH.'functions.inc.php');
 
 // This page requires authentication
-require ($lib_path.'auth.inc.php');
+require (APPLICATION_LIBPATH.'auth.inc.php');
 
 // External variables
 $file = cleanvar($_REQUEST['file']);
@@ -28,10 +27,10 @@ $max_filesize = return_bytes($CONFIG['upload_max_filesize']);
 
 if (empty($action))
 {
-    include ('./inc/htmlheader.inc.php');
- 
+    include (APPLICATION_INCPATH . 'htmlheader.inc.php');
+
     echo "<h2>Upload Public File</h2>";
-    
+
     echo "<p align='center'>IMPORTANT: Files published here are <strong>public</strong> and available to all ftp users.</p>";
     echo "<form name='publishform' action='{$_SERVER['PHP_SELF']}' method='post' enctype='multipart/form-data'>";
     echo "<table class='vertical'>";
@@ -51,7 +50,7 @@ if (empty($action))
 
     // Print Listboxes for a date selection
     echo "<select name='day' onclick=\"window.document.publishform.expiry_none[1].checked = true;\">";
-    
+
     for ($t_day=1;$t_day<=31;$t_day++)
     {
         echo "<option value=\"{$t_day}\" ";
@@ -61,9 +60,9 @@ if (empty($action))
         }
         echo ">$t_day</option>\n";
     }
-    
+
     echo "</select><select name='month' onclick=\"window.document.publishform.expiry_none[1].checked = true;\">";
-  
+
     for ($t_month = 1; $t_month <= 12; $t_month++)
     {
         echo "<option value=\"{$t_month}\"";
@@ -73,9 +72,9 @@ if (empty($action))
         }
         echo ">". date ("F", mktime(0,0,0,$t_month,1,2000)) ."</option>\n";
     }
-    
+
     echo "</select><select name='year' onclick=\"window.document.publishform.expiry_none[1].checked = true;\">";
-    
+
     for ($t_year = (date("Y")-1); $t_year <= (date("Y")+5); $t_year++)
     {
         echo "<option value=\"{$t_year}\" ";
@@ -93,8 +92,8 @@ if (empty($action))
     echo "<input type='hidden' name='action' value='publish' /></p>";
     echo "<p align='center'><a href='ftp_list_files.php'>{$strBackToList}</a></p>";
     echo "</form>";
-    
-    include ('./inc/htmlfooter.inc.php');
+
+    include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
 }
 else
 {
@@ -109,14 +108,14 @@ else
     $fileversion = cleanvar($_REQUEST['fileversion']);
 
     $expirytype = cleanvar($_REQUEST['expiry_none']);
-    
-   
+
+
     if ($expirytype == 'time')
     {
         $days = cleanvar($_REQUEST['expiry_days']);
         $hours = cleanvar($_REQUEST['expiry_hours']);
         $minutes = cleanva($_REQUEST['expiry_minutes']);
-        
+
         if ($days < 1 && $hours < 1 && $minutes < 1)
         {
             $expirydate = 0;
@@ -131,7 +130,7 @@ else
         $day = cleanvar($_REQUEST['day']);
         $month = cleanvar($_REQUEST['month']);
         $year = cleanvar($_REQUEST['year']);
-        
+
         $date = explode("-", $date);
         $expirydate = mktime(0, 0, 0, $month, $day, $year);
     }
@@ -165,7 +164,7 @@ else
 
         // set up basic connection
         $conn_id = create_ftp_connection();
-        
+
         $destination_filepath = $CONFIG['ftp_path'] . $file_name;
 
         // check the source file exists

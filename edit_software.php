@@ -10,13 +10,13 @@
 
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
-$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
+
 $permission = 56; // Add Software
 
-require ($lib_path.'db_connect.inc.php');
-require ($lib_path.'functions.inc.php');
+require ('core.php');
+require (APPLICATION_LIBPATH . 'functions.inc.php');
 // This page requires authentication
-require ($lib_path.'auth.inc.php');
+require (APPLICATION_LIBPATH . 'auth.inc.php');
 
 // External variables
 $id = cleanvar($_REQUEST['id']);
@@ -26,7 +26,7 @@ if (empty($action) OR $action=='edit')
 {
     $title = $strEditSkill;
     // Show add product form
-    include ('./inc/htmlheader.inc.php');
+    include (APPLICATION_INCPATH . 'htmlheader.inc.php');
 
     echo "<h2>".icon('skill', 32)." ";
     echo "{$title}</h2>";
@@ -66,7 +66,7 @@ if (empty($action) OR $action=='edit')
     echo "<p align='center'><input name='submit' type='submit' value='{$strSave}' /></p>";
     echo "</form>\n";
     echo "<p align='center'><a href='products.php'>{$strReturnWithoutSaving}</a></p>";
-    include ('./inc/htmlfooter.inc.php');
+    include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
 }
 elseif ($action=='delete')
 {
@@ -78,10 +78,10 @@ elseif ($action=='delete')
     list($countincidents) = mysql_fetch_row($result);
     if ($countincidents >=1)
     {
-        include ('./inc/htmlheader.inc.php');
+        include (APPLICATION_INCPATH . 'htmlheader.inc.php');
         echo "<p class='error'>{$strCannotDeleteSkill}</p>";
         echo "<p align='center'><a href='products.php?display=skills'>{$strReturnToProductList}</a></p>";
-        include ('./inc/htmlfooter.inc.php');
+        include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
     }
     else
     {
@@ -141,9 +141,9 @@ else
     }
     else
     {
-        include ('./inc/htmlheader.inc.php');
+        include (APPLICATION_INCPATH . 'htmlheader.inc.php');
         echo $errors_string;
-        include ('./inc/htmlfooter.inc.php');
+        include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
     }
 }
 ?>

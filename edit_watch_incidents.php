@@ -9,13 +9,13 @@
 //
 // Author: Paul Heaney <paulheaney[at]users.sourceforge.net>
 
-$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
+
 $permission = 0; // not required
-require ($lib_path.'db_connect.inc.php');
-require ($lib_path.'functions.inc.php');
+require ('core.php');
+require (APPLICATION_LIBPATH . 'functions.inc.php');
 
 // This page requires authentication
-require ($lib_path.'auth.inc.php');
+require (APPLICATION_LIBPATH . 'auth.inc.php');
 
 
 $action = $_REQUEST['action'];
@@ -23,7 +23,7 @@ $action = $_REQUEST['action'];
 switch ($action)
 {
     case 'add':
-        include ('./inc/htmlheader.inc.php');
+        include (APPLICATION_INCPATH . 'htmlheader.inc.php');
         $type = $_REQUEST['type'];
         echo "<h2>{$strWatchAddSet}</h2>";
         echo "<form action='{$_SERVER['PHP_SELF']}?action=do_add&type={$type}' method='post'>";
@@ -53,7 +53,7 @@ switch ($action)
         echo "</td><tr>";
         echo "</table>";
         echo "<p align='center'><input name='submit' type='submit' value='{$strAdd}' /></p>";
-        include ('./inc/htmlfooter.inc.php');
+        include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
         break;
     case 'do_add':
         $id = $_REQUEST['id'];
@@ -88,7 +88,7 @@ switch ($action)
         }
         break;
     default:
-        include ('./inc/htmlheader.inc.php');
+        include (APPLICATION_INCPATH . 'htmlheader.inc.php');
         echo "<h2>{$strEditWatchedIncidents}</h2>";
 
         echo "<table align='center'>";
@@ -176,7 +176,7 @@ switch ($action)
             }
         }
         echo "</table>";
-        include ('./inc/htmlfooter.inc.php');
+        include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
         break;
 }
 
