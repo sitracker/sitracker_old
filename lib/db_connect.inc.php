@@ -25,11 +25,12 @@ include ($lib_path.'defaults.inc.php');
 if ($CONFIG['db_username'] == '' OR $CONFIG['db_database'] == '')
 {
     // If config isn't first found, try again in the directory above
-    @include ("../config.inc.php");
+    @include (dirname( __FILE__ ).DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'config.inc.php');
+
 }
 // TODO determine which language to use, for now we're hardcoded to English (British)
 // i18n
-@include ('i18n/en-gb.inc.php');
+@include (dirname( __FILE__ ).DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'i18n/en-gb.inc.php');
 
 if (!function_exists("getmicrotime"))
 {
