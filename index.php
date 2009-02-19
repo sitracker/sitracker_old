@@ -9,19 +9,19 @@
 //
 // This Page Is Valid XHTML 1.0 Transitional! 31Oct05
 
-$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
 
-if (!@include ($lib_path.'db_connect.inc.php'))
+
+if (!@include ('core.php'))
 {
-    $msg = urlencode(base64_encode("Could not find database connection information (db_connect.inc.php), the php include path is probably wrong"));
+    $msg = urlencode(base64_encode("Could not find database connection/config information (core.php)"));
     header("Location: {$CONFIG['application_webpath']}setup.php?msg={$msg}");
     exit;
 }
 
 session_name($CONFIG['session_name']);
 session_start();
-include ($lib_path.'strings.inc.php');
-require ($lib_path.'functions.inc.php');
+include (APPLICATION_LIBPATH . 'strings.inc.php');
+require (APPLICATION_LIBPATH . 'functions.inc.php');
 
 if ($_SESSION['auth'] != TRUE)
 {
@@ -35,7 +35,7 @@ if ($_SESSION['auth'] != TRUE)
     $page = htmlentities($page, ENT_COMPAT, $GLOBALS['i18ncharset']);
 
     // Invalid user, show log in form
-    include ('./inc/htmlheader.inc.php');
+    include (APPLICATION_INCPATH . 'htmlheader.inc.php');
     if ($id == 1)
     {
         echo "<p class='error'>";
@@ -96,7 +96,7 @@ if ($_SESSION['auth'] != TRUE)
     echo "<br /><a href='forgotpwd.php'>{$strForgottenDetails}</a>";
     echo "</form>\n";
     echo "</div>\n</div>\n";
-    include ('./inc/htmlfooter.inc.php');
+    include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
 }
 else
 {

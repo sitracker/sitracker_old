@@ -10,15 +10,15 @@
 
 // This file will soon be superceded by incident.php - 20Oct05 INL
 
-$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
-$permission = 61; // View Incident Details
-require ($lib_path.'db_connect.inc.php');
-require ($lib_path.'functions.inc.php');
 
-require_once ($lib_path . 'billing.inc.php');
+$permission = 61; // View Incident Details
+require ('core.php');
+require (APPLICATION_LIBPATH . 'functions.inc.php');
+
+require_once (APPLICATION_LIBPATH . 'billing.inc.php');
 
 // This page requires authentication
-require ($lib_path.'auth.inc.php');
+require (APPLICATION_LIBPATH . 'auth.inc.php');
 
 // External variables
 $incidentid = cleanvar($_REQUEST['id']);
@@ -28,8 +28,8 @@ if ($_REQUEST['win'] == 'incomingview')
 {
     $title = 'Incoming';
     $incidentid = '';
-    include ('inc/incident_html_top.inc.php');
-    include ('inc/incident_incoming.inc.php');
+    include (APPLICATION_INCPATH . 'incident_html_top.inc.php');
+    include (APPLICATION_INCPATH . 'incident_incoming.inc.php');
     exit;
 }
 elseif ($_REQUEST['win'] == 'jump')
@@ -93,7 +93,7 @@ else
     $title = $strDetails;
 }
 
-include ('inc/incident_html_top.inc.php');
+include (APPLICATION_INCPATH . 'incident_html_top.inc.php');
 
 echo "<div id='detailsummary'>";
 
@@ -788,5 +788,5 @@ if ($_SESSION['num_update_view'] > 0)
     echo log_nav_bar();
 }
 
-include ('inc/incident_html_bottom.inc.php');
+include (APPLICATION_INCPATH . 'incident_html_bottom.inc.php');
 ?>

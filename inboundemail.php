@@ -11,17 +11,17 @@
 //       with the function in fetchSitMail.class.php
 // Note2: to be called from auto.php
 
-$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
-require ($lib_path . 'mime_parser.inc.php');
-require ($lib_path . 'rfc822_addresses.inc.php');
-require ($lib_path . 'fetchSitMail.class.php');
+require_once ('core.php');
+
+require (APPLICATION_LIBPATH . 'mime_parser.inc.php');
+require (APPLICATION_LIBPATH . 'rfc822_addresses.inc.php');
+require (APPLICATION_LIBPATH . 'fetchSitMail.class.php');
 
 if (realpath(__FILE__) == realpath($_SERVER['SCRIPT_FILENAME']))
 {
-    require ($lib_path.'db_connect.inc.php');
-    include ($lib_path.'strings.inc.php');
-    require ($lib_path.'functions.inc.php');
-    require ($lib_path . 'base.inc.php');
+    include (APPLICATION_LIBPATH . 'strings.inc.php');
+    require (APPLICATION_LIBPATH . 'functions.inc.php');
+    require (APPLICATION_LIBPATH . 'base.inc.php');
 }
 else
 {
@@ -34,7 +34,7 @@ function populate_syslang2()
 {
     global $CONFIG;
     // Populate $SYSLANG with system lang
-    $file = dirname( __FILE__ ).DIRECTORY_SEPARATOR."i18n/{$CONFIG['default_i18n']}.inc.php";
+    $file = APPLICATION_I18NPATH . "{$CONFIG['default_i18n']}.inc.php";
     if (file_exists($file))
     {
         $fh = fopen($file, "r");

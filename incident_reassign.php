@@ -9,13 +9,13 @@
 //
 
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
-$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
+
 
 $permission = 13; // Reassign Incident
-require ($lib_path.'db_connect.inc.php');
-require ($lib_path.'functions.inc.php');
+require ('core.php');
+require (APPLICATION_LIBPATH . 'functions.inc.php');
 // This page requires authentication
-require ($lib_path.'auth.inc.php');
+require (APPLICATION_LIBPATH . 'auth.inc.php');
 
 $forcepermission = user_permission($sit[2],40);
 
@@ -151,7 +151,7 @@ switch ($action)
     default:
         // No submit detected show reassign form
         $title = $strReassign;
-        include ('inc/incident_html_top.inc.php');
+        include (APPLICATION_INCPATH . 'incident_html_top.inc.php');
 
 
         $sql = "SELECT * FROM `{$dbIncidents}` WHERE id='$id' LIMIT 1";
@@ -381,7 +381,7 @@ switch ($action)
         {
             echo "<p class='warning'>{$strNoRecords}</p>";  // FIXME 3.41 better message here
         }
-        include ('inc/incident_html_bottom.inc.php');
+        include (APPLICATION_INCPATH . 'incident_html_bottom.inc.php');
 }
 
 ?>

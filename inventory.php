@@ -7,15 +7,15 @@
 // This software may be used and distributed according to the terms
 // of the GNU General Public License, incorporated herein by reference.
 
-$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
+
 $permission = 0;
 
-require ($lib_path.'db_connect.inc.php');
-require ($lib_path.'functions.inc.php');
+require ('core.php');
+require (APPLICATION_LIBPATH . 'functions.inc.php');
 // This page requires authentication
-require ($lib_path.'auth.inc.php');
+require (APPLICATION_LIBPATH . 'auth.inc.php');
 
-include ('./inc/htmlheader.inc.php');
+include (APPLICATION_INCPATH . 'htmlheader.inc.php');
 
 if (is_numeric($_GET['site']) AND empty($_GET['action']) AND empty($_GET['edit']))
 {
@@ -130,14 +130,14 @@ if (is_numeric($_GET['site']) AND empty($_GET['action']) AND empty($_GET['edit']
     {
         echo "<p class='info'>{$strNoRecords}</p>";
     }
-    include ('./inc/htmlfooter.inc.php');
+    include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
 }
 elseif(is_numeric($_GET['edit']) OR $_GET['action'] == 'new')
 {
     //Edit inventry object
     $edit = cleanvar($_GET['edit']);
     $action = cleanvar($_GET['action']);
-    
+
     if (!empty($_GET['newsite']))
     {
         $newsite = TRUE;
@@ -151,7 +151,7 @@ elseif(is_numeric($_GET['edit']) OR $_GET['action'] == 'new')
     if (isset($_POST['submit']))
     {
         $post = cleanvar($_POST);
-        
+
         if ($post['active'] == 'on')
         {
             $post['active'] = 1;
@@ -168,7 +168,7 @@ elseif(is_numeric($_GET['edit']) OR $_GET['action'] == 'new')
             {
                 $siteid = $post['site'];
             }
-            
+
             $sql = "INSERT INTO `{$dbInventory}`(address, username, password, type,";
             $sql .= " notes, created, createdby, modified, modifiedby, active,";
             $sql .= " name, siteid, privacy, identifier) VALUES('{$post['address']}', ";
@@ -184,21 +184,21 @@ elseif(is_numeric($_GET['edit']) OR $_GET['action'] == 'new')
             $sql .= "SET address='{$post['address']}', ";
             if (isset($post['username']))
                 $sql .= "username='{$post['username']}', ";
-            
+
             if (isset($post['password']))
                 $sql .= "password='{$post['password']}', ";
-                
+
             $sql .= "type='{$post['type']}', ";
             $sql .= "notes='{$post['notes']}', modified=NOW(), ";
             $sql .= "modifiedby='{$sit[2]}', ";
             $sql .= "name='{$post['name']}', ";
             $sql .= "contactid='{$post['owner']}', identifier='{$post['identifier']}' ";
-            
+
             if (isset($post['privacy']))
             {
                 $sql .= ", privacy='{$post['privacy']}' ";
             }
-            
+
             if (isset($post['active']))
             {
                 $sql .= ", active='{$post['active']}' ";
@@ -228,7 +228,7 @@ elseif(is_numeric($_GET['edit']) OR $_GET['action'] == 'new')
             $row = mysql_fetch_object($result);
             echo "<h2>".icon('edit', 32)." {$strEdit}</h2>";
         }
-        
+
         if ($action == 'new')
         {
             echo "<form action='{$_SERVER['PHP_SELF']}?action=new&site={$siteid}' method='post'>";
@@ -263,7 +263,7 @@ elseif(is_numeric($_GET['edit']) OR $_GET['action'] == 'new')
         echo "<td><input name='identifier' value='{$row->identifier}' /></td></tr>";
         echo "<tr><th>{$strAddress}</th>";
         echo "<td><input name='address' value='{$row->address}' /></td></tr>";
-                  
+
         if (!is_numeric($edit) OR
             (($row->privacy == 'adminonly' AND user_permission($sit[2], 22)) OR
             ($row->privacy == 'private' AND ($row->createdby == $sit[2]))))
@@ -273,7 +273,7 @@ elseif(is_numeric($_GET['edit']) OR $_GET['action'] == 'new')
             echo "<tr><th>{$strPassword}</th>";
             echo "<td><input name='password' value='{$row->password}' /></td></tr>";
         }
-        
+
         echo "<tr><th>{$strNotes}</th>";
         echo "<td><textarea name='notes'>$row->notes</textarea></td></tr>";
 
@@ -298,7 +298,7 @@ elseif(is_numeric($_GET['edit']) OR $_GET['action'] == 'new')
             }
             echo "/>";
             echo "{$strAdminOnly}<br />";
-            
+
             echo "<input type='radio' name='privacy' value='none'";
             if (!$selected)
             {
@@ -307,9 +307,9 @@ elseif(is_numeric($_GET['edit']) OR $_GET['action'] == 'new')
             echo "/>";
             echo "{$strNone}<br />";
         }
-        
+
         echo "</td></tr>";
-        
+
         if ($action != 'new')
         {
             echo "<tr><th>{$strActive}</th>";
@@ -332,7 +332,7 @@ elseif(is_numeric($_GET['edit']) OR $_GET['action'] == 'new')
         }
         echo "</form>";
         echo "<br /><p align='center'>";
-        
+
         if ($newsite == 'true')
         {
             echo icon('site', 16);
@@ -342,7 +342,7 @@ elseif(is_numeric($_GET['edit']) OR $_GET['action'] == 'new')
         {
             echo "<a href='{$_SERVER['PHP_SELF']}?site={$siteid}'>{$strBackToList}</a>";
         }
-        include ('./inc/htmlfooter.inc.php');
+        include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
     }
 }
 else
@@ -371,10 +371,10 @@ else
     {
         echo "<p align='center'>{$strNoRecords}</p>";
     }
-    
+
     echo "<p align='center'><a href='{$_SERVER['PHP_SELF']}?action=new&newsite=true'>";
     echo "{$strSiteNotListed}</a></p>";
-    include ('./inc/htmlfooter.inc.php');
+    include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
 }
 
 

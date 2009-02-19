@@ -8,15 +8,15 @@
 // of the GNU General Public License, incorporated herein by reference.
 //
 
-$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
+
 $permission = 8; // Update Incident
-require ($lib_path.'db_connect.inc.php');
-require ($lib_path.'functions.inc.php');
+require ('core.php');
+require (APPLICATION_LIBPATH . 'functions.inc.php');
 
 $disable_priority = TRUE;
 
 // This page requires authentication
-require ($lib_path.'auth.inc.php');
+require (APPLICATION_LIBPATH . 'auth.inc.php');
 
 // External Variables
 // $bodytext = cleanvar($_REQUEST['bodytext'],FALSE,FALSE);
@@ -460,7 +460,7 @@ if (empty($action))
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
-    include ('inc/incident_html_top.inc.php');
+    include (APPLICATION_INCPATH . 'incident_html_top.inc.php');
 
     if (mysql_num_rows($result) > 0)
     {
@@ -478,7 +478,7 @@ if (empty($action))
 }
 else if ($action == "editdraft")
 {
-    include ('inc/incident_html_top.inc.php');
+    include (APPLICATION_INCPATH . 'incident_html_top.inc.php');
     $draftid = cleanvar($_REQUEST['draftid']);
     display_update_page($draftid);
 }
@@ -495,7 +495,7 @@ else if ($action == "deletedraft")
 }
 else if ($action == "newupdate")
 {
-    include ('inc/incident_html_top.inc.php');
+    include (APPLICATION_INCPATH . 'incident_html_top.inc.php');
     display_update_page();
 }
 else
@@ -764,9 +764,9 @@ else
 
     if (!$result)
     {
-        include ('inc/incident_html_top.inc.php');
+        include (APPLICATION_INCPATH . 'incident_html_top.inc.php');
         echo "<p class='error'>{$strUpdateIncidentFailed}</p>\n";
-        include ('inc/incident_html_bottom.inc.php');
+        include (APPLICATION_INCPATH . 'incident_html_bottom.inc.php');
     }
     else
     {
@@ -781,6 +781,6 @@ else
     }
 }
 
-include ('inc/incident_html_bottom.inc.php');
+include (APPLICATION_INCPATH . 'incident_html_bottom.inc.php');
 
 ?>

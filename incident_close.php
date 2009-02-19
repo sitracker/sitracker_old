@@ -8,14 +8,14 @@
 // of the GNU General Public License, incorporated herein by reference.
 //
 
-$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
+
 $permission = 18; //  Close Incidents
 
-require ($lib_path.'db_connect.inc.php');
-require ($lib_path.'functions.inc.php');
-require_once ($lib_path . 'billing.inc.php');
+require ('core.php');
+require (APPLICATION_LIBPATH . 'functions.inc.php');
+require_once (APPLICATION_LIBPATH . 'billing.inc.php');
 // This page requires authentication
-require ($lib_path.'auth.inc.php');
+require (APPLICATION_LIBPATH . 'auth.inc.php');
 
 // External Variables
 $id = cleanvar($_REQUEST['id']);
@@ -43,7 +43,7 @@ if (empty($_REQUEST['process']))
         exit;
     }
 
-    include ('inc/incident_html_top.inc.php');
+    include (APPLICATION_INCPATH . 'incident_html_top.inc.php');
 
     ?>
     <script type="text/javascript">
@@ -273,7 +273,7 @@ if (empty($_REQUEST['process']))
     echo "<input type='hidden' name='process' value='closeincident' />";
     echo "<input name='submit' type='submit' value=\"{$strClose}\" /></p>";
     echo "</form>";
-    include ('inc/incident_html_bottom.inc.php');
+    include (APPLICATION_INCPATH . 'incident_html_bottom.inc.php');
 }
 else
 {
@@ -597,16 +597,16 @@ else
         }
         else
         {
-            include ('inc/incident_html_top.inc.php');
+            include (APPLICATION_INCPATH . 'incident_html_top.inc.php');
             echo $addition_errors_string;
-            include ('inc/incident_html_bottom.inc.php');
+            include (APPLICATION_INCPATH . 'incident_html_bottom.inc.php');
         }
     }
     else
     {
-        include ('inc/incident_html_top.inc.php');
+        include (APPLICATION_INCPATH . 'incident_html_top.inc.php');
         echo $error_string;
-        include ('inc/incident_html_bottom.inc.php');
+        include (APPLICATION_INCPATH . 'incident_html_bottom.inc.php');
     }
 }
 ?>

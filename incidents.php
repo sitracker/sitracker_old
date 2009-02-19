@@ -11,14 +11,14 @@
 
 // This Page Is Valid XHTML 1.0 Transitional!   31Oct05
 
-$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
+
 $permission = 6; // View Incidents
 $title = 'Incidents List';
 
-require ($lib_path.'db_connect.inc.php');
-require ($lib_path.'functions.inc.php');
+require ('core.php');
+require (APPLICATION_LIBPATH . 'functions.inc.php');
 // This page requires authentication
-require ($lib_path.'auth.inc.php');
+require (APPLICATION_LIBPATH . 'auth.inc.php');
 
 // External variables
 $type = cleanvar($_REQUEST['type']);
@@ -42,7 +42,7 @@ if ($user == 'current' OR $user == $_SESSION['userid'])
     $rssfeedurl = "incidents_rss.php?c=".md5($_SESSION['username'] . md5($CONFIG['db_password']));
     $rssfeedtitle = $strIncidents;
 }
-include ('./inc/htmlheader.inc.php');
+include (APPLICATION_INCPATH . 'htmlheader.inc.php');
 ?>
 <script type="text/javascript">
 //<![CDATA[
@@ -227,7 +227,7 @@ switch ($type)
         if (mysql_num_rows($result) >= 1)
         {
             // Incidents Table
-            include ('inc/incidents_table.inc.php');
+            include (APPLICATION_INCPATH . 'incidents_table.inc.php');
         }
         else echo "<p class='info'>{$strNoIncidents}</p>";
 
@@ -331,7 +331,7 @@ switch ($type)
             if ($rowcount >= 1)
             {
                 // Incidents Table
-                include ('inc/incidents_table.inc.php');
+                include (APPLICATION_INCPATH . 'incidents_table.inc.php');
             }
             else echo "<p class='info'>{$strNoIncidents}</p>";
 
@@ -340,5 +340,5 @@ switch ($type)
         }
         echo "</div>";
 }
-include ('./inc/htmlfooter.inc.php');
+include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
 ?>

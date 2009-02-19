@@ -10,13 +10,13 @@
 
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
-$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
+
 $permission = 6; // View Incidents
 
-require ($lib_path.'db_connect.inc.php');
-require ($lib_path.'functions.inc.php');
+require ('core.php');
+require (APPLICATION_LIBPATH . 'functions.inc.php');
 
-require ($lib_path.'auth.inc.php');
+require (APPLICATION_LIBPATH . 'auth.inc.php');
 
 $incidentid = cleanvar($_REQUEST['id']);
 $id = $incidentid;
@@ -43,7 +43,7 @@ $servicelevel_name = servicelevel_name($servicelevelid);
 $opened_for = format_seconds(time() - $incident->opened);
 
 
-include ('inc/incident_html_top.inc.php');
+include (APPLICATION_INCPATH . 'incident_html_top.inc.php');
 
 
 echo "<h2>".icon('sla', 32)." ";
@@ -148,6 +148,6 @@ if (mysql_num_rows($result) > 0)
     }
 }
 
-include ('inc/incident_html_bottom.inc.php');
+include (APPLICATION_INCPATH . 'incident_html_bottom.inc.php');
 
 ?>

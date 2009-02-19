@@ -10,9 +10,9 @@
 
 // This feature is experimental as of 22Sep06
 
-$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
-require ($lib_path.'db_connect.inc.php');
-require ($lib_path.'functions.inc.php');
+
+require ('core.php');
+require (APPLICATION_LIBPATH . 'functions.inc.php');
 
 // This script requires no authentication
 // The information it reveals should not be sensitive

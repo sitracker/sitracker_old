@@ -8,14 +8,14 @@
 // of the GNU General Public License, incorporated herein by reference.
 //
 
-$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
+
 $permission = 34; // Reopen Incidents
 
-require ($lib_path.'db_connect.inc.php');
-require ($lib_path.'functions.inc.php');
+require ('core.php');
+require (APPLICATION_LIBPATH . 'functions.inc.php');
 
 // This page requires authentication
-require ($lib_path.'auth.inc.php');
+require (APPLICATION_LIBPATH . 'auth.inc.php');
 
 // External variables
 $submit = cleanvar($_REQUEST['submit']);
@@ -24,7 +24,7 @@ $newstatus = cleanvar($_REQUEST['newstatus']);
 $bodytext = cleanvar($_REQUEST['bodytext']);
 $updateid = cleanvar($_REQUEST['updateid']);
 
-if (!empty($updateid)) 
+if (!empty($updateid))
 {
     $returnurl = 'holding_queue.php';
 }
@@ -60,7 +60,7 @@ if ($allow_reopen == 'yes')
         // No submit detected show update form
         $incident_title = incident_title($id);
         $title = "{$strReopen}: ".$id . " - " . $incident_title;
-        include ('inc/incident_html_top.inc.php');
+        include (APPLICATION_INCPATH . 'incident_html_top.inc.php');
 
         echo "<h2>{$strReopenIncident}</h2>";
         if (!empty($updateid))
@@ -78,27 +78,27 @@ if ($allow_reopen == 'yes')
           echo "</table>";
         }
         else
-        {   
+        {
             echo "<p align='center'>{$strReopenIncidentAndAddUpdate}</p>";
         }
         echo "<p><input name='submit' type='submit' value='{$strReopen}' /></p>";
         echo "</form>";
-        include ('inc/incident_html_bottom.inc.php');
+        include (APPLICATION_INCPATH . 'incident_html_bottom.inc.php');
     }
     else
     {
         $reopen = reopen_incident($id);
-        
+
         if (!empty($updateid))
         {
             $move = move_update_to_incident($updateid, $id) AND delete_holding_queue_update($updateid);
         }
-        
+
         if (!($result AND $move))
         {
-            include ('inc/incident_html_top.inc.php');
+            include (APPLICATION_INCPATH . 'incident_html_top.inc.php');
             echo "<p class='error'>{$strUpdateIncidentFailed}</p>\n";
-            include ('inc/incident_html_bottom.inc.php');
+            include (APPLICATION_INCPATH . 'incident_html_bottom.inc.php');
         }
         else
         {

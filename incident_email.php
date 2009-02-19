@@ -8,14 +8,14 @@
 // of the GNU General Public License, incorporated herein by reference.
 //
 
-$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
+
 $permission = 33; // Send Emails
-require ($lib_path.'db_connect.inc.php');
-require ($lib_path.'functions.inc.php');
+require ('core.php');
+require (APPLICATION_LIBPATH . 'functions.inc.php');
 // include ('mime.inc.php');
 
 // This page requires authentication
-require ($lib_path.'auth.inc.php');
+require (APPLICATION_LIBPATH . 'auth.inc.php');
 
 // External variables
 $step = cleanvar($_REQUEST['step']);
@@ -50,7 +50,7 @@ if (empty($step))
 
     if (mysql_num_rows($result) > 0)
     {
-        include ('inc/incident_html_top.inc.php');
+        include (APPLICATION_INCPATH . 'incident_html_top.inc.php');
 
         echo "<h2>{$title}</h2>";
 
@@ -58,7 +58,7 @@ if (empty($step))
 
         echo "<p align='center'><a href='".$_SERVER['PHP_SELF']."?step=1&amp;id={$id}'>{$strNewEmail}</a></p>";
 
-        include ('inc/incident_html_bottom.inc.php');
+        include (APPLICATION_INCPATH . 'incident_html_bottom.inc.php');
 
         exit;
     }
@@ -72,7 +72,7 @@ switch ($step)
 {
     case 1:
         // show form 1
-        include ('inc/incident_html_top.inc.php');
+        include (APPLICATION_INCPATH . 'incident_html_top.inc.php');
         ?>
         <script type="text/javascript">
         //<![CDATA[
@@ -317,7 +317,7 @@ switch ($step)
         echo "<input type='hidden' name='menu' value='$menu' />";
         echo "<input name='submit1' type='submit' value='{$strContinue}' /></p>";
         echo "</form>\n";
-        include ('inc/incident_html_bottom.inc.php');
+        include (APPLICATION_INCPATH . 'incident_html_bottom.inc.php');
     break;
 
     case 2:
@@ -332,7 +332,7 @@ switch ($step)
             $metadata = explode("|",$draftobj->meta);
         }
 
-        include ('inc/incident_html_top.inc.php');
+        include (APPLICATION_INCPATH . 'incident_html_top.inc.php');
         ?>
         <script type='text/javascript'>
         //<![CDATA[
@@ -555,7 +555,7 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
         echo "<input name='submit2' type='submit' value='{$strSendEmail}' />";
         echo "</p>\n</form>\n";
 
-        include ('inc/incident_html_bottom.inc.php');
+        include (APPLICATION_INCPATH . 'incident_html_bottom.inc.php');
     break;
 
     case 3:
@@ -871,17 +871,17 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
             }
             else
             {
-                include ('inc/incident_html_top.inc.php');
+                include (APPLICATION_INCPATH . 'incident_html_top.inc.php');
                 echo "<p class='error'>{$SYSLANG['strErrorSendingEmail']}: $mailerror</p>\n";
-                include ('inc/incident_html_bottom.inc.php');
+                include (APPLICATION_INCPATH . 'incident_html_bottom.inc.php');
             }
         }
         else
         {
             // there were errors
-            include ('inc/incident_html_top.inc.php');
+            include (APPLICATION_INCPATH . 'incident_html_top.inc.php');
             echo $error_string;
-            include ('inc/incident_html_bottom.inc.php');
+            include (APPLICATION_INCPATH . 'incident_html_bottom.inc.php');
         }
     break;
 

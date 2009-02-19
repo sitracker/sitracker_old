@@ -11,14 +11,14 @@
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>, Tom Gerrard
 // 7Oct02 INL  Added support for maintenanceid to be put into incidents table
 
-$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
+
 $permission = 5;
-require ($lib_path.'db_connect.inc.php');
-require ($lib_path.'functions.inc.php');
+require ('core.php');
+require (APPLICATION_LIBPATH . 'functions.inc.php');
 $title = $strAddIncident;
 
 // This page requires authentication
-require ($lib_path.'auth.inc.php');
+require (APPLICATION_LIBPATH . 'auth.inc.php');
 
 function to_row($contactrow)
 {
@@ -106,7 +106,7 @@ if (empty($action) OR $action=='showform')
 {
     // TODO This page fails XHTML validation because of dojo attributes - INL 12/12/07
     $pagescripts = array('dojo/dojo.js');
-    include ('./inc/htmlheader.inc.php');
+    include (APPLICATION_INCPATH . 'htmlheader.inc.php');
     ?>
     <script type="text/javascript">
         dojo.require ("dojo.widget.ComboBox");
@@ -137,7 +137,7 @@ if (empty($action) OR $action=='showform')
         echo "<p align='center'>{$strContact} {$contactid}</p>";
 
     }
-    include ('./inc/htmlfooter.inc.php');
+    include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
 }
 elseif ($action == 'findcontact')
 {
@@ -208,7 +208,7 @@ debug_log($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
     if (mysql_num_rows($result) > 0)
     {
-        include ('./inc/htmlheader.inc.php');
+        include (APPLICATION_INCPATH . 'htmlheader.inc.php');
         ?>
         <script type="text/javascript">
         function confirm_support()
@@ -341,12 +341,12 @@ debug_log($sql);
             echo "<p align='center'><a href=\"contact_add.php?name=".urlencode($search_string)."&amp;return=addincident\">{$strAddContact}</a></p>";
         }
         echo "<p align='center'><a href=\"{$_SERVER['PHP_SELF']}?updateid={$updateid}&amp;win={$win}\">{$strSearchAgain}</a></p>";
-        include ('./inc/htmlfooter.inc.php');
+        include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
     }
     else
     {
         // This Page Is Valid XHTML 1.0 Transitional! 27Oct05
-        include ('./inc/htmlheader.inc.php');
+        include (APPLICATION_INCPATH . 'htmlheader.inc.php');
         if (!empty($search_string)) $match = "'$search_string'";
         if (!empty($contactid)) $match = "{$strContact} {$strID} {$contactid}";
         echo "<h2>".sprintf($strSorryUnableToFindAnyContactsMatchingX, $match)."</h2>\n";
@@ -408,13 +408,13 @@ debug_log($sql);
             echo "<p align='center'><a href=\"contact_add.php?name=".urlencode($search_string)."&amp;return=addincident\">{$strAddContact}</a></p>\n";
         }
 
-        include ('./inc/htmlfooter.inc.php');
+        include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
     }
 }
 elseif ($action=='incidentform')
 {
     // Display form to get details of the actual incident
-    include ('./inc/htmlheader.inc.php');
+    include (APPLICATION_INCPATH . 'htmlheader.inc.php');
 
     echo "<h2>".icon('add', 32)." {$strAddIncident} - {$strDetails}</h2>";
     ?>
@@ -579,11 +579,11 @@ elseif ($action=='incidentform')
     echo "<p align='center'><input name='submit' type='submit' value='{$strAddIncident}' /></p>";
     echo "</form>\n";
 
-    include ('./inc/htmlfooter.inc.php');
+    include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
 }
 elseif ($action == 'assign')
 {
-    include ('./inc/htmlheader.inc.php');
+    include (APPLICATION_INCPATH . 'htmlheader.inc.php');
     if ($type == "support" || $type == "free")
     {
         $html .= "<h2>{$strAddIncident} - {$strAssign}</h2>";
@@ -962,7 +962,7 @@ elseif ($action == 'assign')
             trigger_error('User input error: '. $error_string, E_USER_ERROR);
         }
     }
-    include ('./inc/htmlfooter.inc.php');
+    include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
 }
 elseif ($action == 'reassign')
 {
@@ -971,7 +971,7 @@ elseif ($action == 'reassign')
     $uid = cleanvar($_REQUEST['userid']);
     $nextaction = cleanvar($_REQUST['nextaction']);
 
-    include ('./inc/htmlheader.inc.php');
+    include (APPLICATION_INCPATH . 'htmlheader.inc.php');
     echo "<h2>{$strIncidentAdded} - {$strSummary}</h2>";
     echo "<p align='center'><a href=\"javascript:incident_details_window('$incidentid','incident{$incidentid}');\">";
     echo "{$strIncident} {$incidentid}</a> has been moved to ";
@@ -989,6 +989,6 @@ elseif ($action == 'reassign')
     $sql .= "VALUES ('{$incidentid}', '{$sit[2]}', 'reassigning', '{$now}', '{$uid}', '1', '{$nextaction}')";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-    include ('./inc/htmlfooter.inc.php');
+    include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
 }
 ?>

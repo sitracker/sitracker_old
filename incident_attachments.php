@@ -10,21 +10,21 @@
 
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
-$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
+
 $permission = 62; // View incident attachments
 
-require ($lib_path.'db_connect.inc.php');
-require ($lib_path.'functions.inc.php');
+require ('core.php');
+require (APPLICATION_LIBPATH . 'functions.inc.php');
 
 // This page requires authentication
-require ($lib_path.'auth.inc.php');
+require (APPLICATION_LIBPATH . 'auth.inc.php');
 
 // External variables
 $id = cleanvar($_REQUEST['id']);
 $incidentid=$id;
 
 $title = $strFiles;
-include ('inc/incident_html_top.inc.php');
+include (APPLICATION_INCPATH . 'incident_html_top.inc.php');
 
 // append incident number to attachment path to show this users attachments
 $incident_attachment_fspath = $CONFIG['attachment_fspath'] . $id;
@@ -65,12 +65,12 @@ if ($_FILES['attachment']['name'] != '')
         mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
         $updateid = mysql_insert_id();
-        
-        $incident_attachment_fspath = $CONFIG['attachment_fspath']. $fsdelim . 
+
+        $incident_attachment_fspath = $CONFIG['attachment_fspath']. $fsdelim .
             $incidentid . $fsdelim;
-        
+
         // make incident attachment dir if it doesn't exist
-        $newfilename = $incident_attachment_fspath . $fsdelim . $fileid . 
+        $newfilename = $incident_attachment_fspath . $fsdelim . $fileid .
             "-".$_FILES['attachment']['name'];
         $umask = umask(0000);
         $mk = TRUE;
@@ -194,7 +194,7 @@ function draw_file_row($file, $fsdelim, $incidentid, $path)
     $preview = ''; // reset the preview
     $filenameparts = explode("-", $filename);
     $newfilename = cleanvar($filenameparts[1]);
-    
+
     if ($filedir != $incidentid)
     {
         // files are in a subdirectory
@@ -288,7 +288,7 @@ if (file_exists($incident_attachment_fspath))
     }
     else
     {
-        foreach ($temparray as $value) 
+        foreach ($temparray as $value)
         {
             if (is_dir($value)) $dirarray[] = $value;
             elseif (is_file($value) AND substr($value,-1) != '.' AND substr($value,-8) != 'mail.eml')
@@ -388,6 +388,6 @@ if (file_exists($incident_attachment_fspath))
 }
 echo "</form>";
 
-include ('inc/incident_html_bottom.inc.php');
+include (APPLICATION_INCPATH . 'incident_html_bottom.inc.php');
 
 ?>
