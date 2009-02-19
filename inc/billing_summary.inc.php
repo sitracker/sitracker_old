@@ -11,14 +11,18 @@
 
 // Author:  Paul Heaney Paul Heaney <paulheaney[at]users.sourceforge.net>
 
-$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
+// Prevent script from being run directly (ie. it must always be included
+if (realpath(__FILE__) == realpath($_SERVER['SCRIPT_FILENAME']))
+{
+    exit;
+}
+
 $permission =  37; // Run Reports  // FIXME might need its own
 
-require_once ($lib_path.'db_connect.inc.php');
-require_once ($lib_path.'functions.inc.php');
+require ('core.php');
+require (APPLICATION_LIBPATH . 'functions.inc.php');
 // This page requires authentication
-require_once ($lib_path.'auth.inc.php');
-
+require (APPLICATION_LIBPATH . 'auth.inc.php');
 
 $display = cleanvar($_REQUEST['display']);
 $showfoc = cleanvar($_REQUEST['foc']);
@@ -82,7 +86,7 @@ if (mysql_numrows($result) > 0)
 			$obj->creditamount = 0;
 			$obj->balance = 0;
         }
-        
+
         $totalcredit += $obj->creditamount;
         $totalbalance += $obj->balance;
         $awaitingapproval = service_transaction_total($obj->serviceid, BILLING_AWAITINGAPPROVAL)  * -1;
@@ -197,10 +201,10 @@ else
 
 if ($display == 'html')
 {
-    include ('inc/htmlheader.inc.php');
+    include (APPLICATION_INCPATH . 'htmlheader.inc.php');
     echo "<h2>{$strBillingSummary}</h2>";
     echo $str;
-    include ('inc/htmlfooter.inc.php');
+    include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
 }
 elseif ($display == 'csv')
 {
