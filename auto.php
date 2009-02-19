@@ -11,11 +11,11 @@
 
 // This file should be called from a cron job (or similar) to run tasks periodically
 
-$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
-require ($lib_path.'db_connect.inc.php');
-include ($lib_path.'strings.inc.php');
-require ($lib_path.'functions.inc.php');
-include_once ($lib_path . 'billing.inc.php');
+
+require ('core.php');
+include (APPLICATION_LIBPATH . 'strings.inc.php');
+require (APPLICATION_LIBPATH . 'functions.inc.php');
+include_once (APPLICATION_LIBPATH . 'billing.inc.php');
 populate_syslang();
 
 $crlg = "\n";

@@ -9,10 +9,10 @@
 //
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
-$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
+
 $permission = 0; // not required
-require ($lib_path.'db_connect.inc.php');
-require ($lib_path.'functions.inc.php');
+require ('core.php');
+require (APPLICATION_LIBPATH . 'functions.inc.php');
 
 // This page requires authentication
 if ($_REQUEST['action'] == 'contexthelp' AND $_REQUEST['auth'] == 'portal')
@@ -20,11 +20,11 @@ if ($_REQUEST['action'] == 'contexthelp' AND $_REQUEST['auth'] == 'portal')
     // Special exception for contexthelp, use the portal authentication for
     // portal help tips
     $accesslevel = 'any';
-    require($lib_path.'/portalauth.inc.php');
+    require (APPLICATION_LIBPATH . 'portalauth.inc.php');
 }
 else
 {
-    require ($lib_path.'auth.inc.php');
+    require (APPLICATION_LIBPATH . 'auth.inc.php');
 }
 $action = cleanvar($_REQUEST['action']);
 $selected = cleanvar($_REQUEST['selected']);
@@ -83,9 +83,9 @@ switch ($action)
 
     case 'contexthelp':
         $context = cleanvar($_REQUEST['context']);
-        $helpfile = dirname( __FILE__ ).DIRECTORY_SEPARATOR."help/{$_SESSION['lang']}/{$context}.txt";
+        $helpfile = APPLICATION_HELPPATH . "{$_SESSION['lang']}". DIRECTORY_SEPARATOR . "{$context}.txt";
         // Default back to english if language helpfile isn't found
-        if (!file_exists($helpfile)) $helpfile = dirname( __FILE__ ).DIRECTORY_SEPARATOR."help/en-GB/{$context}.txt";
+        if (!file_exists($helpfile)) $helpfile = APPLICATION_HELPPATH . "{$_SESSION['lang']}". DIRECTORY_SEPARATOR. "en-GB/{$context}.txt";
         if (file_exists($helpfile))
         {
             $fp = fopen($helpfile, 'r', TRUE);
@@ -97,7 +97,7 @@ switch ($action)
     break;
 
     case 'dismiss_notice':
-        require ($lib_path.'auth.inc.php');
+        require (APPLICATION_LIBPATH . 'auth.inc.php');
         $noticeid = cleanvar($_REQUEST['noticeid']);
         $userid = cleanvar($_REQUEST['userid']);
         if (is_numeric($noticeid))
@@ -117,23 +117,23 @@ switch ($action)
     break;
 
     case 'dashboard_display':
-        require ($lib_path.'auth.inc.php');
+        require (APPLICATION_LIBPATH . 'auth.inc.php');
         $dashboard = cleanvar($_REQUEST['dashboard']);
         $dashletid = 'win'.cleanvar($_REQUEST['did']);
         // FIXME need some sanitation here
-        include (dirname( __FILE__ ).DIRECTORY_SEPARATOR."plugins{$fsdelim}dashboard_{$dashboard}.php");
+        include (APPLICATION_PLUGINPATH . "dashboard_{$dashboard}.php");
         $dashfn = "dashboard_{$dashboard}_display";
         echo $dashfn($dashletid);
     break;
 
     case 'dashboard_save':
     case 'dashboard_edit':
-        require ($lib_path.'auth.inc.php');
+        require (APPLICATION_LIBPATH . 'auth.inc.php');
 
         $dashboard = cleanvar($_REQUEST['dashboard']);
         $dashletid = 'win'.cleanvar($_REQUEST['did']);
         // FIXME need some sanitation here
-        include (dirname( __FILE__ ).DIRECTORY_SEPARATOR."plugins{$fsdelim}dashboard_{$dashboard}.php");
+        include (APPLICATION_PLUGINPATH . "dashboard_{$dashboard}.php");
         $dashfn = "dashboard_{$dashboard}_edit";
         echo $dashfn($dashletid);
     break;
