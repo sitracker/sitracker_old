@@ -17,7 +17,9 @@
 
 // TODO we need to clean this schema up to make it confirmed compatible with mysql4
 
-$schema = "CREATE TABLE IF NOT EXISTS `{$dbSystem}` (
+$schema = "SET sql_mode = '';
+
+CREATE TABLE IF NOT EXISTS `{$dbSystem}` (
   `id` int(1) NOT NULL default '0',
   `version` float(3,2) NOT NULL default '0.00',
   PRIMARY KEY  (`id`)
