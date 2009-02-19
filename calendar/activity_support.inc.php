@@ -15,10 +15,10 @@ $permission = 27; // View your calendar FIXME
 // Prevent script from being run directly (ie. it must always be included
 if (realpath(__FILE__) == realpath($_SERVER['SCRIPT_FILENAME']))
 {
-    require_once($lib_path.'db_connect.inc.php');
-    require_once($lib_path.'functions.inc.php');
+    require_once ('../core.php');
+    require_once (APPLICATION_LIBPATH . 'unctions.inc.php');
     // This page requires authentication
-    require_once($lib_path.'auth.inc.php');
+    require_once(APPLICATION_LIBPATH . 'auth.inc.php');
 }
 
 foreach (array('level', 'data', 'ws' ) as $var)

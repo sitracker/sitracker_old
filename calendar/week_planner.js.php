@@ -10,12 +10,11 @@
 
 // Author: Tom Gerrard <tom.gerrard[at]salfordsoftware.co.uk>
 
-$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
 $permission = 27; // View your calendar
-require ($lib_path.'db_connect.inc.php');
+require ('../core.php');
 $headerdisplayed = 1;
-require ($lib_path.'functions.inc.php');
-require ($lib_path.'auth.inc.php');
+require (APPLICATION_LIBPATH . 'functions.inc.php');
+require (APPLICATION_LIBPATH . 'auth.inc.php');
 
 header('Content-Type: text/javascript');
 

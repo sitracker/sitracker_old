@@ -9,14 +9,12 @@
 //
 // Author: Tom Gerrard <tom.gerrard[at]salfordsoftware.co.uk>
 
-$lib_path = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
 $permission = 50; /* Approve holidays */
-require ($lib_path.'db_connect.inc.php');
-require ($lib_path.'functions.inc.php');
-$title = $strApproveTimesheets;
-
+require ('..'.DIRECTORY_SEPARATOR.'core.php');
+require (APPLICATION_LIBPATH . 'functions.inc.php');
 // This page requires authentication
-require ($lib_path.'auth.inc.php');
+require (APPLICATION_LIBPATH . 'auth.inc.php');
+$title = $strApproveTimesheets;
 
 foreach (array('user', 'date', 'approve' ) as $var)
 {
@@ -25,7 +23,7 @@ foreach (array('user', 'date', 'approve' ) as $var)
 
 if ($user == '')
 {
-    include ('../inc/htmlheader.inc.php');
+    include (APPLICATION_INCPATH . 'htmlheader.inc.php');
     echo "<h2>".icon('holiday', 32)." ";
     echo $strTimesheets;
     echo "</h2>";
@@ -82,12 +80,12 @@ if ($user == '')
     {
         echo "<p class='info'>There are currently no timesheets waiting for your approval</p>";
     }
-    include ('../inc/htmlfooter.inc.php');
+    include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
 }
 else if ($approve == '')
 {
     include ('calendar.inc.php');
-    include ('../inc/htmlheader.inc.php');
+    include (APPLICATION_INCPATH . 'htmlheader.inc.php');
     echo "<h2>$strTimesheet - " . user_realname($user) . "</h2>";
     echo "<p align='center'>" . date($CONFIG['dateformat_date'], $date) . " - " . date($CONFIG['dateformat_date'], $date + 86400 * 6) . "</p>";
     echo "<table align='center'>";
@@ -125,7 +123,7 @@ else if ($approve == '')
     echo "</table>";
     echo "<p align = 'center'><a href='{$_SERVER['PHP_SELF']}?user=$user&amp;date=$date&amp;approve=1'>$strApprove</a> | ";
     echo "<a href='{$_SERVER['PHP_SELF']}?user=$user&amp;date=$date&amp;approve=2'>$strDecline</a></p>";
-    include ('../inc/htmlfooter.inc.php');
+    include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
 }
 else
 {

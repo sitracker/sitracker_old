@@ -12,6 +12,12 @@
 //         Tom Gerrard <tom.gerrard[at]salfordsoftware.co.uk>
 
 
+if (realpath(__FILE__) == realpath($_SERVER['SCRIPT_FILENAME']))
+{
+    exit;
+}
+
+
 // Get list of holiday types
 $holidaytype[HOL_HOLIDAY] = $GLOBALS['strHoliday'];
 $holidaytype[HOL_SICKNESS] = $GLOBALS['strAbsentSick'];
