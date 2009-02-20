@@ -50,9 +50,9 @@ if (isset($_GET['saveAnItem']))
         break;
 
         case 0:
-            $sql = "UPDATE `{$dbTasks}` SET description='" . mysql_escape_string($description)."'' ";
-            if (!empty($name)) $sql .= ",name='". mysql_escape_string($name)."'' ";
-            $sql .= ",startdate='".date("Y-m-d H:i:s",strtotime($eventStartDate))."'' ";
+            $sql = "UPDATE `{$dbTasks}` SET description='" . mysql_escape_string($description)."' ";
+            if (!empty($name) AND $name !== 'undefined') $sql .= ",name='". mysql_escape_string($name)."' ";
+            $sql .= ",startdate='".date("Y-m-d H:i:s",strtotime($eventStartDate))."' ";
             $sql .= ",enddate='".date("Y-m-d H:i:s",strtotime($eventEndDate))."' ";
             $sql .= "WHERE id='{$id}' AND completion < '1'";
             mysql_query($sql);

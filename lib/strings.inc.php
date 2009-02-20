@@ -162,27 +162,37 @@ $hmenu[50] = array_merge(array (10=> array ( 'perm'=> 54, 'name'=> $strNewKBArti
 
 if (!is_array($hmenu[60])) $hmenu[60] = array();
 // Reports
-        $hmenu[60] = array_merge(array (10=> array ( 'perm'=> 37, 'name'=>"{$strMarketingMailshot}", 'url'=>"{$CONFIG['application_webpath']}report_marketing.php"),
+        $hmenu[60] = array_merge(array (
+                    10=> array ( 'perm'=> 37, 'name'=>"{$strMarketingMailshot}", 'url'=>"{$CONFIG['application_webpath']}report_marketing.php"),
                     20=> array ( 'perm'=> 37, 'name'=> "{$strCustomerExport}", 'url'=>"{$CONFIG['application_webpath']}report_customers.php"),
                     30=> array ( 'perm'=> 37, 'name'=> "{$strQueryByExample}", 'url'=>"{$CONFIG['application_webpath']}report_qbe.php"),
-                    50=> array ( 'perm'=> 37, 'name'=> "{$strIncidentsBySite}", 'url'=>"{$CONFIG['application_webpath']}report_incidents_by_site.php"),
-                    55=> array ( 'perm'=> 37, 'name'=> "{$strIncidentsByEngineer}", 'url'=>"{$CONFIG['application_webpath']}report_incidents_by_engineer.php"),
+                    35=> array ( 'perm'=> 37, 'name'=> "{$strIncidents}", 'url'=>"", 'submenu' => '6050'),
+
+
                     60=> array ( 'perm'=> 37, 'name'=> "{$strSiteProducts}", 'url'=>"{$CONFIG['application_webpath']}report_customer_products.php"),
                     61=> array ( 'perm'=> 37, 'name'=> "{$strSiteProductsMatrix}", 'url'=>"{$CONFIG['application_webpath']}report_customer_products_matrix.php"),
                     65=> array ( 'perm'=> 37,  'name'=> "{$strCountContractsByProduct}", 'url'=>"{$CONFIG['application_webpath']}report_contracts_by_product.php"),
                     70=> array ( 'perm'=> 37, 'name'=> "{$strSiteContracts}", 'url'=>"{$CONFIG['application_webpath']}report_customer_contracts.php"),
                     80=> array ( 'perm'=> 37, 'name'=> "{$strCustomerFeedback}", 'url'=>"{$CONFIG['application_webpath']}report_feedback.php", 'enablevar' => 'feedback_enabled'),
-                    90=> array ( 'perm'=> 37, 'name'=> "{$strSiteIncidents}", 'url'=>"{$CONFIG['application_webpath']}report_incidents_by_customer.php"),
-                    100=> array ( 'perm'=> 37, 'name'=> "{$strRecentIncidents}", 'url'=>"{$CONFIG['application_webpath']}report_incidents_recent.php"),
-                    110=> array ( 'perm'=> 37, 'name'=> "{$strIncidentsLoggedOpenClosed}", 'url'=>"{$CONFIG['application_webpath']}report_incidents_graph.php"),
-                    120=> array ( 'perm'=> 37, 'name'=> "{$strAverageIncidentDuration}", 'url'=>"{$CONFIG['application_webpath']}report_incidents_average_duration.php"),
-                    130=> array ( 'perm'=> 37, 'name'=> "{$strIncidentsBySkill}", 'url'=>"{$CONFIG['application_webpath']}report_incidents_by_skill.php"),
-                    140=> array ( 'perm'=> 37, 'name'=> "{$strIncidentsByVendor}", 'url'=>"{$CONFIG['application_webpath']}report_incidents_by_vendor.php"),
-                    150=> array ( 'perm'=> 37, 'name'=> "{$strEscalatedIncidents}",'url'=>"{$CONFIG['application_webpath']}report_incidents_escalated.php"),
-                    160=> array ( 'perm'=> 37, 'name'=> "{$strBillableIncidents}",'url'=>"{$CONFIG['application_webpath']}report_incidents_billable.php"),
-                    170=> array ( 'perm'=> 37, 'name'=> "{$strIncidentsDailySummary}",'url'=>"{$CONFIG['application_webpath']}report_incidents_daily_summary.php"),
                     180=> array ( 'perm'=> 37, 'name'=> "{$strEngineerUtilisation}",'url'=>"{$CONFIG['application_webpath']}report_billable_engineer_utilisation.php",
 )), $hmenu[60]);
+
+if (!is_array($hmenu[6050])) $hmenu[6050] = array();
+$hmenu[6050] = array_merge(array (
+                    10=> array ( 'perm'=> 37, 'name'=> "{$strIncidentsBySite}", 'url'=>"{$CONFIG['application_webpath']}report_incidents_by_site.php"),
+                    20=> array ( 'perm'=> 37, 'name'=> "{$strIncidentsByEngineer}", 'url'=>"{$CONFIG['application_webpath']}report_incidents_by_engineer.php"),
+                    30=> array ( 'perm'=> 37, 'name'=> "{$strSiteIncidents}", 'url'=>"{$CONFIG['application_webpath']}report_incidents_by_customer.php"),
+                    40=> array ( 'perm'=> 37, 'name'=> "{$strRecentIncidents}", 'url'=>"{$CONFIG['application_webpath']}report_incidents_recent.php"),
+                    50=> array ( 'perm'=> 37, 'name'=> "{$strIncidentsLoggedOpenClosed}", 'url'=>"{$CONFIG['application_webpath']}report_incidents_graph.php"),
+                    60=> array ( 'perm'=> 37, 'name'=> "{$strAverageIncidentDuration}", 'url'=>"{$CONFIG['application_webpath']}report_incidents_average_duration.php"),
+                    70=> array ( 'perm'=> 37, 'name'=> "{$strIncidentsBySkill}", 'url'=>"{$CONFIG['application_webpath']}report_incidents_by_skill.php"),
+                    80=> array ( 'perm'=> 37, 'name'=> "{$strIncidentsByVendor}", 'url'=>"{$CONFIG['application_webpath']}report_incidents_by_vendor.php"),
+                    90=> array ( 'perm'=> 37, 'name'=> "{$strEscalatedIncidents}",'url'=>"{$CONFIG['application_webpath']}report_incidents_escalated.php"),
+                    100=> array ( 'perm'=> 37, 'name'=> "{$strBillableIncidents}",'url'=>"{$CONFIG['application_webpath']}report_incidents_billable.php"),
+                    110=> array ( 'perm'=> 37, 'name'=> "{$strIncidentsDailySummary}",'url'=>"{$CONFIG['application_webpath']}report_incidents_daily_summary.php")
+), $hmenu[6050]);
+
+
 
 if (!is_array($hmenu[70])) $hmenu[70] = array();
 $hmenu[70] = array_merge(array (10=> array ( 'perm'=> 0, 'name'=> "{$strHelpContents}...", 'url'=>"{$CONFIG['application_webpath']}help.php"),
