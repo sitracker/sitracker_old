@@ -247,8 +247,8 @@ else
         }
 
         echo "</td>";
-		echo "<td><a href='edit_contract.php?action=edit&amp;maintid={$results['maintid']}'>{$strEdit}</a></td>";
-		echo"</tr>";
+        echo "<td><a href='contract_edit.php?action=edit&amp;maintid={$results['maintid']}'>{$strEdit}</a></td>";
+        echo"</tr>";
     }
 
     echo "</table>";
