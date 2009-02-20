@@ -10,16 +10,24 @@
 
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
-$lib_path = '.'.DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR;
+// Define path constants, we don't include core.php so we do this here
+define ('APPLICATION_FSPATH', realpath(dirname( __FILE__ ) . DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR);
+define ('APPLICATION_LIBPATH', realpath(dirname( __FILE__ ).DIRECTORY_SEPARATOR . 'lib') . DIRECTORY_SEPARATOR);
+define ('APPLICATION_HELPPATH', realpath(dirname( __FILE__ ).DIRECTORY_SEPARATOR . 'help') . DIRECTORY_SEPARATOR);
+define ('APPLICATION_INCPATH', realpath(dirname( __FILE__ ).DIRECTORY_SEPARATOR . 'inc') . DIRECTORY_SEPARATOR);
+define ('APPLICATION_I18NPATH', realpath(dirname( __FILE__ ).DIRECTORY_SEPARATOR . 'i18n') . DIRECTORY_SEPARATOR);
+define ('APPLICATION_PORTALPATH', realpath(dirname( __FILE__ ).DIRECTORY_SEPARATOR . 'portal') . DIRECTORY_SEPARATOR);
+define ('APPLICATION_PLUGINPATH', realpath(dirname( __FILE__ ).DIRECTORY_SEPARATOR . 'plugins') . DIRECTORY_SEPARATOR);
+
 
 // Load config defaults
-@include ($lib_path.'defaults.inc.php');
+@include (APPLICATION_LIBPATH . 'defaults.inc.php');
 // Keep the defaults as a seperate array
 $DEFAULTS = $CONFIG;
 
 // Load config file with customisations
 // @include ("config.inc-dist.php");
-@include ("./config.inc.php");
+@include (APPLICATION_FSPATH . "config.inc.php");
 // Server Configuration
 @include ('/etc/webtrack.conf'); // for legacy systems
 @include ('/etc/sit.conf');
@@ -36,10 +44,10 @@ $DEFAULTS = $CONFIG;
 // These are the required variables we want to configure during installation
 $SETUP = array('db_hostname','db_database','db_username','db_password', 'db_tableprefix','application_webpath');
 
-require($lib_path.'configvars.inc.php');
+require(APPLICATION_LIBPATH . 'configvars.inc.php');
 
 $upgradeok = FALSE;
-$config_filename='./config.inc.php';
+$config_filename = APPLICATION_FSPATH . 'config.inc.php';
 
 $configfiles = get_included_files();
 
@@ -838,7 +846,7 @@ switch ($_REQUEST['action'])
     break;
 
     default:
-        require ($lib_path.'tablenames.inc.php');
+        require (APPLICATION_LIBPATH . 'tablenames.inc.php');
         // Connect to Database server
         $db = @mysql_connect($CONFIG['db_hostname'], $CONFIG['db_username'], $CONFIG['db_password']);
         if (@mysql_error())
