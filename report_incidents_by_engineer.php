@@ -28,6 +28,13 @@ require (APPLICATION_LIBPATH . 'functions.inc.php');
 // This page requires authentication
 require (APPLICATION_LIBPATH . 'auth.inc.php');
 
+$startdate = cleanvar($_POST['startdate']);
+$enddate = cleanvar($_POST['enddate']);
+$type = cleanvar($_POST['type']);
+$exc = cleanvar($_POST['exc']);
+$inc = cleanvar($_POST['inc']);
+$output = cleanvar($_POST['output']);
+
 if (empty($_REQUEST['mode']))
 {
     include (APPLICATION_INCPATH . 'htmlheader.inc.php');
@@ -79,18 +86,17 @@ if (empty($_REQUEST['mode']))
 }
 elseif ($_REQUEST['statistics'] == 'on')
 {
-    if (!empty($_POST['startdate'])) $startdate = strtotime($_POST['startdate']);
+    if (!empty($startdate)) $startdate = strtotime($startdate);
     else $startdate = mktime(0,0,0,1,1,date('Y'));
-    if (!empty($_POST['enddate'])) $enddate = strtotime($_POST['enddate']);
+    if (!empty($enddate)) $enddate = strtotime($enddate);
     else $enddate = mktime(23,59,59,31,12,date('Y'));
 
-    $type = $_POST['type'];
-    if (is_array($_POST['exc']) && is_array($_POST['exc']))
+    if (is_array($inc) && is_array($exc))
     {
-        $_POST['inc']=array_values(array_diff($_POST['inc'],$_POST['exc']));  // don't include anything excluded
+        $incarray = array_values(array_diff($inc, $exc));  // don't include anything excluded
     }
 
-    $includecount = count($_POST['inc']);
+    $includecount = count($incarray);
     if ($includecount >= 1)
     {
         // $html .= "<strong>Include:</strong><br />";
@@ -98,9 +104,8 @@ elseif ($_REQUEST['statistics'] == 'on')
         $incsql_esc .= "(";
         for ($i = 0; $i < $includecount; $i++)
         {
-            // $html .= "{$_POST['inc'][$i]} <br />";
-            $incsql .= "u.id={$_POST['inc'][$i]}";
-            $incsql_esc .= "i.owner={$_POST['inc'][$i]}";
+            $incsql .= "u.id={$incarray[$i]}";
+            $incsql_esc .= "i.owner={$incarray[$i]}";
             if ($i < ($includecount-1)) $incsql .= " OR ";
             if ($i < ($includecount-1)) $incsql_esc .= " OR ";
         }
@@ -299,14 +304,14 @@ elseif ($_REQUEST['statistics'] == 'on')
         $csv .= "The statistics are approximation only. They don't take into consideration incidents reassigned\n";
     }
 
-    if ($_POST['output'] == 'screen')
+    if ($output == 'screen')
     {
         include (APPLICATION_INCPATH . 'htmlheader.inc.php');
         echo "<h2>".sprintf($strEngineersStatisticsForXMonths, 12)."</h2>";
         echo $html;
         include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
     }
-    elseif ($_POST['output'] == 'csv')
+    elseif ($output == 'csv')
     {
         // --- CSV File HTTP Header
         header("Content-type: text/csv\r\n");
@@ -317,16 +322,17 @@ elseif ($_REQUEST['statistics'] == 'on')
 }
 elseif ($_REQUEST['mode'] == 'report')
 {
-    if (!empty($_POST['startdate'])) $startdate = strtotime($_POST['startdate']);
+    if (!empty($startdate)) $startdate = strtotime($startdate);
     else $startdate = mktime(0,0,0,1,1,date('Y'));
-    if (!empty($_POST['enddate'])) $enddate = strtotime($_POST['enddate']);
+    if (!empty($enddate)) $enddate = strtotime($enddate);
     else $enddate = mktime(23,59,59,31,12,date('Y'));
-    $type = $_POST['type'];
-    if (is_array($_POST['exc']) && is_array($_POST['exc']))
+
+    if (is_array($inc) && is_array($exc))
     {
-        $_POST['inc'] = array_values(array_diff($_POST['inc'],$_POST['exc']));  // don't include anything excluded
+        $incarray = array_values(array_diff($inc, $exc));  // don't include anything excluded
     }
-    $includecount = count($_POST['inc']);
+    
+    $includecount = count($incarray);
     if ($includecount >= 1)
     {
         // $html .= "<strong>Include:</strong><br />";
@@ -340,8 +346,8 @@ elseif ($_REQUEST['mode'] == 'report')
             for ($i = 0; $i < $includecount; $i++)
             {
                 // $html .= "{$_POST['inc'][$i]} <br />";
-                $incsql .= "u.id={$_POST['inc'][$i]}";
-                $incsql_esc .= "i.owner={$_POST['inc'][$i]}";
+                $incsql .= "u.id={$incarray[$i]}";
+                $incsql_esc .= "i.owner={$incarray[$i]}";
                 if ($i < ($includecount-1)) $incsql .= " OR ";
                 if ($i < ($includecount-1)) $incsql_esc .= " OR ";
             }
@@ -448,13 +454,13 @@ elseif ($_REQUEST['mode'] == 'report')
 
     //  $html .= "<p align='center'>SQL Query used to produce this report:<br /><code>$sql</code></p>\n";
 
-    if ($_POST['output'] == 'screen')
+    if ($output == 'screen')
     {
         include (APPLICATION_INCPATH . 'htmlheader.inc.php');
         echo $html;
         include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
     }
-    elseif ($_POST['output'] == 'csv')
+    elseif ($output == 'csv')
     {
         // --- CSV File HTTP Header
         header("Content-type: text/csv\r\n");
