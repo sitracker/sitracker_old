@@ -7043,29 +7043,29 @@ function process_add_contact($mode = 'internal')
     {
         if (!empty($dataprotection_email))
         {
-            $dataprotection_email='Yes';
+            $dataprotection_email = 'Yes';
         }
         else
         {
-            $dataprotection_email='No';
+            $dataprotection_email = 'No';
         }
 
         if (!empty($dataprotection_phone))
         {
-            $dataprotection_phone='Yes';
+            $dataprotection_phone = 'Yes';
         }
         else
         {
-            $dataprotection_phone='No';
+            $dataprotection_phone = 'No';
         }
 
         if (!empty($dataprotection_address))
         {
-            $dataprotection_address='Yes';
+            $dataprotection_address = 'Yes';
         }
         else
         {
-            $dataprotection_address='No';
+            $dataprotection_address = 'No';
         }
 
         // generate username and password
@@ -7089,7 +7089,7 @@ function process_add_contact($mode = 'internal')
         // concatenate username with insert id to make unique
         $newid = mysql_insert_id();
         $username = $username . $newid;
-        $sql = "UPDATE `{$dbContacts}` SET username='$username' WHERE id='$newid'";
+        $sql = "UPDATE `{$dbContacts}` SET username='{$username}' WHERE id='{$newid}'";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
@@ -7125,7 +7125,7 @@ function process_add_contact($mode = 'internal')
                 }
                 elseif ($mode == 'internal')
                 {
-                    html_redirect("contact_details.php?id=$newid");
+                    html_redirect("contact_details.php?id={$newid}");
                     exit;
                 }
                 else

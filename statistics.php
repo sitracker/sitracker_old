@@ -290,7 +290,7 @@ function give_overview()
             if (mysql_num_rows($resultGroups) > 0)
             {
                 $openCallsGroup = 0;
-                echo "<td style='vertical-align:top' align='center'><strong>{$groups['name']}</strong>";
+                echo "<td style='vertical-align:top' align='center'><strong>{$groups->name}</strong>";
                 echo "<table class='vertical' align='center'>";
                 while ($rowGroup = mysql_fetch_object($resultGroups))
                 {
@@ -304,7 +304,7 @@ function give_overview()
                         $openCallsGroup += $amount;
                     //}
                 }
-                echo "<tr><th>{$strTotalOpen}</th>";
+                echo "<tr><th>{$GLOBALS['strTotalOpen']'}</th>";
                 echo "<td class='shade2' align='left'><strong>{$openCallsGroup}</strong></td></tr></table></td>";
             }
         }
