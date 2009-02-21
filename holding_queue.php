@@ -63,7 +63,7 @@ function generate_row($update)
     $html_row .= "<td style='text-align: center'>";
     if (($update['locked'] == $sit[2]) OR empty($update['locked']))
     {
-        $html_row .= "<input type='checkbox' name='selected[]' value='".$update['id']."' />";
+        $html_row .= "<input type='checkbox' name='selected[]' value='".$update['updateid']."' />";
     }
     $html_row .= "</td>";
     $html_row .= "<td align='center' width='20%'>".date($CONFIG['dateformat_datetime'],$update['timestamp']).'</td>';
@@ -118,10 +118,12 @@ function generate_row($update)
             $html_row .= ",'incomingview');\" id='update{$update['id']}' class='info'";
             $html_row .= " title='View and lock this held e-mail'>{$GLOBALS['strView']}</a> | ";
         }
-    if ($update['reason_id'] == 2)
-    {
-        $html_row .= "<a href='incident_reopen.php?id={$update['incident_id']}&updateid={$update['updateid']}'>{$GLOBALS['strReopen']}</a> | ";
-    }
+        
+        if ($update['reason_id'] == 2)
+        {
+            $html_row .= "<a href='incident_reopen.php?id={$update['incident_id']}&updateid={$update['updateid']}'>{$GLOBALS['strReopen']}</a> | ";
+        }
+        
         $html_row.= "<a href='delete_update.php?updateid=".$update['id']."&amp;tempid=".$update['tempid']."&amp;timestamp=".$update['timestamp']."' title='Remove this item permanently' onclick=\"return confirm_action('{$GLOBALS['strAreYouSureDelete']}');\"> {$GLOBALS['strDelete']}</a>";
     }
     $html_row .= "</td></tr>\n";

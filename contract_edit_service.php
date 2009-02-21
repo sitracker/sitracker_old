@@ -43,7 +43,6 @@ switch ($mode)
             if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
             include (APPLICATION_INCPATH . 'htmlheader.inc.php');
-
             if (mysql_numrows($result) != 1)
             {
                 echo "<h2>".sprintf($strNoServiceWithIDXFound, $serviceid)."</h2>";
