@@ -67,7 +67,7 @@ if ($display == 'html')
     echo $text;
     echo "<p align='center'><a href='{$_SERVER['HTTP_REFERER']}'>{$strReturnToPreviousPage}</a></p>";
 
-    include (APPLICATION_I18NPATH . 'htmlfooter.inc.php');
+    include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
 }
 elseif ($display == 'csv')
 {
