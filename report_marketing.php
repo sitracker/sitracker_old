@@ -59,6 +59,22 @@ if (empty($_REQUEST['mode']))
     }
     echo "</select>";
     echo "</td></tr>\n";
+    
+    $sql = "SELECT * FROM `{$dbSiteTypes}`";
+    $result = mysql_query($sql);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+    if (mysql_num_rows($result) > 0)
+    {
+        echo "<tr><th>{$strSiteType}</th><td>";
+        echo "<select name='sitetype[]' multiple='multiple' size='6'>";
+    	while ($obj = mysql_fetch_object($result))
+        {
+            echo "<option value='{$obj->typeid}'>$obj->typename</option>\n";
+        }
+        echo "</select>";
+        echo "</td></tr>\n";
+    }
+    
     echo "<tr><td  colspan='2'><label><input type='checkbox' name='activeonly'";
     echo " value='yes' /> {$strShowActiveOnly}</label></td></tr>";
 
@@ -95,11 +111,12 @@ if (empty($_REQUEST['mode']))
 }
 elseif ($_REQUEST['mode'] == 'report')
 {
+    $sitetype = $_POST['sitetype'];
     // echo "REPORT";
     // don't include anything excluded
     if (is_array($_POST['inc']) && is_array($_POST['exc']))
     {
-        $_POST['inc']=array_values(array_diff($_POST['inc'],$_POST['exc']));
+        $_POST['inc'] = array_values(array_diff($_POST['inc'],$_POST['exc']));
     }
 
     $filtertags = cleanvar($_POST['filtertags']);
@@ -161,6 +178,23 @@ elseif ($_REQUEST['mode'] == 'report')
         !empty($incsql)) $sql .= "AND ";
         $sql .= "$excsql";
     }
+    
+    $sitetypecount = count($sitetype);
+    print_r($sitetype);
+    if  ($sitetypecount > 0)
+    {
+    	$s = "AND (";
+        for ($i = 0; $i < $sitetypecount; $i++)
+        {
+            // $html .= "{$_POST['exc'][$i]} <br />";
+            $s .= "s.typeid = {$sitetype[$i]}";
+            if ($i < ($sitetypecount-1)) $s  .= " AND ";
+        }
+        $s .= ")";
+        
+        $sql .= $s;
+    }
+
 
     $sql .= " ORDER BY c.email ASC ";
 
