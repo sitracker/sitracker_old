@@ -65,13 +65,14 @@ if ($startdate == 'all') $bodytext .= "all days requested\n\n";
 else
 {
     $bodytext .= "the ";
-    $bodytext .= date('l j F Y',$startdate);
+    $bodytext .= date('l j F Y',mysql2date($startdate));
     $bodytext .= "\n";
 }
 $email_from = user_email($sit[2]);
 $email_to = user_email($user);
 $email_subject = "Re: {$CONFIG['application_shortname']}: Holiday Approval Request";
 $rtnvalue = send_email($email_to, $email_from, $email_subject, $bodytext);
+// FIXME this should use triggers
 
 //if ($rtnvalue===TRUE) echo "<p align='center'>".user_realname($user)." has been notified of your decision</p>";
 //else echo "<p class='error'>There was a problem sending your notification</p>";

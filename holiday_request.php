@@ -138,6 +138,7 @@ if (!$sent)
 
     $sql = "SELECT * FROM `{$dbHolidays}` WHERE approved=".HOL_APPROVAL_NONE." ";
     if (!empty($type)) $sql .= "AND type='$type' ";
+    $sql .= "AND type != ".HOL_PUBLIC.' ';
     if ($mode != 'approval' || $user != 'all') $sql.="AND userid='$user' ";
     if ($approver == TRUE && $mode == 'approval') $sql .= "AND approvedby={$sit[2]} ";
     $sql .= "ORDER BY date, length";
@@ -210,6 +211,7 @@ if (!$sent)
 
         $sql = "SELECT * FROM `{$dbHolidays}` WHERE approved = ".HOL_APPROVAL_NONE." AND userid != 0 ";
         if (!empty($type)) $sql .= "AND type='$type' ";
+        $sql .= "AND type != ".HOL_PUBLIC.' ';
         if ($mode == 'approval') $sql .= "AND approvedby = 0 ";
         $sql .= "ORDER BY date, length";
         $result = mysql_query($sql);
