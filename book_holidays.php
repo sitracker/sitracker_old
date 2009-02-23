@@ -70,12 +70,13 @@ if (empty($step))
 }
 elseif ($step == '1')
 {
+    include (APPLICATION_INCPATH . 'htmlheader.inc.php');
+
     // External variables
     $start = cleanvar($_REQUEST['start']);
     $end = cleanvar($_REQUEST['end']);
     $type = cleanvar($_REQUEST['type']);
 
-    include (APPLICATION_INCPATH . 'htmlheader.inc.php');
     if (!empty($start)) $start = strtotime("{$start} 09:00");
     else $start = 0;
     if (!empty($end)) $end = strtotime("{$end} 09:00");
