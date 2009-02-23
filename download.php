@@ -86,7 +86,7 @@ if (!file_exists($file_fspath) AND !file_exists($old_style))
     header('HTTP/1.1 404 Not Found');
     header('Status: 404 Not Found',1,404);
     echo "<h3>404 File Not Found</h3>";
-    if ($CONFIG['debug'] == TRUE)
+    if ($CONFIG['debug'] === TRUE)
     {
         echo "<p>Path: {$file_fspath}<br />Old style path: {$old_style}</p>";
     }
@@ -102,10 +102,10 @@ elseif ($access == TRUE)
         $fp = fopen($file_fspath, 'r');
         if ($fp && ($file_size !=-1))
         {
-            header("Content-Type: ".mime_type($file_fspath)."\r\n");
-            header("Content-Length: {$file_size}\r\n");
-            header("Content-Disposition-Type: attachment\r\n");
-            header("Content-Disposition: filename={$filename}\r\n");
+            header("Content-Type: ".mime_type($file_fspath));
+            header("Content-Length: {$file_size}");
+            header("Content-Disposition: inline; filename=\"{$filename}\"");
+            header("Content-Transfer-Encoding: binary");
             $buffer = '';
             while (!feof($fp))
             {
