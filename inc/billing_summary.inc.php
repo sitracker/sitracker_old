@@ -17,18 +17,6 @@ if (realpath(__FILE__) == realpath($_SERVER['SCRIPT_FILENAME']))
     exit;
 }
 
-$permission =  37; // Run Reports  // FIXME might need its own
-
-require ('core.php');
-require (APPLICATION_LIBPATH . 'functions.inc.php');
-// This page requires authentication
-require (APPLICATION_LIBPATH . 'auth.inc.php');
-
-$display = cleanvar($_REQUEST['display']);
-$showfoc = cleanvar($_REQUEST['foc']);
-$focaszero = cleanvar($_REQUEST['focaszero']);
-$expiredaszero = cleanvar($_REQUEST['expiredaszero']);
-
 if (empty($display)) $display = 'html';
 
 $sql = "SELECT DISTINCT(CONCAT(m.id,sl.id)), m.site, m.product, s.* ";
@@ -37,7 +25,7 @@ $sql .= "WHERE m.servicelevelid = sl.id AND sl.timed = 'yes' AND m.id = s.contra
 
 if (empty($showfoc) OR $showfoc != 'show')
 {
-	$sql .= "AND s.foc = 'no' ";
+    $sql .= "AND s.foc = 'no' ";
 }
 
 $sitestr = '';

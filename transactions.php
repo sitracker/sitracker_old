@@ -16,12 +16,15 @@
 
 $permission = 76; // View Transactions
 
-require ('core.php');
-require_once(APPLICATION_LIBPATH . 'functions.inc.php');
-include_once (APPLICATION_LIBPATH . 'billing.inc.php');
+if (realpath(__FILE__) == realpath($_SERVER['SCRIPT_FILENAME']))
+{
+    require ('core.php');
+    require_once(APPLICATION_LIBPATH . 'functions.inc.php');
+    include_once (APPLICATION_LIBPATH . 'billing.inc.php');
 
-// This page requires authentication
-require_once(APPLICATION_LIBPATH.'auth.inc.php');
+    // This page requires authentication
+    require_once(APPLICATION_LIBPATH.'auth.inc.php');
+}
 
 $title = $strTransactions;
 
