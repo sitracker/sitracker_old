@@ -74,9 +74,9 @@ elseif (authenticate($username, $_REQUEST['password']) == 1)
     $_SESSION['update_order'] = $user->var_update_order;
     $_SESSION['num_update_view'] = $user->var_num_updates_view;
     $_SESSION['groupid'] = is_null($user->groupid) ? 0 : $user->groupid;
-    $_SESSION['utcoffset'] = $user->var_utc_offset;
+    $_SESSION['utcoffset'] = is_null($user->var_utc_offset) ? 0 : $user->var_utc_offset;
     $_SESSION['portalauth'] = FALSE;
-    $_SESSION['startdate'] = $user->user_startdate;
+    if (!is_null($_SESSION['startdate'])) $_SESSION['startdate'] = $user->user_startdate;
 
     // Delete any old session user notices
     $sql = "DELETE FROM `{$dbNotices}` WHERE durability='session' AND userid={$_SESSION['userid']}";
