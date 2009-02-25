@@ -104,11 +104,6 @@ elseif ($step == '1')
         echo "<h2>{$strBook} ".holiday_type($type)." for ".user_realname($user)."</h2>";
     }
 
-    if ($type == HOL_SICKNESS)
-    {
-        echo user_alert('Sickness, can of course only be booked for today or days that have passed', E_USER_ERROR); // FIXME i18n
-    }
-
     if ($type == HOL_HOLIDAY)
     {
         $entitlement = user_holiday_entitlement($user);
@@ -127,6 +122,11 @@ elseif ($step == '1')
         $start = $end;
         $end = $newend;
         unset($newend);
+    }
+
+    if ($type == HOL_SICKNESS AND $start > $now)
+    {
+        echo user_alert('Sickness, can of course only be booked for today or days that have passed', E_USER_ERROR); // FIXME i18n
     }
 
     echo "<p align='center'><strong>{$strSelectDays}</strong></p>";
@@ -249,9 +249,9 @@ elseif ($step == '1')
                     // in the case of long term illness
                     // If overbooking is disabled, prevent booking more holidays
                     // in the current year than you have entitlement for
-                    if (($type == HOL_SICKNESS AND $day <= $today) OR ($type != HOL_SICKNESS) AND
-                        ($CONFIG['holiday_allow_overbooking'] == TRUE OR
-                        ($CONFIG['holiday_allow_overbooking'] == FALSE AND $day < $holiday_resetdate)))
+                    if (($type == HOL_SICKNESS AND $day <= $today) OR ($type != HOL_SICKNESS)
+                        OR ($type == HOL_HOLIDAY AND ($CONFIG['holiday_allow_overbooking'] == TRUE OR
+                        ($CONFIG['holiday_allow_overbooking'] == FALSE AND $day < $holiday_resetdate))))
                     {
                         echo "<td class='shade1' align='center'><input type='radio' name='length{$daynumber}' value='none' /></td>";
                         echo "<td class='shade1' align='center'><input type='radio' name='length{$daynumber}' value='day' checked='checked' /></td>";
