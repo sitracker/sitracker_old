@@ -3440,9 +3440,11 @@ function incident_get_next_review($incidentid)
     * Converts a MySQL date to a UNIX Timestamp
     * @author Ivan Lucas
     * @param string $mysqldate - A date column from mysql
+    * @param bool $utc - TRUE = Timestamp given is UTC
+    *                    FALSE = Timestamp as system time
     * @returns integer. a UNIX Timestamp
 */
-function mysql2date($mysqldate)
+function mysql2date($mysqldate, $utc = FALSE)
 {
     // for the zero/blank case, return 0
     if (empty($mysqldate))
@@ -3465,11 +3467,13 @@ function mysql2date($mysqldate)
         $hour = substr($mysqldate,11,2);
         $minute = substr($mysqldate,14,2);
         $second = substr($mysqldate,17,2);
-        $phpdate = mktime($hour,$minute,$second,$month,$day,$year);
+        if ($utc) $phpdate = gmmktime($hour,$minute,$second,$month,$day,$year);
+        else $phpdate = mktime($hour,$minute,$second,$month,$day,$year);
     }
     else
     {
-        $phpdate = mktime(0, 0, 0, $month, $day, $year);
+        if ($utc) $phpdate = gmmktime(0, 0, 0, $month, $day, $year);
+        else $phpdate = mktime(0, 0, 0, $month, $day, $year);
     }
 
     return $phpdate;
