@@ -59,7 +59,7 @@ function display_holiday_table($result)
             echo user_realname($holiday->userid,TRUE);
             echo "</a></td>";
         }
-        echo "<td>".ldate($CONFIG['dateformat_longdate'], mysql2date($holiday->date))."</td>";
+        echo "<td>".date($CONFIG['dateformat_longdate'], mysql2date($holiday->date))."</td>";
         echo "<td>";
         if ($holiday->length=='am') echo $GLOBALS['strMorning'];
         if ($holiday->length=='pm') echo $GLOBALS['strAfternoon'];
@@ -245,7 +245,7 @@ else
         {
             while ($holiday = mysql_fetch_object($result))
             {
-                $holidaylist .= ldate('l j F Y', mysql2date($holiday->date)).", ";
+                $holidaylist .= date('l j F Y', mysql2date($holiday->date)).", ";
                 if ($holiday->length == 'am') $holidaylist .= $strMorning;
                 if ($holiday->length == 'pm') $holidaylist .= $strAfternoon;
                 if ($holiday->length == 'day') $holidaylist .= $strFullDay;
