@@ -169,9 +169,9 @@ ini_set('default_charset', $i18ncharset);
 //**** Begin functions ****//
 
 /**
-    * Strip slashes from an array
-    * @param $data an array
-    * @return An array with slashes stripped
+  * Strip slashes from an array
+  * @param $data an array
+  * @return An array with slashes stripped
 */
 function stripslashes_array($data)
 {
@@ -191,15 +191,15 @@ function stripslashes_array($data)
 
 
 /**
-    * Make an external variable safe for database and HTML display
-    * @author Ivan Lucas, Kieran Hogg
-    * @param mixed $var variable to replace
-    * @param bool $striphtml whether to strip html
-    * @param bool $transentities whether to translate all aplicable chars (true) or just special chars (false) into html entites
-    * @param bool $mysqlescape whether to mysql_escape()
-    * @param array $disallowedchars array of chars to remove
-    * @param array $replacechars array of chars to replace as $orig => $replace
-    * @returns variable
+  * Make an external variable safe for database and HTML display
+  * @author Ivan Lucas, Kieran Hogg
+  * @param mixed $var variable to replace
+  * @param bool $striphtml whether to strip html
+  * @param bool $transentities whether to translate all aplicable chars (true) or just special chars (false) into html entites
+  * @param bool $mysqlescape whether to mysql_escape()
+  * @param array $disallowedchars array of chars to remove
+  * @param array $replacechars array of chars to replace as $orig => $replace
+  * @returns variable
 */
 function cleanvar($vars, $striphtml = TRUE, $transentities = TRUE,
                 $mysqlescape = TRUE, $disallowedchars = array(),
