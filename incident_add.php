@@ -201,9 +201,6 @@ elseif ($action == 'findcontact')
     {
         $sql .= "AND c.id = '$contactid' ";
     }
-
-debug_log($sql);
-
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
     if (mysql_num_rows($result) > 0)
@@ -235,7 +232,6 @@ debug_log($sql);
 
         while ($contactrow = mysql_fetch_array($result))
         {
-            debug_log('hello'.print_r($contactrow, true));
             if (empty($CONFIG['preferred_maintenance']) OR
                 (is_array($CONFIG['preferred_maintenance']) AND
                     in_array(servicelevel_id2tag($contactrow['servicelevelid']),
@@ -475,7 +471,10 @@ elseif ($action=='incidentform')
         {
             echo "<label for='software'>{$strSkill}</label><br />".softwareproduct_drop_down('software', 1, $productid);
         }
+        echo " <label>{$strVersion}: <input maxlength='50' name='productversion' size='8' type='text' /></label> \n";
+        echo " <label>{$strServicePacksApplied}: <input maxlength='100' name='productservicepacks' size='8' type='text' /></label>\n";
         echo "</td></tr>";
+
         if (site_count_inventory_items($siteid) > 0)
         {
             $items_array[0] = '';
@@ -551,11 +550,23 @@ elseif ($action=='incidentform')
         $updaterow=mysql_fetch_array($result);
         $mailed_subject=$updaterow['subject'];
 
-        echo "<tr><th>{$strIncidentTitle}</th><td><input class='required' name='incidenttitle'";
-        echo " size='50' type='text' value='".htmlspecialchars($mailed_subject,ENT_QUOTES)."' />";
-        echo "<span class='required'>{$strRequired}</span></td></tr>\n";
-        echo "<tr><td colspan='2'>&nbsp;</td></tr>\n";
+        echo "<tr><td><label for='incidenttitle'>{$strIncidentTitle}</label><br />";
+        echo "<input class='required' maxlength='200' id='incidenttitle' ";
+        echo "name='incidenttitle' size='50' type='text' value=\"".htmlspecialchars($mailed_subject,ENT_QUOTES)."\" />";
+        echo " <span class='required'>{$strRequired}</span></td>\n";
+        echo "<td>";
+        if ($type == 'free')
+        {
+            echo "<th>{$strServiceLevel}</th><td>".serviceleveltag_drop_down('servicelevel',$CONFIG['default_service_level'], TRUE)."</td>";
+            echo "<th>{$strSkill}</th><td>".software_drop_down('software', 0)."</td></tr>";
+        }
+        else
+        {
+            echo "<label for='software'>{$strSkill}</label><br />".softwareproduct_drop_down('software', 1, $productid);
+        }
+        echo "</td></tr>";
 
+        echo "<tr><td colspan='2'>&nbsp;</td></tr>\n";
         echo "<tr><th>{$strProblemDescription}<br /><span style='font-weight: normal'>{$strReceivedByEmail}</span></th>";
         echo "<td>".parse_updatebody($mailed_body_text)."</td></tr>\n";
         echo "<tr><td class='shade1' colspan='2'>&nbsp;</td></tr>\n";
