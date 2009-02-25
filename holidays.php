@@ -177,7 +177,7 @@ $totaltaken = 0;
 
 foreach ($holidaytype AS $htypeid => $htype)
 {
-    $sql = "SELECT *, UNIX_TIMESTAMP(`date`) AS date FROM `{$dbHolidays}` ";
+    $sql = "SELECT * FROM `{$dbHolidays}` ";
     $sql .= "WHERE userid='{$user}' AND type={$htypeid} ";
     $sql.= "AND (approved=".HOL_APPROVAL_GRANTED." OR (approved=".HOL_APPROVAL_GRANTED_ARCHIVED." AND date >= FROM_UNIXTIME($now))) ORDER BY date ASC ";
     $result = mysql_query($sql);
@@ -189,6 +189,7 @@ foreach ($holidaytype AS $htypeid => $htype)
         echo "<tr class='shade2'><td colspan='4'><strong>{$htype}</strong>:</td></tr>";
         while ($dates = mysql_fetch_object($result))
         {
+            $dates->date = mysql2date($dates->date, TRUE);
             echo "<tr class='shade1'>";
             echo "<td colspan='2'>".ldate('l', $dates->date, TRUE)." ";
             if ($dates->length == 'am') echo "<u>{$strMorning}</u> ";
