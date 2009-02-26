@@ -30,10 +30,6 @@ if (empty($_REQUEST['mode']))
     echo "<table align='center' class='vertical'>";
     echo "<tr><th>{$strFilter}: {$strTag}</th><td><input type='text' ";
     echo "name='filtertags' value='' size='15' /></td></tr>";
-    echo "<tr><th>{$strFilter}: {$strSiteType}:</td>";
-    echo "<td>";
-    echo sitetype_drop_down('filtertype', 0);
-    echo "</td></tr>";
     echo "<tr><th>{$strInclude}: {$strProducts}</th>";
     echo "<td>";
     $sql   = "SELECT * FROM `{$dbProducts}` ORDER BY name";
@@ -59,7 +55,7 @@ if (empty($_REQUEST['mode']))
     }
     echo "</select>";
     echo "</td></tr>\n";
-    
+
     $sql = "SELECT * FROM `{$dbSiteTypes}`";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
@@ -67,14 +63,14 @@ if (empty($_REQUEST['mode']))
     {
         echo "<tr><th>{$strSiteType}</th><td>";
         echo "<select name='sitetype[]' multiple='multiple' size='6'>";
-    	while ($obj = mysql_fetch_object($result))
+        while ($obj = mysql_fetch_object($result))
         {
             echo "<option value='{$obj->typeid}'>$obj->typename</option>\n";
         }
         echo "</select>";
         echo "</td></tr>\n";
     }
-    
+
     echo "<tr><td  colspan='2'><label><input type='checkbox' name='activeonly'";
     echo " value='yes' /> {$strShowActiveOnly}</label></td></tr>";
 
@@ -155,11 +151,12 @@ elseif ($_REQUEST['mode'] == 'report')
     $sql .= "LEFT JOIN `{$dbContacts}` AS c ON sc.contactid = c.id ";
     $sql .= "LEFT JOIN `{$dbSites}` AS s ON c.siteid = s.id ";
 
+    $sitetypecount = count($sitetype);
+
     if (empty($incsql) == FALSE OR empty($excsql) == FALSE OR
-        $_REQUEST['activeonly'] == 'yes' OR !empty($filtertype))
+        $_REQUEST['activeonly'] == 'yes' OR $sitetypecount > 0)
     {
         $sql .= "WHERE ";
-        if (!empty($filtertype)) $sql .= "s.typeid = {$filtertype} ";
     }
 
     if ($_REQUEST['activeonly'] == 'yes')
@@ -178,31 +175,24 @@ elseif ($_REQUEST['mode'] == 'report')
         !empty($incsql)) $sql .= "AND ";
         $sql .= "$excsql";
     }
-    
-    $sitetypecount = count($sitetype);
-    print_r($sitetype);
+
     if  ($sitetypecount > 0)
     {
-    	$s = "AND (";
+        if (!empty($incsql) OR !empty($excsql)) $sql .= " AND ";
+        $s = " (";
         for ($i = 0; $i < $sitetypecount; $i++)
         {
             // $html .= "{$_POST['exc'][$i]} <br />";
-            $s .= "s.typeid = {$sitetype[$i]}";
-            if ($i < ($sitetypecount-1)) $s  .= " AND ";
+            $s .= "s.typeid = ".cleanvar($sitetype[$i]);
+            if ($i < ($sitetypecount - 1)) $s  .= " AND ";
         }
         $s .= ")";
-        
+
         $sql .= $s;
     }
 
-
     $sql .= " ORDER BY c.email ASC ";
 
-echo "<p><strong>incsql</strong> $incsql</p>";
-echo "<p><strong>excsql</strong> $incsql</p>";
-echo "<p><strong>sql</strong> $sql</p>";
-
-debug_log($sql);
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     $numrows = mysql_num_rows($result);
