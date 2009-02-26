@@ -304,7 +304,7 @@ function give_overview()
                         $openCallsGroup += $amount;
                     //}
                 }
-                echo "<tr><th>{$GLOBALS['strTotalOpen']'}</th>";
+                echo "<tr><th>{$GLOBALS['strTotalOpen']}</th>";
                 echo "<td class='shade2' align='left'><strong>{$openCallsGroup}</strong></td></tr></table></td>";
             }
         }
