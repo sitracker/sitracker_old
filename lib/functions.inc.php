@@ -2227,7 +2227,6 @@ function sit_error_handler($errno, $errstr, $errfile, $errline, $errcontext)
 
     if (defined('E_STRICT')) $errortype[E_STRICT] = 'Strict Runtime notice';
 
-
     $trace_errors = array(E_ERROR, E_USER_ERROR);
 
     $user_errors = E_USER_ERROR | E_USER_WARNING | E_USER_NOTICE;
@@ -2236,26 +2235,37 @@ function sit_error_handler($errno, $errstr, $errfile, $errline, $errcontext)
     $notices = E_NOTICE | E_USER_NOTICE;
     if (($errno & $user_errors) OR ($errno & $system_errors))
     {
+        if (empty($CONFIG['error_logfile']) === FALSE AND is_writable($CONFIG['error_logfile']) === TRUE)
+        {
+            $displayerrors = FALSE;
+        }
+        else
+        {
+            $displayerrors = TRUE;
+        }
         if ($errno & $notices) $class = 'info';
         elseif ($errno & $warnings) $class = 'warning';
         else $class='error';
         $backtrace = debug_backtrace();
         if (php_sapi_name() != 'cli')
         {
-            echo "<p class='{$class}'><strong>{$errortype[$errno]} [{$errno}]</strong><br />";
-            echo "{$errstr} in {$errfile} @ line {$errline}";
             $tracelog = '';
-            if ($CONFIG['debug']) echo "<br /><strong>Backtrace</strong>:";
+            if ($displayerrors)
+            {
+                echo "<p class='{$class}'><strong>{$errortype[$errno]} [{$errno}]</strong><br />";
+                echo "{$errstr} in {$errfile} @ line {$errline}";
+                if ($CONFIG['debug']) echo "<br /><strong>Backtrace</strong>:";
+            }
             foreach ($backtrace AS $trace)
             {
                 if (!empty($trace['file']))
                 {
-                    if ($CONFIG['debug']) echo "<br />{$trace['file']} @ line {$trace['line']}";
+                    if ($CONFIG['debug'] AND $displayerrors) echo "<br />{$trace['file']} @ line {$trace['line']}";
                     $tracelog .= "{$trace['file']} @ line {$trace['line']}";
                     if (!empty($trace['function']))
                     {
                         $tracelog .= " {$trace['function']}()";
-                        echo " {$trace['function']}() ";
+                        if ($displayerrors) echo " {$trace['function']}() ";
 //                         foreach ($trace['args'] AS $arg)
 //                         {
 //                             echo "$arg &bull; ";
@@ -2280,26 +2290,29 @@ function sit_error_handler($errno, $errstr, $errfile, $errline, $errcontext)
             }
 
             debug_log($logentry);
-            echo "</p>";
-            // Tips, to help diagnose errors
-            if (strpos($errstr, 'Unknown column') !== FALSE OR
-                preg_match("/Table '(.*)' doesn't exist/", $errstr))
+            if ($displayerrors)
             {
-                echo "<p class='tip'>The SiT schema may need updating to fix this problem.";
-                if (user_permission($sit[2], 22)) echo "Visit <a href='setup.php'>Setup</a>"; // Only show this to admin
                 echo "</p>";
-            }
-            if (strpos($errstr, 'headers already sent') !== FALSE)
-            {
-                echo "<p class='tip'>This warning may be caused by a problem that occurred before the ";
-                echo "page was displayed, or sometimes by a syntax error or ";
-                echo "extra whitespace in your config file.</p>";
-            }
+                // Tips, to help diagnose errors
+                if (strpos($errstr, 'Unknown column') !== FALSE OR
+                    preg_match("/Table '(.*)' doesn't exist/", $errstr))
+                {
+                    echo "<p class='tip'>The SiT schema may need updating to fix this problem.";
+                    if (user_permission($sit[2], 22)) echo "Visit <a href='setup.php'>Setup</a>"; // Only show this to admin
+                    echo "</p>";
+                }
+                if (strpos($errstr, 'headers already sent') !== FALSE)
+                {
+                    echo "<p class='tip'>This warning may be caused by a problem that occurred before the ";
+                    echo "page was displayed, or sometimes by a syntax error or ";
+                    echo "extra whitespace in your config file.</p>";
+                }
 
-            if (strpos($errstr, 'You have an error in your SQL syntax') !== FALSE OR
-                strpos($errstr, 'Query Error Incorrect table name') !== FALSE)
-            {
-                echo "<p class='tip'>You may have found a bug in SiT, please <a href=\"{$CONFIG['bugtracker_url']}\">report it</a>.</p>";
+                if (strpos($errstr, 'You have an error in your SQL syntax') !== FALSE OR
+                    strpos($errstr, 'Query Error Incorrect table name') !== FALSE)
+                {
+                    echo "<p class='tip'>You may have found a bug in SiT, please <a href=\"{$CONFIG['bugtracker_url']}\">report it</a>.</p>";
+                }
             }
         }
         else
