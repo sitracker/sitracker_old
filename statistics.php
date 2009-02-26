@@ -452,7 +452,6 @@ function give_overview()
 
     mysql_free_result($result);
 
-    $string .= "<h2>{$GLOBALS['strCustomerFeedback']}</h2>";
     $totalresult=0;
     $numquestions=0;
     $qsql = "SELECT * FROM `{$GLOBALS['dbFeedbackQuestions']}` WHERE formid='1' AND type='rating' ORDER BY taborder";
@@ -461,6 +460,7 @@ function give_overview()
 
     if (mysql_num_rows($qresult) >= 1)
     {
+        $string .= "<h2>{$GLOBALS['strCustomerFeedback']}</h2>";
         $string .= "<table align='center' class='vertical'>";
         while ($qrow = mysql_fetch_object($qresult))
         {
