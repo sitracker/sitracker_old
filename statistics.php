@@ -296,7 +296,7 @@ function give_overview()
                 {
                     echo "<tr><th>{$GLOBALS[$rowGroup->name]}</th><td class='shade2' align='left'>";
                     //FIXME - HACK, no idea why this is needed
-                    $amount = $rowGroup->count / 8;
+                    $amount = round($rowGroup->count / 8);
                     echo "{$amount}</td></tr>";
 
                     //if (strpos(strtolower($rowGroup['name']), "clos") === false)
