@@ -192,7 +192,7 @@ $CONFIG['journal_purge_after'] = 60 * 60 * 24 * 180;  // 180 Days
 // When left blank this defaults to $CONFIG['application_webpath'], setting that here will take the value of the default
 $CONFIG['logout_url'] = '';
 
-$CONFIG['error_logfile'] = "{$CONFIG['application_fspath']}logs/sit.log";
+$CONFIG['error_logfile'] = '';
 
 // Filename to log authentication failures
 $CONFIG['access_logfile'] = '';
