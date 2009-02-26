@@ -51,15 +51,15 @@ switch ($_REQUEST['mode'])
         $triggerowner = db_read_column('userid', $dbTriggers, $id);
         if ($triggerowner == 0 AND !user_permission($sit[2], 72))
         {
-            html_redirect($_SERVER['PHP_SELF']."?user={$selecteduser}", FALSE);
+            html_redirect($_SERVER['PHP_SELF']."?user={$selecteduser}", FALSE, $strPermissionDenied);
         }
-        elseif ($triggerowner != 0 AND $triggerowner != $sit[2])
+        elseif ($triggerowner != 0 AND $triggerowner != $sit[2] AND !user_permission($sit[2], 72))
         {
-            html_redirect($_SERVER['PHP_SELF']."?user={$selecteduser}", FALSE);
+            html_redirect($_SERVER['PHP_SELF']."?user={$selecteduser}", FALSE, $strPermissionDenied);
         }
         elseif ($triggerowner == $sit[2] AND !user_permission($sit[2], 71))
         {
-            html_redirect($_SERVER['PHP_SELF']."?user={$selecteduser}", FALSE);
+            html_redirect($_SERVER['PHP_SELF']."?user={$selecteduser}", FALSE, $strPermissionDenied);
         }
         else
         {
