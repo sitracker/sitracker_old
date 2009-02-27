@@ -106,10 +106,10 @@ define ("REASON_INCIDENT_CLOSED", 2);
   * Begin global variable definitions
 **/
 // Version number of the application, (numbers only)
-$application_version = '3.45';
+$application_version = '3.50';
 
 // Revision string, e.g. 'beta2' or 'svn' or ''
-$application_revision = '';
+$application_revision = 'svn';
 
 // The number of errors that have occurred
 $siterrors = 0;
