@@ -11,7 +11,6 @@
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>, Tom Gerrard
 // 7Oct02 INL  Added support for maintenanceid to be put into incidents table
 
-
 $permission = 5;
 require ('core.php');
 require (APPLICATION_LIBPATH . 'functions.inc.php');
@@ -104,14 +103,8 @@ if (!empty($incomingid) AND empty($updateid)) $updateid = db_read_column('update
 
 if (empty($action) OR $action=='showform')
 {
-    // TODO This page fails XHTML validation because of dojo attributes - INL 12/12/07
-    $pagescripts = array('dojo/dojo.js');
+    $pagescripts = array('scriptaculous/scriptaculous.js','AutoComplete.js');
     include (APPLICATION_INCPATH . 'htmlheader.inc.php');
-    ?>
-    <script type="text/javascript">
-        dojo.require ("dojo.widget.ComboBox");
-    </script>
-    <?php
     echo "<h2>".icon('add', 32)." {$strAddIncident} - {$strFindContact}</h2>";
     if (empty($siteid))
     {
@@ -119,11 +112,18 @@ if (empty($action) OR $action=='showform')
         echo "<input type='hidden' name='context' value='{$context}' />";
         echo "<input type='hidden' name='updateid' value='{$updateid}' />";
         echo "<table class='vertical'>";
-        echo "<tr><th><label for='search_string'>{$strContact} ";
+        echo "<tr><th><label for='search_string'>";
         echo icon('contact', 16);
-        echo "</label></th><td>";
-        //echo "<input type='text' name='search_string' size='30' value='{$query}' />\n";
-        echo "<input dojoType='ComboBox' value='{$query}' dataUrl='ajaxdata.php?action=contact' style='width: 300px;' name='search_string' id='search_string' />";
+        echo " {$strContact}</label></th><td>";
+// FIXME this needs making into a php function for an autocomplete control
+echo "<input type='text' name='search_string' id='search_string' size='30' value='{$query}' autocomplete='off' />\n";
+?>
+<script type="text/javascript">
+new AutoComplete('search_string', 'ajaxdata.php?action=autocomplete_sitecontact&s=', {
+                                    delay: 0.25,
+                                    resultFormat: AutoComplete.Options.RESULT_FORMAT_JSON
+}); </script>
+<?php
         echo "<input type='hidden' name='win' value='{$win}' />";
         echo "<input name='submit' type='submit' value='{$strFindContact}' />";
         echo "</td></tr>";

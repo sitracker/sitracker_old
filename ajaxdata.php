@@ -139,7 +139,21 @@ switch ($action)
     break;
 
     case 'autocomplete_sitecontact':
-    break;
+        $s = cleanvar($_REQUEST['s']);
+        // JSON encoded
+        $sql = "SELECT DISTINCT forenames, surname FROM `{$dbContacts}` ";
+        $sql .= "WHERE active='true' AND (forenames LIKE '{$s}%' OR surname LIKE '{$s}%')";
+        $result = mysql_query($sql);
+        if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+        if (mysql_num_rows($result) > 0)
+        {
+            while ($obj = mysql_fetch_object($result))
+            {
+                $str .= "[\"".$obj->forenames." ".$obj->surname."\"],";
+            }
+        }
+        echo "[".substr($str,0,-1)."]";
+        break;
 
     case 'tags':
         $sql = "SELECT DISTINCT t.name FROM `{$dbSetTags}` AS st, `{$dbTags}` AS t WHERE st.tagid = t.tagid GROUP BY t.name";

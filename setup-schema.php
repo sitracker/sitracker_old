@@ -2540,6 +2540,9 @@ ALTER TABLE `{$dbTempIncoming}` ADD `reason_id` TINYINT( 1 ) NOT NULL DEFAULT '1
 UPDATE `{$dbLinkTypes}` SET origtab = 'incidents', linktab='tasks' WHERE id = 4;
 ";
 
+
+$upgrade_schema[350] = "";
+
 // Important: When making changes to the schema you must add SQL to make the alterations
 // to existing databases in $upgrade_schema[] *AND* you must also change $schema[] for
 // new installations (above the line of stars).

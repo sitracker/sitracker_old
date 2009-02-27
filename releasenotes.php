@@ -29,6 +29,11 @@ echo "<h4>This is a summary of the full release notes showing only the most impo
 
 echo "<h3><a name='3.45'>v3.45</a></h3>";
 echo "<div>";
+echo "<ul><li>Not yet released</li></ul>";
+echo "</div>";
+
+echo "<h3><a name='3.45'>v3.45</a></h3>";
+echo "<div>";
 echo "<ul>
 <li>A long awaited configuration/settings interface</li>
 <li>Much improved Inbound Email parsing and connection/error handling</li>
