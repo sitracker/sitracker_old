@@ -63,16 +63,7 @@ Installing
 
         - Copy the files to a directory on your web server
 
-        - Make the htdocs/ directory your web root
-
-        - Configure your php.ini include_path setting to point to the
-          includes/ subdirectory
-            If you cannot edit php.ini, the alternative method of
-            setting the include path is by editing
-            set_include_path.inc.php which is in the htdocs
-            directory.  If you do this you will need to edit the
-            file each time you upgrade, or back it up and restore
-            afterwards.
+        - Make the main sit/ directory your web root
 
         - In your browser visit setup.php which will prompt you
           for a few important settings and take you through the
@@ -91,17 +82,11 @@ Installing
 
 Configuring
 -----------
-After you've run setup.php and installed SiT! you will have a file
-named config.inc.php in your includes directory  This file contains
-only the basic settings that are available, for a full list of
-settings refer to the defaults.inc.php.  Copy the settings over to
-the config.inc.php before you change them, rather than modifying the
-defaults as the defaults.inc.php file will be overwritten when you
-upgrade.
+After you've run setup.php and installed SiT! you should make the
+config.inc.php in your main SiT directory read-only.
 
-When SiT! is configured we advise you to make the config.inc.php file
-read only, this will prevent setup.php being used maliciously to
-compromise your installation.
+Most SiT configuration can now be done through the web interface, log in
+with an admin account and visit SiT! -> Control Panel -> Configure
 
 
 Upgrading
@@ -117,131 +102,11 @@ a crontab or other method. (e.g. http://www.webcron.org/)
 The auto.php script can be run via HTTP or from the console.
 
 An example crontab might look like this:
-1 * * * * /usr/bin/php -f /var/www/sit/htdocs/auto.php
+1 * * * * /usr/bin/php -f /var/www/sit/auto.php
 
 The actual schedule is now configured within SiT itself by going
 to SiT! -> Control Panel -> Scheduler.  auto.php no longer accepts
 parameters.
-
-
-Inbound email
--------------
-Although at the moment we are still treating incoming email as an experimental
-feature, used at your own risk, from v3.40 onwards we support both MTA piped
-emails and scheduled mail collection from a POP or IMAP mailbox.
-
-SiT is perfectly usable without automatic inclusion of inbound email into the
-database.
-
-Either
-
- a) Set the config variable $CONFIG['enable_inbound_mail'] to 'POP/IMAP' and then
-    set the following extra config variables with details of your account and server.
-
-        $CONFIG['email_username'] = '';
-        $CONFIG['email_password'] = '';
-        $CONFIG['email_address'] = '';
-        $CONFIG['email_server'] = '';
-
-    You must set this variable to either 'imap' or 'pop' depending on your mailbox
-    type.
-
-        $CONFIG['email_servertype'] = '';
-
-    If your server is listening on a non-standard port you can set it using:
-
-        $CONFIG['email_port'] = '';
-
-    Additionally, depending on your specific requirements you can also set the
-    following.
-
-        $CONFIG['email_options'] = '';
-
-    e.g. Gmail needs '/ssl', secure Groupwise needs /novalidate-cert etc.
-        see http://uk2.php.net/imap_open for examples
-
-    You must also configure Regular Scheduled Tasks (See above) for mail
-    to be collected.
-
-or
-
- b) Set the config variable $CONFIG['enable_inbound_mail'] to 'MTA' and
-    configure your MTA to pipe emails through the inbound_email.php
-    script included with SiT.  Some helpful information regarding configuring your
-    MTA to pipe emails to a PHP script is available
-    here http://evolt.org/incoming_mail_and_php
-
-
-Creating Plugins
-----------------
-Your plugin is a regular PHP script, place your plugin in the plugins
-directory giving it a .php extension as normal.
-Set the $CONFIG['plugins'] array to include your plugin name
-(minus the .php extension)
-
-In your plugin call the function plugin_register() to set up your hook.
-
-e.g.
-plugin_register('a_context', 'my_function');
-
-the function my_function() will then be called whenever the context
-'a_context' is reached. We suggest you name your functions with a
-unique prefix to avoid clashes with existing functions or other plugins
-
-Set the following variables in your plugin, where 'myplugin' is the
-name of your plugin (minus the .php extension)
-
-$PLUGININFO['myplugin']['version']
-$PLUGININFO['myplugin']['description']
-$PLUGININFO['myplugin']['author']
-$PLUGININFO['myplugin']['legal']
-$PLUGININFO['myplugin']['sitminversion']
-$PLUGININFO['myplugin']['sitmaxversion']
-
-sitminversion and sitmaxversion should be floats that define the minimum version of SiT
-required for your plugin to run, and the maximum version you're plugin is likely to support.
-
-
-Available Plugin Contexts
--------------------------
-context                     purpose
--------                     -------
-cp_menu                     Add to the control panel menu
-edit_profile_form           Add to the edit profile form
-save_profile_form           Perform an action when the edit profile
-                             form is saved
-reports_menu                Add to the reports menu
-edit_contact_form           Add to the edit contact form
-save_contact_form           Perform an action when the edit contact
-                             form is saved
-site_created                Perform an action after a site is created
-site_details                Add to the site details page
-edit_site_form              Add to the edit site form
-feedback_reports_menu       Add to the feedback reports menu
-incident_created            Perform an action after an incident is
-                             created
-incident_created_contract   Perform an action after an incident is
-                             created and logged against a contract
-incident_created_site       Perform an action after an incident is
-                             created and logged against a site
-incident_closed             Perform an action after an incident is
-                             closed
-new_incident_form           Add to the new incident form
-edit_incident_form          Add to the edit incident form
-incident_edited             Perform an action after an incident is
-                             updated
-incident_details            Add to the incident details page
-holiday_chart_cal           Add to the top of the holiday chart page
-add_user_form               Add to the add user form
-statistics_table_overview   Add to the statistics table
-about                       Add to the about page
-user_created                Perform an action after a user has been
-                             created
-trigger_actions             Add a trigger action
-
-If your plugin needs to use additional pages, put those pages in a
-subdirectory (named for your plugin) inside htdocs/ext
-(e.g.  htdocs/ext/myplugin/mypage.php)
 
 
 Getting Help

@@ -12,10 +12,6 @@ To upgrade simply copy all the new files over the existing ones being
 careful not to overwrite your config.inc.php or any custom themes you
 might have.
 
-If you cannot edit php.ini and have set the include path using the
-alternative method of editing set_include_path.inc.php you will need
-to edit this file again and set the path anew.
-
 Then run setup.php in your browser and follow the instructions on-screen.
 
 Further instructions and notes about specific upgrades follow, if you
@@ -24,20 +20,60 @@ everything carefully to make sure you've met all the requirements:
 
 Upgrading to 3.45
 -----------------
-The config variable $CONFIG['support_manager_email'] is now obsolete
-and has been removed, if you have configured this it will be ignored.
-You must set $CONFIG['support_manager'] to the user ID for your support
-manager instead, this defaults to 1 which is your first user in the
-system, usually your SiT Administrator.
+    ** Please read these instructions carefully **
+    ** your upgrade may fail if you do not **
+
+The file layout of SiT! has changed a lot from the last release (namely all
+files from /htdocs/ are now in the directory above), so the recommendations
+are as follows:
+
+    * Backup your /includes/config.inc.php file
+    * Backup your /attachments/ folder
+    * Backup any customised files, plugins, themes and i18n files
+    * Delete all the files from your entire sit install (leaving your
+      database alone)
+    * Unpack the new version
+    * (Optional) If you have set /htdocs/ to be your web root, this needs to
+      be changed to be the directory above now
+    * Update your $CONFIG['application_webpath'] to point to the new location,
+      for example from /sit/htdocs/ to /sit/
+    * Move your attachments directory outside of the web root, or make it
+      secure using .htaccess (or the equivalent for your web server)
+    * Remove any existing php include_path settings for SiT, this is no
+      longer required
+    * Update your cron to point to the new location of auto.php
+    * Edit your config.inc.php file to set $CONFIG['attachment_fspath'] to
+      point to the new location of your attachments directory
+    * Put your config.inc.php back into the root sit directory
+    * Access setup.php in your browser to complete the upgrade
+
+All custom settings that are in your config.inc.php except attachment location
+and database settings will automatically be transferred to database storage,
+this is an automatic process.
+
+In previous versions it was possible for a single user to have multiple
+incident activities running simultaneously, this functionality was never
+intended and has been removed for this release (Mantis 434). From this release
+onwards only one activity per user per incident is allowed to run at once.
+
+Plugins designed for any version prior to 3.45 will not work with 3.45 without
+being modified, see the Creating Plugins page for the latest plugin documentation.
+
+The config variable $CONFIG['support_manager_email'] is now obsolete and has
+been removed, if you have configured this it will be ignored. You must visit
+SiT! | Control Panel | Configure and to Application | Other to set your
+support manager instead, this defaults to the first user in the system,
+usually your SiT Administrator.
 
 A new config variable $CONFIG['default_entitlement'] has been created which
 allows you to specify a number of days holiday entitlement to give to new
-users as they are added.  This won't affect any existing users.  We've set this
+users as they are added. This won't affect any existing users. We've set this
 to 21 days, but you can of course alter it.
 
-The SiT integrated spellcheck feature has been removed, it has been unmaintained
-for a few years and browsers like Firefox do a much better job of spellcheck
-anyway.
+The SiT integrated spellcheck feature has been removed, it has been
+unmaintained for a few years and browsers like Firefox do a much better job of
+spellcheck anyway.
+
 
 Upgrading to 3.41
 -----------------

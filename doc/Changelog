@@ -1,31 +1,50 @@
-Changes in v3.45 - Unreleased
+Changes in v3.45 - Released 27 February 2009
 -----------------------------------------------------------------------
-- 0000480: [other] Rename 'chase' (ivan) - resolved.
-- 0000495: [i18n] i18n missing for TRIGGER_HIDDEN_ERROR (kieran) - resolved.
-- 0000492: [other] Need to secure attachments dir (ivan) - resolved.
-- 0000490: [other] Attachments via updates use old method (kieran) - resolved.
-- 0000491: [other] Can't turn errors off (ivan) - resolved.
-- 0000456: [portal] Portal uses unchecked variables (ivan) - resolved.
-- 0000219: [i18n] Hardcoded text in : Triggers --> Add trigger --> template pull down menu (kieran) - resolved.
-- 0000257: [inbound email] No contract found matching <name of sender> (ivan) - resolved.
-- 0000340: [holidays] Holiday requests are broken by various email clients (ivan) - resolved.
-- 0000278: [incidents] Finding contracts when adding incidents does not find "Pan, Peter" (ivan) - resolved.
-- 0000482: [incidents] Related incident shows this incident's title (ivan) - resolved.
-- 0000437: [reports] SQL error reported on External Engineer Call Distribution report (ivan) - resolved.
-- 0000479: [other] oxygen/16x16/messageflag.png missing (kieran) - resolved.
-- 0000473: [holidays] Booking one days holiday tries to book two (ivan) - resolved.
-- 0000476: [knowledge base] kbarticles.published is 0000-00-00 00:00:00 (ivan) - resolved.
 - 0000471: [setup/config] When changing settings on the "Service levels" page, the incorrect flags are written to the DB - resolved.
-- 0000467: [other] Gravatars broken (ivan) - resolved.
-- 0000280: [setup/config] in reconfigure - option to remove the example data (ivan) - resolved.
 - 0000307: [reports] feedback6.php and feedback7.php should be renamed (ivan) - resolved.
-- 0000416: [other] {userrealname} replaces incorrectly (kieran) - resolved.
+- 0000495: [i18n] i18n missing for TRIGGER_HIDDEN_ERROR (kieran) - resolved.
+- 0000509: [contracts] missing one bracket - resolved.
+- 0000510: [contracts] link file name is wrong (ivan) - resolved.
+- 0000479: [other] oxygen/16x16/messageflag.png missing (kieran) - resolved.
+- 0000340: [holidays] Holiday requests are broken by various email clients (ivan) - resolved.
+- 0000492: [other] Need to secure attachments dir (ivan) - resolved.
+- 0000491: [other] Can't turn errors off (ivan) - resolved.
+- 0000490: [other] Attachments via updates use old method (kieran) - resolved.
+- 0000480: [other] Rename 'chase' (ivan) - resolved.
+- 0000482: [incidents] Related incident shows this incident's title (ivan) - resolved.
 - 0000317: [outbound email] Unable to set visibility on manually created emails (ivan) - resolved.
-- 0000320: [outbound email] cant create templates of type incident (ivan) - resolved.
-- 0000134: [scheduler] auto_chase uses deprecated send_template_email() function (ivan) - resolved.
-- 0000460: [other] html_redirect problems outside of htdocs (ivan) - resolved.
+ - 0000320: [outbound email] cant create templates of type incident (ivan) - resolved.
+- 0000507: [reports] report incidents by engineer does not check input (paulh) - resolved.
+- 0000476: [knowledge base] kbarticles.published is 0000-00-00 00:00:00 (ivan) - resolved.
+- 0000416: [other] {userrealname} replaces incorrectly (kieran) - resolved.
 - 0000452: [setup/config] Array type config variables broken (ivan) - resolved.
+- 0000456: [portal] Portal uses unchecked variables (ivan) - resolved.
 - 0000459: [knowledge base] Editing kb articles removes Additional Infos (ivan) - resolved.
+- 0000460: [other] html_redirect problems outside of htdocs (ivan) - resolved.
+- 0000465: [triggers] Too many new lines in trigger emails (ivan) - resolved.
+- 0000473: [holidays] Booking one days holiday tries to book two (ivan) - resolved.
+- 0000437: [reports] SQL error reported on External Engineer Call Distribution report (ivan) - resolved.
+- 0000494: [dashboard] edit dashlet items broken (ivan) - resolved.
+- 0000497: [other] Release notes (ivan) - resolved.
+- 0000134: [scheduler] auto_chase uses deprecated send_template_email() function (ivan) - resolved.
+- 0000257: [inbound email] No contract found matching <name of sender> (ivan) - resolved.
+- 0000523: [outbound email] Outbound email appears as blank when rx'd in some clients (ivan) - resolved.
+- 0000467: [other] Gravatars broken (ivan) - resolved.
+- 0000219: [i18n] Hardcoded text in : Triggers --> Add trigger --> template pull down menu (kieran) - resolved.
+- 0000525: [other] Error on statistics page (ivan) - resolved.
+- 0000511: [incidents] cant delete multiple items from holding queue (paulh) - resolved.
+- 0000521: [outbound email] Outbound email requires php imap extension (ivan) - resolved.
+- 0000526: [incidents] Add incident page doesn't ask for version number / service pack (ivan) - resolved.
+- 0000529: [triggers] Cannot delete another users trigger actions (ivan) - resolved.
+- 0000498: [incidents] Unable to add incident (ivan) - resolved.
+- 0000499: [profiles] Timezone not displaying correctly (ivan) - resolved.
+- 0000280: [setup/config] in reconfigure - option to remove the example data (ivan) - resolved.
+- 0000278: [incidents] Finding contracts when adding incidents does not find "Pan, Peter" (ivan) - resolved.
+- 0000504: [portal] Errors in the portal (ivan) - resolved.
+- 0000505: [reports] Ability to filter marketing report by site type (ivan) - resolved.
+- 0000198: [triggers] Trigger error after approving a billable incident (ivan) - resolved.
+- 0000441: [billing] upgrade transactions to new format (paulh) - resolved.
+- 0000502: [other] html_redirect problems outside of / - resolved.
 - 0000477: [timesheet] unable to decline timesheets (paulh) - resolved.
 - 0000469: [reports] Links from within the Reports pages do not redirect correctly - resolved.
 - 0000214: [incidents] Re-arrange add-incident form to avoid scrolling (ivan) - resolved.
