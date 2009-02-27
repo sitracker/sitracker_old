@@ -152,6 +152,17 @@ switch ($action)
                 $str .= "[\"".$obj->forenames." ".$obj->surname."\"],";
             }
         }
+        $sql = "SELECT DISTINCT name FROM `{$dbSites}` ";
+        $sql .= "WHERE active='true' AND name LIKE '{$s}%'";
+        $result = mysql_query($sql);
+        if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+        if (mysql_num_rows($result) > 0)
+        {
+            while ($obj = mysql_fetch_object($result))
+            {
+                $str .= "[\"".$obj->name."\"],";
+            }
+        }
         echo "[".substr($str,0,-1)."]";
         break;
 
