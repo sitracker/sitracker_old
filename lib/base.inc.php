@@ -109,7 +109,7 @@ define ("REASON_INCIDENT_CLOSED", 2);
 $application_version = '3.45';
 
 // Revision string, e.g. 'beta2' or 'svn' or ''
-$application_revision = 'beta2';
+$application_revision = '';
 
 // The number of errors that have occurred
 $siterrors = 0;
