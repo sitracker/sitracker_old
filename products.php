@@ -123,7 +123,7 @@ if (empty($productid) AND $display!='skills')
             echo "<td>";
             if ($software['lifetime_start'] > 1)
             {
-                echo ldate($CONFIG['dateformat_shortdate'],mysql2date($software['lifetime_start'])).' {$strTo} ';
+                echo ldate($CONFIG['dateformat_shortdate'],mysql2date($software['lifetime_start']))." {$strTo} ";
             }
             else
             {
@@ -200,7 +200,7 @@ elseif (empty($productid) AND ($display=='skills' OR $display=='software'))
             echo "<td>";
             if ($software->lifetime_start > 1)
             {
-                echo ldate($CONFIG['dateformat_shortdate'],$lifetime_start).' {$strTo} ';
+                echo ldate($CONFIG['dateformat_shortdate'],$lifetime_start)." {$strTo} ";
             }
             else
             {
@@ -280,7 +280,7 @@ else
                     echo "<td>";
                     if ($software['lifetime_start'] > 1)
                     {
-                        echo ldate($CONFIG['dateformat_shortdate'],mysql2date($software['lifetime_start'])).' {$strTo} ';
+                        echo ldate($CONFIG['dateformat_shortdate'],mysql2date($software['lifetime_start']))." {$strTo} ";
                     }
                     else
                     {
