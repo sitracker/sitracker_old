@@ -16,7 +16,7 @@ $permission = 27; // View your calendar FIXME
 if (realpath(__FILE__) == realpath($_SERVER['SCRIPT_FILENAME']))
 {
     require_once ('../core.php');
-    require_once (APPLICATION_LIBPATH . 'unctions.inc.php');
+    require_once (APPLICATION_LIBPATH . 'functions.inc.php');
     // This page requires authentication
     require_once(APPLICATION_LIBPATH . 'auth.inc.php');
 }
