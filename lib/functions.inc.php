@@ -6329,7 +6329,7 @@ function upload_file($file, $incidentid, $updateid, $type='public')
 * @return table row of format <tr><th /><td /></tr>
 * @author Paul Heaney
 */
-function group_user_selector($title, $level="engineer", $groupid)
+function group_user_selector($title, $level="engineer", $groupid, $type='radio')
 {
     global $dbUsers, $dbGroups;
     $str .= "<tr><th>{$title}</th>";
@@ -6342,7 +6342,14 @@ function group_user_selector($title, $level="engineer", $groupid)
 
     while ($row = mysql_fetch_object($result))
     {
-        $str .= "<input type='radio' name='group' value='byweek' onclick='groupMemberSelect(\"{$row->name}\")' ";
+        if ($type == 'radio')
+        {
+            $str .= "<input type='radio' name='group' id='{$row->name}' onclick='groupMemberSelect(\"{$row->name}\", \"TRUE\")' ";
+        }
+        elseif ($type == 'checkbox')
+        {
+        	$str .= "<input type='checkbox' name='{$row->name}' id='{$row->name}' onclick='groupMemberSelect(\"{$row->name}\", \"FALSE\")' ";
+        }
 
         if ($groupid == $row->id)
         {
@@ -6388,7 +6395,7 @@ function group_user_selector($title, $level="engineer", $groupid)
     $str .= "</tr>\n";
 
     // FIXME make this XHTML valid
-    $str .= "<script type='text/javascript'>\n//<![CDATA[\ngroupMemberSelect(\"{$groupname}\");\n//]]>\n</script>";
+    $str .= "<script type='text/javascript'>\n//<![CDATA[\ngroupMemberSelect(\"{$groupname}\", \"TRUE\");\n//]]>\n</script>";
 
     return $str;
 }

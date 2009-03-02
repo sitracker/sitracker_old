@@ -76,7 +76,7 @@ if (empty($action) OR $action == "showform")
             else $class = "shade2";
         }
         echo "</table>";
-        echo "<p><input name='reset' type='reset' value='$strReset' />";
+        echo "<p><input name='reset' type='reset' value='{$strReset}' />";
         echo "<input type='hidden' name='action' value='update' />";
         echo "<input name='submit' type='submit' value='{$strSave}' /></p>";
         echo "</form>";

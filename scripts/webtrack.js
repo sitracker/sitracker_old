@@ -584,15 +584,27 @@ function doSelect(select, element)
     }
 }
 
-function groupMemberSelect(group)
+function groupMemberSelect(group, clear)
 {
-    doSelect(false, 'include');
+    if (clear.toUpperCase() == "TRUE")
+    {
+        doSelect(false, 'include');
+    }
+    
     var includes = document.getElementById('include');
+    $a = $(group);
     for(i = 0; i < includes.length; i++)
     {
         if(includes[i].text.indexOf("("+group+")") > -1)
         {
-             includes[i].selected = true;
+             if ($a.checked == true)
+             {
+                includes[i].selected = true;
+             }
+             else
+             {
+                includes[i].selected = false;
+             }
         }
     }
 }
