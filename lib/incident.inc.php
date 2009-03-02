@@ -501,5 +501,30 @@ function send_email_template($templateid, $paramarray, $attach='', $attachtype='
     return $rtnvalue;
 }
 
+/**
+ * Identified if there are drafts waiting to be sent/updated on an incident
+ * @author Paul Heaney
+ * @param int $incidentid - The incidentID to check for
+ * @param string $type - The type of draft either all/email/update
+ * @return bool TRUE of there are drafts waiting false otherwise
+ */
+function drafts_waiting_on_incident($incidentid, $type='all')
+{
+    $rtn = FALSE;
+	$sql = "SELECT count(id) AS count FROM `{$GLOBALS['dbDrafts']}` WHERE incidentid = {$incidentid} ";
+    if ($type == "update") $sql .= "AND type = 'update'";
+    elseif ($type == "email") $sql .= "AND type = 'email'";
+    $result = mysql_query($sql);
+    if (mysql_error())
+    {
+        trigger_error(mysql_error(),E_USER_ERROR);
+        $rtn = FALSE;
+    }
+    
+    list($count) = mysql_fetch_array($result);
+    if ($count > 0) $rtn = TRUE;
+    
+    return $rtn;
+}
 
 ?>

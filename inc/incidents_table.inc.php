@@ -229,6 +229,12 @@ while ($incidents = mysql_fetch_array($result))
     {
         echo icon('timer', 16, $strOpenActivities).' ';
     }
+    
+    if (drafts_waiting_on_incident($incidents['id']))
+    {
+    	echo "DRAFT ";
+    }
+    
     echo "<a href=\"javascript:incident_details_window('{$incidents['id']}','incident{$incidents['id']}')\" class='info'>";
     if (trim($incidents['title']) != '')
     {
