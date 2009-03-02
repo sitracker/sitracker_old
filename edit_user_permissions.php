@@ -54,7 +54,7 @@ if (empty($action) OR $action == "showform")
             echo "<th>{$rolerow->rolename}</th>";
         }
         echo "</tr>\n";
-        $psql = "SELECT * FROM `{$dbPermissions}`";
+        $psql = "SELECT * FROM `{$dbPermissions}` ORDER BY id ASC";
         $presult = mysql_query($psql);
         $class='shade1';
         while ($perm = mysql_fetch_object($presult))
@@ -97,7 +97,7 @@ elseif ($action == "edit" && (!empty($user) OR !empty($role)))
     {
         $object = "role: ".db_read_column('rolename', $dbRoles, $role);
     }
-    echo "<h2>Set Permissions for {$object}</h2>";
+    echo "<h2>Set Permissions for {$object}</h2>"; 
     if (!empty($user)) echo "<p align='center'>Permissions that are inherited from the users role can not be changed.</p>";
 
     // Next lookup the permissions
@@ -109,7 +109,7 @@ elseif ($action == "edit" && (!empty($user) OR !empty($role)))
     {
         while ($roleperm = mysql_fetch_object($result))
         {
-           $userrolepermission[]=$roleperm->permissionid;
+           $userrolepermission[] = $roleperm->permissionid;
         }
     }
     echo "<form action='{$_SERVER['PHP_SELF']}?action=update' method='post' onsubmit=\"return confirm_action('{$strAreYouSureMakeTheseChanges}')\">";
@@ -137,7 +137,7 @@ elseif ($action == "edit" && (!empty($user) OR !empty($role)))
         $permission_array[$row['id']] = $row;
     }
 
-    $sql = "SELECT * FROM `{$dbPermissions}`";
+    $sql = "SELECT * FROM `{$dbPermissions}`  ORDER BY id ASC";
     $result= mysql_query($sql);
     $class='shade1';
 
