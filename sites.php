@@ -9,16 +9,13 @@
 //
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
-// TODO This page fails XHTML validation because of dojo attributes - INL 12/12/07
-
-
 $permission = 11; // View Sites
 require ('core.php');
 require (APPLICATION_LIBPATH . 'functions.inc.php');
 // This page requires authentication
 require (APPLICATION_LIBPATH . 'auth.inc.php');
 
-$pagescripts = array('dojo/dojo.js');
+$pagescripts = array('scriptaculous/scriptaculous.js','AutoComplete.js');
 
 // External variables
 $search_string = cleanvar($_REQUEST['search_string']);
@@ -75,13 +72,6 @@ if ($submit_value == "go")
 
 include (APPLICATION_INCPATH . 'htmlheader.inc.php');
 if ($search_string=='') $search_string='a';
-?>
-<script type="text/javascript">
-//<![CDATA[
-    dojo.require ("dojo.widget.ComboBox");
-//]]>
-</script>
-<?php
 echo "<h2>".icon('site', 32)." ";
 echo "{$strBrowseSites}</h2>";
 
@@ -91,7 +81,8 @@ echo "<td align='center'>";
 echo "<form action='{$_SERVER['PHP_SELF']}' method='get'>";
 
 echo "<p>{$strBrowseSites}: ";
-echo "<input style='width: 300px;' name='search_string' dojoType='ComboBox' dataUrl='ajaxdata.php?action=sites' />"; //onkeyup=\"autocomplete(this, 'comboresults');\"
+echo "<input type='text' id='search_string' style='width: 300px;' name='search_string' />";
+echo autocomplete('search_string', 'sites');
 echo "<input name='submit' type='submit' value='{$strGo}' /></p>";
 echo "</form>\n";
 if ($displayinactive=="true")

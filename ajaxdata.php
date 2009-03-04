@@ -197,7 +197,9 @@ switch ($action)
         break;
 
     case 'sites':
-        $sql = "SELECT DISTINCT name FROM `{$dbSites}` WHERE active='true'";
+        $s = cleanvar($_REQUEST['s']);
+        $sql = "SELECT DISTINCT name FROM `{$dbSites}` ";
+        $sql .= "WHERE active='true' AND name LIKE '{$s}%'";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
         if (mysql_num_rows($result) > 0)
