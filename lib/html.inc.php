@@ -391,4 +391,72 @@ function user_alert($message, $severity, $helpcontext = '')
 }
 
 
+/**
+* Output the html for an icon
+*
+* @param string $filename filename of the string, minus extension, we assume .png
+* @param int $size size of the icon, from: 12, 16, 32
+* @param string $alt alt text of the icon (optional)
+* @param string $title (optional)
+* @param string $id ID attribute (optional)
+* @return string $html icon html
+* @author Kieran Hogg, Ivan Lucas
+*/
+function icon($filename, $size='', $alt='', $title='', $id='')
+{
+    global $iconset, $CONFIG;
+    $sizes = array(12, 16, 32);
+
+    if (!in_array($size, $sizes) OR empty($size))
+    {
+        trigger_error("Incorrect image size for '{$filename}.png' ", E_USER_WARNING);
+        $size = 16;
+    }
+
+    $file = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR."images/icons/{$iconset}";
+    $file .= "/{$size}x{$size}/{$filename}.png";
+
+    $urlpath = "{$CONFIG['application_webpath']}images/icons/{$iconset}";
+    $urlpath .= "/{$size}x{$size}/{$filename}.png";
+
+    if (!file_exists($file))
+    {
+        $alt = "Missing icon: '$filename.png', ($file) size {$size}";
+        if ($CONFIG['debug']) trigger_error($alt, E_USER_WARNING);
+        $urlpath = dirname( __FILE__ ).DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR."images/icons/sit";
+        $urlpath .= "/16x16/blank.png";
+    }
+    $icon = "<img src=\"{$urlpath}\"";
+    if (!empty($alt))
+    {
+        $icon .= " alt=\"{$alt}\" ";
+    }
+    else
+    {
+        $alt = $filename;
+        $icon .= " alt=\"{$alt}\" ";
+    }
+    if (!empty($title))
+    {
+        $icon .= " title=\"{$title}\"";
+    }
+    else
+    {
+        $icon .= " title=\"{$alt}\"";
+    }
+
+    if (!empty($id))
+    {
+        $icon .= " id=\"{$id}\"";
+    }
+    $icon .= " />";
+
+    return $icon;
+}
+
+
+
+
+
+
 ?>
