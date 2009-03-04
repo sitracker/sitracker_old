@@ -18,6 +18,8 @@ require (APPLICATION_LIBPATH . 'functions.inc.php');
 // This page requires authentication
 require (APPLICATION_LIBPATH . 'auth.inc.php');
 
+$inlinefiles = array('jpg','jpeg','png','gif','txt','htm','html');
+
 function mime_type($file)
 {
     if (function_exists("mime_content_type"))
@@ -102,10 +104,21 @@ elseif ($access == TRUE)
         $fp = fopen($file_fspath, 'r');
         if ($fp && ($file_size !=-1))
         {
-            header("Content-Type: ".mime_type($file_fspath));
+            $ext = substr($filename, strrpos($filename, '.') + 1);
+            if (in_array($ext, $inlinefiles)) $inline = TRUE;
+            else $inline = FALSE;
+            if ($inline) header("Content-Type: ".mime_type($file_fspath));
+            else header("Content-Type: application/octet-stream");
             header("Content-Length: {$file_size}");
-            header("Content-Disposition: inline; filename=\"{$filename}\"");
+            if ($inline) header("Content-Disposition: inline; filename=\"{$filename}\"");
+            else header("Content-Disposition: attachment; filename=\"{$filename}\"");
             header("Content-Transfer-Encoding: binary");
+            if (strstr($_SERVER['HTTP_USER_AGENT'], "MSIE") AND $_SERVER['HTTPS'])
+            {
+                header('Cache-Control: private');
+                header('Pragma: private');
+            }
+
             $buffer = '';
             while (!feof($fp))
             {
