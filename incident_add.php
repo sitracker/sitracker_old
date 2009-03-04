@@ -114,16 +114,9 @@ if (empty($action) OR $action=='showform')
         echo "<table class='vertical'>";
         echo "<tr><th><label for='search_string'>";
         echo icon('contact', 16);
-        echo " {$strContact}</label></th><td>";
-// FIXME this needs making into a php function for an autocomplete control
-echo "<input type='text' name='search_string' id='search_string' size='30' value='{$query}' autocomplete='off' />\n";
-?>
-<script type="text/javascript">
-new AutoComplete('search_string', 'ajaxdata.php?action=autocomplete_sitecontact&s=', {
-                                    delay: 0.25,
-                                    resultFormat: AutoComplete.Options.RESULT_FORMAT_JSON
-}); </script>
-<?php
+        echo " {$strContact}</label></th><td>\n";
+        echo "<input type='text' name='search_string' id='search_string' size='30' value='{$query}' />\n";
+        echo autocomplete('search_string', 'autocomplete_sitecontact');
         echo "<input type='hidden' name='win' value='{$win}' />";
         echo "<input name='submit' type='submit' value='{$strFindContact}' />";
         echo "</td></tr>";

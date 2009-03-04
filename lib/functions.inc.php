@@ -4574,24 +4574,6 @@ function bbcode_toolbar($elementid)
 
 
 /**
-    * Uses calendar.js to make a popup date picker
-    * @author Ivan Lucas
-    * @param string $formelement. form element id, eg. myform.dateinputbox
-    * @returns string HTML
-*/
-function date_picker($formelement)
-{
-    global $CONFIG, $iconset;
-
-    $divid = "datediv".str_replace('.','',$formelement);
-    $html = "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/pickdate.png' ";
-    $html .= "onmouseup=\"toggleDatePicker('$divid','$formelement')\" width='16' height='16' alt='date picker' style='cursor: pointer; vertical-align: bottom;' />";
-    $html .= "\n<div id='$divid' style='position: absolute;'></div>\n";
-    return $html;
-}
-
-
-/**
     * Checks to see whether an incident exists
     * @param int $incidentid
     * @returns 'Yes', 'No' or 'Doesn't exist'

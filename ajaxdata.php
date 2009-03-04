@@ -181,14 +181,15 @@ switch ($action)
         break;
 
     case 'contact' :
-        $sql = "SELECT DISTINCT forenames, surname FROM `{$dbContacts}` WHERE active='true'";
+        $s = cleanvar($_REQUEST['s']);
+        $sql = "SELECT DISTINCT forenames, surname FROM `{$dbContacts}` ";
+        $sql .= "WHERE active='true' AND (forenames LIKE '{$s}%' OR surname LIKE '{$s}%')";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
         if (mysql_num_rows($result) > 0)
         {
             while ($obj = mysql_fetch_object($result))
             {
-                $str .= "[\"".$obj->surname."\"],";
                 $str .= "[\"".$obj->forenames." ".$obj->surname."\"],";
             }
         }

@@ -15,22 +15,22 @@ if (realpath(__FILE__) == realpath($_SERVER['SCRIPT_FILENAME']))
 }
 
 /**
-    * Generate HTML for a redirect/confirmation page
-    * @author Ivan Lucas
-    * @param string $url. URL to redirect to
-    * @param bool $success. (optional) TRUE = Success, FALSE = Failure
-    * @param string $message. (optional) HTML message to display on the page
-    *               before redirection.
-    *               This parameter is optional and only required if the default
-    *               success/failure will not suffice
-    * @returns string HTML page with redirect
-    * @note Replaces confirmation_page() from versions prior to 3.35
-    *       If a header HTML has already been displayed a continue link is printed
-    *       a meta redirect will also be inserted, which is invalid HTML but appears
-    *       to work in most browswers.
-    *
-    * @note The recommended way to use this function is to call it without headers/footers
-    *       already displayed.
+  * Generate HTML for a redirect/confirmation page
+  * @author Ivan Lucas
+  * @param string $url. URL to redirect to
+  * @param bool $success. (optional) TRUE = Success, FALSE = Failure
+  * @param string $message. (optional) HTML message to display on the page
+  *               before redirection.
+  *               This parameter is optional and only required if the default
+  *               success/failure will not suffice
+  * @returns string HTML page with redirect
+  * @note Replaces confirmation_page() from versions prior to 3.35
+  *       If a header HTML has already been displayed a continue link is printed
+  *       a meta redirect will also be inserted, which is invalid HTML but appears
+  *       to work in most browswers.
+  *
+  * @note The recommended way to use this function is to call it without headers/footers
+  *       already displayed.
 */
 function html_redirect($url, $success = TRUE, $message='')
 {
@@ -120,13 +120,13 @@ function html_redirect($url, $success = TRUE, $message='')
 
 
 /**
-    * Returns a HTML string for a checkbox
-    * @author Ivan Lucas
-    * @param string $name The HTML name attribute
-    * @param mixed $state
-    * @param string $attributes. Extra attributes for input tag
-    * @note the 'state' value should be a 1, yes, true or 0, no, false
-    * @returns string HTML
+  * Returns a HTML string for a checkbox
+  * @author Ivan Lucas
+  * @param string $name The HTML name attribute
+  * @param mixed $state
+  * @param string $attributes. Extra attributes for input tag
+  * @note the 'state' value should be a 1, yes, true or 0, no, false
+  * @returns string HTML
 */
 function html_checkbox($name, $state, $attributes = '')
 {
@@ -146,12 +146,12 @@ function html_checkbox($name, $state, $attributes = '')
 
 
 /**
- * Returns HTML for a gravatar (Globally recognised avatar)
- * @author Ivan Lucas
- * @param string $email - Email address
- * @param int $size - Size in pixels (Default 32)
- * @param bool $hyperlink - Make a link back to gravatar.com, default TRUE
- * @returns string - HTML img tag
+  * Returns HTML for a gravatar (Globally recognised avatar)
+  * @author Ivan Lucas
+  * @param string $email - Email address
+  * @param int $size - Size in pixels (Default 32)
+  * @param bool $hyperlink - Make a link back to gravatar.com, default TRUE
+  * @returns string - HTML img tag
  */
 function gravatar($email, $size = 32, $hyperlink = TRUE)
 {
@@ -182,10 +182,10 @@ function gravatar($email, $size = 32, $hyperlink = TRUE)
 
 
 /**
-    * Produces HTML for a percentage indicator
-    * @author Ivan Lucas
-    * @param int $percent. Number between 0 and 100
-    * @returns string HTML
+  * Produces HTML for a percentage indicator
+  * @author Ivan Lucas
+  * @param int $percent. Number between 0 and 100
+  * @returns string HTML
 */
 function percent_bar($percent)
 {
@@ -253,20 +253,20 @@ function colheader($colname, $coltitle, $sort = FALSE, $order='', $filter='', $d
 
 
 /**
-    * Takes an array and makes an HTML selection box
-    * @author Ivan Lucas
-    * @param array $array - The array of options to display in the drop-down
-    * @param string $name - The HTML name attribute (also used for id)
-    * @param mixed $setting - The value to pre-select
-    * @param string $attributes - Extra attributes for the select tag
-    * @param mixed $usekey - (optional) Set the option value to be the array key instead
-    *                        of the array value.
-    *                        When TRUE the array key will be used as the option value
-    *                        When FALSE the array value will be usedoption value
-    *                        When NULL the function detects which is most appropriate
-    * @param bool $multi - When TRUE a multiple selection box is returned and $setting
-    *                      can be an array of values to pre-select
-    * @retval string HTML select element
+  * Takes an array and makes an HTML selection box
+  * @author Ivan Lucas
+  * @param array $array - The array of options to display in the drop-down
+  * @param string $name - The HTML name attribute (also used for id)
+  * @param mixed $setting - The value to pre-select
+  * @param string $attributes - Extra attributes for the select tag
+  * @param mixed $usekey - (optional) Set the option value to be the array key instead
+  *                        of the array value.
+  *                        When TRUE the array key will be used as the option value
+  *                        When FALSE the array value will be usedoption value
+  *                        When NULL the function detects which is most appropriate
+  * @param bool $multi - When TRUE a multiple selection box is returned and $setting
+  *                      can be an array of values to pre-select
+  * @retval string HTML select element
 */
 function array_drop_down($array, $name, $setting='', $attributes='', $usekey = NULL, $multi = FALSE)
 {
@@ -392,15 +392,15 @@ function user_alert($message, $severity, $helpcontext = '')
 
 
 /**
-* Output the html for an icon
-*
-* @param string $filename filename of the string, minus extension, we assume .png
-* @param int $size size of the icon, from: 12, 16, 32
-* @param string $alt alt text of the icon (optional)
-* @param string $title (optional)
-* @param string $id ID attribute (optional)
-* @return string $html icon html
-* @author Kieran Hogg, Ivan Lucas
+  * Output the html for an icon
+  *
+  * @param string $filename filename of the string, minus extension, we assume .png
+  * @param int $size size of the icon, from: 12, 16, 32
+  * @param string $alt alt text of the icon (optional)
+  * @param string $title (optional)
+  * @param string $id ID attribute (optional)
+  * @return string $html icon html
+  * @author Kieran Hogg, Ivan Lucas
 */
 function icon($filename, $size='', $alt='', $title='', $id='')
 {
@@ -455,8 +455,45 @@ function icon($filename, $size='', $alt='', $title='', $id='')
 }
 
 
+/**
+  * Uses calendar.js to make a popup date picker
+  * @author Ivan Lucas
+  * @param string $formelement. form element id, eg. myform.dateinputbox
+  * @returns string HTML
+*/
+function date_picker($formelement)
+{
+    global $CONFIG, $iconset;
+
+    $divid = "datediv".str_replace('.','',$formelement);
+    $html = "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/pickdate.png' ";
+    $html .= "onmouseup=\"toggleDatePicker('$divid','$formelement')\" width='16' height='16' alt='date picker' style='cursor: pointer; vertical-align: bottom;' />";
+    $html .= "\n<div id='$divid' style='position: absolute;'></div>\n";
+    return $html;
+}
 
 
+/**
+  * Uses scriptaculous and AutoComplete.js to make a form text input
+  * box autocomplete
+  * @author Ivan Lucas
+  * @param string $formelement. form element id, eg. textinput
+  * @param string $action. ajaxdata.php action to return JSON data
+  * @returns string HTML javascript block
+  * @note The page that calls this function MUST include the required
+  * javascript libraries. e.g.
+  *   $pagescripts = array('scriptaculous/scriptaculous.js','AutoComplete.js');
+*/
+function autocomplete($formelement, $action = 'autocomplete_sitecontact')
+{
+    $html .= "<script type=\"text/javascript\">\n//<![CDATA[\n";
+    // Disable browser autocomplete (it clashes)
+    $html .= "$('$formelement').setAttribute(\"autocomplete\", \"off\"); \n";
+    $html .= "new AutoComplete('{$formelement}', 'ajaxdata.php?action={$action}&s=', {\n";
+    $html .= "delay: 0.25,\n";
+    $html .= "resultFormat: AutoComplete.Options.RESULT_FORMAT_JSON\n";
+    $html .= "}); \n//]]>\n</script>\n";
 
-
+    return $html;
+}
 ?>

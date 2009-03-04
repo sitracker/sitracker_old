@@ -10,9 +10,6 @@
 
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
-// TODO This page fails XHTML validation because of dojo attributes - INL 12/12/07
-
-
 $permission = 12; // View Contacts
 
 require ('core.php');
@@ -61,7 +58,7 @@ if ($submit_value == 'go')
             header("Location: {$url}");
         }
 }
-$pagescripts = array('dojo/dojo.js');
+$pagescripts = array('scriptaculous/scriptaculous.js','AutoComplete.js');
 include (APPLICATION_INCPATH . 'htmlheader.inc.php');
 
 if ($search_string=='') $search_string='a';
@@ -74,8 +71,6 @@ function contact_products_window(contactid)
     window.open(URL, "contact_products_window", "toolbar=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=520,height=240");
 }
 
-dojo.require ("dojo.widget.ComboBox");
-
 //]]>
 </script>
 
@@ -87,7 +82,8 @@ echo "<tr>";
 echo "<td align='center'>";
 echo "<form action='{$_SERVER['PHP_SELF']}' method='get'>";
 echo "<p>{$strBrowseContacts}: ";
-echo "<input dojoType='ComboBox' dataUrl='ajaxdata.php?action=contact' style='width: 300px;' name='search_string' />";
+echo "<input type='text' id='search_string' style='width: 300px;' name='search_string' />";
+echo autocomplete('search_string', 'contact');
 echo "<input name='submit' type='submit' value=\"{$strGo}\" /></p>";
 echo "</form>\n";
 if ($displayinactive=="true")
@@ -168,7 +164,7 @@ else
         else
         {
 
-            echo "<p align='center'>".sprintf($strDisplayingXcontactMatchingY, mysql_num_rows($result), $search_string)."</em></p>";
+            echo "<p align='center'>".sprintf($strDisplayingXcontactMatchingY, mysql_num_rows($result), "<em>{$search_string}</em>")."</p>";
 
             echo "<table align='center'>
             <tr>
