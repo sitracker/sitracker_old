@@ -46,7 +46,7 @@ if (empty($search_string))
     </table>
     <p><input name="submit" type="submit" value="Search" /></p>
 
-    <p><a href="advanced_search_incidents.php">Advanced Search</a></p>
+    <p><a href="search_incidents_advanced.php">Advanced Search</a></p>
     </form>
     <?php
 }
@@ -108,7 +108,7 @@ else
         if (mysql_num_rows($result) == 0)
         {
             echo "<h2>Sorry, your search yielded no results</h2>\n";
-            echo "<p align='center'><a href=\"advanced_search_incidents.php\">Try an Advanced Search</a></p>";
+            echo "<p align='center'><a href=\"search_incidents_advanced.php\">Try an Advanced Search</a></p>";
         }
         else
         {

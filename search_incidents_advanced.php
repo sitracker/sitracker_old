@@ -164,7 +164,7 @@ else
         if ($countresults == 0)
         {
             echo "<h2>{$strNoResults}</h2>\n";
-            echo "<p align='center'><a href=\"advanced_search_incidents.php\">{$strSearchAgain}</a></p>";
+            echo "<p align='center'><a href=\"search_incidents_advanced.php\">{$strSearchAgain}</a></p>";
         }
         else
         {
@@ -209,7 +209,7 @@ else
         }
         echo "</table>";
         echo "<br />";
-        echo "<p align='center'><a href=\"advanced_search_incidents.php\">{$strSearchAgain}</a></p>";
+        echo "<p align='center'><a href=\"search_incidents_advanced.php\">{$strSearchAgain}</a></p>";
         // FIXME v3.4x Replace maxresults limit with paging
         if ($countresults >= $maxresults) printf($strMaxResults, $maxresults);
     }

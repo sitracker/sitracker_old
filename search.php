@@ -726,7 +726,7 @@ echo "{$strSearch}: ";
 echo "</th>";
 echo "<td>";
 echo "<input maxlength='100' name='q' size='35' type='text' value='".strip_tags(urldecode($q))."' /> ";
-echo "(<a href='advanced_search_incidents.php'>{$strAdvanced}</a> | <a href='view_tags.php'>{$strTagCloud}</a>)";
+echo "(<a href='search_incidents_advanced.php'>{$strAdvanced}</a> | <a href='view_tags.php'>{$strTagCloud}</a>)";
 echo "</td>";
 echo "</tr>\n";
 echo "</table>\n";
