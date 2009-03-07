@@ -41,7 +41,7 @@ echo date('dS F Y',mktime(0,0,0,$month,$day,$year))." &ndash; ".date('dS F Y',mk
 echo " <a href='{$_SERVER['PHP_SELF']}?display=week&amp;year=".date('Y',$ndate)."&amp;month=".date('m',$ndate)."&amp;day=".date('d',$ndate)."{$gidurl}'>&gt;</a>";
 echo "</p>";
 
-$numgroups = group_selector($groupid, "display=day&amp;year={$year}&amp;month={$month}&amp;day={$day}");
+$numgroups = group_selector($groupid, "display={$display}&amp;year={$year}&amp;month={$month}&amp;day={$day}");
 
 if ($groupid == 'all') $groupid = '';
 

@@ -53,7 +53,7 @@ echo "title='Next Month'>&gt;</a></p>";
 
 // echo draw_chart('month', $year, $month, $day, '', $user);
 
-$numgroups = group_selector($groupid, "display=day&amp;year={$year}&amp;month={$month}&amp;day={$day}");
+$numgroups = group_selector($groupid, "display={$display}&amp;year={$year}&amp;month={$month}&amp;day={$day}");
 
 if ($groupid == 'all') $groupid = '';
 
