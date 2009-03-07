@@ -11,6 +11,7 @@
 // Author: Kieran Hogg <kieran[at]sitracker.org
 // This Page Is Valid XHTML 1.0 Transitional!
 
+$permission = 69;
 
 require ('core.php');
 require (APPLICATION_LIBPATH . 'functions.inc.php');
@@ -21,7 +22,6 @@ if (!$CONFIG['tasks_enabled'])
 {
     header("Location: main.php");
 }
-$permission = 69;
 
 ?>
 <script type='text/javascript'>

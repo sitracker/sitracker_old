@@ -148,8 +148,8 @@ $hmenu[30] = array_merge(array (10=> array ( 'perm'=> 5, 'name'=> $strAddInciden
 
 // Tasks
 if (!is_array($hmenu[40])) $hmenu[40] = array();
-$hmenu[40] = array_merge(array (10=> array ( 'perm'=> 0, 'name'=> $strAddTask, 'url'=>"{$CONFIG['application_webpath']}task_add.php"),
-                    20=> array ( 'perm'=> 0, 'name'=> $strViewTasks, 'url'=>"{$CONFIG['application_webpath']}tasks.php")
+$hmenu[40] = array_merge(array (10=> array ( 'perm'=> 70, 'name'=> $strAddTask, 'url'=>"{$CONFIG['application_webpath']}task_add.php"),
+                    20=> array ( 'perm'=> 69, 'name'=> $strViewTasks, 'url'=>"{$CONFIG['application_webpath']}tasks.php")
 ), $hmenu[40]);
 
 
