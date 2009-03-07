@@ -232,7 +232,7 @@ while ($incidents = mysql_fetch_array($result))
     
     if (drafts_waiting_on_incident($incidents['id']))
     {
-    	echo "DRAFT ";
+    	echo icon('note2', 16, $strDraftsExist).' ';
     }
     
     echo "<a href=\"javascript:incident_details_window('{$incidents['id']}','incident{$incidents['id']}')\" class='info'>";

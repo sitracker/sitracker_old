@@ -215,6 +215,20 @@ if (count($num_open_activities) > 0)
     echo "</a> ";
 }
 
+if (drafts_waiting_on_incident($incidentid, 'email'))
+{
+    echo "<a href='javascript:email_window($incidentid)' class='info'>";
+    echo icon('email', 16, $strDraftsEmailExist);
+    echo "</a> ";
+}
+
+if (drafts_waiting_on_incident($incidentid, 'update'))
+{
+    echo "<a href='incident_update.php?id={$incidentid}&amp;popup=' class='info'>";
+    echo icon('note', 16, $strDraftsUpdateExist);
+    echo "</a> ";
+}
+
 // Product Info
 if (!empty($incident->product))
 {
