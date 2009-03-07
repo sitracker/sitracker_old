@@ -32,7 +32,7 @@ if (empty($submit))
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     while ($group = mysql_fetch_object($gresult))
     {
-        $grouparr[$group->id]=$group->name;
+        $grouparr[$group->id] = $group->name;
     }
 
     $numgroups = count($grouparr);

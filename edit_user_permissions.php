@@ -25,9 +25,7 @@ if ($CONFIG['demo'] AND $_SESSION['userid']!=1)
     html_redirect("manage_users.php", FALSE, $strCannotPerformOperationInDemo);
 }
 
-
 include (APPLICATION_INCPATH . 'htmlheader.inc.php');
-
 
 // External variables
 $user = cleanvar($_REQUEST['user']);
@@ -45,6 +43,9 @@ if (empty($action) OR $action == "showform")
     if (mysql_num_rows($result) >= 1)
     {
         echo "<h2>{$strRolePermissions}</h2>";
+        
+        echo "<p align='center'><a href='role_add.php'>{$strAddRole}</a></p>";
+        
         echo "<form action='{$_SERVER['PHP_SELF']}' method='post' onsubmit=\"return confirm_action('{$strAreYouSureMakeTheseChanges}')\">";
         echo "<table align='center'>";
         echo "<tr>";
