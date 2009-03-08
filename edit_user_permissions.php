@@ -52,7 +52,7 @@ if (empty($action) OR $action == "showform")
         echo "<th>{$strPermission}</th>";
         while ($rolerow = mysql_fetch_object($result))
         {
-            echo "<th>{$rolerow->rolename}</th>";
+            echo "<th><a href='role.php?roleid={$rolerow->id}'>{$rolerow->rolename}</a></th>";
         }
         echo "</tr>\n";
         $psql = "SELECT * FROM `{$dbPermissions}` ORDER BY id ASC";
@@ -302,7 +302,7 @@ elseif ($action == "check")
     echo "<h2>{$strCheckUserAndRolePermissions}</h2>";
     if (!empty($permid))
     {
-        echo "<h3>Role Permission: {$permid} - ".permission_name($permid)."</h3>";
+        echo "<h3>".sprintf($strRolePermissionsXY, $permid, permission_name($permid))."</h3>";
         $sql = "SELECT rp.roleid AS roleid, username, u.id AS userid, realname, rolename ";
         $sql .= "FROM `{$dbRolePermissions}` AS rp, `{$dbRoles}` AS r, `{$dbUsers}` AS u ";
         $sql .= "WHERE rp.roleid = r.id ";
@@ -327,11 +327,15 @@ elseif ($action == "check")
                 else $shade='shade1';
             }
             echo "</table>";
-        } else echo "<p align='center'>{$strNone}</p>";
+        } 
+        else
+        {
+            echo "<p align='center'>{$strNone}</p>";
+        }
 
         echo "<p align='center'><a href='edit_user_permissions.php'>Set role permissions</a></p>";
 
-        echo "<h3>User Permission: $permid - ".permission_name($permid)."</h3>";
+        echo "<h3>".sprintf($strUserPermissionXY, $permid, permission_name($permid))."</h3>";
         $sql = "SELECT up.userid AS userid, username, realname ";
         $sql .= "FROM `{$dbUserPermissions}` AS up, `{$dbUsers}` AS u ";
         $sql .= "WHERE up.userid = u.id ";

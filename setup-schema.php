@@ -873,6 +873,7 @@ INSERT INTO `{$dbResellers}` VALUES (1,'Us (No Reseller)');
 CREATE TABLE `{$dbRoles}` (
 `id` INT( 5 ) NOT NULL AUTO_INCREMENT ,
 `rolename` VARCHAR( 255 ) NOT NULL ,
+`description` text NOT NULL,
 PRIMARY KEY ( `id` )
 ) ENGINE=MyISAM;
 
@@ -2541,7 +2542,10 @@ UPDATE `{$dbLinkTypes}` SET origtab = 'incidents', linktab='tasks' WHERE id = 4;
 ";
 
 
-$upgrade_schema[350] = "";
+$upgrade_schema[350] = "
+-- PH 2009-03-08
+ALTER TABLE `roles` ADD `description` TEXT NOT NULL; 
+";
 
 // Important: When making changes to the schema you must add SQL to make the alterations
 // to existing databases in $upgrade_schema[] *AND* you must also change $schema[] for

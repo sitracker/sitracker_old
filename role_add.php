@@ -30,6 +30,7 @@ if (empty($submit))
     echo "<table class='vertical'>";
     echo "<tr><th>{$strName}</th>";
     echo "<td><input class='required' size='30' name='rolename' /><span class='required'>{$strRequired}</span></td></tr>";
+    echo "<tr><th>{$strDescription}</th><td><textarea name='description' id='description' rows='5' cols='30'>{$_SESSION['formdata']['role_add']['description']}</textarea></td></tr>";
     echo "<tr><th>{$strCopyFrom}</th><td>";
     if ($_SESSION['formdata']['role_add']['roleid'] != '')
     {
@@ -50,6 +51,7 @@ if (empty($submit))
 else
 {
     $rolename = cleanvar($_REQUEST['rolename']);
+    $description = cleanvar($_REQUEST['description']);
     $copyfrom = cleanvar($_REQUEST['copyfrom']);
     
     $_SESSION['formdata']['role_add'] = $_REQUEST;
@@ -72,13 +74,16 @@ else
     
     if ($errors == 0)
     {
-        $sql = "INSERT INTO `{$dbRoles}` (rolename) VALUES ('{$rolename}')";
+        $sql = "INSERT INTO `{$dbRoles}` (rolename, description) VALUES ('{$rolename}', '{$description}')";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
         $roleid = mysql_insert_id();
 
         if ($roleid != 0)
         {
+            clear_form_data('role_add');
+            clear_form_errors('role_add');
+            
         	if (!empty($copyfrom))
             {
             	$sql = "INSERT INTO `{$dbRolePermissions}` (roleid, permissionid, granted)  ";
