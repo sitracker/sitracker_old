@@ -1225,6 +1225,7 @@ $strReleaseNotes = 'Release Notes';
 $strReleaseNotesFor = 'Release Notes For %s';
 $strRemaining = '%s Remaining';
 $strRemainingBalance = 'Remaining Balance';
+$strRememberToSave = 'Remember to save any changes you have made';
 $strRemind = 'Remind';
 $strRemindByPhone = 'Remind customer by phone';
 $strRemindCustomer = 'Remind customer';

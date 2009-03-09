@@ -25,6 +25,7 @@ if ($CONFIG['demo'] AND $_SESSION['userid']!=1)
     html_redirect("manage_users.php", FALSE, $strCannotPerformOperationInDemo);
 }
 
+$pagescripts = array('FormProtector.js');
 include (APPLICATION_INCPATH . 'htmlheader.inc.php');
 
 // External variables
@@ -65,7 +66,7 @@ if (empty($action) OR $action == "showform")
         echo "</div>";
 
         echo "<div style='clear: both; margin-top:1em;'></div>";
-        echo "<form action='{$_SERVER['PHP_SELF']}' method='post' onsubmit=\"return confirm_action('{$strAreYouSureMakeTheseChanges}')\">";
+        echo "<form id='permissionsform' action='{$_SERVER['PHP_SELF']}' method='post' onsubmit=\"return confirm_action('{$strAreYouSureMakeTheseChanges}')\">";
         echo "<fieldset><legend>{$GLOBALS[$cat[$seltab]]}</legend>";
         echo "<table>";
         $psql = "SELECT * FROM `{$dbPermissions}` WHERE categoryid = {$seltab} ORDER BY id ASC";
@@ -105,6 +106,7 @@ if (empty($action) OR $action == "showform")
         echo "<input type='hidden' name='action' value='update' />";
         echo "<input name='submit' type='submit' value='{$strSave}' /></p>";
         echo "</form>";
+        echo protectform('permissionsform');
     }
 }
 elseif ($action == "edit" && (!empty($user) OR !empty($role)))

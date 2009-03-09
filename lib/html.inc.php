@@ -496,4 +496,28 @@ function autocomplete($formelement, $action = 'autocomplete_sitecontact')
 
     return $html;
 }
+
+
+/**
+  * Uses prototype.js and FormProtector.js to prevent navigating away from
+  * an unsubmitted form
+  * @author Ivan Lucas
+  * @param string $formelement. form element id
+  * @param string $message. (optional) Message to display in the warning popup
+  * @returns string HTML javascript block
+  * @note The page that calls this function MUST include the required
+  * javascript libraries. e.g.
+  *   $pagescripts = array('FormProtector.js);
+*/
+function protectform($formelement, $message = '')
+{
+    global $strRememberToSave;
+    if (empty($message)) $message = $strRememberToSave;
+    $html = "\n<script type='text/javascript'>\n";
+    $html .= "  var fp = new FormProtector('$formelement');\n";
+    $html .= "  fp.setMessage('{$message}');\n";
+    $html .= "</script>\n";
+
+    return $html;
+}
 ?>
