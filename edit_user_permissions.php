@@ -43,16 +43,16 @@ if (empty($action) OR $action == "showform")
     if (mysql_num_rows($result) >= 1)
     {
         echo "<h2>{$strRolePermissions}</h2>";
-        
+
         echo "<p align='center'><a href='role_add.php'>{$strAddRole}</a></p>";
-        
+
         echo "<form action='{$_SERVER['PHP_SELF']}' method='post' onsubmit=\"return confirm_action('{$strAreYouSureMakeTheseChanges}')\">";
         echo "<table align='center'>";
         echo "<tr>";
         echo "<th>{$strPermission}</th>";
         while ($rolerow = mysql_fetch_object($result))
         {
-            echo "<th><a href='role.php?roleid={$rolerow->id}'>{$rolerow->rolename}</a></th>";
+            echo "<th style='min-width: 40px;'><a href='role.php?roleid={$rolerow->id}'>{$rolerow->rolename}</a></th>";
         }
         echo "</tr>\n";
         $psql = "SELECT * FROM `{$dbPermissions}` ORDER BY id ASC";
@@ -60,7 +60,7 @@ if (empty($action) OR $action == "showform")
         $class='shade1';
         while ($perm = mysql_fetch_object($presult))
         {
-            echo "<tr class='$class'>";
+            echo "<tr class='$class' onclick='trow(event);'>";
             echo "<td><a href='{$PHP_SELF}?action=check&amp;permid={$perm->id}' title='{$strCheckWhoHasThisPermission}'>{$perm->id}</a> {$perm->name}</td>";
             mysql_data_seek($result, 0);
             while ($rolerow = mysql_fetch_object($result))
@@ -68,7 +68,7 @@ if (empty($action) OR $action == "showform")
                 $rpsql = "SELECT * FROM `{$dbRolePermissions}` WHERE roleid='{$rolerow->id}' AND permissionid='{$perm->id}'";
                 $rpresult = mysql_query($rpsql);
                 $rp = mysql_fetch_object($rpresult);
-                echo "<td><input name='{$rolerow->id}perm[]' type='checkbox' value='{$perm->id}' ";
+                echo "<td style='text-align:center;'><input name='{$rolerow->id}perm[]' type='checkbox' value='{$perm->id}' ";
                 if ($rp->granted=='true') echo " checked='checked'";
                 echo " /></td>";
             }
@@ -98,7 +98,7 @@ elseif ($action == "edit" && (!empty($user) OR !empty($role)))
     {
         $object = "role: ".db_read_column('rolename', $dbRoles, $role);
     }
-    echo "<h2>Set Permissions for {$object}</h2>"; 
+    echo "<h2>Set Permissions for {$object}</h2>";
     if (!empty($user)) echo "<p align='center'>Permissions that are inherited from the users role can not be changed.</p>";
 
     // Next lookup the permissions
@@ -327,7 +327,7 @@ elseif ($action == "check")
                 else $shade='shade1';
             }
             echo "</table>";
-        } 
+        }
         else
         {
             echo "<p align='center'>{$strNone}</p>";

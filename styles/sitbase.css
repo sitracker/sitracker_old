@@ -205,8 +205,7 @@ div#menu li:hover li ul,
 
 th:hover { background: #E9E9E9; }
 
-tr.shade1:hover { background-color: #F2F2F2; }
-tr.shade2:hover { background-color: #F2F2F2; }
+tr.shade1:hover, tr.shade2:hover { background-color: #F2F2F2; }
 tr.critical { background-color: #FF4433; }
 tr.critical:hover { background-color: #FFAAAB; }
 strong.critical { text-decoration: blink; }

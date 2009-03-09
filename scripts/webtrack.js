@@ -590,7 +590,7 @@ function groupMemberSelect(group, clear)
     {
         doSelect(false, 'include');
     }
-    
+
     var includes = document.getElementById('include');
     $a = $(group);
     for(i = 0; i < includes.length; i++)
@@ -852,6 +852,30 @@ function toggle_multiselect(elem)
 }
 
 
-
-
+/**
+  * Toggle the checkboxes in a table by clicking on the parent table cell
+  * and toggle highlight table rows by clicking on a row cell
+  * (only cells without a checkbox)
+  * @author Ivan Lucas
+  * @param e event
+  * @note example: <tr onclick='trow(event);'>
+*/
+function trow(e)
+{
+  var e = e || window.event;
+  var t = e.target || e.srcElement;
+  // t is the element that was clicked on
+  if (t.down(0).type == 'checkbox')
+  {
+    if (t.down(0).checked == true) t.down(0).checked = false;
+    else t.down(0).checked = true;
+  }
+  else
+  {
+    if (t.up(0).hasClassName('shade1') || t.up(0).hasClassName('shade2'))
+    {
+        t.up(0).toggleClassName('notice');
+    }
+  }
+}
 
