@@ -57,15 +57,11 @@ echo "<table align='center'>";
 echo "<tr>";
 echo "<th><a href='{$_SERVER['PHP_SELF']}?sort=realname'>{$strName}</a> ";
 echo "(<a href='{$_SERVER['PHP_SELF']}?sort=username'>{$strUsername}</a>)</th>";
+echo "<th><a href='{$_SERVER['PHP_SELF']}?sort=email'>{$strEmail}</a></th>";
 echo "<th><a href='{$_SERVER['PHP_SELF']}?sort=role'>{$strRole}</a></th>";
 echo "<th>{$strStatus}</th>";
 echo "<th>{$strOperation}</th>";
-echo "<th><a href='{$_SERVER['PHP_SELF']}?sort=email'>{$strEmail}</a></th>";
-echo "<th><a href='{$_SERVER['PHP_SELF']}?sort=phone'>{$strTelephone}</a></th>";
-echo "<th><a href='{$_SERVER['PHP_SELF']}?sort=mobile'>{$strMobile}</a></th>";
-echo "<th><a href='{$_SERVER['PHP_SELF']}?sort=fax'>{$strFax}</a></th>";
-echo "<th><a href='{$_SERVER['PHP_SELF']}?sort=status'>{$strStatus}</a></th>";
-echo "<th><a href='{$_SERVER['PHP_SELF']}?sort=accepting'>{$strAccepting}</a></th>";
+
 echo "</tr>\n";
 
 // show results
@@ -75,13 +71,17 @@ while ($users = mysql_fetch_array($result))
     // define class for table row shading
     if ($users['status'] == 0) $class = 'expired';
     // print HTML
-    echo "<tr class='{$class}'>\n";
+    echo "<tr class='{$class}' onclick='trow(event);'>\n";
     echo "<td>{$users['realname']}";
     echo " (";
     if ($users['userid'] == 1) echo "<strong>";
     echo "{$users['username']}";
     if ($users['userid'] == 1) echo "</strong>";
     echo ")</td>";
+
+    echo "<td>";
+    echo $users["email"];
+    echo "</td>";
 
     echo "<td>{$users['rolename']}</td>";
     echo "<td>";
@@ -112,30 +112,7 @@ while ($users = mysql_fetch_array($result))
     }
     echo "</td>";
 
-    echo "<td>";
-    echo $users["email"];
-
-    echo "</td><td>";
-    if ($users["phone"] == '') echo $strNone;
-    else echo $users["phone"];
-    echo "</td><td>";
-
-    if ($users["mobile"] == '') echo $strNone;
-    else echo $users["mobile"];
-
-    echo "</td><td>";
-
-    if ($users["fax"] == '') echo $strNone;
-    else echo $users["fax"];
-
-    echo "</td><td>";
-    echo userstatus_name($users["status"]);
-    echo "</td><td>";
-
-    if ($users["accepting"] == 'Yes') echo $strYes;
-    else echo "<span class='error'>{$strNo}</span>";
-
-    echo "</td></tr>";
+    echo "</tr>\n";
     // invert shade
     if ($class == 'shade2') $class = "shade1";
     else $class = "shade2";

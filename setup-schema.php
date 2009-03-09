@@ -730,92 +730,95 @@ INSERT INTO `$dbNoticeTemplates` (`name`, `type`, `description`, `text`, `linkte
 INSERT INTO `$dbNoticeTemplates` (`name`, `type`, `description`, `text`, `linktext`, `link`, `durability`, `refid`) VALUES('NOTICE_SCHEDULER_TASK_FAILED', 3, 'strNoticeSchedulerTaskFailedDesc', 'strNoticeSchedulerTaskFailed', '', '', 'sticky', '');
 
 
-CREATE TABLE `{$dbPermissions}` (
+CREATE TABLE IF NOT EXISTS `{$dbPermissions}` (
   `id` int(5) NOT NULL auto_increment,
+  `categoryid` int(5) NOT NULL,
   `name` varchar(255) NOT NULL default '',
-  PRIMARY KEY  (`id`)
-) ENGINE=MyISAM;
+  PRIMARY KEY  (`id`),
+  KEY `categoryid` (`categoryid`)
+) TYPE=MyISAM;
 
-INSERT INTO `{$dbPermissions}` VALUES (1, 'Add new contacts');
-INSERT INTO `{$dbPermissions}` VALUES (2, 'Add new sites');
-INSERT INTO `{$dbPermissions}` VALUES (3, 'Edit existing site details');
-INSERT INTO `{$dbPermissions}` VALUES (4, 'Edit your profile');
-INSERT INTO `{$dbPermissions}` VALUES (5, 'Add Incidents');
-INSERT INTO `{$dbPermissions}` VALUES (6, 'View Incidents');
-INSERT INTO `{$dbPermissions}` VALUES (7, 'Edit Incidents');
-INSERT INTO `{$dbPermissions}` VALUES (8, 'Update Incidents');
-INSERT INTO `{$dbPermissions}` VALUES (9, 'Edit User Permissions');
-INSERT INTO `{$dbPermissions}` VALUES (10, 'Edit contacts');
-INSERT INTO `{$dbPermissions}` VALUES (11, 'View Sites');
-INSERT INTO `{$dbPermissions}` VALUES (12, 'View Contacts');
-INSERT INTO `{$dbPermissions}` VALUES (13, 'Reassign Incidents');
-INSERT INTO `{$dbPermissions}` VALUES (14, 'View Users');
-INSERT INTO `{$dbPermissions}` VALUES (15, 'Add Supported Products');
-INSERT INTO `{$dbPermissions}` VALUES (16, 'Add Templates');
-INSERT INTO `{$dbPermissions}` VALUES (17, 'Edit Templates');
-INSERT INTO `{$dbPermissions}` VALUES (18, 'Close Incidents');
-INSERT INTO `{$dbPermissions}` VALUES (19, 'View Maintenance Contracts');
-INSERT INTO `{$dbPermissions}` VALUES (20, 'Add Users');
-INSERT INTO `{$dbPermissions}` VALUES (21, 'Edit Maintenance Contracts');
-INSERT INTO `{$dbPermissions}` VALUES (22, 'Administrate');
-INSERT INTO `{$dbPermissions}` VALUES (23, 'Edit User');
-INSERT INTO `{$dbPermissions}` VALUES (24, 'Add Product');
-INSERT INTO `{$dbPermissions}` VALUES (25, 'Add Product Information');
-INSERT INTO `{$dbPermissions}` VALUES (26, 'Get Help');
-INSERT INTO `{$dbPermissions}` VALUES (27, 'View Your Calendar');
-INSERT INTO `{$dbPermissions}` VALUES (28, 'View Products and Software');
-INSERT INTO `{$dbPermissions}` VALUES (29, 'Edit Products');
-INSERT INTO `{$dbPermissions}` VALUES (30, 'View Supported Products');
-INSERT INTO `{$dbPermissions}` VALUES (32, 'Edit Supported Products');
-INSERT INTO `{$dbPermissions}` VALUES (33, 'Send Emails');
-INSERT INTO `{$dbPermissions}` VALUES (34, 'Reopen Incidents');
-INSERT INTO `{$dbPermissions}` VALUES (35, 'Set your status');
-INSERT INTO `{$dbPermissions}` VALUES (36, 'Set contact flags');
-INSERT INTO `{$dbPermissions}` VALUES (37, 'Run Reports');
-INSERT INTO `{$dbPermissions}` VALUES (38, 'View Sales Incidents');
-INSERT INTO `{$dbPermissions}` VALUES (39, 'Add Maintenance Contract');
-INSERT INTO `{$dbPermissions}` VALUES (40, 'Reassign Incident when user not accepting');
-INSERT INTO `{$dbPermissions}` VALUES (41, 'View Status');
-INSERT INTO `{$dbPermissions}` VALUES (42, 'Review/Delete Incident updates');
-INSERT INTO `{$dbPermissions}` VALUES (43, 'Edit Global Signature');
-INSERT INTO `{$dbPermissions}` VALUES (44, 'Publish files to FTP site');
-INSERT INTO `{$dbPermissions}` VALUES (45, 'View Mailing List Subscriptions');
-INSERT INTO `{$dbPermissions}` VALUES (46, 'Edit Mailing List Subscriptions');
-INSERT INTO `{$dbPermissions}` VALUES (47, 'Administrate Mailing Lists');
-INSERT INTO `{$dbPermissions}` VALUES (48, 'Add Feedback Forms');
-INSERT INTO `{$dbPermissions}` VALUES (49, 'Edit Feedback Forms');
-INSERT INTO `{$dbPermissions}` VALUES (50, 'Approve Holidays');
-INSERT INTO `{$dbPermissions}` VALUES (51, 'View Feedback');
-INSERT INTO `{$dbPermissions}` VALUES (52, 'View Hidden Updates');
-INSERT INTO `{$dbPermissions}` VALUES (53, 'Edit Service Levels');
-INSERT INTO `{$dbPermissions}` VALUES (54, 'View KB Articles');
-INSERT INTO `{$dbPermissions}` VALUES (55, 'Delete Sites/Contacts');
-INSERT INTO `{$dbPermissions}` VALUES (56, 'Add Software');
-INSERT INTO `{$dbPermissions}` VALUES (57, 'Disable User Accounts');
-INSERT INTO `{$dbPermissions}` VALUES (58, 'Edit your Software Skills');
-INSERT INTO `{$dbPermissions}` VALUES (59, 'Manage users software skills');
-INSERT INTO `{$dbPermissions}` VALUES (60, 'Perform Searches');
-INSERT INTO `{$dbPermissions}` VALUES (61, 'View Incident Details');
-INSERT INTO `{$dbPermissions}` VALUES (62, 'View Incident Attachments');
-INSERT INTO `{$dbPermissions}` VALUES (63, 'Add Reseller');
-INSERT INTO `{$dbPermissions}` VALUES (64, 'Manage Escalation Paths');
-INSERT INTO `{$dbPermissions}` VALUES (65, 'Delete Products');
-INSERT INTO `{$dbPermissions}` VALUES (66, 'Install Dashboard Components');
-INSERT INTO `{$dbPermissions}` VALUES (67, 'Run Management Reports');
-INSERT INTO `{$dbPermissions}` VALUES (68, 'Manage Holidays');
-INSERT INTO `{$dbPermissions}` VALUES (69, 'View your Tasks');
-INSERT INTO `{$dbPermissions}` VALUES (70, 'Create/Edit your Tasks');
-INSERT INTO `{$dbPermissions}` VALUES (71, 'Manage your Triggers');
-INSERT INTO `{$dbPermissions}` VALUES (72, 'Manage System Triggers');
-INSERT INTO `{$dbPermissions}` VALUES (73, 'Approve Billable Incidents');
-INSERT INTO `{$dbPermissions}` VALUES (74, 'Set duration without activity (for billable incidents)');
-INSERT INTO `{$dbPermissions}` VALUES (75, 'Set negative time for duration on incidents (for billable incidents - refunds)');
-INSERT INTO `{$dbPermissions}` VALUES (76, 'View Transactions');
-INSERT INTO `{$dbPermissions}` VALUES (77, 'View Billing Information');
-INSERT INTO `{$dbPermissions}` VALUES (78, 'Post System Notices');
-INSERT INTO `{$dbPermissions}` VALUES (79, 'Edit Service Balances');
-INSERT INTO `{$dbPermissions}` VALUES (80, 'Edit Service Details');
-INSERT INTO `{$dbPermissions}` (`id` ,`name`) VALUES ('81', 'Adjust durations on activities');
+
+INSERT INTO `{$dbPermissions}` VALUES(1, 2, 'Add new contacts');
+INSERT INTO `{$dbPermissions}` VALUES(2, 2, 'Add new sites');
+INSERT INTO `{$dbPermissions}` VALUES(3, 2, 'Edit existing site details');
+INSERT INTO `{$dbPermissions}` VALUES(4, 7, 'Edit your profile');
+INSERT INTO `{$dbPermissions}` VALUES(5, 1, 'Add Incidents');
+INSERT INTO `{$dbPermissions}` VALUES(6, 1, 'View Incidents');
+INSERT INTO `{$dbPermissions}` VALUES(7, 1, 'Edit Incidents');
+INSERT INTO `{$dbPermissions}` VALUES(8, 1, 'Update Incidents');
+INSERT INTO `{$dbPermissions}` VALUES(9, 7, 'Edit User Permissions');
+INSERT INTO `{$dbPermissions}` VALUES(10, 2, 'Edit contacts');
+INSERT INTO `{$dbPermissions}` VALUES(11, 2, 'View Sites');
+INSERT INTO `{$dbPermissions}` VALUES(12, 2, 'View Contacts');
+INSERT INTO `{$dbPermissions}` VALUES(13, 1, 'Reassign Incidents');
+INSERT INTO `{$dbPermissions}` VALUES(14, 11, 'View Users');
+INSERT INTO `{$dbPermissions}` VALUES(15, 3, 'Add Supported Products');
+INSERT INTO `{$dbPermissions}` VALUES(16, 7, 'Add Templates');
+INSERT INTO `{$dbPermissions}` VALUES(17, 7, 'Edit Templates');
+INSERT INTO `{$dbPermissions}` VALUES(18, 1, 'Close Incidents');
+INSERT INTO `{$dbPermissions}` VALUES(19, 3, 'View Maintenance Contracts');
+INSERT INTO `{$dbPermissions}` VALUES(20, 7, 'Add Users');
+INSERT INTO `{$dbPermissions}` VALUES(21, 3, 'Edit Maintenance Contracts');
+INSERT INTO `{$dbPermissions}` VALUES(22, 7, 'Administrate');
+INSERT INTO `{$dbPermissions}` VALUES(23, 7, 'Edit User');
+INSERT INTO `{$dbPermissions}` VALUES(24, 3, 'Add Product');
+INSERT INTO `{$dbPermissions}` VALUES(25, 3, 'Add Product Information');
+INSERT INTO `{$dbPermissions}` VALUES(26, 11, 'Get Help');
+INSERT INTO `{$dbPermissions}` VALUES(27, 10, 'View Your Calendar');
+INSERT INTO `{$dbPermissions}` VALUES(28, 3, 'View Products and Software');
+INSERT INTO `{$dbPermissions}` VALUES(29, 3, 'Edit Products');
+INSERT INTO `{$dbPermissions}` VALUES(30, 3, 'View Supported Products');
+INSERT INTO `{$dbPermissions}` VALUES(32, 3, 'Edit Supported Products');
+INSERT INTO `{$dbPermissions}` VALUES(33, 11, 'Send Emails');
+INSERT INTO `{$dbPermissions}` VALUES(34, 1, 'Reopen Incidents');
+INSERT INTO `{$dbPermissions}` VALUES(35, 11, 'Set your status');
+INSERT INTO `{$dbPermissions}` VALUES(36, 2, 'Set contact flags');
+INSERT INTO `{$dbPermissions}` VALUES(37, 9, 'Run Reports');
+INSERT INTO `{$dbPermissions}` VALUES(38, 1, 'View Sales Incidents');
+INSERT INTO `{$dbPermissions}` VALUES(39, 3, 'Add Maintenance Contract');
+INSERT INTO `{$dbPermissions}` VALUES(40, 1, 'Reassign Incident when user not accepting');
+INSERT INTO `{$dbPermissions}` VALUES(41, 11, 'View Status');
+INSERT INTO `{$dbPermissions}` VALUES(42, 1, 'Review/Delete Incident updates');
+INSERT INTO `{$dbPermissions}` VALUES(43, 7, 'Edit Global Signature');
+INSERT INTO `{$dbPermissions}` VALUES(44, 11, 'Publish files to FTP site');
+INSERT INTO `{$dbPermissions}` VALUES(45, 11, 'View Mailing List Subscriptions');
+INSERT INTO `{$dbPermissions}` VALUES(46, 11, 'Edit Mailing List Subscriptions');
+INSERT INTO `{$dbPermissions}` VALUES(47, 11, 'Administrate Mailing Lists');
+INSERT INTO `{$dbPermissions}` VALUES(48, 7, 'Add Feedback Forms');
+INSERT INTO `{$dbPermissions}` VALUES(49, 7, 'Edit Feedback Forms');
+INSERT INTO `{$dbPermissions}` VALUES(50, 10, 'Approve Holidays');
+INSERT INTO `{$dbPermissions}` VALUES(51, 1, 'View Feedback');
+INSERT INTO `{$dbPermissions}` VALUES(52, 1, 'View Hidden Updates');
+INSERT INTO `{$dbPermissions}` VALUES(53, 7, 'Edit Service Levels');
+INSERT INTO `{$dbPermissions}` VALUES(54, 5, 'View KB Articles');
+INSERT INTO `{$dbPermissions}` VALUES(55, 2, 'Delete Sites/Contacts');
+INSERT INTO `{$dbPermissions}` VALUES(56, 3, 'Add Software');
+INSERT INTO `{$dbPermissions}` VALUES(57, 7, 'Disable User Accounts');
+INSERT INTO `{$dbPermissions}` VALUES(58, 7, 'Edit your Software Skills');
+INSERT INTO `{$dbPermissions}` VALUES(59, 7, 'Manage users software skills');
+INSERT INTO `{$dbPermissions}` VALUES(60, 11, 'Perform Searches');
+INSERT INTO `{$dbPermissions}` VALUES(61, 1, 'View Incident Details');
+INSERT INTO `{$dbPermissions}` VALUES(62, 1, 'View Incident Attachments');
+INSERT INTO `{$dbPermissions}` VALUES(63, 3, 'Add Reseller');
+INSERT INTO `{$dbPermissions}` VALUES(64, 7, 'Manage Escalation Paths');
+INSERT INTO `{$dbPermissions}` VALUES(65, 3, 'Delete Products');
+INSERT INTO `{$dbPermissions}` VALUES(66, 7, 'Install Dashboard Components');
+INSERT INTO `{$dbPermissions}` VALUES(67, 9, 'Run Management Reports');
+INSERT INTO `{$dbPermissions}` VALUES(68, 10, 'Manage Holidays');
+INSERT INTO `{$dbPermissions}` VALUES(69, 4, 'View your Tasks');
+INSERT INTO `{$dbPermissions}` VALUES(70, 4, 'Create/Edit your Tasks');
+INSERT INTO `{$dbPermissions}` VALUES(71, 7, 'Manage your Triggers');
+INSERT INTO `{$dbPermissions}` VALUES(72, 7, 'Manage System Triggers');
+INSERT INTO `{$dbPermissions}` VALUES(73, 8, 'Approve Billable Incidents');
+INSERT INTO `{$dbPermissions}` VALUES(74, 8, 'Set duration without activity (for billable incidents)');
+INSERT INTO `{$dbPermissions}` VALUES(75, 8, 'Set negative time for duration on incidents (for billable incidents - refunds)');
+INSERT INTO `{$dbPermissions}` VALUES(76, 8, 'View Transactions');
+INSERT INTO `{$dbPermissions}` VALUES(77, 8, 'View Billing Information');
+INSERT INTO `{$dbPermissions}` VALUES(78, 11, 'Post System Notices');
+INSERT INTO `{$dbPermissions}` VALUES(79, 8, 'Edit Service Balances');
+INSERT INTO `{$dbPermissions}` VALUES(80, 8, 'Edit Service Details');
+INSERT INTO `{$dbPermissions}` VALUES(81, 8, 'Adjust durations on activities');
 
 
 CREATE TABLE `{$dbPriority}` (
@@ -2544,7 +2547,100 @@ UPDATE `{$dbLinkTypes}` SET origtab = 'incidents', linktab='tasks' WHERE id = 4;
 
 $upgrade_schema[350] = "
 -- PH 2009-03-08
-ALTER TABLE `roles` ADD `description` TEXT NOT NULL; 
+ALTER TABLE `{$dbRoles}` ADD `description` TEXT NOT NULL;
+
+-- INL 2009-03-09 FIXME
+ CREATE TABLE `{$dbPermissionCategories}` (
+`id` INT( 5 ) NOT NULL AUTO_INCREMENT ,
+`category` VARCHAR( 255 ) NOT NULL ,
+PRIMARY KEY ( `id` )
+) ENGINE = MYISAM ;
+
+ALTER TABLE `{$dbPermissions}` ADD `categoryid` INT( 5 ) NOT NULL AFTER `id` ;
+ALTER TABLE `{$dbPermissions}` ADD INDEX ( `categoryid` ) ;
+
+TRUNCATE TABLE `{$dbPermissions}`;
+INSERT INTO `{$dbPermissions}` VALUES(1, 2, 'Add new contacts');
+INSERT INTO `{$dbPermissions}` VALUES(2, 2, 'Add new sites');
+INSERT INTO `{$dbPermissions}` VALUES(3, 2, 'Edit existing site details');
+INSERT INTO `{$dbPermissions}` VALUES(4, 7, 'Edit your profile');
+INSERT INTO `{$dbPermissions}` VALUES(5, 1, 'Add Incidents');
+INSERT INTO `{$dbPermissions}` VALUES(6, 1, 'View Incidents');
+INSERT INTO `{$dbPermissions}` VALUES(7, 1, 'Edit Incidents');
+INSERT INTO `{$dbPermissions}` VALUES(8, 1, 'Update Incidents');
+INSERT INTO `{$dbPermissions}` VALUES(9, 7, 'Edit User Permissions');
+INSERT INTO `{$dbPermissions}` VALUES(10, 2, 'Edit contacts');
+INSERT INTO `{$dbPermissions}` VALUES(11, 2, 'View Sites');
+INSERT INTO `{$dbPermissions}` VALUES(12, 2, 'View Contacts');
+INSERT INTO `{$dbPermissions}` VALUES(13, 1, 'Reassign Incidents');
+INSERT INTO `{$dbPermissions}` VALUES(14, 11, 'View Users');
+INSERT INTO `{$dbPermissions}` VALUES(15, 3, 'Add Supported Products');
+INSERT INTO `{$dbPermissions}` VALUES(16, 7, 'Add Templates');
+INSERT INTO `{$dbPermissions}` VALUES(17, 7, 'Edit Templates');
+INSERT INTO `{$dbPermissions}` VALUES(18, 1, 'Close Incidents');
+INSERT INTO `{$dbPermissions}` VALUES(19, 3, 'View Maintenance Contracts');
+INSERT INTO `{$dbPermissions}` VALUES(20, 7, 'Add Users');
+INSERT INTO `{$dbPermissions}` VALUES(21, 3, 'Edit Maintenance Contracts');
+INSERT INTO `{$dbPermissions}` VALUES(22, 7, 'Administrate');
+INSERT INTO `{$dbPermissions}` VALUES(23, 7, 'Edit User');
+INSERT INTO `{$dbPermissions}` VALUES(24, 3, 'Add Product');
+INSERT INTO `{$dbPermissions}` VALUES(25, 3, 'Add Product Information');
+INSERT INTO `{$dbPermissions}` VALUES(26, 11, 'Get Help');
+INSERT INTO `{$dbPermissions}` VALUES(27, 10, 'View Your Calendar');
+INSERT INTO `{$dbPermissions}` VALUES(28, 3, 'View Products and Software');
+INSERT INTO `{$dbPermissions}` VALUES(29, 3, 'Edit Products');
+INSERT INTO `{$dbPermissions}` VALUES(30, 3, 'View Supported Products');
+INSERT INTO `{$dbPermissions}` VALUES(32, 3, 'Edit Supported Products');
+INSERT INTO `{$dbPermissions}` VALUES(33, 11, 'Send Emails');
+INSERT INTO `{$dbPermissions}` VALUES(34, 1, 'Reopen Incidents');
+INSERT INTO `{$dbPermissions}` VALUES(35, 11, 'Set your status');
+INSERT INTO `{$dbPermissions}` VALUES(36, 2, 'Set contact flags');
+INSERT INTO `{$dbPermissions}` VALUES(37, 9, 'Run Reports');
+INSERT INTO `{$dbPermissions}` VALUES(38, 1, 'View Sales Incidents');
+INSERT INTO `{$dbPermissions}` VALUES(39, 3, 'Add Maintenance Contract');
+INSERT INTO `{$dbPermissions}` VALUES(40, 1, 'Reassign Incident when user not accepting');
+INSERT INTO `{$dbPermissions}` VALUES(41, 11, 'View Status');
+INSERT INTO `{$dbPermissions}` VALUES(42, 1, 'Review/Delete Incident updates');
+INSERT INTO `{$dbPermissions}` VALUES(43, 7, 'Edit Global Signature');
+INSERT INTO `{$dbPermissions}` VALUES(44, 11, 'Publish files to FTP site');
+INSERT INTO `{$dbPermissions}` VALUES(45, 11, 'View Mailing List Subscriptions');
+INSERT INTO `{$dbPermissions}` VALUES(46, 11, 'Edit Mailing List Subscriptions');
+INSERT INTO `{$dbPermissions}` VALUES(47, 11, 'Administrate Mailing Lists');
+INSERT INTO `{$dbPermissions}` VALUES(48, 7, 'Add Feedback Forms');
+INSERT INTO `{$dbPermissions}` VALUES(49, 7, 'Edit Feedback Forms');
+INSERT INTO `{$dbPermissions}` VALUES(50, 10, 'Approve Holidays');
+INSERT INTO `{$dbPermissions}` VALUES(51, 1, 'View Feedback');
+INSERT INTO `{$dbPermissions}` VALUES(52, 1, 'View Hidden Updates');
+INSERT INTO `{$dbPermissions}` VALUES(53, 7, 'Edit Service Levels');
+INSERT INTO `{$dbPermissions}` VALUES(54, 5, 'View KB Articles');
+INSERT INTO `{$dbPermissions}` VALUES(55, 2, 'Delete Sites/Contacts');
+INSERT INTO `{$dbPermissions}` VALUES(56, 3, 'Add Software');
+INSERT INTO `{$dbPermissions}` VALUES(57, 7, 'Disable User Accounts');
+INSERT INTO `{$dbPermissions}` VALUES(58, 7, 'Edit your Software Skills');
+INSERT INTO `{$dbPermissions}` VALUES(59, 7, 'Manage users software skills');
+INSERT INTO `{$dbPermissions}` VALUES(60, 11, 'Perform Searches');
+INSERT INTO `{$dbPermissions}` VALUES(61, 1, 'View Incident Details');
+INSERT INTO `{$dbPermissions}` VALUES(62, 1, 'View Incident Attachments');
+INSERT INTO `{$dbPermissions}` VALUES(63, 3, 'Add Reseller');
+INSERT INTO `{$dbPermissions}` VALUES(64, 7, 'Manage Escalation Paths');
+INSERT INTO `{$dbPermissions}` VALUES(65, 3, 'Delete Products');
+INSERT INTO `{$dbPermissions}` VALUES(66, 7, 'Install Dashboard Components');
+INSERT INTO `{$dbPermissions}` VALUES(67, 9, 'Run Management Reports');
+INSERT INTO `{$dbPermissions}` VALUES(68, 10, 'Manage Holidays');
+INSERT INTO `{$dbPermissions}` VALUES(69, 4, 'View your Tasks');
+INSERT INTO `{$dbPermissions}` VALUES(70, 4, 'Create/Edit your Tasks');
+INSERT INTO `{$dbPermissions}` VALUES(71, 7, 'Manage your Triggers');
+INSERT INTO `{$dbPermissions}` VALUES(72, 7, 'Manage System Triggers');
+INSERT INTO `{$dbPermissions}` VALUES(73, 8, 'Approve Billable Incidents');
+INSERT INTO `{$dbPermissions}` VALUES(74, 8, 'Set duration without activity (for billable incidents)');
+INSERT INTO `{$dbPermissions}` VALUES(75, 8, 'Set negative time for duration on incidents (for billable incidents - refunds)');
+INSERT INTO `{$dbPermissions}` VALUES(76, 8, 'View Transactions');
+INSERT INTO `{$dbPermissions}` VALUES(77, 8, 'View Billing Information');
+INSERT INTO `{$dbPermissions}` VALUES(78, 11, 'Post System Notices');
+INSERT INTO `{$dbPermissions}` VALUES(79, 8, 'Edit Service Balances');
+INSERT INTO `{$dbPermissions}` VALUES(80, 8, 'Edit Service Details');
+INSERT INTO `{$dbPermissions}` VALUES(81, 8, 'Adjust durations on activities');
+
 ";
 
 // Important: When making changes to the schema you must add SQL to make the alterations

@@ -33,6 +33,7 @@ $role = cleanvar($_REQUEST['role']);
 $action = $_REQUEST['action'];
 $permselection = $_REQUEST['perm'];
 $permid = $_REQUEST['permid'];
+$seltab = $_REQUEST['tab'];
 
 if (empty($action) OR $action == "showform")
 {
@@ -46,18 +47,38 @@ if (empty($action) OR $action == "showform")
 
         echo "<p align='center'><a href='role_add.php'>{$strAddRole}</a></p>";
 
+        echo "<div class='tabcontainer'>";
+        echo "<ul>";
+        $csql = "SELECT * FROM `{$dbPermissionCategories}` ORDER BY id ASC";
+        $cresult = mysql_query($csql);
+        if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+        if ($cresult AND mysql_num_rows($cresult) > 0)
+        if (empty($seltab)) $seltab = 1;
+        while ($pcat = mysql_fetch_object($cresult))
+        {
+            echo "<li";
+            if ($seltab == $pcat->id) echo " class='active'";
+            echo "><a href='{$_SERVER['PHP_SELF']}?tab={$pcat->id}'>{$GLOBALS[$pcat->category]}</a></li>";
+            $cat[$pcat->id] = $pcat->category;
+        }
+        echo "</ul>";
+        echo "</div>";
+
+        echo "<div style='clear: both; margin-top:1em;'></div>";
         echo "<form action='{$_SERVER['PHP_SELF']}' method='post' onsubmit=\"return confirm_action('{$strAreYouSureMakeTheseChanges}')\">";
-        echo "<table align='center'>";
+        echo "<fieldset><legend>{$GLOBALS[$cat[$seltab]]}</legend>";
+        echo "<table>";
+        $psql = "SELECT * FROM `{$dbPermissions}` WHERE categoryid = {$seltab} ORDER BY id ASC";
+        $presult = mysql_query($psql);
+        if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+        $class='shade1';
         echo "<tr>";
-        echo "<th>{$strPermission}</th>";
+        echo "<th>{$GLOBALS[$pcat->category]} {$strPermissions}</th>";
         while ($rolerow = mysql_fetch_object($result))
         {
             echo "<th style='min-width: 40px;'><a href='role.php?roleid={$rolerow->id}'>{$rolerow->rolename}</a></th>";
         }
         echo "</tr>\n";
-        $psql = "SELECT * FROM `{$dbPermissions}` ORDER BY id ASC";
-        $presult = mysql_query($psql);
-        $class='shade1';
         while ($perm = mysql_fetch_object($presult))
         {
             echo "<tr class='$class' onclick='trow(event);'>";
@@ -77,6 +98,9 @@ if (empty($action) OR $action == "showform")
             else $class = "shade2";
         }
         echo "</table>";
+        if (mysql_num_rows($presult) < 1) echo "<p>{$strNothingToDisplay}</p>";
+
+        echo "</fieldset>";
         echo "<p><input name='reset' type='reset' value='{$strReset}' />";
         echo "<input type='hidden' name='action' value='update' />";
         echo "<input name='submit' type='submit' value='{$strSave}' /></p>";
@@ -117,6 +141,7 @@ elseif ($action == "edit" && (!empty($user) OR !empty($role)))
     echo "<table align='center'>
     <tr>
     <th>{$strID}</th>
+    <th>$strRolePermissions</th>
     <th>{$strPermission}</th>
     </tr>\n";
     if (empty($role) AND !empty($user))
@@ -144,24 +169,24 @@ elseif ($action == "edit" && (!empty($user) OR !empty($role)))
 
     while ($permissions = mysql_fetch_array($result))
     {
+        echo "<tr class='$class' onclick='trow(event);'>";
+        echo "<td><a href='{$_SERVER['PHP_SELF']}?action=check&amp;permid={$permissions['id']}'  title='Check who has this permission'>";
+        echo $permissions['id']."</a> {$permissions['name']}</td>";
         if (!in_array($permissions['id'],$userrolepermission))
         {
-            echo "<tr class='$class'><td align='right'><a href='{$_SERVER['PHP_SELF']}?action=check&amp;permid={$permissions['id']}'  title='Check who has this permission'>".$permissions['id']."</a></td>";
-            echo "<td>";
+            echo "<td style='text-align:center;'><input name='dummy[]' type='checkbox' disabled='disabled' /></td>";
+            echo "<td style='text-align:center;'>";
             echo "<input name=\"perm[]\" type=\"checkbox\" value=\"".$permissions['id']."\"";
-
-
             if ($permission_array[$permissions['id']]['granted'] == 'true') echo " checked='checked'";
-            echo " /> ".$permissions['name'];
-
-            echo "</td></tr>\n";
+            echo " />";
         }
         else
         {
-            echo "<tr class='$class'><td align='right'><a href='{$_SERVER['PHP_SELF']}?action=check&amp;permid={$permissions['id']}' title='Check who has this permission'>{$permissions['id']}</a></td>";
-            echo "<td><input name='dummy[]' type='checkbox' checked='checked' disabled='disabled' /> {$permissions['name']}";
-            echo "<input type='hidden' name='perm[]' value='{$permissions['id']}' /></td></tr>\n";
+            echo "<td style='text-align:center;'><input name='roledummy[]' type='checkbox' checked='checked' disabled='disabled' /></td>";
+            echo "<td style='text-align:center;'><input name='dummy[]' type='checkbox' checked='checked' disabled='disabled' />";
+            echo "<input type='hidden' name='perm[]' value='{$permissions['id']}' />";
         }
+        echo "</td></tr>\n";
         if ($class=='shade2') $class = "shade1";
         else $class = "shade2";
     }

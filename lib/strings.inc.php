@@ -81,7 +81,7 @@ $hmenu[1030] = array_merge(array (
 if (!is_array($hmenu[103010])) $hmenu[103010] = array();
 $hmenu[103010] = array_merge(array (10=> array ( 'perm'=> 22, 'name'=> $strManageUsers, 'url'=>"{$CONFIG['application_webpath']}manage_users.php"),
                         20=> array ( 'perm'=> 20, 'name'=> $strAddUser, 'url'=>"{$CONFIG['application_webpath']}user_add.php?action=showform"),
-                        30=> array ( 'perm'=> 9, 'name'=> $strSetPermissions, 'url'=>"{$CONFIG['application_webpath']}edit_user_permissions.php"),
+                        30=> array ( 'perm'=> 9, 'name'=> $strRolePermissions, 'url'=>"{$CONFIG['application_webpath']}edit_user_permissions.php"),
                         40=> array ( 'perm'=> 23, 'name'=> $strUserGroups, 'url'=>"{$CONFIG['application_webpath']}usergroups.php"),
                         50=> array ( 'perm'=> 22, 'name'=> $strEditHolidayEntitlement, 'url'=>"{$CONFIG['application_webpath']}edit_holidays.php", 'enablevar' => 'holidays_enabled')
 ), $hmenu[103010]);

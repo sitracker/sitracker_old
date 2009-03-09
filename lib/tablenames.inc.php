@@ -55,6 +55,7 @@ $dbNotes = "{$CONFIG['db_tableprefix']}notes";
 $dbNotices = "{$CONFIG['db_tableprefix']}notices";
 $dbNoticeTemplates = "{$CONFIG['db_tableprefix']}noticetemplates";
 $dbPermissions = "{$CONFIG['db_tableprefix']}permissions";
+$dbPermissionCategories = "{$CONFIG['db_tableprefix']}permissioncategories";
 $dbPriority = "{$CONFIG['db_tableprefix']}priority";
 $dbProductInfo = "{$CONFIG['db_tableprefix']}productinfo";
 $dbProducts = "{$CONFIG['db_tableprefix']}products";

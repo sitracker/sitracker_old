@@ -858,17 +858,21 @@ function toggle_multiselect(elem)
   * (only cells without a checkbox)
   * @author Ivan Lucas
   * @param e event
-  * @note example: <tr onclick='trow(event);'>
+  * @note example: <tr ondblclick='trow(event);'>
 */
 function trow(e)
 {
   var e = e || window.event;
   var t = e.target || e.srcElement;
   // t is the element that was clicked on
-  if (t.down(0).type == 'checkbox')
+
+  if ($(t).down(0) && $(t).down(0).type == 'checkbox')
   {
-    if (t.down(0).checked == true) t.down(0).checked = false;
-    else t.down(0).checked = true;
+    if (t.down(0).disabled == false)
+    {
+        if (t.down(0).checked == true) t.down(0).checked = false;
+        else t.down(0).checked = true;
+    }
   }
   else
   {

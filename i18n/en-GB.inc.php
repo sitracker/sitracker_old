@@ -432,7 +432,6 @@ $strDocumentIDX = 'Document ID %s %s';
 $strDoesNOTApply = 'Does NOT apply';
 $strDoesThisUpdateMeetSLA = 'Does this update meet an SLA target?';
 $strDoNothing = 'Do Nothing';
-$strDoNothing = 'Do nothing';
 $strDraftChoose = 'Multiple drafts exist please select one';
 $strDraftDelete = 'Delete Draft';
 $strDraftEdit = 'Edit Draft';
