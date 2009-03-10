@@ -127,7 +127,7 @@ $hmenu[2030] = array_merge(array (10=> array ( 'perm'=> 19, 'name'=> $strBrowse,
                       80=> array ( 'perm'=> 37, 'name'=> "{$strBilling}", 'url'=>"{$CONFIG['application_webpath']}billable_incidents.php")
 ), $hmenu[2030]);
 if (!is_array($hmenu[203010])) $hmenu[203010] = array();
-$hmenu[203010] = array_merge(array (10=> array ( 'perm'=> 56, 'name'=> $strAddVendor, 'url'=>"{$CONFIG['application_webpath']}add_vendor.php"),
+$hmenu[203010] = array_merge(array (10=> array ( 'perm'=> 56, 'name'=> $strAddVendor, 'url'=>"{$CONFIG['application_webpath']}vendor_add.php"),
                         20=> array ( 'perm'=> 24, 'name'=> $strAddProduct, 'url'=>"{$CONFIG['application_webpath']}product_add.php"),
                         30=> array ( 'perm'=> 28, 'name'=> $strListProducts, 'url'=>"{$CONFIG['application_webpath']}products.php"),
                         35=> array ( 'perm'=> 28, 'name'=> $strListSkills, 'url'=>"{$CONFIG['application_webpath']}products.php?display=skills"),
