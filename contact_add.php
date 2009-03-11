@@ -18,8 +18,6 @@ require (APPLICATION_LIBPATH . 'functions.inc.php');
 // This page requires authentication
 require (APPLICATION_LIBPATH . 'auth.inc.php');
 
-$pagescripts = array('dojo/dojo.js');
-
 // External variables
 $siteid = mysql_real_escape_string($_REQUEST['siteid']);
 $submit = $_REQUEST['submit'];
@@ -27,13 +25,6 @@ $submit = $_REQUEST['submit'];
 if (empty($submit) OR !empty($_SESSION['formerrors']['add_contact']))
 {
     include (APPLICATION_INCPATH . 'htmlheader.inc.php');
-    ?>
-    <script type='text/javascript'>
-    //<![CDATA[
-        dojo.require ("dojo.widget.ComboBox");
-    //]]>
-    </script>
-    <?php
     echo show_add_contact($siteid, 'internal');
     include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
 }
