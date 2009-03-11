@@ -25,7 +25,6 @@ require (APPLICATION_LIBPATH . 'functions.inc.php');
 require (APPLICATION_LIBPATH . 'auth.inc.php');
 
 $title = $strIncidentsBySkill;
-$pagescripts = array('dojo/dojo.js');
 
 if (empty($_REQUEST['mode']))
 {
@@ -278,65 +277,7 @@ else
 
                 $clgth = strlen($coords)-2;
                 $coords = substr($coords, 0, $clgth);
-
-                if ($percentage >= 5)
-                {
-                    //only show on graph items with 5% or more of the share
-                    $javascript .= "var d{$js_coordCounter} = [ {$coords} ]\n\n";
-                    $javascript .= "var store{$js_coordCounter} = new dojo.collections.Store();\n";
-                    $javascript .= "store{$js_coordCounter}.setData(d{$js_coordCounter});";
-                    $javascript .= "var s{$js_coordCounter} = new dojo.charting.Series({";
-                    $javascript .= "dataSource:store{$js_coordCounter},";
-                    $javascript .= "bindings:{ x:\"x\", y:\"y\", size:\"size\" },";
-                    $javascript .= "label:\"{$skill['name']}\"";
-                    $javascript .= "});\n\n\n\n";
-
-                    //echo $javascript."<br />";
-
-                    $js_coordCounter++;
-                }
             }
-
-            $javascript .= "var xA = new dojo.charting.Axis();\n";
-            $javascript .= "xA.range={upper:".($counter-1).", lower:0};\n";
-            $javascript .= "xA.origin=\"max\";\n";
-            $javascript .= "xA.showTicks = true;\n";
-            $javascript .= "xA.label = \"Months\";\n";
-            /*$javascript .= "xA.labels = [ "Mon", "Tue", 2, 3, 4, 5 ];";*/
-            $javascript .= "xA.labels = [";
-            foreach ($months AS $m)
-            {
-                $javascript .= "\"{$m}\", ";
-            }
-            $javascript .= "];\n";
-
-            $javascript .= "var yA = new dojo.charting.Axis();\n";
-            $javascript .= "yA.range={upper:{$max},lower:{$min}};\n";
-            $javascript .= "yA.labels = [ {label:\"{$min}\", value:{$min} }, { label:\"{$max}\",value:35 }, { label:\"{$max}\", value:{$max} } ];\n";
-            $javascript .= "yA.label = \"Volume\"\n\n";
-
-            $javascript .= "var p = new dojo.charting.Plot(xA, yA);\n\n";
-
-            for($i = 0; $i  < $js_coordCounter; $i++)
-            {
-                    $javascript .= "p.addSeries({ data:s{$i}, plotter: dojo.charting.Plotters.CurvedLine });";
-            }
-
-            $javascript .= "var pa = new dojo.charting.PlotArea();";
-            $javascript .= "pa.size={width:700,height:170};";
-            $javascript .= "pa.padding={top:20, right:20, bottom:30, left:50 };";
-            $javascript .= "pa.plots.push(p);";
-
-            $javascript .= "pa._color =  { h: 9, s: 246, l: 143, step: 90 };";
-
-                    //  auto assign colors, and increase the step (since we've only 2 series)
-            for($i = 0; $i  < $js_coordCounter; $i++)
-            {
-                $javascript .= "s{$i}.color = pa.nextColor();";
-
-            }
-
-            $javascript .= "var pA = new dojo.charting.Plot(xA, yA);";
 
             $grandsum = 0;
 
@@ -351,53 +292,6 @@ else
             }
 
             echo "<td>{$grandsum}</td></table></p>";
-
-
-            echo "<script type='text/javascript'>\n//<![CDATA[\n";
-                echo "dojo.require ('dojo.collections.Store');";
-                echo "dojo.require ('dojo.charting.Chart');";
-                echo "dojo.require ('dojo.widget.ContentPane');";
-                echo "dojo.require ('dojo.json');";
-
-                echo "var legend;";
-
-                echo "dojo.addOnLoad(function(){";
-                    echo $javascript;
-
-                    echo "var chart = new dojo.charting.Chart(null, \"{$strIncidentsBySkill}\", \"A chart\");";
-                    echo "chart.addPlotArea({ x:50,y:50, plotArea:pa });";
-
-                    echo "legend = pa.getLegendInfo();";
-
-                    echo "chart.node = dojo.byId(\"incidentsBySkill\");";
-                    echo "chart.render();";
-
-
-                    echo "var docpane = dojo.widget.byId(\"legend\");";
-                    //docpane.setContent("Booo");
-                    echo "var a=\"<table>\";";
-                    echo "for(var i=0; i<legend.length;i++){";
-                        echo "a = a+\"<tr><td style='color: \"+legend[i].color+\";'>\"+legend[i].label+\"</td></tr>\";";
-                    echo "}";
-                    echo "a = a+\"</table>\";";
-                    echo "docpane.setContent(a);";
-                echo "});";
-            echo "\n//]]>\n</script>";
-
-            echo "<style>";
-                echo "#incidentsBySkill {";
-                    echo "margin:12px;";
-                    echo "width:800px;";
-                    echo "height:300px;";
-                    echo "background-color:#dedeed;";
-                    echo "border:1px solid #999;";
-                echo "}";
-            echo "</style>";
-            echo "<div id='incidentsBySkill' style='margin-right:auto;margin-left:auto;'></div>";
-            echo "<div  dojoType='ContentPane' layoutAlign='client' style='background-color: #f5ffbf; padding: 10px; width: 20%;margin-right:auto;margin-left:auto; '";
-            echo "id='legend' executeScripts='true'></div>";
-
-
         }
 
         $data .= $others."|";
