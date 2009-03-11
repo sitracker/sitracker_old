@@ -33,7 +33,7 @@ while ($dashboard = mysql_fetch_object($result))
 }
 
 // Valid user
-$pagescripts = array('dojo/dojo.js');
+$pagescripts = array('scriptaculous/scriptaculous.js?load=effects,dragdrop');
 include (APPLICATION_INCPATH . 'htmlheader.inc.php');
 
 $sql = "SELECT dashboard FROM `{$dbUsers}` WHERE id = '".$_SESSION['userid']."'";
@@ -80,87 +80,100 @@ $cols2 = substr($cols2, 0, -1);
 echo "<p id='pageoptions'>".help_link("Dashboard")." <a href='manage_user_dashboard.php' title='{$strManageYourDashboard}'>";
 echo icon('dashboardadd', 16)."</a> ";
 echo "<a href=\"javascript:save_layout();\" id='savelayout' title='{$strSaveDashbaordLayout}'>".icon('save', 16)."</a></p>";
+echo "<table border=\"0\" width=\"99%\" id='cols'><tr>"; //id='dashboardlayout'
+echo "<td width=\"33%\" valign='top' id='col0'>";
+
+$arr = explode(",",$cols0);
+foreach ($arr AS $a)
+{
+    show_dashboard_component(0, $a);
+}
+
+echo "</td><td width=\"33%\" valign='top' id='col1'>";
+
+$arr = explode(",",$cols1);
+foreach ($arr AS $a)
+{
+    show_dashboard_component(1, $a);
+}
+
+echo "</td><td width=\"33%\" valign=\"top\" id='col2'>";
+
+$arr = explode(",",$cols2);
+foreach ($arr AS $a)
+{
+    show_dashboard_component(2, $a);
+}
+
+echo "</td></tr></table>\n";
+
+//  Users Login Details
+echo "<div id='userbar'>";
+
+if (user_accepting($sit[2])!='Yes')
+{
+    $userstatus = "<span class='error'>{$strNotAcceptingIncidents}</span>";
+}
+else
+{
+    $userstatus = "<strong>{$strAcceptingIncidents}</strong>";
+}
+
+echo sprintf($strLoggedInAsXAndCurrentlyXAndX,
+            "<strong>{$sit[0]}</strong>",
+            "<strong>".userstatus_name(user_status($sit[2]))."</strong>",
+            $userstatus);
+
+if ($sit[3] == 'public')
+{
+    echo "- {$strPublicSharedComputerIncreasedSecurity}";
+}
+
+echo "</div>\n";
 ?>
 <script type="text/javascript">
 /* <![CDATA[ */
-    dojo.require ("dojo.dnd.*");
-    dojo.require ("dojo.event.*");
+//var cols = [1,3,1];
+var cols = [<?php echo $colstr; ?>];
+var cols0 = [<?php echo $cols0; ?>];
+var cols1 = [<?php echo $cols1; ?>];
+var cols2 = [<?php echo $cols2; ?>];
 
-    function resetborder()
-    {
-        $('col0').style.border = '0px';
-        $('col1').style.border = '0px';
-        $('col2').style.border = '0px';
-    }
+var dashlets = $$('div.windowbox');
 
-    function init(){
-        // Disable drag/drop for IE because it breaks - INL 4July08
-        if (isIE == true) return;
+Droppables.add('col0', {ghosting: true, onDrop: moveItem, hoverclass: 'droptarget'});
+Droppables.add('col1', {ghosting: true, onDrop: moveItem, hoverclass: 'droptarget'});
+Droppables.add('col2', {ghosting: true, onDrop: moveItem, hoverclass: 'droptarget'});
 
-        //var cols = [1,3,1];
-        var cols = [<?php echo $colstr; ?>];
-        var cols0 = [<?php echo $cols0; ?>];
-        var cols1 = [<?php echo $cols1; ?>];
-        var cols2 = [<?php echo $cols2; ?>];
+// Set drop area by default  non cleared.
+$('col0').cleared = false;
+$('col1').cleared = false;
+$('col2').cleared = false;
+$('savelayout').style.display='none';
 
-        // list one
-        var dl = $("col0");
-        var dt1=new dojo.dnd.HtmlDropTarget(dl, ["li1"]);
+window.onload = function() {
+   dashlets.each(
+       function(item) {
+        new Draggable(item, {revert: true});
+       }
+   );
+}
 
-        dojo.event.connect(dt1, "onDragOver", function(e) {
-        if ($(e.target.id)) $(e.target.id).style.border = '2px dashed #cccccc;';
-        });
+// The target drop area contains a snippet of instructional
+// text that we want to remove when the first item
+// is dropped into it.
+function moveItem( draggable,droparea){
+//    if (!droparea.cleared) {
+// //       droparea.innerHTML = '';
+//       droparea.cleared = true;
+//    }
+// //    draggable.parentNode.removeChild(draggable);
+   droparea.appendChild(draggable);
+   save_layout();
+}
 
-        dojo.event.connect(dt1, "onDrop", function(e) {
-            $('savelayout').style.display='inline';
-             resetborder();
-            //      window.alert(e.dragObject.domNode.id + ' was dropped on ' + e.target.id);
-            save_layout();
-        });
-        for(var x=0; x<cols0.length; x++){
-            new dojo.dnd.HtmlDragSource($('db_0-'+cols0[x]),"li1");
-        }
 
-        // list two
-        var dl = $("col1");
-        var dt2 = new dojo.dnd.HtmlDropTarget(dl, ["li1"]);
-        dojo.event.connect(dt2, "onDragOver", function(e) {
-        if ($(e.target.id)) $(e.target.id).style.border = '2px dashed #cccccc;';
-        });
-
-        dojo.event.connect(dt2, "onDrop", function(e) {
-            $('savelayout').style.display='inline';
-            resetborder();
-            save_layout();
-        });
-        for(var x=0; x<cols1.length; x++){
-            new dojo.dnd.HtmlDragSource($('db_1-'+cols1[x]),"li1");
-        }
-
-        // list three
-        var dl = $("col2");
-        var dt3 = new dojo.dnd.HtmlDropTarget(dl, ["li1"]);
-        dojo.event.connect(dt3, "onDragOver", function(e) {
-        if ($(e.target.id)) $(e.target.id).style.border = '2px dashed #cccccc;';
-        });
-
-        dojo.event.connect(dt3, "onDrop", function(e) {
-            $('savelayout').style.display='inline';
-            resetborder();
-            save_layout();
-        });
-        for(var x=0; x<cols2.length; x++){
-            new dojo.dnd.HtmlDragSource($('db_2-'+cols2[x]),"li1");
-        }
-    }
-
-    dojo.event.connect(dojo, "loaded", "init");
-
-    /*
-        Not directly dojo related
-    */
-
-    function save_layout(){
+function save_layout(){
         var xmlhttp=false;
         /*@cc_on @*/
         /*@if (@_jscript_version >= 5)
@@ -221,62 +234,12 @@ echo "<a href=\"javascript:save_layout();\" id='savelayout' title='{$strSaveDash
         xmlhttp.send(null);
         $('savelayout').style.display='none';
     }
-    window.onunload = save_layout;
-    $('savelayout').style.display='none';
 
 /* ]]> */
 </script>
 <?php
-echo "<table border=\"0\" width=\"99%\" id='cols'><tr>"; //id='dashboardlayout'
-echo "<td width=\"33%\" valign='top' id='col0'>";
 
-$arr = explode(",",$cols0);
-foreach ($arr AS $a)
-{
-    show_dashboard_component(0, $a);
-}
 
-echo "</td><td width=\"33%\" valign='top' id='col1'>";
-
-$arr = explode(",",$cols1);
-foreach ($arr AS $a)
-{
-    show_dashboard_component(1, $a);
-}
-
-echo "</td><td width=\"33%\" valign=\"top\" id='col2'>";
-
-$arr = explode(",",$cols2);
-foreach ($arr AS $a)
-{
-    show_dashboard_component(2, $a);
-}
-
-echo "</td></tr></table>\n";
-
-//  Users Login Details
-echo "<div id='userbar'>";
-
-if (user_accepting($sit[2])!='Yes')
-{
-    $userstatus = "<span class='error'>{$strNotAcceptingIncidents}</span>";
-}
-else
-{
-    $userstatus = "<strong>{$strAcceptingIncidents}</strong>";
-}
-
-echo sprintf($strLoggedInAsXAndCurrentlyXAndX,
-            "<strong>{$sit[0]}</strong>",
-            "<strong>".userstatus_name(user_status($sit[2]))."</strong>",
-            $userstatus);
-
-if ($sit[3] == 'public')
-{
-    echo "- {$strPublicSharedComputerIncreasedSecurity}";
-}
-
-echo "</div>\n";
 echo "<div id='footerbar'>";
 echo "<form action='{$_SERVER['PHP_SELF']}'>";
 echo "{$strSetYourStatus}: ";
