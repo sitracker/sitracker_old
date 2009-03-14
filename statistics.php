@@ -9,6 +9,7 @@
 //
 // Author: Paul Heaney <paulheaney[at]users.sourceforge.net>
 
+$permission = 6; // View incidents
 
 require ('core.php');
 require (APPLICATION_LIBPATH . 'functions.inc.php');
