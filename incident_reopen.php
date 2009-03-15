@@ -89,6 +89,8 @@ if ($allow_reopen == 'yes')
     {
         $reopen = reopen_incident($id);
 
+        $move = true; // Default so we dont get an error if there is no updateid on a reopen (as is the case when reopening from incident_details)
+        
         if (!empty($updateid))
         {
             $move = move_update_to_incident($updateid, $id) AND delete_holding_queue_update($updateid);
