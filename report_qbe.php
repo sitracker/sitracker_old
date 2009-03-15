@@ -105,9 +105,9 @@ elseif ($_REQUEST['mode'] == 'selectfields')
     }
     echo "</select>";
     echo "<select name='criteriaop'>";
-    echo "<option value='=' selected>=</option>";
-    echo "<option value='<'>&lt;</option>";
-    echo "<option value='>'>&gt;</option>";
+    echo "<option value='eq' selected>=</option>";
+    echo "<option value='lt'>&lt;</option>";
+    echo "<option value='gt'>&gt;</option>";
     echo "<option value='LIKE'>LIKE</option>";
     echo "</select>";
     echo "<input type='text' name='criteriaval' />";
@@ -136,7 +136,25 @@ elseif ($_REQUEST['mode'] == 'selectfields')
 elseif ($_REQUEST['mode'] == 'report')
 {
     // External variables
-    $columns=count($_POST[fields]);
+    $table = cleanvar($_POST['table1']);
+    $criteriafield = cleanvar($_POST['criteriafield']);
+    $criteriaop = cleanvar($_POST['criteriaop']);
+    $criteriaval = cleanvar($_POST['criteriaval']);
+    $sortby = cleanvar($_POST['sortby']);
+    $sortorder = cleanvar($_POST['sortorder']);
+    $limit = cleanvar($_POST['limit']);
+    $columns = count($_POST[fields]);
+    
+    switch ($criteriaop)
+    {
+    	case 'eq': $criteriaop = "=";
+            break;
+        case 'lt': $criteriaop = "<";
+            break;
+        case 'gt' : $criteriaop = ">";
+            break;    
+    }
+    
     if ($columns >= 1)
     {
         $htmlfieldheaders = "<tr>";
@@ -144,20 +162,24 @@ elseif ($_REQUEST['mode'] == 'report')
         {
             $fieldname = cleanvar($_POST[fields][$i]);
             $fieldlist .= $fieldname;
-            if ($i < ($columns-1)) $fieldlist .= '","';
+            if ($i < ($columns-1)) $fieldlist .= "`,`";
             $htmlfieldheaders .= "<th>{$fieldname}</th>";
             $csvfieldheaders .= $fieldname;
             if ($i < ($columns-1)) $csvfieldheaders .= '","';
         }
+        $fieldlist = "`{$fieldlist}`";
         $fieldheaders.="</tr>\n";
         $csvfieldheaders.="\"\r\n";
     }
-    else $fieldlist='*';
+    else
+    {
+        $fieldlist = "*";
+    }
 
-    $sql = "SELECT $fieldlist FROM {$_POST['table1']} ";
-    if (!empty($_POST['criteriaval'])) $sql .= "WHERE {$_POST['criteriafield']} {$_POST['criteriaop']} '{$_POST['criteriaval']}' ";
-    if ($_POST['sortorder']!='none') $sql .= "ORDER BY {$_POST['sortby']} {$_POST['sortorder']} ";
-    if ($_POST['limit']>=1) $sql .= "LIMIT {$_POST['limit']} ";
+    $sql = "SELECT {$fieldlist} FROM {$table} ";
+    if (!empty($criteriaval)) $sql .= "WHERE `{$criteriafield}` {$criteriaop} '{$criteriaval}' ";
+    if ($sortorder != 'none') $sql .= "ORDER BY `{$sortby}` {$sortorder} ";
+    if ($limit >= 1) $sql .= "LIMIT {$limit} ";
 
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
