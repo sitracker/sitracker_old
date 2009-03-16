@@ -569,14 +569,11 @@ elseif ($action=='incidentform')
     echo show_next_action();
     echo "</td>";
     echo "<td colspan='2'>";
-    if (empty($updateid))
-    {
-        echo "<strong>{$strVisibleToCustomer}</strong><br />\n";
-        echo "<label><input name='cust_vis' type='checkbox' checked='checked' /> {$strVisibleToCustomer}</label>";
-        echo help_link('VisibleToCustomer')."<br />";
-        echo "<label><input name='send_email' type='checkbox' checked='checked' /> ";
-        echo "{$strSendOpeningEmailDesc}</label><br />";
-    }
+    echo "<strong>{$strVisibleToCustomer}</strong><br />\n";
+    echo "<label><input name='cust_vis' type='checkbox' checked='checked' /> {$strVisibleToCustomer}</label>";
+    echo help_link('VisibleToCustomer')."<br />";
+    echo "<label><input name='send_email' type='checkbox' checked='checked' /> ";
+    echo "{$strSendOpeningEmailDesc}</label><br />";
     echo "<strong>{$strPriority}</strong><br />".priority_drop_down("priority", 1, 4, FALSE)." </td></tr>";
     echo "</table>\n";
     echo "<input type='hidden' name='win' value='{$win}' />";
