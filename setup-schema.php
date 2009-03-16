@@ -2556,6 +2556,19 @@ ALTER TABLE `{$dbRoles}` ADD `description` TEXT NOT NULL;
 PRIMARY KEY ( `id` )
 ) ENGINE = MYISAM ;
 
+
+INSERT INTO `{$dbPermissionCategories}` (`id`, `category`) VALUES(1, 'strSupport');
+INSERT INTO `{$dbPermissionCategories}` (`id`, `category`) VALUES(2, 'strCustomers');
+INSERT INTO `{$dbPermissionCategories}` (`id`, `category`) VALUES(3, 'strContracts');
+INSERT INTO `{$dbPermissionCategories}` (`id`, `category`) VALUES(4, 'strTasks');
+INSERT INTO `{$dbPermissionCategories}` (`id`, `category`) VALUES(5, 'strKBabbr');
+INSERT INTO `{$dbPermissionCategories}` (`id`, `category`) VALUES(6, 'strPortal');
+INSERT INTO `{$dbPermissionCategories}` (`id`, `category`) VALUES(7, 'strConfiguration');
+INSERT INTO `{$dbPermissionCategories}` (`id`, `category`) VALUES(8, 'strBilling');
+INSERT INTO `{$dbPermissionCategories}` (`id`, `category`) VALUES(9, 'strReports');
+INSERT INTO `{$dbPermissionCategories}` (`id`, `category`) VALUES(10, 'strHolidays');
+INSERT INTO `{$dbPermissionCategories}` (`id`, `category`) VALUES(11, 'strOther');
+
 ALTER TABLE `{$dbPermissions}` ADD `categoryid` INT( 5 ) NOT NULL AFTER `id` ;
 ALTER TABLE `{$dbPermissions}` ADD INDEX ( `categoryid` ) ;
 
