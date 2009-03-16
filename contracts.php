@@ -10,8 +10,6 @@
 
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
-// TODO This page fails XHTML validation because of dojo attributes - INL 12/12/07
-
 $permission = 19; // View Maintenance Contracts
 
 require ('core.php');
@@ -20,7 +18,7 @@ require (APPLICATION_LIBPATH.'functions.inc.php');
 require (APPLICATION_LIBPATH.'auth.inc.php');
 
 $title = $strBrowseContracts;
-$pagescripts = array('dojo/dojo.js');
+$pagescripts = array('scriptaculous/scriptaculous.js','AutoComplete.js');
 
 // External variables
 $productid = cleanvar($_REQUEST['productid']);
@@ -31,19 +29,13 @@ $order = cleanvar($_REQUEST['order']);
 $activeonly = cleanvar($_REQUEST['activeonly']);
 
 include (APPLICATION_INCPATH . 'htmlheader.inc.php');
-?>
-<script type="text/javascript">
-//<![CDATA[
-    dojo.require ("dojo.widget.ComboBox");
-//]]>
-</script>
-<?php
 echo "<h2>".icon('contract', 32)." ";
 echo "{$title}</h2>";
 echo "<table summary='alphamenu' align='center'><tr><td align='center'>";
 echo "<form action='{$_SERVER['PHP_SELF']}' method='get'>";
 echo "{$strBrowseContractsBySite}:"; // <!--<input type="text" name="search_string" />-->
-echo "<input dojoType='ComboBox' dataUrl='ajaxdata.php?action=sites' style='width: 300px;' name='search_string' />";
+echo "<input type='text' id='search_string' style='width: 300px;' name='search_string' />";
+echo autocomplete('search_string', 'contract');
 echo "<label><input type='checkbox' name='activeonly' value='yes' ";
 if ($activeonly=='yes') echo "checked='checked' ";
 echo "/> {$strShowActiveOnly}</label>";
