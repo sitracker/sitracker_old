@@ -90,6 +90,7 @@ if ($action == 'save')
     }
 }
 
+$pagescripts = array('FormProtector.js');
 include (APPLICATION_INCPATH . 'htmlheader.inc.php');
 
 echo "<h2>".icon('settings', 32, $strConfiguration);
@@ -124,7 +125,7 @@ echo "</div>";
 
 echo "<div style='clear: both;'></div>";
 
-echo "<form action='{$_SERVER['PHP_SELF']}' method='post'>";
+echo "<form id='configform' action='{$_SERVER['PHP_SELF']}' method='post'>";
 echo "<fieldset>";
 $catname = $CATI18N[$selcat];
 if (empty($catname)) $catname = $selcat;
@@ -147,6 +148,7 @@ echo "<input type='hidden' name='tab' value='{$seltab}' />";
 echo "<input type='hidden' name='action' value='save' />";
 echo "<p><input type='reset' value=\"{$strReset}\" /> <input type='submit' value=\"{$strSave}\" /></p>";
 echo "</form>";
+echo protectform('configform');
 
 include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
 ?>
