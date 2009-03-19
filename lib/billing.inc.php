@@ -431,7 +431,7 @@ function get_contract_balance($contractid, $includenonapproved = FALSE, $showonl
 
     if ($includereserved)
     {
-    	$balance += contract_transaction_total($contractid, RESERVED);
+    	$balance += contract_transaction_total($contractid, BILLING_RESERVED);
     }
 
     return $balance;

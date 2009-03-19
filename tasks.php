@@ -800,7 +800,7 @@ if (mysql_num_rows($result) >=1 )
                 else
                 {
                     echo "<tr class='{$shade}'><td>{$engineer['owner']}</td>";
-                    echo "<td>".round($engineer['duration']/60)."</td>";
+                    echo "<td>".round($engineer['duration'])."</td>";
                     echo "<td>".sizeof($engineer['engineerperiods'])."</td>";
                     echo "<td>".sizeof($engineer['customerperiods'])."</td></tr>";
                 }
@@ -808,7 +808,7 @@ if (mysql_num_rows($result) >=1 )
                 if ($shade == "shade1") $shade = "shade2";
                 else $shade = "shade2";
             }
-            echo "<tr><td>{$GLOBALS['strTOTALS']}</td><td>".round($totals['totalduration']/60)."</td>";
+            echo "<tr><td>{$GLOBALS['strTOTALS']}</td><td>".round($totals['totalduration'])."</td>";
             echo "<td>{$totals['totalengineerperiods']}</td><td>{$totals['totalcustomerperiods']}</td></tr>";
             echo "</table></p>";
         }

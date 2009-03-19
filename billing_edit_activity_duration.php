@@ -43,8 +43,8 @@ switch ($mode)
             if ($obj->duration == $oldduration)
             {
             	// Double check the oldduration thats been passed is whats in the DB
-                $text = "{$obj->bodytext}\n\n[b]Duration adjusted[/b] by ".user_realname($sit[2])." on ".ldate($CONFIG['dateformat_datetime'], $now)." from ".ceil($obj->duration/60)."minutes to {$newduration}minutes, reason given:\n---\n{$reason}\n---"; // FIXME should this be i18n? If so which language
-                $newduration *= 60;
+                $text = "{$obj->bodytext}\n\n[b]Duration adjusted[/b] by ".user_realname($sit[2])." on ".ldate($CONFIG['dateformat_datetime'], $now)." from ".ceil($obj->duration)."minutes to {$newduration}minutes, reason given:\n---\n{$reason}\n---"; // FIXME should this be i18n? If so which language
+                // $newduration *= 60;
                 $usql = "UPDATE `{$dbUpdates}` SET bodytext = '".mysql_real_escape_string($text)."', duration = '{$newduration}' WHERE id = '{$updateid}'";
                 mysql_query($usql);
                 if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
@@ -88,7 +88,7 @@ switch ($mode)
             echo "<form name='editduration' action='{$_SERVER['PHP_SELF']}?mode=edit' method='post' onsubmit='return confirm_submit(\"{$strAreYouSureMakeTheseChanges}\");'>";
             echo "<table align='center' class='vertical'>";
 
-            echo "<tr><th>{$strDuration}</th><td>".sprintf($strXMinutes, ceil($obj->duration/60))."</d></tr>";
+            echo "<tr><th>{$strDuration}</th><td>".sprintf($strXMinutes, ceil($obj->duration))."</d></tr>";
             echo "<tr><th>{$strNewDuration}</th><td><input type='text' size='10' name='newduration' id='newduration' />{$strMinutes}</d></tr>";
             echo "<tr><th>{$strReason}</th><td><textarea rows='3' cols='6' name='reason' id='reason' ></textarea></td></tr>";
 
