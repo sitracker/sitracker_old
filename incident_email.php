@@ -859,8 +859,10 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
                 function confirm_close_window()
                 {
                     if (window.confirm('The email was sent successfully, click OK to close this window'))
-                    window.opener.location='incident_details.php?id=<?php echo $id; ?>';
-                    window.close();l_redirect('', TRUE, TRUE, "window.opener.location='incident_details.php?id=<?php echo $id; ?>");
+                    {
+                        window.opener.location='incident_details.php?id=<?php echo $id; ?>';
+                        window.close();
+                    }
                 }
                 </script>
                 <?php
