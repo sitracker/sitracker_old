@@ -8,6 +8,8 @@
 // of the GNU General Public License, incorporated herein by reference.
 //
 
+// FIXME i18n
+
 // Report Type: Feedback
 
 // Author:  Paul Heaney Paul Heaney <paulheaney[at]users.sourceforge.net>
@@ -31,7 +33,7 @@ $formid = $CONFIG['feedback_form'];
 
 include (APPLICATION_INCPATH . 'htmlheader.inc.php');
 
-echo "<h2>Feedback Reports</h2>";
+echo "<h2>{$strFeedbackReport}</h2>";
 
 function feedback_between_dates()
 {

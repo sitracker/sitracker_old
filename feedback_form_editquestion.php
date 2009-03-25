@@ -60,7 +60,7 @@ switch ($action)
         $required = cleanvar($_POST['required']);
         $options = cleanvar($_POST['options']);
 
-        $sql = "UPDATE feedbackquestions SET ";
+        $sql = "UPDATE `{$dbFeedbackQuestions}` SET ";
         $sql .= "question='{$question}', ";
         $sql .= "questiontext='{$questiontext}', ";
         $sql .= "sectiontext='{$sectiontext}', ";
@@ -71,14 +71,14 @@ switch ($action)
         $sql .= "WHERE id='$qid' LIMIT 1";
         mysql_query($sql);
         if (mysql_error()) trigger_error ("MySQL Error: ".mysql_error(), E_USER_ERROR);
-        header("Location: edit_feedback_form.php?formid={$fid}");
+        header("Location: feedback_form_edit.php?formid={$fid}");
         exit;
     break;
 
     default:
         include (APPLICATION_INCPATH . 'htmlheader.inc.php');
 
-        echo "<h2 align='center'>$title</h2>\n";
+        echo "<h2 align='center'>{$title}</h2>\n";
 
         $sql = "SELECT * FROM `{$dbFeedbackQuestions}` WHERE id = '$qid'";
         $result = mysql_query($sql);

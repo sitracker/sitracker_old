@@ -18,10 +18,10 @@ require (APPLICATION_LIBPATH . 'functions.inc.php');
 // This page requires authentication
 require (APPLICATION_LIBPATH . 'auth.inc.php');
 
-$title = "Browse Feedback Forms";
+$title = $strBrowseFeedbackForms;
 include (APPLICATION_INCPATH . 'htmlheader.inc.php');
 
-echo "<h2>".$title."</h2>";
+echo "<h2>{$title}</h2>";
 
 $sql = "SELECT * FROM `{$dbFeedbackForms}`";
 $result = mysql_query($sql);
@@ -34,7 +34,7 @@ if (mysql_num_rows($result) > 0)
     {
         echo "<dl>\n";
         echo "<dt>";
-        echo "<a href='edit_feedback_form.php?formid={$obj->id}'>{$obj->name}</a> ";
+        echo "<a href='feedback_form_edit.php?formid={$obj->id}'>{$obj->name}</a> ";
         echo "</dt>\n";
         echo "<dd>{$obj->introduction}</dd>\n";
         echo "</dl>\n";
@@ -43,8 +43,8 @@ if (mysql_num_rows($result) > 0)
 }
 else
 {
-    echo "<p align='center'>No feedback forms defined</p>";
-    echo "<p align='center'><a href='edit_feedback_form.php?action=new'>Create new form</a></p>";
+    echo "<p align='center'>{$strNoFeedbackFormsDefined}</p>";
+    echo "<p align='center'><a href='feedback_form_edit.php?action=new'>{$strCreateNewForm}</a></p>";
 }
 
 include (APPLICATION_INCPATH . 'htmlfooter.inc.php');

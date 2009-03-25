@@ -76,7 +76,7 @@ switch ($_REQUEST['action'])
         mysql_query($sql);
         if (mysql_error()) trigger_error ("MySQL Error: ".mysql_error(), E_USER_ERROR);
         $newqid=$qid+1;
-        header("Location: feedback_question_add.php?fid={$formid}&qid={$newqid}");
+        header("Location: feedback_form_addquestion.php?fid={$formid}&qid={$newqid}");
         exit;
     break;
 

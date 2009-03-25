@@ -147,7 +147,7 @@ switch ($mode)
             // no feedback forms
             echo "<h3>{$title}</h3>";
             echo "<p class='error' align='center'>{$strNoFeedbackFormsDefined}</p>";
-            echo "<p align='center'><a href='edit_feedback_form.php?action=new'>{$strCreateNewForm}</a></p>";
+            echo "<p align='center'><a href='feedback_form_edit.php?action=new'>{$strCreateNewForm}</a></p>";
         }
         else
         {
@@ -178,7 +178,7 @@ switch ($mode)
             {
                 if ($completed=='no') echo "<h3>{$strFeedbackRequested}: $formid</h3>";
                 else echo "<h3>{$strResponsesToFeedbackForm}: $formid</h3>";
-                echo "<p align='center'><a href='edit_feedback_form.php?formid={$formid}'>{$strEdit}</a></p>";
+                echo "<p align='center'><a href='feedback_form_edit.php?formid={$formid}'>{$strEdit}</a></p>";
             }
             else echo "<h3>{$strResponsesToAllFeedbackForms}</h3>";
 
@@ -213,10 +213,10 @@ switch ($mode)
                     if ($resp->multi=='yes') $url .= "&amp;rr=1";
 
                     echo "<td>";
-                    if ($resp->completed=='no') echo "<a href='$url' title='$url' target='_blank'>URL</a>";
-                    $eurl=urlencode($url);
-                    $eref=urlencode($resp->responseref);
-                    if ($resp->completed=='no')
+                    if ($resp->completed == 'no') echo "<a href='{$url}' title='{$url}' target='_blank'>URL</a>";
+                    $eurl = urlencode($url);
+                    $eref = urlencode($resp->responseref);
+                    if ($resp->completed == 'no')
                     {
                         //if ($resp->remind<1) echo "<a href='formactions.php?action=remind&amp;id={$resp->respid}&amp;url={$eurl}&amp;ref={$eref}' title='Send a reminder by email'>Remind</a>";
                         //elseif ($resp->remind==1) echo "<a href='formactions.php?action=remind&amp;id={$resp->respid}&amp;url={$eurl}&amp;ref={$eref}' title='Send a Second reminder by email'>Remind Again</a>";

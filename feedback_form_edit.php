@@ -50,7 +50,7 @@ switch ($_REQUEST['action'])
             if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
         }
 
-        header("Location: edit_feedback_form.php?formid={$formid}");
+        header("Location: feedback_form_edit.php?formid={$formid}");
         exit;
     break;
 
@@ -88,7 +88,7 @@ switch ($_REQUEST['action'])
         echo "<tr>";
         echo "<th>{$strQuestions}:</th>";
         echo "<td>";
-        echo "<p>{$strSaveTheMainFormFirst}t</p>";
+        echo "<p>{$strSaveTheMainFormFirst}</p>";
         echo "</td></tr>\n";
         echo "<tr>";
         echo "<td><input type='hidden' name='formid' value='{$formid}' />";
@@ -129,17 +129,17 @@ switch ($_REQUEST['action'])
 
                 echo "<th>{$strDescription}:<br />({$strInternalUseNotDisplayed})</th>";
                 echo "<td><textarea name='description' cols='80' rows='6'>";
-                echo $form->description."</textarea></td>";
+                echo "{$form->description}</textarea></td>";
                 echo "</tr>\n<tr>";
 
                 echo "<th>{$strIntroduction}:<br />({$strSimpleHTMLallowed})</th>";
                 echo "<td><textarea name='introduction' cols='80' rows='10'>";
-                echo $form->introduction."</textarea></td>";
+                echo "{$form->introduction}</textarea></td>";
                 echo "</tr>\n<tr>";
 
                 echo "<th>{$strClosingThanks}:<br />($strSimpleHTMLallowed)</th>";
                 echo "<td><textarea name='thanks' cols='80' rows='10'>";
-                echo $form->thanks."</textarea></td>";
+                echo "{$form->thanks}</textarea></td>";
                 echo "</tr>\n";
 
                 // If there are no reponses to this feedback form, allow questions to be modified also
@@ -147,7 +147,6 @@ switch ($_REQUEST['action'])
                 echo "<th>{$strQuestions}:</th>";
                 echo "<td>";
 
-                // echo "<tr><th>Q</th><th>Question</th><th>Text</th></tr>\n<tr><th>Type</th><th>Reqd</th><th>Options</th></tr>\n";
                 $qsql  = "SELECT * FROM `{$dbFeedbackQuestions}` ";
                 $qsql .= "WHERE formid='$formid' ORDER BY taborder";
                 $qresult = mysql_query($qsql);
@@ -158,7 +157,7 @@ switch ($_REQUEST['action'])
                     {
                         echo "<tr>";
                         echo "<td><strong>Q{$question->taborder}</strong></td>";
-                        echo "<td><a href='edit_feedback_question.php?qid={$question->id}&amp;fid={$formid}'><strong>{$question->question}</strong></a></td>";
+                        echo "<td><a href='feedback_form_editquestion.php?qid={$question->id}&amp;fid={$formid}'><strong>{$question->question}</strong></a></td>";
                         echo "<td>{$question->questiontext}</td>";
                         echo "</tr>\n<tr>";
                         echo "<td>{$question->type}</td>";
@@ -169,7 +168,7 @@ switch ($_REQUEST['action'])
                     }
                     echo "</table>";
                 }
-                echo "<p><a href='add_feedback_question.php?fid=$formid'>{$strAdd}</a><br />Save the main form first</p>";
+                echo "<p><a href='feedback_form_addquestion.php?fid={$formid}'>{$strAdd}</a><br />{$strSaveTheMainFormFirst}</p>";
                 echo "</td></tr>\n";
                 echo "<tr>";
                 echo "<td><input type='hidden' name='formid' value='{$formid}' />";
