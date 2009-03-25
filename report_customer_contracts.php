@@ -14,7 +14,7 @@
 
 
 $permission = 19; /* View Maintenance Contracts */
-$title = 'Supported contacts by Contract';
+$title = $strSupportedContactsbySite;
 
 require ('core.php');
 require (APPLICATION_LIBPATH . 'functions.inc.php');
@@ -88,7 +88,7 @@ while ($site = mysql_fetch_object($result))
         {
             echo "<h2>{$site->sitename}</h2>";
             echo "<table width='100%'>";
-            echo "<tr><th style='text-align: left;'>Product</th><th style='text-align: left;'>Licence</th><th style='text-align: left;'>Expiry Date</th><th style='text-align: left;'>Engineer 1</th><th style='text-align: left;'>Engineer 2</th><th style='text-align: left;'>Engineer 3</th><th style='text-align: left;'>Engineer 4</th></tr>\n";
+            echo "<tr><th style='text-align: left;'>{$strProduct}</th><th style='text-align: left;'>{$strLicense}</th><th style='text-align: left;'>{$strExpiryDate}</th><th style='text-align: left;'>Engineer 1</th><th style='text-align: left;'>Engineer 2</th><th style='text-align: left;'>Engineer 3</th><th style='text-align: left;'>Engineer 4</th></tr>\n";
             while ($maint = mysql_fetch_object($mresult))
             {
                 if ($maint->expirydate > $now AND $maint->term!='no')
