@@ -276,7 +276,7 @@ if (empty($_REQUEST['process']))
     include (APPLICATION_INCPATH . 'incident_html_bottom.inc.php');
 }
 else
-{
+{ 
     // External variables
     $closingstatus = cleanvar($_POST['closingstatus']);
     $summary = cleanvar($_POST['summary']);
@@ -300,7 +300,7 @@ else
     $errors = 0;
 
     echo "<script src='{$CONFIG['application_webpath']}scripts/webtrack.js' type='text/javascript'></script>\n";
-
+    
     // check for blank closing status field
     if ($closingstatus == 0)
     {
@@ -313,6 +313,8 @@ else
         $errors = 1;
         $error_string = user_alert(sprintf($strFieldMustNotBeBlank, "'{$strSummary}' / '$strSolution'"), E_USER_ERROR);
     }
+
+    plugin_do('pre_incident_closing');
 
     if ($errors == 0)
     {
