@@ -413,8 +413,8 @@ function reopen_incident($incident, $newstatus = STATUS_ACTIVE, $message = '')
     // add update
     $sql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, ";
     $sql .= "bodytext, timestamp, currentowner, currentstatus) ";
-    $sql .= "VALUES ({$incident}, {$sit[2]}, 'reopening', '{$bodytext}', {$time}, ";
-    $sql .= "{$owner}, ".STATUS_ACTIVE.")";
+    $sql .= "VALUES ({$incident}, '{$sit[2]}', 'reopening', '{$bodytext}', '{$time}', ";
+    $sql .= "'{$owner}', '{$newstatus}')";
     $result = mysql_query($sql);
     if (mysql_error())
     {
