@@ -185,7 +185,7 @@ if ($action == "showform" OR $action=='')
     echo "</td></tr>\n";
 
     echo "<tr><th>{$strIncidentPool}</th>";
-    $incident_pools = explode(',', "Unlimited,{$CONFIG['incident_pools']}");
+    $incident_pools = explode(',', "{$strUnlimited},{$CONFIG['incident_pools']}");
     echo "<td>".array_drop_down($incident_pools,'incident_poolid',$maint['incident_quantity'])."</td></tr>";
 
     echo "<tr><th>{$strProductOnly}</th><td><input name='productonly' type='checkbox' value='yes' /></td></tr></tbody>\n"; //FIXME XHTML tbody
