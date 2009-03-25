@@ -122,7 +122,7 @@ else
     echo "<table class='timesheet'>";
     echo "<tr>";
     echo "<th>{$strKey}</th>";
-    echo "<th>{$strControls}</th>";
+    echo "<th>{$strOperation}</th>";
     echo "</tr>";
     echo "<tr>";
     echo "<td style='width:200px;'><center>";

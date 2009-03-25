@@ -318,7 +318,6 @@ $strContractProduct = 'The product associated with a contract';
 $strContractNum = 'Contract %d';
 $strContracts = 'Contracts';
 $strContractsSLA = 'The service level of the contract';
-$strControls = 'Controls';
 $strControlPanel = 'Control Panel';
 $strComplete = 'Complete';
 $strCompleted = 'Completed';
