@@ -230,6 +230,15 @@ else //submit
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
             trigger('TRIGGER_INCIDENT_CREATED', array('incidentid' => $incidentid));
+
+            if ($CONFIG['auto_assign_incidents'])
+            {
+                $suggest_user = suggest_reassign_userid($incidentid);
+                if ($suggest_user > 0) {
+                    reassign_incident($incidentid, $suggest_user);
+                }
+            }
+
             $_SESSION['formdata']['portaladdincident'] = NULL;
             $_SESSION['formerrors']['portaladdincident'] = NULL;
             html_redirect("index.php", TRUE, $strIncidentAdded);

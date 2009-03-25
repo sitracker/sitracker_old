@@ -350,27 +350,43 @@ function suggest_reassign_userid($incidentid, $exceptuserid = 0)
  * @return bool TRUE on success, FALSE on failure
  * @author Kieran Hogg
  */
-function reassign_incident($incident, $user, $type = 'full')
+function reassign_incident($incident, $user, $tuser = '', $nextaction = '', $type = 'full')
 {
-    global $dbUpdates;
+    global $dbIncidents, $dbUpdates, $now, $sit;
+    $rtn = TRUE;
+
+    if ($nextaction != '') {
+        $incident->nextaction = $nextaction;
+    }
+
     if ($type == 'temp')
     {
-        $sql = "UPDATE `{$dbUpdates} SET towner = '{$user}'";
+        $sql = "UPDATE `{$dbIncidents} SET towner = '{$tuser}'";
     }
     else
     {
-        $sql = "UPDATE `{$dbUpdates}` SET owner = '{$user}'";
+        $sql = "UPDATE `{$dbIncidents}` SET owner = '{$user}'";
     }
+    $sql .= "WHERE id = '{$incident}'";
+
     mysql_query($sql);
     if (mysql_error())
     {
         trigger_error(mysql_error(),E_USER_WARNING);
-        return FALSE;
+        $rtn = FALSE;
     }
-    else
+
+    $sql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, timestamp, currentowner, currentstatus, nextaction) ";
+    $sql .= "VALUES ('{$incidentid}', '{$sit[2]}', 'reassigning', '{$now}', '{$user}', '1', '{$incident->nextaction}')";
+    $result = mysql_query($sql);
+    mysql_query($sql);
+    if (mysql_error())
     {
-        return FALSE;
+        trigger_error(mysql_error(),E_USER_WARNING);
+        $rtn = FALSE;
     }
+
+    return $rtn;
 }
 
 
