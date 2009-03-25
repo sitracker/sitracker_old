@@ -1,5 +1,5 @@
 <?php
-// Translation to Danish by Carsten Jensen aka Tomse Latest rev 4312
+// Translation to Danish by Carsten Jensen aka Tomse
 // Translation started 14. Oct. 2008
 
 $languagestring = ' (da-DK)';
@@ -126,7 +126,7 @@ $strAmount = 'Mænge';
 $strAmountToEditBy = 'Mængde der skal redigeres +ve/-ve';
 $strAM = 'am';
 $strAnswer = 'Svar';
-$strApplication = 'Ansøgning';
+$strApplication = 'Applikation';
 $strApprovalStatusUnknown = 'Godkendelses status ukendt';
 $strApprove = 'Godkend';
 $strApproveAll = 'Godkend alt';
