@@ -272,18 +272,21 @@ $spamcount = 0;
 if ($countresults > 0)
 {
     if ($countresults) mysql_data_seek($result, 0);
-
-    while ($updates = mysql_fetch_array($result))
-    {
-        if (!stristr($updates['subject'], $CONFIG['spam_email_subject']))
-        {
-            $queuerows[$updates['id']] = generate_row($updates);
-        }
-        else
-        {
-            $spamcount++;
-        }
-    }
+	
+	if (!empty($CONFIG['spam_email-subject'])) 
+	{
+    	while ($updates = mysql_fetch_array($result))
+    	{
+        	if (!stristr($updates['subject'], $CONFIG['spam_email_subject']))
+        	{
+            	$queuerows[$updates['id']] = generate_row($updates);
+        	}
+        	else
+        	{
+            	$spamcount++;
+        	}
+    	}
+	}
 }
 
 $sql = "SELECT * FROM `{$dbIncidents}` WHERE owner='0' AND status!='2'";
