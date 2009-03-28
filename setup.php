@@ -703,7 +703,26 @@ switch ($_REQUEST['action'])
             // or <var>sit.conf</var> in the <var>/etc</var> directory
             echo "Or change the permissions on the folder so that it is writable and <a href=\"javascript:location.reload(true)\">refresh</a> this page to try again (if you do this remember to make it ";
             echo "read-only again afterwards)</p>";
-            echo "<div id='configfile' style='margin-left: 5%; margin-right: 5%; background-color: #F7FAFF; padding: 1em; border: 1px dashed #ccc;filter:alpha(opacity=75);  opacity: 0.75;  -moz-opacity:0.75; -moz-border-radius: 3px; '>";
+            echo "<script type='text/javascript'>\n
+                    function selectText(divid)
+                    {
+                        if (document.selection)
+                        {
+                            var div = document.body.createTextRange();
+                            div.moveToElementText(document.getElementById(divid));
+                            div.select();
+                        }
+                        else
+                        {
+                            var div = document.createRange();
+                            div.setStartBefore(document.getElementById(divid));
+                            div.setEndAfter(document.getElementById(divid)) ;
+                            window.getSelection().addRange(div);
+                        }
+
+                    }
+                </script>";
+            echo "<div id='configfile' onclick=\"selectText('configfile');\" style='margin-left: 5%; margin-right: 5%; background-color: #F7FAFF; padding: 1em; border: 1px dashed #ccc;filter:alpha(opacity=75);  opacity: 0.75;  -moz-opacity:0.75; -moz-border-radius: 3px; '>";
             highlight_string($newcfgfile);
             echo "</div>";
             echo "<p>After creating your config file click the 'Next' button below.</p>";
