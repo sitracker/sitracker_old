@@ -74,7 +74,6 @@ echo colheader('select', '', FALSE, '', '', '', '1%');
 echo colheader('from', $strFrom, FALSE);
 echo colheader('subject', $strSubject, FALSE);
 echo colheader('date', $strDate, FALSE);
-echo colheader('operation', $strOperation, FALSE);
 echo "</tr>";
 while ($incoming = mysql_fetch_object($result))
 {
@@ -82,9 +81,7 @@ while ($incoming = mysql_fetch_object($result))
     echo "<td>".html_checkbox('item', FALSE)."</td>";
     echo "<td>".contact_info($incoming->contactid, $incoming->from, $incoming->emailfrom)."</td>";
     echo "</td>";
-    echo "<td>{$incoming->subject}</td>";
-    // echo "<td><pre>".print_r($incoming,true)."</pre><hr /></td>";
-    echo "<td>...</td>"; // date
+    // Subject
     echo "<td>";
     if (($incoming->locked != $sit[2]) && ($incoming->locked > 0))
     {
@@ -92,25 +89,16 @@ while ($incoming = mysql_fetch_object($result))
     }
     else
     {
-        if ($update['locked'] == $sit[2])
-        {
-            echo "<a href='{$_SERVER['PHP_SELF']}?unlock={$incoming->id}'";
-            echo " title='Unlock this update so it can be modified by someone else'> {$GLOBALS['strUnlock']}</a> | ";
-        }
-        else
-        {
-            echo "<a href=\"javascript:incident_details_window('{$incoming->id}'";
-            echo ",'incomingview');\" id='update{$incoming->updateid}' class='info'";
-            echo " title='View and lock this held e-mail'>{$GLOBALS['strView']}</a> | ";
-        }
-        
-        if ($update['reason_id'] == 2)
-        {
-            echo "<a href='incident_reopen.php?id={$update['incident_id']}&updateid={$update['updateid']}'>{$GLOBALS['strReopen']}</a> | ";
-        }
-        echo "<a href='delete_update.php?updateid=".$update['id']."&amp;tempid=".$update['tempid']."&amp;timestamp=".$update['timestamp']."' title='Remove this item permanently' onclick=\"return confirm_action('{$GLOBALS['strAreYouSureDelete']}');\"> {$GLOBALS['strDelete']}</a>";
+        echo "<a href=\"javascript:incident_details_window('{$incoming->id}'";
+        echo ",'incomingview');\" id='update{$incoming->updateid}' class='info'";
+        echo " title='View and lock this held e-mail'>";
+        echo htmlentities($incoming->subject,ENT_QUOTES, $GLOBALS['i18ncharset']);
+        echo "</a>";
     }
+    
     echo "</td>";
+    // echo "<td><pre>".print_r($incoming,true)."</pre><hr /></td>";
+    echo "<td>...</td>"; // date
     echo "</tr>";
     if ($shade == 'shade1') $shade = 'shade2';
     else $shade = 'shade1';
