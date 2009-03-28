@@ -77,6 +77,14 @@ echo colheader('date', $strDate, FALSE);
 echo "</tr>";
 while ($incoming = mysql_fetch_object($result))
 {
+    if (!empty($incoming->updateid))
+    {
+        $usql = "SELECT * FROM `{$dbUpdates}` WHERE id = '{$incoming->updateid}' LIMIT 1";
+        $uresult = mysql_query($usql);
+        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
+        $update = mysql_fetch_object($uresult);
+    }
+
     echo "<tr class='{$shade}'>";
     echo "<td>".html_checkbox('item', FALSE)."</td>";
     echo "<td>".contact_info($incoming->contactid, $incoming->from, $incoming->emailfrom)."</td>";
@@ -93,12 +101,16 @@ while ($incoming = mysql_fetch_object($result))
         echo ",'incomingview');\" id='update{$incoming->updateid}' class='info'";
         echo " title='View and lock this held e-mail'>";
         echo htmlentities($incoming->subject,ENT_QUOTES, $GLOBALS['i18ncharset']);
+        if (!empty($update->bodytext)) echo '<span>'.parse_updatebody(truncate_string($update->bodytext,1024)).'</span>';
         echo "</a>";
     }
     
     echo "</td>";
     // echo "<td><pre>".print_r($incoming,true)."</pre><hr /></td>";
-    echo "<td>...</td>"; // date
+    // Date
+    echo "<td>";
+    if (!empty($update->timestamp)) echo date($CONFIG['dateformat_datetime'], $update->timestamp);
+    echo "</td>";
     echo "</tr>";
     if ($shade == 'shade1') $shade = 'shade2';
     else $shade = 'shade1';
