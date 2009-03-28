@@ -68,7 +68,7 @@ class fetchSitMail
 	}
 	else
 	{
-	    trigger_error(imap_last_error(), E_USER_ERROR)."\n";
+	    debug_log(imap_last_error());
 	    return FALSE;
 	}
     }
@@ -112,7 +112,6 @@ class fetchSitMail
                 }
 
                 $fp = fopen($path.$filename,"w");
-//                 echo "writing ".$path.$filename."\n";
                 fwrite($fp, $message);
                 fclose($fp);
                 $attachments[] = $filename;
@@ -143,7 +142,7 @@ class fetchSitMail
 
     function deleteEmail($id)
     {
-        imap_delete($this->mailbox, $id) OR trigger_error(imap_last_error(), E_USER_ERROR);
+        imap_delete($this->mailbox, $id) OR debug_log(imap_last_error());
     }
 
     function iso8859Decode($text)
@@ -154,9 +153,9 @@ class fetchSitMail
 	function archiveEmail($id)
 	{
 		global $CONFIG;
-		if ($CONFIG['debug']) echo "Moving mail to {$CONFIG['email_archive_folder']} folder\n";
+		if ($CONFIG['debug']) debug_log("Moving mail to {$CONFIG['email_archive_folder']} folder");
 		imap_mail_move($this->mailbox, $id, $CONFIG['email_archive_folder']) OR
-			trigger_error(imap_last_error(), E_USER_ERROR);
+			debug_log(imap_last_error());
 	}
 }
 ?>
