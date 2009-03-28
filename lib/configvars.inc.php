@@ -92,6 +92,7 @@ $CFGCAT['inboundemail'] = array('enable_inbound_mail',
                          'email_username',
                          'email_password',
                          'email_address',
+                         'email_archive_folder',
                          'max_incoming_email_perday',
                          'spam_email_subject'
                          );
@@ -293,6 +294,9 @@ $CFGVAR['demo']['title'] = 'Demo Mode';
 $CFGVAR['demo']['type'] = 'select';
 
 $CFGVAR['email_address']['title'] = "Incoming email account address";
+
+$CFGVAR['email_archive_folder']['title'] = "IMAP Archive folder";
+$CFGVAR['email_archive_folder']['help'] = "When using IMAP, move email to this folder after retreiving instead of deleting it";
 
 $CFGVAR['email_options']['title'] = "Incoming email connection options";
 $CFGVAR['email_options']['help'] = "Extra options to pass to the mailbox e.g. Gmail needs '/ssl', secure Groupwise needs /ssl/novalidate-cert etc. See <a href='http://www.php.net/imap_open'>http://www.php.net/imap_open</a> for examples";
