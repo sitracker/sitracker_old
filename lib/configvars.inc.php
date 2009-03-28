@@ -18,7 +18,7 @@ if (realpath(__FILE__) == realpath($_SERVER['SCRIPT_FILENAME']))
 
 
 $CFGTAB['application'] = array('appmain', 'theming', 'ldap', 'other');
-$CFGTAB['email'] = array('inboundemail');
+$CFGTAB['email'] = array('inboundemail','outboundemail');
 $CFGTAB['features'] = array('incidents', 'portal', 'ftp', 'kb', 'sla', 'holidays', 'feedback');
 $CFGTAB['system'] = array('paths', 'locale', 'journal');
 
@@ -95,6 +95,9 @@ $CFGCAT['inboundemail'] = array('enable_inbound_mail',
                          'max_incoming_email_perday',
                          'spam_email_subject'
                          );
+
+$CFGCAT['outboundemail'] = array('support_email');
+
 
 $CFGCAT['feedback'] = array('feedback_enabled',
                             'feedback_form',
@@ -531,7 +534,8 @@ $CFGVAR['start_working_day']['help'] = 'The number of seconds since midnight tha
 $CFGVAR['start_working_day']['type'] = 'number';
 $CFGVAR['start_working_day']['unit'] = $strSeconds;
 
-$CFGVAR['support_email']['title'] = 'Emails sent by SiT will come from this address';
+$CFGVAR['support_email']['title'] = 'From address for support emails';
+$CFGVAR['support_email']['help'] = 'Email sent by SiT that uses the template variable <code>{supportemail}</code> will come from this address';
 
 $CFGVAR['support_manager']['title'] = 'Support Manager';
 $CFGVAR['support_manager']['help'] = 'The person who is in charge of your support service. Used in email templates etc.';
