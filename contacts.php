@@ -97,7 +97,7 @@ else
 {
     echo "<a href='".$_SERVER['PHP_SELF']."?displayinactive=true";
     if (!empty($search_string)) echo "&amp;search_string={$search_string}";
-    echo "'>Show inactive</a>";
+    echo "'>{$strShowAll}</a>";
     $inactivestring="displayinactive=false";
 }
 echo "</td></tr><tr><td valign='middle'>";
