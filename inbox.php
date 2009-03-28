@@ -20,13 +20,21 @@ require (APPLICATION_LIBPATH . 'functions.inc.php');
 // This page requires authentication
 require (APPLICATION_LIBPATH . 'auth.inc.php');
 
+// External variables
+$sort = cleanvar($_REQUEST['sort']);
+$order = cleanvar($_REQUEST['order']);
+$filter = cleanvar($_REQUEST['filter']);
+
+$refresh = 60;
+$title = $strInbox;
 include (APPLICATION_INCPATH . 'htmlheader.inc.php');
 
+if (empty($sort)) $sort='date';
 
 function contact_info($contactid, $email, $name)
 {
     global $strUnknown;
-
+    $info .= "<span style='float:right;'>".gravatar($email, 16) . '</span>';
     if (!empty($contactid))
     {
         $info .= "<a href='contact.php?id={$contactid}'>";
@@ -44,6 +52,11 @@ function contact_info($contactid, $email, $name)
     else $info .= "{$strUnknown}";
     if (!empty($email)) $info .= "</a>";
 
+    if (!empty($contactid))
+    {
+        $info .= " (".contact_site($contactid).")";
+    }
+    
     return $info;
 }
 
@@ -61,7 +74,20 @@ function contact_info($contactid, $email, $name)
 
 echo "<h2>".icon('email', 32)." {$strInbox}</h2>";
 
-$sql = "SELECT * FROM `$dbTempIncoming` ORDER BY id DESC";
+$sql = "SELECT * FROM `$dbTempIncoming` ";
+
+if (!empty($sort))
+{
+    if ($order=='a' OR $order=='ASC' OR $order='') $sortorder = "ASC";
+    else $sortorder = "DESC";
+    switch ($sort)
+    {
+        case 'from': $sql .= " ORDER BY `from` $sortorder"; break;
+        case 'subject': $sql .= " ORDER BY `subject` $sortorder"; break;
+        default:   $sql .= " ORDER BY `id` DESC"; break;
+    }
+
+}
 $result = mysql_query($sql);
 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
 $countresults = mysql_num_rows($result);
@@ -71,9 +97,9 @@ $shade = 'shade1';
 echo "<table align='center' style='width: 95%'>";
 echo "<tr>";
 echo colheader('select', '', FALSE, '', '', '', '1%');
-echo colheader('from', $strFrom, FALSE);
-echo colheader('subject', $strSubject, FALSE);
-echo colheader('date', $strDate, FALSE);
+echo colheader('from', $strFrom, $sort, $order, $filter);
+echo colheader('subject', $strSubject, $sort, $order, $filter);
+echo colheader('date', $strDate, $sort, $order, $filter);
 echo "</tr>";
 while ($incoming = mysql_fetch_object($result))
 {
@@ -115,6 +141,14 @@ while ($incoming = mysql_fetch_object($result))
     if ($shade == 'shade1') $shade = 'shade2';
     else $shade = 'shade1';
 }
+
+echo "<tr>";
+echo "<td>".html_checkbox('item', FALSE)."</td>";
+echo "<td colspan='*'>";
+echo "<select></select>";
+echo "</td>";
+echo "</tr>";
+
 echo "</table>";
 
 
