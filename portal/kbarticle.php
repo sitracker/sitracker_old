@@ -33,6 +33,7 @@ if (empty($id))
 echo "<h2>".icon('kb', 32)." {$strKnowledgeBaseArticle}</h2>";
 echo kb_article($id, 'external');
 
+echo "<p align='center'><a href='kb.php'>{$strBackToList}</a></p>";
 include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
 
 ?>
