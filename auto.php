@@ -169,7 +169,7 @@ function saction_TimeCalc()
 
         if (mysql_num_rows($update_result) != 1)
         {
-            if ($CONFIG['debug']) //debug_log("Cannot find SLA information for incident ".$incident['id'].", skipping");
+            //if ($CONFIG['debug']) //debug_log("Cannot find SLA information for incident ".$incident['id'].", skipping");
         }
         else
         {
@@ -193,7 +193,7 @@ function saction_TimeCalc()
 
         if (mysql_num_rows($update_result) != 1)
         {
-            if ($CONFIG['debug']) //debug_log("Cannot find review information for incident ".$incident['id'].", skipping");
+            //if ($CONFIG['debug']) //debug_log("Cannot find review information for incident ".$incident['id'].", skipping");
         }
         else
         {
@@ -201,7 +201,7 @@ function saction_TimeCalc()
             $newReviewTime = floor($now-$reviewInfo['timestamp'])/60;
             if ($CONFIG['debug'])
             {
-                if ($reviewInfo['currentowner'] != 0) //debug_log("There has been no review on incident {$incident['id']}, which was opened $newReviewTime minutes ago");
+                //if ($reviewInfo['currentowner'] != 0) //debug_log("There has been no review on incident {$incident['id']}, which was opened $newReviewTime minutes ago");
             }
             trigger('TRIGGER_INCIDENT_REVIEW_DUE', array('incidentid' => $incident['id'], 'time' => $newReviewTime));
         }
