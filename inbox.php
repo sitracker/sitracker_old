@@ -59,7 +59,7 @@ function contact_info($contactid, $email, $name)
 
 
 
-echo "<h2>".icon('email', 32)." {$strHoldingQueue}</h2>";
+echo "<h2>".icon('email', 32)." {$strInbox}</h2>";
 
 $sql = "SELECT * FROM `$dbTempIncoming` ORDER BY id DESC";
 $result = mysql_query($sql);

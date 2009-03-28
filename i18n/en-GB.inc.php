@@ -689,6 +689,7 @@ $strIfYouShouldHaveAccess = 'If you feel that you should have access to this par
 $strImportant = 'Important';
 $strInactive = 'Inactive';
 $strInbound = 'Inbound';
+$strInbox = 'Inbox';
 $strIncident = 'Incident';
 $strIncidentActivitiesIntro = 'This page is to keep track of activities relating to an incident where time spent dealing with the incident needs to be known';
 $strIncidentAdded = 'Incident Added';
