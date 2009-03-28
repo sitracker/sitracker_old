@@ -499,9 +499,9 @@ $CFGVAR['portal_creates_incidents']['options'] = 'TRUE|FALSE';
 $CFGVAR['portal_interface_style']['title'] = "Portal interface style";
 $CFGVAR['portal_interface_style']['type'] = 'interfacestyleselect';
 
-$CFGVAR['portal_kb_enabled']['help'] = "TRUE for enabled, FALSE for disabled";
-$CFGVAR['portal_kb_enabled']['options'] = 'TRUE|FALSE';
-$CFGVAR['portal_kb_enabled']['title'] = "Portal Knowledge base Enabled/Disabled";
+$CFGVAR['portal_kb_enabled']['help'] = "Public puts a link on the login page, Private makes it available on login for contacts";
+$CFGVAR['portal_kb_enabled']['options'] = 'Public|Private|Disabled';
+$CFGVAR['portal_kb_enabled']['title'] = "Portal/Public Knowledge base";
 $CFGVAR['portal_kb_enabled']['type'] = 'select';
 
 $CFGVAR['portal_site_incidents']['help'] = "Users in the portal can view site incidents based on the contract options";

@@ -14,7 +14,10 @@ require (APPLICATION_LIBPATH . 'functions.inc.php');
 
 $accesslevel = 'any';
 
-include (APPLICATION_LIBPATH . 'portalauth.inc.php');
+if ($CONFIG['portal_kb_enabled'] != 'Public')
+{
+    include (APPLICATION_LIBPATH . 'portalauth.inc.php');
+}
 include (APPLICATION_INCPATH . 'portalheader.inc.php');
 
 if (!empty($_REQUEST['id']))

@@ -14,7 +14,16 @@ require (APPLICATION_LIBPATH . 'functions.inc.php');
 
 $accesslevel = 'any';
 
-include (APPLICATION_LIBPATH . 'portalauth.inc.php');
+if ($CONFIG['portal_kb_enabled'] != 'Public')
+{
+    include (APPLICATION_LIBPATH . 'portalauth.inc.php');
+    $view = $_GET['view'];
+}
+else
+{
+    $view = 'all';
+}
+
 include (APPLICATION_INCPATH . 'portalheader.inc.php');
 
 echo "<h2>".icon('kb', 32)." {$strKnowledgeBase}</h2>";
@@ -31,42 +40,47 @@ else
     $start = $_GET['start'];
 }
 
-$view = $_GET['view'];
 $end = $start + $perpage;
 $filter = array('start' => $start, 'view' => $view);
 
-$sql = "SELECT k.*, s.name FROM `{$dbKBArticles}` AS k,
-                                `{$dbKBSoftware}` as kbs,
-                                `{$dbSoftware}` as s
-        WHERE k.docid = kbs.docid AND kbs.softwareid = s.id AND k.distribution = 'public' ";
+// $sql = "SELECT k.*, s.name FROM `{$dbKBArticles}` AS k,
+//                                $dbKBSoftware,
+//                                 `{$dbSoftware}` as s
+//         WHERE ((k.docid = kbs.docid AND kbs.softwareid = s.id) OR 1=1) AND k.distribution = 'public' ";
+// $sql = "
+// SELECT k.*, s.name FROM `{$dbKBArticles}` AS k,
+// LEFT OUTER JOIN `$dbKBSoftware`, `{$dbSoftware}`
+// ON k.docid = kbs.docid AND kbs.softwareid = s.id ";
 
-// $sql = "SELECT DISTINCT k.*, s.name FROM `{$dbKBArticles}` AS k, `{$dbSoftware}` as s ";
-// $sql .= "LEFT JOIN `{$dbKBSoftware}` as kbs ";
-// $sql .= "ON kbs.softwareid=s.id ";
-// $sql .= "WHERE k.docid = kbs.docid AND k.distribution='public' ";
 
-if ($view != 'all')
+$sql = "SELECT k.*, s.name FROM `{$dbKBArticles}` AS k, `{$dbSoftware}` as s ";
+$sql .= "LEFT OUTER JOIN `{$dbKBSoftware}` as kbs ";
+$sql .= "ON kbs.softwareid=s.id ";
+$sql .= "WHERE (k.docid = kbs.docid OR 1=1) AND k.distribution='public' ";
+if ($CONFIG['portal_kb_enabled'] != 'Public')
 {
-    $softwares = contract_software();
-    $sql .= "AND (1=0 ";
-    if (is_array($softwares))
+    if ($view != 'all')
     {
-        foreach ($softwares AS $software)
+        $softwares = contract_software();
+        $sql .= "AND (1=1 ";
+        if (is_array($softwares))
         {
-            $sql .= "OR kbs.softwareid={$software} ";
+            foreach ($softwares AS $software)
+            {
+                $sql .= "OR kbs.softwareid={$software} ";
+            }
         }
+        $sql .= ")";
+
+        echo "<p class='info'>{$strShowingOnlyRelevantArticles} - ";
+        echo "<a href='{$_SERVER['PHP_SELF']}?view=all'>{$strShowAll}</a></p>";
     }
-    $sql .= ")";
-
-    echo "<p class='info'>{$strShowingOnlyRelevantArticles} - ";
-    echo "<a href='{$_SERVER['PHP_SELF']}?view=all'>{$strShowAll}</a></p>";
+    else
+    {
+        echo "<p class='info'>{$strShowingAllArticles} - ";
+        echo "<a href='{$_SERVER['PHP_SELF']}'>{$strShowOnlyRelevant}</a></p>";
+    }
 }
-else
-{
-    echo "<p class='info'>{$strShowingAllArticles} - ";
-    echo "<a href='{$_SERVER['PHP_SELF']}'>{$strShowOnlyRelevant}</a></p>";
-}
-
 //get the full SQL so we can see the total rows
 $countsql = $sql;
 $sql .= "GROUP BY k.docid ";

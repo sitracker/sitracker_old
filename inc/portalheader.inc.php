@@ -139,46 +139,51 @@ $filter = array('page' => $page);
 //$contractresult = mysql_query($sql);
 //if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 //$numcontracts = mysql_num_rows($contractresult);
-echo "<div id='menu'>\n";
-echo "<ul id='menuList'>\n";
-echo "<li><a href='index.php'>{$strIncidents}</a></li>";
-if (sizeof($_SESSION['entitlement']) == 1 OR !$CONFIG['portal_creates_incidents'])
-{
-    $contractid = $_SESSION['entitlement'][0]->id;
-    echo "<li><a href='add.php";
-	if ($CONFIG['portal_creates_incidents'])
-	{
-		echo "?contractid={$contractid}";
-	}
-	echo "'>{$strAddIncident}</a></li>";
-}
-else
-{
-    echo "<li><a href='entitlement.php'>{$strEntitlement}</a></li>";
-}
-$sql = "SELECT docid FROM `{$dbKBArticles}`";
-$result = mysql_query($sql);
-if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
-if ($CONFIG['kb_enabled'] AND $CONFIG['portal_kb_enabled'] AND mysql_num_rows($result) > 0)
-{
-    echo "<li><a href='kb.php'>{$strKnowledgeBase}</a></li>";
-}
 
-if ($_SESSION['usertype'] == 'admin')
+if ($_SESSION['portalauth'] != TRUE AND $_SERVER['PHP_SELF'] != 'kb.php' 
+    AND $CONFIG['portal_kb_enabled'] != 'Public')
 {
-    echo "<li><a href='admin.php'>{$strAdmin}</a></li>";
+    echo "<div id='menu'>\n";
+    echo "<ul id='menuList'>\n";
+    echo "<li><a href='index.php'>{$strIncidents}</a></li>";
+    if (sizeof($_SESSION['entitlement']) == 1 OR !$CONFIG['portal_creates_incidents'])
+    {
+        $contractid = $_SESSION['entitlement'][0]->id;
+        echo "<li><a href='add.php";
+        if ($CONFIG['portal_creates_incidents'])
+        {
+            echo "?contractid={$contractid}";
+        }
+        echo "'>{$strAddIncident}</a></li>";
+    }
+    else
+    {
+        echo "<li><a href='entitlement.php'>{$strEntitlement}</a></li>";
+    }
+    $sql = "SELECT docid FROM `{$dbKBArticles}`";
+    $result = mysql_query($sql);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+    if ($CONFIG['kb_enabled'] AND $CONFIG['portal_kb_enabled'] != 'Disabled' AND mysql_num_rows($result) > 0)
+    {
+        echo "<li><a href='kb.php'>{$strKnowledgeBase}</a></li>";
+    }
+
+    if ($_SESSION['usertype'] == 'admin')
+    {
+        echo "<li><a href='admin.php'>{$strAdmin}</a></li>";
+    }
+    echo "<li><a href='../logout.php'>{$strLogout}</a></li>";
+
+    echo "</ul>";
+
+    echo "<div id='portaluser'><a href='contactdetails.php'>";
+    echo contact_realname($_SESSION['contactid']);
+    echo ", ".contact_site($_SESSION['contactid']);
+    echo "</a>";
+    echo "</div>";
+    echo "</div>";
+    echo "<div id='mainframe'>";
+
+    $headerdisplayed = TRUE;
 }
-echo "<li><a href='../logout.php'>{$strLogout}</a></li>";
-
-echo "</ul>";
-
-echo "<div id='portaluser'><a href='contactdetails.php'>";
-echo contact_realname($_SESSION['contactid']);
-echo ", ".contact_site($_SESSION['contactid']);
-echo "</a>";
-echo "</div>";
-echo "</div>";
-echo "<div id='mainframe'>";
-
-$headerdisplayed = TRUE;
 ?>
