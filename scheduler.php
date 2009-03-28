@@ -40,7 +40,7 @@ switch ($_REQUEST['mode'])
             echo "<td><strong>{$saction->action}</strong><br />{$saction->description}</td></tr>\n";
             echo "<tr><th><label for='status'>{$strStatus}</label>".help_link('SchedulerStatus')."</th>";
             $statuslist = array('enabled' => $strEnabled ,'disabled' => $strDisabled);
-            echo "<td>".array_drop_down($statuslist, 'status', $saction->status);
+            echo "<td>".array_drop_down($statuslist, 'status', $saction->status, '', TRUE);
             echo "</td></tr>\n";
             if (!empty($saction->paramslabel))
             {
