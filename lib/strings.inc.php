@@ -137,12 +137,20 @@ $hmenu[203010] = array_merge(array (10=> array ( 'perm'=> 56, 'name'=> $strAddVe
                         70=> array ('perm'=> 56, 'name'=> $strEditVendor, 'url'=>"{$CONFIG['application_webpath']}vendor_edit.php")
 ), $hmenu[203010]);
 
+//need to call directly as we don't have functions yet
+$sql = "SELECT COUNT(*) AS count FROM `{$dbTempIncoming}`";
+$result = mysql_query($sql);
+list($inbox_count) = mysql_fetch_row($result);
+if ($inbox_count > 0)
+{
+    $inbox_count = " <strong>(".$inbox_count.")</strong>";
+}
 // Support
 if (!is_array($hmenu[30])) $hmenu[30] = array();
 $hmenu[30] = array_merge(array (10=> array ( 'perm'=> 5, 'name'=> $strAddIncident, 'url'=>"{$CONFIG['application_webpath']}incident_add.php"),
                     20=> array ( 'perm'=> 0, 'name'=> $strMyIncidents, 'url'=>"{$CONFIG['application_webpath']}incidents.php"),
                     30=> array ( 'perm'=> 0, 'name'=> $strAllIncidents, 'url'=>"{$CONFIG['application_webpath']}incidents.php?user=all&amp;queue=1&amp;type=support"),
-                    40=> array ( 'perm'=> 42, 'name'=> $strInbox, 'url'=>"{$CONFIG['application_webpath']}inbox.php"),
+                    40=> array ( 'perm'=> 42, 'name'=> $strInbox.$inbox_count, 'url'=>"{$CONFIG['application_webpath']}inbox.php"),
                     50=> array ( 'perm'=> 42, 'name'=> $strHoldingQueue, 'url'=>"{$CONFIG['application_webpath']}holding_queue.php")
 ), $hmenu[30]);
 
