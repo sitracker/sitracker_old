@@ -64,7 +64,7 @@ while ($site = mysql_fetch_object($result))
             echo "Product,Licence,Expiry Date,Engineer 1, Engineer 2, Engineer 3, Engineer 4\n";
             while ($maint = mysql_fetch_object($mresult))
             {
-                if ($maint->expirydate > $now AND $maint->term!='yes')
+                if ($maint->expirydate > $now AND $maint->term != 'yes')
                 {
                     echo "{$maint->product},";
                     echo "{$maint->licence_quantity} {$maint->licence_type},";
@@ -91,7 +91,7 @@ while ($site = mysql_fetch_object($result))
             echo "<tr><th style='text-align: left;'>{$strProduct}</th><th style='text-align: left;'>{$strLicense}</th><th style='text-align: left;'>{$strExpiryDate}</th><th style='text-align: left;'>Engineer 1</th><th style='text-align: left;'>Engineer 2</th><th style='text-align: left;'>Engineer 3</th><th style='text-align: left;'>Engineer 4</th></tr>\n";
             while ($maint = mysql_fetch_object($mresult))
             {
-                if ($maint->expirydate > $now AND $maint->term!='no')
+                if ($maint->expirydate > $now AND $maint->term != 'no')
                 {
                     echo "<tr>";
                     echo "<td width='20%'>{$maint->product}</td>";
@@ -117,7 +117,7 @@ while ($site = mysql_fetch_object($result))
         }
     }
 }
-if ($_REQUEST['mode']!='csv')
+if ($_REQUEST['mode'] != 'csv')
 {
     echo "<p align='center'><a href='{$_SERVER['PHP_SELF']}?siteid={$siteid}&amp;mode=csv'>Download as <abbr title='Comma Seperated Values'>CSV</abbr> File</a></p>";
     include (APPLICATION_INCPATH . 'htmlfooter.inc.php');

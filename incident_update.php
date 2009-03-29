@@ -1,5 +1,5 @@
 <?php
-// update_incident.php - For for logging updates to an incident
+// incident_update.php - For for logging updates to an incident
 //
 // SiT (Support Incident Tracker) - Support call tracking system
 // Copyright (C) 2000-2009 Salford Software Ltd. and Contributors

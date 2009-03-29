@@ -6308,6 +6308,7 @@ function upload_file($file, $incidentid, $updateid, $type='public')
 * @param string $title - text to go in the first column
 * @param string $level either management or engineer, management is able to (de)select users
 * @param int $groupid  Defalt group to select
+* @param string $type - Type of buttons to use either radio or checkbox 
 * @return table row of format <tr><th /><td /></tr>
 * @author Paul Heaney
 */
