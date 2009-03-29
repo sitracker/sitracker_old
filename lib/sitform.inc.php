@@ -27,7 +27,7 @@ class Form
   {
     global $strSubmit;
     
-    echo "<form action='{$_SERVER['PHP_SLEF']}' id='{$this->name}' name='{$this->name}' method='POST'>";
+    echo "<form action='{$_SERVER['PHP_SELF']}' id='{$this->name}' name='{$this->name}' method='POST'>";
     echo "<table class='vertical'>";
     foreach($this->row AS $r)
     {
