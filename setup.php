@@ -168,7 +168,7 @@ function setup_configure()
     }
     else $html .= "<h2>New Configuration</h2><p>Please complete this form to create a new configuration file for SiT!</p>";
 
-    if ($cfg_file_writable OR $_SESSION['new'] === 1 OR $cfg_file_exists == FALSE)
+    if ($cfg_file_writable OR $_SESSION['new'] === 1 OR $cfg_file_exists == FALSE OR $_REQUEST['configfile'] == 'new')
     {
         $html .= "\n<form action='setup.php' method='post'>\n";
 
@@ -850,10 +850,20 @@ switch ($_REQUEST['action'])
         }
         else
         {
-            echo "<p class='info'>You can now go ahead and run SiT!.</p>";
-            echo "<form action='index.php' method='get'>";
-            echo "<input type='submit' value=\"Run SiT!\" />";
-            echo "</form>\n";
+            $sql = "SHOW TABLES LIKE '{$dbUsers}'";
+            $result = @mysql_query($sql);
+            if (mysql_error() OR mysql_num_rows($result) < 1)
+            {
+                echo "<p>Next we will create a database schema</p>";
+                echo setup_button('', 'Next');
+            }
+            else
+            {
+                echo "<p class='info'>You can now go ahead and run SiT!.</p>";
+                echo "<form action='index.php' method='get'>";
+                echo "<input type='submit' value=\"Run SiT!\" />";
+                echo "</form>\n";
+            }
         }
     break;
 
