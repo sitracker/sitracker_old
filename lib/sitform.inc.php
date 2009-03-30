@@ -27,14 +27,14 @@ class Form
   {
     global $strSubmit;
     
-    echo "<form action='{$_SERVER['PHP_SELF']}' id='{$this->name}' name='{$this->name}' method='POST'>";
+    echo "<form action='{$_SERVER['PHP_SELF']}' id='{$this->name}' name='{$this->name}' method='post'>";
     echo "<table class='vertical'>";
     foreach($this->row AS $r)
     {
       echo $r->generateHTML();
     }
     echo "</table>";
-    echo "<p align='center'><input type='submit' name='submit' value='{$this->submitLabel}' /></p>";
+    echo "<p align='center'><input type='submit' id='{$this->name}submit' name='submit' value='{$this->submitLabel}' /></p>";
     echo "</form>";
   }
   
