@@ -300,7 +300,7 @@ $CFGVAR['email_incoming_folder']['title'] = "IMAP incoming folder";
 $CFGVAR['email_incoming_folder']['help'] = "INBOX by default, only needed if you want to retrieve email from a different folder";
 
 $CFGVAR['email_archive_folder']['title'] = "IMAP Archive folder";
-$CFGVAR['email_archive_folder']['help'] = "When using IMAP, move email to this folder after retreiving instead of deleting it";
+$CFGVAR['email_archive_folder']['help'] = "When using IMAP, move email to this folder after retreiving instead of deleting it. Leave blank to delete email from the server after it has been downloaded.";
 
 $CFGVAR['email_options']['title'] = "Incoming email connection options";
 $CFGVAR['email_options']['help'] = "Extra options to pass to the mailbox e.g. Gmail needs '/ssl', secure Groupwise needs /ssl/novalidate-cert etc. See <a href='http://www.php.net/imap_open'>http://www.php.net/imap_open</a> for examples";
