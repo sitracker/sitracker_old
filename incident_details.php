@@ -8,9 +8,6 @@
 // of the GNU General Public License, incorporated herein by reference.
 //
 
-// This file will soon be superceded by incident.php - 20Oct05 INL
-
-
 $permission = 61; // View Incident Details
 require ('core.php');
 require (APPLICATION_LIBPATH . 'functions.inc.php');
@@ -481,6 +478,24 @@ foreach ($keeptags AS $keeptag)
 echo log_nav_bar();
 $count = 0;
 $billable_incident_approved = is_billable_incident_approved($incidentid);
+if (!$_GET['win'])
+{
+    echo "<div id='log_container'>";
+    echo "<div id='portalleft'>";
+    echo "<h3>Quick Actions</h3>";
+    echo "<u>Status</u><br />";
+    echo "<a>Awaiting customer</a><br />";
+    echo "<a>Active</a>";
+    echo "</p><p>";
+    echo "<u>Ownership</u><br />";
+    echo "<a>Assign to me</a><br />";
+    echo "<a>Temp assign to me</a><br />";
+    echo "</p>";
+    echo "<p><u>Quick update</u>";
+    echo "<textarea></textarea><br /><input type='submit' value='Update'>";
+    echo "</p></div>";
+    echo "<div id='portalright'>";
+}
 
 while ($update = mysql_fetch_object($result))
 {
@@ -791,15 +806,19 @@ while ($update = mysql_fetch_object($result))
 
             echo "</div>";
         }
-
+        echo "</div>";
     }
-    echo "</div>";
+    
     $count++;
 }
 
 if ($_SESSION['num_update_view'] > 0)
 {
     echo log_nav_bar();
+}
+if (!$_GET['win'])
+{
+    echo "</div>";
 }
 
 include (APPLICATION_INCPATH . 'incident_html_bottom.inc.php');
