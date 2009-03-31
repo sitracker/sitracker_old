@@ -404,7 +404,7 @@ $CFGVAR['kb_disclaimer_html']['title'] = 'Knowledgebase disclaimer';
 $CFGVAR['kb_disclaimer_html']['help']  = 'A disclaimer message to be displayed at the bottom of every knowledge base article. Simple HTML is allowed';
 
 $CFGVAR['kb_enabled']['title'] = "Knowledge base Enabled";
-$CFGVAR['kb_enabled']['help'] = "Set to TRUE to enable the Knoweldge Base or FALSE to disable it";
+$CFGVAR['kb_enabled']['help'] = "Set to TRUE to enable the Knowledge Base or FALSE to disable it";
 $CFGVAR['kb_enabled']['options'] = 'TRUE|FALSE';
 $CFGVAR['kb_enabled']['type'] = 'select';
 
