@@ -159,7 +159,9 @@ function setup_configure()
         //$html .= "<p>Since you already have a config file we assume you are upgrading or reconfiguring, if this is not the case please delete the existing config file.</p>";
         if ($cfg_file_writable)
         {
-            $html .= "<p class='error'>Important: The file permissions on the configuration file allow it to be modified, we recommend you make this file read-only once SiT! is configured.</p>";
+            $html .= "<p class='error'>Important: The file permissions on the configuration file ";
+            $html .= "allow it to be modified, we recommend you make this file read-only once SiT! is configured.";
+            $html .= "</p>";
         }
         else
         {
@@ -735,7 +737,13 @@ switch ($_REQUEST['action'])
             echo "<p>Config file modified</p>";
             if (!@chmod($config_filename, 0640))
             {
-                echo "<p class='error'>Important: The file permissions on the file <var>{$config_filename}</var> allow the file to be modified, we recommend you now make this file read-only.</p>";
+                echo "<p class='error'>Important: The file permissions on the file <var>{$config_filename}</var> ";
+                echo "allow the file to be modified, we recommend you now make this file read-only.";
+                if (DIRECTORY_SEPARATOR == '/')
+                {
+                    $html .= "<br />You can run the command <code>chmod 444</code> to make it read-only.";
+                }
+                echo "</p>";
             }
         }
         echo setup_button('checkdbstate', 'Next');
@@ -1410,7 +1418,18 @@ switch ($_REQUEST['action'])
                     echo "<h2>Checking installation...</h2>";
                     if ($cfg_file_writable)
                     {
-                        echo "<p class='error'>Important: The file permissions on the configuration file <var>{$config_filename}</var> file allow it to be modified, we recommend you make this file read-only.</p>";
+                        echo "<p class='error'>Important: The file permissions on the configuration file <var>{$config_filename}</var> file ";
+                        echo "allow it to be modified, we recommend you make this file read-only.";
+                        if (DIRECTORY_SEPARATOR == '/')
+                        {
+                            echo "<br />You can run the following shell command to make it read-only.<br /><br /><var>chmod 444 {$config_filename}</var>";
+                        }
+                        echo "</p>";
+                        echo setup_button('', 'Re-check installation');
+                        echo "<br />or<br /><br />";
+                        echo "<form action='index.php' method='get'>";
+                        echo "<input type='submit' value=\"Run SiT!\" />";
+                        echo "</form>\n";
                     }
                     elseif (!isset($_REQUEST))
                     {
