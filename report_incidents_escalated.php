@@ -165,6 +165,7 @@ while ($escalations = mysql_fetch_object($escs))
         $esc[$name][$obj->priority]++;
         $str = "<span><strong>".$obj->forenames." ".$obj->surname."</strong><br />".$obj->siteName."</span>";
         $esc[$name]['calls'][$i]['text'] = "<a href=\"javascript:incident_details_window_l('".$obj->id."', 'incident".$obj->id."')\"  title=\"{$obj->title}\" class='info'>[".$obj->id."]{$str}</a> #".$obj->externalid." ".$obj->title;
+        $esc[$name]['calls'][$i]['text'] .= "<br />".contact_realname($obj->contact).', '.contact_site($obj->contact);
         $esc[$name]['calls'][$i]['software'] = $obj->name;
         $esc[$name]['calls'][$i]['status'] = $obj->status;
         $esc[$name]['calls'][$i]['localowner'] = $obj->owner;
@@ -180,7 +181,9 @@ while ($escalations = mysql_fetch_object($escs))
         $html .= "<th align='center'>".priority_icon(2)."</th>";
         $html .= "<th align='center'>".priority_icon(1)."</th>";
         $html .= "<td>";
-        $html .= "<table width='100%'><tr><th width='50%'>{$strIncident}</th><th width='12%'>{$strInternalEngineer}</th><th width='25%'>{$strSoftware}</th><th>{$strStatus}</th></tr></table>\n";
+        $html .= "<table width='100%'><tr><th width='50%'>{$strIncident}</th>";
+        $html .= "<th width='12%'>{$strInternalEngineer}</th><th width='25%'>{$strSoftware}</th>";
+        $html .= "<th>{$strStatus}</th></table>\n";
         $html .= "</td>";
         $html .= "</tr>\n";
 
