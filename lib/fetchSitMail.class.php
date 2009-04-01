@@ -62,15 +62,15 @@ class fetchSitMail
     {
         $this->mailbox = imap_open($this->server, $this->username,
                                    $this->password, 'CL_EXPUNGE');
-	if ($this->mailbox)
-	{
-	    return TRUE;
-	}
-	else
-	{
-	    debug_log(imap_last_error());
-	    return FALSE;
-	}
+        if ($this->mailbox)
+        {
+            return TRUE;
+        }
+        else
+        {
+            debug_log(imap_last_error());
+            return FALSE;
+        }
     }
 
     function getNumUnreadEmails()
@@ -124,7 +124,7 @@ class fetchSitMail
     function messageBody($id)
     {
         global $CONFIG;
-        if ($CONFIG['debug']) debug_log("Retreiving message {$id} from server\n");
+        if ($CONFIG['debug']) debug_log("Retrieving message {$id} from server\n");
         if (imap_body($this->mailbox, $id))
         {
             return imap_body($this->mailbox, $id);
@@ -150,12 +150,12 @@ class fetchSitMail
         return imap_utf7_encode($text);
     }
 
-	function archiveEmail($id)
-	{
-		global $CONFIG;
-		if ($CONFIG['debug']) debug_log("Moving mail to {$CONFIG['email_archive_folder']} folder");
-		imap_mail_move($this->mailbox, $id, $CONFIG['email_archive_folder']) OR
-			debug_log(imap_last_error());
-	}
+    function archiveEmail($id)
+    {
+        global $CONFIG;
+        if ($CONFIG['debug']) debug_log("Moving mail to {$CONFIG['email_archive_folder']} folder");
+        imap_mail_move($this->mailbox, $id, $CONFIG['email_archive_folder']) OR
+        debug_log(imap_last_error());
+    }
 }
 ?>
