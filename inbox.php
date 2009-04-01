@@ -34,7 +34,7 @@ if (empty($sort)) $sort='date';
 function contact_info($contactid, $email, $name)
 {
     global $strUnknown;
-    $info .= "<span style='float:right;'>".gravatar($email, 16) . '</span>';
+    //$info .= "<span style='float:right;'>".gravatar($email, 16) . '</span>';
     if (!empty($contactid))
     {
         $info .= "<a href='contact.php?id={$contactid}'>";
@@ -46,17 +46,21 @@ function contact_info($contactid, $email, $name)
         $info .= icon('email', 16);
     }
     $info .= ' ';
-    if (!empty($email)) $info .= "<a href=\"mailto:{$email}\">";
+    if (!empty($email)) $info .= "<a href=\"mailto:{$email}\" class='info'>";
     if (!empty($name)) $info .= "{$name}";
     elseif (!empty($email)) $info .= "{$email}";
     else $info .= "{$strUnknown}";
-    if (!empty($email)) $info .= "</a>";
+    if (!empty($email))
+    {
+        $info .= "<span>".gravatar($email, 50, FALSE)."</span>";
+        $info .= "</a>";
+    }
 
     if (!empty($contactid))
     {
         $info .= " (".contact_site($contactid).")";
     }
-    
+
     return $info;
 }
 
@@ -97,9 +101,9 @@ $shade = 'shade1';
 echo "<table align='center' style='width: 95%'>";
 echo "<tr>";
 echo colheader('select', '', FALSE, '', '', '', '1%');
-echo colheader('from', $strFrom, $sort, $order, $filter);
+echo colheader('from', $strFrom, $sort, $order, $filter, '', '25%');
 echo colheader('subject', $strSubject, $sort, $order, $filter);
-echo colheader('date', $strDate, $sort, $order, $filter);
+echo colheader('date', $strDate, $sort, $order, $filter, '', '15%');
 echo "</tr>";
 while ($incoming = mysql_fetch_object($result))
 {
@@ -130,7 +134,7 @@ while ($incoming = mysql_fetch_object($result))
         if (!empty($update->bodytext)) echo '<span>'.parse_updatebody(truncate_string($update->bodytext,1024)).'</span>';
         echo "</a>";
     }
-    
+
     echo "</td>";
     // echo "<td><pre>".print_r($incoming,true)."</pre><hr /></td>";
     // Date
@@ -145,7 +149,11 @@ while ($incoming = mysql_fetch_object($result))
 echo "<tr>";
 echo "<td>".html_checkbox('item', FALSE)."</td>";
 echo "<td colspan='*'>";
-echo "<select></select>";
+echo "<select>";
+echo "<option value='' selected='selected'></option>";
+echo "<option value='deleteall'>{$strDelete}</option>";
+echo "<option value='assignall'>{$strAssign}</option>";
+echo "</select>";
 echo "</td>";
 echo "</tr>";
 
