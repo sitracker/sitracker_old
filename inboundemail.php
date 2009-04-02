@@ -319,13 +319,15 @@ if ($emails > 0)
         }
 
         // Convert the message encoding to UTF-8 if it isn't already
-        if (!empty($results['Encoding']) AND !strcasecmp('UTF-8', $results['Encoding']))
+        if (!empty($results['Encoding']) AND strcasecmp('UTF-8', $results['Encoding']) !== 0)
         {
             $message = mb_convert_encoding($message, "UTF-8", strtoupper($results['Encoding']));
+            if ($CONFIG['debug']) debug_log("Converted message encoding from {$results['Encoding']} to UTF-8");
         }
-        if (!empty($results['SubjectEncoding']) AND !strcasecmp('UTF-8', $results['SubjectEncoding']))
+        if (!empty($results['SubjectEncoding']) AND strcasecmp('UTF-8', $results['SubjectEncoding']) !== 0)
         {
             $subject = mb_convert_encoding($subject, "UTF-8", strtoupper($results['SubjectEncoding']));
+            if ($CONFIG['debug']) debug_log("Converted subject encoding from {$results['SubjectEncoding']} to UTF-8");
         }
 
         //** BEGIN UPDATE INCIDENT **//
