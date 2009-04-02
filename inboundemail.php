@@ -323,7 +323,7 @@ if ($emails > 0)
         {
             $message = mb_convert_encoding($message, "UTF-8", strtoupper($results['Encoding']));
         }
-        if (!empty($results['SubjectEncoding']) AND !strcasecmp('UTF-8', $results['Encoding']))
+        if (!empty($results['SubjectEncoding']) AND !strcasecmp('UTF-8', $results['SubjectEncoding']))
         {
             $subject = mb_convert_encoding($subject, "UTF-8", strtoupper($results['SubjectEncoding']));
         }
