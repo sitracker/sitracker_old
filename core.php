@@ -63,8 +63,9 @@ if (mysql_error())
     header("Location: {$CONFIG['application_webpath']}setup.php?msg={$msg}");
     exit;
 }
-// mysql_query("SET CHARACTER SET utf8");
-mysql_query("SET NAMES utf8");
+
+mysql_query("SET NAMES 'utf8'");
+mysql_query("SET CHARACTER SET utf8");
 
 // mysql_query("SET time_zone = {$CONFIG['timezone']}");
 
