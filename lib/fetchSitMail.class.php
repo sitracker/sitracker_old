@@ -25,6 +25,7 @@ class fetchSitMail
                           'localhost', $servertype = 'pop', $port = '',
                           $options = '')
     {
+        global $CONFIG;
         if (!empty($CONFIG['email_incoming_folder']))
         {
             $folder = $CONFIG['email_incoming_folder'];

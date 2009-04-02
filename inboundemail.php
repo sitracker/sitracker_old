@@ -318,6 +318,16 @@ if ($emails > 0)
             }
         }
 
+        // Convert the message encoding to UTF-8 if it isn't already
+        if (!empty($results['Encoding']) AND !strcasecmp('UTF-8', $results['Encoding']))
+        {
+            $message = mb_convert_encoding($message, "UTF-8", strtoupper($results['Encoding']));
+        }
+        if (!empty($results['SubjectEncoding']) AND !strcasecmp('UTF-8', $results['Encoding']))
+        {
+            $subject = mb_convert_encoding($subject, "UTF-8", strtoupper($results['SubjectEncoding']));
+        }
+
         //** BEGIN UPDATE INCIDENT **//
         $headertext = '';
         // Build up header text to append to the incident log
@@ -357,11 +367,6 @@ if ($emails > 0)
         //** END UPDATE INCIDENT **//
 
         //** BEGIN UPDATE **//
-        // Convert the encoding to UTF-8 if it isn't already
-        if (!empty($results['Encoding']) AND !strcasecmp('UTF-8', $results['Encoding']))
-        {
-            $message = mb_convert_encoding($message, "UTF-8", strtoupper($results['Encoding']));
-        }
         $bodytext = $headertext . "<hr>" . mysql_real_escape_string($message);
 
         // Strip excessive line breaks

@@ -212,7 +212,7 @@ $hmenu[70] = array_merge(array (10=> array ( 'perm'=> 0, 'name'=> "{$strHelpCont
                     50=> array ( 'perm'=> 41, 'name'=> $strHelpAbout, 'url'=>"{$CONFIG['application_webpath']}about.php")
 ), $hmenu[70]);
 
-if ($_SESSION['auth']) plugin_do('define_menu');
+// if ($_SESSION['auth']) plugin_do('define_menu');
 
 // Sort the top level menu, so that plugin menus appear in the right place
 ksort($hmenu[0]);
