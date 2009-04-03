@@ -127,8 +127,10 @@ while ($incoming = mysql_fetch_object($result))
     }
     else
     {
-        echo "<a href=\"javascript:incident_details_window('{$incoming->id}'";
-        echo ",'incomingview');\" id='update{$incoming->updateid}' class='info'";
+        // TODO option for popup or not (Mantis 619)
+        // $url = "javascript:incident_details_window('{$incoming->id}','incomingview');";
+        $url = "incident_details.php?id={$incoming->id}&amp;win=incomingview";
+        echo "<a href=\"{$url}\" id='update{$incoming->updateid}' class='info'";
         echo " title='View and lock this held e-mail'>";
         echo htmlentities($incoming->subject,ENT_QUOTES, $GLOBALS['i18ncharset']);
         if (!empty($update->bodytext)) echo '<span>'.parse_updatebody(truncate_string($update->bodytext,1024)).'</span>';
