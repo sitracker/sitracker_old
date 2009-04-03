@@ -134,6 +134,7 @@ if ($emails > 0)
 
         $mime = new mime_parser_class();
         $mime->mbox = 0;
+        $mime->decode_headers = 1;
         $mime->decode_bodies = 1;
         $mime->ignore_syntax_errors = 1;
 
@@ -143,6 +144,8 @@ if ($emails > 0)
         $mime->Analyze($decoded[0], $results);
         $to = $cc = $from = $from_name = $from_email = "";
 
+debug_log('DECODED: '.print_r($decoded, true));
+
         if ($CONFIG['debug'])
         {
             debug_log("Message $i Email Type: '{$results['Type']}', Encoding: '{$results['Encoding']}'");
@@ -150,7 +153,7 @@ if ($emails > 0)
         }
 
         // Attempt to recognise contact from the email address
-        $from_email = strtolower($results['From'][0]['address']);
+        $from_email = strtolower($decoded[0]['ExtractedAddresses']['from:'][0]['address']);
         $sql = "SELECT id FROM `{$GLOBALS['dbContacts']}` ";
         $sql .= "WHERE email = '{$from_email}'";
         if ($result = mysql_query($sql))
@@ -160,9 +163,16 @@ if ($emails > 0)
             $contactid = $row->id;
         }
 
-        if (!empty($results['From'][0]['name']))
+        $from_name = $decoded[0]['ExtractedAddresses']['from:'][0]['name'];
+        // Convert the from encoding to UTF-8 if it isn't already
+        if (strcasecmp('UTF-8', $decoded[0]['ExtractedAddresses']['from:'][0]['encoding']) !== 0)
         {
-            $from_name = $results['From'][0]['name'];
+            $from_name = mb_convert_encoding($from_name, "UTF-8", strtoupper($decoded[0]['ExtractedAddresses']['from:'][0]['encoding']));
+            if ($CONFIG['debug']) debug_log("Converted 'from header' encoding from {$decoded[0]['ExtractedAddresses']['from:'][0]['encoding']} to UTF-8");
+        }
+
+        if (!empty($from_name))
+        {
             $from =  $from_name . " <". $from_email . ">";
         }
         else
@@ -171,88 +181,69 @@ if ($emails > 0)
         }
 
         $subject = $results['Subject'];
+        if (!empty($results['SubjectEncoding']) AND strcasecmp('UTF-8', $results['SubjectEncoding']) !== 0)
+        {
+            $subject = mb_convert_encoding($subject, "UTF-8", strtoupper($results['SubjectEncoding']));
+            if ($CONFIG['debug']) debug_log("Converted subject encoding from {$results['SubjectEncoding']} to UTF-8");
+        }
+
         $date = $results['Date'];
+
+        if (is_array($decoded[0]['ExtractedAddresses']['to:']))
+        {
+            foreach ($decoded[0]['ExtractedAddresses']['to:'] as $var)
+            {
+                $num = sizeof($decoded[0]['ExtractedAddresses']['to:']);
+                $cur = 1;
+                if (!empty($var['name']))
+                {
+                    if (!empty($var['encoding']) AND strcasecmp('UTF-8', $var['encoding']) !== 0)
+                    {
+                        $var['name'] = mb_convert_encoding($var['name'], "UTF-8", strtoupper($var['encoding']));
+                    }
+                    $to .= $var['name']. " <".$var['address'].">";
+                    if ($cur != $num) $to .= ", ";
+                }
+                else
+                {
+                    $to .= $var['address'];
+                }
+                $cur++;
+            }
+        }
+
+        if (is_array($decoded[0]['ExtractedAddresses']['cc:']))
+        {
+            foreach ($decoded[0]['ExtractedAddresses']['cc:'] as $var)
+            {
+                $num = sizeof($decoded[0]['ExtractedAddresses']['cc:']);
+                $cur = 1;
+                if (!empty($var['name']))
+                {
+                    if (!empty($var['encoding']) AND strcasecmp('UTF-8', $var['encoding']) !== 0)
+                    {
+                        $var['name'] = mb_convert_encoding($var['name'], "UTF-8", strtoupper($var['encoding']));
+                    }
+                    $cc .= $var['name']. " <".$var['address'].">";
+                    if ($cur != $num) $cc .= ", ";
+                }
+                else
+                {
+                    $cc .= $var['address'];
+                }
+                $cur++;
+            }
+        }
+
 
         switch ($results['Type'])
         {
             case 'html':
-                if (is_array($results['To']))
-                {
-                    foreach ($results['To'] as $var)
-                    {
-                        $num = sizeof($results['To']);
-                        $cur = 1;
-                        if (!empty($var['name']))
-                        {
-                            $to .= $var['name']. " <".$var['address'].">";
-                            if ($cur != $num) $cc .= ", ";
-                        }
-                        else
-                        {
-                            $to .= $var['address'];
-                        }
-                        $cur++;
-                    }
-                }
-
-                if (is_array($results['Cc']))
-                {
-                    foreach ($results['Cc'] as $var)
-                    {
-                        $num = sizeof($results['Cc']);
-                        $cur = 1;
-                        if (!empty($var['name']))
-                        {
-                            $cc .= $var['name']. " <".$var['address'].">";
-                            if ($cur != $num) $cc .= ", ";
-                        }
-                        else
-                        {
-                            $cc .= $var['address'];
-                        }
-                        $cur++;
-                    }
-                }
 
                 $message = $results['Alternative'][0]['Data'];
                 break;
 
             case 'text':
-                if (is_array($results['To']))
-                {
-                    foreach ($results['To'] as $var)
-                    {
-                        $num = sizeof($results['To']);
-                        $cur = 1;
-                        if (!empty($var['name']))
-                        {
-                            $to .= $var['name']. " <".$var['address'].">";
-                            if ($cur != $num) $cc .= ", ";
-                        }
-                        else
-                        {
-                            $to .= $var['address'];
-                        }
-                    }
-                }
-
-                if (is_array($results['Cc']))
-                {
-                    $num = sizeof($results['Cc']);
-                    $cur = 1;
-                    foreach ($results['Cc'] as $var)
-                    {
-                        if (!empty($var['name']))
-                        {
-                            $cc .= $var['name']. " <".$var['address'].">";
-                            if ($cur != $num) $cc .= ", ";
-                        }
-                        else
-                        {
-                            $cc .= $var['address'];
-                        }
-                    }
-                }
                 $message = $results['Data'];
                 break;
 
@@ -324,33 +315,28 @@ if ($emails > 0)
             $message = mb_convert_encoding($message, "UTF-8", strtoupper($results['Encoding']));
             if ($CONFIG['debug']) debug_log("Converted message encoding from {$results['Encoding']} to UTF-8");
         }
-        if (!empty($results['SubjectEncoding']) AND strcasecmp('UTF-8', $results['SubjectEncoding']) !== 0)
-        {
-            $subject = mb_convert_encoding($subject, "UTF-8", strtoupper($results['SubjectEncoding']));
-            if ($CONFIG['debug']) debug_log("Converted subject encoding from {$results['SubjectEncoding']} to UTF-8");
-        }
 
         //** BEGIN UPDATE INCIDENT **//
         $headertext = '';
         // Build up header text to append to the incident log
         if (!empty($from))
         {
-            $headertext = "From: [b]".htmlentities(mysql_real_escape_string($from), ENT_NOQUOTES)."[/b]\n";
+            $headertext = "From: [b]".htmlspecialchars(mysql_real_escape_string($from), ENT_NOQUOTES)."[/b]\n";
         }
 
         if (!empty($to))
         {
-            $headertext .= "To: [b]".htmlentities(mysql_real_escape_string($to))."[/b]\n";
+            $headertext .= "To: [b]".htmlspecialchars(mysql_real_escape_string($to), ENT_NOQUOTES)."[/b]\n";
         }
 
         if (!empty($cc))
         {
-            $headertext .= "CC: [b]".htmlentities(mysql_real_escape_string($cc))."[/b]\n";
+            $headertext .= "CC: [b]".htmlspecialchars(mysql_real_escape_string($cc), ENT_NOQUOTES)."[/b]\n";
         }
 
         if (!empty($subject))
         {
-            $headertext .= "Subject: [b]".mysql_real_escape_string($subject)."[/b]\n";
+            $headertext .= "Subject: [b]".htmlspecialchars(mysql_real_escape_string($subject))."[/b]\n";
         }
 
         $count_attachments = count($attachments);
