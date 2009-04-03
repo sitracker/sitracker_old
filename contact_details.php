@@ -212,7 +212,7 @@ while ($contactrow = mysql_fetch_array($contactresult))
 
     echo "<tr><th>{$strInventoryItems}</th>";
     echo "<td>".contact_count_inventory_items($id)." ";
-    echo "<a href='inventory.php?site=".contact_siteid($id)."'>{$strSeeHere}";
+    echo "<a href='inventory.php?site=".contact_siteid($id)."'>{$strSeeHere}</a>";
     echo "</td></tr>";
     plugin_do('contact_details');
 
