@@ -28,7 +28,7 @@ if ($_SESSION['auth'] == TRUE
     OR (substr($application_revision, 0, 3)=='svn')))
 {
     echo "<p class='warning'>".sprintf($strPreReleaseNotice, "v{$application_version} {$application_revision}");
-    echo ". <a href=\"{$CONFIG['bugtracker_url']}\">{$strReportBug}</a></p>";
+    echo ". <a href=\"{$CONFIG['bugtracker_url']}\" target='_blank' >{$strReportBug}</a></p>";
 }
 
 if ($CONFIG['debug'] == TRUE)
