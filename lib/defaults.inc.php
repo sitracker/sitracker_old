@@ -83,6 +83,7 @@ $CONFIG['dateformat_shorttime'] = 'H:i';
 $CONFIG['dateformat_date'] = 'jS M Y';
 $CONFIG['dateformat_time'] = 'g:ia';
 $CONFIG['dateformat_longdate'] = 'l jS F Y';
+$CONFIG['dateformat_mysql'] = 'Y-m-d';
 
 // Array containing working days (0=Sun, 1=Mon ... 6=Sat)
 $CONFIG['working_days'] = array(1,2,3,4,5);

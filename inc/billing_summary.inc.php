@@ -17,9 +17,14 @@ if (realpath(__FILE__) == realpath($_SERVER['SCRIPT_FILENAME']))
     exit;
 }
 
+$display = cleanvar($_REQUEST['display']);
+$showfoc = cleanvar($_REQUEST['foc']);
+$focaszero = cleanvar($_REQUEST['focaszero']);
+$expiredaszero = cleanvar($_REQUEST['expiredaszero']);
+
 if (empty($display)) $display = 'html';
 
-$sql = "SELECT DISTINCT(CONCAT(m.id,sl.id)), m.site, m.product, s.* ";
+$sql = "SELECT DISTINCT(CONCAT(m.id,sl.id)), m.site, m.product, m.expirydate AS maintexpiry, s.* ";
 $sql .= "FROM `{$dbMaintenance}` AS m, `{$dbServiceLevels}` AS sl, `{$dbService}` AS s, `{$dbSites}` AS site ";
 $sql .= "WHERE m.servicelevelid = sl.id AND sl.timed = 'yes' AND m.id = s.contractid AND m.site = site.id ";
 
@@ -53,14 +58,14 @@ if (mysql_numrows($result) > 0)
     if ($display == 'html')
     {
         $str .= "<table align='center' class='vertical'><tr><th>{$strSiteName}</th><th>{$strProduct}</th>";
-        $str .= "<th>{$strCustomerReference}</th><th>{$strStartDate}</th><th>{$strEndDate}</th>";
+        $str .= "<th>{$strExpiryDate}</th><th>{$strCustomerReference}</th><th>{$strStartDate}</th><th>{$strEndDate}</th>";
         $str .= "<th>{$strFreeOfCharge}</th><th>{$strCreditAmount}</th><th>{$strBalance}</th>";
         $str .= "<th>{$strAwaitingApproval}</th><th>{$strReserved}</th><th>{$strAvailableBalance}</th>";
-        $str .= "<th>{$strUnitRate}</th><th>Units remaining @1x</th></tr>";
+        $str .= "<th>{$strUnitRate}</th><th>Units remaining @1x</th></tr>\n";
     }
     elseif ($display == 'csv')
     {
-        $str .= "\"{$strSiteName}\",\"{$strProduct}\",\"{$strCustomerReference}\", \"{$strStartDate}\",\"{$strEndDate}\",\"{$strFreeOfCharge}\",\"{$strCreditAmount}\",\"{$strBalance}\",\"{$strAwaitingApproval}\",\"{$strReserved}\",\"{$strAvailableBalance}\",\"{$strUnitRate}\",\"Units remaining @1 x\"\n"; // FIXME i18n
+        $str .= "\"{$strSiteName}\",\"{$strProduct}\",\"{$strExpiryDate}\", \"{$strCustomerReference}\", \"{$strStartDate}\",\"{$strEndDate}\",\"{$strFreeOfCharge}\",\"{$strCreditAmount}\",\"{$strBalance}\",\"{$strAwaitingApproval}\",\"{$strReserved}\",\"{$strAvailableBalance}\",\"{$strUnitRate}\",\"Units remaining @1 x\"\n"; // FIXME i18n
     }
 
     $lastsite = '';
@@ -123,6 +128,7 @@ if (mysql_numrows($result) > 0)
                     $str .= "<td></td>";
                 }
             }
+            $str .= "<td>".ldate($CONFIG['dateformat_mysql'], $obj->maintexpiry)."</td>";
 
             $str .= "<td>{$obj->cust_ref}</td><td>{$obj->startdate}</td><td>{$obj->enddate}</td>";
             if ($obj->foc == 'yes') $str .= "<td>{$strYes}</td>";
@@ -133,7 +139,7 @@ if (mysql_numrows($result) > 0)
             $str .= "<td>{$CONFIG['currency_symbol']}".number_format($reserved, 2)."</td>";
             $str .= "<td>{$CONFIG['currency_symbol']}".number_format($actual, 2)."</td>";
             $str .= "<td>{$CONFIG['currency_symbol']}{$obj->unitrate}</td>";
-            $str .= "<td>{$unitsat1times}</td></tr>";
+            $str .= "<td>{$unitsat1times}</td></tr>\n";
 
             $lastsite = $obj->site;
             $lastproduct = $obj->product;
