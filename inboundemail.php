@@ -123,11 +123,11 @@ if ($emails > 0)
                     {
                         debug_log("Archiving email");
                     }
-                    $mailbox->archiveEmail($i + 1);
+                    $mailbox->archiveEmail($i + 1) OR debug_log("Archiving email ".($i + 1)." failed: ".imap_last_error());
                 }
                 else
                 {
-                    $mailbox->deleteEmail($i + 1);
+                    $mailbox->deleteEmail($i + 1) OR debug_log("Deleting email ".($i + 1)." failed: ".imap_last_error());
                 }
             }
         }
@@ -494,7 +494,7 @@ debug_log('DECODED: '.print_r($decoded, true));
         // Delete the message from the mailbox
         if ($mailbox->servertype == 'imap')
         {
-            imap_expunge($mailbox->mailbox);
+            imap_expunge($mailbox->mailbox) OR debug_log("Expunging failed: ".imap_last_error());
         }
         elseif ($mailbox->servertype == 'pop')
         {
@@ -502,10 +502,7 @@ debug_log('DECODED: '.print_r($decoded, true));
             imap_expunge($mailbox->mailbox);
         }
 
-        if ($CONFIG['enable_inbound_mail'] == 'POP/IMAP')
-        {
-            imap_close($mailbox->mailbox);
-        }
+        imap_close($mailbox->mailbox);
     }
 }
 ?>
