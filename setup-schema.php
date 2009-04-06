@@ -2654,6 +2654,9 @@ INSERT INTO `{$dbPermissions}` VALUES(79, 8, 'Edit Service Balances');
 INSERT INTO `{$dbPermissions}` VALUES(80, 8, 'Edit Service Details');
 INSERT INTO `{$dbPermissions}` VALUES(81, 8, 'Adjust durations on activities');
 
+-- INL 2009-04-03
+ALTER TABLE `{$dbContacts}` CHANGE `notes` `notes` TEXT CHARACTER SET utf8 COLLATE utf8_bin NOT NULL  ;
+
 ";
 
 // Important: When making changes to the schema you must add SQL to make the alterations
