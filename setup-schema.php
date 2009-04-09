@@ -2662,9 +2662,8 @@ CREATE TABLE IF NOT EXISTS `{$dbUserConfig}` (
   `userid` int(5) NOT NULL,
   `config` varchar(255) NOT NULL,
   `value` text,
-  PRIMARY KEY  (`config`),
-  KEY `userid` (`userid`)
-) TYPE=MyISAM COMMENT='User configurati
+  PRIMARY KEY  (`userid`,`config`)
+) TYPE=MyISAM COMMENT='User configuration';
 ";
 
 // Important: When making changes to the schema you must add SQL to make the alterations
