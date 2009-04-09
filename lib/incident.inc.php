@@ -400,12 +400,12 @@ function reassign_incident($incident, $user, $tuser = '', $nextaction = '', $typ
  */
 function reopen_incident($incident, $newstatus = STATUS_ACTIVE, $message = '')
 {
-    global $dbIncidents, $dbUpdates, $now, $sit;
+    global $dbIncidents, $dbUpdates, $now, $sit, $bodytext;
     $rtn = TRUE;
 
     $time = time();
-    $sql = "UPDATE `{$dbIncidents}` SET status='$newstatus', ";
-    $sql .= "lastupdated='$time', closed='0' WHERE id='$incident' LIMIT 1";
+    $sql = "UPDATE `{$dbIncidents}` SET status='{$newstatus}', ";
+    $sql .= "lastupdated='{$time}', closed='0' WHERE id='{$incident}' LIMIT 1";
     mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
@@ -437,6 +437,7 @@ function reopen_incident($incident, $newstatus = STATUS_ACTIVE, $message = '')
         trigger_error(mysql_error(),E_USER_ERROR);
         $rtn = FALSE;
     }
+    
     // Insert the first Review update, this indicates the review period of an incident has restarted
     // This insert could possibly be merged with another of the 'updates' records, but for now we keep it seperate for clarity
     $sql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, timestamp, currentowner, currentstatus, customervisibility, sla, bodytext) ";
