@@ -166,12 +166,10 @@ while ($contactrow = mysql_fetch_array($contactresult))
         echo $strNone;
     }
 
-    //if ($openincidents >= 1) echo "$openincidents open, ";
     if ($openincidents >= 1)
     {
         echo sprintf($strNumOpenIncidents, $openincidents).", ";
     }
-
 
     if ($totalincidents >= 1)
     {
@@ -216,7 +214,6 @@ while ($contactrow = mysql_fetch_array($contactresult))
     echo "</td></tr>";
     plugin_do('contact_details');
 
-
     echo "</table>\n";
 
     echo "<p align='center'>";
@@ -225,7 +222,6 @@ while ($contactrow = mysql_fetch_array($contactresult))
     echo "<a href='contact_edit.php?action=edit&amp;contact={$id}'>{$strEdit}</a> | ";
     echo "<a href='contact_delete.php?id={$id}'>{$strDelete}</a>";
     echo "</p>\n";
-
 
     // Check if user has permission to view maintenace contracts, if so display those related to this contact
 

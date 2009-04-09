@@ -1367,6 +1367,8 @@ function make_incident_billing_array($incidentid, $totals=TRUE)
         echo "</pre>";
         */
 
+        $count = array();
+
         foreach ($billing AS $engineer)
         {
             /*
@@ -1379,6 +1381,7 @@ function make_incident_billing_array($incidentid, $totals=TRUE)
                 $duration = 0;
 
                 unset($count);
+                $count = array();
 
                 $count['engineer'];
                 $count['customer'];
@@ -1562,13 +1565,21 @@ function get_incident_billable_breakdown_array($incidentid)
     * @return int. Number of available units according to the service balances and unit rates
     * @todo Check this is correct
 **/
-function contract_unit_balance($contractid, $includenonapproved = FALSE, $includereserved = TRUE)
+function contract_unit_balance($contractid, $includenonapproved = FALSE, $includereserved = TRUE, $showonlycurrentlyvalid = TRUE)
 {
     global $now, $dbService;
 
     $unitbalance = 0;
 
-    $sql = "SELECT * FROM `{$dbService}` WHERE contractid = {$contractid} ORDER BY enddate DESC";
+    $sql = "SELECT * FROM `{$dbService}` WHERE contractid = {$contractid} ";
+    
+    if ($showonlycurrentlyvalid)
+    {
+        $sql .= "AND UNIX_TIMESTAMP(startdate) <= {$now} ";
+        $sql .= "AND UNIX_TIMESTAMP(enddate) >= {$now}  ";
+    }
+    $sql .= "ORDER BY enddate DESC";
+    
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
 
