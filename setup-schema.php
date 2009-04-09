@@ -2657,6 +2657,14 @@ INSERT INTO `{$dbPermissions}` VALUES(81, 8, 'Adjust durations on activities');
 -- INL 2009-04-03
 ALTER TABLE `{$dbContacts}` CHANGE `notes` `notes` TEXT CHARACTER SET utf8 COLLATE utf8_bin NOT NULL  ;
 
+-- INL 2009-04-09
+CREATE TABLE IF NOT EXISTS `{$dbUserConfig}` (
+  `userid` int(5) NOT NULL,
+  `config` varchar(255) NOT NULL,
+  `value` text,
+  PRIMARY KEY  (`config`),
+  KEY `userid` (`userid`)
+) TYPE=MyISAM COMMENT='User configurati
 ";
 
 // Important: When making changes to the schema you must add SQL to make the alterations

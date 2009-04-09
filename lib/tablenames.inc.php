@@ -81,6 +81,7 @@ $dbTempIncoming = "{$CONFIG['db_tableprefix']}tempincoming";
 $dbTransactions = "{$CONFIG['db_tableprefix']}transactions";
 $dbTriggers = "{$CONFIG['db_tableprefix']}triggers";
 $dbUpdates = "{$CONFIG['db_tableprefix']}updates";
+$dbUserConfig = "{$CONFIG['db_tableprefix']}userconfig";
 $dbUserGroups = "{$CONFIG['db_tableprefix']}usergroups";
 $dbUserPermissions = "{$CONFIG['db_tableprefix']}userpermissions";
 $dbUsers = "{$CONFIG['db_tableprefix']}users";
