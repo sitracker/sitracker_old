@@ -10,7 +10,6 @@
 
 // Authors: Kieran Hogg <kieran[at]sitracker.org>
 
-
 $permission = 0; // Allow all auth users
 
 require ('core.php');
