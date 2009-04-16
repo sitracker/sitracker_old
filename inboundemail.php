@@ -144,12 +144,11 @@ if ($emails > 0)
         $mime->Analyze($decoded[0], $results);
         $to = $cc = $from = $from_name = $from_email = "";
 
-debug_log('DECODED: '.print_r($decoded, true));
-
         if ($CONFIG['debug'])
         {
             debug_log("Message $i Email Type: '{$results['Type']}', Encoding: '{$results['Encoding']}'");
-            debug_log(print_r($results,true));
+            debug_log('DECODED: '.print_r($decoded, true));
+            //debug_log('RESULTS: '.print_r($results, true));
         }
 
         // Attempt to recognise contact from the email address
@@ -165,7 +164,8 @@ debug_log('DECODED: '.print_r($decoded, true));
 
         $from_name = $decoded[0]['ExtractedAddresses']['from:'][0]['name'];
         // Convert the from encoding to UTF-8 if it isn't already
-        if (strcasecmp('UTF-8', $decoded[0]['ExtractedAddresses']['from:'][0]['encoding']) !== 0)
+        if (!empty($decoded[0]['ExtractedAddresses']['from:'][0]['encoding'])
+            AND strcasecmp('UTF-8', $decoded[0]['ExtractedAddresses']['from:'][0]['encoding']) !== 0)
         {
             $from_name = mb_convert_encoding($from_name, "UTF-8", strtoupper($decoded[0]['ExtractedAddresses']['from:'][0]['encoding']));
             if ($CONFIG['debug']) debug_log("Converted 'from header' encoding from {$decoded[0]['ExtractedAddresses']['from:'][0]['encoding']} to UTF-8");
@@ -275,16 +275,22 @@ debug_log('DECODED: '.print_r($decoded, true));
             if (!mkdir($fa_dir, 0775, TRUE)) trigger_error("Failed to create incident update attachment directory $fa_dir",E_USER_WARNING);
         }
         $attachments = array();
-        if (is_array($results[Attachments]))
+        if (is_array($results['Attachments']) OR is_array($results['Related']))
         {
-            foreach ($results[Attachments] as $attachment)
+            if (!is_array($results['Attachments']) AND is_array($results['Related']))
             {
-                $data = $attachment[Data];
-                $filename = $attachment[FileName];
+                // Treat related content as attachment
+                $results['Attachments'] = $results['Related'];
+            }
+            foreach ($results['Attachments'] as $attachment)
+            {
+                $data = $attachment['Data'];
+                $filename = $attachment['FileName'];
                 $filename = str_replace(' ', '_', $filename);
                 if (empty($filename))
                 {
                     $filename = 'part'.$part;
+                    if ($attachment['SubType'] = 'jpeg') $filename .= '.jpeg';
                     $part++;
                 }
                 $sql = "INSERT into `{$GLOBALS['dbFiles']}` ";
@@ -298,6 +304,7 @@ debug_log('DECODED: '.print_r($decoded, true));
 
                 if (is_writable($fa_dir))
                 {
+                    if ($CONFIG['debug']) debug_log("Writing attachment to disk: {$fa_dir}{$filename}");
                     $fwp = fopen($fa_dir.$filename, 'a');
                     fwrite($fwp, $data);
                     fclose($fwp);
