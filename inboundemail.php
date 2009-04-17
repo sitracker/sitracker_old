@@ -309,6 +309,10 @@ if ($emails > 0)
                     fwrite($fwp, $data);
                     fclose($fwp);
                 }
+                else
+                {
+                    debug_log("Attachment dir '{$fa_dir}' not writable");
+                }
                 $sql = "INSERT INTO `{$GLOBALS['dbLinks']}` (`linktype`, `origcolref`, `linkcolref`, `direction`, `userid`) ";
                 $sql .= "VALUES('5', '{$updateid}', '{$fileid}', 'left', '0') ";
                 mysql_query($sql);
@@ -362,7 +366,7 @@ if ($emails > 0)
         //** END UPDATE INCIDENT **//
 
         //** BEGIN UPDATE **//
-        $bodytext = $headertext . "<hr>" . mysql_real_escape_string($message);
+        $bodytext = $headertext . "<hr>" . htmlspecialchars(mysql_real_escape_string($message), ENT_NOQUOTES);
 
         // Strip excessive line breaks
         $message = str_replace("\n\n\n\n","\n", $message);
