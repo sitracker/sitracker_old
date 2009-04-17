@@ -132,7 +132,7 @@ class fetchSitMail
         }
         else
         {
-            debug_log("Died on mesasge {$id} with: ".imap_last_error());
+            debug_log("Died on message {$id} with: ".imap_last_error());
         }
     }
 
@@ -155,8 +155,7 @@ class fetchSitMail
     {
         global $CONFIG;
         if ($CONFIG['debug']) debug_log("Moving mail to {$CONFIG['email_archive_folder']} folder");
-        imap_mail_move($this->mailbox, $id, $CONFIG['email_archive_folder']) OR
-        debug_log(imap_last_error());
+        return imap_mail_move($this->mailbox, $id, $CONFIG['email_archive_folder']) OR debug_log(imap_last_error());
     }
 }
 ?>
