@@ -566,11 +566,11 @@ else
     $oldtimeofnextaction = incident_timeofnextaction($id);
     if ($newstatus != $oldstatus)
     {
-        $bodytext = "Status: ".incidentstatus_name($oldstatus)." -&gt; <b>" . incidentstatus_name($newstatus) . "</b>\n\n" . $bodytext;
+        $bodytext = "Status: ".mysql_real_escape_string(incidentstatus_name($oldstatus))." -&gt; <b>" . mysql_real_escape_string(incidentstatus_name($newstatus)) . "</b>\n\n" . $bodytext;
     }
     if ($newpriority != incident_priority($id))
     {
-        $bodytext = "New Priority: <b>" . priority_name($newpriority) . "</b>\n\n" . $bodytext;
+        $bodytext = "New Priority: <b>" . mysql_real_escape_string(priority_name($newpriority)) . "</b>\n\n" . $bodytext;
     }
     if ($timeofnextaction > ($oldtimeofnextaction+60))
     {
