@@ -278,9 +278,9 @@ class DatePicker extends Component
     {
         global $CONFIG, $iconset;
 
-        $divid = "datediv".str_replace('.','',$name);
+        $divid = "datediv".str_replace('.','',$this->name);
         $html = "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/pickdate.png' ";
-        $html .= "onmouseup=\"toggleDatePicker('$divid','{$name}')\" width='16' height='16' alt='date picker' style='cursor: pointer; vertical-align: bottom;' />";
+        $html .= "onmouseup=\"toggleDatePicker('$divid','{$this->name}')\" width='16' height='16' alt='date picker' style='cursor: pointer; vertical-align: bottom;' />";
         $html .= "\n<div id='$divid' style='position: absolute;'></div>\n";
         return $html;
     }

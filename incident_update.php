@@ -197,7 +197,13 @@ function display_update_page($draftid=-1)
 
         if (toPass != '')
         {
-            xmlhttp.open("GET", "ajaxdata.php?action=auto_save&userid="+<?php echo $_SESSION['userid']; ?>+"&type=update&incidentid="+<?php echo $id; ?>+"&draftid="+draftid+"&meta="+meta+"&content="+escape(toPass), true);
+            // xmlhttp.open("GET", "ajaxdata.php?action=auto_save&userid="+<?php echo $_SESSION['userid']; ?>+"&type=update&incidentid="+<?php echo $id; ?>+"&draftid="+draftid+"&meta="+meta+"&content="+escape(toPass), true);
+            var url = "ajaxdata.php";
+            var params = "action=auto_save&userid="+<?php echo $_SESSION['userid']; ?>+"&type=update&incidentid="+<?php echo $id; ?>+"&draftid="+draftid+"&meta="+meta+"&content="+escape(toPass);
+            xmlhttp.open("POST", url, true)
+            xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            xmlhttp.setRequestHeader("Content-length", params.length);
+            xmlhttp.setRequestHeader("Connection", "close");
 
             xmlhttp.onreadystatechange=function() {
                 //remove this in the future after testing
@@ -225,7 +231,7 @@ function display_update_page($draftid=-1)
                     }
                 }
             }
-            xmlhttp.send(null);
+            xmlhttp.send(params);
         }
     }
 

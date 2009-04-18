@@ -402,10 +402,20 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
 
             if (toPass != '')
             {
+                /*
                 xmlhttp.open("GET", "ajaxdata.php?action=auto_save&userid="+<?php echo $_SESSION['userid']; ?>+
                              "&type=email&incidentid="+<?php echo $id; ?>+
                              "&draftid="+draftid+"&meta="+meta+"&content="+
                              escape(toPass), true);
+             */
+                             
+                var url =  "ajaxdata.php";
+                var params = "action=auto_save&userid="+<?php echo $_SESSION['userid']; ?>+"&type=email&incidentid="+<?php echo $id; ?>+"&draftid="+draftid+"&meta="+meta+"&content="+escape(toPass);
+                xmlhttp.open("POST", url, true)
+                xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                xmlhttp.setRequestHeader("Content-length", params.length);
+                xmlhttp.setRequestHeader("Connection", "close");
+                             
 
                 xmlhttp.onreadystatechange=function()
                 {
@@ -434,7 +444,7 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
                         }
                     }
                 }
-                xmlhttp.send(null);
+                xmlhttp.send(params);
             }
         }
 
