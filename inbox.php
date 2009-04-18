@@ -25,7 +25,7 @@ $sort = cleanvar($_REQUEST['sort']);
 $order = cleanvar($_REQUEST['order']);
 $filter = cleanvar($_REQUEST['filter']);
 
-$refresh = 60;
+// $refresh = 60;
 $title = $strInbox;
 include (APPLICATION_INCPATH . 'htmlheader.inc.php');
 
@@ -77,7 +77,43 @@ function contact_info($contactid, $email, $name)
 
 
 echo "<h2>".icon('email', 32)." {$strInbox}</h2>";
+echo "<p align='center'>{$strIncomingEmailText}.  <a href='{$_SERVER['PHP_SELF']}'>{$strRefresh}</a></p>";
 
+
+// Perform action on selected items
+if (!empty($_REQUEST['action']))
+{
+    // FIXME BUGBUG remove for release. temporary message
+    echo "<p>Action: {$_REQUEST['action']}</p>"; 
+    if (is_array($_REQUEST['selected']))
+    {
+        foreach ($_REQUEST['selected'] AS $item => $selected)
+        {
+            $tsql = "SELECT updateid FROM `{$dbTempIncoming}` WHERE id={$selected}";
+            $tresult = mysql_query($tsql);
+            if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
+            if ($tresult AND mysql_num_rows($tresult) > 0)
+            {
+                $temp = mysql_fetch_object($tresult);
+                if ($CONFIG['debug']) echo "<p>action on: $selected</p>"; // FIXME BUGBUG remove for release. temporary message
+                switch ($_REQUEST['action'])
+                {
+                    case 'deleteselected':
+                        $dsql = "DELETE FROM `{$dbUpdates}` WHERE id={$temp->updateid}";
+                        mysql_query($dsql);
+                        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+                        $dsql = "DELETE FROM `{$dbTempIncoming}` WHERE id={$selected}";
+                        mysql_query($dsql);
+                        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+                    break;
+                }
+            }
+       }
+    }
+}
+
+
+// Show list of items in inbox
 $sql = "SELECT * FROM `$dbTempIncoming` ";
 
 if (!empty($sort))
@@ -96,7 +132,8 @@ $result = mysql_query($sql);
 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
 $countresults = mysql_num_rows($result);
 
-echo "<p align='center'>{$strIncomingEmailText}</p>";
+
+echo "<form action='{$_SERVER['PHP_SELF']}' id='inboxform' name='inbox'  method='post'>";
 $shade = 'shade1';
 echo "<table align='center' style='width: 95%'>";
 echo "<tr>";
@@ -115,8 +152,9 @@ while ($incoming = mysql_fetch_object($result))
         $update = mysql_fetch_object($uresult);
     }
 
-    echo "<tr class='{$shade}'>";
-    echo "<td>".html_checkbox('item', FALSE)."</td>";
+    echo "<tr class='{$shade}' onclick='trow(event);'>";
+    echo "<td>".html_checkbox('selected[]', FALSE, $incoming->id);
+    echo "</td>";
     echo "<td>".contact_info($incoming->contactid, $incoming->from, $incoming->emailfrom)."</td>";
     echo "</td>";
     // Subject
@@ -149,18 +187,22 @@ while ($incoming = mysql_fetch_object($result))
 }
 
 echo "<tr>";
-echo "<td>".html_checkbox('item', FALSE)."</td>";
+// Select All
+echo "<td>".html_checkbox('item', FALSE, '', "onclick=\"checkAll('inboxform', this.checked);\"")."</td>";
+// Operation
 echo "<td colspan='*'>";
-echo "<select>";
+echo "<select name='action'>";
 echo "<option value='' selected='selected'></option>";
-echo "<option value='deleteall'>{$strDelete}</option>";
-echo "<option value='assignall'>{$strAssign}</option>";
+echo "<option value='lockselected'>Lock</option>"; // FIXME i18n
+echo "<option value='deleteselected'>{$strDelete}</option>";
+echo "<option value='assignselected'>{$strAssign}</option>";
 echo "</select>";
+echo "<input type='submit' value=\"{$strGo}\" />";
 echo "</td>";
 echo "</tr>";
 
 echo "</table>";
-
+echo "</form>\n";
 
 include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
 ?>

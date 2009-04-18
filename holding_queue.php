@@ -366,7 +366,7 @@ if (is_array($queuerows))
 }
 else if ($spamcount == 0)
 {
-    echo "<h2>".icon('email', 32)." {$strHoldingQueue}</h2>";
+    echo "<h2>".icon('support', 32)." {$strHoldingQueue}</h2>";
     echo "<p align='center'>{$strNoRecords}</p>";
 }
 

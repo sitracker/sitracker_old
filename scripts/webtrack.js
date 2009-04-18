@@ -274,6 +274,19 @@ function populateHidden(fromObject,toObject)
 }
 
 
+/**
+  * Check or uncheck all checkboxes on a form
+  * @author Ivan Lucas
+*/
+function checkAll(formid, checkstatus)
+{
+    var form = $(formid);
+    checkboxes = form.getInputs('checkbox');
+    checkboxes.each(function(e) { e.checked = checkstatus});
+
+}
+
+
 var MIN_ROWS = 3 ;
 var MAX_ROWS = 10 ;
 var MIN_COLS = 40 ;

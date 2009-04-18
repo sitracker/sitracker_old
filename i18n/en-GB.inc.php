@@ -1216,6 +1216,7 @@ $strRecent = 'Recent';
 $strRecentIncidents = 'Recent Incidents';
 $strReducedPrioritySLA = 'Reduced from %s according to SLA';
 $strReferences = 'References';
+$strRefresh = 'Refresh';
 $strRegister = 'Register';
 $strRelated = 'Related';
 $strRelatedContracts = 'Related Contracts';
