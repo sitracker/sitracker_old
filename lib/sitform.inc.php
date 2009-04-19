@@ -166,12 +166,12 @@ abstract class Component
     var $name;
     var $value;
     var $dbFieldName;
-    var $mandetory;
+    var $mandatory;
     abstract function generateHTML();
     abstract function getDB(); // Returns array
-    function isMandetory($mandetory)
+    function isMandatory($mandatory)
     {
-    	$this->mandetory = $mandetory; // Boolean
+    	$this->mandatory = $mandatory; // Boolean
     }
 }
 
