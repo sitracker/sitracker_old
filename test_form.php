@@ -17,7 +17,7 @@ require (APPLICATION_LIBPATH.'sitform.inc.php');
 
 include (APPLICATION_INCPATH . 'htmlheader.inc.php');
 
-$f = new Form("testform", $strSearch, "table", "insert");
+$f = new Form("testform", $strSearch, "table", "insert", "Test Form");
 $c1 = new Cell();
 $c1->setIsHeader(TRUE);
 $c1->addComponent(new Label("My first label"));

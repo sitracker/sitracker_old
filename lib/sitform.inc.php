@@ -4,19 +4,25 @@
 
 class Form
 {
+    var $formheading;
     var $row = array();
     var $name;
     var $submitLabell;
     var $tableName;
-    var $type; // SEARCH, UPDATE, ADD
+    var $type; // UPDATE, ADD
+    var $returnURLSuccess;
+    var $returnURLFailure;
+    var $keyField;
+    var $keyValue;
+    var $debug = false;
 
-
-    public function __construct($name, $submitLabel, $tableName, $type)
+    public function __construct($name, $submitLabel, $tableName, $type, $formheading)
     {
         $this->name = $name;
         $this->submitLabel = $submitLabel;
         $this->tableName = $tableName;
         $this->type = $type;
+        $this->formheading = $formheading;
     }
 
 
@@ -26,9 +32,36 @@ class Form
     }
 
 
+    public function setReturnURLSuccess($returnURL)
+    {
+    	$this->returnURLSuccess = $returnURL;
+    }
+
+    
+    public function setReturnURLFailure($returnURL)
+    {
+        $this->returnURLFailure = $returnURL;
+    }
+
+
+    public function setDebug($debug)
+    {
+    	$this->debug = $debug;
+    }
+    
+    
+    public function setKey($keyField, $keyValue)
+    {
+    	$this->keyField = $keyField;
+        $this->keyValue = $keyValue;
+    }
+    
+
     private function generateHTML()
     {
         global $strSubmit;
+
+        echo "<h2>{$this->formheading}</h2>";
 
         echo "<form action='{$_SERVER['PHP_SELF']}' id='{$this->name}' name='{$this->name}' method='post'>";
         echo "<table class='vertical'>";
@@ -54,21 +87,6 @@ class Form
     //    print_r($toReturn);
         switch ($this->type)
         {
-            case 'search':
-                $sql = "SELECT * FROM `{$this->tableName}` ";
-                if (count($toReturn) > 0)
-                {
-                    $sql .= "WHERE ";
-                    foreach ($toReturn AS $d)
-                    {
-                        $v = cleanvar($_REQUEST[$d->name]);
-                        $a[] = "{$d->field} = '{$v}' ";
-                    }
-                    $sql .= implode(" AND ", $a);
-                }
-                echo $sql;
-                break;
-
             case'insert':
                 $sql = "INSERT INTO `{$this->tableName}` ";
                 if (count($toReturn) > 0)
@@ -76,7 +94,7 @@ class Form
                     $sql .= " (";
                     foreach ($toReturn AS $d)
                     {
-                        $a[] = "'{$d->field}''";
+                        $a[] = "{$d->field}";
                     }
                     $sql .= implode(",", $a);
 
@@ -91,8 +109,36 @@ class Form
                     $sql .= ")";
                 }
 
-                echo $sql;
                 break;
+                
+            case'update':
+                $sql = "UPDATE `{$this->tableName}` ";
+                if (count($toReturn) > 0)
+                {
+                    $sql .= " SET ";
+                    foreach ($toReturn AS $d)
+                    {
+                        $v = cleanvar($_REQUEST[$d->name]);
+                        $a[] .= "{$d->field} = '{$v}'";
+                    }
+                    $sql .= implode(", ", $a);
+
+                    $sql .= "WHERE {$this->keyField} = '{$this->keyValue}'";
+                }
+
+                break;
+        }
+        
+        if ($this->debug) echo $sql;
+        $result = mysql_query($sql);
+        if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+        if (mysql_affected_rows() <= 0)
+        {
+        	html_redirect($this->returnURLFailure, FALSE);
+        }
+        else
+        {
+        	html_redirect($this->returnURLSuccess, TRUE);
         }
     }
 
@@ -118,9 +164,15 @@ class Form
 abstract class Component
 {
     var $name;
+    var $value;
     var $dbFieldName;
+    var $mandetory;
     abstract function generateHTML();
     abstract function getDB(); // Returns array
+    function isMandetory($mandetory)
+    {
+    	$this->mandetory = $mandetory; // Boolean
+    }
 }
 
 
@@ -171,6 +223,38 @@ class Row extends Component
         return $toReturn;
     }
 }// ROW
+
+
+class HiddenRow extends Component
+{
+    public function addComponent(/*Component*/ $component)
+    {
+        $this->components[] = $component;
+    }
+
+
+    public function generateHTML()
+    {
+        foreach ($this->components AS $comp)
+        {
+            $toReturn .= $comp->generateHTML();
+        }
+
+        return $toReturn;
+    }
+
+
+    public function getDB()
+    {
+        $toReturn = array();
+        foreach ($this->components AS $comp)
+        {
+            $toReturn = array_merge($toReturn, $comp->getDB());
+        }
+
+        return $toReturn;
+    }	
+}
 
 
 class Cell extends Component
@@ -241,9 +325,10 @@ class SingleLineEntry extends Component
 {
     var $size = 30;
 
-    public function __construct($name = "text", $size = 30, $dbField)
+    public function __construct($name = "text", $size = 30, $dbField, $value='')
     {
         $this->name = $name;
+        $this->value = $value;
         $this->size = $size;
         $this->dbFieldName = $dbField;
     }
@@ -251,7 +336,7 @@ class SingleLineEntry extends Component
 
     public function generateHTML()
     {
-        return "<input type='text' id='{$this->name}' name='{$this->name}' size='{$this->size}' />";
+        return "<input type='text' id='{$this->name}' name='{$this->name}' size='{$this->size}' value='{$this->value}' />";
     }
 
 
@@ -260,6 +345,41 @@ class SingleLineEntry extends Component
         $db = new db($this->name, $this->dbFieldName);
 
         return array($db);
+    }
+}
+
+
+class HiddenEntry extends Component
+{
+    public function __construct($name = "text", $dbField, $value)
+    {
+        $this->name = $name;
+        $this->value = $value;
+        $this->dbFieldName = $dbField;
+    }
+
+
+    public function generateHTML()
+    {
+    	return "<input type='hidden' id='{$this->name}' name='{$this->name}' value='{$this->value}' />";
+    }
+
+
+    /**
+     * Returns the DB array or an empty array if dbFieldName is empty this allows for fields to control other behaviours rather than just BD Input
+     */
+    public function getDB()
+    {
+    	if (empty($this->dbFieldName))
+        {
+        	return array();
+        }
+        else
+        {
+            $db = new db($this->name, $this->dbFieldName);
+    
+            return array($db);
+        }
     }
 }
 
