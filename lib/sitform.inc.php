@@ -87,7 +87,7 @@ class Form
     //    print_r($toReturn);
         switch ($this->type)
         {
-            case'insert':
+            case 'insert':
                 $sql = "INSERT INTO `{$this->tableName}` ";
                 if (count($toReturn) > 0)
                 {
@@ -111,7 +111,7 @@ class Form
 
                 break;
                 
-            case'update':
+            case 'update':
                 $sql = "UPDATE `{$this->tableName}` ";
                 if (count($toReturn) > 0)
                 {
