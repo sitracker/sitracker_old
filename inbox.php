@@ -245,11 +245,23 @@ else
         if (!empty($update->timestamp)) echo date($CONFIG['dateformat_datetime'], $update->timestamp);
         echo "</div>";
         echo icon('email',16);
-        echo " {$incoming->subject}</div>";
-        echo "<div class='detailentry'>\n";
-        echo parse_updatebody($update->bodytext, FALSE);
+        echo " {$incoming->subject}";
+        if (empty($_REQUEST['reply'])) echo " &mdash; <a href='{$_SERVER['PHP_SELF']}?id={$displayid}&reply=true'>{$strReply}</a>";
         echo "</div>";
-        echo "<p><a href='inbox.php'>&lt; {$strBackToList}</a></p>";
+        echo "<div class='detailentry'>\n";
+        if (!empty($_REQUEST['reply']))
+        {
+            echo "{$strSubject}: <input type='text' value=\"Re: {$incoming->subject}\" size='40' />";
+            echo "<textarea style='width: 98%' rows='30'>";
+            echo quote_message($update->bodytext);
+            echo "</textarea>";
+        }
+        else
+        {
+            echo parse_updatebody($update->bodytext, FALSE);
+        }
+        echo "</div>";
+        echo "<p><a href='{$_SERVER['PHP_SELF']}'>&lt; {$strBackToList}</a></p>";
     }
     else
     {

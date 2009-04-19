@@ -235,5 +235,26 @@ function i18n_code_to_name($code)
     }
 }
 
+/**
+  * Make a string quoted, that is prefix lines with >
+  * and strip out irrelevant update headers
+  * @author Ivan Lucas
+  * @todo FIXME unfinished
+*/
+function quote_message($message)
+{
+    $lines = explode("\n", $message);
+    $message = '';
+    foreach ($lines AS $linenum => $line)
+    {
+        if (trim($line) == "<hr>") $endmeta = $linenum + 1;
+    }
+    if ($endmeta > 0) $lines = array_slice($lines,$endmeta);
+    foreach ($lines AS $line)
+    {
+        $message .= "> {$line}";
+    }
+    return $message;
+}
 
 ?>

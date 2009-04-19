@@ -1240,6 +1240,7 @@ $strReopenIncident = 'Reopen Incident';
 $strReopenIncidentAndAddUpdate = 'Reopen incident and add update?';
 $strReopenedby = 'Reopened by %s';
 $strRepeat = 'Repeat';
+$strReply = 'Reply';
 $strReplyTo = 'Reply To';
 $strReportBug = 'Report a Bug';
 $strReportedBug = 'Reported Bug';
