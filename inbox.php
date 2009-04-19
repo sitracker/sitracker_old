@@ -144,15 +144,22 @@ if (empty($displayid))
         echo colheader('from', $strFrom, $sort, $order, $filter, '', '25%');
         echo colheader('subject', $strSubject, $sort, $order, $filter);
         echo colheader('date', $strDate, $sort, $order, $filter, '', '15%');
+        echo colheader('size', $strSize);
         echo "</tr>";
         while ($incoming = mysql_fetch_object($result))
         {
+            $num_attachments = 0;
             if (!empty($incoming->updateid))
             {
                 $usql = "SELECT * FROM `{$dbUpdates}` WHERE id = '{$incoming->updateid}' LIMIT 1";
                 $uresult = mysql_query($usql);
                 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
                 $update = mysql_fetch_object($uresult);
+
+                $asql = "SELECT COUNT(*) FROM `{$dbLinks}` WHERE linktype = 5 AND direction = 'left' AND origcolref = {$incoming->updateid}";
+                $aresult = mysql_query($asql);
+                if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
+                list($num_attachments) = mysql_fetch_row($aresult);
             }
 
             echo "<tr class='{$shade}' onclick='trow(event);'>";
@@ -178,6 +185,7 @@ if (empty($displayid))
                 echo htmlentities($incoming->subject,ENT_QUOTES, $GLOBALS['i18ncharset']);
                 if (!empty($update->bodytext)) echo '<span>'.parse_updatebody(truncate_string($update->bodytext,1024)).'</span>';
                 echo "</a>";
+                if ($num_attachments > 0) echo ' '.icon('attach', 16, '', "{$strAttachments}: {$num_attachments}");
             }
 
             echo "</td>";
@@ -185,6 +193,10 @@ if (empty($displayid))
             // Date
             echo "<td>";
             if (!empty($update->timestamp)) echo date($CONFIG['dateformat_datetime'], $update->timestamp);
+            echo "</td>";
+            // Size
+            echo "<td style='white-space:nowrap;'>";
+            echo readable_file_size(strlen($update->bodytext));
             echo "</td>";
             echo "</tr>";
             if ($shade == 'shade1') $shade = 'shade2';
@@ -235,7 +247,7 @@ else
         echo icon('email',16);
         echo " {$incoming->subject}</div>";
         echo "<div class='detailentry'>\n";
-        echo parse_updatebody($update->bodytext);
+        echo parse_updatebody($update->bodytext, FALSE);
         echo "</div>";
         echo "<p><a href='inbox.php'>&lt; {$strBackToList}</a></p>";
     }

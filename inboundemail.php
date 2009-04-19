@@ -87,11 +87,11 @@ elseif ($CONFIG['enable_inbound_mail'] == 'POP/IMAP')
 
     if (!$mailbox->connect())
     {
-	if ($CONFIG['debug'])
-	{
-	    echo "Connection error, see debug log for details, if enabled.\n";
-	}
-	exit;
+        if ($CONFIG['debug'])
+        {
+            echo "Connection error, see debug log for details.\n";
+        }
+        exit(1);
     }
 
     $emails = $mailbox->getNumUnreadEmails();
@@ -293,9 +293,10 @@ if ($emails > 0)
                     if ($attachment['SubType'] = 'jpeg') $filename .= '.jpeg';
                     $part++;
                 }
+                $filesize = strlen($data);
                 $sql = "INSERT into `{$GLOBALS['dbFiles']}` ";
                 $sql .= "( `id` ,`category` ,`filename` ,`size` ,`userid` ,`usertype` ,`shortdescription` ,`longdescription` ,`webcategory` ,`path` ,`downloads` ,`filedate` ,`expiry` ,`fileversion` ,`published` ,`createdby` ,`modified` ,`modifiedby` ) ";
-                $sql .= "VALUES('', '', '{$filename}', '0', '0', '', '', '', '', '', '', NOW(), '', '', '', '0', '', '')";
+                $sql .= "VALUES('', 'private', '{$filename}', $filesize, '0', '', '', '', '', '', '', NOW(), NULL, '', 'no', '0', '', NULL)";
                 mysql_query($sql);
                 if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
                 $fileid = mysql_insert_id();
@@ -489,8 +490,9 @@ if ($emails > 0)
 
         //** END UPDATE **//
 
+        // Create a link between the files and the update
         // We need to update the links table here as otherwise we have a blank
-        //
+        // updateid
         foreach ($attachments AS $att)
         {
             $sql = "UPDATE `{$GLOBALS['dbLinks']}` SET origcolref = '{$updateid}' ";
@@ -498,6 +500,7 @@ if ($emails > 0)
             $sql .= "AND linktype = 5 ";
             mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+            debug_log("Creating a link between $updateid and file {$att['fileid']}");
         }
 
         unset($headertext, $newupdate, $attachments, $attachment, $updateobj,
@@ -520,4 +523,5 @@ if ($emails > 0)
         imap_close($mailbox->mailbox);
     }
 }
+
 ?>
