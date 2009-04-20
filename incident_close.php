@@ -378,27 +378,22 @@ else
                 list($currentowner, $currentstatus) = mysql_fetch_row($result);
             }
 
-            ## if ($cust_vis == "yes") $show='show'; else $show='hide';
-            if ($_REQUEST['kbarticle'] != 'yes')
+            if (strlen($_REQUEST['summary']) > 3)
             {
-                // No KB Article, so just add updates to log for Summary and Solution
-                if (strlen($_REQUEST['summary']) > 3)
-                {
-                    // Problem Definition
-                    $sql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, currentowner, currentstatus, bodytext, timestamp, customervisibility) ";
-                    $sql .= "VALUES ('$id', '$sit[2]', 'probdef', '{$currentowner}', '{$currentstatus}', '$summary', '$now', 'hide')";
-                    $result = mysql_query($sql);
-                    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-                }
+                // Problem Definition
+                $sql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, currentowner, currentstatus, bodytext, timestamp, customervisibility) ";
+                $sql .= "VALUES ('$id', '$sit[2]', 'probdef', '{$currentowner}', '{$currentstatus}', '$summary', '$now', 'hide')";
+                $result = mysql_query($sql);
+                if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+            }
 
-                if (strlen($_REQUEST['solution']) > 3)
-                {
-                    // Final Solution
-                    $sql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, currentowner, currentstatus, bodytext, timestamp, customervisibility) ";
-                    $sql .= "VALUES ('$id', '$sit[2]', 'solution', '{$currentowner}', '{$currentstatus}', '$solution', '$now', 'hide')";
-                    $result = mysql_query($sql);
-                    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-                }
+            if (strlen($_REQUEST['solution']) > 3)
+            {
+                // Final Solution
+                $sql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, currentowner, currentstatus, bodytext, timestamp, customervisibility) ";
+                $sql .= "VALUES ('$id', '$sit[2]', 'solution', '{$currentowner}', '{$currentstatus}', '$solution', '$now', 'hide')";
+                $result = mysql_query($sql);
+                if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
             }
 
             // Meet service level 'solution'
@@ -454,6 +449,7 @@ else
             {
                 $relatedincidents[] = $a->relateid;
             }
+            
             if (is_array($relatedincidents))
             {
                 $uniquearray = array_unique($relatedincidents);
