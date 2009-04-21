@@ -127,11 +127,11 @@ if (empty($mode))
         echo sprintf($strRemaining, $entitlement-$holidaystaken);
         echo "</td></tr>\n";
         echo "<tr><th>{$strOtherLeave}</th><td>";
-        echo user_count_holidays($user, HOL_SICKNESS)." {$strdayssick}, ";
-        echo user_count_holidays($user, HOL_WORKING_AWAY)." {$strdaysworkingaway}, ";
-        echo user_count_holidays($user, HOL_TRAINING)." {$strdaystraining}";
+        echo user_count_holidays($edituserid, HOL_SICKNESS)." {$strdayssick}, ";
+        echo user_count_holidays($edituserid, HOL_WORKING_AWAY)." {$strdaysworkingaway}, ";
+        echo user_count_holidays($edituserid, HOL_TRAINING)." {$strdaystraining}";
         echo "<br />";
-        echo user_count_holidays($user, HOL_FREE)." {$strdaysother}";
+        echo user_count_holidays($edituserid, HOL_FREE)." {$strdaysother}";
         echo "</td></tr>";
     }
 
