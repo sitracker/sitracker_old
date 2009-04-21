@@ -153,7 +153,7 @@ if ($incidentid == '')
 else
 {
     // check that the incident is still open.  i.e. status not = closed
-    if (incident_open($incidentid) == $GLOBALS['strYes'])
+    if (incident_open($incidentid) == 'Yes') // Do not translate/i18n, fixed string 'Yes'
     {
         $moved_attachments = TRUE;
         // update the incident record, change the incident status to active
