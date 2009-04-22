@@ -202,7 +202,7 @@ function filter_i18n_filenames($var)
 */
 function i18n_filename_to_code(&$elem, $key)
 {
-    $elem = substr($elem, strrpos($elem,'/')+1, -8);
+    $elem = substr($elem, strrpos($elem,DIRECTORY_SEPARATOR)+1, -8);
 }
 
 
