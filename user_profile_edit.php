@@ -336,7 +336,10 @@ elseif ($mode=='save')
     {
         $startdate = date('Y-m-d',strtotime($_POST['startdate']));
     }
-    else $startdate = '';
+    else
+    {
+        $startdate = date('Y-m-d',0);
+    }
     $password = cleanvar($_POST['oldpassword']);
     $newpassword1 = cleanvar($_POST['newpassword1']);
     $newpassword2 = cleanvar($_POST['newpassword2']);
