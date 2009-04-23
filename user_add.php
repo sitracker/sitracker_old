@@ -236,11 +236,11 @@ else
         $password = md5($password);
         $sql = "INSERT INTO `{$dbUsers}` (username, password, realname, roleid,
                 groupid, title, email, phone, mobile, fax, status, var_style,
-                holiday_entitlement, user_startdate) ";
+                holiday_entitlement, user_startdate, lastseen) ";
         $sql .= "VALUES ('$username', '$password', '$realname', '$roleid',
                 '$groupid', '$jobtitle', '$email', '$phone', '$mobile', '$fax',
                 1, '{$CONFIG['default_interface_style']}',
-                '$holiday_entitlement', '$startdate')";
+                '$holiday_entitlement', '$startdate', NOW())";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
         $newuserid = mysql_insert_id();
