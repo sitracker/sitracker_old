@@ -108,7 +108,7 @@ $sitesql = "SELECT COUNT(id) FROM `{$dbSites}` WHERE owner='{$sit[2]}'";
 $siteresult = mysql_query($sitesql);
 if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 list($ownedsites) = mysql_fetch_row($siteresult);
-if ($ownedsites > 0) echo " | <a href='browse_sites.php?owner={$sit[2]}' title='Sites'>{$strMine}</a> ";
+if ($ownedsites > 0) echo " | <a href='sites.php?owner={$sit[2]}' title='Sites'>{$strMine}</a> ";
 
 echo "</td></tr></table>";
 ?>

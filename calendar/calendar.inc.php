@@ -287,7 +287,7 @@ function appointment_popup($mode, $year, $month, $day, $time, $group, $user)
 */
 function draw_chart($mode, $year, $month='', $day='', $groupid='', $userid='')
 {
-    global $plugin_calendar, $sit, $holidaytype;
+    global $plugin_calendar, $sit, $holidaytype, $startofsession;
     if (empty($day)) $day = date('d');
 
     if ($mode == 'month')
@@ -334,7 +334,7 @@ function draw_chart($mode, $year, $month='', $day='', $groupid='', $userid='')
     $usql  = "SELECT * FROM `{$GLOBALS['dbUsers']}` WHERE status != ".USERSTATUS_ACCOUNT_DISABLED." ";
     if ($groupid == 'allonline')
     {
-        $usql .= "AND lastseen > NOW() - (60 * 30) ";
+        $usql .= "AND lastseen > $startofsession ";
     }
     if (is_numeric($groupid))
     {

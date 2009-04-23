@@ -714,7 +714,7 @@ CREATE TABLE IF NOT EXISTS `{$dbNoticeTemplates}` (
 INSERT INTO `$dbNoticeTemplates` (`name`, `type`, `description`, `text`, `linktext`, `link`, `durability`, `refid`) VALUES('NOTICE_INCIDENT_CREATED', 3, 'strNoticeIncidentCreatedDesc', 'strNoticeIncidentCreated', 'strViewIncident', 'javascript:incident_details_window({incidentid})', 'sticky', '{incidentid}');
 INSERT INTO `$dbNoticeTemplates` (`name`, `type`, `description`, `text`, `linktext`, `link`, `durability`, `refid`) VALUES('NOTICE_INCIDENT_ASSIGNED', 3, 'strNoticeIncidentAssignedDesc', 'strNoticeIncidentAssigned', 'strViewIncident', 'javascript:incident_details_window({incidentid})', 'sticky', '{incidentid}');
 INSERT INTO `$dbNoticeTemplates` (`name`, `type`, `description`, `text`, `linktext`, `link`, `durability`, `refid`) VALUES('NOTICE_INCIDENT_NEARING_SLA', 3, 'strNoticeIncidentNearingSLADesc', 'strNoticeIncidentNearingSLA', 'strViewIncident', 'javascript:incident_details_window({incidentid})', 'sticky','{incidentid}');
-INSERT INTO `$dbNoticeTemplates` (`name`, `type`, `description`, `text`, `linktext`, `link`, `durability`, `refid`) VALUES('NOTICE_LANGUAGE_DIFFERS', 3, 'strNoticeLanguageDiffersDesc', 'strNoticeLanguageDiffers', 'strKeepCurrentLanguage', '{applicationurl}edit_profile.php?mode=savesessionlang', 'session', '{currentlang}');
+INSERT INTO `$dbNoticeTemplates` (`name`, `type`, `description`, `text`, `linktext`, `link`, `durability`, `refid`) VALUES('NOTICE_LANGUAGE_DIFFERS', 3, 'strNoticeLanguageDiffersDesc', 'strNoticeLanguageDiffers', 'strKeepCurrentLanguage', '{applicationurl}user_profile_edit.php?mode=savesessionlang', 'session', '{currentlang}');
 INSERT INTO `$dbNoticeTemplates` (`name`, `type`, `description`, `text`, `linktext`, `link`, `durability`, `refid`) VALUES('NOTICE_NEW_CONTACT', 3, 'strNoticeNewContactDesc', 'strNoticeNewContact', 'strViewContact', '{applicationurl}contact_details.php?id={contactid}', 'sticky','{contactid}');
 INSERT INTO `$dbNoticeTemplates` (`name`, `type`, `description`, `text`, `linktext`, `link`, `durability`, `refid`) VALUES('NOTICE_INCIDENT_REVIEW_DUE', 3, 'strNoticeIncidentReviewDueDesc', 'strNoticeIncidentReviewDue', 'strViewIncident', 'javascript:incident_details_window({incidentid})', 'sticky', '{incidentid}');
 INSERT INTO `$dbNoticeTemplates` (`name`, `type`, `description`, `text`, `linktext`, `link`, `durability`, `refid`) VALUES('NOTICE_KB_CREATED', 3, 'strNoticeKBCreatedDesc', 'strNoticeKBCreated', 'strViewArticle', '{applicationurl}kbarticle?id={kbid}', 'sticky', '{kbid}');
@@ -2664,6 +2664,9 @@ CREATE TABLE IF NOT EXISTS `{$dbUserConfig}` (
   `value` text,
   PRIMARY KEY  (`userid`,`config`)
 ) TYPE=MyISAM COMMENT='User configuration';
+
+-- INL 2009-04-23
+UPDATE `{$dbNoticetemplates}` SET `link` = '{applicationurl}user_profile_edit.php?mode=savesessionlang' WHERE `noticetemplates`.`id` =4 LIMIT 1 ;
 ";
 
 // Important: When making changes to the schema you must add SQL to make the alterations

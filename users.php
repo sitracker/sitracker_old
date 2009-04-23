@@ -55,7 +55,7 @@ else
 
 if ($onlineonly === 'true' OR $filtergroup === 'allonline' )
 {
-    $sql .= "AND lastseen > NOW() - (60 * 30) ";
+    $sql .= "AND lastseen > $startofsession ";
 }
 
 // Sorting

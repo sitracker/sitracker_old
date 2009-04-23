@@ -35,7 +35,6 @@ else
     }
 }
 
-
 if (empty($mode))
 {
     include (APPLICATION_INCPATH . 'htmlheader.inc.php');
