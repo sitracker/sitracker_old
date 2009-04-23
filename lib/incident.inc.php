@@ -224,7 +224,7 @@ function update($update)
 */
 function suggest_reassign_userid($incidentid, $exceptuserid = 0)
 {
-    global $now, $dbUsers, $dbIncidents, $dbUserSoftware;
+    global $now, $dbUsers, $dbIncidents, $dbUserSoftware, $startofsession;
     $sql = "SELECT product, softwareid, priority, contact, owner FROM `{$dbIncidents}` WHERE id={$incidentid} LIMIT 1";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
@@ -271,8 +271,8 @@ function suggest_reassign_userid($incidentid, $exceptuserid = 0)
             // Or in the case we don't know the skill, just get a ticket for accepting
             $ticket[] = $user->userid;
 
-            // Get a ticket for being seen in the past 30 minutes
-            if (mysql2date($user->lastseen) > $now - 1800) $ticket[] = $user->userid;
+            // Get a ticket for being seen within the current session time
+            if (mysql2date($user->lastseen) > $startofsession) $ticket[] = $user->userid;
 
             // Get two tickets for being marked in-office or working at home
             if ($user->status == 1 OR $user->status == 6)
@@ -437,7 +437,7 @@ function reopen_incident($incident, $newstatus = STATUS_ACTIVE, $message = '')
         trigger_error(mysql_error(),E_USER_ERROR);
         $rtn = FALSE;
     }
-    
+
     // Insert the first Review update, this indicates the review period of an incident has restarted
     // This insert could possibly be merged with another of the 'updates' records, but for now we keep it seperate for clarity
     $sql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, timestamp, currentowner, currentstatus, customervisibility, sla, bodytext) ";
@@ -537,10 +537,10 @@ function drafts_waiting_on_incident($incidentid, $type='all')
         trigger_error(mysql_error(),E_USER_ERROR);
         $rtn = FALSE;
     }
-    
+
     list($count) = mysql_fetch_array($result);
     if ($count > 0) $rtn = TRUE;
-    
+
     return $rtn;
 }
 

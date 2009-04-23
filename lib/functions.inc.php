@@ -2285,7 +2285,7 @@ function sit_error_handler($errno, $errstr, $errfile, $errline, $errcontext)
                 || $errno==E_COMPILE_ERROR
                 || $errno==E_COMPILE_WARNING)
             {
-                $logentry .= "Context:\n".print_r($errcontext, TRUE)."\n----------\n\n";
+                $logentry .= "Context: [CONTEXT-BEGIN]\n".print_r($errcontext, TRUE)."\n[CONTEXT-END]\n----------\n\n";
                 $siterrors++;
             }
 
@@ -2329,37 +2329,44 @@ function sit_error_handler($errno, $errstr, $errfile, $errline, $errcontext)
   * @author Ivan Lucas
   * @param string $logentry. A line, or lines to write to the log file
   * (with newlines \n)
+  * @param bool $debugmodeonly. Only write an entry if debug mode is TRUE
   * @retval bool TRUE log entry written
   * @retval bool FALSE log entry not written
 */
-function debug_log($logentry)
+function debug_log($logentry, $debugmodeonly = FALSE)
 {
     global $CONFIG;
-    $logentry = $_SERVER["SCRIPT_NAME"] . ' ' .$logentry;
 
-    if (substr($logentry, -1) != "\n") $logentry .= "\n";
-    if (!empty($CONFIG['error_logfile']))
+    if ($debugmodeonly == FALSE
+        OR ($debugmodeonly == TRUE AND $CONFIG['debug_mode'] == TRUE))
     {
-        if (is_writable($CONFIG['error_logfile']))
+        $logentry = $_SERVER["SCRIPT_NAME"] . ' ' .$logentry;
+
+        if (substr($logentry, -1) != "\n") $logentry .= "\n";
+        if (!empty($CONFIG['error_logfile']))
         {
-            $fp = fopen($CONFIG['error_logfile'], 'a+');
-            if ($fp)
+            if (is_writable($CONFIG['error_logfile']))
             {
-                fwrite($fp, date('c').' '.strip_tags($logentry));
-                fclose($fp);
+                $fp = fopen($CONFIG['error_logfile'], 'a+');
+                if ($fp)
+                {
+                    fwrite($fp, date('c').' '.strip_tags($logentry));
+                    fclose($fp);
+                }
+                else
+                {
+                    echo "<p class='error'>Could not log message to error_logfile</p>";
+                    return FALSE;
+                }
+                return TRUE;
             }
-            else
-            {
-                echo "<p class='error'>Could not log message to error_logfile</p>";
-                return FALSE;
-            }
-            return TRUE;
+        }
+        else
+        {
+            return FALSE;
         }
     }
-    else
-    {
-        return FALSE;
-    }
+    else return TRUE;
 }
 
 
@@ -6308,7 +6315,7 @@ function upload_file($file, $incidentid, $updateid, $type='public')
 * @param string $title - text to go in the first column
 * @param string $level either management or engineer, management is able to (de)select users
 * @param int $groupid  Defalt group to select
-* @param string $type - Type of buttons to use either radio or checkbox 
+* @param string $type - Type of buttons to use either radio or checkbox
 * @return table row of format <tr><th /><td /></tr>
 * @author Paul Heaney
 */

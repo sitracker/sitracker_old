@@ -601,11 +601,11 @@ function user_group_id($userid)
 */
 function user_online_icon($user)
 {
-    global $iconset, $now, $dbUsers, $strOffline, $strOnline;
+    global $iconset, $now, $dbUsers, $strOffline, $strOnline, $startofsession;
     $sql = "SELECT lastseen FROM `{$dbUsers}` WHERE id={$user}";
     $result = mysql_query($sql);
     $users = mysql_fetch_object($result);
-    if (($now - mysql2date($users->lastseen) < (60 * 30)))
+    if (mysql2date($users->lastseen) > $startofsession)
     {
         return icon('online', 16);
     }
@@ -624,11 +624,11 @@ function user_online_icon($user)
 */
 function user_online($user)
 {
-    global $iconset, $now, $dbUsers;
+    global $iconset, $now, $dbUsers, $startofsession;
     $sql = "SELECT lastseen FROM `{$dbUsers}` WHERE id={$user}";
     $result = mysql_query($sql);
     $users = mysql_fetch_object($result);
-    if (($now - mysql2date($users->lastseen) < (60 * 30)))
+    if (mysql2date($users->lastseen) > $startofsession)
     {
         return TRUE;
     }

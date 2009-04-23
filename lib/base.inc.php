@@ -122,6 +122,7 @@ $now = time();
 $today = $now + (16 * 3600);
 $lastweek = $now - (7 * 86400); // the previous seven days
 $todayrecent = $now -(16 * 3600);  // past 16 hours
+$startofsession = $now - (ini_get("session.gc_maxlifetime") * 60);
 
 $CONFIG['upload_max_filesize'] = return_bytes($CONFIG['upload_max_filesize']);
 
@@ -201,7 +202,7 @@ function stripslashes_array($data)
   * @param array $replacechars array of chars to replace as $orig => $replace
   * @returns variable
 */
-function cleanvar($vars, $striphtml = TRUE, $transentities = TRUE,
+function cleanvar($vars, $striphtml = TRUE, $transentities = FALSE,
                 $mysqlescape = TRUE, $disallowedchars = array(),
                 $replacechars = array())
 {
