@@ -1471,7 +1471,7 @@ INSERT INTO `{$dbUserPermissions}` VALUES (1, 77, 'true');
 
 
 CREATE TABLE `{$dbUsers}` (
-  `id` tinyint(4) NOT NULL auto_increment,
+  `id` smallint(6) NOT NULL auto_increment,
   `username` varchar(50) default NULL,
   `password` varchar(50) default NULL,
   `realname` varchar(50) default NULL,
@@ -2667,6 +2667,9 @@ CREATE TABLE IF NOT EXISTS `{$dbUserConfig}` (
 
 -- INL 2009-04-23
 UPDATE `{$dbNoticetemplates}` SET `link` = '{applicationurl}user_profile_edit.php?mode=savesessionlang' WHERE `noticetemplates`.`id` =4 LIMIT 1 ;
+
+-- PH 2009-0425
+ALTER TABLE `{$dbUsers}` CHANGE `id` `id` SMALLINT NOT NULL AUTO_INCREMENT 
 ";
 
 // Important: When making changes to the schema you must add SQL to make the alterations
