@@ -110,7 +110,7 @@ echo "<h3>{$strContacts}</h3>";
 
 // List Contacts
 
-$sql="SELECT * FROM `{$dbContacts}` WHERE siteid='{$id}' ORDER BY surname, forenames";
+$sql = "SELECT * FROM `{$dbContacts}` WHERE siteid='{$id}' ORDER BY active, surname, forenames";
 $contactresult = mysql_query($sql);
 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
 
@@ -162,6 +162,7 @@ if ($countcontacts > 0)
             echo "</td>";
         }
         else echo "<td><strong>{$strWithheld}</strong></td>";
+        
         echo "<td>";
         if ($contactrow['dataprotection_email'] == 'Yes')
         {
