@@ -80,6 +80,13 @@ if (mysql_numrows($result) > 0)
 			$obj->balance = 0;
         }
 
+        if (!empty($expiredaszero) AND strtotime($obj->enddate) < $now)
+        {
+            $obj->balance = 0;
+            $unitsat1times = 0;
+            $actual = 0;
+        }
+
         $totalcredit += $obj->creditamount;
         $totalbalance += $obj->balance;
         $awaitingapproval = service_transaction_total($obj->serviceid, BILLING_AWAITINGAPPROVAL)  * -1;
@@ -90,15 +97,8 @@ if (mysql_numrows($result) > 0)
         $actual = ($obj->balance - $awaitingapproval) - $reserved;
         $totalactual +=$actual;
 
-        if ($obj->unitrate != 0) $unitsat1times = round(($actual/$obj->unitrate), 2);
+        if ($obj->unitrate != 0) $unitsat1times = round(($actual /$obj->unitrate), 2);
         else $unitsat1times = 0;
-
-        if (!empty($expiredaszero) AND strtotime($obj->enddate) < $now)
-        {
-            $obj->balance = 0;
-            $unitsat1times = 0;
-            $actual = 0;
-        }
 
         $remainingunits += $unitsat1times;
 
@@ -176,7 +176,7 @@ if (mysql_numrows($result) > 0)
 
     if ($display == 'html')
     {
-        $str .= "<tfoot><tr><td colspan='6' align='right'>{$strTOTALS}</td><td>{$CONFIG['currency_symbol']}".number_format($totalcredit, 2)."</td>";
+        $str .= "<tfoot><tr><td colspan='7' align='right'><strong>{$strTOTALS}</strong></td><td>{$CONFIG['currency_symbol']}".number_format($totalcredit, 2)."</td>";
         $str .= "<td>{$CONFIG['currency_symbol']}".number_format($totalbalance, 2)."</td><td>{$CONFIG['currency_symbol']}".number_format($totalawaitingapproval, 2)."</td>";
         $str .= "<td>{$CONFIG['currency_symbol']}".number_format($totalreserved, 2)."</td><td>{$CONFIG['currency_symbol']}".number_format($totalactual, 2)."</td><td></td><td>{$remainingunits}</td></tr></tfoot>";
         $str .= "</table>";
