@@ -553,7 +553,7 @@ div.detailfoot
 .statusline { color: green; }
 
 #tail { background:#AAA; color: #fff; padding: 10px 10px; overflow: hidden; }
-.datepicker { background-color: #CCCCFF; border: 1px solid black; font-family: monospace; }
+.datepicker { background-color: #CCCCFF; border: 1px solid black; font-family: monospace; text-align: left;}
 
 div.portalfileicon
 {
