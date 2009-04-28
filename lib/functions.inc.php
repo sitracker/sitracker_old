@@ -7131,7 +7131,7 @@ function kb_name($kbid)
 function application_url()
 {
     global $CONFIG;
-    if (empty($CONFIG['application_uriprefix'])
+    if (empty($CONFIG['application_uriprefix']))
     {
         $url = parse_url($_SERVER['HTTP_REFERER']);
         if ($_SERVER['HTTPS'] == 'off' OR empty($_SERVER['HTTPS']))
