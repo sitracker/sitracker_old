@@ -472,7 +472,7 @@ if ($emails > 0)
                     }
                     $holdingemailid = mysql_insert_id();
                 }
-                trigger('TRIGGER_INCIDENT_UPDATED_EXTERNAL', array('incident' => $incidentid));
+                trigger('TRIGGER_INCIDENT_UPDATED_EXTERNAL', array('incidentid' => $incidentid));
 
             }
             else
