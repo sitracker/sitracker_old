@@ -11,8 +11,6 @@
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
 // This Page Is Valid XHTML 1.0 Transitional!  4Feb06
-// FIXME i18n
-
 
 $permission = 37; // Run Reports
 
@@ -74,19 +72,19 @@ if (empty($_REQUEST['mode']))
     echo "</p>";
     echo "</form>";
     echo "<table align='center'><tr><td>";
-    echo "<h4>When outputting to a CSV file the format is as follows:</h4>"; // FIXME i18n
-    echo "<strong>Field 1:</strong> {$strForenames}<br />";
-    echo "<strong>Field 2:</strong> {$strSurname}<br />";
-    echo "<strong>Field 3:</strong> {$strEmail}<br />";
-    echo "<strong>Field 4:</strong> {$strAddress1}<br />";
-    echo "<strong>Field 5:</strong> {$strAddress2}<br />";
-    echo "<strong>Field 6:</strong> {$strCity}<br />";
-    echo "<strong>Field 7:</strong> {$strCounty}<br />";
-    echo "<strong>Field 8:</strong> {$strPostcode}<br />";
-    echo "<strong>Field 9:</strong> {$strCountry}<br />";
-    echo "<strong>Field 10:</strong> {$strTelephone}<br />";
-    echo "<strong>Field 11:</strong> {$strSite}<br />";
-    echo "<strong>Field 12:</strong> {$strProducts} <em>(Lists all the customers products regardless of selections made above)</em><br />"; // FIXME i18n
+    echo "<h4>{$strCSVFileFormatAsFollows}:</h4>";
+    echo "<strong>{$strField1}:</strong> {$strForenames}<br />";
+    echo "<strong>{$strField2}:</strong> {$strSurname}<br />";
+    echo "<strong>{$strField3}:</strong> {$strEmail}<br />";
+    echo "<strong>{$strField4}:</strong> {$strAddress1}<br />";
+    echo "<strong>{$strField5}:</strong> {$strAddress2}<br />";
+    echo "<strong>{$strField6}:</strong> {$strCity}<br />";
+    echo "<strong>{$strField7}:</strong> {$strCounty}<br />";
+    echo "<strong>{$strField8}:</strong> {$strPostcode}<br />";
+    echo "<strong>{$strField9}:</strong> {$strCountry}<br />";
+    echo "<strong>{$strField10}:</strong> {$strTelephone}<br />";
+    echo "<strong>{$strField11}:</strong> {$strSite}<br />";
+    echo "<strong>{$strField12}:</strong> {$strProducts} <em>({$strListsAllTheCustomersProducts})</em><br />";
     echo "</td></tr></table>";
     include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
 }
@@ -94,7 +92,7 @@ elseif ($_REQUEST['mode'] == 'report')
 {
     if (is_array($_POST['exc']) && is_array($_POST['exc']))
     {
-        $_POST['inc']=array_values(array_diff($_POST['inc'],$_POST['exc']));  // don't include anything excluded
+        $_POST['inc'] = array_values(array_diff($_POST['inc'],$_POST['exc']));  // don't include anything excluded
     }
     $includecount = count($_POST['inc']);
     if ($includecount >= 1)
@@ -141,7 +139,7 @@ elseif ($_REQUEST['mode'] == 'report')
     // FIXME i18n
     // FIXME strip slashes from output
     $html .= "<h2>{$strCustomerExport}</h2>";
-    $html .= "<p align='center'>This report is a list of ($numrows) contact details for all sites that you selected</p>"; // FIXME i18n
+    $html .= "<p align='center'>".sprintf($strThisReportShowsContactForSelectedSites, $numrows)."</p>";
     $html .= "<table width='99%' align='center'>";
     $html .= "<tr><th>{$strForenames}</th><th>{$strSurname}</th><th>{$strEmail}</th><th>{$strAddress1}</th>";
     $html .= "<th>{$strAddress2}</th><th>{$strCity}</th><th>{$strCounty}</th><th>{$strPostcode}</th><th>{$strCountry}</th><th>{$strTelephone}</th><th>{$strSite}</th><th>{$strProducts}</th></tr>";

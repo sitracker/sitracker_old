@@ -46,35 +46,34 @@ if (empty($_REQUEST['mode']))
 
     echo "<table align='center'><tr><td>";
     echo "<h4>{$strCSVFileFormatAsFollows}:</h4>";
-    echo "<strong>{$strField} 1:</strong> {$strSite}<br />";
-    echo "<strong>{$strField} 2:</strong> {$strAddress1}<br />";
-    echo "<strong>{$strField} 3:</strong> {$strAddress2}<br />";
-    echo "<strong>{$strField} 4:</strong> {$strCity}<br />";
-    echo "<strong>{$strField} 5:</strong> {$strCounty}<br />";
-    echo "<strong>{$strField} 6:</strong> {$strCountry}<br />";
-    echo "<strong>{$strField} 7:</strong> {$strPostcode}<br />";
-    echo "<strong>{$strField} 8:</strong> {$strProducts}<br />";
+    echo "<strong>{$strField1}:</strong> {$strSite}<br />";
+    echo "<strong>{$strField2}:</strong> {$strAddress1}<br />";
+    echo "<strong>{$strField3}:</strong> {$strAddress2}<br />";
+    echo "<strong>{$strField4}:</strong> {$strCity}<br />";
+    echo "<strong>{$strField5}:</strong> {$strCounty}<br />";
+    echo "<strong>{$strField6}:</strong> {$strCountry}<br />";
+    echo "<strong>{$strField7}:</strong> {$strPostcode}<br />";
+    echo "<strong>{$strField8}:</strong> {$strProducts}<br />";
     echo "</td></tr></table>";
     include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
 }
 elseif ($_REQUEST['mode'] == 'report')
 {
     $type = cleanvar($_REQUEST['type']);
-    $sql = "SELECT * FROM `{$dbSites}` WHERE typeid='$type' ORDER BY name";
+    $sql = "SELECT * FROM `{$dbSites}` WHERE typeid='{$type}' ORDER BY name";
 
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     $numrows = mysql_num_rows($result);
 
-    // FIXME i18n
-    $html .= "<p align='center'>This report is a list of sites that you selected and the products they have (or have had) maintenance for.</p>";
+    $html .= "<p align='center'>{$strCustomerProductsMaintDesc}.</p>";
     $html .= "<table width='99%' align='center'>";
     $html .= "<tr><th>{$strSite}</th><th>{$strAddress1}</th>";
     $html .= "<th>{$strAddress2}</th><th>{$strCity}</th>";
     $html .= "<th>{$strCounty}</th><th>{$strCountry}</th>";
     $html .= "<th>{$strPostcode}</th><th>{$strProducts}</th></tr>";
-    $csvfieldheaders .= "site,address1,address2,city,county,country,postcode,products\r\n";
-    $rowcount=0;
+    $csvfieldheaders .= "{$strSite},{$strAddress1},{$strAddress2},{$strCity},{$strCounty},{$strCountry},{$strPostcode},{$strProducts}\r\n";
+    $rowcount = 0;
     while ($row = mysql_fetch_object($result))
     {
         // FIXME strip slashes

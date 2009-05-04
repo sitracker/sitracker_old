@@ -25,7 +25,7 @@ $display = cleanvar($_REQUEST['display']);
 
 include (APPLICATION_INCPATH . 'htmlheader.inc.php');
 // FIXME @@@ BUGBUG @@@ experimental ivan 10July2008
-// echo "<p id='pageoptions'><a href='javascript:toggleMenuPanel();' title='Menu'>"; // FIXME i18n menu
+// echo "<p id='pageoptions'><a href='javascript:toggleMenuPanel();' title='{$strMenu}'>";
 // echo "".icon('auto', 16)."</a></p>";
 
 if (empty($productid) AND $display!='skills')
@@ -44,7 +44,7 @@ if (empty($productid) AND $display!='skills')
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
             if (mysql_num_rows($presult) >= 1)
             {
-                echo "<table summary='List of products' align='center' width='95%'>";
+                echo "<table summary='{$strListProducts}' align='center' width='95%'>";
                 echo "<tr><th width='20%'>{$strProduct}</th><th width='52%'>{$strDescription}</th><th width='10%'>{$strLinkedSkills}</th>";
                 echo "<th width='10%'>{$strActiveContracts}</th><th width='8%'>{$strOperation}</th></tr>\n";
                 $shade = 'shade1';
@@ -242,7 +242,7 @@ else
     {
         while ($product = mysql_fetch_object($presult))
         {
-            echo "<h2>".icon('product', 32)." Product: {$product->name}</h2>";
+            echo "<h2>".icon('product', 32)." ".sprintf($strProductX, $product->name)."</h2>";
             echo "<p align='center'><a href='edit_product.php?id={$product->id}'>Edit</a> ";
             echo "| <a href='product_delete.php?id={$product->id}'>{$strDelete}</a></p>";
             $tags = list_tags($product->id, TAG_PRODUCT, TRUE);

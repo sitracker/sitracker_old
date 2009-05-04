@@ -26,7 +26,7 @@ if (empty($displayinactive)) $displayinactive = "false";
 
 if ($submit_value == "go")
 {
-// build SQL
+    // build SQL
     $sql  = "SELECT id, name, department FROM `{$dbSites}` ";
     if (!empty($owner))
     {
@@ -37,17 +37,23 @@ if ($submit_value == "go")
         $sql .= "WHERE ";
         if (strlen($search_string)==1)
         {
-            if ($search_string=='0') $sql .= "(SUBSTRING(name,1,1)=('0')
-                                            OR SUBSTRING(name,1,1)=('1')
-                                            OR SUBSTRING(name,1,1)=('2')
-                                            OR SUBSTRING(name,1,1)=('3')
-                                            OR SUBSTRING(name,1,1)=('4')
-                                            OR SUBSTRING(name,1,1)=('5')
-                                            OR SUBSTRING(name,1,1)=('6')
-                                            OR SUBSTRING(name,1,1)=('7')
-                                            OR SUBSTRING(name,1,1)=('8')
-                                            OR SUBSTRING(name,1,1)=('9'))";
-            else $sql .= "SUBSTRING(name,1,1)=('$search_string') ";
+            if ($search_string=='0')
+            {
+                $sql .= "(SUBSTRING(name,1,1)=('0')
+                                OR SUBSTRING(name,1,1)=('1')
+                                OR SUBSTRING(name,1,1)=('2')
+                                OR SUBSTRING(name,1,1)=('3')
+                                OR SUBSTRING(name,1,1)=('4')
+                                OR SUBSTRING(name,1,1)=('5')
+                                OR SUBSTRING(name,1,1)=('6')
+                                OR SUBSTRING(name,1,1)=('7')
+                                OR SUBSTRING(name,1,1)=('8')
+                                OR SUBSTRING(name,1,1)=('9'))";
+            }
+            else
+            {
+                $sql .= "SUBSTRING(name,1,1)=('$search_string') ";
+            }
         }
         else
         {
@@ -150,17 +156,20 @@ if ($errors == 0)
                 if ($search_string=='0')
                 {
                     $sql .= "(SUBSTRING(name,1,1)=('0')
-                                                OR SUBSTRING(name,1,1)=('1')
-                                                OR SUBSTRING(name,1,1)=('2')
-                                                OR SUBSTRING(name,1,1)=('3')
-                                                OR SUBSTRING(name,1,1)=('4')
-                                                OR SUBSTRING(name,1,1)=('5')
-                                                OR SUBSTRING(name,1,1)=('6')
-                                                OR SUBSTRING(name,1,1)=('7')
-                                                OR SUBSTRING(name,1,1)=('8')
-                                                OR SUBSTRING(name,1,1)=('9'))";
+                                    OR SUBSTRING(name,1,1)=('1')
+                                    OR SUBSTRING(name,1,1)=('2')
+                                    OR SUBSTRING(name,1,1)=('3')
+                                    OR SUBSTRING(name,1,1)=('4')
+                                    OR SUBSTRING(name,1,1)=('5')
+                                    OR SUBSTRING(name,1,1)=('6')
+                                    OR SUBSTRING(name,1,1)=('7')
+                                    OR SUBSTRING(name,1,1)=('8')
+                                    OR SUBSTRING(name,1,1)=('9'))";
                 }
-                else $sql .= "SUBSTRING(name,1,1)=('$search_string') ";
+                else
+                {
+                    $sql .= "SUBSTRING(name,1,1)=('$search_string') ";
+                }
             }
             else
             {

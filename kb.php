@@ -54,10 +54,10 @@ if (strlen($search_string) > 4)
     $sql = "SELECT * FROM `{$dbSoftware}` WHERE name LIKE '%{$search_string}%' LIMIT 20";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
-    echo "<p align='center'><strong>Matching Skills</strong>: "; // FIXME i18n matching skills
-    $softcount=mysql_num_rows($result);
-    $count=1;
-    $colcount=1;
+    echo "<p align='center'><strong>{$strSkills}</strong>: ";
+    $softcount = mysql_num_rows($result);
+    $count = 1;
+    $colcount = 1;
     while ($software = mysql_fetch_object($result))
     {
         echo "{$software->name}";
@@ -69,16 +69,16 @@ if (strlen($search_string) > 4)
 }
 // Find Articles
 $sql = "SELECT * FROM `{$dbKBArticles}` ";
-if (strtolower($mode)=='myarticles') $sql .= "WHERE author='{$sit[2]}' ";
+if (strtolower($mode) == 'myarticles') $sql .= "WHERE author='{$sit[2]}' ";
 if (!empty($search_string))
 {
     $sql .= "WHERE ";
-    $search_string_len=strlen($search_string);
+    $search_string_len = strlen($search_string);
     if (is_numeric($search_string))
     {
         $sql .= "docid=('{$search_string}') ";
     }
-    elseif (strtoupper(substr($search_string,0,strlen($CONFIG['kb_id_prefix'])))==strtoupper($CONFIG['kb_id_prefix']))
+    elseif (strtoupper(substr($search_string,0,strlen($CONFIG['kb_id_prefix']))) == strtoupper($CONFIG['kb_id_prefix']))
     {
         $sql .= "docid='".substr($search_string,strlen($CONFIG['kb_id_prefix']))."' ";
     }

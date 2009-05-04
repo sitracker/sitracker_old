@@ -368,7 +368,7 @@ function display_update_page($draftid=-1)
     echo "<textarea name='bodytext' id='updatelog' rows='13' cols='50'>";
     if ($draftid != -1) echo $draftobj->content;
     echo "</textarea>";
-    echo "<div id='updatestr'><a href='javascript:save_content();'>".icon('save', 16, $strSaveDraft)."</a></div>";
+    echo "<div id='updatestr'><a href='javascript:save_content();'>".icon('save', 16, $GLOBALS['strSaveDraft'])."</a></div>";
     echo "</td></tr>";
 
     if ($target->type == 'initialresponse')

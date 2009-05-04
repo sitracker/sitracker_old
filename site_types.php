@@ -71,7 +71,8 @@ elseif ($mode == 'new')
     $form->addRow($hr);
     
     $form->run();
-}elseif ($mode =='edit')
+}
+elseif ($mode == 'edit')
 {
     $typeid = cleanvar($_REQUEST['typeid']);
     $sql = "SELECT typename FROM `{$dbSiteTypes}` WHERE typeid = {$typeid}";
