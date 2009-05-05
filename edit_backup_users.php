@@ -17,8 +17,8 @@ require (APPLICATION_LIBPATH . 'functions.inc.php');
 
 if (empty($_REQUEST['user'])
     OR $_REQUEST['user'] == 'current'
-    OR $_REQUEST['user']==$_SESSION['userid']
-    OR $_REQUEST['userid']==$_SESSION['userid'])
+    OR $_REQUEST['user'] == $_SESSION['userid']
+    OR $_REQUEST['userid'] == $_SESSION['userid'])
 {
     $permission = 58; // Edit your software skills
 }
@@ -95,7 +95,7 @@ if (empty($save))
     }
     else
     {
-        echo user_alert($strNoResults, E_USER_WARNING);
+        echo user_alert($strNoSkillsDefined, E_USER_WARNING);
     }
     include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
 }
