@@ -140,8 +140,8 @@ $filter = array('page' => $page);
 //if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 //$numcontracts = mysql_num_rows($contractresult);
 
-if ($_SESSION['portalauth'] != TRUE AND $_SERVER['PHP_SELF'] != 'kb.php' 
-    AND $CONFIG['portal_kb_enabled'] != 'Public')
+if ($_SESSION['portalauth'] == TRUE OR ($_SERVER['PHP_SELF'] != 'kb.php' 
+    AND $CONFIG['portal_kb_enabled'] != 'Public'))
 {
     echo "<div id='menu'>\n";
     echo "<ul id='menuList'>\n";
@@ -183,7 +183,8 @@ if ($_SESSION['portalauth'] != TRUE AND $_SERVER['PHP_SELF'] != 'kb.php'
     echo "</div>";
     echo "</div>";
     echo "<div id='mainframe'>";
-
-    $headerdisplayed = TRUE;
 }
+
+$headerdisplayed = TRUE; // Set a variable so we can check to see if the header was included
+
 ?>
