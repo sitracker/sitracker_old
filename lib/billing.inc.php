@@ -801,16 +801,15 @@ function approve_incident_transaction($transactionid)
 
         $unitrate = get_unit_rate(incident_maintid($incidentid));
 
-//        $numberofunits += $bills['refunds'];
         $totalrefunds += $bills['refunds'];
 
         $cost = (($totalbillableunits += $totalrefunds) * $unitrate) * -1;
 
-        $desc = trim("{$numberofunits} {$strUnits} @ {$CONFIG['currency_symbol']}{$unitrate} for incident {$incidentid}. {$s}"); //FIXME i18n
+        $desc = trim("Incident {$incidentid}: {$totalbillableunits}: {$strUnits} @ {$CONFIG['currency_symbol']}{$unitrate}. {$s}"); //FIXME i18n
 
         $rtn = update_contract_balance(incident_maintid($incidentid), $desc, $cost, $serviceid, $transactionid, $totalunits, $totalbillableunits, $totalrefunds);
 
-        if ($rtn != FALSE)
+        if ($rtn == FALSE)
         {
             $rtnvalue = FALSE;
         }

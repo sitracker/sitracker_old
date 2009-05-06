@@ -624,8 +624,8 @@ elseif ($mode == 'approve')
 
     if (!empty($transactionid))
     {
+        $status = true;
         $status = approve_incident_transaction($transactionid);
-
         $maintid = maintid_from_transaction($transactionid);
         $percent = get_service_percentage($maintid);
     }
