@@ -143,7 +143,7 @@ else //submit
         if (substr($key, 0, 5) == 'pinfo' AND empty($value))
         {
             $id = intval(str_replace("pinfo", "", $key));
-            $sql = "SELECT information FROM `$dbProductInfo` ";
+            $sql = "SELECT information FROM `{$dbProductInfo}` ";
             $sql .= "WHERE id='{$id}' ";
             $result = mysql_query($sql);
             $fieldobj = mysql_fetch_object($result);

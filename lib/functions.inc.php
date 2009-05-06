@@ -5709,6 +5709,7 @@ function supported_contacts($maintid)
     $sql  = "SELECT c.forenames, c.surname, sc.contactid AS contactid ";
     $sql .= "FROM `{$dbSupportContacts}` AS sc, `{$dbContacts}` AS c ";
     $sql .= "WHERE sc.contactid=c.id AND sc.maintenanceid='{$maintid}' ";
+    $sql .= "ORDER BY c.surname, c.forenames ";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
     if (!empty($result))
