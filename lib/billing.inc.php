@@ -1661,7 +1661,7 @@ function transactions_report($serviceid, $startdate, $enddate, $sites, $display,
 
     if (!empty($site)) $sql .= "AND m.site = {$site} ";
 
-    $sql .= "ORDER BY s.name ";
+    $sql .= "ORDER BY t.dateupdated, s.name ";
 
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
