@@ -135,10 +135,12 @@ class Form
         if (mysql_affected_rows() <= 0)
         {
         	html_redirect($this->returnURLFailure, FALSE);
+            exit;
         }
         else
         {
         	html_redirect($this->returnURLSuccess, TRUE);
+            exit;
         }
     }
 

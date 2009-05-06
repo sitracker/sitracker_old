@@ -24,7 +24,7 @@ $mode = cleanvar($_REQUEST['mode']);
 
 if (empty($mode))
 {
-	echo "<h2>{$strSiteType}</h2>";
+	echo "<h2>{$strSiteTypes}</h2>";
     
     $sql = "SELECT * FROM `{$dbSiteTypes}` ORDER BY typename";
     $result = mysql_query($sql);
@@ -53,7 +53,6 @@ if (empty($mode))
 elseif ($mode == 'new')
 {   
 	$form = new Form("sitetypes", $strAdd, "sitetypes", "insert", $strNewSiteType);
-    $form->setDebug(true);
     $form->setReturnURLFailure($_SERVER['PHP_SELF']);
     $form->setReturnURLSuccess($_SERVER['PHP_SELF']);
     $c1 = new Cell();
@@ -83,7 +82,6 @@ elseif ($mode == 'edit')
         list($typename) = mysql_fetch_array($result);
     }
 	$form = new Form("sitetypes", $strAdd, "sitetypes", "update", $strEditSiteType);
-    $form->setDebug(true);
     $form->setReturnURLFailure($_SERVER['PHP_SELF']);
     $form->setReturnURLSuccess($_SERVER['PHP_SELF']);
     $c1 = new Cell();

@@ -1424,6 +1424,7 @@ $strSiteProductsMatrix = 'Site Products Matrix';
 $strSites = 'Sites';
 $strSiteSupport = 'Site Support';
 $strSiteType = 'Site Type';
+$strSiteTypes = 'Site Types';
 $strSiteXEdited = 'Site %s edited';
 $strSitUpgraded = "{$CONFIG['application_shortname']} Upgraded";
 $strSitUpgradedTo = '%s has been upgraded to %s';
