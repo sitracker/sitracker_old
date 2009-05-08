@@ -74,6 +74,25 @@ while ($siterow = mysql_fetch_array($siteresult))
     echo "<tr><th>{$strIncidents}:</th>";
     echo "<td>".site_count_incidents($id)." <a href=\"contact_support.php?id=".$siterow['id']."&amp;mode=site\">{$strSeeHere}</a></td></tr>";
     echo "<tr><th>{$strBillableIncidents}:</th><td><a href='transactions.php?site={$siterow['id']}'>{$strSeeHere}</a></td></tr>";
+    
+    $balance = $awaiting = $reserved = 0;
+
+    $billable_contract = get_site_billable_contract_id($id);
+    
+    if ($billable_contract != -1)
+    {
+        $balance = contract_balance($billable_contract, TRUE, TRUE, TRUE);
+        $awaiting = contract_transaction_total($billable_contract, BILLING_AWAITINGAPPROVAL);
+        $reserved = contract_transaction_total($billable_contract, BILLING_RESERVED);
+    }
+    
+    echo "<tr><th>Service Balance</th><td>";
+    echo "{$GLOBALS['strBalance']}: {$CONFIG['currency_symbol']}".number_format($balance, 2);
+    if ($awaiting > 0) echo "<br />{$GLOBALS['strAwaitingApproval']}: {$CONFIG['currency_symbol']}".number_format($awaiting, 2);
+    if ($reserved > 0) echo "<br />{$GLOBALS['strReserved']}: {$CONFIG['currency_symbol']}".number_format($reserved, 2);
+
+    echo "</td></tr>";
+
     echo "<tr><th>{$strActivities}:</th><td>".open_activities_for_site($siterow['id'])." <a href='tasks.php?siteid={$siterow['id']}'>{$strSeeHere}</a></td></tr>";
     echo "<tr><th>{$strInventory}:</th>";
     echo "<td>".site_count_inventory_items($id);

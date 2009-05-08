@@ -94,6 +94,35 @@ function get_billable_contract_id($contactid)
 
 
 /**
+ * Gte sthe billable contract ID for a site, if multiple exist then the first one is choosen
+ * @author Paul Heaney
+ * @param int $siteid - The site ID you want to find the contract for
+ * @return int the ID of the contract, -1 if not found
+ */
+function get_site_billable_contract_id($siteid)
+{
+    global $now;
+
+    $return = -1;
+
+    $sql = "SELECT DISTINCT m.id FROM `{$GLOBALS['dbMaintenance']}` AS m, `{$GLOBALS['dbServiceLevels']}` AS sl ";
+    $sql .= "WHERE m.servicelevelid = sl.id AND sl.timed = 'yes' AND m.site = {$siteid} ";
+    $sql .= "AND m.expirydate > {$now} AND m.term != 'yes'";
+
+    $result = mysql_query($sql);
+
+    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
+
+    if (mysql_num_rows($result) > 0)
+    {
+        $return = mysql_fetch_object($result)->id;
+    }
+
+    return $return;
+}
+
+
+/**
 * Returns the percentage remaining for ALL services on a contract
 * @author Kieran Hogg
 * @param int $mainid - contract ID
@@ -1605,6 +1634,54 @@ function contract_unit_balance($contractid, $includenonapproved = FALSE, $includ
     }
 
     return $unitbalance;
+}
+
+
+/**
+    * @author Ivan Lucas
+    * @param int $contractid. Contract ID of the contract to show a balance for
+    * @return int. Number of available units according to the service balances and unit rates
+    * @todo Check this is correct
+**/
+function contract_balance($contractid, $includenonapproved = FALSE, $includereserved = TRUE, $showonlycurrentlyvalid = TRUE)
+{
+    global $now, $dbService;
+
+    $unitbalance = 0;
+
+    $sql = "SELECT * FROM `{$dbService}` WHERE contractid = {$contractid} ";
+    
+    if ($showonlycurrentlyvalid)
+    {
+        $sql .= "AND UNIX_TIMESTAMP(startdate) <= {$now} ";
+        $sql .= "AND UNIX_TIMESTAMP(enddate) >= {$now}  ";
+    }
+    $sql .= "ORDER BY enddate DESC";
+    
+    $result = mysql_query($sql);
+    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
+
+    if (mysql_num_rows($result) > 0)
+    {
+        while ($service = mysql_fetch_object($result))
+        {
+            $balance += round($service->balance);
+        }
+    }
+
+    if ($includenonapproved)
+    {
+        $awaiting = contract_transaction_total($contractid, BILLING_AWAITINGAPPROVAL);
+        if ($awaiting != 0) $balance += round($awaiting);
+    }
+
+    if ($includereserved)
+    {
+        $reserved = contract_transaction_total($contractid, BILLING_RESERVED);
+        if ($reserved != 0) $balance += round($reserved);
+    }
+
+    return $balance;
 }
 
 
