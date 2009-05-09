@@ -22,6 +22,8 @@ $updateid = cleanvar($_REQUEST['updateid']);
 $incidentid = cleanvar($_REQUEST['incidentid']);
 $expand = cleanvar($_REQUEST['expand']);
 $view = cleanvar($_REQUEST['view']);
+$offset = cleanvar($_REQUEST['offset']);
+$records = cleanvar($_REQUEST['records']);
 
 switch ($mode)
 {
@@ -42,6 +44,6 @@ switch ($mode)
 $temp_result = mysql_query($vsql);
 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
-header("Location: incident_details.php?id=$incidentid&expand={$expand}&view={$view}#$updateid");
+header("Location: incident_details.php?id=$incidentid&expand={$expand}&view={$view}&offset={$offset}&records={$records}#$updateid");
 exit;
 ?>

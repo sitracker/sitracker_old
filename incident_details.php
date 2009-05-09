@@ -395,7 +395,7 @@ function log_nav_bar()
     if ($offset > 0)
     {
         $nav .= "<a href='{$_SERVER['PHP_SELF']}?id={$incidentid}&amp;";
-        $nav .= "javascript=enabled&amp;offset={$previous}&amp;'>&lt;&lt; ";
+        $nav .= "javascript=enabled&amp;offset={$previous}'>&lt;&lt; ";
         $nav .= "{$GLOBALS['strPrevious']}</a>";
     }
     $nav .= "</td>";
@@ -411,7 +411,7 @@ function log_nav_bar()
         else
         {
             $nav .= "<a href='{$_SERVER['PHP_SELF']}?id={$incidentid}&amp;";
-            $nav .= "javascript=enabled&amp;offset=0&amp;'>{$GLOBALS['strShowPaged']}</a>";
+            $nav .= "javascript=enabled&amp;offset=0'>{$GLOBALS['strShowPaged']}</a>";
         }
     }
     $nav .= "</td>";
@@ -420,7 +420,7 @@ function log_nav_bar()
         $records!='all')
     {
         $nav .= "<a href='{$_SERVER['PHP_SELF']}?id={$incidentid}&amp;";
-        $nav .= "javascript=enabled&amp;offset={$next}&amp;'>";
+        $nav .= "javascript=enabled&amp;offset={$next}'>";
         $nav .= "{$GLOBALS['strNext']} &gt;&gt;</a>";
     }
     $nav .= "</td>";
@@ -712,16 +712,28 @@ while ($update = mysql_fetch_object($result))
 
     if ($update->customervisibility == 'show')
     {
-        $newmode='hide';
+        $newmode = 'hide';
     }
     else
     {
-        $newmode='show';
+        $newmode = 'show';
     }
 
     echo "<a href='incident_showhide_update.php?mode={$newmode}&amp;";
     echo "incidentid={$incidentid}&amp;updateid={$update->id}&amp;view";
-    echo "={$view}&amp;expand={$expand}' name='{$update->id}' class='info'>";
+    echo "={$view}&amp;expand={$expand}";
+
+    if ($records == 'all')
+    {
+        echo "&amp;offset=0&amp;records=all";
+    }
+    else
+    {
+        echo "&amp;offset={$offset}";
+    }
+
+    echo "' name='{$update->id}' class='info'>";
+    
     if (array_key_exists($update->type, $updatetypes))
     {
         if (!empty($update->sla) AND $update->type=='slamet')
