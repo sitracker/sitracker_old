@@ -229,7 +229,7 @@ if (empty($mode))
     {
         $available_languages = available_languages();
     }
-    $available_languages = array_merge(array('default'=>$strDefault),$available_languages);
+    $available_languages = array_merge(array(''=>$strDefault),$available_languages);
     if (!empty($user->var_i18n))
     {
         $selectedlang = $user->var_i18n;
