@@ -200,7 +200,7 @@ if (!empty($q))
         echo "<p align='center'>";
         if (!empty($start) AND $domain == 'incidents')
         {
-            echo " <a href='{$_SERVER['PHP_SELF']}?domain=incidents&q={$q}&start=";
+            echo " <a href='{$_SERVER['PHP_SELF']}?domain=incidents&q=".urlencode($q)."&amp;start=";
             echo $begin-$resultsperpage."&amp;sort={$sort}&amp;order={$order}&amp;view={$view}'>";
             echo icon('leftarrow', 16, $strPrevious)." {$strPrevious}</a> ";
         }
@@ -211,7 +211,7 @@ if (!empty($q))
         echo " | ";
         if ($end < $results)
         {
-            echo " <a href='{$_SERVER['PHP_SELF']}?domain=incidents&q={$q}&start=";
+            echo " <a href='{$_SERVER['PHP_SELF']}?domain=incidents&q=".urlencode($q)."&amp;start=";
             echo $begin+$resultsperpage."&amp;sort={$sort}&amp;order={$order}&amp;view={$view}'>{$strNext} ";
             echo icon('rightarrow', 16, $strNext)."</a> ";
         }
