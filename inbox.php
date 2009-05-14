@@ -171,7 +171,7 @@ if (empty($displayid))
             echo "<td>";
             if (($incoming->locked != $sit[2]) && ($incoming->locked > 0))
             {
-                echo "Locked by ".user_realname($update['locked'],TRUE);
+                echo "Locked by ".user_realname($update->locked,TRUE);
             }
             else
             {
