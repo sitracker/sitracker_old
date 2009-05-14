@@ -23,9 +23,12 @@ $incomingid = cleanvar($_REQUEST['id']);
 if (empty($incomingid)) trigger_error("Update ID was not set:{$updateid}", E_USER_WARNING);
 
 $sql = "UPDATE `{$dbTempIncoming}` SET locked = NULL, lockeduntil = NULL ";
-$sql .= "WHERE tempincoming.id='{$incomingid}' AND locked = '{$sit[2]}'";
+$sql .= "WHERE id='{$incomingid}' AND locked = '{$sit[2]}'";
 $result = mysql_query($sql);
 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-echo "<html><head><title></title></head><body onload=\"window.opener.location='holding_queue.php'; window.close();\">";
-echo "</body><html>\n";
+if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+else {
+        header('Location: inbox.php');
+}
+
 ?>
