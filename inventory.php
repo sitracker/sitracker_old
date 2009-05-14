@@ -248,7 +248,7 @@ elseif(is_numeric($_GET['edit']) OR $_GET['action'] == 'new')
         {
             echo "<tr><th>{$strSite}</th><td>";
             echo site_drop_down('site', 0, TRUE);
-	    echo " <span class='required'>{$strRequired}</td>";
+        echo " <span class='required'>{$strRequired}</td>";
             echo "<tr><th>{$strOwner}</th><td>";
             echo contact_site_drop_down('owner', '');
             echo "</td></tr>";
@@ -266,7 +266,7 @@ elseif(is_numeric($_GET['edit']) OR $_GET['action'] == 'new')
 
         if (!is_numeric($edit) OR
             (($row->privacy == 'adminonly' AND user_permission($sit[2], 22)) OR
-            ($row->privacy == 'private' AND ($row->createdby == $sit[2]))))
+            ($row->privacy == 'private' AND ($row->createdby == $sit[2])) OR $row->privacy == 'none'))
         {
             echo "<tr><th>{$strUsername}</th>";
             echo "<td><input name='username' value='{$row->username}' /></td></tr>";
