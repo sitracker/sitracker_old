@@ -408,7 +408,7 @@ function log_nav_bar()
             $nav .= "javascript=enabled&amp;offset=0&amp;records=all'>";
             $nav .= "{$GLOBALS['strShowAll']}</a>";
         }
-        else
+        else if ($_SESSION['num_update_view'] != 0)
         {
             $nav .= "<a href='{$_SERVER['PHP_SELF']}?id={$incidentid}&amp;";
             $nav .= "javascript=enabled&amp;offset=0'>{$GLOBALS['strShowPaged']}</a>";
@@ -417,7 +417,7 @@ function log_nav_bar()
     $nav .= "</td>";
     $nav .= "<td align='right' style='width: 33%;'>";
     if ($offset < ($count_updates - $_SESSION['num_update_view']) AND
-        $records!='all')
+        $records != 'all')
     {
         $nav .= "<a href='{$_SERVER['PHP_SELF']}?id={$incidentid}&amp;";
         $nav .= "javascript=enabled&amp;offset={$next}'>";
@@ -431,6 +431,11 @@ function log_nav_bar()
 
 $records = strtolower(cleanvar($_REQUEST['records']));
 
+if (intval($_SESSION['num_update_view']) == 0)
+{
+	$records = 'all';
+}
+
 if ($incidentid=='' OR $incidentid < 1)
 {
     trigger_error("Incident ID cannot be zero or blank", E_USER_ERROR);
@@ -442,7 +447,10 @@ $sql .= "ORDER BY timestamp {$_SESSION['update_order']}, id {$_SESSION['update_o
 if (empty($records))
 {
     $numupdates = intval($_SESSION['num_update_view']);
-    $sql .= "LIMIT {$offset},{$numupdates}";
+    if ($numupdates != 0)
+    {
+        $sql .= "LIMIT {$offset},{$numupdates}";
+    }
 }
 elseif (is_numeric($records))
 {
