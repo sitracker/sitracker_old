@@ -50,8 +50,8 @@ else $adminuser = FALSE;
 list($dtype, $dlength, $dapproved, $dapprovedby) = user_holiday($user, 0, $year, $month, $day, FALSE);
 
 // allow approver (or admin) to unbook holidays already approved
-if ($length == '0' AND ($approver == TRUE
-                      AND ($dapprovedby = $sit[2] OR $adminuser == TRUE)))
+if ($length == '0' AND (($approver == TRUE AND ($dapprovedby = $sit[2] OR $adminuser == TRUE))
+                   OR ($user == $sit[2] AND mysql2date("$year-$month-$day") >= $today)))
 {
     // Delete the holiday
     $sql = "DELETE FROM `{$dbHolidays}` ";

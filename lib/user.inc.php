@@ -360,7 +360,6 @@ function user_holiday($userid, $type= 0, $year, $month, $day, $length = FALSE)
     {
         $sql .= "AND length='$length' ";
     }
-debug_log($sql); // ###INL###
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
