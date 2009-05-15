@@ -428,7 +428,7 @@ function send_trigger_email($userid, $triggerid, $template, $paramarray)
         $mailok = send_email($toemail, $from, $subject, $body, $replytoemail, $ccemail, $bccemail);
         if ($mailok == FALSE)
         {
-            trigger_error('Internal error sending email: '. $mailerror.' send_email() failed', E_USER_ERROR);
+            trigger_error('Internal error sending email from trigger: '. $mailerror.' send_email() failed', E_USER_ERROR);
             $return = FALSE;
         }
         else
