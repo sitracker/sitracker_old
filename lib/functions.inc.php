@@ -7520,11 +7520,22 @@ if (is_array($CONFIG['plugins']))
         // Remove any slashes
 
         $plugin = str_replace('/','',$plugin);
+        $plugini18npath = APPLICATION_PLUGINPATH . "{$plugin}". DIRECTORY_SEPARATOR . "i18n". DIRECTORY_SEPARATOR;
         if ($plugin != '')
         {
             if (file_exists(APPLICATION_PLUGINPATH . "{$plugin}.php"))
             {
                 include (APPLICATION_PLUGINPATH . "{$plugin}.php");
+                // Load i18n if it exists
+                if (file_exists($plugini18npath))
+                {
+                    @include ("{$plugini18npath}{$CONFIG['default_i18n']}.inc.php");
+                    if (!empty($_SESSION['lang'])
+                        AND $_SESSION['lang'] != $CONFIG['default_i18n'])
+                    {
+                        @include ("{$plugini18npath}{$_SESSION['lang']}.inc.php");
+                    }
+                }
             }
             else
             {
