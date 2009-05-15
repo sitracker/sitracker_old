@@ -57,23 +57,26 @@ $result = mysql_query($sql);
 //  echo $sql;
 if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
-$bodytext = "Message from {$CONFIG['application_shortname']}: ".user_realname($sit[2])." has ";
-if ($approve == 'FALSE') $bodytext.="rejected";
-else $bodytext.="approved";
-$bodytext.=" your request for ";
-if ($startdate == 'all') $bodytext .= "all days requested\n\n";
-else
+// Don't send email when approving 'all' to avoid an error message
+if ($user != 'all')
 {
-    $bodytext .= "the ";
-    $bodytext .= date('l j F Y',mysql2date($startdate));
-    $bodytext .= "\n";
+    $bodytext = "Message from {$CONFIG['application_shortname']}: ".user_realname($sit[2])." has ";
+    if ($approve == 'FALSE') $bodytext.="rejected";
+    else $bodytext.="approved";
+    $bodytext.=" your request for ";
+    if ($startdate == 'all') $bodytext .= "all days requested\n\n";
+    else
+    {
+        $bodytext .= "the ";
+        $bodytext .= date('l j F Y',mysql2date($startdate));
+        $bodytext .= "\n";
+    }
+    $email_from = user_email($sit[2]);
+    $email_to = user_email($user);
+    $email_subject = "Re: {$CONFIG['application_shortname']}: Holiday Approval Request";
+    $rtnvalue = send_email($email_to, $email_from, $email_subject, $bodytext);
+    // FIXME this should use triggers
 }
-$email_from = user_email($sit[2]);
-$email_to = user_email($user);
-$email_subject = "Re: {$CONFIG['application_shortname']}: Holiday Approval Request";
-$rtnvalue = send_email($email_to, $email_from, $email_subject, $bodytext);
-// FIXME this should use triggers
-
 //if ($rtnvalue===TRUE) echo "<p align='center'>".user_realname($user)." has been notified of your decision</p>";
 //else echo "<p class='error'>There was a problem sending your notification</p>";
 
