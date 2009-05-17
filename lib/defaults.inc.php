@@ -344,5 +344,7 @@ $CONFIG['portal_creates_incidents'] = TRUE;
 $CONFIG['holiday_period_increment'] = array(0, 0, 0);
 $CONFIG['holiday_allow_overbooking'] = FALSE;
 
+$CONFIG['soap_enabled'] = TRUE;
+$CONFIG['soap_portal_enabled'] = 'FALSE';
 
 ?>

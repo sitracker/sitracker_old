@@ -17,7 +17,7 @@ if (realpath(__FILE__) == realpath($_SERVER['SCRIPT_FILENAME']))
 }
 
 
-$CFGTAB['application'] = array('appmain', 'theming', 'ldap', 'other');
+$CFGTAB['application'] = array('appmain', 'theming', 'ldap', 'soap', 'other');
 $CFGTAB['email'] = array('inboundemail','outboundemail');
 $CFGTAB['features'] = array('incidents', 'portal', 'ftp', 'kb', 'sla', 'holidays', 'feedback');
 $CFGTAB['system'] = array('paths', 'locale', 'journal');
@@ -127,6 +127,9 @@ $CFGCAT['ldap'] = array('use_ldap',
                         'ldap_default_customer_siteid',
                         'ldap_autocreate_customer');
 
+$CFGCAT['soap'] = array('soap_enabled',
+                         'soap_portal_enabled');
+
 $CFGCAT['kb'] = array('kb_enabled',
                       'kb_disclaimer_html',
                       'kb_id_prefix');
@@ -148,6 +151,7 @@ $CFGCAT['other'] = array('debug', 'error_logfile',
 $CATI18N['appmain'] = $strGeneral;
 $CATI18N['theming'] = $strTheme;
 $CATI18N['ldap'] = $strLDAP;
+$CATI18N['soap'] = $strSOAP;
 $CATI18N['other'] = $strOther;
 $CATI18N['inboundemail'] = $strInbound;
 $CATI18N['outboundemail'] = $strOutbound;
@@ -533,6 +537,16 @@ $CFGVAR['regular_contact_days']['unit'] = $strDays;
 
 $CFGVAR['session_name']['title'] = 'Session Name';
 $CFGVAR['session_name']['help'] = 'The session name for use in cookies and URLs, Must contain alphanumeric characters only';
+
+$CFGVAR['soap_enabled']['title'] = 'Soap enabled';
+$CFGVAR['soap_enabled']['help'] = 'Enable SOAP for SiT! users';
+$CFGVAR['soap_enabled']['options'] = 'TRUE|FALSE';
+$CFGVAR['soap_enabled']['type'] = 'select';
+
+$CFGVAR['soap_portal_enabled']['title'] = 'Soap portal enabled';
+$CFGVAR['soap_portal_enabled']['help'] = 'Enable SOAP for portal users';
+$CFGVAR['soap_portal_enabled']['options'] = 'TRUE|FALSE';
+$CFGVAR['soap_portal_enabled']['type'] = 'select';
 
 $CFGVAR['spam_email_subject']['title'] = 'Spam Subject';
 $CFGVAR['spam_email_subject']['help'] = 'String to look for in email message subject to determine a message is spam';

@@ -1449,6 +1449,8 @@ $strSLAXLate = '%s %s late';
 $strSLAMissed = 'SLA missed';
 $strSLAPerformance = 'SLA Performance';
 $strSLATarget = 'SLA Target';
+# Simple Object Access Protocol
+$strSOAP = 'SOAP';
 $strSoftware = 'Software';
 $strSoftwareVersion = 'Software Version';
 $strSolution = 'Solution';
