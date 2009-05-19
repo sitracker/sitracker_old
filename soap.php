@@ -12,22 +12,21 @@
 
 require ('core.php');
 require (APPLICATION_LIBPATH . 'functions.inc.php');
-// This page requires authentication
 
-require (APPLICATION_LIBPATH . '/nusoap/nusoap.php');
+require (APPLICATION_LIBPATH . DIRECTORY_SEPARATOR . 'nusoap' . DIRECTORY_SEPARATOR . 'nusoap.php');
 
-$soap_namespace = 'http://www.sitracker.org';
+$soap_namespace = 'http://sitracker.org';
 $server = new soap_server();
 $server->configureWSDL('sitsoap', $soap_namespace);
 
 if ($CONFIG['soap_enabled'])
 {
-	require (APPLICATION_LIBPATH . 'soap_core.inc.php');
+    require (APPLICATION_LIBPATH . 'soap_core.inc.php');
     require (APPLICATION_LIBPATH . 'soap_incidents.inc.php');
 }
 else
 {
-	// Return an error
+    // Return an error
 }
 
 $server->service(isset($HTTP_RAW_POST_DATA) ?  $HTTP_RAW_POST_DATA : '');
