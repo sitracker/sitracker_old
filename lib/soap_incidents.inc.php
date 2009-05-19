@@ -26,12 +26,12 @@ $server->register('list_incidents',
 function list_incidents($sessionid, $owner=0, $status=1)
 {
     $status = new SoapStatus();
-    
+
     $incidents = array();
-    
+
     if (!empty($sessionid) AND validate_session($sessionid))
-    { 
-    	$sql = "SELECT * FROM `{$GLOBALS['dbIncidents']}` WHERE 1 = 1 ";
+    {
+        $sql = "SELECT * FROM `{$GLOBALS['dbIncidents']}` WHERE 1 = 1 ";
         if ($owner > 0) $sql .= "AND (owner = {$owner} OR $towner = {$owner}) ";
         switch ($status)
         {
@@ -40,7 +40,7 @@ function list_incidents($sessionid, $owner=0, $status=1)
             case 2: $sql .= "AND (status != ".STATUS_CLOSED." AND status !=  ".STATUS_UNASSIGNED.") ";
                 break;
         }
-        
+
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
         if (mysql_num_rows($result) > 0)
@@ -57,7 +57,7 @@ function list_incidents($sessionid, $owner=0, $status=1)
                 $incident->skillid = $obj->softwareid;
                 $incident->maintenanceid = $obj->maintenanceid;
                 $incident->servicelevel = $obj->servicelevel;
-                
+
                 $incidents[] = $incident;
             }
         }
@@ -66,7 +66,7 @@ function list_incidents($sessionid, $owner=0, $status=1)
     {
     	$status->set_error('session_not_valid');
     }
-    
+
     return array('incidents' => $incidents, 'status' => $status->get_array());
 }
 

@@ -17,7 +17,7 @@ $server->wsdl->addComplexType('status_value',
                                         'struct',
                                         'all',
                                         '',
-                                        array ('value' => array ('name' => 'value', 'type' => 'xsd:int'), 
+                                        array ('value' => array ('name' => 'value', 'type' => 'xsd:int'),
                                                 'name' => array ('name' => 'name', 'type' => 'xsd:string'),
                                                 'description' => array ('name' => 'description', 'type' => 'xsd:string'))
                                         );
@@ -84,42 +84,42 @@ $server->wsdl->addComplexType('incident_list_response',
 
 class SoapStatus
 {
-	var $value;
+    var $value;
     var $name;
     var $description;
-    
+
     function SoapStatus()
     {
-    	$this->set_error('no_error');
+        $this->set_error('no_error');
     }
-    
+
     function set_error($name)
     {
-    	global $soap_errors;
+        global $soap_errors;
         if (isset($soap_errors[$name]))
         {
-        	$this->value = $soap_errors[$name]['value'];
+            $this->value = $soap_errors[$name]['value'];
             $this->name = $soap_errors[$name]['name'];
             $this->description = $soap_errors[$name]['description'];
         }
         else
         {
-        	$this->value = -1;
+            $this->value = -1;
             $this->name = "Undefined error {$name} occured";
             $this->description = "Undefined error {$name} occured";
         }
     }
-    
+
     function get_array()
     {
-    	return array('value' => $this->value, 'name' => $this->name, 'description' => $this->description);
+        return array('value' => $this->value, 'name' => $this->name, 'description' => $this->description);
     }
 }
 
 
 class Incident
 {
-	var $incidentid = -1;
+    var $incidentid = -1;
     var $title = "no title";
     var $ownerid = -1;
     var $townerid = -1;
@@ -134,11 +134,11 @@ class Incident
     var $currentstatusid = -1;
     var $currentstatus = "no status";
     var $servicelevel = "no service level";
-    
+
     function get_array()
     {
         debug_log("get_array ".$this->incidentid );
-    	return array('incidentid' => $this->incidentid,
+        return array('incidentid' => $this->incidentid,
                             'title' => $this->title,
                             'ownerid' => $this>ownerid,
                             'townerid' => $this->townerid,
