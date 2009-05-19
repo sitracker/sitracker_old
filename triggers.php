@@ -218,10 +218,10 @@ switch ($_REQUEST['mode'])
                 $linktitle = $ttvararray[$replace]['description'];
                 echo "<a href='javascript:void(0);' title=\"{$linktitle}\" onclick=\"insertRuletext('{{$param}}');\">{{$param}}</a> ";
             }
-            $compoperators = array('==', '!=');
+            $compoperators = array('==', '!=', '<', '>', '<=', '>=');
             foreach ($compoperators AS $op)
             {
-                echo "<var><strong><a href='javascript:void(0);' onclick=\"insertRuletext('{$op}');\">{$op}</a></strong></var> ";
+                echo "<var><strong><a href='javascript:void(0);' onclick=\"insertRuletext('{$op}');\">".htmlentities($op)."</a></strong></var> ";
             }
             $logicaloperators = array('OR', 'AND');
             foreach ($logicaloperators AS $op)
