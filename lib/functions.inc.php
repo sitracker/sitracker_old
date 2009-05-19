@@ -4526,7 +4526,7 @@ function bbcode($text)
                             12 => "<code>$1</code>",
                             13 => "<hr />",
                             14 => "<span style=\"text-decoration:line-through\">$1</span>",
-                            15 => "<a href=\"{$_SERVER['HTTP_HOST']}{$CONFIG['application_webpath']}download.php?id=$1\">$2</a>",
+                            15 => "<a href=\"{$CONFIG['application_webpath']}download.php?id=$1\">$2</a>",
                             16 => "<a href=\"$1\">$2</a>");
 
     $html = preg_replace($bbcode_regex, $bbcode_replace, $text);
