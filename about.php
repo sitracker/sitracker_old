@@ -80,8 +80,11 @@ Completely free for commercial and non-commercial use.</p>
 <p align='center'>Dojo 0.4.3 by <a href='http://dojotoolkit.org/'>The Dojo Foundation</a><br />
 Copyright &copy; 2004-2006 The Dojo Foundation. Licensed under the BSD license.</p>
 
+<p align='center'><a href='https://sourceforge.net/projects/nusoap/'>NuSOAP</a> 0.7.3 by <a href='http://www.nusphere.com/'>NuSphere Corporation</a><br />
+Copyright &copy; 2002 NuSphere Corporation. Licensed under the LGPL v2.</p>
+
 <p align='center'>MagpieRSS 0.72 by <a href='http://magpierss.sourceforge.net/'>Kellan Elliott-McCrea</a><br />
-Copyright &copy; Kellan Elliott-McCrea. Licensed under the GPLv2.</p>
+Copyright &copy; Kellan Elliott-McCrea. Licensed under the GPL v2.</p>
 
 <p align='center'>Prototype JavaScript framework 1.6.0.3 by <a href='http://www.prototypejs.org/'>Sam Stephenson</a><br />
 Copyright &copy; 2005-2008 Sam Stephenson. Licensed under an MIT style license.</p>

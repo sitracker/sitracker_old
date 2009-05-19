@@ -13,7 +13,7 @@ if ($err)
 $result = $client->call('add', array(1, 3));
 echo "A\n";
 print_r($result);
-$result = $client->call('sit_login', array('admin', 'novell'));
+$result = $client->call('sit_login', array('admin', '111'));
 echo "\nB\n";
 $err = $client->getError();
 if ($err)
@@ -33,8 +33,9 @@ if ($err)
   exit;
 }
 
+echo "<pre>";
 print_r($result);
-
+echo "</pre>";
 
 
 ?>

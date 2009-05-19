@@ -15,20 +15,23 @@ require (APPLICATION_LIBPATH . 'functions.inc.php');
 
 require (APPLICATION_LIBPATH . DIRECTORY_SEPARATOR . 'nusoap' . DIRECTORY_SEPARATOR . 'nusoap.php');
 
-$soap_namespace = 'http://sitracker.org';
-$server = new soap_server();
-$server->configureWSDL('sitsoap', $soap_namespace);
-
 if ($CONFIG['soap_enabled'])
 {
+    $soap_namespace = 'http://sitracker.org';
+    $server = new soap_server();
+    $server->configureWSDL('sitsoap', $soap_namespace);
+
     require (APPLICATION_LIBPATH . 'soap_core.inc.php');
     require (APPLICATION_LIBPATH . 'soap_incidents.inc.php');
+
+    $server->service(isset($HTTP_RAW_POST_DATA) ?  $HTTP_RAW_POST_DATA : '');
 }
 else
 {
-    // Return an error
+    // Return an error -- FIXME better error wouldn't go amiss
+    trigger_error('SOAP is not enabled for this instance of SiT!', E_USER_ERROR);
 }
 
-$server->service(isset($HTTP_RAW_POST_DATA) ?  $HTTP_RAW_POST_DATA : '');
+
 
 ?>
