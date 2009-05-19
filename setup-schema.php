@@ -2669,7 +2669,14 @@ CREATE TABLE IF NOT EXISTS `{$dbUserConfig}` (
 UPDATE `{$dbNoticeTemplates}` SET `link` = '{applicationurl}user_profile_edit.php?mode=savesessionlang' WHERE `noticetemplates`.`id` =4 LIMIT 1 ;
 
 -- PH 2009-0425
-ALTER TABLE `{$dbUsers}` CHANGE `id` `id` SMALLINT NOT NULL AUTO_INCREMENT 
+ALTER TABLE `{$dbUsers}` CHANGE `id` `id` SMALLINT NOT NULL AUTO_INCREMENT
+
+-- INL 2009-05-19 (Mantis 674)
+CREATE TABLE IF NOT EXISTS `{$dbConfig}` (
+  `config` varchar(255) NOT NULL,
+  `value` text,
+  PRIMARY KEY  (`config`)
+) TYPE=MyISAM COMMENT='SiT configuration';
 ";
 
 // Important: When making changes to the schema you must add SQL to make the alterations
