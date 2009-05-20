@@ -5,12 +5,16 @@
 // "If I helped you build something cool I'd like to hear about it. Drop me a line at tom@dagblastit.com."
 // some parts of tjmlib.js were merged with this file and the file was tweaked a bit
 
+// Modified for SiT by Ivan Lucas <ivanlucas[at]users.sourceforge.net>
+
 // how reliable is this test?
 isIE = (document.all ? true : false);
 isDOM = (document.getElementById ? true : false);
 
 // Initialize arrays.
-var months = new Array("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec");
+var months = new Array(strJanAbbr, strFebAbbr, strMarAbbr, strAprAbbr, strMayAbbr,
+                    strJunAbbr, strJulAbbr, strAugAbbr, strSepAbbr, strOctAbbr,
+                    strNovAbbr, strDecAbbr);
 var daysInMonth = new Array(31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31);
 var displayMonth = new Date().getMonth();
 var displayYear = new Date().getFullYear();

@@ -400,7 +400,7 @@ if ($emails > 0)
         {
             $incident_open = incident_open($incidentid);
 
-            if ($incident_open != "Yes")
+            if ($incident_open != "Yes") // Do not translate/i18n fixed string
             {
                 //Dont want to associate with a closed call
                 $oldincidentid = $incidentid;
@@ -438,7 +438,7 @@ if ($emails > 0)
                 if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
                 $updateid = mysql_insert_id();
 
-                if ($incident_open == "Yes")
+                if ($incident_open == "Yes") // Do not translate/i18n fixed string
                 {
                     // Mark the incident as active
                     $sql = "UPDATE `{$GLOBALS['dbIncidents']}` SET status='1', lastupdated='".time()."', timeofnextaction='0' ";
@@ -449,7 +449,7 @@ if ($emails > 0)
                 else
                 {
                     //create record in tempincoming
-                    if ($incident_open == "No")
+                    if ($incident_open == "No") // Do not translate/i18n fixed string
                     {
                         //incident closed
                         $reason = sprintf($SYSLANG['strIncidentXIsClosed'], $oldincidentid);

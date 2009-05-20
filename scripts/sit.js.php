@@ -15,16 +15,28 @@
 
 $permission = 0; // not required
 require ('..'.DIRECTORY_SEPARATOR.'core.php');
+
+session_name($CONFIG['session_name']);
+session_start();
+
 require (APPLICATION_LIBPATH . 'functions.inc.php');
 
 header('Content-type: text/javascript');
 
 echo "
 var application_webpath = '{$CONFIG['application_webpath']}';
-
-
-
-
+var strJanAbbr = '$strJanAbbr';
+var strFebAbbr = '$strFebAbbr';
+var strMarAbbr = '$strMarAbbr';
+var strAprAbbr = '$strAprAbbr';
+var strMayAbbr = '$strMayAbbr';
+var strJunAbbr = '$strJunAbbr';
+var strJulAbbr = '$strJulAbbr';
+var strAugAbbr = '$strAugAbbr';
+var strSepAbbr = '$strSepAbbr';
+var strOctAbbr = '$strOctAbbr';
+var strNovAbbr = '$strNovAbbr';
+var strDecAbbr = '$strDecAbbr';
 ";
 
 ?>

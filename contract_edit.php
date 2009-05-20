@@ -27,7 +27,7 @@ if (empty($action) OR $action == "showform")
 {
     include (APPLICATION_INCPATH . 'htmlheader.inc.php');
     echo "<h2>".icon('contract', 32)." ";
-    echo "Select Contract to Edit</h2>";
+    echo "{$strContract}:</h2>";
     echo "<form action='{$_SERVER['PHP_SELF']}?action=edit' method='post'>";
     echo "<table align='center' class='vertical'>";
     echo "<tr><th>{$strContract}:</th><td>";
