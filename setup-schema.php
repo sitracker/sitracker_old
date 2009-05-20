@@ -74,9 +74,9 @@ CREATE TABLE `{$dbBillingPeriods}` (
 `customerperiod` INT NOT NULL COMMENT 'In minutes',
 `priority` INT( 4 ) NOT NULL,
 `tag` VARCHAR( 10 ) NOT NULL,
-`createdby` INT NULL ,
+`createdby` smallint(6) NULL ,
 `modified` DATETIME NULL ,
-`modifiedby` INT NULL ,
+`modifiedby` smallint(6) NULL ,
 `limit` float NOT NULL default 0,
 PRIMARY KEY ( `servicelevelid`,`priority` )
 ) ENGINE = MYISAM ;
@@ -136,9 +136,9 @@ CREATE TABLE `{$dbContacts}` (
   `notes` blob NOT NULL,
   `active` enum('true','false') NOT NULL default 'true',
   `created` datetime default NULL,
-  `createdby` int(11) default NULL,
+  `createdby` smallint(6) default NULL,
   `modified` datetime default NULL,
-  `modifiedby` int(11) default NULL,
+  `modifiedby` smallint(6) default NULL,
   PRIMARY KEY  (`id`),
   KEY `siteid` (`siteid`),
   KEY `username` (`username`),
@@ -164,7 +164,7 @@ INSERT INTO `{$dbDashboard}` (`id`, `name`, `enabled`) VALUES (1, 'random_tip', 
 
 CREATE TABLE `{$dbDrafts}` (
   `id` int(11) NOT NULL auto_increment,
-  `userid` int(11) NOT NULL,
+  `userid` smallint(6) NOT NULL,
   `incidentid` int(11) NOT NULL,
   `type` enum('update','email') NOT NULL,
   `content` text NOT NULL,
@@ -201,9 +201,9 @@ CREATE TABLE IF NOT EXISTS `{$dbEmailTemplates}` (
   `customervisibility` enum('show','hide') NOT NULL default 'show',
   `storeinlog` enum('No','Yes') NOT NULL default 'Yes',
   `created` datetime default NULL,
-  `createdby` int(11) default NULL,
+  `createdby` smallint(6) default NULL,
   `modified` datetime default NULL,
-  `modifiedby` int(11) default NULL,
+  `modifiedby` smallint(6) default NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM;
 
@@ -257,9 +257,9 @@ CREATE TABLE `{$dbFeedbackForms}` (
   `thanks` text NOT NULL,
   `description` text NOT NULL,
   `multi` enum('yes','no') NOT NULL default 'no',
-  `createdby` INT NULL ,
+  `createdby` smallint(6) NULL ,
   `modified` DATETIME NULL ,
-  `modifiedby` INT NULL ,
+  `modifiedby` smallint(6) NULL ,
   PRIMARY KEY  (`id`),
   KEY `multi` (`multi`)
 ) ENGINE=MyISAM;
@@ -275,9 +275,9 @@ CREATE TABLE `{$dbFeedbackQuestions}` (
   `type` varchar(255) NOT NULL default 'text',
   `required` enum('true','false') NOT NULL default 'false',
   `options` text NOT NULL,
-  `createdby` INT NULL ,
+  `createdby` smallint(6) NULL ,
   `modified` DATETIME NULL ,
-  `modifiedby` INT NULL ,
+  `modifiedby` smallint(6) NULL ,
   PRIMARY KEY  (`id`),
   KEY `taborder` (`taborder`),
   KEY `type` (`type`),
@@ -295,9 +295,9 @@ CREATE TABLE `{$dbFeedbackReport}` (
   `created` timestamp(14) NOT NULL,
   `incidentid` int(5) NOT NULL default '0',
   `contactid` int(5) NOT NULL default '0',
-  `createdby` INT NULL ,
+  `createdby` smallint(6) NULL ,
   `modified` DATETIME NULL ,
-  `modifiedby` INT NULL ,
+  `modifiedby` smallint(6) NULL ,
   PRIMARY KEY  (`id`),
   KEY `responseref` (`responseref`),
   KEY `formid` (`formid`),
@@ -329,9 +329,9 @@ CREATE TABLE `{$dbFeedbackResults}` (
   `questionid` int(5) NOT NULL default '0',
   `result` varchar(255) NOT NULL default '',
   `resulttext` text,
-  `createdby` INT NULL ,
+  `createdby` smallint(6) NULL ,
   `modified` DATETIME NULL ,
-  `modifiedby` INT NULL ,
+  `modifiedby` smallint(6) NULL ,
   PRIMARY KEY  (`id`),
   KEY `questionid` (`questionid`),
   KEY `respondentid` (`respondentid`)
@@ -354,9 +354,9 @@ CREATE TABLE `{$dbFiles}` (
   `expiry` DATETIME NULL,
   `fileversion` varchar(50) NULL default '',
   `published` enum('yes','no') NOT NULL default 'no',
-  `createdby` INT NULL ,
+  `createdby` smallint(6) NULL ,
   `modified` DATETIME NULL ,
-  `modifiedby` INT NULL ,
+  `modifiedby` smallint(6) NULL ,
   PRIMARY KEY  (`id`),
   KEY `userid` (`userid`),
   KEY `category` (`category`),
@@ -370,20 +370,20 @@ CREATE TABLE `{$dbGroups}` (
   `id` int(5) NOT NULL auto_increment,
   `name` varchar(255) NOT NULL default '',
   `imageurl` varchar(255) NOT NULL default '',
-  `createdby` INT NULL ,
+  `createdby` smallint(6) NULL ,
   `modified` DATETIME NULL ,
-  `modifiedby` INT NULL ,
+  `modifiedby` smallint(6) NULL ,
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM COMMENT='List of user groups' ;
 
 
 CREATE TABLE `{$dbHolidays}` (
   `id` int(11) NOT NULL auto_increment,
-  `userid` int(5) NOT NULL default '0',
+  `userid` smallint(6) NOT NULL default '0',
   `type` int(11) NOT NULL default '1',
   `length` enum('am','pm','day') NOT NULL default 'day',
   `approved` tinyint(1) NOT NULL default '0',
-  `approvedby` int(5) NOT NULL default '0',
+  `approvedby` smallint(6) NOT NULL default '0',
   `date` DATE NULL,
   PRIMARY KEY  (`id`),
   KEY `userid` (`userid`),
@@ -408,9 +408,9 @@ CREATE TABLE `{$dbIncidentProductInfo}` (
   `incidentid` int(11) default NULL,
   `productinfoid` int(11) default NULL,
   `information` text,
-   `createdby` INT NULL ,
+   `createdby` smallint(6) NULL ,
   `modified` DATETIME NULL ,
-  `modifiedby` INT NULL ,
+  `modifiedby` smallint(6) NULL ,
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM;
 
@@ -423,8 +423,8 @@ CREATE TABLE `{$dbIncidents}` (
   `externalemail` varchar(255) NOT NULL default '',
   `ccemail` varchar(255) default NULL,
   `title` varchar(150) default NULL,
-  `owner` tinyint(4) default NULL,
-  `towner` tinyint(4) NOT NULL default '0',
+  `owner` smallint(6) default NULL,
+  `towner` smallint(6) NOT NULL default '0',
   `contact` int(11) default '0',
   `priority` tinyint(4) default NULL,
   `servicelevel` varchar(10) default NULL,
@@ -444,9 +444,9 @@ CREATE TABLE `{$dbIncidents}` (
   `slanotice` tinyint(1) NOT NULL default '0',
   `locked` tinyint(4) NOT NULL default '0',
   `locktime` int(11) NOT NULL default '0',
-  `createdby` INT NULL ,
+  `createdby` smallint(6) NULL ,
   `modified` DATETIME NULL ,
-  `modifiedby` INT NULL ,
+  `modifiedby` smallint(6) NULL ,
   PRIMARY KEY  (`id`),
   KEY `type` (`type`),
   KEY `owner` (`owner`),
@@ -523,10 +523,10 @@ CREATE TABLE `{$dbInventory}` (
   `password` varchar(255) NOT NULL,
   `type` varchar(255) NOT NULL,
   `notes` text,
-  `createdby` int(11) NOT NULL,
+  `createdby` smallint(6) NOT NULL,
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
-  `modifiedby` int(11) NOT NULL,
+  `modifiedby` smallint(6) NOT NULL,
   `active` tinyint(1) NOT NULL default '1',
   `privacy` enum('none','adminonly','private') NOT NULL default 'none',
   PRIMARY KEY  (`id`),
@@ -536,7 +536,7 @@ CREATE TABLE `{$dbInventory}` (
 
 CREATE TABLE `{$dbJournal}` (
   `id` int(11) NOT NULL auto_increment,
-  `userid` int(11) NOT NULL default '0',
+  `userid` smallint(6) NOT NULL default '0',
   `timestamp` timestamp(14) NOT NULL,
   `event` varchar(40) NOT NULL default '',
   `bodytext` text NOT NULL,
@@ -558,7 +558,7 @@ CREATE TABLE `{$dbKBArticles}` (
   `published` datetime NOT NULL default '0000-00-00 00:00:00',
   `author` varchar(255) NOT NULL default '',
   `reviewed` datetime NOT NULL default '0000-00-00 00:00:00',
-  `reviewer` tinyint(4) NOT NULL default '0',
+  `reviewer` smallint(6) NOT NULL default '0',
   `keywords` varchar(255) NOT NULL default '',
   PRIMARY KEY  (`docid`),
   KEY `distribution` (`distribution`),
@@ -569,7 +569,7 @@ CREATE TABLE `{$dbKBArticles}` (
 CREATE TABLE `{$dbKBContent}` (
   `docid` int(5) NOT NULL default '0',
   `id` int(7) NOT NULL auto_increment,
-  `ownerid` int(5) NOT NULL default '0',
+  `ownerid` smallint(6) NOT NULL default '0',
   `headerstyle` char(2) NOT NULL default 'h1',
   `header` varchar(255) NOT NULL default '',
   `contenttype` int(5) NOT NULL default '1',
@@ -608,7 +608,7 @@ CREATE TABLE `{$dbLinks}` (
      `origcolref` int(11) NOT NULL default '0',
      `linkcolref` int(11) NOT NULL default '0',
      `direction` enum('left','right','bi') NOT NULL default 'left',
-     `userid` tinyint(4) NOT NULL default '0',
+     `userid` smallint(6) NOT NULL default '0',
      PRIMARY KEY  (`linktype`,`origcolref`,`linkcolref`),
      KEY `userid` (`userid`)
 ) ENGINE=MyISAM ;
@@ -671,7 +671,7 @@ INSERT INTO `{$dbMaintenance}` (id, site, product, reseller, expirydate, licence
 
 CREATE TABLE `{$dbNotes}` (
   `id` int(11) NOT NULL auto_increment,
-  `userid` int(11) NOT NULL default '0',
+  `userid` smallint(6) NOT NULL default '0',
   `timestamp` timestamp(14) NOT NULL,
   `bodytext` text NOT NULL,
   `link` int(11) NOT NULL default '0',
@@ -685,7 +685,7 @@ CREATE TABLE `{$dbNotes}` (
 
 CREATE TABLE `{$dbNotices}` (
   `id` int(11) NOT NULL auto_increment,
-  `userid` int(11) NOT NULL,
+  `userid` smallint(6) NOT NULL,
   `template` varchar(255) NULL,
   `type` tinyint(4) NOT NULL,
   `text` tinytext NOT NULL,
@@ -858,7 +858,7 @@ CREATE TABLE `{$dbRelatedIncidents}` (
 `incidentid` INT( 5 ) NOT NULL ,
 `relation` ENUM( 'child', 'sibling' ) DEFAULT 'child' NOT NULL ,
 `relatedid` INT( 5 ) NOT NULL ,
-`owner` int(5) NOT NULL default '0',
+`owner` smallint(6) NOT NULL default '0',
 PRIMARY KEY ( `id` ) ,
 INDEX ( `incidentid` , `relatedid` )
 ) ENGINE=MyISAM;
@@ -1183,7 +1183,7 @@ CREATE TABLE `{$dbSites}` (
   `freesupport` int(5) NOT NULL default '0',
   `licenserx` int(5) NOT NULL default '0',
   `ftnpassword` varchar(40) NOT NULL default '',
-  `owner` tinyint(4) NOT NULL default '0',
+  `owner` smallint(6) NOT NULL default '0',
   `active` enum('true','false') NOT NULL default 'true',
   PRIMARY KEY  (`id`),
   KEY `typeid` (`typeid`),
@@ -1246,7 +1246,7 @@ CREATE TABLE `{$dbTasks}` (
   `name` varchar(255) default NULL,
   `description` text NOT NULL,
   `priority` tinyint(4) default NULL,
-  `owner` tinyint(4) NOT NULL default '0',
+  `owner` smallint(6) NOT NULL default '0',
   `duedate` datetime default NULL,
   `startdate` datetime default NULL,
   `enddate` datetime default NULL,
@@ -1262,7 +1262,7 @@ CREATE TABLE `{$dbTasks}` (
 
 CREATE TABLE `{$dbTempAssigns}` (
   `incidentid` int(5) NOT NULL default '0',
-  `originalowner` int(5) NOT NULL default '0',
+  `originalowner` smallint(6) NOT NULL default '0',
   `userstatus` tinyint(4) NOT NULL default '1',
   `assigned` enum('yes','no') NOT NULL default 'no',
   PRIMARY KEY  (`incidentid`,`originalowner`),
@@ -1278,7 +1278,7 @@ CREATE TABLE `{$dbTempIncoming}` (
   `from` varchar(255) default NULL,
   `subject` varchar(255) default NULL,
   `emailfrom` varchar(255) default NULL,
-  `locked` tinyint(4) default NULL,
+  `locked` smallint(6) default NULL,
   `lockeduntil` datetime default NULL,
   `reason` varchar(255) default NULL,
   `reason_user` int(11) NOT NULL,
@@ -1299,7 +1299,7 @@ CREATE TABLE `{$dbTempIncoming}` (
 `totalrefunds` INT NOT NULL,
 `amount` FLOAT NOT NULL ,
 `description` VARCHAR( 255 ) NOT NULL ,
-`userid` TINYINT NOT NULL ,
+`userid` smallint(6) NOT NULL ,
 `dateupdated` DATETIME NOT NULL ,
 `transactionstatus` smallint(6) NOT NULL default '5',
 PRIMARY KEY ( `transactionid` )
@@ -1309,7 +1309,7 @@ PRIMARY KEY ( `transactionid` )
 CREATE TABLE IF NOT EXISTS `{$dbTriggers}` (
   `id` int(11) NOT NULL auto_increment,
   `triggerid` varchar(50) NOT NULL,
-  `userid` tinyint(4) NOT NULL,
+  `userid` smallint(6) NOT NULL,
   `action` enum('ACTION_NONE','ACTION_EMAIL','ACTION_NOTICE','ACTION_JOURNAL', 'ACTION_CREATE_INCIDENT') NOT NULL default 'ACTION_NONE',
   `template` varchar(255) default NULL,
   `parameters` varchar(255) default NULL,
@@ -1359,10 +1359,10 @@ INSERT INTO `{$dbTriggers}` (`triggerid`, `userid`, `action`, `template`, `param
 CREATE TABLE `{$dbUpdates}` (
   `id` int(11) NOT NULL auto_increment,
   `incidentid` int(11) default NULL,
-  `userid` int(11) default NULL,
+  `userid` smallint(6) default NULL,
   `type` enum('default','editing','opening','email','reassigning','closing','reopening','auto','phonecallout','phonecallin','research','webupdate','emailout','emailin','externalinfo','probdef','solution','actionplan','slamet','reviewmet','tempassigning', 'auto_chase_email', 'auto_chase_phone', 'auto_chase_manager','auto_chased_phone','auto_chased_manager','auto_chase_managers_manager', 'customerclosurerequest', 'fromtask') default 'default',
   `currentowner` tinyint(4) NOT NULL default '0',
-  `currentstatus` int(11) NOT NULL default '0',
+  `currentstatus` smallint(6) NOT NULL default '0',
   `bodytext` text,
   `timestamp` int(11) default NULL,
   `nextaction` varchar(50) NOT NULL default '',
@@ -1378,14 +1378,14 @@ CREATE TABLE `{$dbUpdates}` (
 
 
 CREATE TABLE `{$dbUserGroups}` (
-  `userid` int(5) NOT NULL default '0',
+  `userid` smallint(6) NOT NULL default '0',
   `groupid` int(5) NOT NULL default '0',
   PRIMARY KEY  (`userid`,`groupid`)
 ) ENGINE=MyISAM COMMENT='Links users with groups';
 
 
 CREATE TABLE `{$dbUserPermissions}` (
-  `userid` tinyint(4) NOT NULL default '0',
+  `userid` smallint(6) NOT NULL default '0',
   `permissionid` int(5) NOT NULL default '0',
   `granted` enum('true','false') NOT NULL default 'false',
   PRIMARY KEY  (`userid`,`permissionid`)
@@ -1515,7 +1515,7 @@ CREATE TABLE `{$dbUsers}` (
 
 
 CREATE TABLE `{$dbUserSoftware}` (
-  `userid` tinyint(4) NOT NULL default '0',
+  `userid` smallint(6) NOT NULL default '0',
   `softwareid` int(5) NOT NULL default '0',
   `backupid` tinyint(4) NOT NULL default '0',
   PRIMARY KEY  (`userid`,`softwareid`),
@@ -2669,7 +2669,7 @@ CREATE TABLE IF NOT EXISTS `{$dbUserConfig}` (
 UPDATE `{$dbNoticeTemplates}` SET `link` = '{applicationurl}user_profile_edit.php?mode=savesessionlang' WHERE `noticetemplates`.`id` =4 LIMIT 1 ;
 
 -- PH 2009-0425
-ALTER TABLE `{$dbUsers}` CHANGE `id` `id` SMALLINT NOT NULL AUTO_INCREMENT
+ALTER TABLE `{$dbUsers}` CHANGE `id` `id` SMALLINT(6) NOT NULL AUTO_INCREMENT;
 
 -- INL 2009-05-19 (Mantis 674)
 CREATE TABLE IF NOT EXISTS `{$dbConfig}` (
@@ -2677,6 +2677,57 @@ CREATE TABLE IF NOT EXISTS `{$dbConfig}` (
   `value` text,
   PRIMARY KEY  (`config`)
 ) TYPE=MyISAM COMMENT='SiT configuration';
+
+-- INL 2009-05-20
+ALTER TABLE `{$dbIncidents}` CHANGE `owner` `owner` SMALLINT( 6 ) NULL DEFAULT NULL;
+ALTER TABLE `{$dbIncidents}` CHANGE `towner` `towner` SMALLINT( 6 ) NOT NULL DEFAULT '0';
+ALTER TABLE `{$dbLinks}` CHANGE `userid` `userid` SMALLINT( 6 ) NOT NULL DEFAULT '0';
+ALTER TABLE `{$dbTransactions}` CHANGE `userid` `userid` SMALLINT( 6 ) NOT NULL;
+ALTER TABLE `{$dbTriggers}` CHANGE `userid` `userid` SMALLINT( 6 ) NOT NULL;
+ALTER TABLE `{$dbUserGroups}` CHANGE `userid` `userid` SMALLINT( 6 ) NOT NULL DEFAULT '0';
+ALTER TABLE `{$dbUserPermissions}` CHANGE `userid` `userid` SMALLINT( 6 ) NOT NULL DEFAULT '0';
+ALTER TABLE `{$dbUserSoftware}` CHANGE `userid` `userid` SMALLINT( 6 ) NOT NULL DEFAULT '0';
+ALTER TABLE `{$dbBillingPeriods}` CHANGE `createdby` `createdby` SMALLINT( 6 ) NULL DEFAULT NULL;
+ALTER TABLE `{$dbBillingPeriods}` CHANGE `modifiedby` `modifiedby` SMALLINT( 6 ) NULL DEFAULT NULL;
+ALTER TABLE `{$dbContacts}` CHANGE `createdby` `createdby` SMALLINT( 6 ) NULL DEFAULT NULL;
+ALTER TABLE `{$dbContacts}` CHANGE `modifiedby` `modifiedby` SMALLINT( 6 ) NULL DEFAULT NULL;
+ALTER TABLE `{$dbDrafts}` CHANGE `userid` `userid` SMALLINT( 6 ) NOT NULL ;
+ALTER TABLE `{$dbEmailTemplates}` CHANGE `createdby` `createdby` SMALLINT( 6 ) NULL DEFAULT NULL ,
+CHANGE `modifiedby` `modifiedby` SMALLINT( 6 ) NULL DEFAULT NULL;
+ALTER TABLE `{$dbEscalationPaths}` CHANGE `createdby` `createdby` SMALLINT( 6 ) NULL DEFAULT NULL ,
+CHANGE `modifiedby` `modifiedby` SMALLINT( 6 ) NULL DEFAULT NULL ;
+ALTER TABLE `{$dbFeedbackForms}` CHANGE `createdby` `createdby` SMALLINT( 6 ) NULL DEFAULT NULL ,
+CHANGE `modifiedby` `modifiedby` SMALLINT( 6 ) NULL DEFAULT NULL ;
+ALTER TABLE `{$dbFeedbackQuestions}` CHANGE `createdby` `createdby` SMALLINT( 6 ) NULL DEFAULT NULL ,
+ CHANGE `modifiedby` `modifiedby` SMALLINT( 6 ) NULL DEFAULT NULL ;
+ALTER TABLE `{$dbFeedbackReport}` CHANGE `createdby` `createdby` SMALLINT( 6 ) NULL DEFAULT NULL ,
+ CHANGE `modifiedby` `modifiedby` SMALLINT( 6 ) NULL DEFAULT NULL ;
+ALTER TABLE `{$dbFeedbackResults}` CHANGE `createdby` `createdby` SMALLINT( 6 ) NULL DEFAULT NULL ,
+ CHANGE `modifiedby` `modifiedby` SMALLINT( 6 ) NULL DEFAULT NULL ;
+ALTER TABLE `{$dbFiles}` CHANGE `createdby` `createdby` SMALLINT( 6 ) NULL DEFAULT NULL ,
+ CHANGE `modifiedby` `modifiedby` SMALLINT( 6 ) NULL DEFAULT NULL ;
+ALTER TABLE `{$dbGroups}` CHANGE `createdby` `createdby` SMALLINT( 6 ) NULL DEFAULT NULL ,
+ CHANGE `modifiedby` `modifiedby` SMALLINT( 6 ) NULL DEFAULT NULL ;
+ALTER TABLE `{$dbHolidays}` CHANGE `userid` `userid` SMALLINT( 6 ) NOT NULL DEFAULT '0',
+ CHANGE `approvedby` `approvedby` SMALLINT( 6 ) NOT NULL DEFAULT '0' ;
+ALTER TABLE `{$dbIncidentProductInfo}` CHANGE `createdby` `createdby` SMALLINT( 6 ) NULL DEFAULT NULL ,
+ CHANGE `modifiedby` `modifiedby` SMALLINT( 6 ) NULL DEFAULT NULL ;
+ALTER TABLE `{$dbIncidents}` CHANGE `createdby` `createdby` SMALLINT( 6 ) NULL DEFAULT NULL ,
+ CHANGE `modifiedby` `modifiedby` SMALLINT( 6 ) NULL DEFAULT NULL ;
+ALTER TABLE `{$dbInventory}` CHANGE `createdby` `createdby` SMALLINT( 6 ) NOT NULL ,
+ CHANGE `modifiedby` `modifiedby` SMALLINT( 6 ) NOT NULL ;
+ALTER TABLE `{$dbJournal}` CHANGE `userid` `userid` SMALLINT( 6 ) NOT NULL DEFAULT '0' ;
+ALTER TABLE `{$dbKBArticles}` CHANGE `reviewer` `reviewer` SMALLINT( 6 ) NOT NULL DEFAULT '0' ;
+ALTER TABLE `{$dbKBContent}` CHANGE `ownerid` `ownerid` SMALLINT( 6 ) NOT NULL DEFAULT '0' ;
+ALTER TABLE `{$dbNotes}` CHANGE `userid` `userid` SMALLINT( 6 ) NOT NULL DEFAULT '0' ;
+ALTER TABLE `{$dbNotices}` CHANGE `userid` `userid` SMALLINT( 6 ) NOT NULL;
+ALTER TABLE `{$dbRelatedIncidents}` CHANGE `owner` `owner` SMALLINT( 6 ) NOT NULL DEFAULT '0' ;
+ALTER TABLE `{$dbSites}` CHANGE `owner` `owner` SMALLINT( 6 ) NOT NULL DEFAULT '0' ;
+ALTER TABLE `{$dbTasks}` CHANGE `owner` `owner` SMALLINT( 6 ) NOT NULL DEFAULT '0' ;
+ALTER TABLE `{$dbTempAssigns}` CHANGE `originalowner` `originalowner` SMALLINT( 6 ) NOT NULL DEFAULT '0';
+ALTER TABLE `{$dbTempIncoming}` CHANGE `locked` `locked` SMALLINT( 6 ) NULL DEFAULT NULL  ;
+ALTER TABLE `{$dbUpdates}` CHANGE `userid` `userid` SMALLINT( 6 ) NULL DEFAULT NULL  ;
+ALTER TABLE `{$dbUpdates}` CHANGE `currentowner` `currentowner` SMALLINT( 6 ) NOT NULL DEFAULT '0';
 ";
 
 // Important: When making changes to the schema you must add SQL to make the alterations

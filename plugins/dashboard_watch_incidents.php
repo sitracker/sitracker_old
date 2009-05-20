@@ -9,7 +9,7 @@
 //
 // Author: Paul Heaney <paulheaney[at]users.sourceforge.net>
 
-$dashboard_watch_incidents_version = 1;
+$dashboard_watch_incidents_version = 2;
 
 
 function dashboard_watch_incidents($dashletid)
@@ -24,7 +24,7 @@ function dashboard_watch_incidents_install()
 {
     global $CONFIG;
     $schema = "CREATE TABLE IF NOT EXISTS `{$CONFIG['db_tableprefix']}dashboard_watch_incidents` (
-        `userid` tinyint(4) NOT NULL,
+        `userid` smallint(6) NOT NULL,
         `type` tinyint(4) NOT NULL,
         `id` int(11) NOT NULL,
         PRIMARY KEY  (`userid`,`type`,`id`)
@@ -424,5 +424,17 @@ function dashboard_watch_incidents_edit($dashletid)
 
     return $html;
 }
+
+
+function dashboard_watch_incidents_upgrade()
+{
+    $upgrade_schema[2] = "
+        -- INL 20May09
+       ALTER TABLE `{$CONFIG['db_tableprefix']}dashboard_watch_incidents` CHANGE `userid` `userid` SMALLINT( 6 ) NOT NULL;
+    ";
+
+    return $upgrade_schema;
+}
+
 
 ?>

@@ -9,7 +9,7 @@
 //
 // Author: Paul Heaney <paulheaney[at]users.sourceforge.net>
 
-$dashboard_rss_version = 2;
+$dashboard_rss_version = 3;
 
 
 function dashboard_rss($dashletid)
@@ -24,7 +24,7 @@ function dashboard_rss_install()
     global $CONFIG;
 
     $schema = "CREATE TABLE `{$CONFIG['db_tableprefix']}dashboard_rss` (
-    `owner` tinyint(4) NOT NULL,
+    `owner` smallint(6) NOT NULL,
     `url` varchar(255) NOT NULL,
     `items` int(5) default NULL,
     `enabled` enum('true','false') NOT NULL,
@@ -313,6 +313,10 @@ function dashboard_rss_upgrade()
         -- INL 22Nov07
         ALTER TABLE `{$CONFIG['db_tableprefix']}dashboard_rss` ADD `items` INT( 5 ) NULL AFTER `url`;
     ";
+
+    $upgrade_schema[3] = "
+        -- INL 22May09
+        ALTER TABLE `{$CONFIG['db_tableprefix']}dashboard_rss` CHANGE `owner` `owner` SMALLINT( 6 ) NOT NULL;";
 
     return $upgrade_schema;
 }
