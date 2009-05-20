@@ -4542,13 +4542,15 @@ function strip_bbcode_tooltip($text)
                         2 => '/\[color\=(.*?)\](.*?)\[\/color\]/s',
                         3 => '/\[size\=(.*?)\](.*?)\[\/size\]/s',
                         4 => '/\[blockquote\=(.*?)\](.*?)\[\/blockquote\]/s',
-                        5 => '/\[blockquote\](.*?)\[\/blockquote\]/s');
+                        5 => '/\[blockquote\](.*?)\[\/blockquote\]/s',
+                        6 => "/\[s\](.*?)\[\/s\]/s");
     $bbcode_replace = array(0 => '$1',
                             1 => '$2',
                             2 => '$2',
                             3 => '$2',
                             4 => '$2',
-                            5 => '$1'
+                            5 => '$1',
+                            6 => '$1'
                             );
 
     return preg_replace($bbcode_regex, $bbcode_replace, $text);
