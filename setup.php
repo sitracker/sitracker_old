@@ -682,7 +682,7 @@ switch ($_REQUEST['action'])
                 }
                 else
                 {
-                    $newcfgfile .= "'{$setupval}'";
+                    $newcfgfile .= "'".addslashes($setupval)."'";
                 }
                 $newcfgfile .= ";\n\n";
             }
