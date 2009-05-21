@@ -77,7 +77,6 @@ if (mysql_num_rows($result) > 0)
         echo "<div class='detaildate'>{$incoming->reason}</div>";
     }
 
-    // FIXME locked by X
     echo icon('locked', 16, $strLocked);
     echo " ".sprintf($strLockedByX, $lockedbyname)."</div>";
 

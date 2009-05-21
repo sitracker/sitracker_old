@@ -358,6 +358,7 @@ function draw_chart($mode, $year, $month='', $day='', $groupid='', $userid='')
     $prevgroupid = '000';
     if ($numusers > 0)
     {
+        $hdays = array();
         while ($user = mysql_fetch_object($uresult))
         {
             unset($hdays);
@@ -432,7 +433,7 @@ function draw_chart($mode, $year, $month='', $day='', $groupid='', $userid='')
                 if ((date('D',mktime(0,0,0,$month,$cday,$year))=='Sat' OR date('D',mktime(0,0,0,$month,$cday,$year))=='Sun'))
                 {
                     // Add  day on for a weekend
-                    if ($weekend == FALSE) $displaydays+=1;
+                    if ($weekend == FALSE) $displaydays += 1;
                     $weekend = TRUE;
                 }
                 if (date('D',mktime(0,0,0,$month,$cday,$year))=='Sat')

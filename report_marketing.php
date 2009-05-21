@@ -258,14 +258,13 @@ elseif ($_REQUEST['mode'] == 'report')
             $psql .= "`{$dbMaintenance}` AS m, `{$dbProducts}` AS p WHERE ";
             $psql .= "sc.maintenanceid = m.id AND ";
             $psql .= "m.product = p.id ";
-            $psql .= "AND sc.contactid = '$row->contactid' ";
+            $psql .= "AND sc.contactid = '{$row->contactid}' ";
             $html .= "<td>";
 
-            // FIXME dataprotection_address for csv
             $csv .= "\"".strip_comma($row->forenames).'","'
                 . strip_comma($row->surname).'","';
 
-            if ($row->dataprotection_email!='Yes')
+            if ($row->dataprotection_email != 'Yes')
             {
                 $csv .= strip_comma(strtolower($row->contactemail)).'","';
             }
@@ -274,15 +273,22 @@ elseif ($_REQUEST['mode'] == 'report')
                 $csv .= '","';
             }
 
-            $csv  .= strip_comma($row->sitename).'","'
-                . strip_comma($row->address1).'","'
-                . strip_comma($row->address2).'","'
-                . strip_comma($row->city).'","'
-                . strip_comma($row->county).'","'
-                . strip_comma($row->postcode).'","'
-                . strip_comma($row->country).'","';
+            if ($row->dataprotection_address != 'Yes')
+            {
+                $csv  .= strip_comma($row->sitename).'","'
+                    . strip_comma($row->address1).'","'
+                    . strip_comma($row->address2).'","'
+                    . strip_comma($row->city).'","'
+                    . strip_comma($row->county).'","'
+                    . strip_comma($row->postcode).'","'
+                    . strip_comma($row->country).'","';
+            }
+            else
+            {
+            	$csv .= '","';
+            }
 
-            if ($row->dataprotection_phone!='Yes')
+            if ($row->dataprotection_phone != 'Yes')
             {
                 $csv .= strip_comma(strtolower($row->phone)).'","';
             }

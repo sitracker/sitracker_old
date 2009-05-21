@@ -25,18 +25,44 @@ header('Content-type: text/javascript');
 
 echo "
 var application_webpath = '{$CONFIG['application_webpath']}';
-var strJanAbbr = '$strJanAbbr';
-var strFebAbbr = '$strFebAbbr';
-var strMarAbbr = '$strMarAbbr';
-var strAprAbbr = '$strAprAbbr';
-var strMayAbbr = '$strMayAbbr';
-var strJunAbbr = '$strJunAbbr';
-var strJulAbbr = '$strJulAbbr';
-var strAugAbbr = '$strAugAbbr';
-var strSepAbbr = '$strSepAbbr';
-var strOctAbbr = '$strOctAbbr';
-var strNovAbbr = '$strNovAbbr';
-var strDecAbbr = '$strDecAbbr';
+var strJanAbbr = '{$strJanAbbr}';
+var strFebAbbr = '{$strFebAbbr}';
+var strMarAbbr = '{$strMarAbbr}';
+var strAprAbbr = '{$strAprAbbr}';
+var strMayAbbr = '{$strMayAbbr}';
+var strJunAbbr = '{$strJunAbbr}';
+var strJulAbbr = '{$strJulAbbr}';
+var strAugAbbr = '{$strAugAbbr}';
+var strSepAbbr = '{$strSepAbbr}';
+var strOctAbbr = '{$strOctAbbr}';
+var strNovAbbr = '{$strNovAbbr}';
+var strDecAbbr = '{$strDecAbbr}';
+
+
+/**
+  * Display/Hide contents of a password field
+  * (converts from a password to text field and back)
+  * @author Ivan Lucas
+  * @param string elem. The ID of the password input HTML element
+**/
+function password_reveal(elem)
+{
+    var elemlink = 'link' + elem;
+    if ($(elem).type == 'password')
+    {
+        $(elem).type = 'text';
+        $(elemlink).innerHTML = '{$strHide}';
+    }
+    else
+    {
+        $(elem).type = 'password';
+        $(elemlink).innerHTML = '{$strReveal}';
+    }
+}
+
 ";
+
+
+
 
 ?>

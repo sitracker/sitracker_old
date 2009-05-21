@@ -6249,6 +6249,7 @@ function contract_details($id, $mode='internal')
 * @param mixed $file file to upload
 * @param int $incidentd
 * @returns string path of file
+* @todo FIXME this function doesn't seem to make use of $updateid and is never called, is it still used?'
 **/
 function upload_file($file, $incidentid, $updateid, $type='public')
 {

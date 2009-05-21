@@ -410,7 +410,7 @@ function saction_SetUserStatus()
 */
 function saction_ChaseCustomers()
 {
-    global $CONFIG, $now;
+    global $CONFIG, $now, $sit;
     global $dbIncidents, $dbUpdates;
     $success = TRUE;
 

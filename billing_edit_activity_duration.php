@@ -104,7 +104,7 @@ switch ($mode)
         }
         else
         {
-        	html_redirect("{$CONFIG['application_webpath']}incident_details.php?id={$incidentid}", FALSE, 'No duration on activity'); // FIXME i18n
+        	html_redirect("{$CONFIG['application_webpath']}incident_details.php?id={$incidentid}", FALSE, $strNoDurationOnActivity);
         }
 }
 

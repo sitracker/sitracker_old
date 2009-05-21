@@ -81,10 +81,11 @@ if (!empty($selectedday))
     echo "</strong> ";
     echo " as ".holiday_type($type).".  ";
 
-    if ($approved==0)
+    if ($approved == 0)
     {
         switch ($length)
         {
+            // FIXME i18n ALL these
             case 'am':
                 echo "You can make it <a href='holiday_add.php?type=$type&amp;user=$user&amp;year=$selectedyear&amp;month=$selectedmonth&amp;day=$selectedday&amp;length=pm'>the afternoon instead</a>, or select the <a href='holiday_add.php?type=$type&amp;user=$user&amp;year=$selectedyear&amp;month=$selectedmonth&amp;day=$selectedday&amp;length=day'>full day</a>. ";
             break;
@@ -106,23 +107,26 @@ if (!empty($selectedday))
     {
         list($xtype, $xlength, $xapproved, $xapprovedby)=user_holiday($user, $type, $selectedyear, $selectedmonth, $selectedday, FALSE);
         echo "Approved by ".user_realname($xapprovedby).".";
-        if ($length!='0' && $approver==TRUE && $sit[2]==$xapprovedby) echo "&nbsp;As approver for this holiday you can <a href='holiday_add.php?type=$type&amp;user=$user&amp;year=$selectedyear&amp;month=$selectedmonth&amp;day=$selectedday&amp;length=0'>deselect</a> it.";
+        if ($length!='0' && $approver==TRUE && $sit[2]==$xapprovedby)
+        {
+            echo "&nbsp;As approver for this holiday you can <a href='holiday_add.php?type={$type}&amp;user={$user}&amp;year={$selectedyear}&amp;month={$selectedmonth}&amp;day={$selectedday}&amp;length=0'>deselect</a> it."; // FIXME i18n
+        }
     }
     else
     {
-        echo "<span class='error'>Declined</span>.  You should <a href='holiday_add.php?type=$type&amp;user=$user&amp;year=$selectedyear&amp;month=$selectedmonth&amp;day=$selectedday&amp;length=0'>deselect</a> it.";
+        echo "<span class='error'>Declined</span>.  You should <a href='holiday_add.php?type={$type}&amp;user={$user}&amp;year={$selectedyear}&amp;month={$selectedmonth}&amp;day={$selectedday}&amp;length=0'>deselect</a> it."; // FIXME i18n
     }
 }
 else
 {
-    echo "Click on a day to select it"; // FIXME i18n click on a day
+    echo $strClickOnDayToSelect;
 }
 echo "</p>\n";
 
 
 echo "<h2>{$strYearView}</h2>";
-$pdate = mktime(0,0,0,$month,$day,$year-1);
-$ndate = mktime(0,0,0,$month,$day,$year+1);
+$pdate = mktime(0, 0, 0, $month, $day, $year-1);
+$ndate = mktime(0, 0, 0 ,$month, $day, $year+1);
 echo "<p align='center'>";
 echo "<a href='{$_SERVER['PHP_SELF']}?display=year&amp;year=".date('Y',$pdate)."&amp;month=".date('m',$pdate)."&amp;day=".date('d',$pdate)."&amp;type={$type}'>&lt;</a> ";
 echo date('Y',mktime(0,0,0,$month,$day,$year));
@@ -133,15 +137,19 @@ echo "</p>";
 echo "<table align='center' border='1' cellpadding='0' cellspacing='0' style='border-collapse:collapse; border-color: #AAA; width: 80%;'>";
 $displaymonth = 1;
 $displayyear = $year;
-for ($r = 1;$r <= 3;$r ++)
+for ($r = 1; $r <= 3;$r ++)
 {
     echo "<tr>";
-    for ($c = 1;$c <= 4;$c++)
+    for ($c = 1; $c <= 4;$c++)
     {
         echo "<td valign='top' align='center' class='shade1'>";
         draw_calendar($displaymonth,$displayyear);
         echo "</td>";
-        if ($displaymonth==12) { $displayyear++; $displaymonth=0; }
+        if ($displaymonth == 12)
+        {
+            $displayyear++;
+            $displaymonth = 0;
+        }
         $displaymonth++;
     }
     echo "</tr>";

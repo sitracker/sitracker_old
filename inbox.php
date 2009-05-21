@@ -171,7 +171,7 @@ if (empty($displayid))
             echo "<td>";
             if (($incoming->locked != $sit[2]) && ($incoming->locked > 0))
             {
-                echo "Locked by ".user_realname($update->locked,TRUE);
+                echo sprintf($strLockedByX, user_realname($update->locked,TRUE));
             }
             else
             {
@@ -210,7 +210,7 @@ if (empty($displayid))
         echo "<td colspan='*'>";
         echo "<select name='action'>";
         echo "<option value='' selected='selected'></option>";
-        echo "<option value='lockselected'>Lock</option>"; // FIXME i18n
+        echo "<option value='lockselected'>{$strLock}</option>";
         echo "<option value='deleteselected'>{$strDelete}</option>";
         echo "<option value='assignselected'>{$strAssign}</option>";
         echo "</select>";

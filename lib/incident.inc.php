@@ -317,13 +317,19 @@ function suggest_reassign_userid($incidentid, $exceptuserid = 0)
                 }
 
                 // Get one ticket for having five or less incidents
-                if ($queued_size <=5) $ticket[] = $user->userid;
+                if ($queue_size <=5) $ticket[] = $user->userid;
 
                 // Get up to three tickets, one less ticket for each critical incident in queue
-                for ($c=1;$c < (3 - $queued_critical);$c++) $ticket[] = $user->userid;
+                for ($c = 1; $c < (3 - $queued_critical); $c++)
+                {
+                    $ticket[] = $user->userid;
+                }
 
                 // Get up to three tickets, one less ticket for each high priority incident in queue
-                for ($c=1;$c < (3 - $queued_high);$c++) $ticket[] = $user->userid;
+                for ($c = 1; $c < (3 - $queued_high); $c++)
+                {
+                    $ticket[] = $user->userid;
+                }
             }
             else
             {
@@ -469,7 +475,7 @@ function reopen_incident($incident, $newstatus = STATUS_ACTIVE, $message = '')
 **/
 function send_email_template($templateid, $paramarray, $attach='', $attachtype='', $attachdesc='')
 {
-    global $CONFIG, $application_version_string;
+    global $CONFIG, $application_version_string, $sit;
 
     if (!is_array($paramarray))
     {
@@ -487,7 +493,7 @@ function send_email_template($templateid, $paramarray, $attach='', $attachtype='
     $tresult = mysql_query($tsql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     if (mysql_num_rows($tresult) > 0) $template = mysql_fetch_object($tresult);
-    $paramarray = array('incidentid' => $id, 'triggeruserid' => $sit[2]);
+    $paramarray = array('incidentid' => $paramarray['incidentid'], 'triggeruserid' => $sit[2]);
     $from = replace_specials($template->fromfield, $paramarray);
     $replyto = replace_specials($template->replytofield, $paramarray);
     $ccemail = replace_specials($template->ccfield, $paramarray);
@@ -495,7 +501,7 @@ function send_email_template($templateid, $paramarray, $attach='', $attachtype='
     $toemail = replace_specials($template->tofield, $paramarray);
     $subject = replace_specials($template->subjectfield, $paramarray);
     $body = replace_specials($template->body, $paramarray);
-    $extra_headers = "Reply-To: $replyto\nErrors-To: ".user_email($sit[2])."\n";
+    $extra_headers = "Reply-To: {$replyto}\nErrors-To: ".user_email($sit[2])."\n";
     $extra_headers .= "X-Mailer: {$CONFIG['application_shortname']} {$application_version_string}/PHP " . phpversion() . "\n";
     $extra_headers .= "X-Originating-IP: {$_SERVER['REMOTE_ADDR']}\n";
     if ($ccemail != '')  $extra_headers .= "CC: $ccemail\n";
@@ -503,14 +509,15 @@ function send_email_template($templateid, $paramarray, $attach='', $attachtype='
     $extra_headers .= "\n"; // add an extra crlf to create a null line to separate headers from body
                         // this appears to be required by some email clients - INL
 
-    $mime = new MIME_mail($fromfield, $tofield, html_entity_decode($subjectfield), '', $extra_headers, $mailerror);
-    $mime -> attach($bodytext, '', "text-plain; charset={$GLOBALS['i18ncharset']}", 'quoted-printable');
+    // Removed $mailerror as MIME_mail expects 5 args and not 6 of which is it not expect errors
+    $mime = new MIME_mail($from, $toemail, html_entity_decode($subject), '', $extra_headers);
+    $mime -> attach($body, '', "text-plain; charset={$GLOBALS['i18ncharset']}", 'quoted-printable');
 
     if (!empty($attach))
     {
-        if (empty($attachdesc)) $attachdesc = "Attachment named $attach";
-        $disp = "attachment; filename=\"$attach\"; name=\"$attach\";";
-        $mime -> fattach($filename, $attachdesc, $attachtype, 'base64', $disp);
+        if (empty($attachdesc)) $attachdesc = "Attachment named {$attach}";
+        $disp = "attachment; filename=\"{$attach}\"; name=\"{$attach}\";";
+        $mime -> fattach($attach, $attachdesc, $attachtype, 'base64', $disp);
     }
 
     // actually send the email

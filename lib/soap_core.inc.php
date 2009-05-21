@@ -12,7 +12,7 @@
 
 include (APPLICATION_LIBPATH . 'soap_types.inc.php');
 
-$server->register('sit_login',
+$server->register('login',
         array('username' => 'xsd:string', 'password' => 'xsd:string'), // Input
         array('return'  => 'tns:login_response'), // return
         $soap_namespace);
@@ -26,7 +26,7 @@ $server->register('sit_login',
  * @param string $applicationname (Optional)  an optional name for the application 
  * @return Array - array of session ID and error
  */
-function sit_login($username, $password, $applicationname='noname')
+function login($username, $password, $applicationname='noname')
 {
     global $CONFIG;
     $auth_result = authenticate($username, $password);

@@ -274,6 +274,7 @@ $strCharsToKeepWhenTranslating = 'When translating, please do not translate anyt
 $strChooseLanguage = 'Please choose your language';
 $strCity = 'City';
 $strClearFilter = 'Clear filter';
+$strClickOnDayToSelect = 'Click on day to select';
 $strClickTitleHeaders = 'Click title headers to enable the sections';
 # e.g. close an incident
 $strClose = 'Close';
@@ -668,6 +669,7 @@ $strHelpAbout = 'About';
 $strHelpChar = '?';
 $strHelpContents = 'Help Contents';
 $strHelpToTranslate = 'This page is to help translators translate SiT!';
+$strHide = 'Hide';
 $strHideInPortal = 'Hide from portal';
 $strHidingIncidentsOlderThan = 'Hiding incidents older than %s days';
 $strHigh = 'High';
@@ -863,6 +865,7 @@ $strLoading = 'Loading';
 # Parameters defining location, language and regional preferences
 $strLocale = 'Locale';
 $strLocation = 'Location';
+$strLock = 'Lock';
 $strLocked = 'Locked';
 $strLockedByX = 'Locked by %s';
 $strLoggedExternally = 'Logged externally';
