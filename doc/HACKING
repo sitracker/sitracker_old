@@ -35,7 +35,7 @@ Comments can also provide notes for future work, including:
     //             to be removed completely
 
 
-Use phpDoc (http://www.phpdoc.org/) format to document functions:
+Use Doxygen (http://www.stack.nl/~dimitri/doxygen/) format to document functions:
 e.g.
 
 /**

@@ -448,36 +448,28 @@ function draw_chart($mode, $year, $month='', $day='', $groupid='', $userid='')
                     $weekend = FALSE;
                     if ($hdays[$cday] == 'am' OR $hdays[$cday] == 'day')
                     {
-                        if ($happroved[$cday] == 0
-                            OR $happroved[$cday]==10
-                            OR $happroved[$cday]==8
-                            OR $happroved[$cday]==-2)
+                        if ($happroved[$cday] == HOL_APPROVAL_NONE
+                            OR $happroved[$cday]==HOL_APPROVAL_NONE_ARCHIVED)
                         {
                             $html .= "<td class='review'>";  // Waiting approval
                         }
                         elseif ($htypes[$cday] <= 4
-                                AND ($happroved[$cday] == 1
-                                OR $happroved[$cday]==11))
+                                AND ($happroved[$cday] == HOL_APPROVAL_GRANTED
+                                OR $happroved[$cday]==HOL_APPROVAL_GRANTED_ARCHIVED))
                         {
                             $html .= "<td class='idle'>"; // Approved
                         }
-                        elseif ($htypes[$cday] <= 4
-                                AND ($happroved[$cday] == 2
-                                OR $happroved[$cday]==12))
-                        {
-                            $html .= "<td class='notice'>"; // Approved Free
-                        }
-                        elseif ($htypes[$cday] == 5
-                                AND ($happroved[$cday] == 1
-                                OR $happroved[$cday] == 2
-                                OR $happroved[$cday]== 11
-                                OR $happroved[$cday] == 12))
-                        {
-                            $html .= "<td class='notice'>"; // Approved Free
-                        }
-                        elseif ($happroved[$cday] == -1 OR $happroved[$cday]==9)
+                        elseif ($htypes[$cday] <= 5
+                                AND ($happroved[$cday] == HOL_APPROVAL_DENIED
+                                OR $happroved[$cday] == HOL_APPROVAL_DENIED_ARCHIVED))
                         {
                             $html .= "<td class='urgent'>"; // Denied
+                        }
+                        elseif ($htypes[$cday] == HOL_FREE
+                                AND ($happroved[$cday] == HOL_APPROVAL_GRANTED
+                                OR $happroved[$cday]== HOL_APPROVAL_GRANTED_ARCHIVED))
+                        {
+                            $html .= "<td class='notice'>"; // Approved Free
                         }
                         else
                         {
@@ -549,39 +541,31 @@ function draw_chart($mode, $year, $month='', $day='', $groupid='', $userid='')
                 }
                 else
                 {
-                    $weekend = FALSE;  $hello='';
+                    $weekend = FALSE;
                     if ($hdays[$cday] == 'pm' OR $hdays[$cday] == 'day')
                     {
-                        if ($happroved[$cday] == 0
-                            OR $happroved[$cday] == 10
-                            OR $happroved[$cday] == 8
-                            OR $happroved[$cday] == -2)
+                        if ($happroved[$cday] == HOL_APPROVAL_NONE
+                            OR $happroved[$cday]==HOL_APPROVAL_NONE_ARCHIVED)
                         {
                             $html .= "<td class='review'>";  // Waiting approval
                         }
                         elseif ($htypes[$cday] <= 4
-                                AND ($happroved[$cday] == 1
-                                OR $happroved[$cday] == 11))
+                                AND ($happroved[$cday] == HOL_APPROVAL_GRANTED
+                                OR $happroved[$cday]==HOL_APPROVAL_GRANTED_ARCHIVED))
                         {
                             $html .= "<td class='idle'>"; // Approved
                         }
-                        elseif ($htypes[$cday] <= 4
-                                AND ($happroved[$cday] == 2
-                                OR $happroved[$cday] == 12))
-                        {
-                            $html .= "<td class='notice'>"; // Approved Free
-                        }
-                        elseif ($htypes[$cday] == 5
-                                AND ($happroved[$cday] == 1
-                                OR $happroved[$cday] == 2
-                                OR $happroved[$cday] == 11
-                                OR $happroved[$cday] == 12))
-                        {
-                            $html .= "<td class='notice'>"; // Approved Free
-                        }
-                        elseif ($happroved[$cday] == -1 OR $happroved[$cday] == 9)
+                        elseif ($htypes[$cday] <= 5
+                                AND ($happroved[$cday] == HOL_APPROVAL_DENIED
+                                OR $happroved[$cday] == HOL_APPROVAL_DENIED_ARCHIVED))
                         {
                             $html .= "<td class='urgent'>"; // Denied
+                        }
+                        elseif ($htypes[$cday] == HOL_FREE
+                                AND ($happroved[$cday] == HOL_APPROVAL_GRANTED
+                                OR $happroved[$cday]== HOL_APPROVAL_GRANTED_ARCHIVED))
+                        {
+                            $html .= "<td class='notice'>"; // Approved Free
                         }
                         else
                         {

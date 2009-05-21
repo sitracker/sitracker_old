@@ -59,6 +59,7 @@ define ('HOL_APPROVAL_NONE', 0); // Not granted or denied
 define ('HOL_APPROVAL_GRANTED', 1);
 define ('HOL_APPROVAL_DENIED', 2);
 // TODO define the other approval (archive) states here, 10, 11 etc.
+define ('HOL_APPROVAL_NONE_ARCHIVED', 10);
 define ('HOL_APPROVAL_GRANTED_ARCHIVED', 11);
 define ('HOL_APPROVAL_DENIED_ARCHIVED', 12);
 

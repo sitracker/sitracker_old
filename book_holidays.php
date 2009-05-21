@@ -151,7 +151,7 @@ elseif ($step == '1')
     {
         if (date('D',$day) != 'Sat' && date('D',$day) != 'Sun')
         {
-            $sql = "SELECT * FROM `{$dbHolidays}` WHERE `date` = FROM_UNIXTIME($day) AND userid='{$user}'";
+            $sql = "SELECT * FROM `{$dbHolidays}` WHERE `date` = FROM_UNIXTIME($day, '%Y-%m-%d') AND userid={$user}";
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
 
@@ -319,8 +319,8 @@ else
         {
             // check to see if there is other holiday booked on this day
             // and modify that where required.
-            $sql = "INSERT INTO `{$dbHolidays}` (userid, type, date, length, approved, approvedby) ";
-            $sql .= "VALUES ('{$user}', '$type', FROM_UNIXTIME({$$d}), '{$$len}', '0', '$approvaluser') ";
+            $sql = "REPLACE INTO `{$dbHolidays}` (userid, type, date, length, approved, approvedby) ";
+            $sql .= "VALUES ('{$user}', '$type', FROM_UNIXTIME({$$d}, '%Y-%m-%d'), '{$$len}', '".HOL_APPROVAL_NONE."', '$approvaluser') ";
             mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
         }

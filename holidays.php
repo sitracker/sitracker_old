@@ -68,8 +68,8 @@ if ($user == $sit[2] OR $approver == TRUE)
     if ($holiday_resetdate != '' AND $holiday_resetdate > 0 AND $holiday_resetdate >= $now)
     {
         $entitlement = user_holiday_entitlement($user);
-        $totalholidaystaken = user_count_holidays($user, HOL_HOLIDAY);
-        $holidaystaken = user_count_holidays($user, HOL_HOLIDAY, $holiday_resetdate);
+        $totalholidaystaken = user_count_holidays($user, HOL_HOLIDAY, 0, array(HOL_APPROVAL_GRANTED));
+        $holidaystaken = user_count_holidays($user, HOL_HOLIDAY, $holiday_resetdate, array(HOL_APPROVAL_GRANTED));
         $awaitingapproval = user_count_holidays($user, HOL_HOLIDAY, 0, array(HOL_APPROVAL_NONE));
         echo "{$entitlement} {$strDays}, ";
         echo "$holidaystaken {$strtaken}, ";
