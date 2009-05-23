@@ -457,8 +457,8 @@ elseif ($action=='incidentform')
         echo "<td>";
         if ($type == 'free')
         {
-            echo "<th>{$strServiceLevel}</th><td>".serviceleveltag_drop_down('servicelevel',$CONFIG['default_service_level'], TRUE)."</td>";
-            echo "<th>{$strSkill}</th><td>".software_drop_down('software', 0)."</td></tr>";
+            echo "<label>{$strServiceLevel}".serviceleveltag_drop_down('servicelevel',$CONFIG['default_service_level'], TRUE)."</label><br />";
+            echo "<label>{$strSkill}: ".software_drop_down('software', 0)."</label>";
         }
         else
         {
@@ -468,27 +468,31 @@ elseif ($action=='incidentform')
         echo " <label>{$strServicePacksApplied}: <input maxlength='100' name='productservicepacks' size='8' type='text' /></label>\n";
         echo "</td></tr>";
 
-        if (site_count_inventory_items($siteid) > 0)
+        // Inventory
+        $items_array[0] = '';
+        $sql = "SELECT * FROM `{$dbInventory}` ";
+        $sql .= "WHERE contactid='{$contactid}' ";
+        $result = mysql_query($sql);
+        $contact_inv_count = mysql_num_rows($result);
+        while ($items = mysql_fetch_object($result))
         {
-            $items_array[0] = '';
-            $sql = "SELECT * FROM `{$dbInventory}` ";
-            $sql .= "WHERE contactid='{$contactid}' ";
-            $result = mysql_query($sql);
-            while ($items = mysql_fetch_object($result))
+            $var = $items->name;
+            if (!empty($items->identifier))
             {
-                $var = $items->name;
-                if (!empty($items->identifier))
-                {
-                    $var .= " ({$items->identifier})";
-                }
-                elseif (!empty($items->address))
-                {
-                    $var .= " ({$items->address})";
-                }
-                $items_array[$items->id] = $var;
+                $var .= " ({$items->identifier})";
             }
-            echo "<tr><th>{$strInventoryItems}</th>";
-            echo "<td colspan='3'>".array_drop_down($items_array, 'inventory', '', '', TRUE)."</td></tr>";
+            elseif (!empty($items->address))
+            {
+                $var .= " ({$items->address})";
+            }
+            $items_array[$items->id] = $var;
+        }
+        
+        // Don't show inventory section if non available for contact
+        if ($contact_inv_count > 0)
+        {
+            echo "<tr><td><label for='inventory'>{$strInventoryItems}:</label><br />";
+            echo array_drop_down($items_array, 'inventory', '', '', TRUE)."</td><td><td></tr>";
         }
 
         // Insert pre-defined per-product questions from the database, these should be required fields
