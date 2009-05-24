@@ -33,11 +33,6 @@ else
 if (empty($step))
 {
     include (APPLICATION_INCPATH . 'htmlheader.inc.php');
-    // The JavaScript date picker used on this page came from an article at
-    // http://www.dagblastit.com/~tmcclure/dhtml/calendar.html
-    // The website states
-    // "You may use the strategies and code in these articles license and royalty free unless otherwise directed.
-    // "If I helped you build something cool I'd like to hear about it. Drop me a line at tom@dagblastit.com."
 
     if ($user == $sit[2])
     {
@@ -126,7 +121,7 @@ elseif ($step == '1')
 
     if ($type == HOL_SICKNESS AND $start > $now)
     {
-        echo user_alert('Sickness, can of course only be booked for today or days that have passed', E_USER_ERROR); // FIXME i18n
+        echo user_alert($strSicknessOnlyBookedNowOrPast, E_USER_ERROR);
     }
 
     echo "<p align='center'><strong>{$strSelectDays}</strong></p>";

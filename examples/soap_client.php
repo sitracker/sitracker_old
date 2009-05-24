@@ -10,10 +10,7 @@ if ($err)
   exit;
 }
 
-$result = $client->call('add', array(1, 3));
-echo "A\n";
-print_r($result);
-$result = $client->call('sit_login', array('admin', '111'));
+$result = $client->call('login', array('admin', '111'));
 echo "\nB\n";
 $err = $client->getError();
 if ($err)

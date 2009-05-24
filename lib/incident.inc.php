@@ -551,4 +551,62 @@ function drafts_waiting_on_incident($incidentid, $type='all')
     return $rtn;
 }
 
+
+
+/**
+    * @author Ivan Lucas
+*/
+function count_incident_stats($incidentid)
+{
+    global $dbUpdates;
+    $sql = "SELECT count(DISTINCT currentowner),count(id) FROM `{$dbUpdates}` WHERE incidentid='$incidentid' AND userid!=0 GROUP BY userid";
+    $result = mysql_query($sql);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+    list($unique_users,$num_updates) = mysql_fetch_row($result);
+    return array($unique_users,$num_updates);;
+}
+
+
+/**
+    * Returns number of closed incidents that were opened within the period giving
+    * the average duration in minutes and the average worked time in minutes
+    * @author Ivan Lucas
+*/
+function average_incident_duration($start,$end,$states)
+{
+    global $dbIncidents;
+    $sql = "SELECT opened, closed, (closed - opened) AS duration_closed, i.id AS incidentid ";
+    $sql .= "FROM `{$dbIncidents}` AS i ";
+    $sql .= "WHERE status='2' ";
+    if ($start > 0) $sql .= "AND opened >= $start ";
+    if ($end > 0) $sql .= "AND opened <= $end ";
+
+    $result = mysql_query($sql);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+
+    $totalduration = 0;
+    $totalworkingduration = 0;
+    $countclosed = 0;
+    $total_unique_owners= 0;
+    while ($row = mysql_fetch_object($result))
+    {
+        $working_time = calculate_incident_working_time($row->incidentid, $row->opened, $row->closed, $states);
+        if ($row->duration_closed > 0)
+        {
+            $totalduration = $totalduration+$row->duration_closed;
+            $totalworkingduration += $working_time;
+            $cio = count_incident_stats($row->incidentid);
+            $total_unique_owners += $cio[0];
+            $total_updates += $cio[1];
+            $countclosed++;
+        }
+    }
+    $total_number_updates = number_format(($countclosed == 0) ? 0 : ($total_updates / $countclosed),1);
+    $average_owners = number_format(($countclosed == 0) ? 0 : ($total_unique_owners / $countclosed),1);
+    $average_incident_duration = ($countclosed == 0) ? 0 : ($totalduration / $countclosed) / 60;
+    $average_worked_minutes = ($countclosed == 0) ? 0 : $totalworkingduration / $countclosed;
+
+    return array($countclosed, $average_incident_duration, $average_worked_minutes,$average_owners, $total_updates, $total_number_updates);
+}
+
 ?>

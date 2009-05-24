@@ -21,7 +21,7 @@ if (realpath(__FILE__) == realpath($_SERVER['SCRIPT_FILENAME']))
 {
     include (APPLICATION_LIBPATH . 'strings.inc.php');
     require (APPLICATION_LIBPATH . 'functions.inc.php');
-    require (APPLICATION_LIBPATH . 'base.inc.php');
+    require_once (APPLICATION_LIBPATH . 'base.inc.php');
 }
 else
 {

@@ -31,10 +31,10 @@ include (APPLICATION_INCPATH . 'htmlheader.inc.php');
 // External variables
 $user = cleanvar($_REQUEST['user']);
 $role = cleanvar($_REQUEST['role']);
-$action = $_REQUEST['action'];
-$permselection = $_REQUEST['perm'];
-$permid = $_REQUEST['permid'];
-$seltab = $_REQUEST['tab'];
+$action = cleanvar($_REQUEST['action']);
+$permselection = cleanvar($_REQUEST['perm']);
+$permid = cleanvar($_REQUEST['permid']);
+$seltab = cleanvar($_REQUEST['tab']);
 
 if (empty($action) OR $action == "showform")
 {

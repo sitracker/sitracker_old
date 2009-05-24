@@ -33,7 +33,6 @@ $serviceid = cleanvar($_REQUEST['serviceid']);
 $startdate = cleanvar($_REQUEST['startdate']);
 $enddate = cleanvar($_REQUEST['enddate']);
 
-$mode = cleanvar($_REQUEST['mode']); // FIXME this parameter is never used
 $site = cleanvar($_REQUEST['site']);
 $sites = $_REQUEST['sites'];
 $display = cleanvar($_REQUEST['display']);

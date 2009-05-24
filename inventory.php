@@ -248,7 +248,7 @@ elseif(is_numeric($_GET['edit']) OR $_GET['action'] == 'new')
         {
             echo "<tr><th>{$strSite}</th><td>";
             echo site_drop_down('site', 0, TRUE);
-        echo " <span class='required'>{$strRequired}</td>";
+            echo " <span class='required'>{$strRequired}</td>";
             echo "<tr><th>{$strOwner}</th><td>";
             echo contact_site_drop_down('owner', '');
             echo "</td></tr>";

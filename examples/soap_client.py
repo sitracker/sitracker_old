@@ -7,8 +7,7 @@ user = 'admin';
 password = 'novell';
 
 _server = WSDL.Proxy(WSDLFile);
-print _server.add(1, 5);
-result = _server.sit_login(user, password);
+result = _server.login(user, password);
 print result;
 print result['status']['value'];
 

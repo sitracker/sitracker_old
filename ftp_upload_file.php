@@ -38,10 +38,10 @@ if (empty($action))
     echo "<td class='shade2'><input type='hidden' name='MAX_FILE_SIZE' value='{$max_filesize}' />";
     echo "<input type='file' name='file' size='40'' /></td></tr>";
 
-    echo "<tr><th>Title:</th><td><input type='text' name='shortdescription' maxlength='255' size='40' /></td></tr>";
-    echo "<tr><th>Description:</th><td><textarea name='longdescription' cols='40' rows='3'></textarea></td></tr>";
-    echo "<tr><th>File Version:</th><td><input type='text' name='fileversion' maxlength='50' size='10' /></td></tr>";
-    echo "<tr><th>Expire:</th><td>";
+    echo "<tr><th>{$strTitle}:</th><td><input type='text' name='shortdescription' maxlength='255' size='40' /></td></tr>";
+    echo "<tr><th>{$strDescription}:</th><td><textarea name='longdescription' cols='40' rows='3'></textarea></td></tr>";
+    echo "<tr><th>{$strFileVersion}:</th><td><input type='text' name='fileversion' maxlength='50' size='10' /></td></tr>";
+    echo "<tr><th>{$strExpire}:</th><td>";
     echo "<input type='radio' name='expiry_none' value='time'' /> In <em>x</em> days, hours, minutes<br />&nbsp;&nbsp;&nbsp;";
     echo "<input maxlength='3' name='expiry_days' value='{$na_days}' onclick=\"window.document.publishform.expiry_none[0].checked = true;\" size='3'' /> Days&nbsp;";
     echo "<input maxlength='2' name='expiry_hours' value='{$na_hours}' onclick=\"window.document.publishform.expiry_none[0].checked = true;\" size='3'' /> Hours&nbsp;";
@@ -176,10 +176,13 @@ else
         // upload the file
         $upload = ftp_put($conn_id, "$destination_filepath", "$filepath", FTP_BINARY);
 
+        // close the FTP stream
+        ftp_close($conn_id);
+
         // check upload status
         if (!$upload)
         {
-            trigger_error("FTP upload has failed!",E_USER_ERROR);
+            trigger_error($strUploadFailed, E_USER_ERROR);
         }
         else
         {
@@ -190,14 +193,11 @@ else
             mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
-            journal(CFG_LOGGING_NORMAL, 'FTP File Uploaded', "FTP File $file_name Uploaded", CFG_JOURNAL_OTHER, 0);
+            journal(CFG_LOGGING_NORMAL, 'FTP File Uploaded', sprintf($strFTPFileXUploaded, $filename), CFG_JOURNAL_OTHER, 0);
 
             html_redirect('ftp_upload_file.php');
             echo "<code>{$ftp_url}</code>";
         }
-
-        // close the FTP stream
-        ftp_close($conn_id);
     }
 
 }

@@ -6093,7 +6093,6 @@ function contract_details($id, $mode='internal')
         $html .= contract_service_table($id, $timed);
         $html .= "</td></tr>\n";
 
-        // FIXME not sure if this should be here
         if ($timed)
         {
             $html .= "<tr><th>{$GLOBALS['strBalance']}</th><td>{$CONFIG['currency_symbol']}".number_format(get_contract_balance($id, TRUE, TRUE), 2);

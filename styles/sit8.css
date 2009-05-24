@@ -63,7 +63,6 @@ abbr { cursor: help; }
 
 th, td { padding: 1px 5px; }
 th, tfoot td { background: #F2F2F2; }
-thead th { padding-top: 2em; padding-bottom: 1em; }
 
 h1,h2,h3,h4,h5 { text-align: center; }
 h1 { font-size: 16pt; font-weight: bold; color: #FFF; background-color: #203894; margin: 0px; padding: 3px 0px 3px 0px; }

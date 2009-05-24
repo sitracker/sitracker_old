@@ -199,6 +199,7 @@ switch ($action)
         {
             echo "<div id='reassignlist'>";
             echo "<table align='center'>";
+            if ($countusers >= 1 AND $suggested > 0) echo "<thead>\n";
             echo "<tr>
                 <th colspan='2'>{$strReassignTo}:</th>
                 <th colspan='5'>{$strIncidentsinQueue}</th>
@@ -265,7 +266,7 @@ switch ($action)
             if ($countusers >= 1)
             {
                 // Other users are shown in a optional section
-                if ($suggested > 0) echo "<tbody id='moreusers' style='display:none;'>";  // FIXME tbody
+                if ($suggested > 0) echo "</thead><tbody id='moreusers' style='display:none;'>";
                 $shade = 'shade1';
 
                 while ($users = mysql_fetch_object($result))
@@ -334,7 +335,7 @@ switch ($action)
             echo "<tr><td colspan='2'><br />{$strReassignText}</td></tr>\n";
             echo "<tr><th>{$strUpdate}:</th>";
             echo "<td>";
-            echo "<textarea name='bodytext' wrap='soft' rows='10' cols='65'>";
+            echo "<textarea name='bodytext' wrap='soft' rows='10' cols='65'>";  // FIXME wrap XHTML
             if (!empty($reason)) echo $reason;
             echo "</textarea>";
             echo "</td></tr>\n";

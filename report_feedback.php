@@ -8,8 +8,6 @@
 // of the GNU General Public License, incorporated herein by reference.
 //
 
-// FIXME i18n
-
 // Report Type: Feedback
 
 // Author:  Paul Heaney Paul Heaney <paulheaney[at]users.sourceforge.net>
@@ -44,7 +42,7 @@ function feedback_between_dates()
         {
             if ($dates == 'feedbackin')
             {
-                $str = "<p>Feedback between ".ldate($CONFIG['dateformat_date'], $startdate)." and ".ldate($CONFIG['dateformat_date'], $enddate)."</p>";
+                $str = "<p>".sprintf($GLOBALS['strFeedbackBetweenXandY'], ldate($CONFIG['dateformat_date'], $startdate), ldate($CONFIG['dateformat_date'], $enddate))."</p>";
             }
             elseif ($dates == 'closedin')
             {
@@ -55,11 +53,11 @@ function feedback_between_dates()
         {
             if ($dates == 'feedbackin')
             {
-                $str = "<p>Feedback after ".ldate($CONFIG['dateformat_date'], $startdate)."</p>";
+                $str = "<p>".sprintf($GLOBALS['strFeedbackAfterX'], ldate($CONFIG['dateformat_date'], $startdate))."</p>";
             }
             elseif ($dates == 'closedin')
             {
-                $str = "<p>Closed after ".ldate($CONFIG['dateformat_date'], $startdate)."</p>";
+                $str = "<p>".sprintf($GLOBALS['strClosedAfterX'], ldate($CONFIG['dateformat_date'], $startdate))."</p>";
             }
         }
     }
@@ -67,11 +65,11 @@ function feedback_between_dates()
     {
         if ($dates == 'feedbackin')
         {
-            $str = "<p>Feedback before ".ldate($CONFIG['dateformat_date'], $enddate)."</p>";
+            $str = "<p>".sprintf($GLOBALS['strFeedbackBeforeX'], ldate($CONFIG['dateformat_date'], $enddate))."</p>";
         }
         elseif ($dates == 'closedin')
         {
-            $str = "<p>Closed before ".ldate($CONFIG['dateformat_date'], $enddate)."</p>";
+            $str = "<p>".srintf($GLOBALS['strClosedBeforeX'], ldate($CONFIG['dateformat_date'], $enddate))."</p>";
         }
     }
     return $str;

@@ -14,7 +14,7 @@
 $permission = 50; // Approve Holiday
 require ('core.php');
 require (APPLICATION_LIBPATH . 'functions.inc.php');
-$title = "Holiday Approval"; // FIXME i18n holiday approval
+$title = $strApproveHolidays;
 
 // This page requires authentication
 require (APPLICATION_LIBPATH . 'auth.inc.php');

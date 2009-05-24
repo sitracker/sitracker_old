@@ -57,7 +57,8 @@ $server->wsdl->addComplexType('incident',
                                                 'priorityid' => array('name' => 'priorityid', 'type' => 'xsd:int'),
                                                 'priority' => array('name' => 'priority', 'type' => 'xsd:string'),
                                                 'currentstatusid' => array('name' => 'currentstatusid', 'type' => 'xsd:int'),
-                                                'currentstatus' => array('name' => 'currentstatus', 'type' => 'xsd:string'),
+                                                'currentstatusinternal' => array('name' => 'currentstatusinternal', 'type' => 'xsd:string'),
+                                                'currentstatusexternal' => array('name' => 'currentstatusexternal', 'type' => 'xsd:string'),
                                                 'servicelevel' => array('name' => 'servicelevel', 'type' => 'xsd:string')
                                             )
                                     );
@@ -132,7 +133,8 @@ class Incident
     var $priorityid = -1;
     var $priority = "no priority";
     var $currentstatusid = -1;
-    var $currentstatus = "no status";
+    var $currentstatusinternal = "no status";
+    var $currentstatusexternal = "no status";
     var $servicelevel = "no service level";
 
     function get_array()
@@ -151,7 +153,8 @@ class Incident
                             'priorityid' => $this->priorityid,
                             'priority' => $this->priority,
                             'currentstatusid' => $this->currentstatusid,
-                            'currentstatus' => $this->currentstatus,
+                            'currentstatusinternal' => $this->currentstatusinternal,
+                            'currentstatusexternal' => $this->currentstatusexternal,
                             'servicelevel' => $this->servicelevel
                         );
     }

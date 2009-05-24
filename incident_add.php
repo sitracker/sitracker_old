@@ -371,7 +371,7 @@ elseif ($action == 'findcontact')
                 if ($site_incident_pool > 0)
                 {
                     $html .= "<td><a href=\"{$_SERVER['PHP_SELF']}?action=incidentform&amp;type=free&amp;contactid=".$contactrow['contactid']."&amp;updateid=$updateid&amp;win={$win}\" onclick=\"return confirm_free();\">";
-                    $html .= "Add Site Support Incident</a> ({$site_incident_pool})</td>"; // FIXME i18n Add Site Support Incident
+                    $html .= "{$strAddSiteSupportIncident}</a> ({$site_incident_pool})</td>";
                     $customermatches++;
                 }
                 else

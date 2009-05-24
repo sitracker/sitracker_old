@@ -8,8 +8,6 @@
 // of the GNU General Public License, incorporated herein by reference.
 //
 
-// FIXME i18n
-
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
 // This Page Is Valid XHTML 1.0 Transitional!   15Mar06
@@ -108,7 +106,7 @@ elseif ($_REQUEST['mode'] == 'report')
     $numrows = mysql_num_rows($result);
 
     $html .= "<h2>{$title}</h2>";
-    $html .= "<p align='center'>This report is a list of ($numrows) incidents for all sites that you selected</p>";  // FIXME i18n
+    $html .= "<p align='center'>".sprintf($strIncidentsBySiteReportDesc, $numrows)."</p>";
     $html .= "<table width='99%' align='center'>";
     $html .= "<tr><th>{$strOpened}</th><th>{$strIncident}</th><th>{$strExternalID}</th><th>{$strTitle}</th><th>{$strContact}</th><th>{$strSite}</th><th>{$strType}</th></tr>";
     $csvfieldheaders .= "{$strOpened},{$strIncident},{$strExternalID},{$strTitle},{$strContact},{$strSite},{$strType}\r\n";

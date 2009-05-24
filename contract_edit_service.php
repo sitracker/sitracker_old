@@ -9,6 +9,7 @@
 // of the GNU General Public License, incorporated herein by reference.
 //
 
+// This Page Is Valid XHTML 1.0 Transitional! 24May2009
 // Author:  Paul Heaney Paul Heaney <paulheaney[at]users.sourceforge.net>
 
 $permission =  80;
@@ -50,20 +51,21 @@ switch ($mode)
             else
             {
                 $obj = mysql_fetch_object($result);
-
+                $timed = is_contract_timed($contractid);
+                
                 echo "<h2>{$strEditService}</h2>";
 
                 echo "<form id='serviceform' name='serviceform' action='{$_SERVER['PHP_SELF']}' method='post' onsubmit='return confirm_submit(\"{$strAreYouSureMakeTheseChanges}\");'>";
-                echo "<table align='center' class='vertical'>";
-
+                echo "<table align='center' class='vertical'>\n";
+                if ($timed) echo "<thead>\n";
                 echo "<tr><th>{$strStartDate}</th>";
-                echo "<td><input class='required' type='text' name='startdate' id='startdate' size='10'";
+                echo "<td><input class='required' type='text' name='startdate' id='startdate' size='10' ";
                 echo "value='{$obj->startdate}' /> ";
                 echo date_picker('serviceform.startdate');
                 echo " <span class='required'>{$strRequired}</span></td></tr>";
 
                 echo "<tr><th>{$strEndDate}</th>";
-                echo "<td><input class='required' type='text' name='enddate' id='enddate' size='10'";
+                echo "<td><input class='required' type='text' name='enddate' id='enddate' size='10' ";
                 echo "value='{$obj->enddate}' /> ";
                 echo date_picker('serviceform.enddate');
                 echo " <span class='required'>{$strRequired}</span></td></tr>\n";
@@ -71,7 +73,6 @@ switch ($mode)
                 echo "<tr><th>{$strNotes}</th><td>";
                 echo "<textarea rows='5' cols='20' name='notes'>{$obj->notes}</textarea></td></tr>";
 
-                $timed = is_contract_timed($contractid);
                 echo "<tr><th>{$strBilling}</th>";
                 if ($timed)
                 {
@@ -99,38 +100,41 @@ switch ($mode)
                         }
                         echo "/> {$strPerIncident}</label>";
                         echo "</td></tr>\n";
+                        echo "</thead>\n";
+                        echo "<tbody id='billingsection'>\n";
 
-                        echo "<tbody id='billingsection'>"; //FIXME not XHTML
-
-                        echo "<tr><th>{$strCreditAmount}</th>";
+                        echo "<tr><th>{$strCreditAmount}</th>\n";
                         echo "<td>{$CONFIG['currency_symbol']} ";
                         echo "<input class='required' type='text' name='amount' size='5' value='{$obj->creditamount}' />";
                         echo " <span class='required'>{$strRequired}</span></td></tr>";
 
-                        echo "<tr id='unitratesection' {$unitstyle}><th>{$strUnitRate}</th>";
+                        echo "<tr id='unitratesection' {$unitstyle}><th>{$strUnitRate}</th>\n";
                         echo "<td>{$CONFIG['currency_symbol']} ";
                         echo "<input class='required' type='text' name='unitrate' size='5' value='{$obj->unitrate}' />";
                         echo " <span class='required'>{$strRequired}</span></td></tr>";
 
-                        echo "<tr id='incidentratesection' {$incidentstyle}><th>{$strIncidentRate}</th>";
+                        echo "<tr id='incidentratesection' {$incidentstyle}><th>{$strIncidentRate}</th>\n";
                         echo "<td>{$CONFIG['currency_symbol']} ";
                         echo "<input class='required' type='text' name='incidentrate' size='5' value='{$obj->incidentrate}' />";
-                        echo " <span class='required'>{$strRequired}</span></td></tr>";
+                        echo " <span class='required'>{$strRequired}</span></td></tr>\n";
 
                         $fochecked = '';
                         if ($obj->foc == 'yes') $fochecked = "checked='checked'";
 
                         echo "<tr>";
                         echo "<th>{$strFreeOfCharge}</th>";
-                        echo "<td><input type='checkbox' id='foc' name='foc' value='yes'  '{$fochecked}' /> {$strAboveMustBeCompletedToAllowDeductions}</td>";
+                        echo "<td><input type='checkbox' id='foc' name='foc' value='yes'  {$fochecked} /> {$strAboveMustBeCompletedToAllowDeductions}</td>";
                         echo "</tr>";
 
-                        echo "</tbody>"; //FIXME not XHTML
+                        echo "</tbody>";
                     }
                     else
                     {
+                        echo "</thead>";
                         echo "<input type='hidden' name='editbilling' id='editbilling' value='false' />";
-                        echo "<tr><th colspan='2'>Unable to change amounts or rates as the service has been used.</th></tr>";
+                        echo "<tbody>\n";
+                        echo "<tr><th colspan='2'>{$strUnableToChangeServiceAsUsed}</th></tr>\m";
+                        echo "</tbody>\n";
                     }
                 //  Not sure how applicable daily rate is, INL 4Apr08
                 //     echo "<tr><th>{$strDailyRate}</th>";
@@ -141,7 +145,7 @@ switch ($mode)
                 {
                     echo "<td><label>";
                     echo "<input type='radio' name='billtype' value='' checked='checked' disabled='disabled' /> ";
-                    echo "{$strNone}</label></td>";
+                    echo "{$strNone}</label></td></tr>";
                 }
 
                 echo "</table>\n\n";

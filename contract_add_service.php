@@ -8,6 +8,7 @@
 // of the GNU General Public License, incorporated herein by reference.
 //
 
+// This Page Is Valid XHTML 1.0 Transitional! 24May2009
 
 $permission = 21; // FIXME need a permission for add service
 
@@ -48,14 +49,15 @@ if (empty($submit) OR !empty($_SESSION['formerrors']['add_service']))
     include (APPLICATION_INCPATH . 'htmlheader.inc.php');
     echo show_form_errors('add_service');
     clear_form_errors('add_service');
-    echo "<h2> ";
-    echo "{$strNewService}</h2>";
-
+    echo "<h2>{$strNewService}</h2>\n";
+    
+    $timed = is_contract_timed($contractid);
+    
     echo "<form id='serviceform' name='serviceform' action='{$_SERVER['PHP_SELF']}' method='post' onsubmit='return confirm_submit(\"{$strAreYouSureMakeTheseChanges}\");'>";
     echo "<table align='center' class='vertical'>";
-
+    if ($timed) echo "<thead>\n";
     echo "<tr><th>{$strStartDate}</th>";
-    echo "<td><input class='required' type='text' name='startdate' id='startdate' size='10'";
+    echo "<td><input class='required' type='text' name='startdate' id='startdate' size='10' ";
     if ($_SESSION['formdata']['add_service']['startdate'] != '')
     {
         echo "value='{$_SESSION['formdata']['add_service']['startdate']}'";
@@ -79,12 +81,11 @@ if (empty($submit) OR !empty($_SESSION['formerrors']['add_service']))
     echo " <span class='required'>{$strRequired}</span></td></tr>";
 
     echo "<tr><th>{$strTitle}</th><td>";
-    echo "<input type='text' id=title' name='title' /'></td></tr>";
+    echo "<input type='text' id='title' name='title' /></td></tr>";
 
     echo "<tr><th>{$strNotes}</th><td>";
     echo "<textarea rows='5' cols='20' name='notes'></textarea></td></tr>";
 
-    $timed = is_contract_timed($contractid);
     echo "<tr><th>{$strBilling}</th>";
     echo "<td>";
     if ($timed)
@@ -103,40 +104,43 @@ if (empty($submit) OR !empty($_SESSION['formerrors']['add_service']))
         echo "{$strNone}</label>";
     }
     echo "</td></tr>\n";
+
     if ($timed)
     {
-        echo "<tbody id='billingsection'>"; //FIXME not XHTML
+        echo "</thead>\n";
+        echo "<tbody id='billingsection'>\n";
 
         echo "<tr><th>{$strCustomerReference}</th>";
-        echo "<td><input type='text' id='cust_ref' name='cust_ref' /></td></tr>";
+        echo "<td><input type='text' id='cust_ref' name='cust_ref' /></td></tr>\n";
 
         echo "<tr><th>{$strCustomerReferenceDate}</th>";
-        echo "<td><input type='text' name='cust_ref_date' id='cust_ref_date' size='10'";
+        echo "<td><input type='text' name='cust_ref_date' id='cust_ref_date' size='10' ";
         echo "value='".date('Y-m-d', $now)."' />";
         echo date_picker('serviceform.cust_ref_date');
-        echo " </td></tr>";
+        echo " </td></tr>\n";
 
         echo "<tr><th>{$strCreditAmount}</th>";
         echo "<td>{$CONFIG['currency_symbol']} ";
         echo "<input class='required' type='text' name='amount' size='5' />";
-        echo " <span class='required'>{$strRequired}</span></td></tr>";
+        echo " <span class='required'>{$strRequired}</span></td></tr>\n";
 
         echo "<tr id='unitratesection'><th>{$strUnitRate}</th>";
         echo "<td>{$CONFIG['currency_symbol']} ";
         echo "<input class='required' type='text' name='unitrate' size='5' />";
-        echo " <span class='required'>{$strRequired}</span></td></tr>";
+        echo " <span class='required'>{$strRequired}</span></td></tr>\n";
 
         echo "<tr id='incidentratesection' style='display:none'><th>{$strIncidentRate}</th>";
         echo "<td>{$CONFIG['currency_symbol']} ";
         echo "<input class='required' type='text' name='incidentrate' size='5' />";
-        echo " <span class='required'>{$strRequired}</span></td></tr>";
+        echo " <span class='required'>{$strRequired}</span></td></tr>\n";
 
         echo "<tr>";
         echo "<th>{$strFreeOfCharge}</th>";
         echo "<td><input type='checkbox' id='foc' name='foc' value='yes' /> {$strAboveMustBeCompletedToAllowDeductions}</td>";
-        echo "</tr>";
+        echo "</tr>\n";
+        
+        echo "</tbody>\n";
     }
-    echo "</tbody>"; //FIXME not XHTML
 
 //  Not sure how applicable daily rate is, INL 4Apr08
 //     echo "<tr><th>{$strDailyRate}</th>";

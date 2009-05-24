@@ -8,8 +8,8 @@
 // of the GNU General Public License, incorporated herein by reference.
 //
 
-// This Page fails XHTML validation because of collapsable tbody in the table - INL 12/12/07
-// FIXME make XHTML complient - PH 13/12/07
+// This Page Is Valid XHTML 1.0 Transitional! 24May2009
+
 
 $permission = 39; // Add Maintenance Contract
 
@@ -35,7 +35,7 @@ if ($action == "showform" OR $action=='')
     echo "{$strAddContract}</h2>";
     echo "<form id='add_contract' name='add_contract' action='{$_SERVER['PHP_SELF']}?action=add' method='post' onsubmit='return confirm_action(\"{$strAreYouSureAdd}\");'>";
     echo "<table align='center' class='vertical'>";
-
+    echo "<thead>";
     echo "<tr><th>{$strSite}</th><td>";
     if ($_SESSION['formdata']['add_contract']['site'] != '')
     {
@@ -61,7 +61,7 @@ if ($action == "showform" OR $action=='')
     echo " /> {$strSupportedContacts} ({$str0MeansUnlimited})<br />";
     echo "<input type='radio' value='all' name='contacts' />";
     echo "{$strAllSiteContactsSupported}";
-    echo "</td></tr>";
+    echo "</td></tr>\n";
     echo "<tr><th>{$strProduct} <sup class='red'>*</sup></th><td>";
     if ($_SESSION['formdata']['add_contract']['product'] != '')
     {
@@ -86,11 +86,11 @@ if ($action == "showform" OR $action=='')
     $sltag = servicelevel_id2tag($slid);
     $timed = servicelevel_timed($sltag);
 
-    echo "<tr><th colspan='2' style='text-align: left;'><br />{$strServicePeriod}</th></tr>";
+    echo "<tr><th colspan='2' style='text-align: left;'><br />{$strServicePeriod}</th></tr>\n";
     echo "<tr><th>{$strStartDate}</th>";
     echo "<td><input type='text' name='startdate' id='startdate' size='10' value='".date('Y-m-d', $now)."' /> ";
     echo date_picker('add_contract.startdate');
-    echo "</td></tr>";
+    echo "</td></tr>\n";
 
     echo "<tr><th>{$strExpiryDate}</th>";
     echo "<td><input class='required' name='expiry' size='10' ";
@@ -112,8 +112,9 @@ if ($action == "showform" OR $action=='')
     echo " <span class='required'>{$strRequired}</span></td></tr>\n";
 
     echo "<tr><th>{$strNotes}</th><td><textarea cols='40' name='notes' rows='5'>{$_SESSION['formdata']['add_contract']['notes']}</textarea></td></tr>\n";
+    echo "<tr><th></th><td><a href=\"javascript:void(0);\" onclick=\"$('hidden').toggle();\">{$strMore}</a></td></tr>\n";
+    echo "</thead>";
 
-     //FIXME not XHTML tbody
     echo "<tbody id='hiddentimed'";
     if (!$timed) echo " style='display:none'";
     echo ">";
@@ -121,7 +122,7 @@ if ($action == "showform" OR $action=='')
     echo "<tr><th>{$strBilling}</th>";
     echo "<td>";
     echo "<label>";
-    echo "<input type='radio' name='billtype' value='billperunit' onchange=\"addservice_showbilling('add_contract');\" checked /> ";
+    echo "<input type='radio' name='billtype' value='billperunit' onchange=\"addservice_showbilling('add_contract');\" checked='checked' /> ";
     echo "{$strPerUnit}</label>";
     echo "<label>";
     echo "<input type='radio' name='billtype' value='billperincident' onchange=\"addservice_showbilling('add_contract');\" /> ";
@@ -138,7 +139,7 @@ if ($action == "showform" OR $action=='')
     {
         echo "value='0' ";
     }
-    echo "/></td></tr>";
+    echo "/></td></tr>\n";
     echo "<tr id='unitratesection'><th>{$strUnitRate}</th>";
     echo "<td>{$CONFIG['currency_symbol']} ";
     echo "<input class='required' type='text' name='unitrate' size='5' ";
@@ -147,7 +148,7 @@ if ($action == "showform" OR $action=='')
         echo "value='{$_SESSION['formdata']['add_contract']['unitrate']}' ";
     }
     echo "/>";
-    echo " <span class='required'>{$strRequired}</span></td></tr>";
+    echo " <span class='required'>{$strRequired}</span></td></tr>\n";
     echo "<tr id='incidentratesection' style='display:none'><th>{$strIncidentRate}</th>";
     echo "<td>{$CONFIG['currency_symbol']} ";
     echo "<input class='required' type='text' name='incidentrate' size='5' ";
@@ -156,7 +157,7 @@ if ($action == "showform" OR $action=='')
         echo "value='{$_SESSION['formdata']['add_contract']['incidentrate']}' ";
     }
     echo "/>";
-    echo " <span class='required'>{$strRequired}</span></td></tr>";
+    echo " <span class='required'>{$strRequired}</span></td></tr>\n";
 
     echo "<tr>";
     echo "<th>{$strFreeOfCharge}</th>";
@@ -165,13 +166,10 @@ if ($action == "showform" OR $action=='')
     {
         echo "checked='checked''  ";
     }
-    echo "/> {$strAboveMustBeCompletedToAllowDeductions}</td>";
-
-    echo "</tbody>";
-
-    echo "<tr><th></th><td><a href=\"javascript:void(0);\" onclick=\"$('hidden').toggle();\">{$strMore}</a></td></tr>\n";
-
-    echo "<tbody id='hidden' style='display:none'>"; //FIXME not XHTML tbody
+    echo "/> {$strAboveMustBeCompletedToAllowDeductions}</td></tr>\n";
+    echo "</tbody>\n";
+    
+    echo "<tbody id='hidden' style='display:none'>";
 
     echo "<tr><th>{$strReseller}</th><td>";
     reseller_drop_down("reseller", 1);
@@ -186,9 +184,9 @@ if ($action == "showform" OR $action=='')
 
     echo "<tr><th>{$strIncidentPool}</th>";
     $incident_pools = explode(',', "{$strUnlimited},{$CONFIG['incident_pools']}");
-    echo "<td>".array_drop_down($incident_pools,'incident_poolid',$maint['incident_quantity'])."</td></tr>";
+    echo "<td>".array_drop_down($incident_pools,'incident_poolid',$maint['incident_quantity'])."</td></tr>\n";
 
-    echo "<tr><th>{$strProductOnly}</th><td><input name='productonly' type='checkbox' value='yes' /></td></tr></tbody>\n"; //FIXME XHTML tbody
+    echo "<tr><th>{$strProductOnly}</th><td><input name='productonly' type='checkbox' value='yes' /></td></tr></tbody>\n";
 
     echo "</table>\n";
     if ($timed) $timed = 'yes';

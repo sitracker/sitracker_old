@@ -9,10 +9,8 @@
 //
 // Author: Paul Heaney <paulheaney[at]users.sourceforge.net>
 
-// FIXME not on menu
 // FIXME needs abit of tidying up
 // Report Type: Management report
-
 
 
 require ('core.php');
@@ -25,12 +23,15 @@ $title = $strIncidentsDailySummary;
 require (APPLICATION_LIBPATH . 'auth.inc.php');
 
 include (APPLICATION_INCPATH . 'htmlheader.inc.php');
-$startdate = strtotime($_REQUEST['startdate']);
-$enddate = strtotime($_REQUEST['enddate']);
 
-if (empty($startdate))
+$submit = cleanvar($_REQUEST['submit']);
+$startdate = cleanvar($_REQUEST['startdate']);
+$enddate = cleanvar($_REQUEST['enddate']);
+
+echo "<h2>{$title}</h2>";
+
+if (empty($submit))
 {
-    echo "<h2>{$title}</h2>";
     echo "<form action='{$_SERVER['PHP_SELF']}' id='incidentsbysoftware' method='post'>";
     echo "<table class='vertical'>";
     echo "<tr><th>{$strStartDate}:</th>";
@@ -42,11 +43,23 @@ if (empty($startdate))
     echo date_picker('incidentsbysoftware.enddate');
     echo "</td></tr>\n";
     echo "</table>";
-    echo "<p align='center'><input type='submit' value='{$strRunReport}' /></p>";
+    echo "<p align='center'><input name='submit' type='submit' value='{$strRunReport}' /></p>";
     echo "</form>";
 }
 else
 {
+    if (empty($startdate))
+    {
+    	if (empty($enddate)) $startdate = $now - 31556926; // 1 year
+        else $startdate = strtotime($enddate) - 31556926; // 1 year
+    }
+    else
+    {
+    	$startdate = strtotime($startdate);
+    }
+    
+    if (empty($enddate)) $enddate = $now;
+    else $enddate = strtotime($enddate);
 
     if ($startdate < $enddate)
     {
@@ -89,68 +102,75 @@ else
         echo "</pre>";
 */
 
-        foreach ($stats AS $day)
+        if (count($stats) > 0)
         {
-            /*
-            echo "<pre>";
-            print_r($day);
-            echo "</pre>";
-            */
-            echo "<h2>".$day['date']."</h2>";
-            echo "<table>";
-            $opened=0;
-            $closed=0;
-            $owners=array();
-            $right='';
-            foreach ($day AS $d)
+            foreach ($stats AS $day)
             {
-                if (is_array($d))
+                /*
+                echo "<pre>";
+                print_r($day);
+                echo "</pre>";
+                */
+                echo "<h2>".$day['date']."</h2>";
+                echo "<table>";
+                $opened=0;
+                $closed=0;
+                $owners=array();
+                $right='';
+                foreach ($day AS $d)
                 {
-                    /*
-                    echo "<pre>";
-                    print_r($d);
-                    echo "</pre>";
-                    */
-                    foreach ($d AS $a)
+                    if (is_array($d))
                     {
-                        $right .= "<tr><td>".$a['type']."</td><td><a href='incident_details.php?id=".$a['id']."' class='direct'>".$a['id']."</td><td>".$a['title']."</a></td><td>".user_realname($a['owner'])."</td></tr>";
-                        if ($a['type'] == 'opened')
+                        /*
+                        echo "<pre>";
+                        print_r($d);
+                        echo "</pre>";
+                        */
+                        foreach ($d AS $a)
                         {
-                            $opened++;
-                            $owners[$a['owner']]['owner']=$a['owner'];
-                            $owners[$a['owner']]['opened']++;
-                        }
-                        else
-                        {
-                            $closed++;
-                            $owners[$a['owner']]['owner']=$a['owner'];
-                            $owners[$a['owner']]['closed']++;
+                            $right .= "<tr><td>".$a['type']."</td><td><a href='incident_details.php?id=".$a['id']."' class='direct'>".$a['id']."</td><td>".$a['title']."</a></td><td>".user_realname($a['owner'])."</td></tr>";
+                            if ($a['type'] == 'opened')
+                            {
+                                $opened++;
+                                $owners[$a['owner']]['owner']=$a['owner'];
+                                $owners[$a['owner']]['opened']++;
+                            }
+                            else
+                            {
+                                $closed++;
+                                $owners[$a['owner']]['owner']=$a['owner'];
+                                $owners[$a['owner']]['closed']++;
+                            }
                         }
                     }
                 }
+    
+                echo "<tr><td valign='top'><table>";
+                echo "<tr><td>{$strOpened}</td><td>{$opened}</td></tr>";
+                echo "<tr><td>{$strClosed}</td><td>{$closed}</td></tr>";
+                echo "<table><tr><th>User</th><th>Opened</th><th>Closed</th></tr>";
+                foreach ($owners AS $o)
+                {
+                    echo "<tr>";
+                    echo "<td>".user_realname($o['owner'])."</td><td>";
+                    if ($o['closed'] != 0) echo $o['closed'];
+                    else echo "0";
+    
+                    echo "</td><td>";
+                    if ($o['opened']!=0) echo $o['opened'];
+                    else echo "0";
+                    echo "</td>";
+                    echo "</tr>";
+                }
+                echo "</table></td><td><table>";
+                echo $right;
+                echo "</table></td></tr>";
+                echo "</table>";
             }
-
-            echo "<tr><td valign='top'><table>";
-            echo "<tr><td>{$strOpened}</td><td>{$opened}</td></tr>";
-            echo "<tr><td>{$strClosed}</td><td>{$closed}</td></tr>";
-            echo "<table><tr><th>User</th><th>Opened</th><th>Closed</th></tr>";
-            foreach ($owners AS $o)
-            {
-                echo "<tr>";
-                echo "<td>".user_realname($o['owner'])."</td><td>";
-                if ($o['closed'] != 0) echo $o['closed'];
-                else echo "0";
-
-                echo "</td><td>";
-                if ($o['opened']!=0) echo $o['opened'];
-                else echo "0";
-                echo "</td>";
-                echo "</tr>";
-            }
-            echo "</table></td><td><table>";
-            echo $right;
-            echo "</table></td></tr>";
-            echo "</table>";
+        }
+        else
+        {
+        	echo "<p class='error'>{$strNoIncidents}</p>";
         }
     }
     else

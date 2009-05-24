@@ -61,11 +61,11 @@ if (mysql_numrows($result) > 0)
         $str .= "<th>{$strExpiryDate}</th><th>{$strCustomerReference}</th><th>{$strStartDate}</th><th>{$strEndDate}</th>";
         $str .= "<th>{$strFreeOfCharge}</th><th>{$strCreditAmount}</th><th>{$strBalance}</th>";
         $str .= "<th>{$strAwaitingApproval}</th><th>{$strReserved}</th><th>{$strAvailableBalance}</th>";
-        $str .= "<th>{$strUnitRate}</th><th>Units remaining @1x</th></tr>\n";
+        $str .= "<th>{$strUnitRate}</th><th>{$strUnitsRemaingSingleTime}</th></tr>\n";
     }
     elseif ($display == 'csv')
     {
-        $str .= "\"{$strSiteName}\",\"{$strProduct}\",\"{$strExpiryDate}\", \"{$strCustomerReference}\", \"{$strStartDate}\",\"{$strEndDate}\",\"{$strFreeOfCharge}\",\"{$strCreditAmount}\",\"{$strBalance}\",\"{$strAwaitingApproval}\",\"{$strReserved}\",\"{$strAvailableBalance}\",\"{$strUnitRate}\",\"Units remaining @1 x\"\n"; // FIXME i18n
+        $str .= "\"{$strSiteName}\",\"{$strProduct}\",\"{$strExpiryDate}\", \"{$strCustomerReference}\", \"{$strStartDate}\",\"{$strEndDate}\",\"{$strFreeOfCharge}\",\"{$strCreditAmount}\",\"{$strBalance}\",\"{$strAwaitingApproval}\",\"{$strReserved}\",\"{$strAvailableBalance}\",\"{$strUnitRate}\",\"{$strUnitsRemaingSingleTime}\"\n";
     }
 
     $lastsite = '';

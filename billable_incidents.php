@@ -11,7 +11,7 @@
 // Author:  Paul Heaney Paul Heaney <paulheaney[at]users.sourceforge.net>
 
 
-$permission = 37; // Run Reports // FIXME permissions need defining
+$permission = 11; // View sites, more granular permissions are defined on the more sensitive sections 
 
 require ('core.php');
 require (APPLICATION_LIBPATH . 'functions.inc.php');
@@ -286,7 +286,6 @@ elseif ($mode == 'approvalpage')
              * SELECT * FROM `transactions` t, `links` l, `incidents` i, `contacts` c WHERE t.transactionid = l.origcolref AND t.status = 5 AND linktype= 6 AND l.linkcolref = i.id AND i.contact = c.id
              */
 
-            // TODO FIXME only retrieve necessary fields
             $sql = "SELECT i.id, i.owner, i.contact, i.title, i.closed, i.opened, t.transactionid FROM `{$GLOBALS['dbTransactions']}` AS t, `{$GLOBALS['dbLinks']}` AS l, `{$GLOBALS['dbIncidents']}` AS i ";
             $sql .= ", `{$GLOBALS['dbContacts']}` AS c WHERE ";
             $sql .= "t.transactionid = l.origcolref AND t.transactionstatus = ".BILLING_AWAITINGAPPROVAL." AND linktype= 6 AND l.linkcolref = i.id AND i.contact = c.id AND c.siteid = {$objsite->site} ";

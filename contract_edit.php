@@ -75,7 +75,8 @@ if ($action == "edit")
         echo "{$strEditContract}: {$maintid}</h2>";
         echo "<h5>".sprintf($strMandatoryMarked,"<sup class='red'>*</sup>")."</h5>";
         echo "<form id='maintform' name='maintform' action='{$_SERVER['PHP_SELF']}?action=update' method='post' onsubmit='return confirm_action(\"{$strAreYouSureMakeTheseChanges}\")'>\n";
-        echo "<table align='center' class='vertical'>";
+        echo "<table align='center' class='vertical'>\n";
+        echo "<thead>\n";
         echo "<tr><th>{$strSite}: <sup class='red'>*</sup></th><td>";
         echo site_name($maint["site"]). "</td></tr>";
         echo "<tr><th>{$strContacts}:</th><td>";
@@ -100,7 +101,6 @@ if ($action == "edit")
         }
         else echo "{$productname}";
         echo "</td></tr>\n";
-
 
         echo "<tr><th>{$strExpiryDate}: <sup class='red'>*</sup></th>";
         echo "<td><input name='expirydate' size='10' value='";
@@ -130,8 +130,8 @@ if ($action == "edit")
 
 
         echo "<tr><th></th><td><a href=\"javascript:void(0);\" onclick=\"$('hidden').toggle();\">{$strAdvanced}</a></td></tr>";
-
-        echo "<tbody id='hidden' style='display:none'>"; // FIXME tbody
+        echo "</thead>\n";
+        echo "<tbody id='hidden' style='display:none'>";
 
         echo "<tr><th>{$strReseller}:</th><td>";
         echo reseller_drop_down("reseller", $maint["reseller"]);
@@ -145,7 +145,7 @@ if ($action == "edit")
 
         echo "<tr><th>{$strIncidentPool}:</th>";
         $incident_pools = explode(',', "Unlimited,{$CONFIG['incident_pools']}");
-        echo "<td>".array_drop_down($incident_pools,'incident_poolid',$maint['incident_quantity'],TRUE,FALSE)."</td></tr>";
+        echo "<td>".array_drop_down($incident_pools, 'incident_poolid', $maint['incident_quantity'], '', TRUE, FALSE)."</td></tr>";
 
         echo "<tr><th>{$strProductOnly}:</th>";
         echo "<td><input name='productonly' type='checkbox' value='yes' onclick='set_terminated();' ";

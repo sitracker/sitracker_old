@@ -299,9 +299,8 @@ elseif ($_REQUEST['statistics'] == 'on')
         $csv .= round($totalClosed/12,2)."\",\""; //The average over a 12mnth period
         $csv .= round(($totalEscalated/$totalOpened)*100,2)."%\"\n";
 
-        // FIXME i18n
-        $html .= "<p align='center'>The statistics are approximation only. They don't take into consideration incidents reassigned</p>";
-        $csv .= "The statistics are approximation only. They don't take into consideration incidents reassigned\n";
+        $html .= "<p align='center'>{$strStatisticsWarningReassign}</p>";
+        $csv .= "{$strStatisticsWarningReassign}\n";
     }
 
     if ($output == 'screen')
@@ -426,8 +425,7 @@ elseif ($_REQUEST['mode'] == 'report')
         $count++;
     }
 
-    // FIXME i18n
-    $html .= "<p align='center'>This report is a list of ($numrows) incidents for your selections of which ($numrows_esc) where escalated</p>";
+    $html .= "<p align='center'>".sprintf($strIncidentEscalatedReportDesc, $numrows, $numrows_esc)."</p>";
     $html .= "<table width='99%' align='center'>";
     $html .= "<tr><th>{$strOpened}</th><th>{$strClosed}</th><th>{$strIncident}</th>";
     $html .= "<th>{$strTitle}</th><th>{$strEngineer}</th><th>{$strEscalated}</th></tr>";
