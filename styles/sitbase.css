@@ -186,6 +186,7 @@ div#menu li:hover li ul,
 
 #menu li.menuitem {
   /* background: url('../images/menu_divider.gif') no-repeat right center; */
+  z-index: 100;
 }
 
 
@@ -340,7 +341,7 @@ p.trigger
 
 
 .helplink { vertical-align: super; color: #555; margin-left: 2px; font-size: 10px; position: static;}
-.helplink a { text-decoration: none; cursor: help; position: relative; color: #CC0000; }
+.helplink a { text-decoration: none; cursor: help; position: relative; color: #CC0000; z-index: 100;}
 .helplink a span { display: none;
   /*margin-right: 20px;*/
     position: absolute;
@@ -355,7 +356,6 @@ p.trigger
   -webkit-border-radius: 5px; /* this is just for Safari */
   cursor: pointer;
   text-align: left;
-  z-index: 100;
 }
 .helplink a:hover {
     font-size: 99%; /* this is just for IE */
