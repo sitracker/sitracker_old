@@ -141,9 +141,17 @@ var cols2 = [<?php echo $cols2; ?>];
 
 var dashlets = $$('div.windowbox');
 
-Droppables.add('col0', {ghosting: true, onDrop: moveItem, hoverclass: 'droptarget'});
-Droppables.add('col1', {ghosting: true, onDrop: moveItem, hoverclass: 'droptarget'});
-Droppables.add('col2', {ghosting: true, onDrop: moveItem, hoverclass: 'droptarget'});
+var contain0 = ['col1', 'col2'];
+var contain1 = ['col0', 'col2'];
+var contain2 = ['col0', 'col1'];
+
+Droppables.add('col0', {ghosting: true, onDrop: moveItem, hoverclass: 'droptarget', containment: contain0});
+Droppables.add('col1', {ghosting: true, onDrop: moveItem, hoverclass: 'droptarget', containment: contain1});
+Droppables.add('col2', {ghosting: true, onDrop: moveItem, hoverclass: 'droptarget', containment: contain2});
+
+Sortable.create('col0', { tag:'div', only:'windowbox', onUpdate: save_layout});
+Sortable.create('col1', { tag:'div', only:'windowbox', onUpdate: save_layout});
+Sortable.create('col2', { tag:'div', only:'windowbox', onUpdate: save_layout});
 
 // Set drop area by default  non cleared.
 $('col0').cleared = false;
