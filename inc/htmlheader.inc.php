@@ -119,7 +119,8 @@ if ($sit[0] != '')
     echo "<ul id='menuList'>\n";
     foreach ($hmenu[0] as $top => $topvalue)
     {
-        if ((!empty($topvalue['enablevar']) AND $CONFIG[$topvalue['enablevar']])
+        if ((!empty($topvalue['enablevar']) AND $CONFIG[$topvalue['enablevar']] === TRUE
+            AND $CONFIG[$topvalue['enablevar']] !== 'disabled')
             OR empty($topvalue['enablevar']))
         {
             echo "<li class='menuitem'>";
@@ -139,7 +140,8 @@ if ($sit[0] != '')
                 echo "\n<ul>"; //  id='menuSub'
                 foreach ($hmenu[$topvalue['submenu']] as $sub => $subvalue)
                 {
-                    if ((!empty($subvalue['enablevar']) AND $CONFIG[$subvalue['enablevar']])
+                    if ((!empty($subvalue['enablevar']) AND $CONFIG[$subvalue['enablevar']] == TRUE
+                        AND $CONFIG[$subvalue['enablevar']] !== 'disabled')
                         OR empty($subvalue['enablevar']))
                     {
                         if ($subvalue['submenu'] > 0)
@@ -165,7 +167,8 @@ if ($sit[0] != '')
                             echo "<ul>"; // id ='menuSubSub'
                             foreach ($hmenu[$subvalue['submenu']] as $subsub => $subsubvalue)
                             {
-                                if ((!empty($subsubvalue['enablevar']) AND $CONFIG[$subsubvalue['enablevar']])
+                                if ((!empty($subsubvalue['enablevar']) AND $CONFIG[$subsubvalue['enablevar']] == TRUE
+                                    AND $CONFIG[$subsubvalue['enablevar']] !== 'disabled')
                                     OR empty($subsubvalue['enablevar']))
                                 {
                                     if ($subsubvalue['submenu'] > 0)
