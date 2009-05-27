@@ -171,7 +171,7 @@ else
     }
     else
     {
-        if ($_POST['userid']==$_COOKIE['sit'][2]) html_redirect("edit_user_skills.php?user={$_POST['userid']}");
+        if ($_POST['userid'] == $sit[2]) html_redirect("edit_user_skills.php?user={$_POST['userid']}");
         else html_redirect("manage_users.php");
     }
 }
