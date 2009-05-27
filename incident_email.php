@@ -311,6 +311,7 @@ switch ($step)
         echo "</td>";
         echo "<br />";
         echo "</td></tr>";
+        plugin_do('incident_email_form1');
         echo "</table>";
         echo "<p align='center'>";
         echo "<input type='hidden' name='step' value='2' />";
@@ -408,14 +409,14 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
                              "&draftid="+draftid+"&meta="+meta+"&content="+
                              escape(toPass), true);
              */
-                             
+
                 var url =  "ajaxdata.php";
                 var params = "action=auto_save&userid="+<?php echo $_SESSION['userid']; ?>+"&type=email&incidentid="+<?php echo $id; ?>+"&draftid="+draftid+"&meta="+meta+"&content="+escape(toPass);
                 xmlhttp.open("POST", url, true)
                 xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
                 xmlhttp.setRequestHeader("Content-length", params.length);
                 xmlhttp.setRequestHeader("Connection", "close");
-                             
+
 
                 xmlhttp.onreadystatechange=function()
                 {
@@ -547,6 +548,7 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
         echo "</textarea>";
         echo "<div id='updatestr'><a href='javascript:save_content();'>".icon('save', 16, $strSaveDraft)."</a></div>";
         echo "</td></tr>";
+        plugin_do('incident_email_form2');
         echo "</table>";
         echo "<p align='center'>";
         echo "<input name='newincidentstatus' id='newincidentstatus' type='hidden' value='{$newincidentstatus}' />";
