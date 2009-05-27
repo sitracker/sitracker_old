@@ -140,7 +140,7 @@ $filter = array('page' => $page);
 //if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 //$numcontracts = mysql_num_rows($contractresult);
 
-if ($_SESSION['portalauth'] == TRUE OR ($_SERVER['PHP_SELF'] != 'kb.php' 
+if ($_SESSION['portalauth'] == TRUE OR ($_SERVER['PHP_SELF'] != 'kb.php'
     AND $CONFIG['portal_kb_enabled'] != 'Public'))
 {
     echo "<div id='menu'>\n";
@@ -160,14 +160,14 @@ if ($_SESSION['portalauth'] == TRUE OR ($_SERVER['PHP_SELF'] != 'kb.php'
     {
         echo "<li><a href='entitlement.php'>{$strEntitlement}</a></li>";
     }
-    $sql = "SELECT docid FROM `{$dbKBArticles}`";
+    $sql = "SELECT COUNT(docid) FROM `{$dbKBArticles}`";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
-    if ($CONFIG['kb_enabled'] AND $CONFIG['portal_kb_enabled'] != 'Disabled' AND mysql_num_rows($result) > 0)
+    list($countkb) = mysql_fetch_row($result);
+    if ($CONFIG['kb_enabled'] != FALSE AND $CONFIG['portal_kb_enabled'] !== 'Disabled' AND $countkb > 0)
     {
         echo "<li><a href='kb.php'>{$strKnowledgeBase}</a></li>";
     }
-
     if ($_SESSION['usertype'] == 'admin')
     {
         echo "<li><a href='admin.php'>{$strAdmin}</a></li>";
