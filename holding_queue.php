@@ -27,6 +27,7 @@ require (APPLICATION_LIBPATH . 'auth.inc.php');
 function generate_row($update)
 {
     global $CONFIG, $sit;
+    if (empty($update['fromaddr']) AND !empty($update['from'])) $update['fromaddr'] = $update['from'];
     $update['fromaddr'] = strtolower($update['fromaddr']);
 
     if (strlen($update['bodytext']) > 1003)
@@ -85,7 +86,8 @@ function generate_row($update)
     }
     else
     {
-        $html_row .= "{$update['fromaddr']}<br />\n";
+        $html_row .= gravatar($update['fromaddr'], 16) . ' ';
+        $html_row .= "<a href=\"mailto:{$update['fromaddr']}\">{$update['fromaddr']}</a><br />\n";
         $html_row .= htmlentities($update['emailfrom'],ENT_QUOTES, $GLOBALS['i18ncharset']);
     }
     $html_row .= "</td>";
