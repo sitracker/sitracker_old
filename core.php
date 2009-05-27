@@ -64,9 +64,6 @@ if (mysql_error())
     exit;
 }
 
-mysql_query("SET NAMES 'utf8'");
-mysql_query("SET CHARACTER SET utf8");
-
 // mysql_query("SET time_zone = {$CONFIG['timezone']}");
 
 // Select database
@@ -92,6 +89,11 @@ if (mysql_error())
         exit;
     }
 }
+
+mysql_query("SET NAMES 'utf8'");
+mysql_query("SET CHARACTER SET utf8");
+
+
 // Soft table names
 require (APPLICATION_LIBPATH . 'tablenames.inc.php');
 
