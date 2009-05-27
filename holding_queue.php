@@ -273,7 +273,7 @@ if ($countresults > 0)
 {
     if ($countresults) mysql_data_seek($result, 0);
 	
-	if (!empty($CONFIG['spam_email-subject'])) 
+	if (!empty($CONFIG['spam_email_subject'])) 
 	{
     	while ($updates = mysql_fetch_array($result))
     	{
