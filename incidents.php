@@ -118,16 +118,16 @@ switch ($type)
                 echo "<span class='actionqueue'>{$strActionNeeded}</span>";
                 $sql .= "AND (status!='2') ";  // not closed
                 // the "1=2" obviously false else expression is to prevent records from showing unless the IF condition is true
-                $sql .= "AND ((timeofnextaction > 0 AND timeofnextaction < $now) OR ";
+                $sql .= "AND ((timeofnextaction > 0 AND timeofnextaction < {$now}) OR ";
                 if ($user != 'all') $sql .= "(status='5' AND towner=$user) OR ";
-                $sql .= "(IF ((status >= 5 AND status <=8), ($now - lastupdated) > ({$CONFIG['regular_contact_days']} * 86400), 1=2 ) ";  // awaiting
+                $sql .= "(IF ((status >= 5 AND status <=8), ({$now} - lastupdated) > ({$CONFIG['regular_contact_days']} * 86400), 1=2 ) ";  // awaiting
                 $sql .= "OR IF (status='1' OR status='3' OR status='4', 1=1 , 1=2) ";  // active, research, left message - show all
                 $sql .= ") AND timeofnextaction < $now ) ";
             break;
 
             case 2: // Waiting
                 echo "<span class='waitingqueue'>{$strWaiting}</span>";
-                $sql .= "AND ((status >= 4 AND status <= 8) OR (timeofnextaction > 0 AND timeofnextaction > $now)) ";
+                $sql .= "AND ((status >= 4 AND status <= 8) OR (timeofnextaction > 0 AND timeofnextaction > {$now})) ";
             break;
 
             case 3: // All Open

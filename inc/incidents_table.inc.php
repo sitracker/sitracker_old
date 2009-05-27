@@ -319,6 +319,10 @@ while ($incidents = mysql_fetch_array($result))
 
     if ($incidents['towner'] > 0 AND $incidents['towner'] != $user)
     {
+        if ($incidents['owner'] != $user OR $user == 'all')
+        {
+        	echo "<br />{$strOwner}: <strong>".user_realname($incidents['owner'],TRUE)."</strong>";
+        }
         echo "<br />{$strTemp}: <strong>".user_realname($incidents['towner'],TRUE)."</strong>";
     }
     elseif ($incidents['owner'] != $user)
