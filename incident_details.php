@@ -486,24 +486,26 @@ foreach ($keeptags AS $keeptag)
 echo log_nav_bar();
 $count = 0;
 $billable_incident_approved = is_billable_incident_approved($incidentid);
-if (!$_GET['win'])
-{
-    echo "<div id='log_container'>";
-    echo "<div id='portalleft'>";
-    echo "<h3>Quick Actions</h3>";
-    echo "<u>Status</u><br />";
-    echo "<a>Awaiting customer</a><br />";
-    echo "<a>Active</a>";
-    echo "</p><p>";
-    echo "<u>Ownership</u><br />";
-    echo "<a>Assign to me</a><br />";
-    echo "<a>Temp assign to me</a><br />";
-    echo "</p>";
-    echo "<p><u>Quick update</u>";
-    echo "<textarea></textarea><br /><input type='submit' value='Update'>";
-    echo "</p></div>";
-    echo "<div id='portalright'>";
-}
+
+// An idea for a 'common actions' menu, see Mantis 461, commented out for 3.50 release
+// if (!$_GET['win'])
+// {
+//     echo "<div id='log_container'>";
+//     echo "<div id='portalleft'>";
+//     echo "<h3>Quick Actions</h3>";
+//     echo "<u>Status</u><br />";
+//     echo "<a>Awaiting customer</a><br />";
+//     echo "<a>Active</a>";
+//     echo "</p><p>";
+//     echo "<u>Ownership</u><br />";
+//     echo "<a>Assign to me</a><br />";
+//     echo "<a>Temp assign to me</a><br />";
+//     echo "</p>";
+//     echo "<p><u>Quick update</u>";
+//     echo "<textarea></textarea><br /><input type='submit' value='Update'>";
+//     echo "</p></div>";
+//     echo "<div id='portalright'>";
+// }
 
 while ($update = mysql_fetch_object($result))
 {
@@ -741,7 +743,7 @@ while ($update = mysql_fetch_object($result))
     }
 
     echo "' name='{$update->id}' class='info'>";
-    
+
     if (array_key_exists($update->type, $updatetypes))
     {
         if (!empty($update->sla) AND $update->type=='slamet')
@@ -828,7 +830,7 @@ while ($update = mysql_fetch_object($result))
         }
         echo "</div>";
     }
-    
+
     $count++;
 }
 
