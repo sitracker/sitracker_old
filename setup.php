@@ -407,6 +407,9 @@ function setup_createdb()
     $db = @mysql_connect($CONFIG['db_hostname'], $CONFIG['db_username'], $CONFIG['db_password']);
     if (!@mysql_error())
     {
+        // See Mantis 506 for sql_mode discussion
+        @mysql_query("SET SESSION sql_mode = '';");
+
         // Connected to database
         echo "<h2>Creating empty database...</h2>";
         $result = mysql_query($sql);

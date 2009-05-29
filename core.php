@@ -89,7 +89,8 @@ if (mysql_error())
         exit;
     }
 }
-
+// See Mantis 506 for sql_mode discussion
+@mysql_query("SET SESSION sql_mode = '';");
 mysql_query("SET NAMES 'utf8'");
 mysql_query("SET CHARACTER SET utf8");
 
