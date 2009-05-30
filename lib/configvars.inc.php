@@ -194,7 +194,7 @@ $CFGVAR['application_shortname']['title'] = 'Short Application Name';
 $CFGVAR['application_shortname']['help'] = 'A short (abbreviated) version of the application name. This is used to refer to this application where space is at a premium.';
 
 $CFGVAR['application_uriprefix']['title'] = 'URI Prefix';
-$CFGVAR['application_uriprefix']['help'] = "The <abbr title='Uniform Resource Identifier'>URI</abbr> prefix to use when referring to this application (in emails etc.) e.g. http://{\$_SERVER['HTTP_HOST']}";
+$CFGVAR['application_uriprefix']['help'] = "The <abbr title='Uniform Resource Identifier'>URI</abbr> prefix to use when referring to this application (in emails etc.) e.g. https://www.example.com";
 
 $CFGVAR['application_webpath']['title'] = 'Web Path';
 $CFGVAR['application_webpath']['help'] = 'The path to SiT! from the browsers perspective with a trailing slash. e.g. /sit/';

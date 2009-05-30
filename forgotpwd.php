@@ -60,8 +60,7 @@ switch ($_REQUEST['action'])
         if ($usercount == 1)
         {
             $hash = md5($userdetails->username.'.'.$userdetails->password);
-            $url = parse_url($_SERVER['HTTP_REFERER']);
-            $reseturl = "{$url['scheme']}://{$url['host']}{$CONFIG['application_webpath']}forgotpwd.php?action=confirmreset&userid={$userdetails->id}&hash={$hash}";
+            $reseturl = "{$CONFIG['application_uriprefix']}{$CONFIG['application_webpath']}forgotpwd.php?action=confirmreset&userid={$userdetails->id}&hash={$hash}";
             trigger('TRIGGER_USER_RESET_PASSWORD', array('userid' => $userdetails->id, 'passwordreseturl' => $reseturl));
             echo "<h3>{$strInformationSent}</h3>";
             echo "<p>{$strInformationSentRegardingSettingPassword}</p>";
@@ -94,8 +93,7 @@ switch ($_REQUEST['action'])
             {
                 $row = mysql_fetch_object($contactresult);
                 $hash = md5($row->username.'.'.$row->password);
-                $url = parse_url($_SERVER['HTTP_REFERER']);
-                $reseturl = "{$url['scheme']}://{$url['host']}{$CONFIG['application_webpath']}forgotpwd.php?action=confirmreset&contactid={$row->id}&hash={$hash}";
+                $reseturl = "{$CONFIG['application_uriprefix']}{$CONFIG['application_webpath']}forgotpwd.php?action=confirmreset&contactid={$row->id}&hash={$hash}";
                 trigger('TRIGGER_CONTACT_RESET_PASSWORD', array('contactid' => $row->id, 'passwordreseturl' => $reseturl));
                 echo "<h3>{$strInformationSent}</h3>";
                 echo "<p>{$strInformationSentRegardingSettingPassword}</p>";

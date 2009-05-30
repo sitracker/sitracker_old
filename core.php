@@ -116,4 +116,23 @@ if ($result AND mysql_num_rows($result) > 0)
     }
 }
 
+// Try to guess the application_uriprefix if it hasn't been set
+if (empty($CONFIG['application_uriprefix']))
+{
+    if (!empty($_SERVER['HTTP_REFERER']))
+    {
+        $url = parse_url($_SERVER['HTTP_REFERER']);
+        $scheme = $url['scheme'];
+        $CONFIG['application_uriprefix'] =  "{$url['scheme']}://{$url['host']}";
+        unset($url);
+    }
+    else
+    {
+        if ($_SERVER['HTTPS'] == 'off' OR empty($_SERVER['HTTPS'])) $scheme = 'https';
+        else $scheme = 'http';
+        $CONFIG['application_uriprefix'] =  "{$scheme}://{$_SERVER['HTTP_HOST']}";
+        unset($scheme);
+    }
+}
+
 ?>

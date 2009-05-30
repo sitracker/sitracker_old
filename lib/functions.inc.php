@@ -7734,7 +7734,7 @@ function alpha_index($baseurl = '#')
 function emoticons($text)
 {
     global $CONFIG;
-    $smiley_url = "http://{$_SERVER['HTTP_HOST']}{$CONFIG['application_webpath']}images/emoticons/";
+    $smiley_url = "{$CONFIG['application_uriprefix']}{$CONFIG['application_webpath']}images/emoticons/";
     $smiley_regex = array(0 => "/\:[-]?\)/s",
                         1 => "/\:[-]?\(/s",
                         2 => "/\;[-]?\)/s",

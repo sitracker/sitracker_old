@@ -37,7 +37,7 @@ $CONFIG['application_shortname'] = 'SiT!';
 $CONFIG['application_webpath'] = '/';
 
 // The URI prefix to use when referring to this application (in emails etc.)
-$CONFIG['application_uriprefix'] = "http://{$_SERVER['HTTP_HOST']}";
+$CONFIG['application_uriprefix'] = '';
 
 $CONFIG['db_hostname'] = 'localhost';
 $CONFIG['db_username'] = '';
