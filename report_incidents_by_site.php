@@ -156,7 +156,7 @@ elseif ($_REQUEST['mode'] == 'report')
 
     if ($showtotals)
     {
-        $html .= "<tfoot><tr><td colspan='0'>Total Number of incidents logged: {$numrows}, Logged externally: {$externalincidents} ({$externalpercent}%)</td></tr></tfoot>\n"; // FIXME i18n
+        $html .= "<tfoot><tr><td colspan='0'>".sprintf($strReportIncidentsBySiteDesc, $numrows, $externalincidents, $externalpercent)."</td></tr></tfoot>\n";
     }
 
     $html .= "</table>";

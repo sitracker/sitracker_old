@@ -1272,6 +1272,7 @@ $strReply = 'Reply';
 $strReplyTo = 'Reply To';
 $strReportBug = 'Report a Bug';
 $strReportedBug = 'Reported Bug';
+$strReportIncidentsBySiteDesc = 'Total Number of incidents logged: %s, Logged externally: %s (%s%%)';
 $strReportListsIncidentsLoggedThatEachSiteLoggedOverPastXMonths = 'This report lists the incidents that each site has logged over the past %s months';
 $strReports = 'Reports';
 $strRequested = 'Requested';
