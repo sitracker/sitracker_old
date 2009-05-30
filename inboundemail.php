@@ -258,12 +258,14 @@ if ($emails > 0)
         }
         if ($incidentid > 0) debug_log("Incident ID found in email: '{$incidentid}'");
 
+        $incident_open = incident_open($incidentid);
+
         plugin_do('email_arrived');
 
         $customer_visible = 'No';
         $part = 1;
         //process attachments
-        if (!empty($incidentid))
+        if (!empty($incidentid) AND $incident_open == 'Yes')
         {
             $fa_dir = $CONFIG['attachment_fspath'].$incidentid.$fsdelim;
         }
@@ -400,8 +402,6 @@ if ($emails > 0)
         }
         else
         {
-            $incident_open = incident_open($incidentid);
-
             if ($incident_open != "Yes") // Do not translate/i18n fixed string
             {
                 //Dont want to associate with a closed call
