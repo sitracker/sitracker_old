@@ -258,6 +258,8 @@ if ($emails > 0)
         }
         if ($incidentid > 0) debug_log("Incident ID found in email: '{$incidentid}'");
 
+        plugin_do('email_arrived');
+
         $customer_visible = 'No';
         $part = 1;
         //process attachments
