@@ -105,7 +105,7 @@ elseif (authenticate($username, $_REQUEST['password']) == 1)
     //check if the session lang is different the their profiles
     if ($_SESSION['lang'] != '' AND $_SESSION['lang'] != $user->var_i18n)
     {
-        $t = trigger('TRIGGER_LANGUAGE_DIFFERS', array('profilelang' => $user->var_i18n, 'currentlang' => $_SESSION['lang']));
+        $t = trigger('TRIGGER_LANGUAGE_DIFFERS', array('profilelang' => $user->var_i18n, 'currentlang' => $_SESSION['lang'], 'user' => $_SESSION['userid']));
     }
 
     if ($user->var_i18n != $CONFIG['default_i18n'] AND $_SESSION['lang'] == '')
