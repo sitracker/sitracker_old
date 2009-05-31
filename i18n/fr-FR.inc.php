@@ -1,6 +1,10 @@
 <?php
 // SiT! Language File - French (fr-FR) By Gabriel RIAM
 // Pauline du Toit and Gilles Grenier
+$CONFIG['dateformat_time'] = 'G\hi';
+$CONFIG['dateformat_datetime'] = 'jS M Y @ G\hi';
+$CONFIG['dateformat_filedatetime'] = 'd/m/Y G\hi';
+$CONFIG['dateformat_shorttime'] = 'G\hi';
 
 $languagestring = ' (fr-FR)';
 $i18ncharset = 'UTF-8';
