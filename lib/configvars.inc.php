@@ -16,8 +16,8 @@ if (realpath(__FILE__) == realpath($_SERVER['SCRIPT_FILENAME']))
     exit;
 }
 
-
-$CFGTAB['application'] = array('appmain', 'theming', 'ldap', 'soap', 'other');
+// 'soap' commented out by ivan 3 june 2009
+$CFGTAB['application'] = array('appmain', 'theming', 'ldap', 'other');
 $CFGTAB['email'] = array('inboundemail','outboundemail');
 $CFGTAB['features'] = array('incidents', 'portal', 'ftp', 'kb', 'sla', 'holidays', 'feedback');
 $CFGTAB['system'] = array('paths', 'locale', 'journal');

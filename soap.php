@@ -21,8 +21,9 @@ if ($CONFIG['soap_enabled'])
     $server = new soap_server();
     $server->configureWSDL('sitsoap', $soap_namespace);
 
-    require (APPLICATION_LIBPATH . 'soap_core.inc.php');
-    require (APPLICATION_LIBPATH . 'soap_incidents.inc.php');
+// Commented out by Ivan 3 June 2009
+//    require (APPLICATION_LIBPATH . 'soap_core.inc.php');
+//    require (APPLICATION_LIBPATH . 'soap_incidents.inc.php');
 
     $server->service(isset($HTTP_RAW_POST_DATA) ?  $HTTP_RAW_POST_DATA : '');
 }
