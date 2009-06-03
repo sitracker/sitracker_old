@@ -1134,7 +1134,7 @@ function contract_service_table($contractid, $billing)
                 $awaitingapproval = service_transaction_total($service->serviceid, BILLING_AWAITINGAPPROVAL) * -1;
                 $reserved = service_transaction_total($service->serviceid, BILLING_RESERVED) * -1;
 
-                $span = '';
+                $span = "<strong>{$GLOBALS['strServiceID']}:</strong> {$service->serviceid}<br />";                
                 if (!empty($service->title))
                 {
                     $span .= "<strong>{$GLOBALS['strTitle']}</strong>: {$service->title}<br />";
