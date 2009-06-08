@@ -8,19 +8,25 @@
 // of the GNU General Public License, incorporated herein by reference.
 
 // Author: Martin Cosgrave - apto Solutions Ltd - 20080512
+// updated: Matt Feider - 20090603
 //
-// hacked from dashboard_tasks
+// hacked from dashboard_tasks, updated to match format of dashboard_watch_incidents.php
 
-$dashboard_incoming_version = 1;
+$dashboard_incoming_version = 2;
 
 function dashboard_incoming($dashletid)
 {
     global $sit, $CONFIG, $iconset;
     global $dbUpdates, $dbTempIncoming;
-    $user = $sit[2];
-    echo "<div class='windowbox' style='width: 95%;' id='$dashletid'>";
-    echo "<div class='windowtitle'><a href='holding_queue.php'><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/emailin.png' width='16' height='16' alt='' /> ";
+	
+	$content = "<p align='center'><img src='{$CONFIG['application_webpath']}images/ajax-loader.gif' alt='Loading icon' /></p>";
+	echo dashlet('incoming', $dashletid, icon('emailin', 16), 'Holding Queue Emails', 'holding_queue.php', $content);
+}
 
+function dashboard_incoming_display($dashletid)
+{
+	global $sit, $CONFIG, $iconset;
+	global $dbUpdates, $dbTempIncoming;
     // extract updates (query copied from review_incoming_email.php)
     $sql  = "SELECT u.id AS id, u.bodytext AS bodytext, ti.emailfrom AS emailfrom, ti.subject AS subject, ";
     $sql .= "u.timestamp AS timestamp, ti.incidentid AS incidentid, ti.id AS tempid, ti.locked AS locked, ";
@@ -31,12 +37,10 @@ function dashboard_incoming($dashletid)
 
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
-    printf($GLOBALS['strHeldEmailsNum'], mysql_num_rows($result));
-    echo "</a></div>";
-
+    
     if (user_permission($sit[2], 42))
     {
-        echo "<div class='window'>";
+        //echo "<div class='window'>";
 
         if (mysql_num_rows($result) >=1 )
         {
@@ -73,8 +77,6 @@ function dashboard_incoming($dashletid)
     {
         echo "<p class='error'>{$GLOBALS['strPermissionDenied']}</p>";
     }
-    echo "</div>";
-    echo "</div>";
 }
 
 ?>
