@@ -20,6 +20,7 @@ require (APPLICATION_LIBPATH . 'auth.inc.php');
 include (APPLICATION_INCPATH . 'htmlheader.inc.php');
 
 $tolang = cleanvar($_REQUEST['lang']);
+$fromlang = cleanvar($_REQUEST['from']);
 
 if (!$_REQUEST['mode'])
 {
@@ -29,26 +30,36 @@ if (!$_REQUEST['mode'])
     echo "<form action='{$_SERVER['PHP_SELF']}?mode=show' method='get'>";
     //FIXME
     echo "<input name='mode' value='show' type='hidden' />";
-
+    echo "<strong>{$strFrom}</strong>: ";
+    echo "<select name='from'>";
+    foreach ($i18n_codes AS $langcode => $language)
+    {
+        echo "<option value='{$langcode}";
+        if ($langcode == 'en-GB') echo " selected = 'selected' ";
+        echo "'>{$langcode} - {$language}</option>\n";
+    }
+    echo "</select> <strong>{$strTo}</strong>: ";
     echo "<select name='lang'>";
     foreach ($i18n_codes AS $langcode => $language)
     {
-        if ($langcode!='en-GB') echo "<option value='{$langcode}'>{$langcode} - {$language}</option>\n";
+        if ($langcode != 'en-GB') echo "<option value='{$langcode}'>{$langcode} - {$language}</option>\n";
     }
-    echo "</select><br /><br />";
+    echo "</select>";
+    echo "<br /><br />";
     echo "<input type='submit' value='$strTranslate' />";
     echo "</form></div>\n";
 }
 elseif ($_REQUEST['mode'] == "show")
 {
+    $from = cleanvar($_REQUEST['from']);
     //open english file
-    $englishfile = APPLICATION_I18NPATH . "en-GB.inc.php";
-    $fh = fopen($englishfile, 'r');
-    $theData = fread($fh, filesize($englishfile));
+    $fromfile = APPLICATION_I18NPATH . "{$from}.inc.php";
+    $fh = fopen($fromfile, 'r');
+    $theData = fread($fh, filesize($fromfile));
     fclose($fh);
     $lines = explode("\n", $theData);
-    $langstrings['en-GB'];
-    $englishvalues = array();
+    $langstrings[$from];
+    $fromvalues = array();
 
     foreach ($lines as $values)
     {
@@ -67,7 +78,7 @@ elseif ($_REQUEST['mode'] == "show")
             //remove leading and trailing quotation marks
             $vars[1] = substr_replace($vars[1], "",-2);
             $vars[1] = substr_replace($vars[1], "",0, 1);
-            $englishvalues[$vars[0]] = $vars[1];
+            $fromvalues[$vars[0]] = $vars[1];
         }
         elseif (substr($vars[0], 0, 2) == "# ")
         {
@@ -82,7 +93,7 @@ elseif ($_REQUEST['mode'] == "show")
         }
         $lastkey = $vars[0];
     }
-    $origcount = count($englishvalues);
+    $origcount = count($fromvalues);
     unset($lines);
 
     //open foreign file
@@ -148,14 +159,14 @@ elseif ($_REQUEST['mode'] == "show")
     echo "</td></tr>";
     echo "<tr class='shade2'><td><code>i18nAlphabet</code></td>";
     echo "<td colspan='2'><input type='text' name='i18nalphabet' value=\"{$i18nalphabet}\" size='80' style='width: 100%;' /></td></tr>";
-    echo "<tr><th>{$strVariable}</th><th>en-GB ({$strEnglish})</th><th>{$tolang}</th></tr>";
+    echo "<tr><th>{$strVariable}</th><th>{$from}</th><th>{$tolang}</th></tr>";
 
     $shade = 'shade1';
-    foreach (array_keys($englishvalues) as $key)
+    foreach (array_keys($fromvalues) as $key)
     {
         if ($_REQUEST['lang'] == 'zz') $foreignvalues[$key] = $key;
         echo "<tr class='$shade'><td><label for=\"{$key}\"><code>{$key}</code></td>";
-        echo "<td><input name='english_{$key}' value=\"".htmlentities($englishvalues[$key], ENT_QUOTES, 'UTF-8')."\" size=\"45\" readonly='readonly' /></td>";
+        echo "<td><input name='english_{$key}' value=\"".htmlentities($fromvalues[$key], ENT_QUOTES, 'UTF-8')."\" size=\"45\" readonly='readonly' /></td>";
         echo "<td><input id=\"{$key}\" ";
         if (empty($foreignvalues[$key])) echo "class='notice' onblur=\"if ($('{$key}').value != '') { $('{$key}').removeClassName('notice'); $('{$key}').addClassName('idle');} \"";
         echo "name=\"{$key}\" value=\"".htmlentities($foreignvalues[$key], ENT_QUOTES, 'UTF-8')."\" size=\"45\" />";
