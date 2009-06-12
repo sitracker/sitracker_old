@@ -1224,13 +1224,12 @@ INSERT INTO `{$dbSoftwareProducts}` VALUES (1,1);
 
 
 CREATE TABLE `{$dbSupportContacts}` (
-  `id` int(11) NOT NULL auto_increment,
   `maintenanceid` int(11) default NULL,
   `contactid` int(11) default NULL,
-  PRIMARY KEY  (`id`)
+  PRIMARY KEY ( `maintenanceid` , `contactid` ) ;
 ) ENGINE=MyISAM;
 
-INSERT INTO `{$dbSupportContacts}` VALUES (1,1,1);
+INSERT INTO `{$dbSupportContacts}` VALUES (1,1);
 
 
 CREATE TABLE `{$dbTags}` (
@@ -2727,6 +2726,11 @@ ALTER TABLE `{$dbTempAssigns}` CHANGE `originalowner` `originalowner` SMALLINT( 
 ALTER TABLE `{$dbTempIncoming}` CHANGE `locked` `locked` SMALLINT( 6 ) NULL DEFAULT NULL  ;
 ALTER TABLE `{$dbUpdates}` CHANGE `userid` `userid` SMALLINT( 6 ) NULL DEFAULT NULL  ;
 ALTER TABLE `{$dbUpdates}` CHANGE `currentowner` `currentowner` SMALLINT( 6 ) NOT NULL DEFAULT '0';
+
+-- KMH 2009-06-12
+ALTER TABLE `{$dbSupportContacts}` DROP `id`;
+ALTER TABLE `{$dbSupportContacts}` ADD PRIMARY KEY ( `maintenanceid` , `contactid` ) ;
+
 ";
 
 // Important: When making changes to the schema you must add SQL to make the alterations
