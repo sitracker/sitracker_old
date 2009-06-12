@@ -35,6 +35,7 @@ switch ($action)
         $tempnewowner = cleanvar($_REQUEST['tempnewowner']);
         $permnewowner = cleanvar($_REQUEST['permnewowner']);
         $removetempowner = cleanvar($_REQUEST['removetempowner']);
+        $fullreassign = cleanvar($_REQUEST['fullreassign']);
         $newstatus = cleanvar($_REQUEST['newstatus']);
         $userid = cleanvar($_REQUEST['userid']);
         $temporary = cleanvar($_REQUEST['temporary']);
@@ -55,7 +56,14 @@ switch ($action)
 
         // Update incident
         $sql = "UPDATE `{$dbIncidents}` SET ";
-        if ($temporary != 'yes' AND $incident->towner > 0 AND $sit[2] == $incident->owner)
+
+        if ($fullreassign == 'yes')
+        {
+            //full reassign with temp owner, fixes http://bugs.sitracker.org/view.php?id=141
+            $sql .= "owner='{$userid}', towner=0, ";
+            $triggeruserid = $userid;
+        }
+        elseif ($temporary != 'yes' AND $incident->towner > 0 AND $sit[2] == $incident->owner)
         {
             $sql .= "owner='{$sit[2]}', towner=0, "; // make current user = owner
             $triggeruserid = $sit[2];
@@ -63,7 +71,7 @@ switch ($action)
         elseif ($temporary != 'yes' AND $sit[2]==$incident->towner)
         {
             $sql .= "towner=0, "; // temp owner removing temp ownership
-            $triggeruserid = $incident->towner;
+            $triggeruserid = $incident->owner;
         }
         elseif ($temporary == 'yes' AND $tempnewowner != 'yes' AND $incident->towner < 1 AND $sit[2]!=$incident->owner)
         {
@@ -115,7 +123,11 @@ switch ($action)
 
         $sql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, bodytext, type, timestamp, currentowner, currentstatus, customervisibility) ";
         $sql .= "VALUES ($id, $sit[2], '$bodytext', '$assigntype', '$now', ";
-        if ($temporary != 'yes' AND $incident->towner > 0 AND $sit[2] == $incident->owner)
+        if ($fullreassign == 'yes')
+        {
+            $sql .= "'{$userid}', ";
+        }
+        elseif ($temporary != 'yes' AND $incident->towner > 0 AND $sit[2] == $incident->owner)
         {
             $sql .= "'{$sit[2]}', ";
         }
@@ -178,7 +190,7 @@ switch ($action)
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
         $countusers = mysql_num_rows($result);
 
-        echo "<p>{$strOwner}: <strong>";
+        echo "<p style='font-size: 18px'>{$strOwner}: <strong>";
         if ($sit[2] == $incident->owner) echo "{$strYou} (".user_realname($incident->owner,TRUE).")";
         else echo user_realname($incident->owner,TRUE);
         echo "</strong>";
@@ -311,27 +323,6 @@ switch ($action)
 
             echo "<table class='vertical'>";
 
-
-    //         if (empty($_REQUEST['backupid']) AND empty($_REQUEST['originalid']))
-    //         {
-    //         }
-    //         elseif (!empty($originalid))
-    //         {
-    //             echo "<tr><th>{$strReassign}:</th>";
-    //             echo "<td>Reassign to original engineer (".user_realname($originalid,TRUE).")";
-    //             echo "<input type='hidden' name='permnewowner' value='{$originalid}' />";
-    //             echo "<input type='hidden' name='permassign' value='{$originalid}' />";
-    //             echo "</td></tr>\n";
-    //         }
-    //         elseif (!empty($backupid))
-    //         {
-    //             echo "<tr><th>{$strReassign}:</strong>:</th>";
-    //             echo "<td>To Substitute Engineer (".user_realname($backupid,TRUE).")";
-    //             echo "<input type='hidden' name='tempnewowner' value='{$backupid}' />";
-    //             echo "<input type='hidden' name='tempassign' value='{$originalid}' />";
-    //             echo "</td></tr>\n";
-    //         }
-
             echo "<tr><td colspan='2'><br />{$strReassignText}</td></tr>\n";
             echo "<tr><th>{$strUpdate}:</th>";
             echo "<td>";
@@ -341,7 +332,8 @@ switch ($action)
             echo "</td></tr>\n";
             if ($incident->towner > 0 AND ($sit[2] == $incident->owner OR $sit[2] == $incident->towner))
             {
-                echo "<tr><th>{$strTemporaryOwner}:</th><td>";
+                echo "<tr><th>{$strOwner}:</th><td>";
+                echo "<label><input type='checkbox' name='fullreassign' value='yes' onchange=\"$('reassignlist').show();\" /> {$strChangeOwner}</label>";
                 echo "<label><input type='checkbox' name='temporary' value='yes' onchange=\"$('reassignlist').show();\" /> {$strChangeTemporaryOwner}</label>";
                 echo "<label><input type='checkbox' name='removetempowner' value='yes' onchange=\"$('reassignlist').hide();\" /> {$strRemoveTemporaryOwner}</label> ";
                 echo "</td></tr>\n";
