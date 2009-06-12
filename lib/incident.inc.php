@@ -552,6 +552,43 @@ function drafts_waiting_on_incident($incidentid, $type='all')
 }
 
 
+/**
+ * Gets the incident ID for an email based on its subject
+ * @author Kierna Hogg
+ * @param string $subject The email subject
+ * @param string $from The email address it was sent from
+ * @return int ID of the incident, 0 if none
+ */
+function incident_id_from_subject($subject, $from)
+{
+    $incident_id = 0;
+    $from_parts = explode($from, "@");
+    $domain = $from_parts[2];
+
+    if (preg_match('/\[(\d{1,5})\]/', $subject, $m))
+    {
+        $incident_id = $m[1];
+    }
+    else
+    {
+        preg_match('/\d{1,12}/', $subjectm, $external_id);
+        $external_id = $external_id[0];
+        $sql = "SELECT name, email_domain FROM `{$dbEscalationPaths}`";
+        $result = mysql_query($sql);
+        if ($result)
+        {
+            while ($row = mysql_fetch_object($result))
+            {
+                if ($row->email_domain == $domain)
+                {
+                    $sql = "SELECT id FROM `{$dbIncidents}` ";
+                    $sql .= "WHERE externalid";
+                }
+            }
+        }
+    }
+
+}
 
 /**
     * @author Ivan Lucas
@@ -607,6 +644,33 @@ function average_incident_duration($start,$end,$states)
     $average_worked_minutes = ($countclosed == 0) ? 0 : $totalworkingduration / $countclosed;
 
     return array($countclosed, $average_incident_duration, $average_worked_minutes,$average_owners, $total_updates, $total_number_updates);
+}
+
+
+/**
+ * Returns the contents of an SLA target update, mostly for problem definition and action plan to pre-fill the close form
+ * @author Kieran Hogg
+ * @param $incidentid int The incident to get the update of
+ * @param $target string The SLA target, initialresponse, probdef etc
+ * @return string The updates of the message, stripped of line breaks
+ */
+function sla_target_content($incidentid, $target)
+{
+    $rtn = '';
+    global $dbUpdates;
+    $incidentid = cleanvar($incidentid);
+    $target = cleanvar($target);
+
+    $sql = "SELECT bodytext FROM `{$dbUpdates}` ";
+    $sql .= "WHERE incidentid = '{$incidentid}' ";
+    $sql .= "AND sla = '{$target}' ";
+    $sql .= "ORDER BY timestamp DESC";
+    $result = mysql_query($sql);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+    list($bodytext) = mysql_fetch_array($result);
+    $bodytext = str_replace("<hr>", "", $bodytext);
+    $rtn .= $bodytext;
+    return $rtn;
 }
 
 ?>
