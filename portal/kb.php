@@ -128,7 +128,8 @@ if ($result = mysql_query($sql))
         if ($end != $numtotal)
         {
             echo " <a href='{$_SERVER['PHP_SELF']}?start=";
-            echo $start+$perpage."&amp;sort={$sort}&amp;order={$order}&amp;view={$view}'>{$strNext}</a> ";    }
+            echo $start+$perpage."&amp;sort={$sort}&amp;order={$order}&amp;view={$view}'>{$strNext}</a> ";    
+        }
         else
         {
             echo $strNext;
@@ -136,7 +137,7 @@ if ($result = mysql_query($sql))
         echo "</p>";
 
         echo "<table align='center' width='80%'><tr>";
-        echo colheader('id', $strID, $sort, $order, $filter, '', '5');
+        echo colheader('id', $strID, $sort, $order, $filter, '', '10');
         echo colheader('title', $strTitle, $sort, $order, $filter);
         echo colheader('date', $strDate, $sort, $order, $filter, '', '15');
         echo colheader('author', $strAuthor, $sort, $order, $filter);

@@ -8095,6 +8095,50 @@ function delete_holding_queue_update($updateid)
 }
 
 
+function num_unread_emails()
+{
+    global $dbTempIncoming;
+    $sql = "SELECT COUNT(*) AS count FROM `{$dbTempIncoming}`";
+    $result = mysql_query($sql);
+    if (mysql_error()) trigger_error(mysql_error(). "  $sql",E_USER_WARNING);
+    list($count) = mysql_fetch_row($result);
+    return $count;
+}
+
+
+/**
+ * Checks whether an KB article exists and/or the user is allowed to view is
+ * @author Kieran Hogg
+ * @param $id int ID of the KB article
+ * @param $mode string 'public' for portal users, 'private' for internal users
+ * @return bool Whether we are allowed to see it or not
+*/
+function is_kb_article($id, $mode)
+{
+    $rtn = FALSE;
+    global $dbKBArticles;
+    $id = cleanvar($id);
+    if ($id > 0)
+    {
+        $sql = "SELECT distribution FROM `{$dbKBArticles}` ";
+        $sql .= "WHERE docid = '{$id}'";
+        $result = mysql_query($sql);
+        if (mysql_error()) trigger_error(mysql_error(). "  $sql",E_USER_WARNING);
+        list($visibility) = mysql_fetch_row($result);
+        if ($visibility == 'public' && $mode == 'public')
+        {
+            $rtn = TRUE;
+        }
+        else if (($visibility == 'private' OR $visibility == 'restricted') AND
+                 $mode == 'private')
+        {
+            $rtn = TRUE;
+        }
+    }
+    return $rtn;
+}
+
+
 // ** Place no more function defs below this **
 
 

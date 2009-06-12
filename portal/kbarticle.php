@@ -18,17 +18,19 @@ if ($CONFIG['portal_kb_enabled'] !== 'Public')
 {
     include (APPLICATION_LIBPATH . 'portalauth.inc.php');
 }
-include (APPLICATION_INCPATH . 'portalheader.inc.php');
 
+$can_view = FALSE;
 if (!empty($_REQUEST['id']))
 {
     $id = cleanvar($_REQUEST['id']);
+    $can_view = is_kb_article($id, 'public');
 }
-if (empty($id))
+if (empty($id) OR !$can_view)
 {
     header("Location: kb.php");
     exit;
 }
+include (APPLICATION_INCPATH . 'portalheader.inc.php');
 
 echo "<h2>".icon('kb', 32)." {$strKnowledgeBaseArticle}</h2>";
 echo kb_article($id, 'external');
