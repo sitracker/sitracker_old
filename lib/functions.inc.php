@@ -919,7 +919,7 @@ function software_drop_down($name, $id)
 
     if ($id == 0)
     {
-        $html .= "<option selected='selected' value='0'></option>\n";
+        $html .= "<option selected='selected' value='0'>{$GLOBALS['strNone']}</option>\n";
     }
 
     while ($software = mysql_fetch_object($result))
@@ -4130,7 +4130,7 @@ function incident_backup_switchover($userid, $accepting)
             // Try and find a backup/substitute engineer
             $backupid = software_backup_userid($userid, $incident->softwareid);
 
-            if (empty($backupid))
+            if (empty($backupid) OR user_accepting($backupid) == 'No')
             {
                 // no backup engineer found so add to the holding queue
                 // Look to see if this assignment is in the queue already
