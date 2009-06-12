@@ -641,6 +641,7 @@ else
     if ($target == 'none')
     {
         $target = '';
+        $updatetype = 'research';
     }
 
     if (!empty($target))
