@@ -28,7 +28,7 @@ if (!empty($_REQUEST['id']))
 
 // Array of available sections, in order they are to appear
 $sections = array('Summary', 'Symptoms', 'Cause', 'Question', 'Answer',
-                  'Solution', 'Workaround', 'Status', 'Additionalinfo',
+                  'Solution', 'Workaround', 'Status', 'Additional Information',
                   'References');
 
 if (isset($_POST['submit']))
@@ -75,6 +75,7 @@ if (isset($_POST['submit']))
     foreach ($sections AS $section)
     {
         $sectionvar = strtolower($section);
+		$sectionvar = str_replace(" ", "", $sectionvar);
         $sectionid = $_POST["{$sectionvar}id"];
         $content = cleanvar($_POST[$sectionvar]);
         if ($_POST["{$sectionvar}id"] > 0)
@@ -303,13 +304,13 @@ else
     echo "</textarea>";
     echo "</div>";
 
-    echo "<h3><a href=\"javascript:void(0);\" onclick=\"Effect.toggle('additionalinfosection', 'blind', { duration: 0.2 });";
-    echo "togglePlusMinus('additionalinfospan');\">";
-    echo "{$strAdditionalInfo} <span id='additionalinfospan'>[+]</span></a></h3>";
-    echo "<div id='additionalinfosection' style='display: none;'>";
-    echo bbcode_toolbar('additionalinfo');
-    echo "<textarea id='additionalinfo' name='additionalinfo' cols='100' rows='8'  ";
-    echo "onchange='kbSectionCollapse();'>{$sections['Additionalinfo']}";
+    echo "<h3><a href=\"javascript:void(0);\" onclick=\"Effect.toggle('additionalinformationsection', 'blind', { duration: 0.2 });";
+    echo "togglePlusMinus('additionalinformationspan');\">";
+    echo "{$strAdditionalInfo} <span id='additionalinformationspan'>[+]</span></a></h3>";
+    echo "<div id='additionalinformationsection' style='display: none;'>";
+    echo bbcode_toolbar('additionalinformation');
+    echo "<textarea id='additionalinformation' name='additionalinformation' cols='100' rows='8'  ";
+    echo "onchange='kbSectionCollapse();'>{$sections['Additional Information']}";
     echo "</textarea>";
     echo "</div>";
 
