@@ -3400,15 +3400,14 @@ function incident_get_next_target($incidentid)
     if (mysql_num_rows($result) > 0)
     {
         $upd = mysql_fetch_object($result);
-
         switch ($upd->sla)
         {
             case 'opened': $target->type = 'initialresponse'; break;
             case 'initialresponse': $target->type = 'probdef'; break;
             case 'probdef': $target->type = 'actionplan'; break;
             case 'actionplan': $target->type = 'solution'; break;
-            // case 'solution': $target->type='closed'; break;
-            case 'solution': $target->type = 'probdef'; break;
+            case 'solution': $target->type=''; break;
+            //case 'solution': $target->type = 'probdef'; break;
             case 'closed': $target->type = 'opened'; break;
         }
 

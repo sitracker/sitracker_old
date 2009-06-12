@@ -357,8 +357,7 @@ while ($incidents = mysql_fetch_array($result))
     }
     else
     {
-        ## Don't print anything, because there is no target to meet
-        //echo "...";
+        echo $strNone;
     }
 
     echo "</td>";
