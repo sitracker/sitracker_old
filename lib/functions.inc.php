@@ -1678,58 +1678,18 @@ function incident_lastupdate($id)
 {
     // Find the most recent update
     $sql = "SELECT userid, type, sla, currentowner, currentstatus, LEFT(bodytext,500) AS body, timestamp, nextaction, id ";
-    $sql .= "FROM `{$GLOBALS['dbUpdates']}` WHERE incidentid='{$id}' ORDER BY timestamp DESC, id DESC LIMIT 1";
+    $sql .= "FROM `{$GLOBALS['dbUpdates']}` WHERE incidentid='{$id}' AND bodytext != '' ORDER BY timestamp DESC, id DESC LIMIT 1";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
     if (mysql_num_rows($result) == 0)
     {
-        trigger_error("Zero records while retrieving incident last update",E_USER_WARNING);
+        trigger_error("Zero records while retrieving incident last update for incident {$id}",E_USER_WARNING);
     }
     else
     {
         $update = mysql_fetch_array($result);
-
-        // In certain circumstances go back even further, find an earlier update
-        if (($update['type'] == "reassigning" AND !isset($update['body'])) OR ($update['type'] == 'slamet' AND $update['sla'] == 'opened'))
-        {
-            //check if the previous update was by userid == 0 if so then we can assume this is a new call
-            $sqlPrevious = "SELECT userid, type, currentowner, currentstatus, LEFT(bodytext,500) AS body, timestamp, nextaction, id, sla, type ";
-            $sqlPrevious .= "FROM `{$GLOBALS['dbUpdates']}` WHERE id < ".$update['id']." AND incidentid = '$id' ORDER BY id DESC";
-            $resultPrevious = mysql_query($sqlPrevious);
-            if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
-
-            if (mysql_num_rows($result) == 0)
-            {
-                trigger_error("Zero records while retrieving incident last update",E_USER_WARNING);
-            }
-            else
-            {
-                $row = mysql_fetch_array($resultPrevious);
-                if ($row['userid'] == 0)
-                {
-                    $last = "";
-                    //This was an initial assignment so we now want the first update - looping round data retrieved rather than second query
-                    while ($row = mysql_fetch_array($resultPrevious))
-                    {
-                        $last = $row;
-                        if ($row['userid'] != 0)
-                        {
-                            if ($row['type'] == 'slamet')
-                            {
-                                $last = mysql_fetch_array($resultPrevious);
-                            }
-                            break;
-                        }
-                    }
-                    mysql_free_result($resultPrevious);
-
-                    return array($last['userid'], $last['type'] ,$last['currentowner'], $last['currentstatus'], $last['body'], $last['timestamp'], $last['nextaction'], $last['id']);
-
-                }
-            }
-
-        }
+        
         mysql_free_result($result);
         // Remove Tags from update Body
         $update['body'] = trim($update['body']);
@@ -7777,22 +7737,23 @@ function emoticons($text)
  * 'auto_chase_phone', 'auto_chase_manager', 'auto_chased_phone',
  * 'auto_chased_manager', 'auto_chase_managers_manager',
  * 'customerclosurerequest', 'fromtask'
+ * @param string $sla The SLA the update meets
  * @param int $userid (Optional) ID of the user doing the updating (Default: 0)
  * @param int $currentowner (Optional) ID of the current incident owner
  * @param int $currentstatus (Optional) Current incident status (Default: 1 = active)
  * @param enum $visibility (Optional) Whether to 'show' or 'hide' in the portal (Default: 'show')
  * @author Kieran Hogg
  */
-function new_update($incidentid, $text, $type = 'default', $userid = 0, $currentowner = '',
+function new_update($incidentid, $text, $type = 'default', $sla = '', $userid = 0, $currentowner = '',
                     $currentstatus = 1, $visibility = 'show')
 {
     global $now;
-
+    $text = cleanvar($text);
     $sql  = "INSERT INTO `{$GLOBALS['dbUpdates']}` (incidentid, userid, ";
     $sql .= "type, bodytext, timestamp, currentowner, currentstatus, ";
-    $sql .= "customervisibility) VALUES ('{$incidentid}', '{$userid}', ";
+    $sql .= "customervisibility, sla) VALUES ('{$incidentid}', '{$userid}', ";
     $sql .= "'{$type}', '{$text}', '{$now}', '{$currentowner}', ";
-    $sql .= "'{$currentstatus}', '{$visibility}')";
+    $sql .= "'{$currentstatus}', '{$visibility}', '{$sla}')";
     $result = mysql_query($sql);
     if (mysql_error())
     {
