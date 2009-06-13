@@ -89,7 +89,7 @@ var id = <?php echo $q; ?>;
 if (!isNaN(id))
 {
     <?php
-        if (is_numeric($q))
+        if (FALSE !== incident_status($q))
         {
             $sql = "SELECT id FROM `{$dbIncidents}` WHERE id='$q'";
             $result = mysql_query($sql);
