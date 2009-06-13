@@ -46,14 +46,29 @@ function saction_CloseIncidents($closure_delay)
     $sql = "SELECT * FROM `{$dbIncidents}` WHERE status='".STATUS_CLOSING."' ";
     $sql .= "AND (({$now} - lastupdated) > '{$closure_delay}') ";
     $sql .= "AND (timeofnextaction='0' OR timeofnextaction<='{$now}') ";
-    $result=mysql_query($sql);
+    $result = mysql_query($sql);
     if (mysql_error())
     {
         trigger_error(mysql_error(),E_USER_WARNING);
         $success = FALSE;
     }
 
-    if ($CONFIG['debug']) //debug_log("Found ".mysql_num_rows($result)." Incidents to close");
+    // Code added back in to fix mark as closure incidents
+    // http://bugs.sitracker.org/view.php?id=717
+    $sql = "UPDATE `{$dbIncidents}` SET lastupdated='{$now}', ";
+    $sql .= "closed='{$now}', status='".STATUS_CLOSED."', closingstatus='4', ";
+    $sql .= "timeofnextaction='0' WHERE status='".STATUS_CLOSING."' ";
+    $sql .= "AND (({$now} - lastupdated) > '{$closure_delay}') ";
+    $sql .= "AND (timeofnextaction='0' OR timeofnextaction <= '{$now}')";
+   
+    $result = mysql_query($sql);
+    if (mysql_error())
+    {
+        trigger_error(mysql_error(),E_USER_WARNING);
+        $success = FALSE;
+    }
+
+    //if ($CONFIG['debug']) debug_log("Found ".mysql_num_rows($result)." Incidents to close");
 
     while ($obj = mysql_fetch_object($result))
     {
