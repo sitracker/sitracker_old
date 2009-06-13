@@ -292,8 +292,9 @@ elseif ($action == "edit")
         echo "<tr><th>{$strText}</th>";
         echo "<td>";
         if ($templatetype=='notice') echo bbcode_toolbar('bodytext');
+
         echo "<textarea id='bodytext' name='bodytext' rows='20' cols='50' onfocus=\"recordFocusElement(this);\"";
-        if (strlen($body) > 3 AND substr_compare($body, 'str', 1, 3) === 0)
+        if (strlen($body) > 3 AND substr_compare($body, 'str', 0, 3) === 0)
         {
             echo " readonly='readonly' ";
             $body = $SYSLANG[$body];
