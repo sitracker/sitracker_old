@@ -784,4 +784,34 @@ function trigger_revoke($triggerid, $userid, $referenceid = 0)
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
     }
 }
+
+
+/**
+ * Checks is a specified trigger already exists
+ * @author Kieran Hogg
+ * @param $id string ID/name of the trigger
+ * @param $userid int The ID of the trigger user, 0 for system
+ * @param $action enum 'ACTION_NONE', 'ACTION_JOURNAL', 'ACTION_EMAIL', 'ACTION_NOTICE', 'ACTION_CREATE_INCIDENT'
+ * @param $templateid int ID of the template
+ * @param $rules string The trigger rules
+ * @param $parameters string The trigger parameters
+ */
+function check_trigger_exists($id, $userid, $action, $templateid, $rules, $parameters)
+{
+    global $dbTriggers;
+    $rtn = FALSE;
+
+    $sql = "SELECT * FROM `{$dbTriggers}` ";
+    $sql .= "WHERE triggerid = '{$id}' AND userid = '{$userid}' AND action = '{$action}'";
+    $sql .= "AND template = '{$templateid}' AND parameters = '{$parameters}' ";
+    $sql .= "AND checks = '{$rules}'";
+    $result = mysql_query($sql);
+    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
+    if (mysql_num_rows($result) != 0)
+    {
+        $rtn = TRUE;
+    }
+   
+    return $rtn;
+}
 ?>

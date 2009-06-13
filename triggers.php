@@ -286,12 +286,20 @@ switch ($_REQUEST['mode'])
             $templateid = 0;
         }
 
-        $sql = "INSERT INTO `{$dbTriggers}` (triggerid, userid, action, template, parameters, checks) ";
-        $sql .= "VALUES ('{$id}', '{$userid}', '{$action}', '{$templateid}', '{$parameters}', '{$rules}')";
-        mysql_query($sql);
-        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
-        //drop through and list...
-
+        //check if we already have this trigger
+        if(check_trigger_exists($id, $userid, $action, $templateid, $rules, $parameters))
+        {
+            html_redirect($_SERVER['PHP_SELF'], FALSE, $strADuplicateAlreadyExists); 
+        }
+        else
+        {
+            $sql = "INSERT INTO `{$dbTriggers}` (triggerid, userid, action, template, parameters, checks) ";
+            $sql .= "VALUES ('{$id}', '{$userid}', '{$action}', '{$templateid}', '{$parameters}', '{$rules}')";
+            mysql_query($sql);
+            if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
+            else html_redirect($_SERVER['PHP_SELF'], TRUE);
+        }
+        break;
     case 'list':
     default:
         //display the list
