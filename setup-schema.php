@@ -757,7 +757,7 @@ INSERT INTO `$dbNoticeTemplates` (`name`, `type`, `description`, `text`, `linkte
 INSERT INTO `$dbNoticeTemplates` (`name`, `type`, `description`, `text`, `linktext`, `link`, `durability`, `refid`) VALUES('NOTICE_INCIDENT_REVIEW_DUE', 3, 'strNoticeIncidentReviewDueDesc', 'strNoticeIncidentReviewDue', 'strViewIncident', 'javascript:incident_details_window({incidentid})', 'sticky', '{incidentid}');
 INSERT INTO `$dbNoticeTemplates` (`name`, `type`, `description`, `text`, `linktext`, `link`, `durability`, `refid`) VALUES('NOTICE_KB_CREATED', 3, 'strNoticeKBCreatedDesc', 'strNoticeKBCreated', 'strViewArticle', '{applicationurl}kbarticle?id={kbid}', 'sticky', '{kbid}');
 INSERT INTO `$dbNoticeTemplates` (`name`, `type`, `description`, `text`, `linktext`, `link`, `durability`, `refid`) VALUES('NOTICE_NEW_HELD_EMAIL', 3, 'strNoticeNewHeldEmailDesc', 'strNoticeNewHeldEmail', 'strViewHoldingQueue', '{applicationurl}holding_queue.php', 'sticky', '{holdingemailid}');
-INSERT INTO `$dbNoticeTemplates` (`name`, `type`, `description`, `text`, `linktext`, `link`, `durability`, `refid`) VALUES('NOTICE_MINS_HELD_EMAIL', 3, 'strNoticeNewUserDesc', 'strNoticeNewUser', 'strViewHoldingQueue', '{applicationurl}holding_queue.php', 'sticky', '{holdingemailid}');
+INSERT INTO `$dbNoticeTemplates` (`name`, `type`, `description`, `text`, `linktext`, `link`, `durability`, `refid`) VALUES('NOTICE_MINS_HELD_EMAIL', 3, 'strNoticeMinsHeldEmailDesc', 'strNoticeMinsHeldEmail', 'strViewHoldingQueue', '{applicationurl}holding_queue.php', 'sticky', '{holdingemailid}');
 INSERT INTO `$dbNoticeTemplates` (`name`, `type`, `description`, `text`, `linktext`, `link`, `durability`, `refid`) VALUES('NOTICE_SIT_UPGRADED', 3, 'strNoticeSitUpgradedDesc', 'strNoticeSitUpgraded', 'strWhatsNew', '{applicationurl}releasenotes.php?v={applicationversion}', 'sticky', '{applicationversion}');
 INSERT INTO `$dbNoticeTemplates` (`name`, `type`, `description`, `text`, `linktext`, `link`, `durability`, `refid`) VALUES('NOTICE_USER_CHANGED_STATUS', 3, 'strNoticeUserChangedStatusDesc', 'strNoticeUserChangedStatus', NULL, '', 'sticky', '{userid}');
 INSERT INTO `$dbNoticeTemplates` (`name`, `type`, `description`, `text`, `linktext`, `link`, `durability`, `refid`) VALUES('NOTICE_NEW_USER', 3, 'strNoticeNewUserDesc', 'strNoticeNewUser', NULL, NULL, 'sticky', '{userid}');
@@ -2736,6 +2736,7 @@ ALTER TABLE `{$dbSupportContacts}` DROP `id`;
 ALTER TABLE `{$dbSupportContacts}` ADD PRIMARY KEY ( `maintenanceid` , `contactid` ) ;
 ALTER TABLE `{$dbTriggers}` ADD `defined` ENUM( 'custom', 'built-in' ) NOT NULL DEFAULT 'custom' ;
 UPDATE TABLE `{$dbTriggers}` SET `type` = 'built-in' WHERE id < 35 ;
+UPDATE TABLE `{$dbNoticeTemplates}` SET `description` = 'strNoticeMinsHeldEmailDesc', `text` = 'strNoticeMinsHeldEmail' WHERE `name` = 'NOTICE_MINS_HELD_EMAIL' AND `description` = 'strNoticeNewUserDesc' AND `text` = 'strNoticeNewUser' ;
 ";
 
 // Important: When making changes to the schema you must add SQL to make the alterations
