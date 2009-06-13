@@ -254,18 +254,21 @@ if ($emails > 0)
         // Extract Incident ID
         if (preg_match('/\[(\d{1,5})\]/', $subject, $m))
         {
-            $incidentid = $m[1];
+            if (FALSE !== incident_status($m[1]))
+            {
+                $incidentid = $m[1];
+                debug_log("Incident ID found in email: '{$incidentid}'");
+            }
         }
-        if ($incidentid > 0) debug_log("Incident ID found in email: '{$incidentid}'");
 
-        $incident_open = incident_open($incidentid);
+        $incident_open = (incident_status($incidentid) == STATUS_ACTIVE);
 
         plugin_do('email_arrived');
 
         $customer_visible = 'No';
         $part = 1;
         //process attachments
-        if (!empty($incidentid) AND $incident_open == 'Yes')
+        if (!empty($incidentid) AND $incident_open)
         {
             $fa_dir = $CONFIG['attachment_fspath'].$incidentid.$fsdelim;
         }
@@ -402,7 +405,7 @@ if ($emails > 0)
         }
         else
         {
-            if ($incident_open != "Yes") // Do not translate/i18n fixed string
+            if (!$incident_open) // Do not translate/i18n fixed string
             {
                 //Dont want to associate with a closed call
                 $oldincidentid = $incidentid;
@@ -440,7 +443,7 @@ if ($emails > 0)
                 if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
                 $updateid = mysql_insert_id();
 
-                if ($incident_open == "Yes") // Do not translate/i18n fixed string
+                if ($incident_open) // Do not translate/i18n fixed string
                 {
                     // Mark the incident as active
                     $sql = "UPDATE `{$GLOBALS['dbIncidents']}` SET status='1', lastupdated='".time()."', timeofnextaction='0' ";
@@ -451,7 +454,7 @@ if ($emails > 0)
                 else
                 {
                     //create record in tempincoming
-                    if ($incident_open == "No") // Do not translate/i18n fixed string
+                    if (!$incident_open) // Do not translate/i18n fixed string
                     {
                         //incident closed
                         $reason = sprintf($SYSLANG['strIncidentXIsClosed'], $oldincidentid);
@@ -474,8 +477,12 @@ if ($emails > 0)
                     }
                     $holdingemailid = mysql_insert_id();
                 }
-                trigger('TRIGGER_INCIDENT_UPDATED_EXTERNAL', array('incidentid' => $incidentid));
-
+                //Fix for http://bugs.sitracker.org/view.php?id=572, we shouldn't really have
+                //incident ID of 0 here, but apparently we do :/
+                if (FALSE !== incident_status($incidentid))
+                {
+                    trigger('TRIGGER_INCIDENT_UPDATED_EXTERNAL', array('incidentid' => $incidentid));
+                }
             }
             else
             {
