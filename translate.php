@@ -34,9 +34,9 @@ if (!$_REQUEST['mode'])
     echo "<select name='from'>";
     foreach ($i18n_codes AS $langcode => $language)
     {
-        echo "<option value='{$langcode}";
+        echo "<option value='{$langcode}'";
         if ($langcode == 'en-GB') echo " selected = 'selected' ";
-        echo "'>{$langcode} - {$language}</option>\n";
+        echo ">{$langcode} - {$language}</option>\n";
     }
     echo "</select> <strong>{$strTo}</strong>: ";
     echo "<select name='lang'>";
