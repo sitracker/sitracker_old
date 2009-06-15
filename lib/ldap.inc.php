@@ -489,7 +489,7 @@ function authenticateLDAP($username, $password)
 
     // Get user type - if it's not a user then return
     $usertype = ldapGetUserType($username);
-    if( $usertype != LDAP_USERTYPE_USER &&
+    if ( $usertype != LDAP_USERTYPE_USER &&
         $usertype != LDAP_USERTYPE_MANAGER &&
         $usertype != LDAP_USERTYPE_ADMIN ) return 0;
 
@@ -554,7 +554,7 @@ function ldapCreateUser($details)
     setup_user_triggers($newuserid);
     trigger('TRIGGER_NEW_USER', array('userid' => $newuserid));
 
-    journal(4,'User Authenticated',"$username authenticated from ".getenv('REMOTE_ADDR'),1,0);
+    journal(CFG_JOURNAL_SITES,'User Authenticated',"$username authenticated from ".getenv('REMOTE_ADDR'),1,0);
     return 1;
 }
 
@@ -601,7 +601,7 @@ function ldapUpdateUser($details)
 
     $sql  = "UPDATE `{$dbUsers}` SET password='$md5password', realname='$realname', ";
     $sql .= "title='$jobtitle', roleid=$usertype, email='$email', phone='$phone', ";
-    $sql .= "mobile='$mobile', fax='$fax' where username='$username'";
+    $sql .= "mobile='$mobile', fax='$fax' WHERE username='$username'";
 
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
@@ -619,7 +619,7 @@ function getUserDetailsFromDBByEmail($email)
 {
     global $dbUsers;
 
-    $sql = "SELECT * FROM `{$dbUsers}` where email='$email'";
+    $sql = "SELECT * FROM `{$dbUsers}` WHERE email='$email'";
 
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
@@ -638,7 +638,7 @@ function getContactDetailsFromDBByEmail($email)
 {
     global $dbContacts;
 
-    $sql = "SELECT * FROM `{$dbContacts}` where email='$email'";
+    $sql = "SELECT * FROM `{$dbContacts}` WHERE email='$email'";
 
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);

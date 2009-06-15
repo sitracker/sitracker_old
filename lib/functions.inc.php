@@ -119,7 +119,7 @@ function authenticateSQL($username, $password)
 
     // extract user
     $sql  = "SELECT id FROM `{$dbUsers}` ";
-    $sql .= "WHERE username = '$username' AND password = '$password' AND status!= 0 ";
+    $sql .= "WHERE username = '{$username}' AND password = '{$password}' AND status != 0 ";
     // a status of 0 means the user account is disabled
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
@@ -132,7 +132,7 @@ function authenticateSQL($username, $password)
     }
     else
     {
-        journal(4,'User Authenticated',"$username authenticated from ".getenv('REMOTE_ADDR'),1,0);
+        journal(4,'User Authenticated',"{$username} authenticated from " . getenv('REMOTE_ADDR'),1,0);
         return 1;
     }
 }
@@ -1695,7 +1695,7 @@ function incident_lastupdate($id)
     else
     {
         $update = mysql_fetch_array($result);
-        
+
         mysql_free_result($result);
         // Remove Tags from update Body
         $update['body'] = trim($update['body']);

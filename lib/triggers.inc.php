@@ -687,11 +687,11 @@ function trigger_description($triggervar)
     $html .= "</strong><br />\n";
     if (isset($GLOBALS[$triggervar['description']]))
     {
-    	$html .= $GLOBALS[$triggervar['description']];
+        $html .= $GLOBALS[$triggervar['description']];
     }
     else
     {
-    	$html .=  $triggervar['description'];
+        $html .=  $triggervar['description'];
     }
     return $html;
 }
@@ -811,7 +811,7 @@ function check_trigger_exists($id, $userid, $action, $templateid, $rules, $param
     {
         $rtn = TRUE;
     }
-   
+
     return $rtn;
 }
 ?>

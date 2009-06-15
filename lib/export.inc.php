@@ -29,6 +29,8 @@ class feed
 
 /**
   * Return XML for an RSS feed
+  * @author Ivan Lucas
+  * @todo TODO finish this code, the idea is to pass an object which will generate some valid RSS XML
 
 */
 function rss_feed($feedobject)
