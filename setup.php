@@ -230,6 +230,7 @@ function setup_configure()
                 if ($setupvar == 'application_webpath')
                 {
                     $value = dirname( strip_tags( $_SERVER['PHP_SELF'] ) ) . '/';
+                    if ($value == '//') $value = '/';
                 }
             }
 
