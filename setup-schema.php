@@ -1265,7 +1265,7 @@ INSERT INTO `{$dbSoftwareProducts}` VALUES (1,1);
 CREATE TABLE `{$dbSupportContacts}` (
   `maintenanceid` int(11) default NULL,
   `contactid` int(11) default NULL,
-  PRIMARY KEY ( `maintenanceid` , `contactid` ) ;
+  PRIMARY KEY ( `maintenanceid` , `contactid` )
 ) ENGINE=MyISAM;
 
 INSERT INTO `{$dbSupportContacts}` VALUES (1,1);
