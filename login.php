@@ -28,6 +28,8 @@ setcookie(session_name(), session_id(),ini_get("session.cookie_lifetime"), "/");
 $language = $_POST['lang'];
 
 require (APPLICATION_LIBPATH . 'functions.inc.php');
+require (APPLICATION_LIBPATH . 'triggers.inc.php');
+
 populate_syslang();
 // External vars
 $password = md5($_REQUEST['password']);
