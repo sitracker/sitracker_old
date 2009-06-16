@@ -94,9 +94,6 @@ if (get_magic_quotes_gpc())
 //     infinite recursion, so it's dangerous...
 }
 
-
-require (APPLICATION_LIBPATH . 'triggers.inc.php');
-
 /**
     * Authenticate a user with a username/password pair
     * @author Ivan Lucas
@@ -8123,4 +8120,5 @@ if (@ini_get('register_globals') == 1 OR strtolower(@ini_get('register_globals')
     trigger_error('Error: php.ini MUST have register_globals set to off, there are potential security risks involved with leaving it as it is!', E_USER_ERROR);
     die('Stopping SiT now, fix your php and try again.');
 }
+
 ?>
