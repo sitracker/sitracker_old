@@ -13,9 +13,10 @@
 
 
 require ('core.php');
-include (APPLICATION_LIBPATH . 'strings.inc.php');
-require (APPLICATION_LIBPATH . 'functions.inc.php');
+include_once (APPLICATION_LIBPATH . 'strings.inc.php');
+require_once (APPLICATION_LIBPATH . 'functions.inc.php');
 include_once (APPLICATION_LIBPATH . 'billing.inc.php');
+require_once (APPLICATION_LIBPATH . 'triggers.inc.php');
 populate_syslang();
 
 $crlg = "\n";

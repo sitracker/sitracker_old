@@ -12,7 +12,7 @@
 // Note2: to be called from auto.php
 
 require_once ('core.php');
-
+require_once (APPLICATION_LIBPATH . 'triggers.inc.php');
 require (APPLICATION_LIBPATH . 'mime_parser.inc.php');
 require (APPLICATION_LIBPATH . 'rfc822_addresses.inc.php');
 require (APPLICATION_LIBPATH . 'fetchSitMail.class.php');
