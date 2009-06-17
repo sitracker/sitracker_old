@@ -19,7 +19,7 @@ session_name($CONFIG['session_name']);
 session_start();
 require (APPLICATION_LIBPATH . 'strings.inc.php');
 require (APPLICATION_LIBPATH . 'functions.inc.php');
-
+require (APPLICATION_LIBPATH . 'triggers.inc.php');
 $title = $strForgottenDetails;
 
 // External variables
