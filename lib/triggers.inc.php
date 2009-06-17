@@ -15,6 +15,7 @@ if (realpath(__FILE__) == realpath($_SERVER['SCRIPT_FILENAME']))
 {
     exit;
 }
+// This lib is currently included at the end of auth.inc.php
 
 include_once (APPLICATION_LIBPATH . 'incident.inc.php');
 include_once (APPLICATION_LIBPATH . 'billing.inc.php');
