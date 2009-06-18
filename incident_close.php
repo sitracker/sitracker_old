@@ -195,7 +195,17 @@ if (empty($_REQUEST['process']))
     echo "<td>{$strSummaryOfProblem}<br />\n";
     echo "<textarea class='required' id='summary' name='summary' cols='40' rows='8' onfocus=\"if (this.enabled) { this.value = saveValue; ";
     echo "setTimeout('document.articlform.summary.blur()',1); } else saveValue=this.value;\">";
-    echo sla_target_content($id, 'probdef');    
+
+    //  style="display: none;"
+    $sql = "SELECT * FROM `{$dbUpdates}` WHERE incidentid='{$id}' AND type='probdef' ORDER BY timestamp ASC";
+    $result = mysql_query($sql);
+    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
+    while ($row = mysql_fetch_object($result))
+    {
+        $bodytext = str_replace("<hr>", "", $row->bodytext);
+        echo $bodytext;
+        echo "\n\n";
+    }
     echo "</textarea>\n";
     echo "</td></tr>";
 
@@ -216,17 +226,15 @@ if (empty($_REQUEST['process']))
     echo "<input type='checkbox' name='incsolution' onclick=\"if (this.checked) {document.closeform.solution.disabled = false; document.closeform.solution.style.display=''} else { saveValue=document.closeform.solution.value; document.closeform.solution.disabled = true; document.closeform.solution.style.display='none'}\" checked='checked' disabled='disabled' /></th>";
 
     echo "<td><textarea id='solution' name='solution' cols='40' rows='8' onfocus=\"if (this.enabled) { this.value = saveValue; setTimeout('document.articleform.solution.blur()',1); } else saveValue=this.value;\">";
-    $solution = sla_target_content($id, 'solution');
-    $ap = sla_target_content($id, 'actionplan');
-    if ($solution != '')
+    $sql = "SELECT * FROM `{$dbUpdates}` WHERE incidentid='{$id}' AND type='solution' OR type='actionplan' ORDER BY timestamp DESC";
+    $result = mysql_query($sql);
+    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
+    while ($row = mysql_fetch_object($result))
     {
-        echo $solution;
+        $bodytext = str_replace("<hr>", "", $row->bodytext);
+        echo trim($bodytext);
+        echo "\n\n";
     }
-    else
-    {
-        echo $ap;
-    }
-
     echo "</textarea>\n";
     echo "</td></tr>";
 
