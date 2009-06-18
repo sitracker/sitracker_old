@@ -2668,7 +2668,7 @@ CREATE TABLE IF NOT EXISTS `{$dbUserConfig}` (
 ) TYPE=MyISAM COMMENT='User configuration';
 
 -- INL 2009-04-23
-UPDATE `{$dbNoticeTemplates}` SET `link` = '{applicationurl}user_profile_edit.php?mode=savesessionlang' WHERE `noticetemplates`.`id` =4 LIMIT 1 ;
+UPDATE `{$dbNoticeTemplates}` SET `link` = '{applicationurl}user_profile_edit.php?mode=savesessionlang' WHERE `{$dbNoticeTemplates}`.`id` =4 LIMIT 1 ;
 
 -- PH 2009-0425
 ALTER TABLE `{$dbUsers}` CHANGE `id` `id` SMALLINT(6) NOT NULL AUTO_INCREMENT;
