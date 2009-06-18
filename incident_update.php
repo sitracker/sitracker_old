@@ -626,27 +626,16 @@ else
     // Debug
     ## if ($target!='') $bodytext = "Target: $target\n".$bodytext;
 
-//     // Check the updatetype field, if it's blank look at the target
-//     if (empty($updatetype))
-//     {
-//         switch ($target)
-//         {
-//             case 'actionplan': $updatetype='actionplan';  break;
-//             case 'probdef': $updatetype='probdef';  break;
-//             case 'solution': $updatetype='solution';  break;
-//             default: $updatetype='research';  break;
-//         }
-//     }
-
-    if ($target == 'none')
+    // Check the updatetype field, if it's blank look at the target
+    if (empty($updatetype))
     {
-        $target = '';
-        $updatetype = 'research';
-    }
-
-    if (!empty($target))
-    {
-        $updatetype = 'slamet';
+        switch ($target)
+        {
+            case 'actionplan': $updatetype='actionplan';  break;
+            case 'probdef': $updatetype='probdef';  break;
+            case 'solution': $updatetype='solution';  break;
+            default: $updatetype='research';  break;
+        }
     }
 
     // Force reviewmet to be visible
@@ -657,17 +646,15 @@ else
     // visible update
     if ($cust_vis == "yes")
     {
-        $visibility = 'show';
+        $sql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, bodytext, timestamp, currentowner, currentstatus, customervisibility, nextaction) ";
+        $sql .= "VALUES ('$id', '$sit[2]', '$updatetype', '$bodytext', '$now', '{$owner}', '$newstatus', 'show' , '$nextaction')";
     }
     // invisible update
     else
     {
-        $visibility = 'hide';
+        $sql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, bodytext, timestamp, currentowner, currentstatus, nextaction) ";
+        $sql .= "VALUES ($id, $sit[2], '$updatetype', '$bodytext', '$now', '{$owner}', '$newstatus', '$nextaction')";
     }
-
-    $sql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, bodytext, timestamp, currentowner, customervisibility, sla, currentstatus, nextaction) ";
-    $sql .= "VALUES ($id, $sit[2], '$updatetype', '$bodytext', '$now', '{$owner}', '$visibility', '$target', '$newstatus', '$nextaction')";
-    
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     $updateid = mysql_insert_id();
@@ -736,6 +723,35 @@ else
     $sql = "UPDATE `{$dbIncidents}` SET status='$newstatus', priority='$newpriority', lastupdated='$now', timeofnextaction='$timeofnextaction' WHERE id='$id'";
     mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+
+    // Handle meeting of service level targets
+    switch ($target)
+    {
+        case 'none':
+            // do nothing
+            $sql = '';
+        break;
+
+        case 'initialresponse':
+            $sql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, timestamp, currentowner, currentstatus, customervisibility, sla, bodytext) ";
+            $sql .= "VALUES ('$id', '".$sit[2]."', 'slamet', '$now', '{$owner}', '$newstatus', 'show', 'initialresponse','The Initial Response has been made.')";
+        break;
+
+        case 'probdef':
+            $sql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, timestamp, currentowner, currentstatus, customervisibility, sla, bodytext) ";
+            $sql .= "VALUES ('$id', '".$sit[2]."', 'slamet', '$now', '{$owner}', '$newstatus', 'show', 'probdef','The problem has been defined.')";
+        break;
+
+        case 'actionplan':
+            $sql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, timestamp, currentowner, currentstatus, customervisibility, sla, bodytext) ";
+            $sql .= "VALUES ('$id', '".$sit[2]."', 'slamet', '$now', '{$owner}', '$newstatus', 'show', 'actionplan','An action plan has been made.')";
+        break;
+
+        case 'solution':
+            $sql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, timestamp, currentowner, currentstatus, customervisibility, sla, bodytext) ";
+            $sql .= "VALUES ('$id', '".$sit[2]."', 'slamet', '$now', '{$owner}', '$newstatus', 'show', 'solution','The incident has been resolved or reprioritised.\nThe issue should now be brought to a close or a new problem definition created within the service level.')";
+        break;
+    }
 
     if (!empty($sql))
     {
