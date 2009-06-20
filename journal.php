@@ -33,6 +33,7 @@ $sort = cleanvar($_REQUEST['sort']);
 $order = cleanvar($_REQUEST['order']);
 
 if (empty($perpage)) $perpage = 30;
+if (empty($page)) $page = 1;
 
 if (empty($search_string)) $search_string='a';
 
@@ -154,8 +155,11 @@ if ($journal_count >= 1)
         echo " &hellip; <a href='{$_SERVER['PHP_SELF']}?page=$pages'>$pages</a>";
     }
 
-    echo "&nbsp;";
-    echo "<a href='{$_SERVER['PHP_SELF']}?page={$next}'>{$strNext} &gt;</a>";
+    if ($page < $pages)
+    {
+        echo "&nbsp;";
+        echo "<a href='{$_SERVER['PHP_SELF']}?page={$next}'>{$strNext} &gt;</a>";
+    }
     echo "</p>";
 }
 else
