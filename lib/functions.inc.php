@@ -2618,7 +2618,7 @@ function journal($loglevel, $event, $bodytext, $journaltype, $refid)
     {
         $sql  = "INSERT INTO `{$dbJournal}` ";
         $sql .= "(userid, event, bodytext, journaltype, refid) ";
-        $sql .= "VALUES ('".$sit[2]."', '$event', '$bodytext', '$journaltype', '$refid') ";
+        $sql .= "VALUES ('".$_SESSION['userid']."', '$event', '$bodytext', '$journaltype', '$refid') ";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
         return TRUE;
