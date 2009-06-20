@@ -154,6 +154,7 @@ elseif (authenticate($username, $_REQUEST['password']) == 1)
 
 
     $_SESSION['permissions'] = array_unique($userpermissions);
+	journal(CFG_LOGGING_NORMAL, 'Login', "User {$_SESSION['userid']} logged in", CFG_JOURNAL_LOGIN, '');
 
     // redirect
     if (empty($page))
@@ -246,7 +247,7 @@ elseif ($CONFIG['portal'] == TRUE)
         {
             $_SESSION['entitlement'][] = $contract;
         }
-
+		journal(CFG_LOGGING_NORMAL, 'Login', "Portal user ".contact_realname($_SESSION['contactid'])." logged in", CFG_JOURNAL_LOGIN, $_SESSION['contactid']);
         header("Location: portal/");
         exit;
     }
