@@ -16,7 +16,7 @@ require (APPLICATION_LIBPATH . 'functions.inc.php');
 
 session_name($CONFIG['session_name']);
 session_start();
-journal(CFG_LOGGING_NORMAL, 'Logout', "User {$_SESSION['userid']} logged out", CFG_JOURNAL_LOGIN);
+journal(CFG_LOGGING_NORMAL, 'Logout', "User {$_SESSION['userid']} logged out", CFG_JOURNAL_LOGIN, '');
 
 // End the session, remove the cookie and destroy all data registered with the session
 $_SESSION['auth'] = FALSE;
