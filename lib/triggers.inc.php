@@ -200,7 +200,7 @@ function trigger_action($userid, $triggerid, $action, $paramarray, $template)
             {
                 $journalbody = '';
             }
-            $rtnvalue = journal(CFG_LOGGING_NORMAL, $triggerid, "Trigger Fired ({$journalbody})", 11, $userid);
+            $rtnvalue = journal(CFG_LOGGING_NORMAL, $triggerid, "Trigger Fired ({$journalbody})", CFG_JOURNAL_TRIGGERS, $userid);
 
         case "ACTION_NONE":
         //fallthrough

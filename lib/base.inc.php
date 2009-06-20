@@ -34,7 +34,9 @@ define ('CFG_JOURNAL_USER', 7);       // 7 = User Management
 define ('CFG_JOURNAL_MAINTENANCE', 8);  // 8 = Maintenance Contracts
 define ('CFG_JOURNAL_PRODUCTS', 9);
 define ('CFG_JOURNAL_OTHER', 10);
-define ('CFG_JOURNAL_KB', 11);    // Knowledge Base
+define ('CFG_JOURNAL_TRIGGERS', 11);
+define ('CFG_JOURNAL_KB', 12);    // Knowledge Base
+define ('CFG_JOURNAL_TASKS', 13);
 
 define ('TAG_CONTACT', 1);
 define ('TAG_INCIDENT', 2);

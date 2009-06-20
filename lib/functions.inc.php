@@ -129,7 +129,7 @@ function authenticateSQL($username, $password)
     }
     else
     {
-        journal(4,'User Authenticated',"{$username} authenticated from " . getenv('REMOTE_ADDR'),1,0);
+        journal(CFG_LOGGING_MAX,'User Authenticated',"{$username} authenticated from " . getenv('REMOTE_ADDR'),CFG_JOURNAL_LOGIN,0);
         return 1;
     }
 }

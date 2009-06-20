@@ -69,17 +69,21 @@ $sql .= " LIMIT $offset, $perpage ";
 $result = mysql_query($sql);
 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
 
-$journaltype[1] = 'Logon/Logoff';
-$journaltype[2] = 'Support Incidents';
-$journaltype[3] = 'Sales Incidents';  // Obsolete
-$journaltype[4] = 'Sites';
-$journaltype[5] = 'Contacts';
-$journaltype[6] = 'Admin';
-$journaltype[7] = 'User Management';
-$journaltype[8] = 'Maintenance';
-$journaltype[9] = 'Products';
-$journaltype[10] = 'Tasks';
-$journaltype[11] = 'Triggers';
+// FIXME needs i18n
+$journaltype[CFG_JOURNAL_DEBUG] = 'Debug';
+$journaltype[CFG_JOURNAL_LOGIN] = 'Logon/Logoff';
+$journaltype[CFG_JOURNAL_SUPPORT] = 'Support Incidents';
+$journaltype[CFG_JOURNAL_SALES] = 'Sales Incidents';  // Obsolete
+$journaltype[CFG_JOURNAL_SITES] = 'Sites';
+$journaltype[CFG_JOURNAL_CONTACTS] = 'Contacts';
+$journaltype[CFG_JOURNAL_ADMIN] = 'Admin';
+$journaltype[CFG_JOURNAL_USER] = 'User Management';
+$journaltype[CFG_JOURNAL_MAINTENANCE] = 'Maintenance';
+$journaltype[CFG_JOURNAL_PRODUCTS] = 'Products';
+$journaltype[CFG_JOURNAL_OTHER] = 'Other';
+$journaltype[CFG_JOURNAL_TRIGGERS] = 'Triggers';
+$journaltype[CFG_JOURNAL_KB] = 'Knowledge Base';
+$journaltype[CFG_JOURNAL_TASKS] = 'Tasks';
 
 $journal_count = mysql_num_rows($result);
 if ($journal_count >= 1)
