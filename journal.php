@@ -25,19 +25,29 @@ require (APPLICATION_LIBPATH . 'auth.inc.php');
 
 // External variables
 $offset = cleanvar($_REQUEST['offset']);
+$page = cleanvar($_REQUEST['page']);
 $perpage = cleanvar($_REQUEST['perpage']);
 $search_string = cleanvar($_REQUEST['search_string']);
 $type = cleanvar($_REQUEST['type']);
 $sort = cleanvar($_REQUEST['sort']);
 $order = cleanvar($_REQUEST['order']);
 
+if (empty($perpage)) $perpage = 30;
+
 if (empty($search_string)) $search_string='a';
 
 include (APPLICATION_INCPATH . 'htmlheader.inc.php');
 echo "<h2>{$title}</h2>";
 
-if (empty($perpage)) $perpage = 50;
-if ($offset=='') $offset=0;
+
+// Count number of journal records
+$sql = "SELECT COUNT(id) FROM `{$dbJournal}`";
+$result = mysql_query($sql);
+list($totaljournals) = mysql_fetch_row($result);
+if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
+
+if ($offset == '' AND $page > 0) $offset = (($page -1) * $perpage);
+elseif ($offset=='' AND empty($page)) $offset=0;
 
 $sql = "SELECT * FROM `{$dbJournal}` ";
 if (!empty($type)) $sql .= "WHERE journaltype='{$type}' ";
@@ -109,12 +119,42 @@ if ($journal_count >= 1)
         else $shade = 1;
     }
     echo "</table>\n";
-    $prev=$offset-$perpage;
-    $next=$offset+$perpage;
+
+    printf("<p align='center'>{$strXRecords}</p>", $totaljournals);
+    $pages = ceil($totaljournals / $perpage);
+    $numpagelinks = $pages > 10 ? $numpagelinks = 10: $numpagelinks = $pages;
+
     echo "<p align='center'>";
-    if ($prev > 0) echo "<a href='{$_SERVER['PHP_SELF']}?offset={$prev}'>&lt; {$strPrev}</a>";
+
+    if ($page > 3 && $pages > 10) $minpage = $page - 3;
+    else $minpage = ($page - 2);
+    if ($minpage < 1) $minpage = 1;
+    $maxpage = $minpage + $numpagelinks;
+    if ($maxpage > $pages + 1) $maxpage = $pages + 1;
+    if ($minpage >= ($maxpage - $numpagelinks)) $minpage = $maxpage - $numpagelinks;
+
+    $prev = $page - 1;
+    $next = $page + 1;
+
+    if ($page > 1) echo "<a href='{$_SERVER['PHP_SELF']}?page={$prev}'>&lt; {$strPrevious}</a>&nbsp;";
+    if ($minpage > 3)
+    {
+        echo "<a href='{$_SERVER['PHP_SELF']}?page=1'>1</a> &hellip; ";
+    }
+
+    for ($i=$minpage;$i<$maxpage;$i++)
+    {
+        if ($i <> $page) echo "<a href='{$_SERVER['PHP_SELF']}?page={$i}'>$i</a> ";
+        else echo "<strong>{$i}</strong> ";
+    }
+
+    if ($maxpage < ($pages -3))
+    {
+        echo " &hellip; <a href='{$_SERVER['PHP_SELF']}?page=$pages'>$pages</a>";
+    }
+
     echo "&nbsp;";
-    echo "<a href='{$_SERVER['PHP_SELF']}?offset={$next}'>{$strNext} &gt;</a>";
+    echo "<a href='{$_SERVER['PHP_SELF']}?page={$next}'>{$strNext} &gt;</a>";
     echo "</p>";
 }
 else
