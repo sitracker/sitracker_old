@@ -2590,6 +2590,12 @@ function countdaycurrentincidents($day, $month, $year)
 /**
     * Inserts an entry into the Journal table and marks the user online
     * @author Ivan Lucas, Kieran Hogg
+    * @param int $loglevel The log level required for this event to be logged
+    * @param string $event Text title for the event
+    * @param string $bodytext Text describing the event in detail
+    * @param int $journaltype One of the defined journal types
+    * @param int $refid An ID to relate to data, the table this ID is for
+                 depends on the journal type used
     * @retval TRUE success, entry logged
     * @retval FALSE failure. entry not logged
     * @note Produces an audit log
