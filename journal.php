@@ -85,6 +85,7 @@ if ($journal_count >= 1)
 {
     echo "<table align='center'>";
     echo "<tr>";
+    $filter = array('page' => $page);
     echo colheader('userid',$strUser,$sort, $order, $filter);
     echo colheader('timestamp',"{$strTime}/{$strDate}",$sort, $order, $filter);
     echo colheader('event',$strEvent);

@@ -202,10 +202,20 @@ function percent_bar($percent)
     return $html;
 }
 
-
-// Return HTML for a table column header (th and /th) with links for sorting
-// Filter parameter can be an assocative array containing fieldnames and values
-// to pass on the url for data filtering purposes
+/**
+  * Return HTML for a table column header (th and /th) with links for sorting
+  * Filter parameter can be an assocative array containing fieldnames and values
+  * to pass on the url for data filtering purposes
+  * @author Ivan Lucas
+  * @param string $colname. Column name
+  * @param string $coltitle. Column title (to display in the table header)
+  * @param bool $sort Whether to sort the column
+  * @param string $order ASC or DESC
+  * @param array $filter assoc. array of variables to pass on the link url
+  * @param string $defaultorder The order to display by default (a = ASC, d = DESC)
+  * @param string $width cell width
+  * @returns string HTML
+*/
 function colheader($colname, $coltitle, $sort = FALSE, $order='', $filter='', $defaultorder='a', $width='')
 {
     global $CONFIG;
