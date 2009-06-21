@@ -34,6 +34,7 @@ if (sizeof($_SESSION['entitlement']) >= 1)
     $shade = 'shade1';
     foreach ($_SESSION['entitlement'] AS $contract)
     {
+        $contract = unserialize($contract);
         echo "<tr class='$shade'>";
         echo "<td>";
         // Only show link to contract details if the contract belongs to our site

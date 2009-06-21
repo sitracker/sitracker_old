@@ -137,7 +137,7 @@ if (!$CONFIG['portal_creates_incidents'])
 elseif (sizeof($_SESSION['entitlement']) == 1)
 {
     //only one contract
-    $contractid = $_SESSION['entitlement'][0]->id;
+    $contractid = unserialize($_SESSION['entitlement'][0])->id;
     echo "<a href='add.php?contractid={$contractid}'>";
 }
 else

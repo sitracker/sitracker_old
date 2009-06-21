@@ -244,7 +244,7 @@ elseif ($CONFIG['portal'] == TRUE)
         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
         while ($contract = mysql_fetch_object($contractresult))
         {
-            $_SESSION['entitlement'][] = $contract;
+            $_SESSION['entitlement'][] = serialize($contract);
         }
         header("Location: portal/");
         exit;
