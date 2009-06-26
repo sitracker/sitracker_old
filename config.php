@@ -28,7 +28,7 @@ $action = cleanvar($_REQUEST['action']);
 
 require(APPLICATION_LIBPATH . 'configvars.inc.php');
 
-if ($action == 'save' AND $CONFIG['demo'] === FALSE)
+if ($action == 'save' AND ($CONFIG['demo'] !== TRUE OR $_SESSION['userid'] == 1)
 {
     if (!empty($selcat))
     {
@@ -146,7 +146,7 @@ echo "</fieldset>";
 echo "<input type='hidden' name='cat' value='{$selcat}' />";
 echo "<input type='hidden' name='tab' value='{$seltab}' />";
 echo "<input type='hidden' name='action' value='save' />";
-if ($CONFIG['demo'] !== TRUE)
+if ($CONFIG['demo'] !== TRUE OR $_SESSION['userid'] == 1)
 {
     echo "<p><input type='reset' value=\"{$strReset}\" /> ";
     echo "<input type='submit' value=\"{$strSave}\" />";
