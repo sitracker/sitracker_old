@@ -28,7 +28,7 @@ $action = cleanvar($_REQUEST['action']);
 
 require(APPLICATION_LIBPATH . 'configvars.inc.php');
 
-if ($action == 'save' AND ($CONFIG['demo'] !== TRUE OR $_SESSION['userid'] == 1)
+if ($action == 'save' AND ($CONFIG['demo'] !== TRUE OR $_SESSION['userid'] == 1))
 {
     if (!empty($selcat))
     {
