@@ -139,7 +139,7 @@ $CFGCAT['journal'] = array('journal_loglevel', 'journal_purge_after');
 
 $CFGCAT['other'] = array('debug', 'error_logfile',
                         'support_manager', 'tasks_enabled', 'timesheets_enabled',
-                          'demo', 'bugtracker_url',
+                          'bugtracker_url',
                           'changelogfile','creditsfile',
                           'licensefile',
                           'session_name',
