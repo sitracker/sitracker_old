@@ -226,7 +226,7 @@ if (empty($_REQUEST['process']))
     echo "<input type='checkbox' name='incsolution' onclick=\"if (this.checked) {document.closeform.solution.disabled = false; document.closeform.solution.style.display=''} else { saveValue=document.closeform.solution.value; document.closeform.solution.disabled = true; document.closeform.solution.style.display='none'}\" checked='checked' disabled='disabled' /></th>";
 
     echo "<td><textarea id='solution' name='solution' cols='40' rows='8' onfocus=\"if (this.enabled) { this.value = saveValue; setTimeout('document.articleform.solution.blur()',1); } else saveValue=this.value;\">";
-    $sql = "SELECT * FROM `{$dbUpdates}` WHERE incidentid='{$id}' AND type='solution' OR type='actionplan' ORDER BY timestamp DESC";
+    $sql = "SELECT * FROM `{$dbUpdates}` WHERE incidentid='{$id}' AND (type='solution' OR type='actionplan') ORDER BY timestamp DESC";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
     while ($row = mysql_fetch_object($result))
