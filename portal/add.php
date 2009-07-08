@@ -12,6 +12,8 @@
 
 require ('..'.DIRECTORY_SEPARATOR.'core.php');
 require (APPLICATION_LIBPATH . 'functions.inc.php');
+require (APPLICATION_LIBPATH . 'incident.inc.php');
+require (APPLICATION_LIBPATH . 'triggers.inc.php');
 
 $accesslevel = 'any';
 
