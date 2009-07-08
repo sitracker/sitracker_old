@@ -148,7 +148,8 @@ if ($_SESSION['portalauth'] == TRUE OR ($_SERVER['PHP_SELF'] != 'kb.php'
     echo "<li><a href='index.php'>{$strIncidents}</a></li>";
     if (sizeof($_SESSION['entitlement']) == 1 OR !$CONFIG['portal_creates_incidents'])
     {
-        $contractid = $_SESSION['entitlement'][0]->id;
+		// This is needed so the code will unserialize
+        $contractid = unserialize($_SESSION['entitlement'][0])->id;
         echo "<li><a href='add.php";
         if ($CONFIG['portal_creates_incidents'])
         {
