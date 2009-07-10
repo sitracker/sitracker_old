@@ -177,6 +177,7 @@ CREATE TABLE `{$dbContacts}` (
   `createdby` smallint(6) default NULL,
   `modified` datetime default NULL,
   `modifiedby` smallint(6) default NULL,
+  `user_source` varchar(32) NOT NULL default 'sit',
   PRIMARY KEY  (`id`),
   KEY `siteid` (`siteid`),
   KEY `username` (`username`),
@@ -1508,6 +1509,7 @@ CREATE TABLE `{$dbUsers}` (
   `qualifications` tinytext,
   `dashboard` varchar(255) NOT NULL default '0-3,1-1,1-2,2-4',
   `lastseen` DATETIME NOT NULL,
+  `user_source` varchar(32) NOT NULL default 'sit',
   PRIMARY KEY  (`id`),
   KEY `username` (`username`),
   KEY `accepting` (`accepting`),
@@ -2738,6 +2740,10 @@ ALTER TABLE `{$dbTriggers}` ADD `defined` ENUM( 'custom', 'built-in' ) NOT NULL 
 UPDATE TABLE `{$dbTriggers}` SET `type` = 'built-in' WHERE id < 35 ;
 UPDATE TABLE `{$dbNoticeTemplates}` SET `description` = 'strNoticeMinsHeldEmailDesc', `text` = 'strNoticeMinsHeldEmail' WHERE `name` = 'NOTICE_MINS_HELD_EMAIL' AND `description` = 'strNoticeNewUserDesc' AND `text` = 'strNoticeNewUser' ;i
 UPDATE `{$dbEmailTemplates}` SET `type` = 'system' WHERE id < 28 AND id > 1 AND type != 'incident' ;
+        
+-- PH 2009-06-28
+ALTER TABLE `{$dbUsers}` ADD `user_source` VARCHAR( 32 ) NOT NULL DEFAULT 'sit';
+ALTER TABLE `{$dbContact}` ADD `contact_source` VARCHAR( 32 ) NOT NULL DEFAULT 'sit';
 ";
 
 // Important: When making changes to the schema you must add SQL to make the alterations

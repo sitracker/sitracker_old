@@ -603,6 +603,7 @@ function user_online_icon($user)
     global $iconset, $now, $dbUsers, $strOffline, $strOnline, $startofsession;
     $sql = "SELECT lastseen FROM `{$dbUsers}` WHERE id={$user}";
     $result = mysql_query($sql);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     $users = mysql_fetch_object($result);
     if (mysql2date($users->lastseen) > $startofsession)
     {
@@ -626,6 +627,7 @@ function user_online($user)
     global $iconset, $now, $dbUsers, $startofsession;
     $sql = "SELECT lastseen FROM `{$dbUsers}` WHERE id={$user}";
     $result = mysql_query($sql);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     $users = mysql_fetch_object($result);
     if (mysql2date($users->lastseen) > $startofsession)
     {
@@ -669,6 +671,5 @@ function user_status_name($userid)
     $status = db_read_column('name', $GLOBALS['dbUserStatus'], $userid);
     return $GLOBALS[$status];
 }
-
 
 ?>

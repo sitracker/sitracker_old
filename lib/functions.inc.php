@@ -94,6 +94,7 @@ if (get_magic_quotes_gpc())
 //     infinite recursion, so it's dangerous...
 }
 
+
 /**
     * Authenticate a user with a username/password pair
     * @author Ivan Lucas
@@ -141,33 +142,146 @@ function authenticateSQL($username, $password)
     * @param string $username. Username
     * @param string $password. Password
     * @return an integer to indicate whether the user authenticated against any authentication backends
-    * @retval int 0 the credentials were wrong or the user was not found.
-    * @retval int 1 to indicate user is authenticated and allowed to continue.
+    * @retval bool false the credentials were wrong or the user was not found.
+    * @retval bool true to indicate user is authenticated and allowed to continue.
 */
 function authenticate($username, $password)
 {
-    global $CONFIG, $dbUsers;
-    $use_ldap = $CONFIG['use_ldap'];
-
-    // SQL Auth
-    if (authenticateSQL($username, $password) == 1)
+    global $CONFIG;
+    $toReturn = false;
+    
+    $sql = "SELECT id, password, status, user_source FROM `{$GLOBALS['dbUsers']}` WHERE username = '{$username}'";
+    $result = mysql_query($sql);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+    if (mysql_num_rows($result) == 1)
     {
-        if ($use_ldap)
+    	// Exist in SiT DB
+        $obj = mysql_fetch_object($result);
+        if ($obj->user_source == 'sit')
         {
-            ldapSyncUser($username, $password);
+        	if (md5($password) == $obj->password AND $obj->status != 0) $toReturn = true;
+            else $toReturn = false;
         }
-        return 1;
+        elseif ($obj->user_source == 'ldap')
+        {
+        	// Auth against LDAP and sync
+            $toReturn =  authenticateLDAP($username, $password, $obj->id);
+            if ($toReturn == -1)
+            {
+            	// Communication with LDAP server failed
+                if ($CONFIG['ldap_allow_cached_password'])
+                {
+                    // Use cached password
+                	if (md5($password) == $obj->password AND $obj->status != 0) $toReturn = true;
+                    else $toReturn = false;
+                }
+                else
+                {
+                    $toReturn = false;
+                }
+            }
+            else
+            {
+                $toReturn = false;
+            }
+        }
     }
-
-    // LDAP Auth
-    if ($use_ldap)
+    elseif (mysql_num_rows($result) > 1)
     {
-        return authenticateLDAP($username, $password);
+    	// Multiple this should NEVER happen
+        trigger_error($GLOBALS['strUsernameNotUnique'], E_USER_ERROR);
+        $toReturn = false;
     }
-
-    return 0;
+    else
+    {
+    	// Don't exist, check LDAP etc
+        if ($CONFIG['use_ldap'])
+        {
+            $toReturn =  authenticateLDAP($username, $password);
+        }
+    }
+    
+    if ($toReturn)
+    {
+    	journal(CFG_LOGGING_MAX,'User Authenticated',"{$username} authenticated from " . getenv('REMOTE_ADDR'),CFG_JOURNAL_LOGIN,0);
+    }
+    
+    debug_log ("authenticate returning {$toReturn}");
+    return $toReturn;
 }
 
+
+function authenticateContact($username, $password)
+{
+    debug_log ("authenticateContact called");
+	global $CONFIG;
+    $toReturn = false;
+    
+    $sql = "SELECT id, password, contact_source, active FROM `{$GLOBALS['dbContacts']}` WHERE username = '{$username}'";
+    $result = mysql_query($sql);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+    if (mysql_num_rows($result) == 1)
+    {
+        debug_log ("Just one in db");
+        // Exists in SiT DB
+        $obj = mysql_fetch_object($result);
+        if ($obj->contact_source == 'sit')
+        {
+            if ((md5($password) == $obj->password OR $password == $obj->password) AND $obj->active == 'true') $toReturn = true;
+            else $toReturn = false;
+        }
+        elseif ($obj->contact_source == 'ldap')
+        {
+            // Auth against LDAP and sync
+            $toReturn =  authenticateLDAP($username, $password, $obj->id, false);
+            
+            if ($toReturn == -1)
+            {
+                // Communication with LDAP server failed
+                if ($CONFIG['ldap_allow_cached_password'])
+                {
+                    debug_log ("LDAP connection failed, using cached password");
+                    // Use cached password
+                    if ((md5($password) == $obj->password OR $password == $obj->password) AND $obj->active == 'true') $toReturn = true;
+                    else $toReturn = false;
+                    debug_log ("Cached contact {$toReturn} {$password}");
+                    
+                }
+                else
+                {
+                	$toReturn = false;
+                }
+            }
+            else
+            {
+            	$toReturn = false;
+            }
+        }
+        else
+        {
+        	debug_log ("Source SOMETHING ELSE this shouldn't happen'");
+        }
+    }
+    elseif (mysql_num_rows($result) > 1)
+    {
+        debug_log ("Multiple");
+        // Multiple this should NEVER happen
+        trigger_error($GLOBALS['strUsernameNotUnique'], E_USER_ERROR);
+        $toReturn = false;
+    }
+    else
+    {
+        debug_log ("non in db");
+        // Don't exist, check LDAP etc
+        if ($CONFIG['use_ldap'])
+        {
+            $toReturn =  authenticateLDAP($username, $password, 0, false);
+        }
+    }
+    
+    debug_log ("authenticateContact returning {$toReturn}");
+    return $toReturn;
+}
 
 /**
     * See if a customer exists in the database

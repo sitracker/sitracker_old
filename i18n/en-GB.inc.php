@@ -1681,6 +1681,7 @@ $strUsedNofNDaysEntitlement = 'Used %s of %s days entitlement';
 $strUser = 'User';
 $strUserGroups = 'User Groups';
 $strUsername = 'Username';
+$strUsernameNotUnique = 'Username must be unique';
 $strUsers = 'Users';
 $strUserChangedStatus = 'User Changed Status';
 # User Permission 3 - Edit existing site details

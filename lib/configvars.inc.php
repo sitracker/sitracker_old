@@ -107,25 +107,22 @@ $CFGCAT['feedback'] = array('feedback_enabled',
                             'no_feedback_contracts');
 
 $CFGCAT['ldap'] = array('use_ldap',
+                        'ldap_type',
                         'ldap_host',
+                        'ldap_port',
                         'ldap_protocol',
                         'ldap_bind_user',
                         'ldap_bind_pass',
                         'ldap_use_tls',
                         'ldap_dn_base',
-                        'ldap_user_attr',
-                        'ldap_attr_map',
                         'ldap_default_user_status',
-                        'ldap_user_group',
-                        'ldap_user_group_attr',
                         'ldap_admin_group',
-                        'ldap_admin_group_attr',
                         'ldap_manager_group',
-                        'ldap_manager_group_attr',
+                        'ldap_user_group',
                         'ldap_customer_group',
-                        'ldap_customer_group_attr',
                         'ldap_default_customer_siteid',
-                        'ldap_autocreate_customer');
+                        'ldap_autocreate_customer',
+                        'ldap_allow_cached_password');
 
 $CFGCAT['soap'] = array('soap_enabled',
                          'soap_portal_enabled');
@@ -417,8 +414,6 @@ $CFGVAR['kb_id_prefix']['title'] = 'Knowledgebase ID prefix';
 
 $CFGVAR['ldap_admin_group']['title'] = 'LDAP group for SIT admins';
 
-$CFGVAR['ldap_admin_group_attr']['title'] = 'LDAP group attribute for SIT admins';
-
 $CFGVAR['ldap_attr_map']['title'] = 'LDAP Attribute Map';
 $CFGVAR['ldap_attr_map']['help'] = 'Mapping between SIT and LDAP attributes. Do not change the keys, only change the values. Valid key values are: realname, forenames, jobtitle, email, mobile, fax, phone';
 $CFGVAR['ldap_attr_map']['type'] = '2darray';
@@ -428,6 +423,11 @@ $CFGVAR['ldap_autocreate_customer']['title'] = 'Auto create customer';
 $CFGVAR['ldap_autocreate_customer']['help'] = 'This attempts to create the customer record automatically using LDAP when creating an incident from an email in the holding queue.';
 $CFGVAR['ldap_autocreate_customer']['options'] = 'TRUE|FALSE';
 $CFGVAR['ldap_autocreate_customer']['type'] = 'select';
+
+$CFGVAR['ldap_allow_cached_password']['title'] = 'Allow use of cached passwords';
+$CFGVAR['ldap_allow_cached_password']['help'] = 'This allows use of cached passwords in SiT for authentication if communication with the LDAP server fails.';
+$CFGVAR['ldap_allow_cached_password']['options'] = 'TRUE|FALSE';
+$CFGVAR['ldap_allow_cached_password']['type'] = 'select';
 
 $CFGVAR['ldap_bind_user']['title'] = 'LDAP Bind user';
 $CFGVAR['ldap_bind_user']['help'] = 'The user for binding to the LDAP host';
@@ -454,9 +454,12 @@ $CFGVAR['ldap_dn_base']['help'] = 'The LDAP Base DN for user lookups';
 $CFGVAR['ldap_host']['title'] = 'LDAP Host Name';
 $CFGVAR['ldap_host']['help'] = "This should be your <abbr title='Lightweight Directory Access Protocol'>LDAP</abbr> IP address or hostname, e.g.: ldap.example.com";
 
-$CFGVAR['ldap_manager_group']['title'] = 'LDAP group for SIT admins';
+$CFGVAR['ldap_type']['title'] = 'LDAP Type';
+$CFGVAR['ldap_type']['help'] = "The type of LDAP server you are using";
+$CFGVAR['ldap_type']['type'] = 'select';
+$CFGVAR['ldap_type']['options'] = 'EDIR|AD|OPENLDAP|CUSTOM';
 
-$CFGVAR['ldap_manager_group_attr']['title'] = 'LDAP group attribute for SIT admins';
+$CFGVAR['ldap_manager_group']['title'] = 'LDAP group for SIT managers';
 
 $CFGVAR['ldap_protocol']['title'] = 'LDAP Protocol version';
 $CFGVAR['ldap_protocol']['type'] = 'select';
@@ -467,12 +470,7 @@ $CFGVAR['ldap_use_tls']['help'] = 'Use Transport Layer Security. TRUE = start TL
 $CFGVAR['ldap_use_tls']['options'] = 'TRUE|FALSE';
 $CFGVAR['ldap_use_tls']['type'] = 'select';
 
-$CFGVAR['ldap_user_attr']['title'] = 'LDAP User attribute';
-$CFGVAR['ldap_user_attr']['help'] = 'The LDAP user attribute';
-
 $CFGVAR['ldap_user_group']['title'] = 'LDAP group for SIT users';
-
-$CFGVAR['ldap_user_group_attr']['title'] = 'LDAP group attribute for SIT users';
 
 $CFGVAR['licensefile']['title'] = 'Path to the License file';
 

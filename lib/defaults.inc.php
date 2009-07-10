@@ -299,35 +299,21 @@ $CONFIG['ldap_use_tls'] = FALSE;
 // The LDAP Base DN for user lookups
 $CONFIG['ldap_dn_base'] = "ou=Users,dc=example,dc=com";
 
-// The LDAP user attribute
-$CONFIG['ldap_user_attr'] = "uid";
-
-// Mapping between SIT and ldap attributes. Do not change the keys only the values.
-// Valid key values are: realname, forenames, jobtitle, email, mobile, fax, phone
-
-$CONFIG['ldap_attr_map'] = array("realname" => "cn", "jobtitle" => "title",
-                                 "email" => "mail", "phone" => "phone",
-                                 "forenames" => "givenname", "surname" => "surname");
-
 // Default user values
 // LDAP user status (1 = In Office)
 $CONFIG['ldap_default_user_status'] = 1;
 
 // LDAP group for SIT users
 $CONFIG["ldap_user_group"] = "cn=situsers,ou=Groups,dc=example,dc=com";
-$CONFIG["ldap_user_group_attr"] = "memberUid";
 
 // LDAP group for SIT admins
 $CONFIG["ldap_admin_group"] = "cn=sitadmins,ou=Groups,dc=example,dc=com";
-$CONFIG["ldap_admin_group_attr"] = "memberUid";
 
 // LDAP group for SIT managers
 $CONFIG["ldap_manager_group"] = "cn=sitmanagers,ou=Groups,dc=example,dc=com";
-$CONFIG["ldap_manager_group_attr"] = "memberUid";
 
 // Customer Group and default role
 $CONFIG["ldap_customer_group"] = "cn=sitcustomers,ou=Groups,dc=example,dc=com";
-$CONFIG["ldap_customer_group_attr"] = "memberUid";
 
 // Default Customer values
 // 1 is the example site in the default install
@@ -336,6 +322,10 @@ $CONFIG["ldap_default_customer_siteid"] = 1;
 // This attempts to create the customer record automatically using LDAP
 // when creating an incident from an email in the holding queue.
 $CONFIG["ldap_autocreate_customer"] = TRUE;
+
+// Whether to allow authentication against stored password if unable to 
+// connect to LDAP server
+$CONFIG["ldap_allow_cached_password"] = FALSE;
 
 // If true, portal users create incidents, if FALSE, they just create emails
 $CONFIG['portal_creates_incidents'] = TRUE;

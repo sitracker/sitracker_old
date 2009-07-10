@@ -32,7 +32,7 @@ require (APPLICATION_LIBPATH . 'triggers.inc.php');
 
 populate_syslang();
 // External vars
-$password = md5($_REQUEST['password']);
+$password = $_REQUEST['password'];
 $username = cleanvar($_REQUEST['username']);
 $public_browser = cleanvar($_REQUEST['public_browser']);
 $page = strip_tags(str_replace('..','',str_replace('//','',str_replace(':','',urldecode($_REQUEST['page'])))));
@@ -57,7 +57,7 @@ elseif (authenticate($username, $_REQUEST['password']) == 1)
     $password = md5($_REQUEST['password']);
 
     // Retrieve users profile
-    $sql = "SELECT * FROM `{$dbUsers}` WHERE username='$username' AND password='$password' LIMIT 1";
+    $sql = "SELECT * FROM `{$dbUsers}` WHERE username='{$username}' AND password='{$password}' LIMIT 1";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(), E_USER_WARNING);
     if (mysql_num_rows($result) < 1)
@@ -171,23 +171,23 @@ elseif ($CONFIG['portal'] == TRUE)
 {
     // Invalid user and portal enabled
 
-    // Have a look if this is a contact trying to login
-    $portalpassword = cleanvar($_REQUEST['password']);
-
-    // Have a look if this is a contact trying to login via ldap
-    if ($CONFIG['use_ldap']) authenticateLDAPCustomer($username, $portalpassword );
-
-    //we need plaintext and md5 as contacts created pre 3.35 will be in plaintext
-    $sql = "SELECT * FROM `{$dbContacts}` WHERE username='{$username}' AND (password='{$portalpassword}' OR password=MD5('{$portalpassword}')) LIMIT 1";
-    $result = mysql_query($sql);
-    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
-    if (mysql_num_rows($result) >= 1)
+    if (authenticateContact($username, $password))
     {
+        debug_log("PORTAL AUTH SUCESSFUL");
+        $_SESSION['portalauth'] = TRUE;
+        
+        $sql = "SELECT * FROM `{$dbContacts}` WHERE username = '{$username}'";
+        $result = mysql_query($sql);
+        if (mysql_error()) trigger_error(mysql_error(), E_USER_WARNING);
+        if (mysql_num_rows($result) < 1)
+        {
+            $_SESSION['portalauth'] = FALSE;
+            trigger_error("No such user", E_USER_ERROR);
+        }
         $contact = mysql_fetch_object($result);
 
         // Customer session
         // Valid user
-        $_SESSION['portalauth'] = TRUE;
         $_SESSION['contactid'] = $contact->id;
         $_SESSION['siteid'] = $contact->siteid;
         $_SESSION['style'] = $CONFIG['portal_interface_style'];

@@ -693,6 +693,20 @@ elseif ($action == 'assign')
                 $servicelevel = $CONFIG['default_service_level'];
             }
 
+            if ($CONFIG['use_ldap'])
+            {
+                // Attempt to update contact
+                $sql = "SELECT username, contact_source FROM `{$GLOBALS['dbContacts']}` WHERE id = {$contactid}";
+                $result = mysql_query($sql);
+                if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+                $obj = mysql_fetch_object($result);
+                if ($obj->contact_source == 'ldap')
+                {
+                	//function authenticateLDAP($username, $password, $id = 0, $user=TRUE, $populateOnly=FALSE, $searchOnEmail=FALSE)
+                    authenticateLDAP($obj->username, '', $contactid, false, true, false);
+                }
+            }
+
             // Check the service level priorities, look for the highest possible and reduce the chosen priority if needed
             $sql = "SELECT priority FROM `{$dbServiceLevels}` WHERE tag='$servicelevel' ORDER BY priority DESC LIMIT 1";
             $result = mysql_query($sql);
