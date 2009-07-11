@@ -75,9 +75,9 @@ if (isset($_POST['submit']))
     foreach ($sections AS $section)
     {
         $sectionvar = strtolower($section);
-		$sectionvar = str_replace(" ", "", $sectionvar);
+        $sectionvar = str_replace(" ", "", $sectionvar);
         $sectionid = $_POST["{$sectionvar}id"];
-        $content = cleanvar($_POST[$sectionvar]);
+        $content = cleanvar($_POST[$sectionvar], FALSE, TRUE);
         if ($_POST["{$sectionvar}id"] > 0)
         {
             if (!empty($content))
