@@ -257,4 +257,27 @@ function quote_message($message)
     return $message;
 }
 
+/**
+  * Encode email subject
+  * @author Ivan Lucas
+*/
+function encode_email_subject($subject, $charset)
+{
+    $encoded_subject = '';
+    if ($subject && $charset)
+    {
+        $end = "?=";
+        $start = "=?" . $charset . "?B?";
+        $spacer = $end . "\r\n " . $start;
+        $len = floor((75 - strlen($start) - strlen($end))/2) * 2;
+        $encoded_subject = base64_encode($subject);
+        $encoded_subject = chunk_split($encoded_subject, $len, $spacer);
+        $spacer = preg_quote($spacer);
+        $encoded_subject = preg_replace("/" . $spacer . "$/", "", $encoded_subject);
+        $encoded_subject = $start . $encoded_subject . $end;
+    }
+    return $encoded_subject;
+}
+
+
 ?>

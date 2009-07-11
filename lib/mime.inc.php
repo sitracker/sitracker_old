@@ -1,4 +1,5 @@
 <?php
+// MIME class for sending email
 // This script was on the Internet as MIME.def and MIME.class and is assumed to be in the public domain
 
 // Prevent script from being run directly (ie. it must always be included
@@ -73,7 +74,8 @@ if (realpath(__FILE__) == realpath($_SERVER['SCRIPT_FILENAME']))
  function MIME_mail($from= '', $to= '', $subject= '', $body= '', $headers = '') {
     $this->to = $to;
     $this->from = $from;
-    $this->subject = $subject;
+    // $this->subject = $subject;
+    $this->subject = encode_email_subject($subject, 'UTF-8');
     $this->body = $body;
     if (is_array($headers)) {
         if (sizeof($headers)>1)
@@ -252,9 +254,7 @@ if (realpath(__FILE__) == realpath($_SERVER['SCRIPT_FILENAME']))
     }
     return mail($this->to, $this->subject, "", $email);
  }
-} // Class End
-
-
+} 
 
 
 ?>
