@@ -78,6 +78,7 @@ elseif (authenticate($username, $_REQUEST['password']) == 1)
     $_SESSION['groupid'] = is_null($user->groupid) ? 0 : $user->groupid;
     $_SESSION['utcoffset'] = is_null($user->var_utc_offset) ? 0 : $user->var_utc_offset;
     $_SESSION['portalauth'] = FALSE;
+    $_SESSION['user_source'] = $user->user_source;
     if (!is_null($_SESSION['startdate'])) $_SESSION['startdate'] = $user->user_startdate;
 
 
@@ -193,6 +194,7 @@ elseif ($CONFIG['portal'] == TRUE)
         $_SESSION['style'] = $CONFIG['portal_interface_style'];
         $_SESSION['contracts'] = array();
         $_SESSION['auth'] = FALSE;
+        $_SESSION['contact_source'] = $contact->contact_source;
 
         //get admin contracts
         if (admin_contact_contracts($_SESSION['contactid'], $_SESSION['siteid']) != NULL)

@@ -48,10 +48,6 @@ else
     $id = $_SESSION['contactid'];
 }
 
-// External variables
-$using_ldap = $CONFIG["use_ldap"];
-$attrmap = $CONFIG['ldap_attr_map'];
-
 if (!empty($_SESSION['formerrors']['portalcontactdetails']))
 {
     echo $_SESSION['formerrors']['portalcontactdetails'];
@@ -184,7 +180,7 @@ else
     echo "<form action='$_SERVER[PHP_SELF]?action=update' method='post'>";
     echo "<table align='center' class='vertical'>";
 
-    if ($CONFIG['portal_usernames_can_be_changed'] && !$using_ldap )
+    if ($CONFIG['portal_usernames_can_be_changed'] && $_SESSION['contact_source'] != 'sit' )
     {
         echo "<tr><th>{$strUsername}</th><td>";
         echo "<input class='required' name='username' value='{$user->username}' />";
@@ -195,7 +191,7 @@ else
     echo "<tr><th>{$strForenames}</th><td>";
 
 
-    if ( $using_ldap && array_key_exists("forenames",$attrmap) )
+    if ($_SESSION['contact_source'] != 'sit' AND !empty($CONFIG['ldap_forenames']))
     {
         echo "<input type='hidden' name='forenames' value='{$user->forenames}' />".$user->forenames;
     }
@@ -206,7 +202,7 @@ else
     }
     echo "</td></tr>\n";
     echo "<tr><th>{$strSurname}</th><td>";
-    if ( $using_ldap && array_key_exists("surname",$attrmap) )
+    if ($_SESSION['contact_source'] != 'sit' AND !empty($CONFIG['ldap_surname']))
     {
         echo "<input type='hidden'  name='surname' value='{$user->surname}' />".$user->surname;
     }
@@ -223,7 +219,7 @@ else
     echo "<tr><th>{$strCountry}</th><td><input name='country' value='{$user->country}' /></td></tr>\n";
     echo "<tr><th>{$strPostcode}</th><td><input name='postcode' value='{$user->postcode}' /></td></tr>\n";
     echo "<tr><th>{$strTelephone}</th><td>";
-    if ( $using_ldap && array_key_exists("phone",$attrmap) )
+    if ($_SESSION['contact_source'] != 'sit' AND !empty($CONFIG['ldap_telephone']))
     {
         echo "<input type='hidden' name='phone' value='{$user->phone}' />".$user->phone;
     }
@@ -234,7 +230,7 @@ else
     }
     echo "</td></tr>\n";
     echo "<tr><th>{$strMobile}</th><td>";
-    if ( $using_ldap && array_key_exists("mobile",$attrmap) )
+    if ($_SESSION['contact_source'] != 'sit' AND !empty($CONFIG['ldap_mobile']))
     {
         echo "<input type='hidden' name='mobile' value='{$user->mobile}' />".$user->mobile;
     }
@@ -244,7 +240,7 @@ else
     }
     echo "</td></tr>\n";
     echo "<tr><th>{$strFax}</th><td>";
-    if ( $using_ldap && array_key_exists("fax",$attrmap) )
+    if ($_SESSION['contact_source'] != 'sit' AND !empty($CONFIG['ldap_fax']))
     {
         echo "<input type='hidden' name='fax' value='{$user->fax}' />".$user->fax;
     }
@@ -254,7 +250,7 @@ else
     }
 
     echo "<tr><th>{$strEmail}</th><td>";
-    if ( $using_ldap && array_key_exists("email",$attrmap) )
+    if ($_SESSION['contact_source'] != 'sit' AND !empty($CONFIG['ldap_email']))
     {
         echo "<input type='hidden' name='email' value='{$user->email}' />$user->email";
     }
@@ -265,7 +261,7 @@ else
     }
     echo "</td></tr>\n";
 
-    if ( !$using_ldap )
+    if ( $_SESSION['contact_source'] != 'sit' )
     {
         echo "<tr><th>{$strNewPassword}</th><td><input name='newpassword' value='' type='password' /></td></tr>\n";
         echo "<tr><th>{$strRepeat}</th><td><input name='newpassword2' value='' type='password' /></td></tr>\n";

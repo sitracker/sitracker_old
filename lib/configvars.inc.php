@@ -414,11 +414,6 @@ $CFGVAR['kb_id_prefix']['title'] = 'Knowledgebase ID prefix';
 
 $CFGVAR['ldap_admin_group']['title'] = 'LDAP group for SIT admins';
 
-$CFGVAR['ldap_attr_map']['title'] = 'LDAP Attribute Map';
-$CFGVAR['ldap_attr_map']['help'] = 'Mapping between SIT and LDAP attributes. Do not change the keys, only change the values. Valid key values are: realname, forenames, jobtitle, email, mobile, fax, phone';
-$CFGVAR['ldap_attr_map']['type'] = '2darray';
-$CFGVAR['ldap_attr_map']['helplink'] = 'LDAPAttributeMap';
-
 $CFGVAR['ldap_autocreate_customer']['title'] = 'Auto create customer';
 $CFGVAR['ldap_autocreate_customer']['help'] = 'This attempts to create the customer record automatically using LDAP when creating an incident from an email in the holding queue.';
 $CFGVAR['ldap_autocreate_customer']['options'] = 'TRUE|FALSE';
@@ -437,8 +432,6 @@ $CFGVAR['ldap_bind_pass']['help'] = 'The password for binding to the LDAP host';
 $CFGVAR['ldap_bind_pass']['type'] = 'password';
 
 $CFGVAR['ldap_customer_group']['title'] = 'LDAP Customer Group';
-
-$CFGVAR['ldap_customer_group_attr']['title'] = 'LDAP Customer Group attribute';
 
 $CFGVAR['ldap_default_customer_siteid']['title'] = 'LDAP Customer default site';
 $CFGVAR['ldap_default_customer_siteid']['help'] = 'Place LDAP customers as contacts under this site';

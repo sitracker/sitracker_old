@@ -20,8 +20,6 @@ require (APPLICATION_LIBPATH . 'auth.inc.php');
 // External variables
 $mode = $_REQUEST['mode'];
 $edituserpermission = user_permission($sit[2],23); // edit user
-$using_ldap = $CONFIG['use_ldap'];
-$attrmap = $CONFIG['ldap_attr_map'];
 
 if (empty($_REQUEST['userid']) OR $_REQUEST['userid'] == 'current' OR $edituserpermission == FALSE)
 {
@@ -76,7 +74,7 @@ if (empty($mode))
 
     echo "</tr>";
     echo "<tr><th>{$strRealName}</th><td>";
-    if ( $using_ldap && array_key_exists("realname",$attrmap) )
+    if ($_SESSION['user_source'] != 'sit' AND !empty($CONFIG['ldap_realname']))
     {
         echo "<input name='realname' type='hidden' value=\"{$user->realname}\" '/>{$user->realname}";
     }
@@ -89,7 +87,7 @@ if (empty($mode))
     echo "</td></tr>\n";
     echo "<tr><th>{$strJobTitle}</th>";
     echo "<td>";
-    if ( $using_ldap && array_key_exists("jobtitle",$attrmap) )
+    if ($_SESSION['user_source'] != 'sit' AND !empty($CONFIG['ldap_jobtitle']))
     {
         echo $user->title;
     }
@@ -104,7 +102,7 @@ if (empty($mode))
     echo "<tr><th>{$strEmailSignature} ".help_link('EmailSignatureTip')."</th>";
     echo "<td><textarea name='signature' rows='4' cols='40'>".strip_tags($user->signature)."</textarea></td></tr>\n";
     $entitlement = user_holiday_entitlement($edituserid);
-    if ($edituserpermission && $edituserid!=$sit[2])
+    if ($edituserpermission && $edituserid != $sit[2])
     {
         echo "<tr><th>{$strHolidayEntitlement}</th><td>";
         echo "<input type='text' name='holiday_entitlement' value='{$entitlement}' size='2' /> {$strDays}";
@@ -171,7 +169,7 @@ if (empty($mode))
     echo "<tr><th colspan='2'>{$strContactDetails}</th></tr>";
     echo "<tr id='email'><th>{$strEmail}</th>";
     echo "<td>";
-    if ( $using_ldap && array_key_exists("email",$attrmap) )
+    if ($_SESSION['user_source'] != 'sit' AND !empty($CONFIG['ldap_email']))
     {
         echo "<input name='email' type='hidden'value='".strip_tags($user->email)."' />{$user->email}";
     }
@@ -183,7 +181,7 @@ if (empty($mode))
     }
     echo "</td></tr>";
     echo "<tr id='phone'><th>{$strTelephone}</th><td>";
-    if ( $using_ldap && array_key_exists("phone",$attrmap) )
+    if ($_SESSION['user_source'] != 'sit' AND !empty($CONFIG['ldap_telephone']))
     {
         echo $user->phone;
     }
@@ -193,7 +191,7 @@ if (empty($mode))
     }
     echo "</td></tr>";
     echo "<tr><th>{$strFax}</th><td>";
-    if ( $using_ldap && array_key_exists("fax",$attrmap) )
+    if ($_SESSION['user_source'] != 'sit' AND !empty($CONFIG['ldap_fax']))
     {
         echo $user->fax;
     }
@@ -203,7 +201,7 @@ if (empty($mode))
     }
     echo "</td></tr>";
     echo "<tr><th>{$strMobile}</th><td>";
-    if ( $using_ldap && array_key_exists("mobile",$attrmap) )
+    if ($_SESSION['user_source'] != 'sit' AND !empty($CONFIG['ldap_mobile']))
     {
         echo $user->mobile;
     }
@@ -283,7 +281,7 @@ if (empty($mode))
     plugin_do('edit_profile_form');
 
     // Do not allow password change if using LDAP
-    if ( !$using_ldap )
+    if ($_SESSION['user_source'] != 'sit')
     {
         if ($CONFIG['trusted_server'] == FALSE AND $edituserid == $sit[2])
         {

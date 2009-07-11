@@ -98,11 +98,6 @@ define ('LDAP_OPENLDAP_COURTESYTITLE', 'personalTitle');
 
 $CONFIG['ldap_type'] = strtoupper($CONFIG['ldap_type']);
 
-// Bit of a hack though a large number of places have this hard coded to prevent SiT changing details
-$CONFIG['ldap_attr_map'] = array("realname" => "cn", "jobtitle" => "title",
-                                 "email" => "mail", "phone" => "phone",
-                                 "forenames" => "givenname", "surname" => "surname");
-
 if ($CONFIG['use_ldap'] AND $CONFIG['ldap_type'] != 'CUSTOM')
 {
     $CONFIG['ldap_surname'] = constant("LDAP_{$CONFIG['ldap_type']}_SURNAME");
