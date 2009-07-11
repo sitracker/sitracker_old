@@ -746,7 +746,7 @@ CREATE TABLE IF NOT EXISTS `{$dbNoticeTemplates}` (
   `linktext` varchar(50) default NULL,
   `link` varchar(100) default NULL,
   `durability` enum('sticky','session') NOT NULL default 'sticky',
-  `refid` int(11) NULL,
+  `refid` varchar(255) NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM  ;
 
@@ -915,7 +915,7 @@ INSERT INTO `{$dbResellers}` VALUES (1,'Us (No Reseller)');
 CREATE TABLE `{$dbRoles}` (
 `id` INT( 5 ) NOT NULL AUTO_INCREMENT ,
 `rolename` VARCHAR( 255 ) NOT NULL ,
-`description` text NOT NULL,
+`description` text NULL,
 PRIMARY KEY ( `id` )
 ) ENGINE=MyISAM;
 
@@ -1124,10 +1124,10 @@ CREATE TABLE `{$dbScheduler}` (
   `type` enum('interval','date') NOT NULL default 'interval',
   `interval` int(11) NOT NULL,
   `date_type` enum('month','year') NOT NULL COMMENT 'For type date the type',
-  `date_offset` int(11) NOT NULL COMMENT 'off set into the period',
-  `date_time` time NOT NULL COMMENT 'Time to perform action',
-  `laststarted` datetime NOT NULL,
-  `lastran` datetime NOT NULL,
+  `date_offset` int(11) NOT NULL default '0' COMMENT 'off set into the period',
+  `date_time` time NULL COMMENT 'Time to perform action',
+  `laststarted` datetime NULL,
+  `lastran` datetime NULL,
   `success` tinyint(1) NOT NULL default '1',
   PRIMARY KEY  (`id`),
   KEY `job` (`action`)
@@ -1565,7 +1565,7 @@ INSERT INTO `{$dbSites}` (`id`, `name`, `department`, `address1`, `address2`, `c
 'Example site', 1, 0, 0, 0);
 
 INSERT INTO `{$dbContacts}` (`id`, `notify_contactid`, `username`, `password`, `forenames`, `surname`, `jobtitle`, `courtesytitle`, `siteid`, `email`, `phone`, `mobile`, `fax`, `department`, `address1`, `address2`, `city`, `county`, `country`, `postcode`, `dataprotection_email`, `dataprotection_phone`, `dataprotection_address`, `timestamp_added`, `timestamp_modified`, `notes`) VALUES
-(1, '', 'Acme1', MD5(RAND()), 'John', 'Acme', 'Chairman', 'Mr', 1, 'acme@example.com', '0666 222111', '', '', '', '', '', '', '', '', '', 'Yes', 'Yes', 'Yes', 1132930556, 1187360933, '');
+(1, '0', 'Acme1', MD5(RAND()), 'John', 'Acme', 'Chairman', 'Mr', 1, 'acme@example.com', '0666 222111', '', '', '', '', '', '', '', '', '', 'Yes', 'Yes', 'Yes', 1132930556, 1187360933, '');
 
 INSERT INTO `{$dbProducts}` VALUES (1,1,'Example Product','This is an example product.');
 
