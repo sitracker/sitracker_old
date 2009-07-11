@@ -26,7 +26,7 @@ echo "<img src='images/sitlogo_270x100.png' width='270' height='100' alt='SiT! S
 echo "<p align='center'>{$strVersion}: {$application_version} {$application_revision}</p>";
 
 
-echo "<table summary='by Ivan Lucas' align='center' width='50%'>\n";
+echo "<table summary='by Ivan Lucas' align='center' width='65%'>\n";
 // echo "<tr><td class='shade1' colspan='2'>{$strAbout} {$CONFIG['application_shortname']}&hellip;</td></tr>\n";
 // echo "<tr><td class='shade2' colspan='2' style='text-align:center; padding-top: 10px;' >";
 //background-image: url(images/sitting_man_logo64x64.png); ";
