@@ -833,7 +833,8 @@ switch ($_REQUEST['action'])
 
 
     case 'createdb':
-        if ($_REQUEST['sampledata']) $_SESSION['sampledata'] = TRUE;
+        if ($_REQUEST['sampledata'] == 'yes' ) $_SESSION['sampledata'] = TRUE;
+        else $_SESSION['sampledata'] = FALSE;
         setup_createdb();
     break;
 
