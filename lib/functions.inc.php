@@ -198,6 +198,7 @@ function authenticate($username, $password)
         if ($CONFIG['use_ldap'])
         {
             $toReturn =  authenticateLDAP($username, $password);
+            if ($toReturn == -1) $toReturn = false;
         }
     }
     
@@ -234,7 +235,6 @@ function authenticateContact($username, $password)
         {
             // Auth against LDAP and sync
             $toReturn =  authenticateLDAP($username, $password, $obj->id, false);
-            
             if ($toReturn == -1)
             {
                 // Communication with LDAP server failed
@@ -249,8 +249,13 @@ function authenticateContact($username, $password)
                 }
                 else
                 {
+                    debug_log ("Cached passwords are not enabled");
                 	$toReturn = false;
                 }
+            }
+            elseif ($toReturn)
+            {
+            	$toReturn = true;
             }
             else
             {
@@ -260,6 +265,7 @@ function authenticateContact($username, $password)
         else
         {
         	debug_log ("Source SOMETHING ELSE this shouldn't happen'");
+            $toReturn = false;
         }
     }
     elseif (mysql_num_rows($result) > 1)
@@ -276,6 +282,7 @@ function authenticateContact($username, $password)
         if ($CONFIG['use_ldap'])
         {
             $toReturn =  authenticateLDAP($username, $password, 0, false);
+            if ($toReturn == -1) $toReturn = false;
         }
     }
     
