@@ -29,10 +29,10 @@ if (empty($expired))
 {
     include (APPLICATION_INCPATH . 'htmlheader.inc.php');
     
-    echo "<h2>Search Expired Contracts</h2>";
+    echo "<h2>{$strShowExpired}</h2>";
     echo "<form action='{$_SERVER['PHP_SELF']}' method='get' >";
-    echo "<p>Show Contracts Expired Within <input maxlength='4' name='expired' size='3' type='text'' /> Days</p>";
-    echo "<p><input checked='checked' name='show' type='radio' value='terminated> Terminated <input name='show' type='radio' value='nonterminated'' /> Non-terminated</p>";
+    printf("<p>{$strContractsExpiringWithinXdays}</p>", "<input maxlength='4' name='expired' size='3' type='text' />");
+    echo "<p><input checked='checked' name='show' type='checkbox' value='terminated'> {$strTerminated}</p>";
     
     echo "<p align='center'>{$strOutput}: ";
     echo "<select name='output'>";
@@ -82,7 +82,7 @@ else
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
 
-        if ($show == "nonterminated") $pagetitle = "<h2>Non-Terminated Contracts Expired Within The Last $expired Days</h2>\n";
+        if ($show == "") $pagetitle = "<h2>Non-Terminated Contracts Expired Within The Last $expired Days</h2>\n";
         else if ($show == "terminated") $pagetitle = "<h2>Terminated Contracts Expired Within The Last $expired Days</h2>\n";
 
         if (mysql_num_rows($result) == 0)

@@ -31,7 +31,7 @@ if (empty($expire))
     <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
  
     <?php
-    printf("<p>{$strContractsExpiringWithinXdays}</p>", "<input maxlength='3' name='expire' size='3' type='text' />");
+    printf("<p>{$strContractsExpiringWithinXdays}</p>", "<input maxlength='4' name='expire' size='3' type='text' />");
     echo "<p><input name='submit' type='submit' value=\"{$strSearch}\" /></p>";
     echo "</form>\n";
     include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
