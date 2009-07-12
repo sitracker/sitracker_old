@@ -49,7 +49,7 @@ if (empty($_REQUEST['username']) AND empty($_REQUEST['password']) AND $language 
     }
     header ("Location: index.php");
 }
-elseif (authenticate($username, $_REQUEST['password']) == 1)
+elseif (authenticate($username, $_REQUEST['password']))
 {
     // Valid user
     $_SESSION['auth'] = TRUE;
@@ -57,7 +57,7 @@ elseif (authenticate($username, $_REQUEST['password']) == 1)
     $password = md5($_REQUEST['password']);
 
     // Retrieve users profile
-    $sql = "SELECT * FROM `{$dbUsers}` WHERE username='{$username}' AND password='{$password}' LIMIT 1";
+    $sql = "SELECT * FROM `{$dbUsers}` WHERE username='{$username}' LIMIT 1";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(), E_USER_WARNING);
     if (mysql_num_rows($result) < 1)

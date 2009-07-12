@@ -122,6 +122,7 @@ $CFGCAT['ldap'] = array('use_ldap',
                         'ldap_customer_group',
                         'ldap_default_customer_siteid',
                         'ldap_autocreate_customer',
+                        'ldap_cache_passwords',
                         'ldap_allow_cached_password');
 
 $CFGCAT['soap'] = array('soap_enabled',
@@ -418,6 +419,11 @@ $CFGVAR['ldap_autocreate_customer']['title'] = 'Auto create customer';
 $CFGVAR['ldap_autocreate_customer']['help'] = 'This attempts to create the customer record automatically using LDAP when creating an incident from an email in the holding queue.';
 $CFGVAR['ldap_autocreate_customer']['options'] = 'TRUE|FALSE';
 $CFGVAR['ldap_autocreate_customer']['type'] = 'select';
+
+$CFGVAR['ldap_cache_passwords']['title'] = 'Allow SiT! to cache users passwords';
+$CFGVAR['ldap_cache_passwords']['help'] = 'This allows SiT! to cache an MD5 of users passwords which can be used for authentication if the LDAP server is down - see . $CONFIG[\'ldap_allow_cached_password\']';
+$CFGVAR['ldap_cache_passwords']['options'] = 'TRUE|FALSE';
+$CFGVAR['ldap_cache_passwords']['type'] = 'select';
 
 $CFGVAR['ldap_allow_cached_password']['title'] = 'Allow use of cached passwords';
 $CFGVAR['ldap_allow_cached_password']['help'] = 'This allows use of cached passwords in SiT for authentication if communication with the LDAP server fails.';

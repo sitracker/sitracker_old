@@ -166,7 +166,7 @@ function authenticate($username, $password)
         {
         	// Auth against LDAP and sync
             $toReturn =  authenticateLDAP($username, $password, $obj->id);
-            if ($toReturn == -1)
+            if ($toReturn === -1)
             {
             	// Communication with LDAP server failed
                 if ($CONFIG['ldap_allow_cached_password'])
@@ -179,6 +179,10 @@ function authenticate($username, $password)
                 {
                     $toReturn = false;
                 }
+            }
+            elseif ($toReturn)
+            {
+            	$toReturn = true;
             }
             else
             {
@@ -198,7 +202,7 @@ function authenticate($username, $password)
         if ($CONFIG['use_ldap'])
         {
             $toReturn =  authenticateLDAP($username, $password);
-            if ($toReturn == -1) $toReturn = false;
+            if ($toReturn === -1) $toReturn = false;
         }
     }
     
@@ -235,7 +239,7 @@ function authenticateContact($username, $password)
         {
             // Auth against LDAP and sync
             $toReturn =  authenticateLDAP($username, $password, $obj->id, false);
-            if ($toReturn == -1)
+            if ($toReturn === -1)
             {
                 // Communication with LDAP server failed
                 if ($CONFIG['ldap_allow_cached_password'])
@@ -282,7 +286,7 @@ function authenticateContact($username, $password)
         if ($CONFIG['use_ldap'])
         {
             $toReturn =  authenticateLDAP($username, $password, 0, false);
-            if ($toReturn == -1) $toReturn = false;
+            if ($toReturn === -1) $toReturn = false;
         }
     }
     

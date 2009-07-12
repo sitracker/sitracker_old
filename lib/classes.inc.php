@@ -61,6 +61,8 @@ class User extends Person{
         $this->startdate = $now;
         if (empty($this->source)) $this->source = 'sit';
         
+        if (empty($this->password)) $this->password = generate_password(16);
+        
         $toReturn = false;
         
         $sql = "SELECT * FROM `{$GLOBALS['dbUsers']}` WHERE username = '{$this->username}'";
@@ -265,13 +267,15 @@ class Contact extends Person {
             $dp = $this->get_dataprotection();
             
             if (empty($this->source)) $this->source = 'sit';
-            
+
             if (empty($this->username))
             {
             	$generate_username = true;
                 $this->username = strtolower($this->surname).$now;
             }
-            
+
+            if (empty($this->password)) $this->password = generate_password(16);
+
             $sql  = "INSERT INTO `{$GLOBALS['dbContacts']}` (username, password, courtesytitle, forenames, surname, jobtitle, ";
             $sql .= "siteid, address1, address2, city, county, country, postcode, email, phone, mobile, fax, ";
             $sql .= "department, notes, dataprotection_email, dataprotection_phone, dataprotection_address, ";

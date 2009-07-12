@@ -221,7 +221,7 @@ function ldapOpen()
 */
 function authenticateLDAP($username, $password, $id = 0, $user=TRUE, $populateOnly=FALSE, $searchOnEmail=FALSE)
 {
-    debug_log("authenticateLDAP {$username} {$password} {$id} {$user}");
+    debug_log("authenticateLDAP {$username}");
 
     global $CONFIG;
 
@@ -400,7 +400,7 @@ function authenticateLDAP($username, $password, $id = 0, $user=TRUE, $populateOn
                 	// get attributes
                     $user = new User();
                     $user->username = $username;
-                    $user->password = $password;
+                    if ($CONFIG['ldap_cache_passwords']) $user->password = $password;
                     $user->realname = $user_attributes[$CONFIG['ldap_realname']][0];
                     $user->jobtitle = $user_attributes[$CONFIG['ldap_jobtitle']][0];
                     $user->email = $user_attributes[$CONFIG['ldap_email']][0];
@@ -442,7 +442,7 @@ function authenticateLDAP($username, $password, $id = 0, $user=TRUE, $populateOn
                     debug_log("Adding contact TYPE {$usertype} {$user}");
                     $contact = new Contact();
                     $contact->username = $username;
-                    $contact->password = $password;
+                    if ($CONFIG['ldap_cache_passwords']) $contact->password = $password;
                     $contact->surname = $user_attributes[$CONFIG['ldap_surname']][0];
                     $contact->forenames = $user_attributes[$CONFIG['ldap_forenames']][0];
                     $contact->jobtitle = $user_attributes[$CONFIG['ldap_jobtitle']][0];
