@@ -860,6 +860,26 @@ INSERT INTO `{$dbPermissions}` VALUES(80, 8, 'Edit Service Details');
 INSERT INTO `{$dbPermissions}` VALUES(81, 8, 'Adjust durations on activities');
 
 
+CREATE TABLE `{$dbPermissionCategories}` (
+`id` INT( 5 ) NOT NULL AUTO_INCREMENT ,
+`category` VARCHAR( 255 ) NOT NULL ,
+PRIMARY KEY ( `id` )
+) ENGINE = MYISAM ;
+
+
+INSERT INTO `{$dbPermissionCategories}` (`id`, `category`) VALUES(1, 'strSupport');
+INSERT INTO `{$dbPermissionCategories}` (`id`, `category`) VALUES(2, 'strCustomers');
+INSERT INTO `{$dbPermissionCategories}` (`id`, `category`) VALUES(3, 'strContracts');
+INSERT INTO `{$dbPermissionCategories}` (`id`, `category`) VALUES(4, 'strTasks');
+INSERT INTO `{$dbPermissionCategories}` (`id`, `category`) VALUES(5, 'strKBabbr');
+INSERT INTO `{$dbPermissionCategories}` (`id`, `category`) VALUES(6, 'strPortal');
+INSERT INTO `{$dbPermissionCategories}` (`id`, `category`) VALUES(7, 'strConfiguration');
+INSERT INTO `{$dbPermissionCategories}` (`id`, `category`) VALUES(8, 'strBilling');
+INSERT INTO `{$dbPermissionCategories}` (`id`, `category`) VALUES(9, 'strReports');
+INSERT INTO `{$dbPermissionCategories}` (`id`, `category`) VALUES(10, 'strHolidays');
+INSERT INTO `{$dbPermissionCategories}` (`id`, `category`) VALUES(11, 'strOther');
+
+
 CREATE TABLE `{$dbPriority}` (
   `id` int(11) NOT NULL auto_increment,
   `name` varchar(50) default NULL,
@@ -2553,7 +2573,7 @@ $upgrade_schema[350] = "
 -- PH 2009-03-08
 ALTER TABLE `{$dbRoles}` ADD `description` TEXT NOT NULL;
 
--- INL 2009-03-09 FIXME
+-- INL 2009-03-09
  CREATE TABLE `{$dbPermissionCategories}` (
 `id` INT( 5 ) NOT NULL AUTO_INCREMENT ,
 `category` VARCHAR( 255 ) NOT NULL ,
