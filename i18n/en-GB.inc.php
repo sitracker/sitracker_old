@@ -1508,6 +1508,7 @@ $strSun = 'Sun';
 $strSunday = 'Sunday';
 $strSupport = 'Support';
 $strSupportEmailAddress = 'Support Email Address';
+$strSupportEmailDesc = 'Free text support email';
 $strSupportExpired = 'Support Expired';
 $strSupportManagersEmailAddress = 'Technical Support managers email address';
 $strSupportedContacts = 'Supported Contacts';
