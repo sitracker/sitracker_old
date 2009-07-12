@@ -14,7 +14,7 @@
 $permission = 19; // View Maintenance Contracts
 require ('core.php');
 require (APPLICATION_LIBPATH . 'functions.inc.php');
-$title='Search Renewals';
+$title = $strShowRenewals;
 
 // This page requires authentication
 require (APPLICATION_LIBPATH . 'auth.inc.php');
@@ -29,9 +29,9 @@ if (empty($expire))
     ?>
     <h2><?php echo $title; ?></h2>
     <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
-    <p>Show Contracts Expiring Within <input maxlength='3' name="expire" size='3' type="text" /> Days</p>
+ 
     <?php
-    // FIXME i18n
+    printf("<p>{$strContractsExpiringWithinXdays}</p>", "<input maxlength='3' name='expire' size='3' type='text' />");
     echo "<p><input name='submit' type='submit' value=\"{$strSearch}\" /></p>";
     echo "</form>\n";
     include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
@@ -69,7 +69,7 @@ else
 
         if (mysql_num_rows($result) == 0)
         {
-            echo "<h2>Contracts Expiring Within The Next $expire Days</h2>\n";
+            printf("<h2>{$strContractsExpiringWithinXdays}</h2>", $expire);
             echo "<h5 class='warning'>Sorry, your search yielded no results</h5>\n";
         }
         else
@@ -89,20 +89,21 @@ else
             }
             //]]>
             </script>
-            <h2>Contracts Expiring Within The Next <?php echo $expire ?> Days</h2>
-            <h5>Search yielded <?php echo mysql_num_rows($result) ?> result(s)</h5>
+            <?php
+            printf("<h2>{$strContractsExpiringWithinXdays}</h2>", $expire);
+            printf("<h5>{$strResultsNum}</h5>", mysql_num_rows($result));
+            echo "
             <table align='center'>
             <tr>
-            <th>ID</th>
-            <th>Site</th>
-            <th>Product</th>
-            <th>Reseller</th>
-            <th>Licence</th>
-            <th>Expiry Date</th>
-            <th>Admin Contact</th>
-            <th>Notes</th>
-            </tr>
-            <?php
+            <th>{$strID}</th>
+            <th>{$strSite}</th>
+            <th>{$strProduct}</th>
+            <th>{$strReseller}</th>
+            <th>{$strLicense}</th>
+            <th>{$strExpiryDate}</th>
+            <th>{$strAdminContact}</th>
+            <th>{$strNotes}</th>
+            </tr>";
             $shade = 0;
             while ($results = mysql_fetch_array($result))
             {
