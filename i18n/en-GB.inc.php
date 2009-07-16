@@ -896,6 +896,7 @@ $strLowPriority = 'Low Priority';
 
 $strMaintenance = 'Maintenance';
 $strMakeVisibleInPortal = 'Make visible in portal';
+$strMap = 'Map';
 $strManageDashboardComponents = 'Manage Dashboard Components';
 $strManageEmailTemplates = 'Manage Email Templates';
 $strManageFTPFiles = 'Manage FTP Files';

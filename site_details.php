@@ -58,7 +58,13 @@ while ($siterow = mysql_fetch_array($siteresult))
     echo "<tr><th>{$strCity}:</th><td>{$siterow['city']}</td></tr>";
     echo "<tr><th>{$strCounty}:</th><td>{$siterow['county']}</td></tr>";
     echo "<tr><th>{$strCountry}:</th><td>{$siterow['country']}</td></tr>";
-    echo "<tr><th>{$strPostcode}:</th><td>{$siterow['postcode']}</td></tr>";
+    echo "<tr><th>{$strPostcode}:</th><td>{$siterow['postcode']} ";
+    if (!empty($siterow['postcode']))
+    {
+        //TODO make this support different links via config
+        echo "(<a href='http://www.google.com/maps?q={$siterow['postcode']}'>{$strMap}</a>)";
+    }
+    echo "</td></tr>";
     echo "<tr><th>{$strTelephone}:</th><td>{$siterow['telephone']}</td></tr>";
     echo "<tr><th>{$strFax}:</th><td>{$siterow['fax']}</td></tr>";
     echo "<tr><th>{$strEmail}:</th><td><a href=\"mailto:".$siterow['email']."\">".$siterow['email']."</a></td></tr>";
