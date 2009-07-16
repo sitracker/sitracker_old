@@ -681,7 +681,7 @@ else
             }
         }
         umask($umask);
-        $newfilename = "{$CONFIG['attachment_fspath']}{$id}{$delim}{$fileid}-{$_FILES['attachment']['name']}";
+        $newfilename = "{$CONFIG['attachment_fspath']}{$id}{$delim}{$fileid}";
 
         // Move the uploaded file from the temp directory into the incidents attachment dir
         $mv = move_uploaded_file($_FILES['attachment']['tmp_name'], $newfilename);

@@ -225,7 +225,7 @@ function draw_file_row($file, $fsdelim, $incidentid, $path)
     $updateid = str_replace("u", "", $filedir);
     $sql = "SELECT f.id FROM `{$GLOBALS['dbLinks']}`, `{$GLOBALS['dbFiles']}` AS f  ";
     $sql .= "WHERE linktype = '5' AND origcolref='$updateid' ";
-    $sql .= "AND f.id = linkcolref AND f.filename='$filename'";
+    $sql .= "AND f.id = linkcolref ";
     $result = mysql_query($sql);
     $fileobj = mysql_fetch_object($result);
     $fileid = $fileobj->id;
@@ -242,7 +242,7 @@ function draw_file_row($file, $fsdelim, $incidentid, $path)
         $result = mysql_query($sql);
         $row = mysql_fetch_object($result);
         $url = "download.php?id={$row->fileid}";
-        $filename = $filenameparts[1];
+        $filename = $row->filename;
     }
 
     $html = "<tr>";

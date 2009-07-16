@@ -41,7 +41,7 @@ class fetchSitMail
                 $port = '143';
             }
             $connectionString = "{{$server}:{$port}/imap{$options}".
-                                 "/user={$user}}$folder";
+                                 "/user={$username}}$folder";
         }
         else
         {
@@ -50,7 +50,7 @@ class fetchSitMail
                 $port = '110';
             }
             $connectionString = "{{$server}:{$port}/pop3{$options}".
-                                "/user={$user}}$folder";
+                                "/user={$username}}$folder";
         }
         $this->username = $username;
         $this->password = $password;

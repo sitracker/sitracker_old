@@ -74,16 +74,18 @@ else
 
 if ($incidentid == 0 OR empty($incidentid))
 {
-    $file_fspath = "{$CONFIG['attachment_fspath']}updates{$fsdelim}{$fileid}-{$filename}";
+    $file_fspath = "{$CONFIG['attachment_fspath']}updates{$fsdelim}{$fileid}";
+    $file_fspath2 = "{$CONFIG['attachment_fspath']}updates{$fsdelim}{$fileid}-{$filename}";
     $old_style = "{$CONFIG['attachment_fspath']}updates{$fsdelim}{$filename}";
 }
 else
 {
     $file_fspath = "{$CONFIG['attachment_fspath']}{$incidentid}{$fsdelim}{$fileid}-{$filename}";
+    $file_fspath2 = "{$CONFIG['attachment_fspath']}{$incidentid}{$fsdelim}{$fileid}";
     $old_style = "{$CONFIG['attachment_fspath']}{$incidentid}{$fsdelim}u{$updateid}{$fsdelim}{$filename}";
 }
 
-if (!file_exists($file_fspath) AND !file_exists($old_style))
+if (!file_exists($file_fspath) AND !file_exists($file_fspath2) AND !file_exists($old_style))
 {
     header('HTTP/1.1 404 Not Found');
     header('Status: 404 Not Found',1,404);
@@ -96,7 +98,18 @@ if (!file_exists($file_fspath) AND !file_exists($old_style))
 }
 elseif ($access == TRUE)
 {
-    if (file_exists($old_style)) $file_fspath = $old_style;
+    if (file_exists($file_fspath))
+    {  
+        //do nothing
+    }
+    elseif (file_exists($file_fspath2))
+    {
+        $file_fspath = $file_fspath2;
+    }
+    elseif (file_exists($old_style))
+    {
+        $file_fspath = $old_style;
+    }
 
     if (file_exists($file_fspath))
     {

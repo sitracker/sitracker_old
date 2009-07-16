@@ -292,8 +292,9 @@ if ($emails > 0)
             foreach ($results['Attachments'] as $attachment)
             {
                 $data = $attachment['Data'];
-                $filename = $attachment['FileName'];
+                $filename = utf8_encode(mb_decode_mimeheader($attachment['FileName']));
                 $filename = str_replace(' ', '_', $filename);
+
                 if (empty($filename))
                 {
                     $filename = 'part'.$part;
@@ -312,8 +313,8 @@ if ($emails > 0)
 
                 if (is_writable($fa_dir))
                 {
-                    if ($CONFIG['debug']) debug_log("Writing attachment to disk: {$fa_dir}{$filename}");
-                    $fwp = fopen($fa_dir.$filename, 'a');
+                    if ($CONFIG['debug']) debug_log("Writing attachment to disk: {$fa_dir}{$fileid}");
+                    $fwp = fopen($fa_dir.$fileid, 'a');
                     fwrite($fwp, $data);
                     fclose($fwp);
                 }
