@@ -19,6 +19,7 @@ require ('..'.DIRECTORY_SEPARATOR.'core.php');
 require (APPLICATION_LIBPATH . 'functions.inc.php');
 
 $accesslevel = 'any';
+$inlinefiles = array('jpg','jpeg','png','gif','txt','htm','html');
 
 include (APPLICATION_LIBPATH . 'portalauth.inc.php');
 
@@ -56,16 +57,18 @@ $file_fspath = "{$CONFIG['attachment_fspath']}{$incidentid}{$fsdelim}{$fileid}-{
 
 if ($incidentid == 0 OR empty($incidentid))
 {
-    $file_fspath = "{$CONFIG['attachment_fspath']}updates{$fsdelim}{$fileid}-{$filename}";
+    $file_fspath = "{$CONFIG['attachment_fspath']}updates{$fsdelim}{$fileid}";
+    $file_fspath2 = "{$CONFIG['attachment_fspath']}updates{$fsdelim}{$fileid}-{$filename}";
     $old_style = "{$CONFIG['attachment_fspath']}updates{$fsdelim}{$filename}";
 }
 else
 {
     $file_fspath = "{$CONFIG['attachment_fspath']}{$incidentid}{$fsdelim}{$fileid}-{$filename}";
+    $file_fspath2 = "{$CONFIG['attachment_fspath']}{$incidentid}{$fsdelim}{$fileid}";
     $old_style = "{$CONFIG['attachment_fspath']}{$incidentid}{$fsdelim}u{$updateid}{$fsdelim}{$filename}";
 }
 
-if (!file_exists($file_fspath) AND !file_exists($old_style))
+if (!file_exists($file_fspath) AND !file_exists($file_fspath2) AND !file_exists($old_style))
 {
     header('HTTP/1.1 404 Not Found');
     header('Status: 403 Not Found',1,403);
@@ -75,36 +78,57 @@ if (!file_exists($file_fspath) AND !file_exists($old_style))
 }
 elseif ($access == TRUE)
 {
-    if (file_exists($old_style)) $file_fspath = $old_style;
-
-    $file_size = filesize($file_fspath);
-    $fp = fopen($file_fspath, 'r');
-
-    if ($fp && ($file_size !=-1))
+    if (file_exists($file_fspath))
+    {  
+        //do nothing
+    }
+    elseif (file_exists($file_fspath2))
     {
-        if (file_exists($file_fspath))
-        {
-            header("Content-Type: ".mime_content_type($filename)."\r\n");
-            header("Content-Length: {$file_size}\r\n");
-            header("Content-Disposition-Type: attachment\r\n");
-            header("Content-Disposition: filename={$filename}\r\n");
-        }
-        elseif(file_exists($old_style))
-        {
-            header("Content-Type: ".mime_content_type($old_style)."\r\n");
-            header("Content-Length: {$file_size}\r\n");
-            header("Content-Disposition-Type: attachment\r\n");
-            header("Content-Disposition: filename={$old_style}\r\n");
-        }
+        $file_fspath = $file_fspath2;
+    }
+    elseif (file_exists($old_style))
+    {
+        $file_fspath = $old_style;
+    }
 
-        $buffer = '';
-        while (!feof($fp))
+    if (file_exists($file_fspath))
+    {
+        $file_size = filesize($file_fspath);
+        $fp = fopen($file_fspath, 'r');
+        if ($fp && ($file_size !=-1))
         {
-            $buffer = fread($fp, 1024*1024);
-            print $buffer;
+           $ext = substr($filename, strrpos($filename, '.') + 1);
+            if (in_array($ext, $inlinefiles)) $inline = TRUE;
+            else $inline = FALSE;
+            if ($inline) header("Content-Type: ".mime_content_type($file_fspath));
+            else header("Content-Type: application/octet-stream");
+            header("Content-Length: {$file_size}");
+            if ($inline) header("Content-Disposition: inline; filename=\"{$filename}\"");
+            else header("Content-Disposition: attachment; filename=\"{$filename}\"");
+            header("Content-Transfer-Encoding: binary");
+            if (strstr($_SERVER['HTTP_USER_AGENT'], "MSIE") AND $_SERVER['HTTPS'])
+            {
+                header('Cache-Control: private');
+                header('Pragma: private');
+            }
+
+            $buffer = '';
+            while (!feof($fp))
+            {
+                $buffer = fread($fp, 1024*1024);
+                print $buffer;
+            }
+            fclose($fp);
+            exit;
         }
-        fclose($fp);
-        exit;
+        else
+        {
+            // Access Denied
+            header('HTTP/1.1 403 Forbidden');
+            header('Status: 403 Forbidden',1,403);
+            echo "<h3>403 Forbidden</h3>";
+            exit;
+        }
     }
 }
 else
