@@ -7969,11 +7969,10 @@ function is_assoc_callback($a, $b)
 
 /**
  * HTML for a config variable input box
+ * @author Ivan Lucas
  * @param string $setupvar The setup variable key name
  * @param bool $showvarnames Whether to display the config variable name
- * @todo  TODO, this code was ripped out of setup.php, need to make setup.php use this
-                INL 28Nov08
- * @author Ivan Lucas
+ * @returns string HTML
 **/
 function cfgVarInput($setupvar, $showvarnames = FALSE)
 {
@@ -8113,7 +8112,7 @@ function cfgVarInput($setupvar, $showvarnames = FALSE)
 
         case 'ldappassword':
           $html .= "<input type='password' id='cfg{$setupvar}' name='{$setupvar}' size='16' value=\"{$value}\" /> ".password_reveal_link("cfg{$setupvar}");
-          $html.= " <a href='javascript:void(0);' onclick=\"checkLDAPDetails('status{$setupvar}');\">{$GLOBALS['strCheckLDAPDetails']}</a>";
+          $html.= " &nbsp; <a href='javascript:void(0);' onclick=\"checkLDAPDetails('status{$setupvar}');\">{$GLOBALS['strCheckLDAPDetails']}</a>";
         break;
 
 

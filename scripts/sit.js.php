@@ -65,6 +65,7 @@ function password_reveal(elem)
 /**
   * Check the LDAP details entered and display the results
   * @author Paul heaney
+  * @param string statusfield element ID of the DIV that will contain the status text
 */
 function checkLDAPDetails(statusfield)
 {
