@@ -461,6 +461,11 @@ $CFGVAR['ldap_type']['options'] = 'EDIR|AD|OPENLDAP|CUSTOM';
 
 $CFGVAR['ldap_manager_group']['title'] = 'LDAP group for SIT managers';
 
+$CFGVAR['ldap_port']['title'] = 'LDAP Port';
+$CFGVAR['ldap_port']['help'] = 'The TCP port to use to connect to the LDAP server. Usually 389 or 636 for LDAPs. Leave blank for default.';
+$CFGVAR['ldap_port']['type'] = 'number';
+
+
 $CFGVAR['ldap_protocol']['title'] = 'LDAP Protocol version';
 $CFGVAR['ldap_protocol']['type'] = 'select';
 $CFGVAR['ldap_protocol']['options'] = '1|2|3';
