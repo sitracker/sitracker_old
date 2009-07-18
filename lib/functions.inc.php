@@ -8016,7 +8016,7 @@ function cfgVarInput($setupvar, $showvarnames = FALSE)
     switch ($CFGVAR[$setupvar]['type'])
     {
         case 'select':
-            $html .= "<select name='$setupvar'>";
+            $html .= "<select name='{$setupvar}' id='{$setupvar}'>";
             if (empty($CFGVAR[$setupvar]['options'])) $CFGVAR[$setupvar]['options'] = "TRUE|FALSE";
             $options = explode('|', $CFGVAR[$setupvar]['options']);
             foreach ($options AS $option)
@@ -8029,7 +8029,7 @@ function cfgVarInput($setupvar, $showvarnames = FALSE)
         break;
 
         case 'percent':
-            $html .= "<select name='$setupvar'>";
+            $html .= "<select name='{$setupvar}' id='{$setupvar}'>";
             for($i = 0; $i <= 100; $i++)
             {
                 $html .= "<option value=\"{$i}\"";
@@ -8091,42 +8091,57 @@ function cfgVarInput($setupvar, $showvarnames = FALSE)
         break;
 
         case 'number':
-            $html .= "<input type='text' name='$setupvar' size='7' value=\"{$value}\" />";
+            $html .= "<input type='text' name='{$setupvar}' id='{$setupvar}' size='7' value=\"{$value}\" />";
         break;
 
         case '1darray':
             $replace = array('array(', ')', "'");
             $value = str_replace($replace, '',  $value);
-            $html .= "<input type='text' name='$setupvar' size='60' value=\"{$value}\" />";
+            $html .= "<input type='text' name='{$setupvar}' id='{$setupvar}' size='60' value=\"{$value}\" />";
         break;
 
         case '2darray':
             $replace = array('array(', ')', "'", '\r','\n');
             $value = str_replace($replace, '',  $value);
             $value = str_replace(',', "\n", $value);
-            $html .= "<textarea name='$setupvar' cols='60' rows='10'>{$value}</textarea>";
+            $html .= "<textarea name='{$setupvar}' id='{$setupvar}' cols='60' rows='10'>{$value}</textarea>";
         break;
 
         case 'password':
-          $html .= "<input type='password' id='cfg{$setupvar}' name='$setupvar' size='16' value=\"{$value}\" /> ".password_reveal_link("cfg{$setupvar}");
+          $html .= "<input type='password' id='cfg{$setupvar}' name='{$setupvar}' size='16' value=\"{$value}\" /> ".password_reveal_link("cfg{$setupvar}");
         break;
+
+        case 'ldappassword':
+          $html .= "<input type='password' id='cfg{$setupvar}' name='{$setupvar}' size='16' value=\"{$value}\" /> ".password_reveal_link("cfg{$setupvar}");
+          $html.= " <a href='javascript:void(0);' onclick=\"checkLDAPDetails('status{$setupvar}');\">{$GLOBALS['strCheckLDAPDetails']}</a>";
+        break;
+
 
         case 'text':
         default:
             if (strlen($CONFIG[$setupvar]) < 65)
             {
-                $html .= "<input type='text' name='$setupvar' size='60' value=\"{$value}\" />";
+                $html .= "<input type='text' name='{$setupvar}' id='{$setupvar}'  size='60' value=\"{$value}\" />";
             }
             else
             {
-                $html .= "<textarea name='$setupvar' cols='60' rows='10'>{$value}</textarea>";
+                $html .= "<textarea name='{$setupvar}' id='{$setupvar}' cols='60' rows='10'>{$value}</textarea>";
             }
     }
     if (!empty($CFGVAR[$setupvar]['unit'])) $html .= " {$CFGVAR[$setupvar]['unit']}";
     if (!empty($CFGVAR[$setupvar]['helplink'])) $html .= ' '.help_link($CFGVAR[$setupvar]['helplink']);
-    if ($setupvar=='db_password' AND $_REQUEST['action']!='reconfigure' AND $value != '') $html .= "<p class='info'>The current password setting is not shown</p>";
+    if ($setupvar == 'db_password' AND $_REQUEST['action'] != 'reconfigure' AND $value != '')
+    {
+        $html .= "<p class='info'>The current password setting is not shown</p>";
+    }
 
     if ($showvarnames) $html .= "<br />(<var>\$CONFIG['$setupvar']</var>)";
+
+    if ($CFGVAR[$setupvar]['statusfield'] == 'TRUE')
+    {
+        $html .= "<div id='status{$setupvar}'></div>";    	
+    }
+    
     $html .= "</div>";
     $html .= "<br />\n";
     if ($c == 1) $c == 2;

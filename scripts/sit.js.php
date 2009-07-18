@@ -60,6 +60,77 @@ function password_reveal(elem)
     }
 }
 
+
+
+/**
+  * Check the LDAP details entered and display the results
+  * @author Paul heaney
+*/
+function checkLDAPDetails(statusfield)
+{
+    $(statusfield).innerHTML = \"\";
+
+    var server = $('ldap_host').value;
+    var port = $('ldap_port').value;
+    var protocol = $('ldap_protocol').options[$('ldap_protocol').selectedIndex].value;
+    var tls = $('ldap_use_tls').options[$('ldap_use_tls').selectedIndex].value;
+    var user = $('ldap_bind_user').value;
+    var password = $('cfgldap_bind_pass').value;
+
+    // Auto save
+    var xmlhttp=false;
+
+    if (!xmlhttp && typeof XMLHttpRequest!='undefined')
+    {
+        try
+        {
+            xmlhttp = new XMLHttpRequest();
+        }
+        catch (e)
+        {
+            xmlhttp=false;
+        }
+    }
+    if (!xmlhttp && window.createRequest)
+    {
+        try
+        {
+            xmlhttp = window.createRequest();
+        }
+        catch (e)
+        {
+            xmlhttp=false;
+        }
+    }
+
+    var url =  \"ajaxdata.php\";
+    var params = \"action=checkldap&ldap_host=\"+server+\"&ldap_port=\"+port+\"&ldap_protocol=\"+protocol+\"&ldap_use_tls=\"+tls+\"&ldap_bind_user=\"+escape(user)+\"&ldap_user_pass=\"+escape(password);
+    xmlhttp.open(\"POST\", url, true)
+    xmlhttp.setRequestHeader(\"Content-type\", \"application/x-www-form-urlencoded\");
+    xmlhttp.setRequestHeader(\"Content-length\", params.length);
+    xmlhttp.setRequestHeader(\"Connection\", \"close\");
+
+
+    xmlhttp.onreadystatechange=function()
+    {
+        if (xmlhttp.readyState==4)
+        {
+            if (xmlhttp.responseText != '')
+            {
+                if (xmlhttp.responseText == 1)
+                {
+                    $(statusfield).innerHTML = \"<strong>{$strLDAPTestSucessful}</strong>\";
+                }
+                else
+                {
+                    $(statusfield).innerHTML = \"<strong>{$strLDAPTestFailed}</strong>\";
+                }
+            }
+        }
+    }
+    xmlhttp.send(params);
+}
+
 ";
 
 

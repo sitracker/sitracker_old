@@ -435,7 +435,8 @@ $CFGVAR['ldap_bind_user']['help'] = 'The user for binding to the LDAP host';
 
 $CFGVAR['ldap_bind_pass']['title'] = 'LDAP Bind password';
 $CFGVAR['ldap_bind_pass']['help'] = 'The password for binding to the LDAP host';
-$CFGVAR['ldap_bind_pass']['type'] = 'password';
+$CFGVAR['ldap_bind_pass']['type'] = 'ldappassword';
+$CFGVAR['ldap_bind_pass']['statusfield'] = 'TRUE'; 
 
 $CFGVAR['ldap_customer_group']['title'] = 'LDAP Customer Group';
 

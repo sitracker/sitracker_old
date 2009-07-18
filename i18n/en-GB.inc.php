@@ -272,6 +272,7 @@ $strChangeTemporaryOwner = 'Change temporary owner';
 $strChangeOwner = 'Change owner';
 $strChangingContact = 'Changing the contact or skill will not reassign this incident to another contract';
 $strCharsToKeepWhenTranslating = 'When translating, please do not translate anything that looks like the following: [b] {word} %s. These are placeholders, leave them in the appropriate place in your translated string';
+$strCheckLDAPDetails = 'Check LDAP details';
 $strChooseLanguage = 'Please choose your language';
 $strCity = 'City';
 $strClearFilter = 'Clear filter';
@@ -850,6 +851,8 @@ $strLastWeek = 'Last week';
 $strLastYear = 'Last year';
 # LDAP - Lightweight Directory Access Protocol
 $strLDAP = 'LDAP';
+$strLDAPTestSucessful = 'LDAP Connection Sucessful';
+$strLDAPTestFailed = 'LDAP Connection Failed';
 $strLength = 'Length';
 $strLicense = 'Licence';
 $strLicenseAndCopyright = 'Licence &amp; Copyright Information';
