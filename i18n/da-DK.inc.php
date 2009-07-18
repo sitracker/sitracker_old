@@ -1569,6 +1569,7 @@ $strUsedNofNDaysEntitlement = 'Brugt %s af %s dage berretigelse';
 $strUser = 'Bruger';
 $strUserGroups = 'Bruger grupper';
 $strUsername = 'Brugernavn';
+$strUsernameNotUnique = 'Brugernavnet skal være unikt';
 $strUsers = 'Brugere';
 $strUserChangedStatus = 'Bruger ændrede status';
 $strUserPermissionXY = 'Bruger rettighed: %s - %s';
