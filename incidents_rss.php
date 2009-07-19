@@ -8,8 +8,10 @@
 // of the GNU General Public License, incorporated herein by reference.
 //
 
-// This feature is experimental as of 22Sep06
+// Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
+//            Paul Heaney <paul[at]sitracker.org>
 
+// This feature is experimental as of 22Sep06
 
 require ('core.php');
 require (APPLICATION_LIBPATH . 'functions.inc.php');
@@ -20,6 +22,7 @@ require (APPLICATION_LIBPATH . 'functions.inc.php');
 $c = cleanvar($_GET['c']);
 $salt = md5($CONFIG['db_password']);
 $usql = "SELECT id FROM `{$dbUsers}` WHERE MD5(CONCAT(`username`, '{$salt}')) = '$c' LIMIT 1";
+// $usql = "SELECT id FROM `{$dbUsers}` WHERE username = '$c' LIMIT 1";
 $uresult = mysql_query($usql);
 
 if ($uresult)
@@ -46,48 +49,37 @@ else $lang = $CONFIG['default_i18n'];
 
 $count = 0;
 $pubdate = $now;
+
+$items = array();
+
 while ($incident = mysql_fetch_object($result))
 {
     // Get Last Update
     list($update_userid, $update_type, $update_currentowner, $update_currentstatus, $update_body, $update_timestamp, $update_nextaction, $update_id)=incident_lastupdate($incident->id);
 
-    if ($count == 0) $pubdate = date('r',$update_timestamp);
+    if ($count == 0) $update_timestamp;
 
     $authorname = user_realname($update_userid);
     $author = user_email($update_userid)." (".$authorname. ")";
 
-    $itemxml .= "<item>\n";
-    $itemxml .= "<title>[{$incident->id}] - {$incident->title} ({$update_type})</title>\n";
-    $itemxml .= "<author>{$author}</author>\n";
-    $itemxml .= "<link>{$CONFIG['application_uriprefix']}{$CONFIG['application_webpath']}incident_details.php?id={$incident->id}</link>\n";
-    $itemxml .= "<description>{$strUpdated} ".date($CONFIG['dateformat_datetime'],$update_timestamp) . ' ';
-    $itemxml .= " {$strby} &lt;strong&gt;{$authorname}&lt;/strong&gt;. \n";
-    $itemxml .= "{$strStatus}: ".incidentstatus_name($update_currentstatus).". &lt;br /&gt;\n\n";
-    $itemxml .= strip_tags($update_body);
-    $itemxml .= "</description>\n";
-    $itemxml .= "<pubDate>".date('r',$update_timestamp)."</pubDate>\n";
-    $itemxml .= "<guid isPermaLink=\"false\">{$CONFIG['application_uriprefix']}{$CONFIG['application_webpath']}incident_details.php?id={$incident->id}#{$update_id}</guid>\n";
-    $itemxml .= "</item>\n";
+    $fi = new FeedItem();
+    $fi->title = "[{$incident->id}] - {$incident->title} ({$update_type})";
+    $fi->author = $author;
+    $fi->link = "{$CONFIG['application_uriprefix']}{$CONFIG['application_webpath']}incident_details.php?id={$incident->id}";   
+    $fi->description = "{$strUpdated} ".date($CONFIG['dateformat_datetime'],$update_timestamp) ." {$strby} &lt;strong&gt;{$authorname}&lt;/strong&gt;. \n{$strStatus}: ".incidentstatus_name($update_currentstatus).". &lt;br /&gt;\n\n".strip_tags($update_body);
+    $fi->pubdate =$update_timestamp; 
+    
+    $fi->guid = "{$CONFIG['application_uriprefix']}{$CONFIG['application_webpath']}incident_details.php?id={$incident->id}#{$update_id}";
     $count++;
+    $items[] = $fi;
 }
 
-$xml = '<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">';
-$xml .= "<channel><title>{$CONFIG['application_shortname']} {$strIncidents}</title>\n";
-$xml .= '<link>'.application_url()."</link>\n";
-$xml .= '<atom:link href="'.application_url()."incidents_rss.php?c={$c}\" rel=\"self\" type=\"application/rss+xml\" />\n";
-$xml .= "<description>{$CONFIG['application_name']}: {$strIncidents} {$strFor} ".user_realname($userid)." ({$strActionNeeded}).</description>\n";
-$xml .= "<language>{$lang}</language>\n";
-$xml .= "<pubDate>{$pubdate}</pubDate>\n";
-$xml .= "<lastBuildDate>{$pubdate}</lastBuildDate>\n";
-$xml .= '<docs>http://blogs.law.harvard.edu/tech/rss</docs>';
-$xml .= "<generator>{$CONFIG['application_name']} {$application_version_string}</generator>\n";
-$xml .= "<webMaster>".user_email($CONFIG['support_manager'])." (Support Manager)</webMaster>\n";
+$feed = new Feed();
+$feed->title = "{$CONFIG['application_shortname']} {$strIncidents}";
+$feed->feedurl = "{$CONFIG['application_uriprefix']}{$CONFIG['application_webpath']}incident_details.php?id={$incident->id}";
+$feed->description = "{$CONFIG['application_name']}: {$strIncidents} {$strFor} ".user_realname($userid)." ({$strActionNeeded})";
+$feed->pubdate = $pubdate;
+$feed->items = $items;
 
-$xml .= $itemxml;
-
-
-$xml .= "</channel></rss>\n";
-
-header("Content-Type: application/xml");
-echo $xml;
+$feed->generate_feed();
 ?>
