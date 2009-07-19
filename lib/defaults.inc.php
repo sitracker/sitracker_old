@@ -293,8 +293,8 @@ $CONFIG['ldap_protocol'] = 3;
 $CONFIG['ldap_bind_user'] = "";
 $CONFIG['ldap_bind_pass'] = "";
 
-// TLS. TRUE = start TLS, FALSE = use unencrypted
-$CONFIG['ldap_use_tls'] = FALSE;
+// SSL, TLS or NONE
+$CONFIG['ldap_security'] = 'NONE';
 
 // The LDAP Base DN for user lookups
 $CONFIG['ldap_dn_base'] = "ou=Users,dc=example,dc=com";

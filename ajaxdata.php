@@ -274,11 +274,11 @@ switch ($action)
         $ldap_host = cleanvar($_REQUEST['ldap_host']);
         $ldap_port = cleanvar($_REQUEST['ldap_port']);
         $ldap_protocol = cleanvar($_REQUEST['ldap_protocol']);
-        $ldap_tls = cleanvar($_REQUEST['ldap_use_tls']);
+        $ldap_security = cleanvar($_REQUEST['ldap_security']);
         $ldap_user = cleanvar($_REQUEST['ldap_bind_user']);
         $ldap_password = cleanvar($_REQUEST['ldap_bind_pass']);        
 
-        $r = ldapOpen($ldap_host, $ldap_port, $ldap_protocol, $ldap_tls, $ldap_user, $ldap_password);
+        $r = ldapOpen($ldap_host, $ldap_port, $ldap_protocol, $ldap_security, $ldap_user, $ldap_password);
         if ($r == -1) echo "0"; // Failed
         else echo "1"; // Success
     

@@ -153,22 +153,29 @@ elseif ($CONFIG['use_ldap'])
     * @author Lea Anthony
     * @return the handle of the opened connection
 */
-function ldapOpen($host='', $port='', $protocol='', $tls='', $user='', $password='')
+function ldapOpen($host='', $port='', $protocol='', $security='', $user='', $password='')
 {
-    // TODO: Secure binding to host using TLS/SSL
     debug_log("ldapOpen");
     global $CONFIG, $ldap_conn;
 
     if (empty($host)) $host = $CONFIG['ldap_host'];
     if (empty($port)) $port = $CONFIG['ldap_port'];
     if (empty($protocol)) $protocol = $CONFIG['ldap_protocol'];
-    if (empty($tls)) $tls = $CONFIG['ldap_use_tls'];
+    if (empty($security)) $security = $CONFIG['ldap_security'];
     if (empty($user)) $user = $CONFIG['ldap_bind_user'];
     if (empty($password)) $password = $CONFIG['ldap_bind_pass'];
 
     $toReturn = -1;
 
-    $ldap_conn = @ldap_connect($host, $port);
+    $ldap_url = "ldap://{$host}:{$port}";
+
+    if ($security == 'SSL')
+    {
+    	$ldap_url = "ldaps://{$host}:{$port}";
+    }
+
+    debug_log ("LDAP URL: {$ldap_url}");
+    $ldap_conn = @ldap_connect($ldap_url);
 
 
     if ($ldap_conn)
@@ -177,7 +184,7 @@ function ldapOpen($host='', $port='', $protocol='', $tls='', $user='', $password
         ldap_set_option($ldap_conn, LDAP_OPT_PROTOCOL_VERSION, $protocol);
         ldap_set_option($ldap_conn, LDAP_OPT_REFERRALS,0);
     
-        if ( $tls )
+        if ( $security == 'TLS' )
         {
             // Protocol V3 required for start_tls
             if ( $protocol == 3 )

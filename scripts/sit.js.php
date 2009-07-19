@@ -69,12 +69,12 @@ function password_reveal(elem)
 */
 function checkLDAPDetails(statusfield)
 {
-    $(statusfield).innerHTML = \"\";
+    $(statusfield).innerHTML = \"<strong>{$strCheckingDetails}</strong>\";
 
     var server = $('ldap_host').value;
     var port = $('ldap_port').value;
     var protocol = $('ldap_protocol').options[$('ldap_protocol').selectedIndex].value;
-    var tls = $('ldap_use_tls').options[$('ldap_use_tls').selectedIndex].value;
+    var security = $('ldap_security').options[$('ldap_security').selectedIndex].value;
     var user = $('ldap_bind_user').value;
     var password = $('cfgldap_bind_pass').value;
 
@@ -105,7 +105,7 @@ function checkLDAPDetails(statusfield)
     }
 
     var url =  \"ajaxdata.php\";
-    var params = \"action=checkldap&ldap_host=\"+server+\"&ldap_port=\"+port+\"&ldap_protocol=\"+protocol+\"&ldap_use_tls=\"+tls+\"&ldap_bind_user=\"+escape(user)+\"&ldap_user_pass=\"+escape(password);
+    var params = \"action=checkldap&ldap_host=\"+server+\"&ldap_port=\"+port+\"&ldap_protocol=\"+protocol+\"&ldap_security=\"+security+\"&ldap_bind_user=\"+escape(user)+\"&ldap_bind_pass=\"+escape(password);
     xmlhttp.open(\"POST\", url, true)
     xmlhttp.setRequestHeader(\"Content-type\", \"application/x-www-form-urlencoded\");
     xmlhttp.setRequestHeader(\"Content-length\", params.length);

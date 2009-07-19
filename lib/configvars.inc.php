@@ -113,7 +113,7 @@ $CFGCAT['ldap'] = array('use_ldap',
                         'ldap_protocol',
                         'ldap_bind_user',
                         'ldap_bind_pass',
-                        'ldap_use_tls',
+                        'ldap_security',
                         'ldap_dn_base',
                         'ldap_default_user_status',
                         'ldap_admin_group',
@@ -470,10 +470,10 @@ $CFGVAR['ldap_protocol']['title'] = 'LDAP Protocol version';
 $CFGVAR['ldap_protocol']['type'] = 'select';
 $CFGVAR['ldap_protocol']['options'] = '1|2|3';
 
-$CFGVAR['ldap_use_tls']['title'] = 'Use TLS';
-$CFGVAR['ldap_use_tls']['help'] = 'Use Transport Layer Security. TRUE = start TLS, FALSE = use unencrypted. (Requires LDAP protocol v3)';
-$CFGVAR['ldap_use_tls']['options'] = 'TRUE|FALSE';
-$CFGVAR['ldap_use_tls']['type'] = 'select';
+$CFGVAR['ldap_security']['title'] = 'LDAP Security';
+$CFGVAR['ldap_security']['help'] = 'LDAP security method (Requires LDAP protocol v3)';
+$CFGVAR['ldap_security']['options'] = 'SSL|TLS|NONE';
+$CFGVAR['ldap_security']['type'] = 'select';
 
 $CFGVAR['ldap_user_group']['title'] = 'LDAP group for SIT users';
 

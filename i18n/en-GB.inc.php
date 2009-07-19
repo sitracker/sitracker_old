@@ -273,6 +273,7 @@ $strChangeOwner = 'Change owner';
 $strChangingContact = 'Changing the contact or skill will not reassign this incident to another contract';
 $strCharsToKeepWhenTranslating = 'When translating, please do not translate anything that looks like the following: [b] {word} %s. These are placeholders, leave them in the appropriate place in your translated string';
 $strCheckLDAPDetails = 'Check LDAP details';
+$strCheckingDetails = 'Checking Details';
 $strChooseLanguage = 'Please choose your language';
 $strCity = 'City';
 $strClearFilter = 'Clear filter';
