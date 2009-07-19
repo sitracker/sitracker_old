@@ -251,6 +251,7 @@ $strChangeOwner = 'Skift ejer';
 $strChangingContact = 'Ændring af kontakt eller færdighed til ikke at redelegere denne hændelse til en anden kontrakt';
 $strCharsToKeepWhenTranslating = 'Ved oversættelse, oversæt venligst ikke noget der ligner: [b] {word} %s. Disse er specielle parametre, efterlad dem i de respektive steder i den oversatte tekst';
 $strCheckLDAPDetails = 'Kontroller LDAP indstillinger';
+$strCheckingDetails = 'Kontrollerer indstillinger';
 $strChooseLanguage = 'Vælg venligst dit sprog';
 $strCity = 'By';
 $strClearFilter = 'Fjern filter';
