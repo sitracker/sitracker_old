@@ -99,7 +99,13 @@ while ($contactrow = mysql_fetch_array($contactresult))
         echo "<tr><th>{$strAddress2}:</th><td>{$address2}</td></tr>\n";
         echo "<tr><th>{$strCity}:</th><td>{$city}</td></tr>\n";
         echo "<tr><th>{$strCounty}:</th><td>{$county}</td></tr>\n";
-        echo "<tr><th>{$strPostcode}:</th><td>{$postcode}</td></tr>\n";
+        echo "<tr><th>{$strPostcode}:</th><td>{$postcode}";
+        if (!empty($postcode))
+        {
+            //TODO make this support different links via config
+            echo "(<a href='http://www.google.com/maps?q={$postcode}'>{$strMap}</a>)";
+        }
+        echo "</td></tr>\n";
         echo "<tr><th>{$strCountry}:</th><td>{$country}</td></tr>\n";
     }
 
