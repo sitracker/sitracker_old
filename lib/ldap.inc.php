@@ -422,7 +422,6 @@ function authenticateLDAP($username, $password, $id = 0, $user=TRUE, $populateOn
                     $user->mobile = $user_attributes[$CONFIG['ldap_mobile']][0];
                     $user->fax = $user_attributes[$CONFIG['ldap_fax']][0];
                     $user->message = $user_attributes[$CONFIG['ldap_description']][0];
-                    $user->status = $CONFIG['ldap_default_user_status'];
                     $user->holiday_entitlement = $CONFIG['default_entitlement'];
                     $user->source = 'ldap';
                     
@@ -438,6 +437,7 @@ function authenticateLDAP($username, $password, $id = 0, $user=TRUE, $populateOn
                     
                     if ($id == 0)
                     {
+                        $user->status = $CONFIG['ldap_default_user_status'];
                         $status = $user->add();
                     }
                     else

@@ -12,6 +12,12 @@ class Holiday {
     var $endtime;
 }
 
+
+
+/** 
+ * Base class for all types of people, this contains the core attributes common for all people
+ * @author Paul Heaney
+ */
 class Person {
     var $id;
     var $username;
@@ -24,6 +30,11 @@ class Person {
     var $source; // default: sit, ldap etc
 }
 
+
+/**
+ * Represents a user adding the additional details possible for a user
+ * @author Paul Heaney
+ */
 class User extends Person{
     var $realname;
     var $roleid;
@@ -48,7 +59,7 @@ class User extends Person{
     var $startdate;
     
     /**
-     * Add a user to SiT!
+     * Adds a user to SiT! this performs a number of checks to ensure uniqueness and mandertory details are present
      * 
      * @return mixed int for user ID if sucessful else false
      * @author Paul Heaney
@@ -117,7 +128,9 @@ class User extends Person{
 
     
     /**
+     * Updates the details of a user within SiT!
      * @author Paul Heaney
+     * @return bool True if updated sucessfully false otherwise
      */
     function update()
     {
@@ -193,6 +206,10 @@ class User extends Person{
 }
 
 
+/**
+ * Represents a contact within SiT! adding the necessary details unique to contacts
+ * @author Paul Heaney
+ */
 class Contact extends Person {
 	var $notify_contact;
     var $forenames;
@@ -212,6 +229,13 @@ class Contact extends Person {
     var $notes;
     var $active;
     
+    
+    /**
+     * Checks to see if the required fields are present and optionally that the user is unique
+     * @author Paul Heaney
+     * @param bool $duplicate Whether to check if this contact is a duplicate, defaults to true
+     * @return bool true indicates valid contact, false otherwise
+     */
     function check_valid($duplicate=true)
     {
         $errors = 0;
@@ -237,6 +261,12 @@ class Contact extends Person {
         else return true;
     }
     
+    
+    /**
+     * Generates an array of insertable values for the contacts data protection settings
+     * @author Paul Heaney
+     * @return array an array with keys email, phone, address with either Yes or No as values
+     */
     function get_dataprotection()
     {
     	$dp['email'] = 'Yes';
@@ -252,7 +282,7 @@ class Contact extends Person {
     
     
     /**
-     * Adds a contact to SiT!
+     * Performs the addition of the contact to SiT! this performs validity checks before adding the contact
      * @author Paul Heaney
      * @return mixed int for contactID if sucsesful, false otherwise
      */
@@ -306,7 +336,7 @@ class Contact extends Person {
 
 
     /**
-     * Modifies an existing contact
+     * Updates the details of an existing contact within SiT!
      * @author Paul Heaney
      * @return bool. true on sucess, false otherwise
      */
@@ -380,7 +410,7 @@ class Contact extends Person {
     
     
     /**
-     * Checks if this contact already exists
+     * Checks to see if the contact is a duplicate within SiT!
      * @author Paul Heaney
      * @return bool. true for duplicate, false otherwise
      */

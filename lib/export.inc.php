@@ -18,6 +18,10 @@ if (realpath(__FILE__) == realpath($_SERVER['SCRIPT_FILENAME']))
 }
 
 
+/**
+ * This class represents an RSS/Atom feed, containing the necessary header details and feed items
+ * @author Ivan Lucas, Paul heaney
+ */
 class Feed
 {
     var $title = '';
@@ -77,6 +81,10 @@ class Feed
 }
 
 
+/**
+ * This represents a item on an RSS/Atom feed
+ * @author Paul Heaney
+ */
 class FeedItem
 {
      var $title = '';
@@ -106,6 +114,5 @@ class FeedItem
         return $itemxml;
      }
 }
-
 
 ?>
