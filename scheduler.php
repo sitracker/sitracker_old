@@ -131,7 +131,7 @@ switch ($_REQUEST['mode'])
                                 21 => "9:00 PM", 22 => "10:00 PM", 23 => "11:00 PM",);
             $selected = substr($saction->date_time, 0, 2);
             if ($selected[0] == '0') $selected = $selected[1];
-            echo array_drop_down($dates, 'date_time', $selected);
+            echo array_drop_down($dates, 'date_time', $selected, '', TRUE);
 
             echo "</td></tr>";
             echo "</tbody>";
@@ -323,13 +323,46 @@ switch ($_REQUEST['mode'])
                         elseif ($schedule->type == 'date')
                         {
                             $nextruntime = 1;
-                            // TODO
-                            /*
-                            if over schedule
-                                now
-                            else
-                                find date
-                             */
+                            if ($schedule->date_type = 'month')
+                            {
+                                if ($lastruntime < ($now - (86400 * 31)))
+                                {
+                                    $nextruntime = $now;
+                                }
+                                else
+                                {
+                                    if ($schedule->date_offset > date('d'))
+                                    {
+                                        $nextrunmonth = date('m');
+                                    }
+                                    else
+                                    {
+                                        $nextrunmonth = date('m') + 1;
+                                    }
+                                    $h = substr($schedule->date_time, 0, 2);
+                                    $nextruntime = gmmktime($h,0,0,$nextrunmonth,$schedule->date_offset);
+                                }
+                            }
+                            if ($schedule->date_type = 'year')
+                            {
+                                if ($lastruntime < ($now - (86400 * 365)))
+                                {
+                                    $nextruntime = $now;
+                                }
+                                else
+                                {
+                                    if ($schedule->date_offset > date('z'))
+                                    {
+                                        $nextrunyear = date('y');
+                                    }
+                                    else
+                                    {
+                                        $nextrunyear = date('y') + 1;
+                                    }
+                                    $h = substr($schedule->date_time, 0, 2);
+                                    $nextruntime = gmmktime($h,0,0,1,$schedule->date_offset,$nextrunyear);
+                                }
+                            }
                         }
                     }
                     else
@@ -341,13 +374,46 @@ switch ($_REQUEST['mode'])
                         elseif ($schedule->type == 'date')
                         {
                             $nextruntime = 1;
-                            // TODO
-                            /*
-                            if over schedule
-                                now
-                            else
-                                find date
-                             */
+                            if ($schedule->date_type = 'month')
+                            {
+                                if ($lastruntime < ($now - (86400 * 31)))
+                                {
+                                    $nextruntime = $now;
+                                }
+                                else
+                                {
+                                    if ($schedule->date_offset > date('d'))
+                                    {
+                                        $nextrunmonth = date('m');
+                                    }
+                                    else
+                                    {
+                                        $nextrunmonth = date('m') + 1;
+                                    }
+                                    $h = substr($schedule->date_time, 0, 2);
+                                    $nextruntime = gmmktime($h,0,0,$nextrunmonth,$schedule->date_offset);
+                                }
+                            }
+                            if ($schedule->date_type = 'year')
+                            {
+                                if ($lastruntime < ($now - (86400 * 365)))
+                                {
+                                    $nextruntime = $now;
+                                }
+                                else
+                                {
+                                    if ($schedule->date_offset > date('z'))
+                                    {
+                                        $nextrunyear = date('y');
+                                    }
+                                    else
+                                    {
+                                        $nextrunyear = date('y') + 1;
+                                    }
+                                    $h = substr($schedule->date_time, 0, 2);
+                                    $nextruntime = gmmktime($h,0,0,1,$schedule->date_offset,$nextrunyear);
+                                }
+                            }
                         }
                     }
 

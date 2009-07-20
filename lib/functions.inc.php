@@ -149,7 +149,7 @@ function authenticate($username, $password)
 {
     global $CONFIG;
     $toReturn = false;
-    
+
     $sql = "SELECT id, password, status, user_source FROM `{$GLOBALS['dbUsers']}` WHERE username = '{$username}'";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
@@ -205,12 +205,12 @@ function authenticate($username, $password)
             if ($toReturn === -1) $toReturn = false;
         }
     }
-    
+
     if ($toReturn)
     {
     	journal(CFG_LOGGING_MAX,'User Authenticated',"{$username} authenticated from " . getenv('REMOTE_ADDR'),CFG_JOURNAL_LOGIN,0);
     }
-    
+
     debug_log ("authenticate returning {$toReturn}");
     return $toReturn;
 }
@@ -221,7 +221,7 @@ function authenticateContact($username, $password)
     debug_log ("authenticateContact called");
 	global $CONFIG;
     $toReturn = false;
-    
+
     $sql = "SELECT id, password, contact_source, active FROM `{$GLOBALS['dbContacts']}` WHERE username = '{$username}'";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
@@ -249,7 +249,7 @@ function authenticateContact($username, $password)
                     if ((md5($password) == $obj->password OR $password == $obj->password) AND $obj->active == 'true') $toReturn = true;
                     else $toReturn = false;
                     debug_log ("Cached contact {$toReturn} {$password}");
-                    
+
                 }
                 else
                 {
@@ -289,7 +289,7 @@ function authenticateContact($username, $password)
             if ($toReturn === -1) $toReturn = false;
         }
     }
-    
+
     debug_log ("authenticateContact returning {$toReturn}");
     return $toReturn;
 }
@@ -5696,9 +5696,6 @@ function schedule_actions_due()
     $sql .= "AND ((date_type = 'month' AND (DAYOFMONTH(CURDATE()) > date_offset OR (DAYOFMONTH(CURDATE()) = date_offset AND CURTIME() >= date_time)) ";
     $sql .= "AND DATE_FORMAT(CURDATE(), '%Y-%m') != DATE_FORMAT(lastran, '%Y-%m') ) ) ";  // not run this month
     $sql .= "AND laststarted <= lastran";
-    //$sql .= "OR ";
-    //$sql .= "(date_type = 'year'))";
-
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     if (mysql_num_rows($result) > 0)
@@ -5717,8 +5714,6 @@ function schedule_actions_due()
     $sql .= "OR (DAYOFYEAR(CURDATE()) = date_offset AND CURTIME() >= date_time)) ";
     $sql .= "AND DATE_FORMAT(CURDATE(), '%Y') != DATE_FORMAT(lastran, '%Y') ) ) ";  // not run this year
     $sql .= "AND laststarted <= lastran";
-    //$sql .= "OR ";
-    //$sql .= "(date_type = 'year'))";
 
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
@@ -8138,9 +8133,9 @@ function cfgVarInput($setupvar, $showvarnames = FALSE)
 
     if ($CFGVAR[$setupvar]['statusfield'] == 'TRUE')
     {
-        $html .= "<div id='status{$setupvar}'></div>";    	
+        $html .= "<div id='status{$setupvar}'></div>";
     }
-    
+
     $html .= "</div>";
     $html .= "<br />\n";
     if ($c == 1) $c == 2;
