@@ -671,6 +671,8 @@ $strGroupMembersAway = 'Group Members Away';
 $strGroupMembership = 'Group Membership';
 
 $strHandled = 'Handled';
+# Incident 3 has been moved to John's Action Needed queue, three %s variables in this: incident number, queue name, users name
+$strHasBeenMovedToX = '%s has been moved to %s\'s %s queue';
 $strHAVESkills = 'HAVE Skills';
 $strHeldEmailsNum = '%d Held Emails';
 $strHelp = 'Help';

@@ -992,9 +992,12 @@ elseif ($action == 'reassign')
 
     include (APPLICATION_INCPATH . 'htmlheader.inc.php');
     echo "<h2>{$strIncidentAdded} - {$strSummary}</h2>";
-    echo "<p align='center'><a href=\"javascript:incident_details_window('$incidentid','incident{$incidentid}');\">";
-    echo "{$strIncident} {$incidentid}</a> has been moved to ";
-    echo user_realname($uid)."'s <strong style='color: red'>{$strActionNeeded}</strong> queue</p>";
+    echo "<p align='center'>";
+    $incidentnum = "<a href=\"javascript:incident_details_window('$incidentid','incident{$incidentid}');\">{$strIncident} {$incidentid}</a>";
+    $queuename = "<strong style='color: red'>{$strActionNeeded}</strong>";
+    $name = user_realname($uid);
+    printf($strHasBeenMovedToX, $incidentnum, $name, $queuename);
+    echo "</p>";
     $userphone = user_phone($userid);
     if ($userphone!='') echo "<p align='center'>{$strTelephone}: {$userphone}</p>";
     $sql = "UPDATE `{$dbIncidents}` SET owner='$uid', lastupdated='$now' WHERE id='$incidentid'";
