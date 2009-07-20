@@ -27,8 +27,11 @@ $sql .= "WHERE id='{$incomingid}' AND locked = '{$sit[2]}'";
 $result = mysql_query($sql);
 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-else {
-        header('Location: inbox.php');
+else
+{
+    // FIXME Have temporarily disabled the inbox feature by removing it from the menu for v3.50 release
+    // header('Location: inbox.php');
+    header('Location: holding_queue.php');
 }
 
 ?>
