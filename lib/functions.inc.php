@@ -155,24 +155,24 @@ function authenticate($username, $password)
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     if (mysql_num_rows($result) == 1)
     {
-    	// Exist in SiT DB
+        // Exist in SiT DB
         $obj = mysql_fetch_object($result);
         if ($obj->user_source == 'sit')
         {
-        	if (md5($password) == $obj->password AND $obj->status != 0) $toReturn = true;
+            if (md5($password) == $obj->password AND $obj->status != 0) $toReturn = true;
             else $toReturn = false;
         }
         elseif ($obj->user_source == 'ldap')
         {
-        	// Auth against LDAP and sync
+            // Auth against LDAP and sync
             $toReturn =  authenticateLDAP($username, $password, $obj->id);
             if ($toReturn === -1)
             {
-            	// Communication with LDAP server failed
+                // Communication with LDAP server failed
                 if ($CONFIG['ldap_allow_cached_password'])
                 {
                     // Use cached password
-                	if (md5($password) == $obj->password AND $obj->status != 0) $toReturn = true;
+                    if (md5($password) == $obj->password AND $obj->status != 0) $toReturn = true;
                     else $toReturn = false;
                 }
                 else
@@ -182,7 +182,7 @@ function authenticate($username, $password)
             }
             elseif ($toReturn)
             {
-            	$toReturn = true;
+                $toReturn = true;
             }
             else
             {
@@ -4069,37 +4069,6 @@ function readable_date($date, $lang = 'user')
 
 
 /**
-* Select a header style, h1, h2 etc.
-* @deprecated DEPRECATED remove before after 3.45 release
-**/
-function header_listbox($headersize,$header,$element)
-{
-    $html .= "<select id='header$element' name='header$element' style='display:inline' onchange=\"change_header($element,'$header');\">\n";
-    $html .= "<option value='h1' ";  if ($headersize=='h1') $html .= "selected='selected'";  $html .= ">H1 (Largest)</option>\n";
-    $html .= "<option value='h2' ";  if ($headersize=='h2') $html .= "selected='selected'";  $html .= ">H2</option>\n";
-    $html .= "<option value='h3' ";  if ($headersize=='h3') $html .= "selected='selected'";  $html .= ">H3</option>\n";
-    $html .= "<option value='h4' ";  if ($headersize=='h4') $html .= "selected='selected'";  $html .= ">H4</option>\n";
-    $html .= "<option value='h5' ";  if ($headersize=='h5') $html .= "selected='selected'";  $html .= ">H5 (Smallest)</option>\n";
-    $html .= "</select>\n";
-    return $html;
-}
-
-
-/**
-* @deprecated DEPRECATED remove before after 3.45 release
-**/
-function distribution_listbox($name, $distribution)
-{
-    $html  = "<select name='$name'>\n";
-    $html .= "<option value='public' ";  if ($distribution=='public') $html .= "selected='selected'";  $html .= ">{$GLOBALS['strPublic']}</option>\n";
-    $html .= "<option value='private' style='color: blue;' ";  if ($distribution=='private') $html .= "selected='selected'";  $html .= ">{$GLOBALS['strPrivate']}</option>\n";
-    $html .= "<option value='restricted' style='color: red;' ";  if ($distribution=='restricted') $html .= "selected='selected'";  $html .= ">{$GLOBALS['strRestricted']}</option>\n";
-    $html .= "</select>\n";
-    return $html;
-}
-
-
-/**
     * Return the email address of the notify contact of the given contact
     * @author Ivan Lucas
     * @returns string. email address.
@@ -4673,46 +4642,6 @@ function bbcode_toolbar($elementid)
     $html .= "</div>\n";
     return $html;
 }
-
-
-/**
-    * Checks to see whether an incident exists
-    * @param int $incidentid
-    * @returns 'Yes', 'No' or 'Doesn't exist'
-    * @deprecated DEPRECATED don't use for any new code for >= 3.45
-    * @note this function needs replacing with something more sensible
-    * this function name would be more suitable for something that actually
-    * does the opening too...  legacy rubbish
-*/
-function incident_open($incidentid)
-{
-    global $dbIncidents;
-    $sql = "SELECT id FROM `{$dbIncidents}` WHERE id='$incidentid' AND status!=2";
-    $result = mysql_query($sql);
-    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
-    if (mysql_num_rows($result) > 0)
-    {
-        return 'Yes'; // Do not translate
-    }
-    else
-    {
-        $sql = "SELECT id FROM `{$dbIncidents}` WHERE id = '$incidentid'";
-        $result = mysql_query($sql);
-        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
-        if (mysql_num_rows($result) > 0)
-        {
-            //closed
-            return 'No'; // Do not translate
-        }
-        else
-        {
-            //doesn't exist
-            return "Doesn't exist"; // Do not translate
-        }
-    }
-}
-
-
 
 
 function parse_updatebody($updatebody, $striptags = TRUE)
