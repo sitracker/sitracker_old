@@ -85,6 +85,7 @@ if (empty($mode))
         echo " <span class='required'>{$strRequired}</span>";
     }
     echo "</td></tr>\n";
+    echo "<tr><th>{$strSource}</th><td>{$user->user_source}</td></th>";
     echo "<tr><th>{$strJobTitle}</th>";
     echo "<td>";
     if ($_SESSION['user_source'] != 'sit' AND !empty($CONFIG['ldap_jobtitle']))
@@ -149,7 +150,7 @@ if (empty($mode))
     echo "</td></tr>";
     echo "<tr><th colspan='2'>{$strWorkStatus}</th></tr>";
 
-    if ($edituserpermission AND $edituserid != $sit[2])
+    if ($edituserpermission AND $edituserid != $sit[2] AND $user->user_source == 'sit')
     {
         $userdisable = TRUE;
     }

@@ -1484,6 +1484,7 @@ $strSort = 'Sort';
 $strSortAscending = 'Sort Ascending';
 $strSortDescending = 'Sort Decending';
 $strSortResults = 'Sort Results';
+$strSource = 'Source';
 $strSourceFailCannotBeFoundX = 'Source file cannot be found %s';
 $strSpamEmail = 'Spam Email';
 $strSpecifyAddress = 'Specify an address for this contact that is different to the site';
