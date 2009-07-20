@@ -285,6 +285,7 @@ $CONFIG['allow_duration_adjustment'] = FALSE;
 $CONFIG['use_ldap'] = FALSE;
 
 $CONFIG['ldap_host'] = "";
+$CONFIG['ldap_port'] = '389';
 
 // Ldap Protocol version to use
 $CONFIG['ldap_protocol'] = 3;
