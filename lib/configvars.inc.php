@@ -429,7 +429,7 @@ $CFGVAR['ldap_allow_cached_password']['options'] = 'TRUE|FALSE';
 $CFGVAR['ldap_allow_cached_password']['type'] = 'select';
 
 $CFGVAR['ldap_bind_user']['title'] = 'LDAP Bind user';
-$CFGVAR['ldap_bind_user']['help'] = 'The user for binding to the LDAP host, this should be the full DN of the user e.g. cn=sitadmin,ou=sitracker,o=org';
+$CFGVAR['ldap_bind_user']['help'] = 'The user for binding to the LDAP host, this should be the full DN of the user e.g. <code>cn=sitadmin,ou=sitracker,o=org</code>';
 
 $CFGVAR['ldap_bind_pass']['title'] = 'LDAP Bind password';
 $CFGVAR['ldap_bind_pass']['help'] = 'The password for binding to the LDAP host';
@@ -437,16 +437,16 @@ $CFGVAR['ldap_bind_pass']['type'] = 'ldappassword';
 $CFGVAR['ldap_bind_pass']['statusfield'] = 'TRUE'; 
 
 $CFGVAR['ldap_admin_group']['title'] = 'LDAP group for SIT admins';
-$CFGVAR['ldap_admin_group']['help'] = 'The full DN of the group the users are a member of which assigns the SiT! admin role e.g. cn=sitadmins,ou=sitracker,o=org';
+$CFGVAR['ldap_admin_group']['help'] = 'The full DN of the group the users are a member of which assigns the SiT! admin role e.g. <code>cn=sitadmins,ou=sitracker,o=org</code>';
 
 $CFGVAR['ldap_manager_group']['title'] = 'LDAP group for SIT managers';
-$CFGVAR['ldap_manager_group']['help'] = 'The full DN of the group the users are a member of which assigns the SiT! manager role e.g. cn=sitmanagers,ou=sitracker,o=org';
+$CFGVAR['ldap_manager_group']['help'] = 'The full DN of the group the users are a member of which assigns the SiT! manager role e.g. <code>cn=sitmanagers,ou=sitracker,o=org</code>';
 
 $CFGVAR['ldap_user_group']['title'] = 'LDAP group for SIT users';
-$CFGVAR['ldap_user_group']['help'] = 'The full DN of the group the users are a member of which assigns the SiT! user role e.g. cn=situsers,ou=sitracker,o=org';
+$CFGVAR['ldap_user_group']['help'] = 'The full DN of the group the users are a member of which assigns the SiT! user role e.g. <code>cn=situsers,ou=sitracker,o=org</code>';
 
 $CFGVAR['ldap_customer_group']['title'] = 'LDAP Customer Group';
-$CFGVAR['ldap_customer_group']['help'] = 'The full DN of the group the identifies the person as a valid contact/customer e.g. cn=sitcustomers,ou=sitracker,o=org';
+$CFGVAR['ldap_customer_group']['help'] = 'The full DN of the group the identifies the person as a valid contact/customer e.g. <code>cn=sitcustomers,ou=sitracker,o=org</code>';
 
 $CFGVAR['ldap_default_customer_siteid']['title'] = 'LDAP Customer default site';
 $CFGVAR['ldap_default_customer_siteid']['help'] = 'Place LDAP customers as contacts under this site';
@@ -457,7 +457,7 @@ $CFGVAR['ldap_default_user_status']['help'] = 'The initial status that will be g
 $CFGVAR['ldap_default_user_status']['type'] = 'userstatusselect';
 
 $CFGVAR['ldap_dn_base']['title'] = 'LDAP Base DN';
-$CFGVAR['ldap_dn_base']['help'] = 'The LDAP Base DN for user lookups e.g. ou=people,ou=sitracker,o=org';
+$CFGVAR['ldap_dn_base']['help'] = 'The LDAP Base DN for user lookups e.g. <code>ou=people,ou=sitracker,o=org</code>';
 
 $CFGVAR['ldap_host']['title'] = 'LDAP Host Name';
 $CFGVAR['ldap_host']['help'] = "This should be your <abbr title='Lightweight Directory Access Protocol'>LDAP</abbr> IP address or hostname, e.g.: ldap.example.com";
