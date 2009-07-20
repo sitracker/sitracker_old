@@ -165,6 +165,13 @@ function ldapOpen($host='', $port='', $protocol='', $security='', $user='', $pas
     if (empty($user)) $user = $CONFIG['ldap_bind_user'];
     if (empty($password)) $password = $CONFIG['ldap_bind_pass'];
 
+    // Use a default port if one isn't specified
+    if (empty($port))
+    {
+        if ($security == 'SSL') $port = '636';
+        else $port = '389';
+    }
+
     $toReturn = -1;
 
     $ldap_url = "ldap://{$host}:{$port}";
