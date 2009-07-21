@@ -2724,8 +2724,6 @@ ALTER TABLE `{$dbFeedbackForms}` CHANGE `createdby` `createdby` SMALLINT( 6 ) NU
 CHANGE `modifiedby` `modifiedby` SMALLINT( 6 ) NULL DEFAULT NULL ;
 ALTER TABLE `{$dbFeedbackQuestions}` CHANGE `createdby` `createdby` SMALLINT( 6 ) NULL DEFAULT NULL ,
  CHANGE `modifiedby` `modifiedby` SMALLINT( 6 ) NULL DEFAULT NULL ;
-ALTER TABLE `{$dbFeedbackReport}` CHANGE `createdby` `createdby` SMALLINT( 6 ) NULL DEFAULT NULL ,
- CHANGE `modifiedby` `modifiedby` SMALLINT( 6 ) NULL DEFAULT NULL ;
 ALTER TABLE `{$dbFeedbackResults}` CHANGE `createdby` `createdby` SMALLINT( 6 ) NULL DEFAULT NULL ,
  CHANGE `modifiedby` `modifiedby` SMALLINT( 6 ) NULL DEFAULT NULL ;
 ALTER TABLE `{$dbFiles}` CHANGE `createdby` `createdby` SMALLINT( 6 ) NULL DEFAULT NULL ,
@@ -2757,8 +2755,8 @@ ALTER TABLE `{$dbUpdates}` CHANGE `currentowner` `currentowner` SMALLINT( 6 ) NO
 ALTER TABLE `{$dbSupportContacts}` DROP `id`;
 ALTER TABLE `{$dbSupportContacts}` ADD PRIMARY KEY ( `maintenanceid` , `contactid` ) ;
 ALTER TABLE `{$dbTriggers}` ADD `defined` ENUM( 'custom', 'built-in' ) NOT NULL DEFAULT 'custom' ;
-UPDATE TABLE `{$dbTriggers}` SET `type` = 'built-in' WHERE id < 35 ;
-UPDATE TABLE `{$dbNoticeTemplates}` SET `description` = 'strNoticeMinsHeldEmailDesc', `text` = 'strNoticeMinsHeldEmail' WHERE `name` = 'NOTICE_MINS_HELD_EMAIL' AND `description` = 'strNoticeNewUserDesc' AND `text` = 'strNoticeNewUser' ;i
+UPDATE `{$dbTriggers}` SET `defined` = 'built-in' WHERE id < 35 ;
+UPDATE `{$dbNoticeTemplates}` SET `description` = 'strNoticeMinsHeldEmailDesc', `text` = 'strNoticeMinsHeldEmail' WHERE `name` = 'NOTICE_MINS_HELD_EMAIL' AND `description` = 'strNoticeNewUserDesc' AND `text` = 'strNoticeNewUser' ;
 UPDATE `{$dbEmailTemplates}` SET `type` = 'system' WHERE id < 28 AND id > 1 AND type != 'incident' ;
 
 -- PH 2009-06-28

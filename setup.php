@@ -1355,7 +1355,7 @@ switch ($_REQUEST['action'])
                             $installed_version = $application_version;
                             echo "<h2>Upgrade complete</h2>";
                             echo "<p>Upgraded to v{$application_version}</p>";
-
+                            include (APPLICATION_LIBPATH . 'triggers.inc.php');
                             trigger("TRIGGER_SIT_UPGRADED", array('applicationversion' => $application_version));
                         }
                         else
