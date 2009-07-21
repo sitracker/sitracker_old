@@ -1423,18 +1423,27 @@ switch ($_REQUEST['action'])
                     echo "<h2>Checking installation...</h2>";
                     if ($cfg_file_writable)
                     {
+                        $checkadminuser = setup_check_adminuser();
                         echo "<p class='error'>Important: The file permissions on the configuration file <var>{$config_filename}</var> file ";
                         echo "allow it to be modified, we recommend you make this file read-only.";
                         if (DIRECTORY_SEPARATOR == '/')
                         {
                             echo "<br />You can run the following shell command to make it read-only.<br /><br /><var>chmod 444 {$config_filename}</var>";
                         }
+                        else
+                        {
+                            echo "<br />You can run the following command from windows command prompt to make it read-only.<br /><br /><var>attrib +r {$config_filename}</var>";
+                        }
                         echo "</p>";
+                        if ($checkadminuser == FALSE) echo "<p>You must set your config file to be read-only before setup can continue.</p>";
                         echo setup_button('', 'Re-check installation');
-                        echo "<br />or<br /><br />";
-                        echo "<form action='index.php' method='get'>";
-                        echo "<input type='submit' value=\"Run SiT!\" />";
-                        echo "</form>\n";
+                        if ($checkadminuser == TRUE)
+                        {
+                            echo "<br />or<br /><br />";
+                            echo "<form action='index.php' method='get'>";
+                            echo "<input type='submit' value=\"Run SiT!\" />";
+                            echo "</form>\n";
+                        }
                     }
                     elseif (!isset($_REQUEST))
                     {
