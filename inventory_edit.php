@@ -15,6 +15,7 @@ require (APPLICATION_LIBPATH . 'auth.inc.php');
 include (APPLICATION_INCPATH . 'htmlheader.inc.php');
 
 $id = cleanvar($_GET['id']);
+$siteid = cleanvar($_REQUEST['siteid']);
 
 // if (!empty($_GET['newsite']))
 // {
@@ -64,11 +65,10 @@ if (isset($_POST['submit']))
     }
 
     $sql .= " WHERE id='{$id}'";
-    
 
     mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
-    else html_redirect("inventory_site.php?site={$post['siteid']}");
+    else html_redirect("inventory_site.php?site={$siteid}");
 }
 else
 {
@@ -78,7 +78,7 @@ else
     $row = mysql_fetch_object($result);
     echo "<h2>".icon('edit', 32)." {$strEdit}</h2>";
     
-    echo "<form action='{$_SERVER['PHP_SELF']}?edit={$edit}&site={$row->siteid}' method='post'>";
+    echo "<form action='{$_SERVER['PHP_SELF']}?id={$id}&site={$row->siteid}' method='post'>";
     
     echo "<table class='vertical' align='center'>";
     echo "<tr><th>{$strName}</th>";
@@ -88,7 +88,7 @@ else
     echo "<td>".array_drop_down($CONFIG['inventory_types'], 'type', $row->type, '', TRUE)."</td></tr>";
 
     echo "<tr><th>{$strSite}</th><td>";
-    echo site_drop_down('site', $row->siteid, TRUE);
+    echo site_drop_down('siteid', $row->siteid, TRUE);
     echo " <span class='required'>{$strRequired}</td>";
     echo "<tr><th>{$strOwner}</th><td>";
     echo contact_site_drop_down('owner', '');
@@ -99,9 +99,9 @@ else
     echo "<tr><th>{$strAddress}</th>";
     echo "<td><input name='address' value='{$row->address}' /></td></tr>";
 
-    if (!is_numeric($edit) OR
-        (($row->privacy == 'adminonly' AND user_permission($sit[2], 22)) OR
-        ($row->privacy == 'private' AND ($row->createdby == $sit[2])) OR $row->privacy == 'none'))
+    if (!is_numeric($id)
+        OR (($row->privacy == 'adminonly' AND user_permission($sit[2], 22))
+            OR ($row->privacy == 'private' AND ($row->createdby == $sit[2])) OR $row->privacy == 'none'))
     {
         echo "<tr><th>{$strUsername}</th>";
         echo "<td><input name='username' value='{$row->username}' /></td></tr>";
