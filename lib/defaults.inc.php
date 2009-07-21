@@ -327,7 +327,7 @@ $CONFIG["ldap_autocreate_customer"] = TRUE;
 // Whether to cache users passwords from LDAP
 $CONFIG["ldap_cache_passwords"] = FALSE;
 
-// Whether to allow authentication against stored password if unable to 
+// Whether to allow authentication against stored password if unable to
 // connect to LDAP server
 $CONFIG["ldap_allow_cached_password"] = FALSE;
 
