@@ -615,6 +615,7 @@ $strGroupMembersAway = 'Gruppe medlemmer ikke tilstede';
 $strGroupMembership = 'Gruppe medlemsskab';
 
 $strHandled = 'Håndteret';
+$strHasBeenMovedToX = '% er flyttet til %s\'s %s kø';
 $strHAVESkills = 'HAR færdigheder';
 $strHeldEmailsNum = '%d holdte emails';
 $strHelp = 'Hjælp';
@@ -1376,6 +1377,7 @@ $strSort = 'Sorter';
 $strSortAscending = 'Sorter stigende';
 $strSortDescending = 'Sorter faldende';
 $strSortResults = 'Sorter resultater';
+$strSource = 'Kilde';
 $strSourceFailCannotBeFoundX = 'Filen kan ikke findes %s';
 $strSpamEmail = 'Spam Email';
 $strSpecifyAddress = 'Angiv en adresse for kontakten der er forskellig fra afdelingen';
