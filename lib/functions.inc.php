@@ -7224,15 +7224,6 @@ function contract_site($maintid)
     }
 }
 
-/**
-* Adds a new user
-* @author Lea Anthony
-* @todo Needs completing 27Nov08
-*/
-function add_new_user($username, $password, $realname, $roleid, $groupid, $title, $email, $phone, $mobile, $fax, $status, $var_style, $holiday_entitlement)
-{
-}
-
 
 /**
 * Sets up default triggers for new users or upgraded users

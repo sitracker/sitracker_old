@@ -71,7 +71,7 @@ class Feed
         {
             foreach ($this->items AS $item)
             {
-                $xml .= $item->generateItem();    
+                $xml .= $item->generateItem();
             }
         }
 
@@ -102,7 +102,7 @@ class FeedItem
       */
      function generateItem()
      {
-     	$itemxml .= "<item>\n";
+        $itemxml .= "<item>\n";
         $itemxml .= "<title>{$this->title}</title>\n";
         $itemxml .= "<author>{$this->author}</author>\n";
         $itemxml .= "<link>{$this->link}</link>\n";
