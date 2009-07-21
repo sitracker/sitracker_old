@@ -877,3 +877,26 @@ function trow(e)
   }
 }
 
+
+/**
+  * Enable/Disable the contact address fields
+  * @author Ivan Lucas
+*/
+function togglecontactaddress()
+{
+    var setting = false;
+    if ($('usesiteaddress').checked == true)
+    {
+        setting = false;
+    }
+    else
+    {
+        setting = true;
+    }
+    $('address1').disabled = setting;
+    $('address2').disabled = setting;
+    $('city').disabled = setting;
+    $('county').disabled = setting;
+    $('country').disabled = setting;
+    $('postcode').disabled = setting;
+}

@@ -3436,7 +3436,7 @@ function country_drop_down($name, $country, $extraattributes='')
     if (in_array(strtoupper($country), $countrylist))
     {
         // make drop down
-        $html = "<select name=\"$name\" $extraattributes>";
+        $html = "<select id=\"{$name}\" name=\"{$name}\" {$extraattributes}>";
         foreach ($countrylist as $key => $value)
         {
             $value = htmlspecialchars($value);

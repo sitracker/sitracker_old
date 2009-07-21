@@ -87,7 +87,7 @@ elseif ($action == "edit" && isset($contact))
         echo "<tr><th>{$strActive}:</th><td><input type='checkbox' name='active' ";
         if ($contactrow['active'] == 'true') echo "checked='checked'";
         echo " value='true' /></td></tr> <tr><th></th><td>";
-        echo "<input type='checkbox' name='usesiteaddress' value='yes' onclick='togglecontactaddress();' ";
+        echo "<input type='checkbox' id='usesiteaddress' name='usesiteaddress' value='yes' onclick='togglecontactaddress();' ";
         if ($contactrow['address1'] !='')
         {
             echo "checked='checked'";
@@ -103,19 +103,19 @@ elseif ($action == "edit" && isset($contact))
         echo html_checkbox('dataprotection_address', $contactrow['dataprotection_address']);
         echo " {$strAddress} {$strDataProtection}</label></td></tr>\n";
         echo "<tr><th>{$strAddress1}:</th><td>";
-        echo "<input maxlength='255' name='address1' size='40' value='{$contactrow['address1']}' {$extraattributes} />";
+        echo "<input maxlength='255' id='address1' name='address1' size='40' value='{$contactrow['address1']}' {$extraattributes} />";
         echo "</td></tr>\n";
         echo "<tr><th>{$strAddress2}:</th><td>";
-        echo "<input maxlength='255' name='address2' size='40' value='{$contactrow['address2']}' {$extraattributes} />";
+        echo "<input maxlength='255' id='address2' name='address2' size='40' value='{$contactrow['address2']}' {$extraattributes} />";
         echo "</td></tr>\n";
         echo "<tr><th>{$strCity}:</th><td>";
-        echo "<input maxlength='255' name='city' size='40' value='{$contactrow['city']}' {$extraattributes} />";
+        echo "<input maxlength='255' id='city' name='city' size='40' value='{$contactrow['city']}' {$extraattributes} />";
         echo "</td></tr>\n";
         echo "<tr><th>{$strCounty}:</th><td>";
-        echo "<input maxlength='255' name='county' size='40' value='{$contactrow['county']}' {$extraattributes} />";
+        echo "<input maxlength='255' id='county' name='county' size='40' value='{$contactrow['county']}' {$extraattributes} />";
         echo "</td></tr>\n";
         echo "<tr><th>{$strPostcode}:</th><td>";
-        echo "<input maxlength='255' name='postcode' size='40' value='{$contactrow['postcode']}' {$extraattributes} />";
+        echo "<input maxlength='255' id='postcode' name='postcode' size='40' value='{$contactrow['postcode']}' {$extraattributes} />";
         echo "</td></tr>\n";
         echo "<tr><th>{$strCountry}:</th><td>";
         echo country_drop_down('country', $contactrow['country'], $extraattributes);
