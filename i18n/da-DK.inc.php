@@ -833,6 +833,7 @@ $strMarAbbr = 'Mar';
 $strMarch = 'Marts';
 $strMarkComplete = 'Mærk færdig';
 $strMarkedComplete = 'Markeret færdig';
+$strMarkedforclosure = 'Markeret til lukning';
 $strMarkedforclosureby = 'Markeret til lukning af %s';
 $strMarketingMailshot = 'Marketing masse mail';
 $strMarketingMailshotDesc = 'enne rapport er en liste af oplysninger for alle kunder der har kontrakter for de produkter du har valgt men ingen af dem ekskludere';
