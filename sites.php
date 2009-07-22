@@ -191,37 +191,26 @@ if ($errors == 0)
 
     if (mysql_num_rows($result) == 0)
     {
-        
         echo "<p align='center'>{$strSorryNoResult} ";
-        if ($owner > 0) echo " {$strOwnedBy} <strong>".user_realname($owner)."</strong></p>\n";
-        elseif ($search_string == '0') echo " {$strMatching} <strong><em>{$strNumber}</em></strong>";
-        else echo "{$strMatching} <strong>'$search_string</strong>'</p>\n";
-		
     }
     else
     {
         $countsites = mysql_num_rows($result);
         
         echo "<p align='center'>{$strDisplaying} $countsites ";
+
         if ($countsites == 1)
-
+        {
             echo "{$strSite}";
-
+        }
         else
-
+        {
             echo "{$strSites}";
-
+        }
         if ($owner > 0)
         {
             echo " {$strOwnedBy} <strong>".user_realname($owner)."</strong>";
-        }
-        elseif ($search_string=='0')
-        {
-            echo " {$strMatching} <strong>'{strNumber}'</strong>";
-        }
-        else
-        {
-            echo " {$strMatching} <strong>'{$search_string}'</strong>";
+
         }
         echo "</p>";
         echo "<table align='center'>";

@@ -1062,6 +1062,7 @@ $strOtherIncidents = 'Andre hændelser';
 $strOtherLeave = 'Anden frihed';
 $strOutbound = 'Udgående';
 $strOutput = 'Output';
+$strOwnedBy = 'ejet af';
 $strOwner = 'Ejer';
 $strOwners = 'Ejere';
 $strOwnerXAcctingAgain = 'Ejer %s accepterer igen';

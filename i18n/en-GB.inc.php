@@ -922,7 +922,6 @@ $strMarkedforclosureby = 'Marked for closure by %s';
 $strMarketingMailshot = 'Marketing Mailshot';
 $strMarketingMailshotDesc = 'This report is a list of details for all customers that currently (or previously) have contracts for the products you selected but none of the products excluded';
 $strMarkForClosure = 'Mark for Closure';
-$strMatching = 'matching';
 $strMaxCarryOverXDays = 'Max Carry-over %s days';
 $strMaxResults = 'A maximum of %d results are displayed, your search might have returned more.';
 # Short for the month of May (these happen to be the same in english)
@@ -1119,7 +1118,6 @@ $strNoVendorsDefined = 'No Vendors Defined';
 # Month number 11: November
 $strNovember = 'November';
 $strNow = 'Now';
-$strNumber = '<em>number</em>';
 $strNumOfIncidents = 'There are %s incidents in this list';
 $strNumOfIncidentsLoggedByX = 'Number of incidents logged by %s';
 $strNumOfCalls = '# of calls';
