@@ -602,6 +602,7 @@ function saction_CheckWaitingEmail()
     return $success;
 }
 
+
 /**
  * Checks for expired FTP files (where expired is before now) and removes them
  * @author Paul Heaney
@@ -644,6 +645,7 @@ function saction_PurgeExpiredFTPItems()
 
 // TODO PurgeAttachments
 // Look for the review due trigger, where did it go
+
 
 /**
  *
@@ -699,6 +701,7 @@ function saction_MailPreviousMonthsTransactions()
     return $mime->send_mail();
 }
 
+
 function saction_CheckIncomingMail()
 {
     global $CONFIG;
@@ -708,6 +711,7 @@ function saction_CheckIncomingMail()
     }
     return TRUE;
 }
+
 
 function saction_CheckTasksDue()
 {
@@ -735,6 +739,191 @@ function saction_CheckTasksDue()
         }
     }
     return $rtn;
+}
+
+
+/**
+ * Perform the periodic sync of users and contacts from LDAP
+ * @author Paul Heaney
+ */
+function saction_ldapSync()
+{
+    global $CONFIG;
+    if ($CONFIG['use_ldap'])
+    {
+        $ldap_conn = ldapOpen();
+    
+        if ($ldap_conn)
+        {
+            // NOTE TODO FIXME would be more optimal to pass the user type into the create as in the case where the group membership isn't stored its looked up again
+    
+            // Search for members of each group and then unique the members and loop through
+    
+            // Only want GROUPS
+            $filter = "(objectClass={$CONFIG['ldap_grpobjecttype']})";
+            $attributesToGet = array($CONFIG['ldap_grpattributegrp']);
+    
+            $users = array();
+            
+            $userGrps = array($CONFIG['ldap_admin_group'], $CONFIG['ldap_manager_group'], $CONFIG['ldap_user_group'] );
+
+            foreach ($userGrps AS $grp)
+            {            
+                if (!empty($grp))
+                {
+                    $sr = ldap_search($ldap_conn, $grp, $filter, $attributesToGet);
+                    if (ldap_count_entries($ldap_conn, $sr) != 1)
+                    {
+                    	trigger_error ("Group {$grp} not found in LDAP");
+                    }
+                    else
+                    {
+                    	$entry = ldap_first_entry($ldap_conn, $sr);
+                        $attributes = ldap_get_attributes($ldap_conn, $entry);
+                        
+                        for ($i = 0; $i < $attributes[$CONFIG['ldap_grpattributegrp']]['count']; $i++)
+                        {
+                            $member = $attributes[$CONFIG['ldap_grpattributegrp']][$i];
+
+                        	if (endsWith($member, $CONFIG['ldap_base']) AND $CONFIG['ldap_grpfulldn'])
+                            {
+                                $users[$member] = $member;
+                            }
+                            elseif (!$CONFIG['ldap_grpfulldn'])
+                            {
+                            	 $users[$member] = $member;
+                            }
+                        }
+                    }
+                }
+            }
+            
+            $sit_db_users = array();
+            $sql = "SELECT id, username, status FROM `{$GLOBALS['dbUsers']}` WHERE user_source = 'ldap'";
+            $result = mysql_query($sql);
+            if (mysql_error()) trigger_error("MySQL Query Error".mysql_error(), E_USER_WARNING);
+            if (mysql_num_rows($result) > 0)
+            {
+                while ($obj = mysql_fetch_object($result))
+                {
+                    $user_obj = new User();
+                    $user_obj->id = $obj->id;
+                    $user_obj->username = $obj->username;
+                    $user_obj->status = $obj->status;
+                    $sit_db_users[$obj->username] = $user_obj;
+                }
+            }
+            
+            foreach ($users AS $u)
+            {
+            	$e = ldap_getDetails($u, FALSE, $ldap_conn);
+                
+                if ($e)
+                {
+                    $user_attributes = ldap_get_attributes($ldap_conn, $e);
+                	
+                    $userid = 0;
+                    if (!empty($sit_db_users[$user_attributes[$CONFIG['ldap_userattribute']][0]]))
+                    {
+                    	$userid = $sit_db_users[$user_attributes[$CONFIG['ldap_userattribute']][0]]->id;
+                        unset ($sit_db_users[$user_attributes[$CONFIG['ldap_userattribute']][0]]);
+                    }
+                    
+                    if (!ldap_storeDetails('', $userid, TRUE, TRUE, $ldap_conn, $user_attributes))
+                    {
+                    	trigger_warning ("Failed to store details for userid {$userid}");
+                    }
+                }
+                else
+                {
+                	debug_log ("Failed to get details for {$u}");
+                }
+            }
+            
+            // Disable users we no longer know about
+            // TODO reassign incidents?
+            foreach ($sit_db_users AS $u)
+            {
+                debug_log ("Disabling {$u->username}");
+            	$u->disable();
+            }
+            
+            /** CONTACTS */
+            
+            $contacts = array();
+            if (!empty($CONFIG["ldap_customer_group"]))
+            {
+                debug-log ("CONTACTS");
+                $sr = ldap_search($ldap_conn, $CONFIG["ldap_customer_group"], $filter, $attributesToGet);
+                if (ldap_count_entries($ldap_conn, $sr) != 1)
+                {
+                    trigger_error ("No contact group found in LDAP");
+                }
+                else
+                {
+                    $entry = ldap_first_entry($ldap_conn, $sr);
+                    $attributes = ldap_get_attributes($ldap_conn, $entry);
+                    for ($i = 0; $i < $attributes[$CONFIG['ldap_grpattributegrp']]['count']; $i++)
+                    {
+                        $member = $attributes[$CONFIG['ldap_grpattributegrp']][$i];
+                        if (endsWith($member, $CONFIG['ldap_base']) AND $CONFIG['ldap_grpfulldn'])
+                        {
+                            $contacts[$member] = $member;
+                        }
+                        elseif (!$CONFIG['ldap_grpfulldn'])
+                        {
+                            $contacts[$member] = $member;
+                        }
+                    }
+                }
+
+                $sit_db_contacts = array();
+                $sql = "SELECT id, username, active FROM `{$GLOBALS['dbContacts']}` WHERE contact_source = 'ldap'";
+                $result = mysql_query($sql);
+                if (mysql_error()) trigger_error("MySQL Query Error".mysql_error(), E_USER_WARNING);
+                if (mysql_num_rows($result) > 0)               
+                {
+                    while ($obj = mysql_fetch_object($result))
+                    {
+                    	$c = new Contact();
+                        $c->id = $obj->id;
+                        $c->username = $obj->username;
+                        $c->status = $obj->active;
+                        $sit_db_contacts[$c->username] = $c;
+                    }
+                }
+                
+                foreach ($contacts AS $c)
+                {
+                    $e = ldap_getDetails($c, FALSE, $ldap_conn);
+                    if ($e)
+                    {
+                        $contact_attributes = ldap_get_attributes($ldap_conn, $e);
+                        
+                        $contactid = 0;
+                        if (!empty($sit_db_contacts[$contact_attributes[$CONFIG['ldap_userattribute']][0]]))
+                        {
+                            $contactid = $sit_db_contacts[$contact_attributes[$CONFIG['ldap_userattribute']][0]]->id;
+                            unset ($sit_db_contacts[$contact_attributes[$CONFIG['ldap_userattribute']][0]]);
+                        }
+
+                        if (!ldap_storeDetails('', $contactid, FALSE, TRUE, $ldap_conn, $contact_attributes))
+                        {
+                            trigger_warning ("Failed to store details for userid {$contactid}");
+                        }
+                    }
+                }
+                
+                // Disable users we no longer know about
+                // TODO reassign incidents?
+                foreach ($sit_db_contacts AS $c)
+                {
+                    debug_log ("Disabling {$c->username}");
+                    $c->disable();
+                }
+            }
+        }  
+    }
 }
 
 // =======================================================================================

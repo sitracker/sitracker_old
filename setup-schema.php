@@ -1162,6 +1162,7 @@ INSERT INTO `{$dbScheduler}` (`action`, `params`, `paramslabel`, `description`, 
 INSERT INTO `{$dbScheduler}` (`action`, `params`, `paramslabel`, `description`, `status`, `start`, `end`, `interval`, `lastran`, `success`) VALUES ('PurgeExpiredFTPItems', '', NULL, 'purges files which have expired from the FTP site when run.', 'enabled', '2008-01-01 00:00:00', '0000-00-00 00:00:00', 216000, '0000-00-00 00:00:00', 1);
 INSERT INTO `{$dbScheduler}` (`action`, `params`, `paramslabel`, `description`, `status`, `start`, `end`, `interval`, `lastran`, `success`) VALUES ('CheckIncomingMail', '', NULL, 'Check incoming support mailbox.', 'enabled', '2008-01-01 00:00:00', '0000-00-00 00:00:00', 60, '0000-00-00 00:00:00', 1);
 INSERT INTO `{$dbScheduler}` (`action`, `params`, `paramslabel`, `description`, `status`, `start`, `end`, `interval`, `lastran`, `success`) VALUES ('CheckTasksDue', '', NULL, 'Checks for due tasks.', 'enabled', '2008-01-01 00:00:00', '0000-00-00 00:00:00', 3600, '0000-00-00 00:00:00', 1);
+INSERT INTO `{$dbScheduler}` (`action`, `params`, `paramslabel`, `description`, `status`, `start`, `end`, `type`, `interval`, `date_type`, `date_offset`, `date_time`, `laststarted`, `lastran`, `success`) VALUES ('ldapSync', '', NULL, 'Sync users and customers from LDAP', 'enabled', '2008-01-01 00:00:00', '0000-00-00 00:00:00', 'interval', 60, 'month', 0, '00:00:00', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 1);
 
 CREATE TABLE IF NOT EXISTS `{$dbService}` (
   `serviceid` int(11) NOT NULL auto_increment,
@@ -2765,6 +2766,9 @@ ALTER TABLE `{$dbContacts}` ADD `contact_source` VARCHAR( 32 ) NOT NULL DEFAULT 
 
 -- INL 2009-07-12
 UPDATE `{$dbEmailTemplates}` SET `description` = 'strSupportEmailDesc' WHERE `id` =1 LIMIT 1 ;
+
+-- PH 2009-07-22
+INSERT INTO `{$dbScheduler}` (`action`, `params`, `paramslabel`, `description`, `status`, `start`, `end`, `type`, `interval`, `date_type`, `date_offset`, `date_time`, `laststarted`, `lastran`, `success`) VALUES ('ldapSync', '', NULL, 'Sync users and customers from LDAP', 'enabled', '2008-01-01 00:00:00', '0000-00-00 00:00:00', 'interval', 60, 'month', 0, '00:00:00', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 1);
 ";
 
 // Important: When making changes to the schema you must add SQL to make the alterations

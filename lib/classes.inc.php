@@ -203,6 +203,35 @@ class User extends Person{
         
         return $toReturn;
     }
+    
+    
+    /**
+     * Disabled this user in SiT!
+     * @author Paul Heaney
+     * @return bool True if disabled, false otherwise
+     */
+    function disable()
+    {
+        $toReturn = true;
+        if (!empty($this->id) AND $this->status != 0)
+        {
+    	   $sql = "UPDATE `{$GLOBALS['dbUsers']}` SET status = 0 WHERE id = {$this->id}";
+        
+            $result = mysql_query($sql);
+            if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+            if (mysql_affected_rows() != 1)
+            {
+                trigger_error("Failed to disable user {$this->username}", E_USER_WARNING);
+                $toReturn = false;
+            }
+            else
+            {
+                $toReturn = true;
+            }
+        }
+        
+        return $toReturn;
+    }
 }
 
 
@@ -408,6 +437,33 @@ class Contact extends Person {
         return $toReturn;
     }
     
+    /**
+     * Disabled this contact in SiT!
+     * @author Paul Heaney
+     * @return bool True if disabled, false otherwise
+     */
+    function disable()
+    {
+        $toReturn = true;
+        if (!empty($this->id) AND $this->status != 0)
+        {
+           $sql = "UPDATE `{$GLOBALS['dbContacts']}` SET active = 0'false'WHERE id = {$this->id}";
+        
+            $result = mysql_query($sql);
+            if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+            if (mysql_affected_rows() != 1)
+            {
+                trigger_error("Failed to disable contact {$this->username}", E_USER_WARNING);
+                $toReturn = false;
+            }
+            else
+            {
+                $toReturn = true;
+            }
+        }
+        
+        return $toReturn;
+    }
     
     /**
      * Checks to see if the contact is a duplicate within SiT!

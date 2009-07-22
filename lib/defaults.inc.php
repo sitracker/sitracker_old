@@ -305,31 +305,31 @@ $CONFIG['ldap_dn_base'] = "ou=Users,dc=example,dc=com";
 $CONFIG['ldap_default_user_status'] = 1;
 
 // LDAP group for SIT users
-$CONFIG["ldap_user_group"] = "cn=situsers,ou=Groups,dc=example,dc=com";
+$CONFIG['ldap_user_group'] = "cn=situsers,ou=Groups,dc=example,dc=com";
 
 // LDAP group for SIT admins
-$CONFIG["ldap_admin_group"] = "cn=sitadmins,ou=Groups,dc=example,dc=com";
+$CONFIG['ldap_admin_group'] = "cn=sitadmins,ou=Groups,dc=example,dc=com";
 
 // LDAP group for SIT managers
-$CONFIG["ldap_manager_group"] = "cn=sitmanagers,ou=Groups,dc=example,dc=com";
+$CONFIG['ldap_manager_group'] = "cn=sitmanagers,ou=Groups,dc=example,dc=com";
 
 // Customer Group and default role
-$CONFIG["ldap_customer_group"] = "cn=sitcustomers,ou=Groups,dc=example,dc=com";
+$CONFIG['ldap_customer_group'] = "cn=sitcustomers,ou=Groups,dc=example,dc=com";
 
 // Default Customer values
 // 1 is the example site in the default install
-$CONFIG["ldap_default_customer_siteid"] = 1;
+$CONFIG['ldap_default_customer_siteid'] = 1;
 
 // This attempts to create the customer record automatically using LDAP
 // when creating an incident from an email in the holding queue.
-$CONFIG["ldap_autocreate_customer"] = TRUE;
+$CONFIG['ldap_autocreate_customer'] = TRUE;
 
 // Whether to cache users passwords from LDAP
-$CONFIG["ldap_cache_passwords"] = FALSE;
+$CONFIG['ldap_cache_passwords'] = FALSE;
 
 // Whether to allow authentication against stored password if unable to
 // connect to LDAP server
-$CONFIG["ldap_allow_cached_password"] = FALSE;
+$CONFIG['ldap_allow_cached_password'] = FALSE;
 
 // If true, portal users create incidents, if FALSE, they just create emails
 $CONFIG['portal_creates_incidents'] = TRUE;
