@@ -1372,6 +1372,7 @@ $strSolution = 'Løsning';
 $strSolvedProblem = 'Løst problem';
 $strSomeOfTheseIdentifiers = 'Nogle af disse identifikatorer vil måske ikke være tilgængelige når du først tilføjer en trigger';
 $strSorryNoPermissionToAreas = 'Desværre, du har ikke rettigheder til de følgende områder';
+$strSorryNoSearchResults = 'Desværre, din søgning skabte ingen resultater';
 $strSorryUnableToFindAnyContactsMatchingX = 'Desværre, kan ikke finde nogen kontakter der passer <em>%s</em>';
 $strSort = 'Sorter';
 $strSortAscending = 'Sorter stigende';
