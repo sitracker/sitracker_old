@@ -192,17 +192,18 @@ if ($errors == 0)
     if (mysql_num_rows($result) == 0)
     {
         // FIXME i18n
-        echo "<p align='center'>Sorry, unable to find any sites ";
-        if ($owner > 0) echo " owned by <strong>".user_realname($owner)."</strong></p>\n";
-        elseif ($search_string == '0') echo " matching <strong><em>Number</em></strong>";
-        else echo "matching <strong>'$search_string</strong>'</p>\n";
+        // echo "<p align='center'>Sorry, unable to find any sites ";
+        // if ($owner > 0) echo " owned by <strong>".user_realname($owner)."</strong></p>\n";
+        // elseif ($search_string == '0') echo " matching <strong><em>Number</em></strong>";
+        // else echo "matching <strong>'$search_string</strong>'</p>\n";
+		echo "<p align='center'>{$strSorryNoSearchResults}";
     }
     else
     {
         $countsites = mysql_num_rows($result);
         // FIXME i18n
-        echo "<p align='center'>Displaying $countsites site";
-        if ($countsites > 1) echo "s";
+        echo "<p align='center'>{$strDisplaying} $countsites {$strSite}";
+        if ($countsites > 1) echo "{$strPlural}";
 
         if ($owner > 0)
         {
