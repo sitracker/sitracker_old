@@ -1762,20 +1762,45 @@ function escalation_path_drop_down($name, $id)
 }
 
 
-/* Returns a string representing the name of   */
-/* the given priority. Returns an empty string if the         */
-/* priority does not exist.                                   */
-function priority_name($id)
+/**
+  * Returns a string representing the name of
+  * the given priority. Returns an empty string if the
+  * priority does not exist.
+  * @author Ivan Lucas
+  * @param int $id. Priority ID, higher the number higher the priority
+  * @param bool $syslang. (optional) Uses system language when set to TRUE otherwise
+  *                       uses user language (default)
+  * @returns string.
+*/
+function priority_name($id, $syslang = FALSE)
 {
     switch ($id)
     {
-        case 1: $value = $GLOBALS['strLow']; break;
-        case 2: $value = $GLOBALS['strMedium']; break;
-        case 3: $value = $GLOBALS['strHigh']; break;
-        case 4: $value = $GLOBALS['strCritical']; break;
-        case '': $value = $GLOBALS['strNotSet']; break;
-        default: $value = $GLOBALS['strUnknown']; break;
-}
+        case 1:
+            if (!$syslang) $value = $GLOBALS['strLow'];
+            else $value = $_SESSION['syslang']['strLow'];
+        break;
+        case 2:
+            if (!$syslang) $value = $GLOBALS['strMedium'];
+            else $value = $_SESSION['syslang']['strMedium'];
+        break;
+        case 3:
+            if (!$syslang) $value = $GLOBALS['strHigh'];
+            else $value = $_SESSION['syslang']['strHigh'];
+        break;
+        case 4:
+            if (!$syslang) $value = $GLOBALS['strCritical'];
+            else $value = $_SESSION['syslang']['strCritical'];
+        break;
+        case '':
+            if (!$sylang) $value = $GLOBALS['strNotSet'];
+            else $value = $_SESSION['syslang']['strNotSet'];
+        break;
+        default:
+            if (!$syslang) $value = $GLOBALS['strUnknown'];
+            else $value = $_SESSION['syslang']['strUnknown'];
+        break;
+    }
 return $value;
 }
 

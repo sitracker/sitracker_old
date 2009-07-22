@@ -276,7 +276,7 @@ if (empty($_REQUEST['process']))
     include (APPLICATION_INCPATH . 'incident_html_bottom.inc.php');
 }
 else
-{ 
+{
     // External variables
     $closingstatus = cleanvar($_POST['closingstatus']);
     $summary = cleanvar($_POST['summary']);
@@ -300,7 +300,7 @@ else
     $errors = 0;
 
     echo "<script src='{$CONFIG['application_webpath']}scripts/webtrack.js' type='text/javascript'></script>\n";
-    
+
     // check for blank closing status field
     if ($closingstatus == 0)
     {
@@ -408,7 +408,7 @@ else
             {
                 // Update - mark for closure
                 $sql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, currentowner, currentstatus, bodytext, timestamp) ";
-                $sql .= "VALUES ('$id', '{$sit[2]}', 'closing', '{$currentowner}', '{$currentstatus}', 'Marked for Closure', '$now')";
+                $sql .= "VALUES ('$id', '{$sit[2]}', 'closing', '{$currentowner}', '{$currentstatus}', '{$_SESSION['syslang']['strMarkedforclosure']}', '$now')";
                 $result = mysql_query($sql);
                 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
             }
@@ -416,7 +416,7 @@ else
             {
                 // Update - close immediately
                 $sql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, currentowner, currentstatus, bodytext, timestamp) ";
-                $sql .= "VALUES ('$id', '{$sit[2]}', 'closing', '{$currentowner}', '{$currentstatus}', 'Incident Closed', '$now')";
+                $sql .= "VALUES ('$id', '{$sit[2]}', 'closing', '{$currentowner}', '{$currentstatus}', '{$_SESSION['syslang']['strIncidentClosed']}', '$now')";
                 $result = mysql_query($sql);
                 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
             }
@@ -449,7 +449,7 @@ else
             {
                 $relatedincidents[] = $a->relateid;
             }
-            
+
             if (is_array($relatedincidents))
             {
                 $uniquearray = array_unique($relatedincidents);

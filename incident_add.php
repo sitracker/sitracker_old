@@ -487,7 +487,7 @@ elseif ($action=='incidentform')
             }
             $items_array[$items->id] = $var;
         }
-        
+
         // Don't show inventory section if non available for contact
         if ($contact_inv_count > 0)
         {
@@ -745,15 +745,14 @@ elseif ($action == 'assign')
                 }
             }
 
-            // FIXME use $SYSLANG
-            $updatetext = "Opened as Priority: [b]" . priority_name($priority) . "[/b]";
+            $updatetext = "{$_SESSION['syslang']['strPriority']}: [b]" . priority_name($priority, TRUE) . "[/b]";
             if (!empty($prioritychangedmessage)) $updatetext .= $prioritychangedmessage;
             $updatetext .= "\n\n" . $bodytext;
-            if ($probdesc != '') $updatetext .= "<b>Problem Description</b>\n" . $probdesc . "\n\n";
-            if ($workarounds != '') $updatetext .= "<b>Workarounds Attempted</b>\n" . $workarounds . "\n\n";
-            if ($probreproduction != '') $updatetext .= "<b>Problem Reproduction</b>\n" . $probreproduction . "\n\n";
-            if ($custimpact != '') $updatetext .= "<b>Customer Impact</b>\n" . $custimpact . "\n\n";
-            if ($other != '') $updatetext .= "<b>Other Details</b>\n" . $other . "\n";
+            if ($probdesc != '') $updatetext .= "<b>{$_SESSION['syslang']['strProblemDescription']}</b>\n" . $probdesc . "\n\n";
+            if ($workarounds != '') $updatetext .= "<b>{$_SESSION['syslang']['strWorkAroundsAttempted']}</b>\n" . $workarounds . "\n\n";
+            if ($probreproduction != '') $updatetext .= "<b>{$_SESSION['syslang']['strProblemReproduction']}</b>\n" . $probreproduction . "\n\n";
+            if ($custimpact != '') $updatetext .= "<b>{$_SESSION['syslang']['strCustomerImpact']}</b>\n" . $custimpact . "\n\n";
+            if ($other != '') $updatetext .= "<b>{$_SESSION['syslang']['strDetails']}</b>\n" . $other . "\n";
             if ($cust_vis == "on") $customervisibility='show';
             else $customervisibility='hide';
 
@@ -765,39 +764,39 @@ elseif ($action == 'assign')
                 $result = mysql_query($sql);
                 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
-		        $old_path = $CONFIG['attachment_fspath']. 'updates' . $fsdelim;
-		        $new_path = $CONFIG['attachment_fspath'] . $incidentid . $fsdelim;
+                $old_path = $CONFIG['attachment_fspath']. 'updates' . $fsdelim;
+                $new_path = $CONFIG['attachment_fspath'] . $incidentid . $fsdelim;
 
-		        //move attachments from updates to incident
-		        $sql = "SELECT linkcolref, filename FROM `{$dbLinks}` AS l, ";
-		        $sql .= "`{$dbFiles}` as f ";
-		        $sql .= "WHERE l.origcolref = '{$updateid}' ";
-		        $sql .= "AND l.linktype = 5 ";
-		        $sql .= "AND l.linkcolref = f.id";
-		        $result = mysql_query($sql);
-		        if ($result)
-		        {
-		            if (!file_exists($new_path))
-		            {
-		                $umask=umask(0000);
-		                @mkdir($new_path, 0770);
-		                umask($umask);
-		            }
-		            while ($row = mysql_fetch_object($result))
-		            {
-		                $filename = $row->linkcolref . "-" . $row->filename;
-		                $old_file = $old_path . $filename;
-		                if (file_exists($old_file))
-		                {
-		                    $rename = rename($old_file, $new_path . $filename);
-		                    if (!$rename)
-		                    {
-		                        trigger_error("Couldn't move file: {$file}", E_USER_WARNING);
-		                        $moved_attachments = FALSE;
-		                    }
-		                }
-		            }
-		        }
+                //move attachments from updates to incident
+                $sql = "SELECT linkcolref, filename FROM `{$dbLinks}` AS l, ";
+                $sql .= "`{$dbFiles}` as f ";
+                $sql .= "WHERE l.origcolref = '{$updateid}' ";
+                $sql .= "AND l.linktype = 5 ";
+                $sql .= "AND l.linkcolref = f.id";
+                $result = mysql_query($sql);
+                if ($result)
+                {
+                    if (!file_exists($new_path))
+                    {
+                        $umask=umask(0000);
+                        @mkdir($new_path, 0770);
+                        umask($umask);
+                    }
+                    while ($row = mysql_fetch_object($result))
+                    {
+                        $filename = $row->linkcolref . "-" . $row->filename;
+                        $old_file = $old_path . $filename;
+                        if (file_exists($old_file))
+                        {
+                            $rename = rename($old_file, $new_path . $filename);
+                            if (!$rename)
+                            {
+                                trigger_error("Couldn't move file: {$file}", E_USER_WARNING);
+                                $moved_attachments = FALSE;
+                            }
+                        }
+                    }
+                }
             }
             else
             {
@@ -833,7 +832,7 @@ elseif ($action == 'assign')
             // Insert the first SLA update, this indicates the start of an incident
             // This insert could possibly be merged with another of the 'updates' records, but for now we keep it seperate for clarity
             $sql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, timestamp, currentowner, currentstatus, customervisibility, sla, bodytext) ";
-            $sql .= "VALUES ('{$incidentid}', '{$sit[2]}', 'slamet', '{$now}', '{$sit[2]}', '1', 'show', 'opened','The incident is open and awaiting action.')";
+            $sql .= "VALUES ('{$incidentid}', '{$sit[2]}', 'slamet', '{$now}', '{$sit[2]}', '1', 'show', 'opened','{$_SESSION['syslang']['strIncidentIsOpen']}.')";
             mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 

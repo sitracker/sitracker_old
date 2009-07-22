@@ -707,7 +707,7 @@ $strHolidayPlanner = 'Holiday Planner';
 $strHolidayRequested = 'Holiday Requested';
 $strHolidayRequests = 'Holiday Requests';
 $strHolidayType = 'Holiday Type';
-$strHolidayUsage = 'Holiday Usage'; 
+$strHolidayUsage = 'Holiday Usage';
 $strHomeURL = 'Home URL';
 $strHours = 'Hours';
 
@@ -916,6 +916,7 @@ $strMarAbbr = 'Mar';
 $strMarch = 'March';
 $strMarkComplete = 'Mark Complete';
 $strMarkedComplete = 'Marked Complete';
+$strMarkedforclosure = 'Marked for closure';
 $strMarkedforclosureby = 'Marked for closure by %s';
 $strMarketingMailshot = 'Marketing Mailshot';
 $strMarketingMailshotDesc = 'This report is a list of details for all customers that currently (or previously) have contracts for the products you selected but none of the products excluded';
