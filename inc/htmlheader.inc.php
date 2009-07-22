@@ -274,7 +274,7 @@ if ($sit[0] != '')
     }
 
     // Check users email address
-    if (empty($_SESSION['email']) OR !preg_match('/^[a-zA-Z0-9_\+-]+(\.[a-zA-Z0-9_\+-]+)*@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.([a-zA-Z]{2,4})$/',$_SESSION['email']))
+    if (empty($_SESSION['email']))
     {
         echo user_alert("{$strInvalidEmailAddress} - <a href='user_profile_edit.php'>{$strEditEmail}</a>", E_USER_ERROR);
     }
