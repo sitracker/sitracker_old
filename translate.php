@@ -147,7 +147,7 @@ elseif ($_REQUEST['mode'] == "show")
     echo "<p align='center'>{$strTranslateTheString}<br/>";
     echo "<strong>{$strCharsToKeepWhenTranslating}</strong></p>";
     echo "<form method='post' action='{$_SERVER[PHP_SELF]}?mode=save'>";
-    echo "<table align='center'>";
+    echo "<table align='center' style='table-layout:fixed'>";
     echo "<tr class='shade1'><td colspan='3'>";
     if (is_array($meta))
     {
