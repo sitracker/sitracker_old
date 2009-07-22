@@ -148,6 +148,7 @@ elseif ($_REQUEST['mode'] == "show")
     echo "<strong>{$strCharsToKeepWhenTranslating}</strong></p>";
     echo "<form method='post' action='{$_SERVER[PHP_SELF]}?mode=save'>";
     echo "<table align='center' style='table-layout:fixed'>";
+    echo "<col width='33%'/><col width='33%'/><col width='33%'/>";
     echo "<tr class='shade1'><td colspan='3'>";
     if (is_array($meta))
     {
@@ -165,7 +166,7 @@ elseif ($_REQUEST['mode'] == "show")
     foreach (array_keys($fromvalues) as $key)
     {
         if ($_REQUEST['lang'] == 'zz') $foreignvalues[$key] = $key;
-        echo "<tr class='$shade'><td><label for=\"{$key}\"><code>{$key}</code></td>";
+        echo "<tr class='$shade'><td><label for=\"{$key}\"><code>{$key}</code></label></td>";
         echo "<td><input name='english_{$key}' value=\"".htmlentities($fromvalues[$key], ENT_QUOTES, 'UTF-8')."\" size=\"45\" readonly='readonly' /></td>";
         echo "<td><input id=\"{$key}\" ";
         if (empty($foreignvalues[$key])) echo "class='notice' onblur=\"if ($('{$key}').value != '') { $('{$key}').removeClassName('notice'); $('{$key}').addClassName('idle');} \"";
@@ -174,7 +175,7 @@ elseif ($_REQUEST['mode'] == "show")
         echo "</td></tr>\n";
         if ($shade=='shade1') $shade='shade2';
         else $shade='shade1';
-        if (!empty($comments[$key])) echo "<tr><td colspan=3' class='{$shade}'><strong>{$strNotes}:</strong> {$comments[$key]}</td><tr>\n";
+        if (!empty($comments[$key])) echo "<tr><td colspan='3' class='{$shade}'><strong>{$strNotes}:</strong> {$comments[$key]}</td></tr>\n";
     }
     echo "</table>";
     echo "<input type='hidden' name='origcount' value='{$origcount}' />";
