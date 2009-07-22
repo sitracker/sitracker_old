@@ -922,6 +922,7 @@ $strMarkedforclosureby = 'Marked for closure by %s';
 $strMarketingMailshot = 'Marketing Mailshot';
 $strMarketingMailshotDesc = 'This report is a list of details for all customers that currently (or previously) have contracts for the products you selected but none of the products excluded';
 $strMarkForClosure = 'Mark for Closure';
+$strMatching = 'matching';
 $strMaxCarryOverXDays = 'Max Carry-over %s days';
 $strMaxResults = 'A maximum of %d results are displayed, your search might have returned more.';
 # Short for the month of May (these happen to be the same in english)
@@ -1118,6 +1119,7 @@ $strNoVendorsDefined = 'No Vendors Defined';
 # Month number 11: November
 $strNovember = 'November';
 $strNow = 'Now';
+$strNumber = '<em>number</em>';
 $strNumOfIncidents = 'There are %s incidents in this list';
 $strNumOfIncidentsLoggedByX = 'Number of incidents logged by %s';
 $strNumOfCalls = '# of calls';
@@ -1157,6 +1159,7 @@ $strOtherIncidents = 'Other Incidents';
 $strOtherLeave = 'Other Leave';
 $strOutbound = 'Outbound';
 $strOutput = 'Output';
+$strOwnedBy = 'owned by';
 $strOwner = 'Owner';
 $strOwners = 'Owners';
 $strOwnerXAcctingAgain = 'Owner %s accepting again';
@@ -1184,8 +1187,6 @@ $strPermissionDeniedForX = 'Permission denied for %s';
 $strPermissions = 'Permissions';
 $strPerIncident = 'Per Incident';
 $strPerUnit = 'Per Unit';
-# eg Site's' as in more than one
-$strPlural = 's';
 $strPreferred = 'Preferred';
 $strPreReleaseNotice = 'You are using a pre-release version of SiT - %s, Pre-release versions are for you to test, provide feedback and to help with further development and should never be used in a live production environment';
 $strPreviousIncidentOwner = 'Previous Incident Owner';

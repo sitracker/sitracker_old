@@ -191,31 +191,37 @@ if ($errors == 0)
 
     if (mysql_num_rows($result) == 0)
     {
-        // FIXME i18n
-        // echo "<p align='center'>Sorry, unable to find any sites ";
-        // if ($owner > 0) echo " owned by <strong>".user_realname($owner)."</strong></p>\n";
-        // elseif ($search_string == '0') echo " matching <strong><em>Number</em></strong>";
-        // else echo "matching <strong>'$search_string</strong>'</p>\n";
-		echo "<p align='center'>{$strSorryNoSearchResults}";
+        
+        echo "<p align='center'>{$strSorryNoResult} ";
+        if ($owner > 0) echo " {$strOwnedBy} <strong>".user_realname($owner)."</strong></p>\n";
+        elseif ($search_string == '0') echo " {$strMatching} <strong><em>{$strNumber}</em></strong>";
+        else echo "{$strMatching} <strong>'$search_string</strong>'</p>\n";
+		
     }
     else
     {
         $countsites = mysql_num_rows($result);
-        // FIXME i18n
-        echo "<p align='center'>{$strDisplaying} $countsites {$strSite}";
-        if ($countsites > 1) echo "{$strPlural}";
+        
+        echo "<p align='center'>{$strDisplaying} $countsites ";
+        if ($countsites == 1) 
+		
+			echo "{$strSite}";
+			
+		else 
+		
+			echo "{$strSites}";
 
         if ($owner > 0)
         {
-            echo " owned by <strong>".user_realname($owner)."</strong>";
+            echo " {$strOwnedBy} <strong>".user_realname($owner)."</strong>";
         }
         elseif ($search_string=='0')
         {
-            echo " matching <strong><em>Number</em></strong>";
+            echo " {$strMatching} <strong>'{strNumber}'</strong>";
         }
         else
         {
-            echo " matching <strong>'{$search_string}'</strong>";
+            echo " {$strMatching} <strong>'{$search_string}'</strong>";
         }
         echo "</p>";
         echo "<table align='center'>";

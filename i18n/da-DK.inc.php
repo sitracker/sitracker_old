@@ -1088,7 +1088,6 @@ $strPermissionDeniedForX = 'Adgang nægtet for %s';
 $strPermissions = 'Tilladelser';
 $strPerIncident = 'Per hændelse';
 $strPerUnit = 'Per enhed';
-$strPlural = 'er';
 $strPreferred = 'Foretrukket';
 $strPreReleaseNotice = 'Du benytter en pre-udgivet version af SiT - %s, pre-udgivelser er til tests, give feedback og til hjælp til videre udvikling og burde aldrig benyttes i et produktions miljø';
 $strPreviousIncidentOwner = 'Forrige hændelse\'s ejer';
