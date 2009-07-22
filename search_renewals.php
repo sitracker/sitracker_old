@@ -14,10 +14,11 @@
 $permission = 19; // View Maintenance Contracts
 require ('core.php');
 require (APPLICATION_LIBPATH . 'functions.inc.php');
-$title = $strShowRenewals;
 
 // This page requires authentication
 require (APPLICATION_LIBPATH . 'auth.inc.php');
+
+$title = $strShowRenewals;
 
 // External variables
 $expire = cleanvar($_REQUEST['expire']);
@@ -26,11 +27,10 @@ $expire = cleanvar($_REQUEST['expire']);
 if (empty($expire))
 {
     include (APPLICATION_INCPATH . 'htmlheader.inc.php');
-    ?>
-    <h2><?php echo $title; ?></h2>
-    <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
+    
+    echo "<h2>{$strShowRenewals}</h2>";
+    echo "<form action='{$_SERVER['PHP_SELF']}' method='post' >";
  
-    <?php
     printf("<p>{$strContractsExpiringWithinXdays}</p>", "<input maxlength='4' name='expire' size='3' type='text' />");
     echo "<p><input name='submit' type='submit' value=\"{$strSearch}\" /></p>";
     echo "</form>\n";
@@ -70,7 +70,7 @@ else
         if (mysql_num_rows($result) == 0)
         {
             printf("<h2>{$strContractsExpiringWithinXdays}</h2>", $expire);
-            echo "<h5 class='warning'>Sorry, your search yielded no results</h5>\n";
+            echo "<h5 class='warning'>{$strSorryNoSearchResults}</h5>\n";
         }
         else
         {
