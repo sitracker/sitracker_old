@@ -432,6 +432,7 @@ $strDismiss = 'Dismiss';
 $strDismissAll = 'Dismiss All';
 # i.e. show
 $strDisplay = 'Display';
+$strDisplaying = 'Displaying';
 $strDisplayingXcontactMatchingY = 'Displaying %s contact(s) matching %s';
 $strDisplayPreferences = 'Display Preferences';
 $strDistribution = 'Distribution';
@@ -1183,6 +1184,8 @@ $strPermissionDeniedForX = 'Permission denied for %s';
 $strPermissions = 'Permissions';
 $strPerIncident = 'Per Incident';
 $strPerUnit = 'Per Unit';
+# eg Site's' as in more than one
+$strPlural = 's';
 $strPreferred = 'Preferred';
 $strPreReleaseNotice = 'You are using a pre-release version of SiT - %s, Pre-release versions are for you to test, provide feedback and to help with further development and should never be used in a live production environment';
 $strPreviousIncidentOwner = 'Previous Incident Owner';
