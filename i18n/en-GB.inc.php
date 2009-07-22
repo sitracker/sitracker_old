@@ -1482,6 +1482,7 @@ $strSolution = 'Solution';
 $strSolvedProblem = 'Solved Problem';
 $strSomeOfTheseIdentifiers = 'Some of these identifiers might not be available once you add a trigger';
 $strSorryNoPermissionToAreas = 'Sorry, you do not have permission to the following areas';
+$strSorryNoSearchResults = 'Sorry, your search wielded no results';
 $strSorryUnableToFindAnyContactsMatchingX = 'Sorry, unable to find any contacts matching <em>%s</em>';
 $strSort = 'Sort';
 $strSortAscending = 'Sort Ascending';
