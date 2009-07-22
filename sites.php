@@ -203,13 +203,13 @@ if ($errors == 0)
         $countsites = mysql_num_rows($result);
         
         echo "<p align='center'>{$strDisplaying} $countsites ";
-        if ($countsites == 1) 
-		
-			echo "{$strSite}";
-			
-		else 
-		
-			echo "{$strSites}";
+        if ($countsites == 1)
+
+            echo "{$strSite}";
+
+        else
+
+            echo "{$strSites}";
 
         if ($owner > 0)
         {

@@ -23,6 +23,8 @@ $search_string = cleanvar($_REQUEST['search_string']);
 $mode = cleanvar($_REQUEST['mode']);
 
 $title = $strBrowseKB;
+$rssfeedurl = "kb_rss.php?c=".md5($_SESSION['username'] . md5($CONFIG['db_password']));
+$rssfeedtitle = "{$strKnowledgeBase}: {$strRecent}";
 include (APPLICATION_INCPATH . 'htmlheader.inc.php');
 if (empty($mode) && empty($search_string)) $mode='RECENT';
 if (empty($search_string) AND empty($mode)) $search_string='a';

@@ -11,8 +11,6 @@
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 //            Paul Heaney <paul[at]sitracker.org>
 
-// This feature is experimental as of 22Sep06
-
 require ('core.php');
 require (APPLICATION_LIBPATH . 'functions.inc.php');
 
