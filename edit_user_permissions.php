@@ -114,7 +114,7 @@ elseif ($action == "edit" && (!empty($user) OR !empty($role)))
     // Show form
     if (!empty($role) AND !empty($user))
     {
-        trigger_error("Can't edit users and roles at the same time", E_USER_ERROR);
+        trigger_error("{$strCannotEditUserAndRole}", E_USER_ERROR);
     }
     if (!empty($user))
     {
@@ -125,7 +125,7 @@ elseif ($action == "edit" && (!empty($user) OR !empty($role)))
         $object = "role: ".db_read_column('rolename', $dbRoles, $role);
     }
     echo "<h2>Set Permissions for {$object}</h2>";
-    if (!empty($user)) echo "<p align='center'>Permissions that are inherited from the users role can not be changed.</p>";
+    if (!empty($user)) echo "<p align='center'>{$strPermissionsInhereitedCannotBeChanged}</p>";
 
     // Next lookup the permissions
     $sql = "SELECT * FROM `{$dbUsers}` AS u, `{$dbRolePermissions}` AS rp WHERE u.roleid = rp.roleid AND u.id = '$user' AND granted='true'";
@@ -172,7 +172,7 @@ elseif ($action == "edit" && (!empty($user) OR !empty($role)))
     while ($permissions = mysql_fetch_array($result))
     {
         echo "<tr class='$class' onclick='trow(event);'>";
-        echo "<td><a href='{$_SERVER['PHP_SELF']}?action=check&amp;permid={$permissions['id']}'  title='Check who has this permission'>";
+        echo "<td><a href='{$_SERVER['PHP_SELF']}?action=check&amp;permid={$permissions['id']}'  title='{$strCheckWhoHasPermission}'>";
         echo $permissions['id']."</a> {$permissions['name']}</td>";
         if (!in_array($permissions['id'],$userrolepermission))
         {
@@ -214,7 +214,7 @@ elseif ($action == "update")
             $aresult = mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
-            if (!$aresult) echo user_alert("Update of role permissions failed on pass 1", E_USER_WARNING);
+            if (!$aresult) echo user_alert("{$strUpdateRolePermissionsFailed}", E_USER_WARNING);
 
             // Second pass, loop through checkbox array setting access to true where boxes are checked
             if (is_array($_POST["{$rolerow->id}perm"]))
@@ -235,7 +235,7 @@ elseif ($action == "update")
                         $isql .= "VALUES ('{$rolerow->id}', '".$x[1]."', 'true')";
                         $iresult = mysql_query($isql);
                         if (mysql_error()) trigger_error(mysql_error(), E_USER_ERROR);
-                        if (mysql_affected_rows() < 1) echo user_alert("Update of user permission ".$x[1]." failed on pass 2", E_USER_WARNING);
+                        if (mysql_affected_rows() < 1) echo user_alert("{$strUpdateUserPermission} ".$x[1]." {$strFailedOnPass2}", E_USER_WARNING);
                     }
                 }
             }
@@ -276,7 +276,7 @@ elseif ($action == "update")
                     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
                     if (mysql_affected_rows() < 1)
                     {
-                        echo user_alert("Update of user permission ".$x[1]." failed on pass 2", E_USER_WARNING);
+                        echo user_alert("{$strUpdateUserPermission} ".$x[1]." {$strFailedOnPass2}", E_USER_WARNING);
                     }
                 }
             }
@@ -292,7 +292,7 @@ elseif ($action == "update")
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
-        if (!$result) echo user_alert("Update of role permissions failed on pass 1", E_USER_WARNING);
+        if (!$result) echo user_alert("{$strUpdateRolePermissionsFailed}", E_USER_WARNING);
         else
         {
             html_redirect("manage_users.php");
@@ -318,7 +318,7 @@ elseif ($action == "update")
                     $isql .= "VALUES ('$role', '".$x[1]."', 'true')";
                     $iresult = mysql_query($isql);
                     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
-                    if (mysql_affected_rows() < 1) echo user_alert("Update of user permission ".$x[1]." failed on pass 2", E_USER_WARNING);
+                    if (mysql_affected_rows() < 1) echo user_alert("{$strUpdateUserPermission} ".$x[1]." {$strFailedOnPass2}", E_USER_WARNING);
                 }
             }
         }
@@ -329,6 +329,7 @@ elseif ($action == "check")
     echo "<h2>{$strCheckUserAndRolePermissions}</h2>";
     if (!empty($permid))
     {
+        // permission_names needs i18n bug 545
         echo "<h3>".sprintf($strRolePermissionsXY, $permid, permission_name($permid))."</h3>";
         $sql = "SELECT rp.roleid AS roleid, username, u.id AS userid, realname, rolename ";
         $sql .= "FROM `{$dbRolePermissions}` AS rp, `{$dbRoles}` AS r, `{$dbUsers}` AS u ";
@@ -360,7 +361,7 @@ elseif ($action == "check")
             echo "<p align='center'>{$strNone}</p>";
         }
 
-        echo "<p align='center'><a href='edit_user_permissions.php'>Set role permissions</a></p>";
+        echo "<p align='center'><a href='edit_user_permissions.php'>{$strSetRolePermissions}</a></p>";
 
         echo "<h3>".sprintf($strUserPermissionXY, $permid, permission_name($permid))."</h3>";
         $sql = "SELECT up.userid AS userid, username, realname ";
@@ -390,7 +391,7 @@ elseif ($action == "check")
 }
 else
 {
-    echo user_alert("No changes to make", E_USER_WARNING);
+    echo user_alert("{$strNoChangesToMake}", E_USER_WARNING);
 }
 include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
 ?>
