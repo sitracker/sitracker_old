@@ -20,6 +20,8 @@ require (APPLICATION_LIBPATH . 'functions.inc.php');
 // This page requires authentication
 require (APPLICATION_LIBPATH . 'auth.inc.php');
 
+$title = $strShowExpired;
+
 // External variables
 $expired = cleanvar($_REQUEST['expired']);
 $output = cleanvar($_REQUEST['output']);
@@ -47,17 +49,18 @@ if (empty($expired))
 }
 else
 {
+    include (APPLICATION_INCPATH . 'htmlheader.inc.php');
     // perform search
     // check input
     if ($expired == '')
     {
         $errors = 1;
-        echo "<p class='error'>You must enter a number of days</p>\n";
+        echo "<p class='error'>{$strEnterNumberOfDays}</p>\n";
     }
     elseif (!is_numeric($expired))
     {
         $errors = 1;
-        echo "<p class='error'>You must enter a numeric value</p>\n";
+        echo "<p class='error'>{$strEnterNumericValue}</p>\n";
     }
     if ($errors == 0)
     {
@@ -82,22 +85,22 @@ else
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
 
-        if ($show == "") $pagetitle = "<h2>Non-Terminated Contracts Expired Within The Last $expired Days</h2>\n";
-        else if ($show == "terminated") $pagetitle = "<h2>Terminated Contracts Expired Within The Last $expired Days</h2>\n";
+        if ($show == "") $pagetitle = "<h2>{$strNonTerminatedContractsExpired} $expired {$strDays}</h2>\n";
+        else if ($show == "terminated") $pagetitle = "<h2>{$strTerminatedContractsExpired} $expired {$strDays}</h2>\n";
 
         if (mysql_num_rows($result) == 0)
         {
-            include (APPLICATION_INCPATH . 'htmlheader.inc.php');
+
             echo $pagetitle;
-            // FIXME i18n
-            echo "<p class='error'>Sorry, your search yielded no results</p>\n";
-            include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
+
+            echo "<p class='error'>{$strNoResults}</p>\n";
+
         }
         else
         {
             if ($_REQUEST['output'] == 'screen')
             {
-                include (APPLICATION_INCPATH . 'htmlheader.inc.php');
+
                 ?>
                 <script type="text/javascript">
                 function support_contacts_window(maintenanceid)
@@ -114,7 +117,16 @@ else
                 <?php
                 echo "<h2>$pagetitle</h2>";
 
-                echo "<h3>Search yielded ".mysql_num_rows($result)." result(s)</h3>";
+                echo "<h3>{$strSearchYielded} ".mysql_num_rows($result);
+                    if (mysql_num_rows($result) == 1)
+                    {
+                        echo "{$strResult}</h3>";
+                    }
+                    else
+                    {
+                        echo "{$strResults}</h3>";
+                    }
+
 
                 echo "<table align='center'>
                 <tr>
@@ -163,7 +175,7 @@ else
                 }
                 echo "</table>\n";
                 echo "<p align='center'><a href='search.php?query={$search_string}&amp;context=maintenance'>{$strSearchAgain}</a></p>\n";
-                include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
+
             }
             else
             {
@@ -189,5 +201,6 @@ else
             }
         }
     }
+    include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
 }
 ?>

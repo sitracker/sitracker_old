@@ -44,12 +44,12 @@ else
     if ($expire == '')
     {
         $errors = 1;
-        echo "<p class='error'>You must enter a number of days</p>\n";
+        echo "<p class='error'>{$strEnterNumberOfDays}</p>\n";
     }
     elseif (!is_numeric($expire))
     {
         $errors = 1;
-        echo "<p class='error'>You must enter a numeric value</p>\n";
+        echo "<p class='error'>{$strEnterNumericValue}</p>\n";
     }
     if ($errors == 0)
     {
