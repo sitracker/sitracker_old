@@ -121,11 +121,11 @@ else
                 echo "<h3>{$strSearchYielded} ".mysql_num_rows($result);
                     if (mysql_num_rows($result) == 1)
                     {
-                        echo "{$strResult}</h3>";
+                        echo " {$strResult}</h3>";
                     }
                     else
                     {
-                        echo "{$strResults}</h3>";
+                        echo " {$strResults}</h3>";
                     }
 
 
