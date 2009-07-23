@@ -1010,7 +1010,7 @@ $strNobody = 'Nobody';
 $strNoAnswerGiven = 'No Answer Given';
 $strNoActionSpecified = 'No action specified';
 $strNoneAvailable = 'None Available';
-$strNonTerminatedContractsExpired = 'Non-Terminated Contracts Expired Within The Last';
+$strNonTerminatedContractsExpiredXdaysAgo = 'Non-Terminated Contracts that expired up to %s days ago';
 $strNoCalls = 'No Calls';
 $strNoChangesToMake = 'No changes to make';
 $strNoContactsForSite = 'There are no contacts associated with this site';
@@ -1578,7 +1578,7 @@ $strTemplateVariables = 'Template Variables';
 $strTemporarilyAssignedto = 'Temporarily assigned to %s by %s';
 $strTemporaryOwner = 'Temporary Owner';
 $strTerminated = 'Terminated';
-$strTerminatedContractsExpired  = 'Terminated Contracts Expired Within The Last';
+$strTerminatedContractsExpiredXdaysAgo  = 'Terminated Contracts that expired up to %s days ago';
 # As in 'Click to test triggers'
 $strTestTriggers = 'Test Triggers';
 $strText = 'Text';

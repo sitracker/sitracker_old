@@ -87,13 +87,13 @@ else
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
 
-        if ($show == "") $pagetitle = "<h2>{$strNonTerminatedContractsExpired} $expired {$strDays}</h2>\n";
-        else if ($show == "terminated") $pagetitle = "<h2>{$strTerminatedContractsExpired} $expired {$strDays}</h2>\n";
+        if ($show == "") $pagetitle = "<h2>{$strNonTerminatedContractsExpiredXdaysAgo}</h2>\n";
+        else if ($show == "terminated") $pagetitle = "<h2>{$strTerminatedContractsExpiredXdaysAgo}</h2>\n";
 
         if (mysql_num_rows($result) == 0)
         {
             include (APPLICATION_INCPATH . 'htmlheader.inc.php');
-            echo $pagetitle;
+            printf ($pagetitle, $expired);
             echo "<p class='error'>{$strNoResults}</p>\n";
             include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
         }
