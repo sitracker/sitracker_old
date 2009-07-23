@@ -30,12 +30,12 @@ $output = cleanvar($_REQUEST['output']);
 if (empty($expired))
 {
     include (APPLICATION_INCPATH . 'htmlheader.inc.php');
-    
+
     echo "<h2>{$strShowExpired}</h2>";
     echo "<form action='{$_SERVER['PHP_SELF']}' method='get' >";
     printf("<p>{$strContractsExpiringWithinXdays}</p>", "<input maxlength='4' name='expired' size='3' type='text' />");
     echo "<p><input checked='checked' name='show' type='checkbox' value='terminated'> {$strTerminated}</p>";
-    
+
     echo "<p align='center'>{$strOutput}: ";
     echo "<select name='output'>";
     echo "<option value='screen'>{$strScreen}</option>";
@@ -49,18 +49,19 @@ if (empty($expired))
 }
 else
 {
-    include (APPLICATION_INCPATH . 'htmlheader.inc.php');
     // perform search
     // check input
     if ($expired == '')
     {
         $errors = 1;
-        echo "<p class='error'>{$strEnterNumberOfDays}</p>\n";
+        html_redirect($_SERVER['PHP_SELF'], FALSE, $strEnterNumberOfDays);
+        exit;
     }
     elseif (!is_numeric($expired))
     {
         $errors = 1;
-        echo "<p class='error'>{$strEnterNumericValue}</p>\n";
+        html_redirect($_SERVER['PHP_SELF'], FALSE, $strEnterNumericValue);
+        exit;
     }
     if ($errors == 0)
     {
@@ -100,7 +101,7 @@ else
         {
             if ($_REQUEST['output'] == 'screen')
             {
-
+                include (APPLICATION_INCPATH . 'htmlheader.inc.php');
                 ?>
                 <script type="text/javascript">
                 function support_contacts_window(maintenanceid)
@@ -157,7 +158,7 @@ else
 
                     echo "<td class='{$shade}'>{$results->admincontactphone}</td>";
                     echo "<td class='{$shade}'>{$results->admincontactemail}</td>";
-                    
+
                     echo "<td align='center' class='{$shade}' width='150'>";
                     if ($results->notes == '')
                     {
@@ -167,7 +168,7 @@ else
                     {
                         echo nl2br($results->notes);
                     }
-                    
+
                     echo "</td></tr>";
                     // invert shade
                     if ($shade == 'shade1;') $shade = 'shade2';

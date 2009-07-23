@@ -27,10 +27,10 @@ $expire = cleanvar($_REQUEST['expire']);
 if (empty($expire))
 {
     include (APPLICATION_INCPATH . 'htmlheader.inc.php');
-    
+
     echo "<h2>{$strShowRenewals}</h2>";
     echo "<form action='{$_SERVER['PHP_SELF']}' method='post' >";
- 
+
     printf("<p>{$strContractsExpiringWithinXdays}</p>", "<input maxlength='4' name='expire' size='3' type='text' />");
     echo "<p><input name='submit' type='submit' value=\"{$strSearch}\" /></p>";
     echo "</form>\n";
