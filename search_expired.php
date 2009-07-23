@@ -116,7 +116,7 @@ else
                 }
                 </script>
                 <?php
-                echo "<h2>$pagetitle</h2>";
+                printf ($pagetitle, $expired);
 
                 echo "<h3>{$strSearchYielded} ".mysql_num_rows($result);
                     if (mysql_num_rows($result) == 1)
