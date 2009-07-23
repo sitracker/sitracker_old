@@ -325,6 +325,7 @@ $strContractID = 'Contract ID';
 $strContractProduct = 'The product associated with a contract';
 $strContractNum = 'Contract %d';
 $strContracts = 'Contracts';
+$strContractsExpiredXdaysAgo = 'Contracts that expired up to %s days ago';
 $strContractsExpiringWithinXdays = 'Contracts expiring within %s days';
 $strContractsSLA = 'The service level of the contract';
 $strControlPanel = 'Control Panel';

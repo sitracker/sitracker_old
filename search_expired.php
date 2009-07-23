@@ -9,8 +9,6 @@
 //
 
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
-// FIXME i18n whole page
-
 
 $permission = 19; // View Contracts
 
@@ -25,6 +23,7 @@ $title = $strShowExpired;
 // External variables
 $expired = cleanvar($_REQUEST['expired']);
 $output = cleanvar($_REQUEST['output']);
+$show = cleanvar($_REQUEST['show']);
 
 // show search expired maintenance form
 if (empty($expired))
@@ -33,8 +32,8 @@ if (empty($expired))
 
     echo "<h2>{$strShowExpired}</h2>";
     echo "<form action='{$_SERVER['PHP_SELF']}' method='get' >";
-    printf("<p>{$strContractsExpiringWithinXdays}</p>", "<input maxlength='4' name='expired' size='3' type='text' />");
-    echo "<p><input checked='checked' name='show' type='checkbox' value='terminated'> {$strTerminated}</p>";
+    printf("<p>{$strContractsExpiredXdaysAgo}", "<input maxlength='4' name='expired' size='3' type='text' value='30' />");
+    echo "<p><input name='show' type='checkbox' value='terminated'> {$strTerminated}</p>";
 
     echo "<p align='center'>{$strOutput}: ";
     echo "<select name='output'>";
@@ -76,11 +75,13 @@ else
         $sql .= "c.email AS admincontactemail, c.phone AS admincontactphone, m.notes ";
         $sql .= "FROM `{$dbMaintenance}` AS m, `{$dbSites}` AS s, `{$dbContacts}` AS c, ";
         $sql .= "`{$dbProducts}` AS p, `{$dbLicenceTypes}` AS l, `{$dbResellers}` AS r WHERE ";
-        $sql .= "(siteid = s.id AND product = p.id AND reseller = r.id AND licence_type = l.id AND admincontact = c.id) AND ";
+        $sql .= "(siteid = s.id AND product = p.id AND reseller = r.id AND (licence_type = l.id OR licence_type = NULL) AND admincontact = c.id) AND ";
         $sql .= "expirydate >= $min_expiry AND expirydate <= $now ";
         if ($show == "terminated") $sql .= "AND term='yes'";
-        else if ($show == "nonterminated") $sql .= "AND term='no'";
+        else $sql .= "AND term != 'yes'";
         $sql .= "ORDER BY expirydate ASC";
+
+    echo $sql;
 
         // connect to database
         $result = mysql_query($sql);
@@ -91,11 +92,10 @@ else
 
         if (mysql_num_rows($result) == 0)
         {
-
+            include (APPLICATION_INCPATH . 'htmlheader.inc.php');
             echo $pagetitle;
-
             echo "<p class='error'>{$strNoResults}</p>\n";
-
+            include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
         }
         else
         {
@@ -175,8 +175,8 @@ else
                     else $shade = 'shade1';
                 }
                 echo "</table>\n";
-                echo "<p align='center'><a href='search.php?query={$search_string}&amp;context=maintenance'>{$strSearchAgain}</a></p>\n";
-
+                echo "<p align='center'><a href='{$_SERVER['PHP_SELF']}'>{$strSearchAgain}</a></p>\n";
+                include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
             }
             else
             {
@@ -202,6 +202,5 @@ else
             }
         }
     }
-    include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
 }
 ?>
