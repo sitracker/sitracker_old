@@ -19,7 +19,7 @@ if (realpath(__FILE__) == realpath($_SERVER['SCRIPT_FILENAME']))
 // 'soap' commented out by ivan 3 june 2009
 $CFGTAB['application'] = array('appmain', 'theming', 'ldap', 'other');
 $CFGTAB['email'] = array('inboundemail','outboundemail');
-$CFGTAB['features'] = array('incidents', 'portal', 'ftp', 'kb', 'sla', 'holidays', 'feedback');
+$CFGTAB['features'] = array('incidents', 'portal', 'ftp', 'kb', 'sla', 'holidays', 'feedback', 'inventory');
 $CFGTAB['system'] = array('paths', 'locale', 'journal');
 
 $TABI18n['application'] = $strApplication;
@@ -135,6 +135,8 @@ $CFGCAT['kb'] = array('kb_enabled',
 // $CFGCAT['outboundemail'] = array();
 $CFGCAT['journal'] = array('journal_loglevel', 'journal_purge_after');
 
+$CFGCAT['inventory'] = array('inventory_enabled', 'inventory_types');           
+
 $CFGCAT['other'] = array('debug', 'error_logfile',
                         'support_manager', 'tasks_enabled', 'timesheets_enabled',
                           'bugtracker_url',
@@ -163,6 +165,7 @@ $CATI18N['feedback'] = $strFeedback;
 $CATI18N['paths'] = $strPaths;
 $CATI18N['locale'] = $strLocale;
 $CATI18N['journal'] = $strJournal;
+$CATI18N['inventory'] = $strInventory;
 
 // Text to introduce a configuration category, may contain HTML
 $CATINTRO['sla'] = "This section allows you to configure how service levels are used, configure the <abbr title='Service Level Agreements'>SLA</abbr>'s themselves on the <a href='service_levels.php'>Service Levels</a> page.";
@@ -391,6 +394,14 @@ $CFGVAR['home_country']['title'] = "The default country in capitals. e.g. 'UNITE
 $CFGVAR['incident_pools']['title'] = 'Incident Pool options';
 $CFGVAR['incident_pools']['help'] = 'Comma seperated list specifying the numbers of incidents to assign to contracts';
 // Note: incident_pools is not a 1darray, it's actually a comma separated list
+
+$CFGVAR['inventory_enabled']['title'] = 'Inventory Enabled';
+$CFGVAR['inventory_enabled']['help'] = 'Set to TRUE to enable Inventory, set to FALSE to disable';
+$CFGVAR['inventory_enabled']['type'] = 'TRUE|FALSE';
+
+$CFGVAR['inventory_types']['title'] = 'Inventory Types';
+$CFGVAR['inventory_types']['help'] = 'The types of Inventory items allowed';
+$CFGVAR['inventory_types']['type'] = '2darray';
 
 $CFGVAR['journal_loglevel']['help'] = '0 = none, 1 = minimal, 2 = normal, 3 = full, 4 = maximum/debug';
 $CFGVAR['journal_loglevel']['title'] = 'Journal Logging Level';
