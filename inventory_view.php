@@ -6,13 +6,19 @@
 //
 // This software may be used and distributed according to the terms
 // of the GNU General Public License, incorporated herein by reference.
-
+if (
 $permission = 0;
 
 require ('core.php');
 require (APPLICATION_LIBPATH . 'functions.inc.php');
 require (APPLICATION_LIBPATH . 'auth.inc.php');
 include (APPLICATION_INCPATH . 'htmlheader.inc.php');
+
+if(!$CONFIG['inventory_enabled']) 
+{
+    html_redirect('index.php', FALSE);
+    exit;
+}
 
 if (is_numeric($_GET['id']))
 {

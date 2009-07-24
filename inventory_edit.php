@@ -14,6 +14,12 @@ require (APPLICATION_LIBPATH . 'functions.inc.php');
 require (APPLICATION_LIBPATH . 'auth.inc.php');
 include (APPLICATION_INCPATH . 'htmlheader.inc.php');
 
+if(!$CONFIG['inventory_enabled']) 
+{
+    html_redirect('index.php', FALSE);
+    exit;
+}
+
 $id = cleanvar($_GET['id']);
 $siteid = cleanvar($_REQUEST['siteid']);
 

@@ -14,6 +14,12 @@ require (APPLICATION_LIBPATH . 'functions.inc.php');
 require (APPLICATION_LIBPATH . 'auth.inc.php');
 include (APPLICATION_INCPATH . 'htmlheader.inc.php');
 
+if(!$CONFIG['inventory_enabled']) 
+{
+    html_redirect('index.php', FALSE);
+    exit;
+}
+
 $siteid = cleanvar($_GET['site']);
 
 if (isset($_POST['submit']))
@@ -26,7 +32,7 @@ if (isset($_POST['submit']))
     $sql .= "'{$post['username']}', '{$post['password']}', ";
     $sql .= "'{$post['type']}', ";
     $sql .= "'{$post['notes']}', NOW(), '{$sit[2]}', NOW(), ";
-    $sql .= "'{$sit[2]}', '1', '{$post['name']}', '{$post['siteid']}', ";
+    $sql .= "'{$sit[2]}', '1', '{$post['name']}', '{$post['site']}', ";
     $sql .= "'{$post['privacy']}', '{$post['identifier']}')";
 
     mysql_query($sql);
