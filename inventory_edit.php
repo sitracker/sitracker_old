@@ -68,7 +68,7 @@ if (isset($_POST['submit']))
 
     mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
-    else html_redirect("inventory_site.php?site={$siteid}");
+    else html_redirect("inventory_site.php?id={$siteid}");
 }
 else
 {
