@@ -58,7 +58,7 @@ else
     }
     else
     {
-        echo "<input type='hidden' id='siteid' value='{$siteid}' />";
+        echo "<input type='hidden' id='site' value='{$siteid}' />";
         echo "<tr><th>{$strOwner}</th><td>";
         echo contact_site_drop_down('owner', $row->contactid, $siteid, NULL, FALSE);
         echo "</td></tr>";
