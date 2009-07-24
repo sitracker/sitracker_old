@@ -207,6 +207,7 @@ $strBackToSites = 'Back to sites';
 $strBackOneYear = 'Back One Year';
 $strBalance = 'Balance';
 $strBCC = 'BCC';
+$strBeforeDeleteContact = 'Before you can delete you must select another contact to receive any incidents and/or contracts.';
 # noun, a bill to pay money
 $strBill = 'Bill';
 $strBillableIncidentApproved = 'Billable Incident Approved';
@@ -413,6 +414,7 @@ $strDefaultNewEntitlement = 'Default new Entitlement';
 $strDefaultSubstitute = 'Default Substitute';
 $strDefineSubstituteEngineersFor = 'Define Substitute Engineers For %s';
 $strDelete = 'Delete';
+$strDeleteContact = 'Delete Contact';
 $strDeleteSite = 'Delete Site';
 $strDeleteAllSpam = 'Delete all mail from spam queue';
 $strDeleted = 'Deleted';

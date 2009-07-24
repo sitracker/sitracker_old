@@ -12,7 +12,6 @@
 
 // This Page Is Valid XHTML 1.0 Transitional!   31Oct05
 
-
 $permission = 55; // Delete Sites/Contacts
 
 require ('core.php');
@@ -30,27 +29,23 @@ if (empty($process))
 {
     if (empty($id))
     {
-        ?>
-        <h2>Select Contact To Delete</h2>
-        <form action="<?php echo $_SERVER['PHP_SELF'] ?>?action=delete" method="post">
-        <table>
-        <tr><th>Contact:</th><td><?php echo contact_site_drop_down("id", 0); ?></td></tr>
-        </table>
-        <p><input name="submit1" type="submit" value="Continue" /></p>
-        <?php
+        echo "<h2>{$strDeleteContact}</h2>";
+        echo "<form action=\"{$_SERVER['PHP_SELF']}?action=delete\" method=\"post\">";
+        echo "<table align='center'>";
+        echo "<tr><th>{$strContact}:</th><td>".contact_site_drop_down("id", 0)."</td></tr>";
+        echo "</table>";
+        echo "<p><input name=\"submit1\" type=\"submit\" value=\"{$strDelete}\" /></p>";
         echo "</form>";
     }
     else
     {
-        echo "<h2>Delete Contact</h2>\n";
+        echo "<h2>{$strDeleteContact}</h2>\n";
         $sql="SELECT * FROM `{$dbContacts}` WHERE id='$id' ";
         $contactresult = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
         while ($contactrow=mysql_fetch_array($contactresult))
         {
-            ?>
-            <table align='center' class='vertical'>
-            <?php
+            echo "<table align='center' class='vertical'>";
             echo "<tr><th>{$strName}:</th><td><h3>".$contactrow['forenames'].' '.$contactrow['surname']."</h3></td></tr>";
             echo "<tr><th>{$strSite}:</th><td><a href=\"site_details.php?id=".$contactrow['siteid']."\">".site_name($contactrow['siteid'])."</a></td></tr>";
             echo "<tr><th>{$strDepartment}:</th><td>".$contactrow['department']."</td></tr>";
@@ -80,7 +75,7 @@ if (empty($process))
         if ($totalincidents > 0 || $totalcontracts > 0)
         {
             echo "<form action='{$_SERVER['PHP_SELF']}' onsubmit=\"return confirm_action('{$strAreYouSureDelete}')\" method='post'>\n";
-            echo "<p align='center'>Before you can delete you must select another contact to receive any incidents and/or maintenance contracts.</p>";
+            echo "<p align='center'>{$strBeforeDeleteContact}</p>";
             $sql  = "SELECT id, forenames, surname, siteid FROM `{$dbContacts}` ORDER BY surname ASC";
             $result = mysql_query($sql);
             echo "<p align='center'>";
@@ -151,6 +146,6 @@ else
     journal(CFG_LOGGING_NORMAL, 'Contact Deleted', "Contact $id was deleted", CFG_JOURNAL_CONTACTS, $id);
 
     if (!empty($newcontact)) html_redirect("contact_details.php?id={$newcontact}");
-    else  html_redirect("contacts.php?search_string=A");
+    else  html_redirect("contacts.php");
 }
 ?>
