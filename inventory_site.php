@@ -71,10 +71,11 @@ if (is_numeric($_GET['id']))
     if (mysql_num_rows($result) > 0)
     {
         echo "<table align='center'>";
-        echo "<tr><th>{$strItem}</th><th>{$strActions}</th></tr>";
+        echo "<tr><th>{$strInventoryItems}</th><th>{$strActions}</th></tr>";
+        $shade = 'shade1';
         while ($row = mysql_fetch_object($result))
         {
-            echo "<tr><td>".icon('inventory', 16); 
+            echo "<tr class='{$shade}'><td>".icon('inventory', 16);
             echo " {$row->name}, {$CONFIG['inventory_types'][$row->type]}";
 
             if ($row->active != 1)
@@ -82,8 +83,10 @@ if (is_numeric($_GET['id']))
                 echo " (inactive)";
             }
             echo "</td>";
-            echo "<td><a href='inventory_view.php?id={$row->id}'>{$strView}</a> ";
+            echo "<td><a href='inventory_view.php?id={$row->id}'>{$strView}</a> &nbsp; ";
             echo "<a href='inventory_edit.php?id={$row->id}'>{$strEdit}</td></tr>";
+            if ($shade == 'shade1') $shade = 'shade2';
+            else $shade = 'shade1';
         }
         echo "</table>";
         echo "<p align='center'>.".icon('add', 16);
