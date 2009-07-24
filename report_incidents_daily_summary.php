@@ -50,16 +50,25 @@ else
 {
     if (empty($startdate))
     {
-    	if (empty($enddate)) $startdate = $now - 31556926; // 1 year
+        if (empty($enddate)) $startdate = $now - 31556926; // 1 year
         else $startdate = strtotime($enddate) - 31556926; // 1 year
     }
     else
     {
-    	$startdate = strtotime($startdate);
+        $startdate = strtotime($startdate);
     }
-    
+
     if (empty($enddate)) $enddate = $now;
     else $enddate = strtotime($enddate);
+
+    if ($startdate > $enddate)
+    {
+        // swap
+        $s2 = $enddate;
+        $enddate = $startdate;
+        $startdate = $s2;
+        unset($s2);
+    }
 
     if ($startdate < $enddate)
     {
@@ -148,7 +157,7 @@ else
                 echo "<tr><td valign='top'><table>";
                 echo "<tr><td>{$strOpened}</td><td>{$opened}</td></tr>";
                 echo "<tr><td>{$strClosed}</td><td>{$closed}</td></tr>";
-                echo "<table><tr><th>User</th><th>Opened</th><th>Closed</th></tr>";
+                echo "<table><tr><th>{$strUser}</th><th>{$strOpened}</th><th>{$strClosed}</th></tr>";
                 foreach ($owners AS $o)
                 {
                     echo "<tr>";
@@ -172,10 +181,6 @@ else
         {
         	echo "<p class='error'>{$strNoIncidents}</p>";
         }
-    }
-    else
-    {
-        echo "<h1>Start date MUST be before end date</h1>";
     }
 }
 

@@ -34,7 +34,7 @@ $sites = array();
 
 $monthago = time()-(60 * 60 * 24 * 30.5);
 
-echo "<h2>Incidents opened since ".ldate($CONFIG['dateformat_date'], $monthago)."</h2>";
+echo "<h2>{$strRecentIncidents} (".sprintf($strSinceX, ldate($CONFIG['dateformat_date'], $monthago)).")</h2>";
 
 $sql  = "SELECT *,s.id AS siteid FROM `{$dbSites}` AS s, `{$dbMaintenance}` AS m, `{$dbSupportContacts}` AS sc, `{$dbIncidents}` AS i ";
 $sql .= "WHERE s.id = m.site ";
