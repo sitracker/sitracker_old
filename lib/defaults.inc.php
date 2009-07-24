@@ -341,4 +341,6 @@ $CONFIG['holiday_allow_overbooking'] = FALSE;
 $CONFIG['soap_enabled'] = FALSE;
 $CONFIG['soap_portal_enabled'] = FALSE;
 
+$CONFIG['inventory_enabled'] = TRUE;
+
 ?>
