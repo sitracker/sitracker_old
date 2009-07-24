@@ -397,7 +397,7 @@ $CFGVAR['incident_pools']['help'] = 'Comma seperated list specifying the numbers
 
 $CFGVAR['inventory_enabled']['title'] = 'Inventory Enabled';
 $CFGVAR['inventory_enabled']['help'] = 'Set to TRUE to enable Inventory, set to FALSE to disable';
-$CFGVAR['inventory_enabled']['type'] = 'TRUE|FALSE';
+$CFGVAR['inventory_enabled']['type'] = 'select';
 
 $CFGVAR['inventory_types']['title'] = 'Inventory Types';
 $CFGVAR['inventory_types']['help'] = 'The types of Inventory items allowed';
