@@ -23,7 +23,7 @@ if(!$CONFIG['inventory_enabled'])
 $siteid = cleanvar($_GET['site']);
 $newsite = cleanvar($_GET['newsite']);
 
-if (isset($_POST['submit']))
+if (isset($_POST['submit']) AND isset($POST['name']))
 {
     $post = cleanvar($_POST);
 
@@ -43,6 +43,10 @@ if (isset($_POST['submit']))
 }
 else
 {
+    if (!isset($_POST['name']))
+    {
+        echo "<p class='error'>{$strYouMissedARequiredField}: {$strName}</p>";
+    }
     echo "<h2>".icon('add', 32)." {$strAdd}</h2>";
     $siteid = intval($_GET['site']);
 
