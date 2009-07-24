@@ -127,8 +127,9 @@ if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARN
 
 if (mysql_num_rows($result) == 0)
 {
-    echo "<p align='center'>{$strNoResults}";
-    if (!empty($search_string)) echo " matching '<em>{$search_string}</em>";
+    echo "<p align='center'>";
+    if (empty($search_string)) echo $strNoRecords;
+    else printf($strSorryNoRecordsMatchingX, "<em>{$search_string}</em>");
     echo "</p>\n";
 }
 else

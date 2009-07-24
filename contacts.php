@@ -159,8 +159,10 @@ else
 
         if (mysql_num_rows($result) == 0)
         {
-            echo "<p align='center'>".sprintf($strSorryUnableToFindAnyContactsMatchingX, "<em>{$search_string}</em>")."</p>\n";
-        }
+            echo "<p align='center'>";
+            if (empty($search_string)) echo $strNoRecords;
+            else printf($strSorryNoRecordsMatchingX, "<em>{$search_string}</em>");
+            echo "</p>\n";        }
         else
         {
 
