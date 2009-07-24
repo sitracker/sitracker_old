@@ -14,7 +14,7 @@ require (APPLICATION_LIBPATH . 'functions.inc.php');
 require (APPLICATION_LIBPATH . 'auth.inc.php');
 include (APPLICATION_INCPATH . 'htmlheader.inc.php');
 
-if(!$CONFIG['inventory_enabled']) 
+if(!$CONFIG['inventory_enabled'])
 {
     html_redirect('index.php', FALSE);
     exit;
@@ -89,7 +89,7 @@ if (is_numeric($_GET['id']))
             else $shade = 'shade1';
         }
         echo "</table>";
-        echo "<p align='center'>.".icon('add', 16);
+        echo "<p align='center'>".icon('add', 16);
         echo " <a href='inventory_add.php?site={$siteid}'>";
         echo "{$strAddNew}</a></p>";
     }
