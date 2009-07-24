@@ -118,7 +118,7 @@ else
     if ($newsite)
     {
         echo icon('site', 16);
-        echo " <a href='{$_SERVER['PHP_SELF']}'>{$strBackToSites}</a>";
+        echo " <a href='inventory.php'>{$strBackToSites}</a>";
     }
     else
     {
