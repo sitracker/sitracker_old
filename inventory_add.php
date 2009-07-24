@@ -21,6 +21,7 @@ if(!$CONFIG['inventory_enabled'])
 }
 
 $siteid = cleanvar($_GET['site']);
+$newsite = cleanvar($_GET['newsite']);
 
 if (isset($_POST['submit']))
 {
@@ -32,7 +33,7 @@ if (isset($_POST['submit']))
     $sql .= "'{$post['username']}', '{$post['password']}', ";
     $sql .= "'{$post['type']}', ";
     $sql .= "'{$post['notes']}', NOW(), '{$sit[2]}', NOW(), ";
-    $sql .= "'{$sit[2]}', '1', '{$post['name']}', '{$post['site']}', ";
+    $sql .= "'{$sit[2]}', '1', '{$post['name']}', '{$post['siteid']}', ";
     $sql .= "'{$post['privacy']}', '{$post['identifier']}')";
 
     mysql_query($sql);
