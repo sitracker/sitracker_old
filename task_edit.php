@@ -29,6 +29,7 @@ $action = $_REQUEST['action'];
 $id = cleanvar($_REQUEST['id']);
 $incident = cleanvar($_REQUEST['incident']);
 $SYSLANG = $_SESSION['syslang'];
+
 switch ($action)
 {
     case 'edittask':
@@ -86,12 +87,12 @@ switch ($action)
 
         // Validate input
         $error = array();
-        if ($name == '') $error[] = 'Task name must not be blank';
+        if ($name == '') $error[] = sprintf($strFieldMustNotBeBlank, $strName);
         if ($startdate > $duedate AND $duedate != '' AND $duedate > 0 ) $startdate = $duedate;
         if (count($error) >= 1)
         {
             include (APPLICATION_INCPATH . 'htmlheader.inc.php');
-            echo "<p class='error'>Please check the data you entered</p>";
+            echo "<p class='error'>{$strPleaseCheckData}</p>";
             echo "<ul class='error'>";
             foreach ($error AS $err)
             {
@@ -122,21 +123,21 @@ switch ($action)
 
             // Add a note to say what changed (if required)
             $bodytext='';
-            if ($name != $old_name) $bodytext .= "Name: {$old_name} -&gt; [b]{$name}[/b]\n";
-            if ($description != $old_description) $bodytext .= "Description: {$old_description} -&gt; [b]{$description}[/b]\n";
-            if ($priority != $old_priority) $bodytext .= "Priority: ".priority_name($old_priority)." -&gt; [b]".priority_name($priority)."[/b]\n";
+            if ($name != $old_name) $bodytext .= "{$SYSLANG['strName']}: {$old_name} -&gt; [b]{$name}[/b]\n";
+            if ($description != $old_description) $bodytext .= "{$SYSLANG['strDescription']}: {$old_description} -&gt; [b]{$description}[/b]\n";
+            if ($priority != $old_priority) $bodytext .= "{$SYSLANG['strPriority']}: ".priority_name($old_priority)." -&gt; [b]".priority_name($priority)."[/b]\n";
             $old_startdate = substr($old_startdate,0,10);
             if ($startdate != $old_startdate AND ($startdate != '' AND $old_startdate != '0000-00-00')) $bodytext .= "Start Date: {$old_startdate} -&gt; [b]{$startdate}[/b]\n";
             $old_duedate = substr($old_duedate,0,10);
             if ($duedate != $old_duedate AND ($duedate != '0000-00-00' AND $old_duedate != '0000-00-00')) $bodytext .= "Due Date: {$old_duedate} -&gt; [b]{$duedate}[/b]\n";
-            if ($completion != $old_completion) $bodytext .= "Completion: {$old_completion}% -&gt; [b]{$completion}%[/b]\n";
+            if ($completion != $old_completion) $bodytext .= "{$SYSLANG['strCompletion']}: {$old_completion}% -&gt; [b]{$completion}%[/b]\n";
             if ($enddate != $old_enddate AND ($enddate != '0000-00-00 00:00:00' AND $old_enddate != '0000-00-00 00:00:00')) $bodytext .= "End Date: {$old_enddate} -&gt; [b]{$enddate}[/b]\n";
-            if ($value != $old_value) $bodytext .= "Value: {$old_value} -&gt; [b]{$value}[/b]\n";
-            if ($owner != $old_owner) $bodytext .= "User: ".user_realname($old_owner)." -&gt; [b]".user_realname($owner)."[/b]\n";
-            if ($distribution != $old_distribution) $bodytext .= "Privacy: {$old_distribution} -&gt; [b]{$distribution}[/b]\n";
+            if ($value != $old_value) $bodytext .= "{$SYSLANG['strValue']}: {$old_value} -&gt; [b]{$value}[/b]\n";
+            if ($owner != $old_owner) $bodytext .= "{$SYSLANG['strUser']}: ".user_realname($old_owner)." -&gt; [b]".user_realname($owner)."[/b]\n";
+            if ($distribution != $old_distribution) $bodytext .= "{$SYSLANG['strPrivacy']}: {$old_distribution} -&gt; [b]{$distribution}[/b]\n";
             if (!empty($bodytext))
             {
-                $bodytext="Task Edited by {$_SESSION['realname']}:\n\n".$bodytext;
+                $bodytext = sprintf($strEditedBy, $_SESSION['realname']).":\n\n".$bodytext;
                 // Link 10 = Tasks
                 $sql = "INSERT INTO `{$dbNotes}` ";
                 $sql .= "(userid, bodytext, link, refid) ";
@@ -144,7 +145,7 @@ switch ($action)
                 mysql_query($sql);
                 if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
             }
-            html_redirect("view_task.php?id={$id}", TRUE, $strTaskEditedSuccessfully); // FIXME redundant i18n string
+            html_redirect("view_task.php?id={$id}", TRUE);
         }
     break;
 
@@ -245,7 +246,7 @@ switch ($action)
             if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
             if (mysql_affected_rows() != 1)
             {
-            	trigger_error("No rows affected while updating incident",E_USER_ERROR);
+                trigger_error("No rows affected while updating incident",E_USER_ERROR);
             }
 
             mark_task_completed($id, TRUE);
@@ -257,7 +258,7 @@ switch ($action)
 
         // FIXME redundant i18n strings
         if ($incident) html_redirect("tasks.php?incident={$incident}", TRUE, $strActivityMarkedCompleteSuccessfully);
-        else html_redirect("tasks.php", TRUE, $strTaskMarkedCompleteSuccessfully);
+        else html_redirect("tasks.php", TRUE);
     break;
 
     case 'delete':
@@ -271,8 +272,7 @@ switch ($action)
         mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
-        // FIXME redundant i18n strings
-        html_redirect("tasks.php", TRUE, $strTaskDeletedSuccessfully);
+        html_redirect("tasks.php", TRUE);
     break;
 
     case '':
