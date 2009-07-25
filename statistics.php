@@ -379,7 +379,7 @@ function give_overview()
     $todaysincidents = mysql_num_rows($result);
     mysql_free_result($result);
 
-    $string = "<h4>$todaysincidents Incidents Logged Today</h4>";
+    $string = "<h4>".sprintf($GLOBALS['strIncidentsLoggedToday'], $todaysincidents)."</h4>";
     if ($todaysincidents > 0)
     {
         $string .= "<table align='center' width='50%'><tr><td colspan='2'>{$GLOBALS['strAssignedAsFollows']}</td></tr>";
