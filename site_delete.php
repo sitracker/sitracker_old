@@ -27,12 +27,12 @@ $destinationid = cleanvar($_REQUEST['destinationid']);
 if (empty($id))
 {
     include (APPLICATION_INCPATH . 'htmlheader.inc.php');
-    echo "<h2>Select Site To Delete</h2>";
+    echo "<h2>{$strDeleteSite}</h2>";
     echo "<form action='{$_SERVER['PHP_SELF']}?action=delete' method='post'>";
-    echo "<table>";
+    echo "<table align='center'>";
     echo "<tr><th>{$strSite}:</th><td>".site_drop_down('id', 0)."</td></tr>";
     echo "</table>";
-    echo "<p><input name='submit' type='submit' value='Continue' /></p>";
+    echo "<p><input name='submit' type='submit' value='{$strDelete}' /></p>";
     echo "</form>";
     include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
 }
@@ -59,7 +59,7 @@ else
         list($numcontacts) = mysql_fetch_row($result);
         if ($numcontacts > 0)
         {
-            echo "<p align='center' class='warning'>There are $numcontacts contacts assigned to this site</p>";
+            echo "<p align='center' class='warning'>".sprintf($strNumContactsAssignedToSite, $numcontacts)."</p>";
         }
 
         // Look for associated maintenance contracts
@@ -69,17 +69,17 @@ else
         list($numcontracts) = mysql_fetch_row($result);
         if ($numcontracts>0)
         {
-            echo "<p align='center' class='warning'>There are $numcontracts contracts assigned to this site</p>";
+            echo "<p align='center' class='warning'>".sprintf($strNumContractsAssignedToSite, $numcontracts)."</p>";
         }
         if ($numcontacts > 0 OR $numcontracts > 0)
         {
-            echo "<p align='center'>In order to delete this site you must select another site to recieve the records that are assigned to this one</p>";
+            echo "<p align='center'>{$strInOrderToDelete}</p>";
             echo "<form action='{$_SERVER['PHP_SELF']}?action=delete' method='post'>";
             echo "<table align='center'>";
-            echo "<tr><th>Transfer records to:</th><td>".site_drop_down('destinationid', 0)."</td></tr>";
+            echo "<tr><th>{$strSite}:</th><td>".site_drop_down('destinationid', 0)."</td></tr>";
             echo "</table>";
             echo "<input type='hidden' name='id' value='$id' />";
-            echo "<p><input name='submit' type='submit' value='Transfer records and delete site' /></p>";
+            echo "<p><input name='submit' type='submit' value='{$strDelete}' /></p>";
             echo "</form>";
         }
         else
