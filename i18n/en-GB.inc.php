@@ -474,6 +474,7 @@ $strEarliestExpiry = 'Earliest Expiry:';
 $strEdit = 'Edit';
 $strEditContact = 'Edit Contact';
 $strEditContract = 'Edit Contract';
+$strEditFeedbackQuestion = 'Edit Feedback Question';
 $strEditGlobalSignature = 'Edit Global Signature';
 $strEdited = 'Edited';
 $strEditedBy = 'Edited by %s';
