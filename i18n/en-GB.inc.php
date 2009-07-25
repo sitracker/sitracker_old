@@ -573,6 +573,7 @@ $strEnvironment = 'Environment';
 $strEOL = 'EOL';
 $strError = 'Error';
 $strErrorAssigningUpdate = 'Error assigning that incident update. This could be because no incident exists with that ID or the incident has been closed.';
+$strErrorNoEmptyForm = 'Error, could not locate empty form to store results.';
 $strErrorRequiredQuestionsNotCompleted = 'Error: you did not complete all required questions, please check your answers and try again.';
 $strErrorSendingEmail = 'Error sending email';
 $strEscalated = 'Escalated';
@@ -614,6 +615,7 @@ $strFeedback = 'Feedback';
 $strFeedbackAfterX = 'Feedback after %s';
 $strFeedbackBeforeX = 'Feedback before %s';
 $strFeedbackBetweenXandY = 'Feedback between %s and %s';
+$strFeedbackForm = 'Feedback Form';
 $strFeedbackForms = 'Feedback Forms';
 $strFeedbackReport = 'Feedback Report';
 $strFeedbackFormsRequested = 'There are %s feedback forms that have been returned already';
@@ -657,6 +659,7 @@ $strFinalUpdate = 'Final Update';
 $strFindContact = 'Find Contact';
 $strFirstCustomerVisibleUpdate = 'The first customer visible update in the incident log';
 $strFollowingSpecialIdentifiers = 'The following special identifiers can be used in these fields:';
+$strFollowThisLink = 'follow this link';
 #e.g. for a person
 $strFor = 'for';
 $strForce = 'Force';
@@ -746,6 +749,7 @@ $strHours = 'Hours';
 
 # i.e. short for identification; unique number
 $strID = 'ID';
+$strIfYourBrowserNotReload = 'If your browser does not reload the page within a few seconds';
 $strIfYouShouldHaveAccess = 'If you feel that you should have access to this particular feature, please ask an administrator to grant you access';
 $strImportant = 'Important';
 $strInactive = 'Inactive';
@@ -1634,6 +1638,8 @@ $strTestTriggers = 'Test Triggers';
 $strText = 'Text';
 #English suffix for most numbers - 5th, 6th, 7th
 $strth = 'th';
+$strThankYou = 'Thank You';
+$strThankYouCompleteForm = 'Thank you for taking the time to complete this form.';
 $strTheFollowingVariables = 'The following variables may be used:';
 $strThereAreXcontractsAssignedToThisPerson = 'There are %s contracts assigned to this contact';
 $strThereAreXIncidentsAssignedToThisContact = 'There are %s incidents assigned to this contact';

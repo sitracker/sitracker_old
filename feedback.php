@@ -228,7 +228,7 @@ switch ($_REQUEST['action'])
         if (mysql_num_rows($result) < 1)
         {
             // FIXME: Proper error here
-            echo "<p>Error, could not locate empty form to store results.</p>";
+            echo "<p>{$strErrorNoEmptyForm}</p>";
         }
         else
         {
@@ -313,14 +313,14 @@ switch ($_REQUEST['action'])
 <html xmlns='http://www.w3.org/1999/xhtml'>
 <head>
 <meta http-equiv="refresh" content="0;URL=feedback.php?ax=<?php echo "{$hashcode}&error={$errortext}&mode={$mode}"; ?>" />
-<title>Please wait</title>
+<title><?php echo $strPleaseWaitRedirect ?></title>
 <style>
 body { font:10pt Arial, Helvetica, sans-serif; }
 </style>
 </head>
 <body>
-<p>Please wait while we redirect you...</p>
-<p>If your browser does not reload the page within a few seconds <a href='feedback.php?ax=<?php echo "{$hashcode}&error={$errortext}&mode={$mode}"; ?>'>follow this link</a>.</p>
+<p><?php echo $strPleaseWaitRedirect ?></p>
+<p><?php echo $strIfYourBrowserNotReload; ?><a href='feedback.php?ax=<?php echo "{$hashcode}&error={$errortext}&mode={$mode}"; ?>'><?php echo $strFollowThisLink;?></a>.</p>
 </body>
 </head>
 <?php
@@ -350,11 +350,11 @@ body { font:10pt Arial, Helvetica, sans-serif; }
         echo "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\">\n";
         echo "<html>\n";
         echo "<head>\n";
-        echo "<title>Thank you</title>\n";
+        echo "<title>{$strThankYou}</title>\n";
         echo "</head>\n";
         echo "<body>\n";
-        echo "<div id='pagecontent'><h1>Thank you</h1>";
-        echo "<p>Thank you for taking the time to complete this form.</p>";
+        echo "<div id='pagecontent'><h1>{$strThankYou}</h1>";
+        echo "<p>{$strThankYouCompleteForm}</p>";
         //echo "<!-- \n {$sqltext} \n\n\n {$debugtext} -->";
         echo "</div>\n</body>\n";
         echo "</html>\n";
@@ -362,7 +362,7 @@ body { font:10pt Arial, Helvetica, sans-serif; }
 
     default:
         if ($_REQUEST['mode']!='bare') include (APPLICATION_INCPATH . 'htmlheader.inc.php');
-        else echo "<html>\n<head>\n<title>Feedback Form</title>\n</head>\n<body>\n<div id='pagecontent'>\n\n";
+        else echo "<html>\n<head>\n<title>{$strFeedbackForm}</title>\n</head>\n<body>\n<div id='pagecontent'>\n\n";
         $errorfields = explode(",",urldecode($_REQUEST['error']));
         $fielddata = unserialize(base64_decode($errorfields[0])); // unserialize(
 
