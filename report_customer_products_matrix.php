@@ -17,6 +17,9 @@ include (APPLICATION_LIBPATH.'functions.inc.php');
 // This page requires authentication
 require (APPLICATION_LIBPATH.'auth.inc.php');
 
+// External variables
+$title = $strSiteProductsMatrix;
+
 // show search renewal form
 switch ($_POST['action'])
 {
@@ -152,11 +155,11 @@ switch ($_POST['action'])
         echo "<table class='vertical'>";
         echo "<tr><th>{$strVendor}</th>";
         echo "<td>".vendor_drop_down('vendor', 0)."</td></tr>\n";
-        echo "<tr><th>Earliest Expiry:</th>";
+        echo "<tr><th>{$strEarliestExpiry}</th>";
         echo "<td><input maxlength='100' id='min_expire' name='min_expire' size='10' type='text' value=\"".date('Y-m-d')."\" /> ";
         echo date_picker('report.min_expire');
         echo "</td></tr>\n";
-        echo "<tr><th>Latest Expiry:</th>";
+        echo "<tr><th>{$strLatestExpiry}</th>";
         echo "<td><input maxlength='100' id='max_expire' name='max_expire' size='10' type='text' value=\"".date('Y-m-d',mktime(0,0,0,date('m'),date('d'),date('Y')+1))."\" /> ";
         echo date_picker('report.max_expire');
         echo "</td></tr>\n";

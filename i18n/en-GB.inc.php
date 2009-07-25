@@ -467,6 +467,7 @@ $strDuration = 'Duration';
 $strDurationMismatch = 'Duration mismatch';
 $strDurationUpdated = 'Duration updated';
 
+$strEarliestExpiry = 'Earliest Expiry:';
 # verb, i.e. to change
 $strEdit = 'Edit';
 $strEditContact = 'Edit Contact';
@@ -859,6 +860,7 @@ $strKnowledgeBaseArticleCreated = 'Knowledge Base Article Created';
 $strKnowledgeBaseArticles = 'Knowledge Base Articles';
 
 $strLanguage = 'Language';
+$strLatestExpiry = 'Latest Expiry:';
 # Last date a bill was generated
 $strLastBilled = 'Last Billed';
 $strLastModifiedBy = 'Last modified by';
@@ -1600,6 +1602,8 @@ $strText = 'Text';
 #English suffix for most numbers - 5th, 6th, 7th
 $strth = 'th';
 $strTheFollowingVariables = 'The following variables may be used:';
+$strThereAreXcontractsAssignedToThisPerson = 'There are %s contracts assigned to this contact';
+$strThereAreXIncidentsAssignedToThisContact = 'There are %s incidents assigned to this contact';
 $strThereAreXIncidentsInThisList = 'There are %s incidents in this list';
 $strTheInfoInThisArticle = 'The information in this article applies to';
 # Theme as in Interface Style
