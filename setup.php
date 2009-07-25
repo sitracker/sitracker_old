@@ -165,7 +165,7 @@ function setup_configure()
         }
         else
         {
-            $html .= "<p><a href='setup.php?configfile=new' >Create a new config file</a>.</p>";
+            $html .= "<p><a href='setup.php?action=reconfigure&amp;configfile=new' >Create a new config file</a>.</p>";
         }
     }
     else $html .= "<h2>New Configuration</h2><p>Please complete this form to create a new configuration file for SiT!</p>";

@@ -257,7 +257,7 @@ $CFGVAR['db_hostname']['title'] = 'MySQL Database Hostname';
 $CFGVAR['db_password']['title'] = 'MySQL Database Password';
 $CFGVAR['db_password']['type'] = 'password';
 
-$CFGVAR['db_tableprefix']['help']="Optionally prefix database tables with the a string (e.g. 'sit_', use this if the database you are using is shared with other applications";
+$CFGVAR['db_tableprefix']['help']="Optionally prefix database table names with the a string (e.g. 'sit_', use this if the database you are using is shared with other applications";
 $CFGVAR['db_tableprefix']['title'] = 'MySQL Database Table Prefix';
 
 $CFGVAR['db_username']['title'] = 'MySQL Database Username';
