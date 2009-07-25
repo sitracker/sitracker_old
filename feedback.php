@@ -29,7 +29,10 @@ unset($errorfields);
 /**
 * @author Ivan Lucas
 * @param string $name. Field name
-* @param string $required. 
+* @param string $required. 'true' or 'false' is the field mandatory?
+* @param string $options. delimited list of options
+* @param string $answer (optional).
+* @returns string HTML
 */
 function feedback_html_rating($name, $required, $options, $answer='')
 {
@@ -89,7 +92,11 @@ function feedback_html_rating($name, $required, $options, $answer='')
 
 
 /**
-    * @author Ivan Lucas
+* @author Ivan Lucas
+* @param string $name. Field name
+* @param string $required. 'true' or 'false' is the field mandatory?
+* @param string $options. delimited list of options
+* @param string $answer (optional).
 */
 function feedback_html_options($name, $required, $options, $answer='')
 {
@@ -128,7 +135,10 @@ function feedback_html_options($name, $required, $options, $answer='')
 
 
 /**
-    * @author Ivan Lucas
+* @author Ivan Lucas
+* @param string $name. Field name
+* @param string $required. 'true' or 'false' is the field mandatory?
+* @param string $options. delimited list of options
 */
 function html_multioptions($name, $required, $options)
 {
@@ -157,7 +167,11 @@ function html_multioptions($name, $required, $options)
 
 
 /**
-    * @author Ivan Lucas
+* @author Ivan Lucas
+* @param string $name. Field name
+* @param string $required. 'true' or 'false' is the field mandatory?
+* @param string $options. delimited list of options
+* @param string $answer (optional).
 */
 function feedback_html_text($name, $required, $options, $answer='')
 {
@@ -179,7 +193,11 @@ function feedback_html_text($name, $required, $options, $answer='')
 
 
 /**
-    * @author Ivan Lucas
+* @author Ivan Lucas
+* @param string $name. Field name
+* @param string $required. 'true' or 'false' is the field mandatory?
+* @param string $options. delimited list of options
+* @param string $answer (optional).
 */
 function feedback_html_question($type, $name, $required, $options, $answer='')
 {
