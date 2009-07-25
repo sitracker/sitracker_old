@@ -38,6 +38,13 @@ var strOctAbbr = '{$strOctAbbr}';
 var strNovAbbr = '{$strNovAbbr}';
 var strDecAbbr = '{$strDecAbbr}';
 
+var strAreYouSureUpdateLastBilled = '{$strAreYouSureUpdateLastBilled}';
+
+/* Please don't add functions here, these functions below need moving to webtrack.js
+   this file is to make i18n keys available in javascript
+*/
+
+
 
 /**
   * Display/Hide contents of a password field
