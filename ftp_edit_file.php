@@ -15,7 +15,6 @@
 
 $permission=44; // Publish Files to FTP site
 
-$title='Edit FTP File Details and Publish';
 require ('core.php');
 require (APPLICATION_LIBPATH . 'functions.inc.php');
 
@@ -25,6 +24,8 @@ require (APPLICATION_LIBPATH . 'auth.inc.php');
 // External Vars
 $id = cleanvar($_REQUEST['id']);
 $mode = cleanvar($_REQUEST['mode']);
+$title = $strEditFTPdetailsUpload;
+
 if (empty($mode)) $mode='form';
 
 switch ($mode)
@@ -73,7 +74,7 @@ switch ($mode)
         echo "<tr><th>{$strFileVersion}:</th><td>";
         echo "<input type='text' size='40' name='fileversion' value='{$obj->fileversion}' />";
         echo "</td></tr>\n";
-        echo "<tr><th>{$strFileDate}:</th><td>".ldate('D jS M Y @ g:i A',$obj->filedate)." <strong>by</strong> ".user_realname($obj->userid,TRUE). "</td></tr>\n";
+        echo "<tr><th>{$strFileDate}:</th><td>".ldate('D jS M Y @ g:i A',$obj->filedate)." "{$strby}" ".user_realname($obj->userid,TRUE). "</td></tr>\n";
 
         if ($obj->expiry>0)
         {
@@ -83,7 +84,7 @@ switch ($mode)
         echo "</table>\n\n";
         echo "<input type='hidden' name='id' value='{$id}' />";
         echo "<input type='hidden' name='mode' value='save' />";
-        echo "<p align='center'><input type='submit' value='Save &amp; Publish' /></p>";
+        echo "<p align='center'><input type='submit' value='{$strSavePublish}' /></p>";
         echo "</form>";
         include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
     break;

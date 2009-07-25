@@ -55,7 +55,7 @@ else
     if ($filepath != $CONFIG['ftp_path'])
     {
         $dele = ftp_delete($conn_id, $filepath);
-        if (!$dele) trigger_error("Error deleting FRP folder: {$filepath}", E_USER_WARNING);
+        if (!$dele) trigger_error("Error deleting FTP folder: {$filepath}", E_USER_WARNING);
     }
 }
 // close the FTP stream

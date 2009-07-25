@@ -15,7 +15,6 @@
 
 $permission = 44; // Publish Files to FTP site
 
-$title = 'FTP File Details';
 require ('core.php');
 require (APPLICATION_LIBPATH . 'functions.inc.php');
 
@@ -27,6 +26,7 @@ include (APPLICATION_INCPATH . 'htmlheader.inc.php');
 
 // External Vars
 $id = cleanvar($_REQUEST['id']);
+$title = $strFTPFileDetails;
 
 $sql = "SELECT * FROM `{$dbFiles}` WHERE id='$id'";
 $result = mysql_query($sql);
