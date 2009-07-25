@@ -233,7 +233,7 @@ array('description' => $strAwaitingClosureVar,
       );
 
 $ttvararray['{contactid}'][] =
-array('description' => 'Contact ID',
+array('description' => $strContactID,
       'requires' => 'incidentid',
       'replacement' => 'incident_contact($paramarray[\'incidentid\']);',
       'show' => FALSE
@@ -266,7 +266,7 @@ array('description' => $strContactsForename,
       );
 
 $ttvararray['{contactid}'][] =
-array('description' => 'Contact ID',
+array('description' => $strContactID,
       'requires' => 'contactid',
       'replacement' => '$paramarray[\'contactid\'];',
       'show' => FALSE
@@ -302,7 +302,6 @@ array('description' => $strContactsPhone,
       'replacement' => 'contact_phone(incident_contact($paramarray[\'incidentid\']));'
       );
 
-
 $ttvararray['{contactusername}'] =
 array('description' => $strContactsUsername,
       'requires' => 'contactid',
@@ -310,7 +309,7 @@ array('description' => $strContactsUsername,
       );
 
 $ttvararray['{contractid}'] =
-array('description' => 'Contact ID',
+array('description' => $strContractID,
       'requires' => 'contractid',
       'replacement' => '$paramarray[\'contractid\'];',
       'show' => FALSE
@@ -345,12 +344,12 @@ array('description' => $strGlobalSignature,
       'replacement' => 'global_signature();'
       );
 
-$ttvararray['{holdingemailid}'] =
-array('description' => 'ID of the new email in the holding queue',
-      'replacement' => '$paramarray[\'holdingemailid\'];',
-      'requires' => 'holdingemailid',
-      'show' => FALSE
-      );
+// $ttvararray['{holdingemailid}'] =
+// array('description' => 'ID of the new email in the holding queue',
+//       'replacement' => '$paramarray[\'holdingemailid\'];',
+//       'requires' => 'holdingemailid',
+//       'show' => FALSE
+//       );
 
 $ttvararray['{holdingmins}'] =
 array('description' => $strHoldingQueueMinutes,
@@ -383,13 +382,13 @@ array('description' => $strExternalEngineersFirstName,
       );
 
 $ttvararray['{incidentexternalid}'] =
-array('description' => "{$GLOBALS['strExternalID']}",
+array('description' => $strExternalID,
       'requires' => 'incidentid',
       'replacement' => 'incident_externalid($paramarray[\'incidentid\']);'
       );
 
 $ttvararray['{incidentid}'] =
-array('description' => $GLOBALS['strIncidentID'],
+array('description' => $strIncidentID,
       'requires' => 'incidentid',
       'replacement' => '$paramarray[\'incidentid\'];'
       );
@@ -475,7 +474,7 @@ array('description' => $strNotifyExternalEngineerOnClose,
       );
 
 $ttvararray['{ownerid}'] =
-array('description' => 'Incident owner ID',
+array('description' => $strIncidentOwnerID,
       'replacement' => 'incident_owner($paramarray[\'incidentid\']);',
       'requires' => 'incidentid',
       'show' => FALSE
@@ -534,13 +533,13 @@ $ttvararray['{serviceremaining}'] =
 array('description' => $strServiceBalance,
       'requires' => 'contractid',
       'replacement' => 'get_service_percentage($paramarray[\'contractid\']);'
+      'show' => FALSE
      );
 
 $ttvararray['{serviceremainingstring}'] =
-array('description' => 'The amount of remaining service i.e. 0.34',
+array('description' => $strServiceBalanceString,
       'requires' => 'contractid',
       'replacement' => '(get_service_percentage($paramarray[\'contractid\']) * 100)."%";',
-      'show' => FALSE
      );
 
 $ttvararray['{signature}'] =

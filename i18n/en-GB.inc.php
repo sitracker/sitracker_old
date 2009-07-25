@@ -310,6 +310,7 @@ $strConfirmNewPassword = 'Confirm New Password';
 # noun, he is a contact
 $strContact = 'Contact';
 $strContactAddedSuccessfully = 'Contact Added Successfully';
+$strContactID = 'Contact\'s ID';
 $strContinue = 'Continue';
 $strContactDetails = 'Contact Details';
 $strContactRecordExists = 'A contact record already exists with that Surname and Email address';
@@ -785,6 +786,7 @@ $strIncidentsRequiringReminderByPhone = 'Incidents requiring a reminder by phone
 $strIncidentsVerbOnDate = 'Incidents %s on %s';
 # e.g. Incidents opened between 2007-12-03 and 2007-12-04
 $strIncidentsVerbBetweenDates = 'Incidents %s between %s and %s';
+$strIncidentOwnerID = 'Incident owner\'s ID';
 $strIncidentOwnersFullName = 'Full name of the person who owns the incident';
 $strIncidentOwnersEmail = 'Email address of the incident owner';
 $strIncidentsUsed = 'Incidents Used';
@@ -1416,7 +1418,8 @@ $strSepAbbr = 'Sep';
 # Month number 9: September
 $strSeptember = 'September';
 $strService = 'Service';
-$strServiceBalance = 'The amount of remaining service balance e.g. 34%';
+$strServiceBalance = 'The amount of remaining service balance as a number e.g. "0.34"';
+$strServiceBalanceString = 'The amount of remaining service as a percentage e.g. "34%"';
 $strServiceHistory = 'Service History';
 $strServiceID = 'Service ID';
 $strServiceLevel = 'Service Level';
