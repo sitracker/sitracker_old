@@ -22,24 +22,24 @@ require (APPLICATION_LIBPATH . 'auth.inc.php');
 
 function qtype_listbox($type)
 {
-    global $CONFIG;
+    global $CONFIG, $strRating, $strOptions, $strMultipleOptions, $strText;
 
     $html .= "<select name='type'>\n";
     $html .= "<option value='rating'";
     if ($type=='rating') $html .= " selected";
-    $html .= ">Rating, accepts score between 1 and {$CONFIG['feedback_max_score']}, label low and high (one per line) below</option>";
+    $html .= ">{$strRating}</option>";
 
     $html .= "<option value='options'";
     if ($type=='options') $html .= " selected";
-    $html .= ">Options, accepts one of the values listed below (one per line)</option>";
+    $html .= ">{$strOptions}</option>";
 
     $html .= "<option value='multioptions'";
     if ($type=='multioptions') $html .= " selected";
-    $html .= ">MultiOptions, accepts multiple values as isted below (one per line)</option>";
+    $html .= ">{$strMultipleOptions}</option>";
 
     $html .= "<option value='text'";
     if ($type=='text') $html .= " selected";
-    $html .= ">Text, accepts free-text, enter columns and rows (one per line) to accept below</option>";
+    $html .= ">{$strText}</option>";
 
     $html .= "</select>\n";
 
@@ -81,7 +81,7 @@ switch ($_REQUEST['action'])
     break;
 
     default:
-        $title = "Add Feedback Question";
+        $title = "{$strAddFeedbackQuestion}";
         include (APPLICATION_INCPATH . 'htmlheader.inc.php');
         $qid = strip_tags($_REQUEST['qid']);
 
@@ -91,38 +91,41 @@ switch ($_REQUEST['action'])
         echo "<table summary='Form' align='center'>";
         echo "<tr>";
 
-        echo "<th>Section Text:<br />(When this question starts a new section,<br />enter information here to appear above this question,<br />leave blank for no new section)</th>";
+        echo "<th>{$strSectionText}:<br /></th>";
         echo "<td><textarea name='sectiontext' cols='80' rows='5'>";
-        echo $question->sectiontext."</textarea></td>";
+        echo $question->sectiontext."</textarea>";
+        echo "({$strLeaveBlankForNewSection})";
+        echo "</td>";
         echo "</tr>\n<tr>";
 
-        echo "<th>Q#:</th>";
+        echo "<th>{$strQuestion} #:</th>";
         echo "<td><input type='text' name='taborder' size='3' maxlength='5' value='{$qid}' /></td>";
         echo "</tr>\n<tr>";
 
-        echo "<th>Question:</th>";
+        echo "<th>{$strQuestion}:</th>";
         echo "<td><input type='text' name='question' size='35' maxlength='255' value='".$question->question."' /></td>";
         echo "</tr>\n<tr>";
 
-        echo "<th>Question Text:<br />(Information and Instructions)</th>";
+        echo "<th>{$strQuestionText}:</th>";
         echo "<td><textarea name='questiontext' cols='80' rows='5'>";
         echo $question->questiontext."</textarea></td>";
         echo "</tr>\n<tr>";
 
-        echo "<th>Type:</th>";
+        echo "<th>{$strType}:</th>";
         echo "<td>";
         echo qtype_listbox($question->type);
         echo "</td></tr>\n<tr>";
 
-        echo "<th>Options:<br />(For this question-type)<br /><br />(One per line)</th>";
+        echo "<th>$strOptionsOnePerLine:</th>";
         echo "<td><textarea name='options' cols='80' rows='10'>";
         echo $question->options."</textarea></td>";
         echo "</tr>\n<tr>";
 
-        echo "<th>Required:</th>";
-        echo "<td>";
+        echo "<th>{$strRequired}:</th>";
+        echo "<td><label>";
         if ($question->required=='true') echo "<input type='checkbox' name='required' value='true' checked='checked' />";
         else echo "<input type='checkbox' name='required' value='true' />";
+        echo " {$strRequired}</label>";
         echo "</td></tr>\n<tr>";
 
         echo "<td><input type='hidden' name='id' value='{$qid}' />";
