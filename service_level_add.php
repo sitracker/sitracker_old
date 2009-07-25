@@ -167,19 +167,19 @@ elseif ($action == "edit")
     if (empty($tag))
     {
         $errors++;
-        $_SESSION['formerrors']['add_servicelevel']['tag'] = 'You must enter an tag';
+        $_SESSION['formerrors']['add_servicelevel']['tag'] = sprintf($strFieldMustNotBeBlank, $strTag);
     }
 
     if (empty($engineerPeriod) AND $timed == 'yes')
     {
     	$errors++;
-        $_SESSION['formerrors']['add_servicelevel']['engineerPeriod'] = 'You must enter an engineer period';
+        $_SESSION['formerrors']['add_servicelevel']['engineerPeriod'] = sprintf($strFieldMustNotBeBlank, $strBillingEngineerPeriod);
     }
 
     if (empty($customerPeriod) AND $timed == 'yes')
     {
         $errors++;
-        $_SESSION['formerrors']['add_servicelevel']['customerPeriod'] = 'You must enter an customer period';
+        $_SESSION['formerrors']['add_servicelevel']['customerPeriod'] = sprintf($strFieldMustNotBeBlank, $strBillingCustomerPeriod);
     }
 
     if ($errors >= 1)

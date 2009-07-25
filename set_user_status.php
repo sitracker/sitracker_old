@@ -29,7 +29,10 @@ switch ($mode)
 {
     case 'setstatus':
         $sql  = "UPDATE `{$dbUsers}` SET status='$userstatus'";
-        switch ($userstatus)
+
+        // NOTE: do not translate thise 'Yes' 'No' strings below
+
+switch ($userstatus)
         {
             case 1: // in office
                 $accepting='Yes';
