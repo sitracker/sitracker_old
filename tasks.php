@@ -359,7 +359,7 @@ else
         }
         else
         {
-            echo "<h2>".icon('task', 32)." {$strAllTasks}</h2>";
+            echo "<h2>".icon('task', 32)." {$strEverybodysTasks}</h2>";
             echo "<p align='center'><a href='{$_SERVER['PHP_SELF']}?show={$show}";
             echo "&amp;sort={$sort}&amp;order={$order}'>{$strShowMine}</a></p>";
         }

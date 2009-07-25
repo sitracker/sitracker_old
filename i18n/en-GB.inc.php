@@ -572,6 +572,7 @@ $strEscalatedIncidents = 'Escalated Incidents';
 $strEscalation = 'Escalation';
 $strEscalationPaths = 'Escalation Paths';
 $strEvent = 'Event';
+$strEverybodysTasks = 'Everybody\'s Tasks';
 $strExceeded = 'Exceeded';
 $strExclude = 'Exclude';
 $strExcludeSitesWith = 'Exclude sites with';
