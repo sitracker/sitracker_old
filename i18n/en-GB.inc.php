@@ -1449,6 +1449,7 @@ $strShowAll = 'Show All';
 $strShowApproved = 'Show Approved';
 $strShowClosedIncidents = 'Show closed incidents';
 $strShowEmoticons = 'Show Emoticons';
+$strShowEverybodys = 'Show Everybody\'s';
 $strShowExpiredAsZero = 'Show Expired As Zero';
 $strShowExpiredContracts = 'Show Expired Contracts';
 $strShowingAllArticles = 'Showing all articles';
