@@ -135,6 +135,7 @@ switch ($_REQUEST['action'])
         echo "</tr>";
         echo "</table>";
         echo "</form>";
+        echo "<p><a href='feedback_form_edit.php?id={$fid}'>{$strReturnToPreviousPage}</a></p>";
         include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
 }
 ?>

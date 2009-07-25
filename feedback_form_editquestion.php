@@ -131,8 +131,8 @@ switch ($action)
             echo "<input type='hidden' name='action' value='save' /></td>";
             echo "<td><input type='submit' value='{$strSave}' /></td>";
             echo "</tr>";
-
             echo "</table>";
+            echo "<p><a href='feedback_form_edit.php?id={$fid}'>{$strReturnToPreviousPage}</a></p>";
         }
         include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
     break;
