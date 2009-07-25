@@ -27,7 +27,9 @@ $incidentid=urldecode(mysql_real_escape_string($hashvars['2']));
 unset($errorfields);
 
 /**
-    * @author Ivan Lucas
+* @author Ivan Lucas
+* @param string $name. Field name
+* @param string $required. 
 */
 function feedback_html_rating($name, $required, $options, $answer='')
 {

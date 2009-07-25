@@ -2,6 +2,9 @@
 
 # SiT! forms
 
+/**
+* SiT! Form class
+*/
 class Form
 {
     var $formheading;

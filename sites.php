@@ -17,6 +17,8 @@ require (APPLICATION_LIBPATH . 'auth.inc.php');
 
 $pagescripts = array('scriptaculous/scriptaculous.js','AutoComplete.js');
 
+$title = $strBrowseSites;
+
 // External variables
 $search_string = cleanvar($_REQUEST['search_string']);
 $owner = cleanvar($_REQUEST['owner']);

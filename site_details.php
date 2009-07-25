@@ -92,7 +92,7 @@ while ($siterow = mysql_fetch_array($siteresult))
         $reserved = contract_transaction_total($billable_contract, BILLING_RESERVED);
     }
     
-    echo "<tr><th>Service Balance</th><td>";
+    echo "<tr><th>{$strServiceBalance}</th><td>";
     echo "{$GLOBALS['strBalance']}: {$CONFIG['currency_symbol']}".number_format($balance, 2);
     if ($awaiting > 0) echo "<br />{$GLOBALS['strAwaitingApproval']}: {$CONFIG['currency_symbol']}".number_format($awaiting, 2);
     if ($reserved > 0) echo "<br />{$GLOBALS['strReserved']}: {$CONFIG['currency_symbol']}".number_format($reserved, 2);

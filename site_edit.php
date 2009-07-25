@@ -45,8 +45,8 @@ elseif ($action == "edit")
     }
     else
     {
-	    //  Show edit site form
-	    echo show_edit_site($site);
+        //  Show edit site form
+        echo show_edit_site($site);
     }
 }
 elseif ($action == "update")

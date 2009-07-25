@@ -626,7 +626,7 @@ $strFeedIcon = 'Feed Icon';
 $strFewMinutesAgo = 'A few minutes ago';
 # e.g. spreadsheet field
 $strField = 'Field';
-$strField1 = 'Field 1';fg
+$strField1 = 'Field 1';
 $strField2 = 'Field 2';
 $strField3 = 'Field 3';
 $strField4 = 'Field 4';
@@ -1446,7 +1446,8 @@ $strSepAbbr = 'Sep';
 # Month number 9: September
 $strSeptember = 'September';
 $strService = 'Service';
-$strServiceBalance = 'The amount of remaining service balance as a number e.g. "0.34"';
+$strServiceBalance = 'Service Balance';
+$strServiceBalanceInfo = 'The amount of remaining service balance as a number e.g. "0.34"';
 $strServiceBalanceString = 'The amount of remaining service as a percentage e.g. "34%"';
 $strServiceHistory = 'Service History';
 $strServiceID = 'Service ID';
