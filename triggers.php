@@ -33,11 +33,11 @@ else
 
 if ($_GET['user'] == '0')
 {
-	$title = $strSystemActions;
+    $title = $strSystemActions;
 }
 else
 {
-	$title = $strNotifications;
+    $title = $strNotifications;
 }
 
 switch ($_REQUEST['mode'])

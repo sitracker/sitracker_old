@@ -26,6 +26,9 @@ if (!$CONFIG['tasks_enabled'])
 ?>
 <script type='text/javascript'>
 //<![CDATA[
+/**
+  * @author Paul Heaney
+**/
 function Activity()
 {
     var id;
@@ -36,17 +39,26 @@ var dataArray = new Array();
 var count = 0;
 var closedDuration = 0;
 
+/**
+  * @author Paul Heaney
+**/
 function addActivity(act)
 {
     dataArray[count] = act;
     count++;
 }
 
+/**
+  * @author Paul Heaney
+**/
 function setClosedDuration(closed)
 {
     closedDuration = closed;
 }
 
+/**
+  * @author Paul Heaney
+**/
 function formatSeconds(secondsOpen)
 {
     var str = '';
@@ -129,6 +141,9 @@ function formatSeconds(secondsOpen)
     return str;
 }
 
+/**
+  * @author Paul Heaney
+**/
 function countUp()
 {
     var now = new Date();
@@ -185,11 +200,18 @@ $siteid = cleanvar($_REQUEST['siteid']);
 ?>
 <script type='text/javascript'>
 //<![CDATA[
+
+/**
+  * @author Paul Heaney
+**/
 function submitform()
 {
     document.tasks.submit();
 }
 
+/**
+  * @author Paul Heaney
+**/
 function checkAll(checkStatus)
 {
     var frm = document.held_emails.elements;
