@@ -17,10 +17,10 @@ require_once (APPLICATION_LIBPATH . 'functions.inc.php');
 // This page requires authentication
 require_once (APPLICATION_LIBPATH . 'auth.inc.php');
 require_once (APPLICATION_LIBPATH . 'billing.inc.php');
-$strUpdateIncidentXsBalance
 
 $mode = cleanvar($_REQUEST['mode']);
 $incidentid = cleanvar($_REQUEST['incidentid']);
+$title = "{$strUpdateIncidentXsBalance}, $incidentid";
 
 if (empty($mode))
 {

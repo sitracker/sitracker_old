@@ -18,6 +18,8 @@ require (APPLICATION_LIBPATH . 'functions.inc.php');
 // This page requires authentication
 require (APPLICATION_LIBPATH . 'auth.inc.php');
 
+$title = $strBookHoliday;
+
 // External variables
 $step = $_REQUEST['step'];
 $date = cleanvar($_REQUEST['date']);

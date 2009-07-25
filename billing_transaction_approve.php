@@ -19,6 +19,7 @@ include_once (APPLICATION_LIBPATH . 'billing.inc.php');
 require_once(APPLICATION_LIBPATH.'auth.inc.php');
 
 $transactiond = cleanvar($_REQUEST['transactionid']);
+$title = $strBilling;
 
 include (APPLICATION_INCPATH . 'htmlheader.inc.php');
 
@@ -44,7 +45,7 @@ if (mysql_num_rows($result) > 0)
 }
 else
 {
-    html_redirect("billable_incidents.php", FALSE, "No transaction found with ID {$transactiond}");
+    html_redirect("billable_incidents.php", FALSE, "{$strNoTransactionsFoundWithID} {$transactiond}");
 }
 
 include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
