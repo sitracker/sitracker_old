@@ -406,7 +406,6 @@ else
     echo "</select>\n";
     echo "</form><br />";
 
-
     $sql = "SELECT * FROM `{$dbTasks}` WHERE ";
     if ($user != 'all')
     {
@@ -442,9 +441,9 @@ else
     {
         // ALL all incident tasks to be viewed
     }
-    else if ($user != $sit[2])
+    elseif ($user != $sit[2])
     {
-        $sql .= "AND distribution='public' ";
+        $sql .= "AND (distribution='public' OR (distribution='private' AND owner = {$sit[2]})) ";
     }
 
     if (!empty($sort))
