@@ -1764,6 +1764,7 @@ $strValid = 'Valid';
 $strValue = 'Value';
 $strVariable = 'Variable';
 $strVendor = 'Vendor';
+$strVendorName = 'Vendor Name';
 $strVersion = 'Version';
 $strView = 'View';
 $strViewActivity = 'View Activity';
