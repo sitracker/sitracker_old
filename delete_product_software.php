@@ -17,7 +17,7 @@
 $permission = 24;  // Add Product
 require ('core.php');
 require (APPLICATION_LIBPATH . 'functions.inc.php');
-$title = "Disassociate skill with a product";
+$title = "{$strDisassociateSkillWithProduct}";
 
 // This page requires authentication
 require (APPLICATION_LIBPATH . 'auth.inc.php');
@@ -36,6 +36,6 @@ if (!empty($productid) && !empty($softwareid))
 }
 else
 {
-    html_redirect("products.php", FALSE, "Required data missing");
+    html_redirect("products.php", FALSE, "{$strRequiredDataMissing}");
 }
 ?>

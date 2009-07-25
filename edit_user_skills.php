@@ -23,6 +23,8 @@ require (APPLICATION_LIBPATH . 'auth.inc.php');
 
 // External Variables
 $submit = $_REQUEST['submit'];
+$title = $strEditUserSkills;
+
 if (empty($_REQUEST['user']) || $_REQUEST['user'] == 'current') $user=$sit[2];
 else $user = cleanvar($_REQUEST['user']);
 

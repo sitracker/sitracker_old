@@ -87,9 +87,11 @@ else
 
 if (!file_exists($file_fspath) AND !file_exists($file_fspath2) AND !file_exists($old_style))
 {
-    header('HTTP/1.1 404 Not Found');
-    header('Status: 404 Not Found',1,404);
+    include (APPLICATION_INCPATH . 'htmlheader.inc.php');
+    // header('HTTP/1.1 404 Not Found');
+    // header('Status: 404 Not Found',1,404);
     echo "<h3>404 File Not Found</h3>";
+    include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
     if ($CONFIG['debug'] === TRUE)
     {
         echo "<p>Path: {$file_fspath}<br />Old style path: {$old_style}</p>";
@@ -144,9 +146,11 @@ elseif ($access == TRUE)
         else
         {
             // Access Denied
-            header('HTTP/1.1 403 Forbidden');
-            header('Status: 403 Forbidden',1,403);
+            include (APPLICATION_INCPATH . 'htmlheader.inc.php');
+            // header('HTTP/1.1 403 Forbidden');
+            // header('Status: 403 Forbidden',1,403);
             echo "<h3>403 Forbidden</h3>";
+            include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
             exit;
 
         }
@@ -154,10 +158,12 @@ elseif ($access == TRUE)
 }
 else
 {
-	header('HTTP/1.1 404 Not Found');
-    header('Status: 404 Not Found',1,404);
+    include (APPLICATION_INCPATH . 'htmlheader.inc.php');
+	// header('HTTP/1.1 404 Not Found');
+    // header('Status: 404 Not Found',1,404);
     echo "<h3>404 File Not Found</h3>";
     echo "Please report this message to support";
+    include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
     if ($CONFIG['debug'] == TRUE)
     {
         echo "<p>Path: {$file_fspath}<br />Old style path: {$old_style}</p>";

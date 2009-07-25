@@ -20,6 +20,7 @@ require_once (APPLICATION_LIBPATH . 'billing.inc.php');
 // This page requires authentication
 require_once (APPLICATION_LIBPATH.'auth.inc.php');
 
+
 $mode = cleanvar($_REQUEST['mode']);
 $amount = cleanvar($_REQUEST['amount']);
 $contractid = cleanvar($_REQUEST['contractid']);
@@ -42,7 +43,7 @@ switch ($mode)
             $sql = "SELECT * FROM `{$dbService}` WHERE serviceid = {$serviceid}";
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
-
+            $title = ("$strContract - $strEditService");
             include (APPLICATION_INCPATH . 'htmlheader.inc.php');
             if (mysql_numrows($result) != 1)
             {
@@ -256,11 +257,11 @@ switch ($mode)
 
             if ($sucess)
             {
-                html_redirect("{$CONFIG['application_webpath']}contract_details.php?id={$contractid}", TRUE, 'Sucessfully updated');
+                html_redirect("{$CONFIG['application_webpath']}contract_details.php?id={$contractid}", TRUE, '{$strSuccessfullyUpdated}');
             }
             else
             {
-                html_redirect("{$CONFIG['application_webpath']}contract_details.php?id={$contractid}", FALSE, 'NOT udpated');
+                html_redirect("{$CONFIG['application_webpath']}contract_details.php?id={$contractid}", FALSE, '{$strNotUpdated}');
             }
 
 
@@ -275,6 +276,7 @@ switch ($mode)
         }
         else
         {
+            $title = ("$strContract - $strEditBalance");
             include (APPLICATION_INCPATH . 'htmlheader.inc.php');
             echo "<h2>{$strOneTimeBillingEditor}</h2>";
 

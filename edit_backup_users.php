@@ -33,6 +33,7 @@ require (APPLICATION_LIBPATH.'auth.inc.php');
 // Valid user with Permission
 // External variables
 $save = $_REQUEST['save'];
+$title = $strDefineSubstituteEngineer;
 
 if (empty($save))
 {

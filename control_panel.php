@@ -16,6 +16,8 @@ require (APPLICATION_LIBPATH . 'functions.inc.php');
 // This page requires authentication
 require (APPLICATION_LIBPATH . 'auth.inc.php');
 
+$title = $strControlPanel;
+
 include (APPLICATION_INCPATH . 'htmlheader.inc.php');
 echo "<h2>".icon('settings', 32, $strControlPanel);
 echo " {$CONFIG['application_shortname']} {$strControlPanel}</h2>";
