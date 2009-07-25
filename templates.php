@@ -27,6 +27,7 @@ $templatetype = cleanvar($_REQUEST['template']);
 if (empty($action) OR $action == 'showform' OR $action == 'list')
 {
     // Show select email type form
+    $title = $strTemplates;
     include (APPLICATION_INCPATH . 'htmlheader.inc.php');
 
     echo "<h2>".icon('templates', 32)." ";
@@ -121,18 +122,27 @@ elseif ($action == "edit")
     <script type='text/javascript'>
     //<![CDATA[
 
+    /**
+      * @author Ivan Lucas
+    **/
     function recordFocusElement(element)
     {
         $('focuselement').value = element.identify();
         $('templatevariables').show();
     }
 
+    /**
+      * @author Ivan Lucas
+    **/
     function clearFocusElement()
     {
         $('focuselement').value = '';
         $('templatevariables').hide();
     }
 
+    /**
+      * @author Ivan Lucas
+    **/
     function insertTemplateVar(tvar)
     {
         var element = $('focuselement').value;
