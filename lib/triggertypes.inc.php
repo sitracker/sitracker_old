@@ -532,7 +532,7 @@ array('description' => $strSendOpeningEmailDesc,
 $ttvararray['{serviceremaining}'] =
 array('description' => $strServiceBalance,
       'requires' => 'contractid',
-      'replacement' => 'get_service_percentage($paramarray[\'contractid\']);'
+      'replacement' => 'get_service_percentage($paramarray[\'contractid\']);',
       'show' => FALSE
      );
 
