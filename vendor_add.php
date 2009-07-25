@@ -33,7 +33,7 @@ if (empty($submit))
     echo "<h5>".sprintf($strMandatoryMarked,"<sup class='red'>*</sup>")."</h5>";
     echo "<form action='{$_SERVER['PHP_SELF']}' method='post' onsubmit='return confirm_action(\"{$strAreYouSureAdd}\")'>";
     echo "<table align='center' class='vertical'>";
-    echo "<tr><th>{$strVendor}<sup class='red'>*</sup></th><td><input maxlength='50' name='name' size='30' /></td></tr>\n";
+    echo "<tr><th>{$strVendorName}<sup class='red'>*</sup></th><td><input maxlength='50' name='name' size='30' /></td></tr>\n";
     echo "</table>";
     echo "<p align='center'><input name='submit' type='submit' value='{$strSave}' /></p>";
     echo "<p class='warning'>{$strAvoidDupes}</p>";
@@ -53,7 +53,7 @@ else
     if ($name == '')
     {
         $errors++;
-        $_SESSION['formerrors']['name'] = user_alert(sprintf($strFieldMustNotBeBlank, "'{$strName}'"), E_USER_ERROR);
+        $_SESSION['formerrors']['name'] = user_alert(sprintf($strFieldMustNotBeBlank, "'{$strVendorName}'"), E_USER_ERROR);
     }
 
     // add product if no errors
@@ -65,7 +65,7 @@ else
 
         if (!$result)
         {
-            echo "<p class='error'>Addition of Vendor Failed\n";
+            echo "<p class='error'>{$strAdditionFail}</p>\n";
         }
         else
         {
