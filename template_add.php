@@ -62,6 +62,8 @@ if (!empty($_POST['type']))
         }
     }
 }
+$title = $strAddTemplate;
+
 include (APPLICATION_INCPATH . 'htmlheader.inc.php');
 
 echo "<h2>".icon('add', 32)." {$strAddTemplate}</h2>";
