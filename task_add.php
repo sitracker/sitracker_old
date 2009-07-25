@@ -32,7 +32,7 @@ $incident = $_REQUEST['incident'];
 if ($incident)
 {
     $sql = "INSERT INTO `{$dbTasks}` (owner, name, priority, distribution, startdate, created, lastupdated) ";
-    $sql .= "VALUES('$sit[2]', 'Activity for Incident {$incident}', 1, 'incident', NOW(), NOW(), NOW())";
+    $sql .= "VALUES('$sit[2]', '".sprintf($strActivityForIncidentX, $incident)."', 1, 'incident', NOW(), NOW(), NOW())";
 
     mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
