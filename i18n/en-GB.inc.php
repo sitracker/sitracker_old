@@ -253,6 +253,8 @@ $strByVendor = 'By Vendor';
 $strByX = 'By: %s';
 
 $strCalendar = 'Calendar';
+# verb: Calculate, plural noun: Units
+$strCalculateUnits = 'Calculate Units';
 # incident status: e.g. Made a phone call and left a message
 $strCalledAndLeftMessage = 'Called And Left Message';
 $strCallFromCustomer = 'Phone call from customer';
@@ -681,6 +683,7 @@ $strGlobalSignatureDescription = 'A signature to insert at the bottom of outgoin
 $strGlobalSignatureRemember = 'Remember that any changes here will be effective immediately and outgoing emails will carry the new signature.';
 $strGo = 'Go';
 $strGracePeriod = 'Grace Period';
+$strGrandTotal = 'Grand Total';
 $strGroup = 'Group';
 $strGroupMembersAway = 'Group Members Away';
 $strGroupMembership = 'Group Membership';
@@ -962,6 +965,7 @@ $strMon = 'Mon';
 $strMonday = 'Monday';
 $strMonth = 'Month';
 $strMonthly = 'Monthly';
+$strMonthlyActivityTotals = 'Monthly Activity Totals';
 $strMonthBreakdown = 'Month Breakdown';
 $strMonthView = 'Month View';
 $strMore = 'More...';
@@ -986,6 +990,7 @@ $strNamedContacts = 'Named Contacts';
 #English suffix for second - 2nd
 $strnd = 'nd';
 $strNeedsSubstitueEngineers = '%s need substitute engineers to be defined';
+$strNegative = 'Negative';
 $strNever = 'Never';
 $strNewContact = 'New Contact';
 $strNewContract = 'New Contract';
@@ -1221,6 +1226,7 @@ $strPleaseWaitRedirect = 'Please wait while you are redirected';
 $strPlugins = 'Plugins';
 $strPopularity = 'Popularity';
 $strPortal = 'Portal';
+$strPositive = 'Positive';
 $strPositivity = 'Positivity';
 $strPossibleNewIncident = 'Possible new incident';
 # Postal code

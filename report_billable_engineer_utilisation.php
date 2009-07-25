@@ -24,7 +24,7 @@ if (empty($mode) OR $mode == 'showform')
 {
     include (APPLICATION_INCPATH . 'htmlheader.inc.php');
 
-    echo "<h2>Monthly Activity Totals</h2>";
+    echo "<h2>{$strMonthlyActivityTotals}</h2>";
     echo "<form name='report' action='{$_SERVER['PHP_SELF']}' method='post'>";
     echo "<table class='vertical'>";
 
@@ -37,7 +37,7 @@ if (empty($mode) OR $mode == 'showform')
     echo date_picker('report.enddate');
     echo "</td></tr>\n";
 
-    echo "<tr><th>Calculate Units</th><td>";
+    echo "<tr><th>{$strCalculateUnits}</th><td>";
     echo "<input type='checkbox' name='calcote' value='yes' />\n";
     echo "</td></tr>";
 
@@ -104,7 +104,7 @@ elseif ($mode == 'runreport')
 
     include (APPLICATION_INCPATH . 'htmlheader.inc.php');
 
-    echo "<h2>Monthly Activity Totals</h2>";
+    echo "<h2>{$strMonthlyActivityTotals}</h2>";
 
     foreach ($util AS $u)
     {
@@ -113,7 +113,7 @@ elseif ($mode == 'runreport')
         {
             echo "<p><table class='vertical' align='center'>";
             echo "<tr><th colspan='3'>{$month['name']} {$u['name']}</th></tr>";
-            echo "<tr><th>{$strEngineer}</th><th>Positive</th><th>Negative</th></tr>";
+            echo "<tr><th>{$strEngineer}</th><th>{$strPositive}</th><th>{$strNegative}</th></tr>";
 
             $totalpos = 0;
             $totalneg = 0;
@@ -153,10 +153,10 @@ elseif ($mode == 'runreport')
         }
     }
 
-    echo "<p align='center'><h3>Grand Totals</h3></p>";
+    echo "<p align='center'><h3>{$strGrandTotal}</h3></p>";
 
     echo "<table class='vertical' align='center'>";
-    echo "<tr><th>{$strEngineer}</th><th>Positive</th><th>Negative</th></tr>";
+    echo "<tr><th>{$strEngineer}</th><th>{$strPositive}</th><th>{$strNegative}</th></tr>";
 
     $shade = 'shade1';
     foreach ($grandtotals AS $gt)
