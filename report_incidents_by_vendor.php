@@ -28,11 +28,11 @@ if (empty($_REQUEST['mode']))
     echo "<h2>{$title}</h2>";
     echo "<form action='{$_SERVER['PHP_SELF']}' id='incidentsbyvendor' method='post'>";
     echo "<table class='vertical'>";
-    echo "<tr><td class='shade2'>{$strStartDate}:</td>";
-    echo "<td class='shade2'><input type='text' name='startdate' id='startdate' size='10' /> ";
+    echo "<tr><th>{$strStartDate}:</th>";
+    echo "<td><input type='text' name='startdate' id='startdate' size='10' /> ";
     echo date_picker('incidentsbyvendor.startdate');
     echo "</td></tr>";
-    echo "<tr><td class='shade2'>{$strEndDate}:</td>";
+    echo "<tr><th>{$strEndDate}:</th>";
     echo "<td class='shade2'><input type='text' name='enddate' id='enddate' size='10' /> ";
     echo date_picker('incidentsbyvendor.enddate');
     echo "</td></tr>";
