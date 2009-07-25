@@ -61,7 +61,7 @@ while ($site = mysql_fetch_object($result))
         if ($_REQUEST['mode'] == 'csv')
         {
             echo "{$site->sitename}\n";
-            echo "Product,Licence,Expiry Date,Engineer 1, Engineer 2, Engineer 3, Engineer 4\n";
+            echo "{$strProduct},{$strLicense},{$strExpiryDate},{$strEngineer} 1, {$strEngineer} 2, {$strEngineer} 3, {$strEngineer} 4\n";
             while ($maint = mysql_fetch_object($mresult))
             {
                 if ($maint->expirydate > $now AND $maint->term != 'yes')
@@ -88,7 +88,13 @@ while ($site = mysql_fetch_object($result))
         {
             echo "<h2>{$site->sitename}</h2>";
             echo "<table width='100%'>";
-            echo "<tr><th style='text-align: left;'>{$strProduct}</th><th style='text-align: left;'>{$strLicense}</th><th style='text-align: left;'>{$strExpiryDate}</th><th style='text-align: left;'>Engineer 1</th><th style='text-align: left;'>Engineer 2</th><th style='text-align: left;'>Engineer 3</th><th style='text-align: left;'>Engineer 4</th></tr>\n";
+            echo "<tr><th style='text-align: left;'>{$strProduct}</th>";
+            echo "<th style='text-align: left;'>{$strLicense}</th>";
+            echo "<th style='text-align: left;'>{$strExpiryDate}</th>";
+            echo "<th style='text-align: left;'>{$strEngineer} 1</th>";
+            echo "<th style='text-align: left;'>{$strEngineer} 2</th>";
+            echo "<th style='text-align: left;'>{$strEngineer} 3</th>";
+            echo "<th style='text-align: left;'>{$strEngineer} 4</th></tr>\n";
             while ($maint = mysql_fetch_object($mresult))
             {
                 if ($maint->expirydate > $now AND $maint->term != 'no')
@@ -119,7 +125,7 @@ while ($site = mysql_fetch_object($result))
 }
 if ($_REQUEST['mode'] != 'csv')
 {
-    echo "<p align='center'><a href='{$_SERVER['PHP_SELF']}?siteid={$siteid}&amp;mode=csv'>Download as <abbr title='Comma Seperated Values'>CSV</abbr> File</a></p>";
+    echo "<p align='center'><a href='{$_SERVER['PHP_SELF']}?siteid={$siteid}&amp;mode=csv'>{$strSaveAsCSV}</a></p>";
     include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
 }
 ?>
