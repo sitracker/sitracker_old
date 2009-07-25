@@ -23,6 +23,7 @@ $maintid = cleanvar($_REQUEST['maintid']);
 $contactid = cleanvar($_REQUEST['contactid']);
 $context = cleanvar($_REQUEST['context']);
 $action = $_REQUEST['action'];
+$title = ("$strContract - $strAddContact");
 
 // Valid user, check permissions
 if (empty($action) || $action == "showform")

@@ -21,7 +21,6 @@
 $permission=32;  // Edit Supported Products
 require ('core.php');
 require (APPLICATION_LIBPATH . 'functions.inc.php');
-$title = "Remove a Supported Contact";
 
 // This page requires authentication
 require (APPLICATION_LIBPATH . 'auth.inc.php');
@@ -31,14 +30,14 @@ $action = $_REQUEST['action'];
 $context = cleanvar($_REQUEST['context']);
 $maintid =cleanvar($_REQUEST['maintid']);
 $contactid = cleanvar($_REQUEST['contactid']);
-
+$title = ("$strContract - $strRemoveASupportedContact");
 
 if (empty($action) OR $action == "showform")
 {
     include (APPLICATION_INCPATH . 'htmlheader.inc.php');
 
-    echo "<h2>Remove the link between a contract and a support contact</h2>";
-    echo "<p align='center'>This will mean that the contact will not be able to log any further support incidents for the related product</p>";
+    echo "<h2>{$strRemoveLinkContractAndSupportContact}</h2>";
+    echo "<p align='center'>{$strRemoveLinkContractAndSupportContactText}</p>";
     echo "<form action='{$_SERVER['PHP_SELF']}?action=delete' method='post' onsubmit='return confirm_action(\"{$strAreYouSureDeleteMaintenceContract}\")'>";
     echo "<input type='hidden' name='context' value='{$context}' />";
     echo "<table align='center' class='vertical'>";
@@ -81,13 +80,13 @@ elseif ($action == "delete")
     if ($contactid == 0)
     {
         $errors = 1;
-        $errors_string .= user_alert("You must select a support contact", E_USER_ERROR);
+        $errors_string .= user_alert("{$strYouMustSelectAsupportContact}", E_USER_ERROR);
     }
     // check for blank maintenance id
     if ($maintid == 0)
     {
         $errors = 1;
-        $errors_string .= user_alert("You must select a maintenance contract", E_USER_ERROR);
+        $errors_string .= user_alert("{$strYouMustSelectAmaintenanceContract}", E_USER_ERROR);
     }
     // delete maintenance support contact if no errors
     if ($errors == 0)
