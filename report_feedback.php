@@ -26,6 +26,8 @@ $startdate = strtotime(cleanvar($_REQUEST['startdate']));
 $enddate = strtotime(cleanvar($_REQUEST['enddate']));
 
 $formid = $CONFIG['feedback_form'];
+$title = $strFeedbackReport;
+
 
 /// echo "Start: {$startdate}";
 
