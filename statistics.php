@@ -231,7 +231,7 @@ function give_overview()
     echo "<th>{$GLOBALS['strClosed']}</th><th>{$GLOBALS['strHandled']}</th>";
     echo "<th>{$GLOBALS['strUpdates']}</th><th>{$GLOBALS['strPerIncident']}</th><th>{$GLOBALS['strSkills']}</th>";
     echo "<th>{$GLOBALS['strOwners']}</th><th>{$GLOBALS['strUsers']}</th>";
-    echo "<th>Per User</th><th>Incidents Per Owner</th><th>{$GLOBALS['strEmailReceivedAbbrev']}</th>";
+    echo "<th>{$GLOBALS['strPerUser']}</th><th>{$GLOBALS['strIncidentPerOwnerAbbrev']}</th><th>{$GLOBALS['strEmailReceivedAbbrev']}</th>";
     echo "<th>{$GLOBALS['strEmailTransmittedAbbrev']}</th><th>{$GLOBALS['strHigherPriority']}</th>";
     echo "<th>{$GLOBALS['strActivity']}</th></tr>\n";
 
@@ -415,7 +415,7 @@ function give_overview()
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     list($todaysclosed) = mysql_fetch_row($result);
 
-    $string .= "<h4>{$todaysclosed} Incidents Closed Today</h4>";
+    $string .= "<h4>".sprintf($$GLOBALS['strIncidentsClosedToday'], $todaysclosed)".</h4>";
     if ($todaysclosed > 0)
     {
         $sql = "SELECT COUNT(i.id) AS count, realname, u.id AS owner FROM `{$GLOBALS['dbIncidents']}` AS i ";
@@ -425,12 +425,12 @@ function give_overview()
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
 
         $string .= "<table align='center' width='50%'>";
-        $string .= "<tr><th>ID</th><th>Title</th>";
-        $string .= "<th>Owner</th><th>Closing Status</th></tr>\n";
+        $string .= "<tr><th>{$GLOBALS['strID']}</th><th>{$GLOBALS['strTitle']}</th>";
+        $string .= "<th>{$GLOBALS['strOwner']}</th><th>{$GLOBALS['strClosingStatus']}</th></tr>\n";
 
         while ($row = mysql_fetch_object($result))
         {
-            $string .= "<tr><th colspan='4' align='left'>{$row->count} Closed By {$row->realname}</th></tr>\n";
+            $string .= "<tr><th colspan='4' align='left'>{$row->count} {$GLOBALS['strClosedBy']} {$row->realname}</th></tr>\n";
 
             $sql = "SELECT i.id, i.title, cs.name ";
             $sql .= "FROM `{$GLOBALS['dbIncidents']}` AS i, `{$GLOBALS['dbClosingStatus']}` AS cs ";

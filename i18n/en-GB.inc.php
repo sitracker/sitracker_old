@@ -626,7 +626,7 @@ $strFeedIcon = 'Feed Icon';
 $strFewMinutesAgo = 'A few minutes ago';
 # e.g. spreadsheet field
 $strField = 'Field';
-$strField1 = 'Field 1';
+$strField1 = 'Field 1';fg
 $strField2 = 'Field 2';
 $strField3 = 'Field 3';
 $strField4 = 'Field 4';
@@ -769,6 +769,7 @@ $strIncidentNearingSLA = 'Incident Nearing SLA target time';
 $strIncidentNoContract = 'This incident is not logged under contract';
 $strIncidentNum = 'Incident %d';
 $strIncidentNumOrSearchTerm = 'Incident # or search term';
+# Abbreviation of incidents per owner
 $strIncidentPerOwnerAbbrev = 'inc per owner';
 $strIncidentPool = 'Incident Pool';
 $strIncidentRate = 'Incident Rate';
@@ -1230,6 +1231,7 @@ $strPermissions = 'Permissions';
 $strPermissionsInhereitedCannotBeChanged = 'Permissions that are inherited from the users role can not be changed.';
 $strPerIncident = 'Per Incident';
 $strPerUnit = 'Per Unit';
+$strPerUser = 'Per User';
 $strPreferred = 'Preferred';
 $strPreReleaseNotice = 'You are using a pre-release version of SiT - %s, Pre-release versions are for you to test, provide feedback and to help with further development and should never be used in a live production environment';
 $strPreviousIncidentOwner = 'Previous Incident Owner';
