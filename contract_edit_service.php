@@ -133,7 +133,7 @@ switch ($mode)
                         echo "</thead>";
                         echo "<input type='hidden' name='editbilling' id='editbilling' value='false' />";
                         echo "<tbody>\n";
-                        echo "<tr><th colspan='2'>{$strUnableToChangeServiceAsUsed}</th></tr>\m";
+                        echo "<tr><th colspan='2'>{$strUnableToChangeServiceAsUsed}</th></tr>\n";
                         echo "</tbody>\n";
                     }
                 //  Not sure how applicable daily rate is, INL 4Apr08
