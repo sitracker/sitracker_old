@@ -19,6 +19,7 @@ require (APPLICATION_LIBPATH . 'auth.inc.php');
 
 // External variables
 $id = cleanvar($_REQUEST['id']);
+$title = $strHelp;
 
 include (APPLICATION_INCPATH . 'htmlheader.inc.php');
 journal(CFG_LOGGING_MAX, 'Help Viewed', "Help document $id was viewed", CFG_JOURNAL_OTHER, $id);

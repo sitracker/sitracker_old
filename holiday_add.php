@@ -14,7 +14,6 @@
 $permission = 27; // View your calendar
 require ('core.php');
 require (APPLICATION_LIBPATH . 'functions.inc.php');
-$title = "Holiday Calendar";
 // This page requires authentication
 require (APPLICATION_LIBPATH . 'auth.inc.php');
 
@@ -28,6 +27,7 @@ $user = cleanvar($_REQUEST['user']);
 $type = cleanvar($_REQUEST['type']);
 $length = cleanvar($_REQUEST['length']);
 $return = cleanvar($_REQUEST['return']);
+$title = $strCalendar;
 
 // startdate in unix format
 $startdate = mktime(0,0,0,$month,$day,$year);

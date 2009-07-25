@@ -105,14 +105,14 @@ function generate_row($update)
     $html_row .= "<td align='center' width='20%'>";
     if (($update['locked'] != $sit[2]) && ($update['locked'] > 0))
     {
-        $html_row .= "Locked by ".user_realname($update['locked'],TRUE);
+        $html_row .= sprintf($strLockedByX, user_realname($update['locked'],TRUE));
     }
     else
     {
         if ($update['locked'] == $sit[2])
         {
             $html_row .="<a href='{$_SERVER['PHP_SELF']}?unlock={$update['tempid']}'";
-            $html_row.= " title='Unlock this update so it can be modified by someone else'> {$GLOBALS['strUnlock']}</a> | ";
+            $html_row.= " title='{$strUnlockThisToBeModifiedByOther}'> {$GLOBALS['strUnlock']}</a> | ";
         }
         else
         {
@@ -126,7 +126,7 @@ function generate_row($update)
             $html_row .= "<a href='incident_reopen.php?id={$update['incident_id']}&updateid={$update['updateid']}'>{$GLOBALS['strReopen']}</a> | ";
         }
         
-        $html_row.= "<a href='delete_update.php?updateid=".$update['id']."&amp;tempid=".$update['tempid']."&amp;timestamp=".$update['timestamp']."' title='Remove this item permanently' onclick=\"return confirm_action('{$GLOBALS['strAreYouSureDelete']}');\"> {$GLOBALS['strDelete']}</a>";
+        $html_row.= "<a href='delete_update.php?updateid=".$update['id']."&amp;tempid=".$update['tempid']."&amp;timestamp=".$update['timestamp']."' title='{$strRemoveThisPermanently}' onclick=\"return confirm_action('{$GLOBALS['strAreYouSureDelete']}');\"> {$GLOBALS['strDelete']}</a>";
     }
     $html_row .= "</td></tr>\n";
     return $html_row;
@@ -533,10 +533,10 @@ if (mysql_num_rows($result) >= 1)
             $rhtml .= "<td>";
             if ($backupid >= 1)
             {
-                $rhtml .= "<a href=\"javascript:wt_winpopup('incident_reassign.php?id={$assign->id}&amp;reason={$reason}&amp;backupid={$backupid}&amp;asktemp=temporary&amp;popup=yes','mini');\" title='Re-assign this incident to {$backupname}'>{$strAssignToBackup}</a> | ";
+                $rhtml .= "<a href=\"javascript:wt_winpopup('incident_reassign.php?id={$assign->id}&amp;reason={$reason}&amp;backupid={$backupid}&amp;asktemp=temporary&amp;popup=yes','mini');\" title='{$strReassignTo} {$backupname}'>{$strAssignToBackup}</a> | ";
             }
 
-            $rhtml .= "<a href=\"javascript:wt_winpopup('incident_reassign.php?id={$assign->id}&amp;reason={$reason}&amp;asktemp=temporary&amp;popup=yes','mini');\" title='Re-assign this incident to another engineer'>Assign to other</a> | <a href='set_user_status.php?mode=deleteassign&amp;incidentid={$assign->incidentid}&amp;originalowner={$assign->originalowner}' title='Ignore this reassignment and delete this notice'>Ignore</a></td>";
+            $rhtml .= "<a href=\"javascript:wt_winpopup('incident_reassign.php?id={$assign->id}&amp;reason={$reason}&amp;asktemp=temporary&amp;popup=yes','mini');\" title='{$strReassign}'>{$strAssignToOther}</a> | <a href='set_user_status.php?mode=deleteassign&amp;incidentid={$assign->incidentid}&amp;originalowner={$assign->originalowner}' title='{$strIgnoreThisAndDelete}'>{$strIgnore}</a></td>";
             $rhtml .= "</tr>\n";
         }
         elseif ($assign->owner != $assign->originalowner AND $useraccepting == 'yes')
@@ -556,9 +556,9 @@ if (mysql_num_rows($result) >= 1)
             $originalname = user_realname($assign->originalowner,TRUE);
             $reason = urlencode(trim("{$originalname} is now accepting incidents again. Previous status {$origstatus} and not accepting."));  // FIXME i18n
             $rhtml .= "<td>";
-            $rhtml .= "<a href=\"javascript:wt_winpopup('incident_reassign.php?id={$assign->id}&amp;reason={$reason}&amp;originalid={$assign->originalowner}&amp;popup=yes','mini');\" title='Re-assign this incident to {$originalname}'>Return to original owner</a> | ";
+            $rhtml .= "<a href=\"javascript:wt_winpopup('incident_reassign.php?id={$assign->id}&amp;reason={$reason}&amp;originalid={$assign->originalowner}&amp;popup=yes','mini');\" title='{$strReassignTo} {$originalname}'>{$strReturnToOriginalOwner}</a> | ";
 
-            $rhtml .= "<a href=\"javascript:wt_winpopup('incident_reassign.php?id={$assign->id}&amp;reason={$reason}&amp;asktemp=temporary&amp;popup=yes','mini');\" title='Re-assign this incident to another engineer'>{$strAssignToOther}</a> | <a href='set_user_status.php?mode=deleteassign&amp;incidentid={$assign->incidentid}&amp;originalowner={$assign->originalowner}' title='Ignore this reassignment and delete this notice'>{$strIgnore}</a></td>";
+            $rhtml .= "<a href=\"javascript:wt_winpopup('incident_reassign.php?id={$assign->id}&amp;reason={$reason}&amp;asktemp=temporary&amp;popup=yes','mini');\" title='{$strAssignToOther}'>{$strAssignToOther}</a> | <a href='set_user_status.php?mode=deleteassign&amp;incidentid={$assign->incidentid}&amp;originalowner={$assign->originalowner}' title='{$strIgnoreThisAndDelete}'>{$strIgnore}</a></td>";
             $rhtml .= "</tr>\n";
         }
     }
