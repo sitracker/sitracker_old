@@ -32,6 +32,8 @@ if ($groupid == 'all' OR ($groupid == '' AND $_SESSION['groupid'] == 0)) $filter
 elseif ($groupid == '') $filtergroup = $_SESSION['groupid'];
 else $filtergroup = $groupid;
 
+$title = $strUsers;
+
 include (APPLICATION_INCPATH . 'htmlheader.inc.php');
 
 echo "<h2>".icon('user', 32)." ";

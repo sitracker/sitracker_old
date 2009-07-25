@@ -17,6 +17,9 @@ require ('core.php');
 require (APPLICATION_LIBPATH . 'functions.inc.php');
 
 require (APPLICATION_LIBPATH . 'auth.inc.php');
+
+$title = $strTranslate;
+
 include (APPLICATION_INCPATH . 'htmlheader.inc.php');
 
 $tolang = cleanvar($_REQUEST['lang']);
@@ -244,13 +247,13 @@ elseif ($_REQUEST['mode'] == "save")
     $fp = @fopen($myFile, 'w');
     if (!$fp)
     {
-        echo "<p class='warn'>Can't write to <code>$myFile</code>, you'll have to save the file manually.</p>";
+        echo "<p class='warn'>".sprintf($strCannotWriteFile, "<code>{$myFile}</code>")."</p>";
     }
     else
     {
         fwrite($fp, $i18nfile);
         fclose($fp);
-        echo "<p class='info'>File saved as: <code>$myFile</code></p>";
+        echo "<p class='info'>".sprintf($strFileSavedAs, "<code>{$myFile}</code>")."</p>";
     }
 
     echo "<div style='margin-left: 5%; margin-right: 5%; background-color: white; border: 1px solid #ccc; padding: 1em;'>";

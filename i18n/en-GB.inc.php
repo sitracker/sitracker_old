@@ -268,6 +268,7 @@ $strCancel = 'Cancel';
 $strCannotDeleteSkill = 'Sorry, this skill cannot be deleted because it has been associated with one or more incidents';
 $strCannotResetThisPassword = 'You cannot reset this users password';
 $strCannotResetPasswordInDemoMode = 'You cannot reset passwords while in DEMO MODE';
+$strCannotWriteFile = 'Can\'t write to %s, you\'ll have to save the file manually.';
 $strCategory = 'Category';
 $strCause = 'Cause';
 $strCC = 'CC';
@@ -487,6 +488,7 @@ $strEditHolidays = 'Edit Holidays';
 $strEditHolidayEntitlement = 'Edit Holiday Entitlement';
 $strEditKBArticle = 'Edit Knowledge Base Article';
 $strEditProduct = 'Edit Product';
+$strEditProfile = 'Edit Profile';
 $strEditProfileFor = 'Edit User Profile for %s';
 $strEditRole = 'Edit Role';
 $strEditRSSAtomFeed = 'Edit RSS/Atom feed';
@@ -640,6 +642,7 @@ $strFile = 'File';
 # e.g. computer files
 $strFiles = 'Files';
 $strFileDate = 'File Date';
+$strFileSavedAs = 'File saved as: %s';
 $strFileUploaded = 'File uploaded';
 $strFileVersion = 'File Version';
 # e.g. File filename.txt (Text file 100 bytes) uploaded OK

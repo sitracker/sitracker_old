@@ -12,7 +12,7 @@
 
 
 $permission = 14; // View Users
-$title = "User Skills";
+
 require ('core.php');
 require (APPLICATION_LIBPATH . 'functions.inc.php');
 
@@ -22,6 +22,7 @@ require (APPLICATION_LIBPATH . 'auth.inc.php');
 // External Variables
 $sort = cleanvar($_REQUEST['sort']);
 
+$title = $strListSkills;
 include (APPLICATION_INCPATH . 'htmlheader.inc.php');
 
 $sql  = "SELECT * FROM `{$dbUsers}` WHERE status!=0";  // status=0 means account disabled

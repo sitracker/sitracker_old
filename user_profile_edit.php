@@ -35,6 +35,7 @@ else
 
 if (empty($mode))
 {
+    $title = $strEditProfile;
     include (APPLICATION_INCPATH . 'htmlheader.inc.php');
 
     $sql = "SELECT u.*, r.rolename FROM `{$dbUsers}` AS u, `{$dbRoles}` AS r  ";
