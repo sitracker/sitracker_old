@@ -18,7 +18,7 @@ require (APPLICATION_LIBPATH . 'functions.inc.php');
 // This page requires authentication
 require (APPLICATION_LIBPATH . 'auth.inc.php');
 
-$title = $strShowExpired;
+$title = $strShowExpiredContracts;
 
 // External variables
 $expired = cleanvar($_REQUEST['expired']);
@@ -30,7 +30,7 @@ if (empty($expired))
 {
     include (APPLICATION_INCPATH . 'htmlheader.inc.php');
 
-    echo "<h2>{$strShowExpired}</h2>";
+    echo "<h2>{$strShowExpiredContracts}</h2>";
     echo "<form action='{$_SERVER['PHP_SELF']}' method='get' >";
     printf("<p>{$strContractsExpiredXdaysAgo}", "<input maxlength='4' name='expired' size='3' type='text' value='30' />");
     echo "<p><input name='show' type='checkbox' value='terminated'> {$strTerminated}</p>";

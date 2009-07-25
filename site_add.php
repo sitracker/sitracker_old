@@ -18,6 +18,7 @@ require (APPLICATION_LIBPATH . 'functions.inc.php');
 // This page requires authentication
 require (APPLICATION_LIBPATH . 'auth.inc.php');
 
+$title = $strNewSite;
 // External variables
 $action = $_REQUEST['action'];
 
@@ -176,7 +177,7 @@ elseif ($action == "add")
         // show error message if addition failed
         if (!$result)
         {
-            echo "<p class='error'>Addition of site failed</p>\n";
+            echo "<p class='error'>{$strAddSiteFailed}</p>\n";
         }
         // show success message
         else

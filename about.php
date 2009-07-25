@@ -19,6 +19,8 @@ require (APPLICATION_LIBPATH . 'functions.inc.php');
 // This page requires authentication
 require (APPLICATION_LIBPATH . 'auth.inc.php');
 
+$title = $strAbout;
+
 include (APPLICATION_INCPATH . 'htmlheader.inc.php');
 
 echo "<div id='aboutsit'>";

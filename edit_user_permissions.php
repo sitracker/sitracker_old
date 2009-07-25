@@ -244,8 +244,7 @@ elseif ($action == "update")
         html_redirect("manage_users.php");
         exit;
     }
-
-    journal(CFG_LOGGING_NORMAL, 'User Permissions Edited', "User $user permissions edited", CFG_JOURNAL_USERS, $user);
+    journal(CFG_LOGGING_NORMAL, '{$strUserPermissionsEdited}', "{$strUserXPermissionsEdited}", CFG_JOURNAL_USERS, $user);
 
     // Edit the users permissions
     if (empty($role) AND !empty($user))
