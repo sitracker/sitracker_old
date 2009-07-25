@@ -824,6 +824,7 @@ $strInitialResponseHasBeenMade = 'The Initial Response has been made';
 $strInMeeting = 'In Meeting';
 $strInMinutes = 'in minutes';
 $strInOffice = 'In Office';
+$strInOrderToDelete = 'In order to delete this record you must select another to receive the related objects';
 $strInstall = 'Install';
 $strInstallDashboardComponents = 'Install new dashboard component';
 $strInterfaceStyle = 'Interface Style (Theme)';
@@ -1161,6 +1162,8 @@ $strNoVendorsDefined = 'No Vendors Defined';
 # Month number 11: November
 $strNovember = 'November';
 $strNow = 'Now';
+$strNumContactsAssignedToSite = 'There are %s contacts assigned to this site';
+$strNumContractsAssignedToSite = 'There are %s contracts assigned to this site';
 $strNumOfIncidents = 'There are %s incidents in this list';
 $strNumOfIncidentsLoggedByX = 'Number of incidents logged by %s';
 $strNumOfCalls = '# of calls';
