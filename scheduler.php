@@ -22,6 +22,7 @@ require (APPLICATION_LIBPATH . 'auth.inc.php');
 // External vars
 $id = cleanvar($_REQUEST['id']);
 
+$title = $strScheduler;
 
 switch ($_REQUEST['mode'])
 {
@@ -94,7 +95,7 @@ switch ($_REQUEST['mode'])
             }
 
             echo "<input type='radio' name='type' value='interval' id='interval' onclick=\"$('intervalsection').show(); $('datesection').hide();\" {$interval} />{$strInterval} ";
-            echo "<input type='radio' name='type' value='date' id='date' onclick=\"$('intervalsection').hide(); $('datesection').show();\" {$date} />{$strDate} ";
+            echo "<input type='radio' name='type' value='date' id='date' onclick=\"$('intervalsection').hide(); $('datesection').show();\" {$date} />{$strFrequency} ";
             echo "</td></tr>";
 
             echo "<tbody id='intervalsection' {$visibilityinterval}>";
@@ -274,26 +275,13 @@ switch ($_REQUEST['mode'])
                 elseif ($schedule->type == 'date')
                 {
                     echo "<td>";
-                    switch ($schedule->date_offset)
-                    {
-                        case 1: echo $str1st;
-                            break;
-                        case 2: echo $str2nd;
-                            break;
-                        case 3: echo $str3rd;
-                            break;
-                        default:
-                            echo sprintf($strXth, $schedule->date_offset);
-                            break;
-                    }
-
                     if ($schedule->date_type == 'month')
                     {
-                        echo " of month";
+                        echo sprintf($strDayOfMonth, $schedule->date_offset);
                     }
                     elseif ($schedule->date_type == 'year')
                     {
-                        echo " of year";
+                        echo sprintf($strDayOfYear, $schedule->date_offset);
                     }
                     echo "</td>";
                 }

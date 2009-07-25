@@ -18,10 +18,7 @@ $str1Month = '1 Måned';
 $str1Hour = '1 Time';
 $str1IncidentsLoggedViaPortal = '1 Hændelse logget via portalen';
 $str1Second = '1 Sekund';
-$str1st = '1.';
 $str1Year = '1 År';
-
-$str2nd = '2.';
 
 $str3rd = '3.';
 
@@ -1739,7 +1736,6 @@ $strXRecords = '%s poster';
 $strXsActivities = '%s\'s aktiviteter';
 $strXSeconds = '%s sekunder';
 $strXsTasks = '%s\'s opgaver';
-$strXth = '%.';
 $strXUnitsAtX = '%d enheder @ %dx';
 $strXWorkingDay = '%s arbejdsdag';
 $strXWorkingDays = '%s arbejdsdage';

@@ -12,10 +12,7 @@ $str1Month = '1 Mes';
 $str1Hour = '1 Hora';
 $str1IncidentsLoggedViaPortal = '1 Incidente registrado vía el portal';
 $str1Second = '1 Segundo';
-$str1st = '1er';
 $str1Year = '1 Año';
-
-$str2nd = '2o';
 
 $str3rd = '3er';
 
@@ -1432,7 +1429,6 @@ $strXofX = '%s de %s';
 $strXsActivities = 'Actividades de %s';
 $strXSeconds = '%segundos';
 $strXsTasks = 'Tareas de %s';
-$strXth = '%smo';
 $strXUnitsAtX = '%d unidades por %dx';
 $strXWorkingDay = '%s día laborable';
 $strXWorkingDays = '%s días laborables';

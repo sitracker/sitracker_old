@@ -20,8 +20,6 @@ $str1Second = '1 second';
 # e.g 1st day of month
 $str1st = '1st';
 $str1Year = '1 year';
-# e.g 2nd day of month
-$str2nd = '2nd';
 # e.g 3rd day of month
 $str3rd = '3rd';
 
@@ -406,6 +404,8 @@ $strDatesAwaitingApproval = 'Dates awaiting approval';
 $strDatesNotRequested = 'Dates Not Requested';
 $strDatesNotYetApproved = 'Dates not yet approved';
 $strDay = 'Day';
+$strDayOfMonth = 'day %s of each month';
+$strDayOfYear = 'day %s of each year';
 $strDays = 'Days';
 $strDayView = 'Day View';
 $strdaysother = 'days other leave';
@@ -1866,10 +1866,6 @@ $strXsActivities = '%s\'s Activities';
 $strXSeconds = '%s seconds';
 # e.g. John's Tasks
 $strXsTasks = '%s\'s Tasks';
-# e.g. 10th day of month
-$strXth = '%sth';
-# e.g. 42 units @ 2x
-$strXUnitsAtX = '%d units @ %dx';
 $strXWorkingDay = '%s working day';
 $strXWorkingDays = '%s working days';
 $strXYears = '%s years';

@@ -17,10 +17,7 @@ $str1Month = '1 месяц';
 $str1Hour = '1 час';
 $str1IncidentsLoggedViaPortal = '1 инцидент зарегистрирован через портал';
 $str1Second = '1 секунда';
-$str1st = '1-ый';
 $str1Year = '1 год';
-
-$str2nd = '2-ой';
 
 $str3rd = '3-ий';
 
@@ -1478,7 +1475,6 @@ $strXRecords = '%s записей';
 $strXsActivities = '%s действия';
 $strXSeconds = '%s секунд';
 $strXsTasks = 'Задачи %s';
-$strXth = '%s-ый';
 $strXUnitsAtX = '%d единиц @ %dx';
 $strXWorkingDay = '%s рабочий день';
 $strXWorkingDays = '%s рабочих дней';

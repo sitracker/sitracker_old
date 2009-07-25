@@ -13,10 +13,7 @@ $str1Month = '1 maand';
 $str1Hour = '1 uur';
 $str1IncidentsLoggedViaPortal = '1 Incindent gelogd via de portal';
 $str1Second = '1 seconde';
-$str1st = 'Eerste';
 $str1Year = '1 jaar';
-
-$str2nd = 'Tweede';
 
 $str3rd = 'Derde';
 

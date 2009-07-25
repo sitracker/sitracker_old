@@ -13,10 +13,7 @@ $str1Month = 'str1Month';
 $str1Hour = 'str1Hour';
 $str1IncidentsLoggedViaPortal = 'str1IncidentsLoggedViaPortal';
 $str1Second = 'str1Second';
-$str1st = 'str1st';
 $str1Year = 'str1Year';
-
-$str2nd = 'str2nd';
 
 $str3rd = 'str3rd';
 
@@ -1594,7 +1591,6 @@ $strXRecords = 'strXRecords';
 $strXsActivities = 'strXsActivities';
 $strXSeconds = 'strXSeconds';
 $strXsTasks = 'strXsTasks';
-$strXth = 'strXth';
 $strXUnitsAtX = 'strXUnitsAtX';
 $strXWorkingDay = 'strXWorkingDay';
 $strXWorkingDays = 'strXWorkingDays';

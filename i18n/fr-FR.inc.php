@@ -21,10 +21,7 @@ $str1Month = '1 Mois';
 $str1Hour = '1 Heure';
 $str1IncidentsLoggedViaPortal = '1 Ticket saisi via le Portail';
 $str1Second = '1 Seconde';
-$str1st = '1er';
 $str1Year = '1 An';
-
-$str2nd = '2ème';
 
 $str3rd = '3ème';
 
@@ -1455,7 +1452,6 @@ $strXRecords = '%s enregistrements';
 $strXsActivities = 'Les Activités de %s';
 $strXSeconds = '%s Secondes';
 $strXsTasks = 'Les tâches de %s';
-$strXth = '%ème';
 $strXUnitsAtX = '%d unités @ %dx';
 $strXWorkingDay = '%s Jour ouvré';
 $strXWorkingDays = '%s Jours ouvrés';
