@@ -63,7 +63,7 @@ while ($incident = mysql_fetch_object($result))
     $fi = new FeedItem();
     $fi->title = "[{$incident->id}] - {$incident->title} ({$update_type})";
     $fi->author = $author;
-    $fi->link = "{$CONFIG['application_uriprefix']}{$CONFIG['application_webpath']}incident_details.php?id={$incident->id}";   
+    $fi->link = "{$CONFIG['application_uriprefix']}{$CONFIG['application_webpath']}incident_details.php?id={$incident->id}";
     $fi->description = "{$strUpdated} ".date($CONFIG['dateformat_datetime'],$update_timestamp) ." {$strby} &lt;strong&gt;{$authorname}&lt;/strong&gt;. \n{$strStatus}: ".incidentstatus_name($update_currentstatus).". &lt;br /&gt;\n\n".strip_tags($update_body);
     $fi->pubdate =$update_timestamp; 
     

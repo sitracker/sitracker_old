@@ -111,7 +111,7 @@ if ($result = mysql_query($sql))
     }
     if ($numtotal > 0)
     {
-        echo "<p>".sprintf($strShowingXtoXofX, $start+1, $end, $numtotal)."</p>";
+        echo "<p align='center'>".sprintf($strShowingXtoXofX, $start+1, $end, $numtotal)."</p>";
 
         echo "<p align='center'>";
 

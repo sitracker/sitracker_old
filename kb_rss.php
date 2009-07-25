@@ -36,7 +36,39 @@ if (!is_numeric($userid))
     exit;
 }
 
-// Feed stuff goes here (obviously) ;)
+if (!empty($_SESSION['lang'])) $lang = $_SESSION['lang'];
+else $lang = $CONFIG['default_i18n'];
 
+// Feed stuff goes here (obviously) ;)
+$sql = "SELECT * FROM `{$dbKBArticles}` ORDER BY docid DESC LIMIT 20";
+$result = mysql_query($sql);
+if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+
+$count = 0;
+$pubdate = $now;
+
+$items = array();
+
+while ($kbarticle = mysql_fetch_object($result))
+{
+    if (empty($kbarticle->title)) $kbarticle->title = $strUntitled;
+    else $kbarticle->title = $kbarticle->title;
+    $fi = new FeedItem();
+    $fi->title = $kbarticle->title;
+    $fi->author = $kbarticle->author;
+    $fi->link = "{$CONFIG['application_uriprefix']}{$CONFIG['application_webpath']}kb_view_article.php?id={$kbarticle->docid}";
+    $fi->description = "{$strKeywords}: {$kbarticle->keywords}";
+    $fi->pubdate = mysql2date($kbarticle->published);
+    $items[] = $fi;
+}
+
+$feed = new Feed();
+$feed->title = "{$CONFIG['application_shortname']} {$strKnowledgeBase}: {$strArticlesPublishedRecently}";
+$feed->feedurl = "{$CONFIG['application_uriprefix']}{$CONFIG['application_webpath']}kb.php?mode=RECENT";
+$feed->description = "{$CONFIG['application_name']}: {$strKnowledgeBase} {$strFor} ".user_realname($userid)." ({$strActionNeeded})";
+$feed->pubdate = $pubdate;
+$feed->items = $items;
+
+$feed->generate_feed();
 
 ?>

@@ -87,21 +87,22 @@ class Feed
  */
 class FeedItem
 {
-     var $title = '';
-     var $author = '';
-     var $link = '';
-     var $description = '';
-     var $pubdate = ''; // Unix Timestamp
-     var $guid = '';
-     
-     
-     /**
-      * Generates the XML for this particular item
-      * @author Paul Heaney
-      * @return string The  XML for this item
-      */
-     function generateItem()
-     {
+    var $title = '';
+    var $author = '';
+    var $link = '';
+    var $description = '';
+    var $pubdate = ''; // Unix Timestamp
+    var $guid = '';
+
+
+    /**
+    * Generates the XML for this particular item
+    * @author Paul Heaney
+    * @return string The  XML for this item
+    */
+    function generateItem()
+    {
+        if ($this->pubdate == 0) $this->pubdate = $now;
         $itemxml .= "<item>\n";
         $itemxml .= "<title>{$this->title}</title>\n";
         $itemxml .= "<author>{$this->author}</author>\n";
@@ -110,9 +111,9 @@ class FeedItem
         $itemxml .= "<pubDate>".date('r',$this->pubdate)."</pubDate>\n";
         $itemxml .= "<guid isPermaLink=\"false\">{$this->guid}</guid>\n";
         $itemxml .= "</item>\n";
-        
+
         return $itemxml;
-     }
+    }
 }
 
 ?>
