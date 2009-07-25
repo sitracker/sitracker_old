@@ -183,31 +183,31 @@ else
     if ($realname == '')
     {
         $errors++;
-        $_SESSION['formerrors']['add_user']['realname']= "You must enter a real name</p>\n";
+        $_SESSION['formerrors']['add_user']['realname']= sprintf($strFieldMustNotBeBlank, $strRealName)."</p>\n";
     }
     // check for blank username
     if ($username == '')
     {
         $errors++;
-        $_SESSION['formerrors']['add_user']['username']= "You must enter a username</p>\n";
+        $_SESSION['formerrors']['add_user']['username']= sprintf($strFieldMustNotBeBlank, $strUsername)."</p>\n";
     }
     // check for blank password
     if ($password == '')
     {
         $errors++;
-        $_SESSION['formerrors']['add_user']['password']= "You must enter a password</p>\n";
+        $_SESSION['formerrors']['add_user']['password']= sprintf($strFieldMustNotBeBlank, $strPassword)."</p>\n";
     }
     // check for blank job title
     if ($jobtitle == '')
     {
         $errors++;
-        $_SESSION['formerrors']['add_user']['jobtitle']= "You must enter a job title</p>\n";
+        $_SESSION['formerrors']['add_user']['jobtitle']= sprintf($strFieldMustNotBeBlank, $strJobTitle)."</p>\n";
     }
     // check for blank email
     if ($email == '')
     {
         $errors++;
-        $_SESSION['formerrors']['add_user']['email']= "You must enter an email address</p>\n";
+        $_SESSION['formerrors']['add_user']['email']= sprintf($strFieldMustNotBeBlank, $strEmail)."</p>\n";
     }
     // Check username is unique
     $sql = "SELECT COUNT(id) FROM `{$dbUsers}` WHERE username='$username'";
@@ -217,7 +217,7 @@ else
     if ($countexisting >= 1)
     {
         $errors++;
-        $_SESSION['formerrors']['add_user']['']= "Username must be unique</p>\n";
+        $_SESSION['formerrors']['add_user']['']= "{$strUsernameNotUnique}</p>\n";
     }
     // Check email address is unique (discount disabled accounts)
     $sql = "SELECT COUNT(id) FROM `{$dbUsers}` WHERE status > 0 AND email='$email'";
@@ -227,7 +227,7 @@ else
     if ($countexisting >= 1)
     {
         $errors++;
-        $_SESSION['formerrors']['add_user']['duplicate_email'] = "Email must be unique</p>\n";
+        $_SESSION['formerrors']['add_user']['duplicate_email'] = "{$strEmailMustBeUnique}</p>\n";
     }
 
     // add information if no errors
@@ -257,7 +257,7 @@ else
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
         }
 
-        if (!$result) echo "<p class='error'>Addition of user failed</p>\n";
+        if (!$result) echo "<p class='error'>{$strAdditionFail}</p>\n";
         else
         {
             setup_user_triggers($newuserid);
