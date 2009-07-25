@@ -227,7 +227,7 @@ $CONFIG['dont_chase_maintids'] = array(1 => 1); // maintence IDs not to chase
 
 //Enable/Disable sections
 $CONFIG['kb_enabled'] = TRUE;
-$CONFIG['portal_kb_enabled'] = TRUE;
+$CONFIG['portal_kb_enabled'] = 'Public';
 $CONFIG['tasks_enabled'] = TRUE;
 $CONFIG['calendar_enabled'] = TRUE;
 $CONFIG['holidays_enabled'] = TRUE;
