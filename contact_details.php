@@ -26,6 +26,7 @@ require (APPLICATION_LIBPATH . 'auth.inc.php');
 // External variables
 $id = mysql_real_escape_string($_REQUEST['id']);
 $output = $_REQUEST['output'];
+$title = $strContactDetails;
 
 if ($output == 'vcard')
 {

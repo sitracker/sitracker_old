@@ -21,6 +21,7 @@ require (APPLICATION_LIBPATH . 'auth.inc.php');
 // External variables
 $siteid = mysql_real_escape_string($_REQUEST['siteid']);
 $submit = $_REQUEST['submit'];
+$title = $strNewContact;
 
 if (empty($submit) OR !empty($_SESSION['formerrors']['add_contact']))
 {
