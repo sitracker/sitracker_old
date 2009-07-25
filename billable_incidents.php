@@ -64,7 +64,7 @@ if (empty($mode))
     function processForm()
     {
         // confirm_action('Are you sure you wish to update the last billed time to {$enddateorig}');
-		// FIXME i18n text string below is added in lang file - $strAreYouSureUpdateLastBilled = 'Are you sure you wish to update the last billed time to %s ?';
+        // FIXME i18n text string below is added in lang file - $strAreYouSureUpdateLastBilled = 'Are you sure you wish to update the last billed time to %s ?';
         var approval = $('approvalpage');
         var invoice = $('invoicepage');
 

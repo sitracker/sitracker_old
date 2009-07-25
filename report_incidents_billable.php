@@ -21,6 +21,7 @@ require (APPLICATION_LIBPATH . 'functions.inc.php');
 // This page requires authentication
 require (APPLICATION_LIBPATH . 'auth.inc.php');
 
+$title = $strBillableIncidents;
 $startdate = strtotime(cleanvar($_REQUEST['startdate']));
 $enddate = strtotime(cleanvar($_REQUEST['enddate']));
 $mode = cleanvar($_REQUEST['mode']);

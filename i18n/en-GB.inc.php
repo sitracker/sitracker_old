@@ -585,6 +585,8 @@ $strExternalInfoAddedBy = 'External Information added by %s';
 
 $strFailed = 'Failed';
 $strFailedOnPass2 = 'failed on pass 2';
+$strFailedtoApproveTransactID = 'Failed to approve transaction ID';
+$strFailedToFindDateIncidentClosed = 'Failed to find date incident closed';
 $strFatalError = 'Fatal Error';
 $strFax = 'Fax';
 $strFeatures = 'Features';
@@ -645,6 +647,7 @@ $strForceTo = 'Force To';
 $strForenames = 'Forenames';
 $strForFurtherAssistance = 'For further assistance please contact %s';
 $strForgottenDetails = 'Forgotten your details?';
+$strForIncident = 'For Incident';
 $strForThePeriodXToY = 'For the period %s to %s';
 $strForgottenPasswordDetails = 'Forgotten Password Details';
 $strForm = 'Form';
@@ -1628,7 +1631,9 @@ $strTotalOpen = 'Total Open';
 $strTotalUnits = 'Total Units';
 $strTrackURL = 'Track URL';
 $strTraining = 'Training';
+$strTransactionApproved = 'Transaction approved';
 $strTransactions = 'Transactions';
+$strTransactionXnotAwaitingApproval = 'Transaction %s is not awaiting approval';
 $strTransfer = 'Transfer';
 # An example of transfering amounts between services
 $strTransferExamplePositiveService = 'Select the service which has a negative balance and transfer the amount from here, e.g. Service A is -100 to resolve this transfer 100 from here.';

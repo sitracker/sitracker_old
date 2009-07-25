@@ -17,6 +17,7 @@ require_once (APPLICATION_LIBPATH . 'functions.inc.php');
 // This page requires authentication
 require_once (APPLICATION_LIBPATH . 'auth.inc.php');
 require_once (APPLICATION_LIBPATH . 'billing.inc.php');
+$strUpdateIncidentXsBalance
 
 $mode = cleanvar($_REQUEST['mode']);
 $incidentid = cleanvar($_REQUEST['incidentid']);
@@ -61,7 +62,7 @@ elseif ($mode == 'update')
     {
         $obj = mysql_fetch_object($result);
 
-        $description = "[b]Amount[/b]: {$amount} minutes\n\n{$description}";
+        $description = "[b]{$strAmount}[/b]: {$amount} {$strMinutes}\n\n{$description}";
 
         $amount *= 60; // to seconds
         $sqlInsert = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, currentowner, currentstatus, bodytext, timestamp, duration) VALUES ";
@@ -104,7 +105,7 @@ elseif ($mode == 'update')
 
             $cost = (($totalbillableunits + $totalrefunds)  * $unitrate) * -1;
 
-            $desc = trim("{$numberofunits} {$strUnits} @ {$CONFIG['currency_symbol']}{$unitrate} for incident {$incidentid}. {$s}"); //FIXME i18n
+            $desc = trim("{$numberofunits} {$strUnits} @ {$CONFIG['currency_symbol']}{$unitrate} {$strForIncident} {$incidentid}. {$s}");
 
             $transactionid = get_incident_transactionid($incidentid);
             if ($transactionid != FALSE)
@@ -125,7 +126,7 @@ elseif ($mode == 'update')
     }
     else
     {
-        html_redirect('billable_incidents.php', FALSE, "Failed to find date incident closed");
+        html_redirect('billable_incidents.php', FALSE, $strFailedToFindDateIncidentClosed);
     }
 }
 

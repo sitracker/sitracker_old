@@ -34,12 +34,12 @@ if (mysql_num_rows($result) > 0)
         // function update_contract_balance($contractid, $description, $amount, $serviceid='', $transactionid='', $totalunits=0, $totalbillableunits=0, $totalrefunds=0)
         $r = update_contract_balance('', '', $obj->amount, $obj->serviceid, $obj->transactionid);
 
-        if ($r) html_redirect("billable_incidents.php", TRUE, "Transaction approved");
-        else html_redirect("billable_incidents.php", FALSE, "Failed to approve transaction ID {$transactiond}");
+        if ($r) html_redirect("billable_incidents.php", TRUE, "{$strTransactionApproved}");
+        else html_redirect("billable_incidents.php", FALSE, "{$strFailedtoApproveTransactID} {$transactiond}");
     }
     else
     {
-        html_redirect("billable_incidents.php", FALSE, "Transaction{$transactiond} is not awaiting approval");
+        html_redirect("billable_incidents.php", FALSE, "{$strTransactionXnotAwaitingApproval}", $transactiond);
     }
 }
 else
