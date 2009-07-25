@@ -1647,6 +1647,7 @@ $strTheFollowingVariables = 'The following variables may be used:';
 $strThereAreXcontractsAssignedToThisPerson = 'There are %s contracts assigned to this contact';
 $strThereAreXIncidentsAssignedToThisContact = 'There are %s incidents assigned to this contact';
 $strThereAreXIncidentsInThisList = 'There are %s incidents in this list';
+$strThereWasAProblemSendingYourRequest = 'There was a problem sending your request';
 $strTheInfoInThisArticle = 'The information in this article applies to';
 # Theme as in Interface Style
 $strTheme = 'Theme';

@@ -274,7 +274,7 @@ else
         }
         else
         {
-            echo "<p class='error'>There was a problem sending your request</p>";
+            echo "<p class='error'>{$strThereWasAProblemSendingYourRequest}</p>";
         }
     }
     echo "<p align='center'><a href='holidays.php?user={$user}'>{$strMyHolidays}</p></p>";
