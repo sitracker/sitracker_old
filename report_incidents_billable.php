@@ -71,13 +71,13 @@ elseif ($mode == 'report')
         echo "<h2>{$strBillableIncidentsReport}</h2>";
     }
 
-    $sqlsite = "SELECT DISTINCT m.site FROM `{$dbMaintenance}` AS m WHERE expirydate >= {$startdate}";
+    $sqlsite = "SELECT DISTINCT m.site FROM `{$dbMaintenance}` AS m ";
+    if ($startdate > 0) $sqlsite .= "WHERE expirydate >= {$startdate}";
     $resultsite = mysql_query($sqlsite);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
 
     if (mysql_num_rows($resultsite) > 0)
     {
-
         while ($objsite = mysql_fetch_object($resultsite))
         {
 
@@ -89,7 +89,7 @@ elseif ($mode == 'report')
                 $sql .= "AND closed >= {$startdate} ";
             }
 
-            if ($enedate != 0)
+            if ($enddate != 0)
             {
                 $sql .= "AND closed <= {$enedate} ";
             }
@@ -100,7 +100,6 @@ elseif ($mode == 'report')
                 trigger_error(mysql_error(),E_USER_WARNING);
                 return FALSE;
             }
-
             $units = 0;
 
             if (mysql_num_rows($result) > 0)
@@ -116,7 +115,6 @@ elseif ($mode == 'report')
                     }
                 }
             }
-
             if ($used)
             {
                 if ($output == 'html')
@@ -129,6 +127,10 @@ elseif ($mode == 'report')
                 }
             }
         }
+    }
+    else
+    {
+        echo "<p align='center'>ss{$strNoResults}</p>";
     }
 
     if ($output == 'html')
