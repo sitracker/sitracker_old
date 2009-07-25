@@ -428,7 +428,6 @@ switch ($_REQUEST['mode'])
             }
         }
         echo "</table>";
-        if ($CONFIG['debug']) echo "<p align='center'><a href='triggertest.php'>{$strTestTriggers}</a></p>";
         include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
 }
 ?>
