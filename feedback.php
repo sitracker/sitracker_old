@@ -17,7 +17,8 @@ require (APPLICATION_LIBPATH . 'functions.inc.php');
 // External variables
 $hashcode = $_REQUEST['ax'];
 $mode = $_REQUEST['mode'];
-$decodehash = str_rot13(gzuncompress(base64_decode(urldecode($hashcode))));
+if (!empty($hashcode)) $decodehash = str_rot13(gzuncompress(base64_decode(urldecode($hashcode))));
+else $hashcode = '';
 
 $hashvars=explode('&&',$decodehash);
 $formid=mysql_real_escape_string($hashvars['0']);
