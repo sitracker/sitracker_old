@@ -509,7 +509,7 @@ $strEditWatchedIncidents = 'Edit Watched Incidents';
 $strEmail = 'Email';
 $strEmailAddress = 'Email Address';
 # Do you want to send an email with login details to the contact?
-$strEmailContactLoginDetails = 'Email contact login details?';
+$strEmailContactLoginDetails = 'Send an email to contact with login details?';
 $strEmailDetails = 'Email details';
 # eg novell.com
 $strEmailDomain = 'Email Domain';
@@ -527,7 +527,7 @@ $strEmailToCustomer = 'Email to customer';
 $strEmailTransmittedAbbrev = 'Email Tx';
 $strEmailIncidentClosureDesc = 'Notifies contact that the incident has been marked for closure and will be closed shortly';
 $strEmailIncidentLoggedContactDesc = 'Acknowledge the contact\'s contact and notify them of the new incident number';
-$strEmailIncidentOutOfSlaDesc = 'Notifies Notifies an incident has gone out of SLA';
+$strEmailIncidentOutOfSlaDesc = 'Notifies when an incident has gone out of SLA';
 $strEmailIncidentOutOfReviewWDesc = 'Notify when an incident\'s review is due';
 $strEmailIncidentCreatedUserDesc = 'Notifies a user that an incident has been logged';
 $strEmailIncidentReassignedUserNotifyDesc = 'Notifies user when call is assigned to them';
