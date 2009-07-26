@@ -23,6 +23,7 @@ require (APPLICATION_LIBPATH . 'auth.inc.php');
 
 if (empty($_REQUEST['mode']))
 {
+    $title = $strMarketingMailshot;
     include (APPLICATION_INCPATH . 'htmlheader.inc.php');
     echo "<h2>{$strMarketingMailshot}</h2>";
     echo "<p align='center'>{$strMarketingMailshotDesc}</p>";
@@ -285,7 +286,7 @@ elseif ($_REQUEST['mode'] == 'report')
             }
             else
             {
-            	$csv .= '","';
+                $csv .= '","';
             }
 
             if ($row->dataprotection_phone != 'Yes')

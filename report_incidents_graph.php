@@ -21,8 +21,7 @@ require (APPLICATION_LIBPATH . 'auth.inc.php');
 // External variables
 $startyear = cleanvar($_REQUEST['startyear']);
 
-
-$title = "Incident Graph";
+$title = $strIncidentsLoggedOpenClosed;
 
 $openedcolour = '#FF962A';
 $closedcolour = '#72B8B8';
@@ -35,7 +34,7 @@ $currentmonth = date('n');
 $daysinyear = date('z',mktime(0,0,0,12,31,$year));
 flush();
 
-echo "<table summary='Graph' align='center' style='border: 1px solid #000;' width='250'>";
+echo "<table summary='{$strIncidentsLoggedOpenClosed}' align='center' style='border: 1px solid #000;' width='250'>";
 if (empty($startyear))
 {
     $startyear = $currentyear;
@@ -61,9 +60,9 @@ else
     $lastmonth = 12;
 }
 
-echo "<h2>Incidents <span style='color: {$openedcolour};'>Opened</span> and <span style='color: {$closedcolour};'>Closed</span> each month</h2>";
-echo "<p align='center'>This report shows how many incidents where opened each day.  Hover your mouse over each bar to see the daily figures.<br />";
-echo "Compare: <a href='{$_SERVER['PHP_SELF']}?startyear=".($currentyear-2)."'>".($currentyear-2)."</a> | ";
+echo "<h2>{$strIncidentsLoggedOpenClosed}</h2>";
+echo "<p align='center'>{$strIncidentsOpenedEachDay}<br />";
+echo "<a href='{$_SERVER['PHP_SELF']}?startyear=".($currentyear-2)."'>".($currentyear-2)."</a> | ";
 echo "<a href='{$_SERVER['PHP_SELF']}?startyear=".($currentyear-1)."'>".($currentyear-1)."</a> | ";
 echo "<a href='{$_SERVER['PHP_SELF']}?startyear=".($currentyear)."'>".($currentyear)."</a>";
 echo "</p>";
@@ -81,7 +80,7 @@ for ($year = $startyear; $year < $lastyear; $year++)
         $colspan = ($daysinmonth*2)+1;  // have to calculate number of cols since ie doesn't seem to do colspan=0
         echo "<tr><td align=\"center\" colspan=\"$colspan\"><h2><a href='{$_SERVER['PHP_SELF']}?startyear=$year&startmonth=$month'>$monthname $year</a></h2></td></tr>\n";
         echo "<tr align=\"center\">";
-        echo "<td><img src=\"images/graph_scale.jpg\" width=\"11\" height=\"279\" alt=\"Graph Scale\"></td>";
+        echo "<td><img src=\"images/graph_scale.jpg\" width=\"11\" height=\"279\" alt=''></td>";
         $monthtotal = 0;
         $monthtotalclosed = 0;
         // loop through days
@@ -94,7 +93,7 @@ for ($year = $startyear; $year < $lastyear; $year++)
             if ($countdayincidents > 0)
             {
                 $height = $countdayincidents*4;
-                echo "<div style='cursor: help; height: {$height}px; width: 5px; background-color: {$openedcolour};' title={'$countdayincidents} Incidents Opened on {$day} {$monthname} {$year}'>&nbsp;</div>";
+                echo "<div style='cursor: help; height: {$height}px; width: 5px; background-color: {$openedcolour};' title='{$countdayincidents}'>&nbsp;</div>";
                 // echo "<img src=\"/images/vertgraph.gif\" width=\"12\" height=\"$height\" alt=\"$countdayincidents Incidents\" title=\"$countdayincidents Incidents\">";
                 $monthtotal += $countdayincidents;
             }
@@ -114,7 +113,7 @@ for ($year = $startyear; $year < $lastyear; $year++)
             echo "<td valign=\"bottom\" >";
             if ($countdayclosedincidents > 0)
             {
-                echo "<div style='cursor: help; height: {$closedheight}px;  width: 5px; background-color: $closedcolour;' title='$countdayclosedincidents Incidents Closed on $day $monthname $year'>&nbsp;</div>";
+                echo "<div style='cursor: help; height: {$closedheight}px;  width: 5px; background-color: $closedcolour;' title='{$countdayclosedincidents}'>&nbsp;</div>";
             }
             echo "</td>";
         }
@@ -140,8 +139,8 @@ for ($year = $startyear; $year < $lastyear; $year++)
         }
 
         echo "<tr><td align=\"center\" colspan=\"$colspan\" style='border-bottom: 2px solid #000;'>";
-        echo "<p>{$strTotal}: <b style='color: $openedcolour;'>$monthtotal</b>";
-        echo "opened and <b style='color: $closedcolour;'>$monthtotalclosed</b> closed during $monthname $year, difference: <b>$diff</b><br />";
+        echo "<p>{$strTotal}: <strong style='color: $openedcolour;'>$monthtotal</strong> {$strOpened}. ";
+        echo "<strong style='color: $closedcolour;'>$monthtotalclosed</strong> {$strClosed}. {$strDifference}: <strong>$diff</strong><br />";
 
         $diff = ($grandtotal-$grandtotalclosed);
 
@@ -154,7 +153,8 @@ for ($year = $startyear; $year < $lastyear; $year++)
             $diff="<span style='color: $openedcolour;'>$diff</span>";
         }
 
-        echo "{$strTotal}: <b style='color: $openedcolour;'>$grandtotal</b> opened and <b style='color: $closedcolour;'>$grandtotalclosed</b> closed up to the end of $monthname $year, difference <b>$diff</b></p><br /></td></tr>\n";
+        echo "{$strGrandTotal}: <strong style='color: $openedcolour;'>$grandtotal</strong> {$strOpened}. ";
+        echo "<strong style='color: $closedcolour;'>$grandtotalclosed</strong> {$strOpened}. {$strDifference} <strong>$diff</strong></p></td></tr>\n";
     }
     if ($startmonth > 1)
     {
@@ -174,7 +174,8 @@ else
     $diff="<span style='color: $openedcolour;'>$diff</span>";
 }
 
-echo "<h3>Grand Total: <u style='color: $openedcolour;'>$grandtotal</u> incidents opened and <u style='color: $closedcolour;'>$grandtotalclosed</u> closed during the year, difference <u>$diff</u></h3>";
+echo "<h3>".($year-1)." {$strTOTALS}: <u style='color: $openedcolour;'>$grandtotal</u> {$strOpened}. ";
+echo "<u style='color: $closedcolour;'>$grandtotalclosed</u> {$strClosed}. {$strDifference}: <u>$diff</u></h3>";
 
 include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
 ?>

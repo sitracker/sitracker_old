@@ -28,7 +28,7 @@ switch ($action)
         $errors = 0;
         if (empty($name))
         {
-            $_SESSION['formerrors']['name'] = 'Name cannot be empty';
+            $_SESSION['formerrors']['name'] = sprintf($strFieldMustNotBeBlank, $strName);
             $errors++;
         }
 
@@ -45,7 +45,7 @@ switch ($action)
             if (!$result)
             {
                 $addition_errors = 1;
-                $addition_errors_string .= "<p class='error'>Addition of reseller failed</p>\n";
+                $addition_errors_string .= "<p class='error'>{$strAdditionFail}</p>\n";
             }
 
 
@@ -68,6 +68,7 @@ switch ($action)
         }
         break;
     default:
+        $title = $strAddReseller;
         include (APPLICATION_INCPATH . 'htmlheader.inc.php');
         echo show_form_errors('add_reseller');
         clear_form_errors('formerrors');

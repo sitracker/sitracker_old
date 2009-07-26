@@ -439,6 +439,7 @@ $strDetails = 'Details';
 $strDetailsAndLog = 'Details and Log';
 $strDetailsSend = 'Details sent';
 $strDidYouPasteFullURL = 'Did you paste the full URL you received in the email?';
+$strDifference = 'Difference';
 $strDisassociateSkillWithProduct = 'Disassociate skill with a product';
 $strDisable = 'Disable';
 # i.e. not available
@@ -802,6 +803,7 @@ $strIncidentsinQueue = 'Incidents in Queue';
 $strIncidentsLoggedOpenClosed = 'Incidents Logged (Open/Closed)';
 $strIncidentsLoggedToday = '%s Incidents Logged Today';
 $strIncidentsMulti = '%s Incidents';
+$strIncidentsOpenedEachDay = 'This report shows how many incidents were opened each day. Hover your mouse over each bar to see the daily figures.';
 $strIncidentsRequiringReminderByPhone = 'Incidents requiring a reminder by phone';
 # e.g. Incidents opened on 2007-12-03
 $strIncidentsVerbOnDate = 'Incidents %s on %s';

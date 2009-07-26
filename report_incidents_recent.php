@@ -17,6 +17,9 @@ require (APPLICATION_LIBPATH . 'functions.inc.php');
 
 // This page requires authentication
 require (APPLICATION_LIBPATH . 'auth.inc.php');
+
+$title = $strRecentIncidents;
+
 include (APPLICATION_INCPATH . 'htmlheader.inc.php');
 echo "<script type='text/javascript'>";
 ?>
