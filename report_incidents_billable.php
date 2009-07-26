@@ -76,6 +76,8 @@ elseif ($mode == 'report')
     $resultsite = mysql_query($sqlsite);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
 
+    $datadisplayed = false;
+
     if (mysql_num_rows($resultsite) > 0)
     {
         while ($objsite = mysql_fetch_object($resultsite))
@@ -91,12 +93,13 @@ elseif ($mode == 'report')
 
             if ($enddate != 0)
             {
-                $sql .= "AND closed <= {$enedate} ";
+                $sql .= "AND closed <= {$enddate} ";
             }
 
             $result = mysql_query($sql);
             if (mysql_error())
             {
+                debug_log ("Problem SQL: {$sql}");
                 trigger_error(mysql_error(),E_USER_WARNING);
                 return FALSE;
             }
@@ -115,10 +118,12 @@ elseif ($mode == 'report')
                     }
                 }
             }
+
             if ($used)
             {
                 if ($output == 'html')
                 {
+                    $datadisplayed = true;
                     echo "<table align='center'>";
                     echo "<tr><th colspan='3'>".site_name($objsite->site)."</th></tr>";
                     echo "<tr><th>{$strIncidentID}</th><th>{$strTitle}</th><th>{$strBillingCustomerPeriod}</th></tr>";
@@ -130,7 +135,15 @@ elseif ($mode == 'report')
     }
     else
     {
-        echo "<p align='center'>ss{$strNoResults}</p>";
+        echo "<p align='center'>{$strNoResults}</p>";
+    }
+
+    if (!$datadisplayed)
+    {
+        if ($output == 'html')
+        {
+            echo "<p align='center'>{$strNoResults}</p>";
+        }
     }
 
     if ($output == 'html')
