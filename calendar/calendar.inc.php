@@ -625,7 +625,7 @@ function draw_chart($mode, $year, $month='', $day='', $groupid='', $userid='')
     $html .= "<table align='center'><tr><td><strong>{$GLOBALS['strKey']}</strong>:</td>";
     foreach ($GLOBALS['holidaytype'] AS $htype)
     {
-        $html .= "<td>".substr($htype,0,1)." = {$htype}</td>";
+        $html .= "<td>".utf8_substr($htype,0,1)." = {$htype}</td>";
     }
     $html .= "<td>PH = {$GLOBALS['strPublicHoliday']}</td>";
     $html .= "</tr>";
