@@ -4850,6 +4850,10 @@ function dashlet_link($dashboard, $dashletid, $text='', $action='', $params='', 
     else $action = 'dashboard_display';
     if (empty($text)) $text = $GLOBALS['strUntitled'];
 
+    // Ensure the dashlet ID is always correct, 'win' gets prepended with each subpage
+    // We only need it once
+    $dashletid = 'win'.str_replace('win', '', $dashletid);
+
     // Convert refresh boolean to javascript text for boolean
     if ($refresh) $refresh = 'true';
     else $refresh = 'false';
@@ -4883,6 +4887,14 @@ function dashlet_link($dashboard, $dashletid, $text='', $action='', $params='', 
 }
 
 
+/**
+ * Wrapper function to call dashboard_*_do() within a dashlet plugin
+ * See dashlet() for more information
+ * @author Ivan Lucas
+ * @param string $context
+ * @param string $row
+ * @param string $dashboardid
+*/
 function dashboard_do($context, $row=0, $dashboardid=0)
 {
     global $DASHBOARDCOMP;
@@ -4997,6 +5009,10 @@ function show_links($origtab, $colref, $level=0, $parentlinktype='', $direction=
 }
 
 
+/**
+  * Interface for creating record 'links' (relationships)
+  * @author Ivan Lucas
+*/
 function show_create_links($table, $ref)
 {
     global $dbLinkTypes;
@@ -6787,7 +6803,7 @@ function show_edit_site($site, $mode='internal')
         plugin_do('edit_site_form');
         $html .= "</table>\n";
         $html .= "<input name='site' type='hidden' value='$site' />";
-        $html .= "<p><input name='submit' type='submit' value='{$GLOBALS['strSave']	}' /></p>";
+        $html .= "<p><input name='submit' type='submit' value='{$GLOBALS['strSave']}' /></p>";
         $html .= "</form>";
     }
     return $html;

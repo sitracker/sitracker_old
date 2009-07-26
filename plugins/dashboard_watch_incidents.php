@@ -11,7 +11,6 @@
 
 $dashboard_watch_incidents_version = 2;
 
-
 function dashboard_watch_incidents($dashletid)
 {
     global $sit, $CONFIG, $iconset;
@@ -293,7 +292,6 @@ function dashboard_watch_incidents_edit($dashletid)
             echo "<p align='center'>";
             echo dashlet_link('watch_incidents', $dashletid, $GLOBALS['strAdd'], 'save', array('editaction' => 'do_add', 'type'=>$type), false, 'dwiaddform');
             echo "</p>";
-            // echo "<p align='center'><input name='submit' type='submit' value='{$GLOBALS['strAdd']}' /></p>";
             break;
 
         case 'do_add':
@@ -309,7 +307,8 @@ function dashboard_watch_incidents_edit($dashletid)
             }
             else
             {
-                html_redirect("edit_watch_incidents.php", TRUE, $GLOBALS['strAddedSuccessfully']);
+                echo "<p>{$GLOBALS['strAddedSuccessfully']}</p>";
+                echo dashlet_link('watch_incidents', $dashletid, $GLOBALS['strBackToList'], '', '', TRUE);
             }
             break;
         case 'delete':
@@ -325,7 +324,8 @@ function dashboard_watch_incidents_edit($dashletid)
             }
             else
             {
-                html_redirect("edit_watch_incidents.php", TRUE);
+                echo "<p>{$GLOBALS['strSuccess']}</p>";
+                echo dashlet_link('watch_incidents', $dashletid, $GLOBALS['strBackToList'], '', '', TRUE);
             }
             break;
         default:
