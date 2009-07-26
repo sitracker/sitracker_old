@@ -76,7 +76,7 @@ if (empty($displayid))
     echo "<h2>".icon('email', 32)." {$CONFIG['email_address']}: {$strInbox}</h2>";
     if ($CONFIG['enable_inbound_mail'] == 'disabled')
     {
-        echo "<p class='warning'>Inbound email is disabled in your SiT configuration</p>";
+        echo "<p class='warning'>{$strInboundEmailIsDisabled}</p>";
     }
 
     echo "<p align='center'>{$strIncomingEmailText}.  <a href='{$_SERVER['PHP_SELF']}'>{$strRefresh}</a></p>";
@@ -180,7 +180,7 @@ if (empty($displayid))
                 // $url = "incident_details.php?id={$incoming->id}&amp;win=incomingview";
                 $url = "inbox.php?id={$incoming->id}";
                 echo "<a href=\"{$url}\" id='update{$incoming->updateid}' class='info'";
-                echo " title='View and lock this held e-mail'>";
+                echo " title='{$strViewAndLockHeldEmail}'>";
                 if (!empty($incoming->incident_id)) echo icon('support',16) . ' ';
                 echo htmlentities($incoming->subject,ENT_QUOTES, $GLOBALS['i18ncharset']);
                 if (!empty($update->bodytext)) echo '<span>'.parse_updatebody(truncate_string($update->bodytext,1024)).'</span>';

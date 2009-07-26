@@ -355,7 +355,7 @@ elseif ($action == 'findcontact')
         if (mysql_num_rows($result)>0)
         {
             $html = "<h3>{$strCustomers}</h3>\n";
-            $html .= "<p align='center'>This list shows customers that matched your search, if site-support is available you can add incidents for the site.</p>";
+            $html .= "<p align='center'>{$strThisListShowsCustomers}</p>";
             $html .= "<table align='center'>";
             $html .= "<tr>";
             $html .= "<th>&nbsp;</th>";
@@ -412,7 +412,7 @@ elseif ($action=='incidentform')
     {
         if (form.incidenttitle.value == '')
         {
-            alert("You must enter an incident title.");
+            alert(strYouMustEnterIncidentTitle);
             form.incidenttitle.focus( );
             return false;
         }
@@ -630,7 +630,7 @@ elseif ($action == 'assign')
         if ($contactid == 0)
         {
             $errors = 1;
-            $error_string .= "You must select a contact";
+            $error_string .= "{$strYouMustSelectAcontact}";
         }
 
         // check for blank title
@@ -649,13 +649,13 @@ elseif ($action == 'assign')
         if ($type == '')
         {
             $errors = 1;
-            $error_string .= "Incident type was blank";
+            $error_string .= "{$strIncidentTypeWasBlank}";
         }
 
         if ($type == 'free' AND $servicelevel == '' )
         {
             $errors++;
-            $error_string .= "You must select a service level";
+            $error_string .= "{$strYouMustSelectAserviceLevel}";
         }
 
         if ($errors == 0)

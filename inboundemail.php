@@ -313,7 +313,7 @@ if ($emails > 0)
 
                 if (is_writable($fa_dir))
                 {
-                    if ($CONFIG['debug']) debug_log("Writing attachment to disk: {$fa_dir}{$fileid}");
+                    if ($CONFIG['debug']) debug_log("{$strWritingAttachmentToDisk}: {$fa_dir}{$fileid}");
                     $fwp = fopen($fa_dir.$fileid, 'a');
                     fwrite($fwp, $data);
                     fclose($fwp);
@@ -333,7 +333,7 @@ if ($emails > 0)
         if (!empty($results['Encoding']) AND strcasecmp('UTF-8', $results['Encoding']) !== 0)
         {
             $message = mb_convert_encoding($message, "UTF-8", strtoupper($results['Encoding']));
-            if ($CONFIG['debug']) debug_log("Converted message encoding from {$results['Encoding']} to UTF-8");
+            if ($CONFIG['debug']) debug_log("{$strConvertedMessageEncodingFrom} {$results['Encoding']} to UTF-8");
         }
 
         //** BEGIN UPDATE INCIDENT **//

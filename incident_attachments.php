@@ -105,7 +105,7 @@ if ($_FILES['attachment']['name'] != '')
         }
         else
         {
-            echo "An error occurred while uploading <strong>{$_FILES['attachment']['name']}</strong>";
+            echo "{$strErrorUploading} <strong>{$_FILES['attachment']['name']}</strong>";
         }
 
         // Debug
@@ -284,7 +284,7 @@ if (file_exists($incident_attachment_fspath))
     $temparray = list_dir($incident_attachment_fspath, 0);
     if (count($temparray) == 0)
     {
-        echo "<p class='info'>No files<p>";
+        echo "<p class='info'>{$strNoFiles}<p>";
     }
     else
     {
@@ -355,7 +355,7 @@ if (file_exists($incident_attachment_fspath))
                 {
                     $updatelink = readlink($dir);
                     $updateid = substr($updatelink,strrpos($updatelink,$fsdelim)+1,strlen($updatelink));
-                    echo "<p>These files arrived by <a href='{$CONFIG['attachment_webpath']}{$incidentid}/{$dirname}/mail.eml'>email</a>, jump to the appropriate <a href='incident_details.php?id={$incidentid}#$updateid'>entry in the log</a></p>";
+                    echo "<p>{$strTheseFilesArrivedBy} <a href='{$CONFIG['attachment_webpath']}{$incidentid}/{$dirname}/mail.eml'>{$strEmail}</a>, <a href='incident_details.php?id={$incidentid}#$updateid'>{$strJumpToEntryLog}</a></p>";
                 }
                 foreach ($tempfarray as $fvalue)
                 {
