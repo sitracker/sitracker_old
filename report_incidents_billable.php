@@ -82,7 +82,6 @@ elseif ($mode == 'report')
     {
         while ($objsite = mysql_fetch_object($resultsite))
         {
-
             $used = false;
 
             $sql = "SELECT i.* FROM `{$GLOBALS['dbIncidents']}` AS i, `{$GLOBALS['dbContacts']}` AS c WHERE c.id = i.contact AND c.siteid = {$objsite->site} ";
@@ -99,7 +98,6 @@ elseif ($mode == 'report')
             $result = mysql_query($sql);
             if (mysql_error())
             {
-                debug_log ("Problem SQL: {$sql}");
                 trigger_error(mysql_error(),E_USER_WARNING);
                 return FALSE;
             }
