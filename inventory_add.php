@@ -45,7 +45,7 @@ else
 {
     if (!isset($_POST['name']))
     {
-        echo "<p class='error'>{$strYouMissedARequiredField}: {$strName}</p>";
+        echo "<p class='error'>".sprintf($strFieldMustNotBeBlank, $strName)."</p>";
     }
     echo "<h2>".icon('add', 32)." {$strAdd}</h2>";
     $siteid = intval($_GET['site']);

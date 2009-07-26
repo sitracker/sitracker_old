@@ -1598,7 +1598,6 @@ $strYesterday = 'Ieri';
 $strYou = 'Tu';
 $strYouShouldNowDefineSubstituteEngineers = 'Dovresti definire un tecnico sostitutivo per ogni competenza';
 $strYouACurrentlyNotAccepting = 'Attualmente non accetti segnalazioni. Puoi cambiare questa condizione al fondo della pagina principale.';
-$strYouMissedARequiredField = 'Hai saltato un campo richiesto';
 $strYouMustEnterYourNewPasswordTwice = 'Devi inserire la nuova password due volte';
 $strYourClosedIncidents = 'Le tue segnalazioni chiuse';
 $strYourCurrentIncidents = 'Le tue attuali segnalazioni';

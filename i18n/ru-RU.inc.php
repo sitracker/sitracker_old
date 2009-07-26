@@ -1488,7 +1488,6 @@ $strYesterday = 'Вчера';
 $strYou = 'Вас';
 $strYouShouldNowDefineSubstituteEngineers = 'Теперь вы должны определить заменщающего инженера для каждого навыка';
 $strYouACurrentlyNotAccepting = 'Вы в настоящее время не принимаете инциденты. Вы можете изменить это в нижней части главной страницы.';
-$strYouMissedARequiredField = 'Вы пропустили обязательное поле';
 $strYouMustEnterYourNewPasswordTwice = 'Вы должны ввести ваш новый пароль дважды';
 $strYourClosedIncidents = 'Ваши закрытые инциденты';
 $strYourCurrentIncidents = 'Ваши текущие инциденты';

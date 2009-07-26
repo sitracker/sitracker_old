@@ -1749,7 +1749,6 @@ $strYesterday = 'I går';
 $strYou = 'Dig';
 $strYouShouldNowDefineSubstituteEngineers = 'Du skal nu definere en afløser tekniker for hver færdighed';
 $strYouACurrentlyNotAccepting = 'Du accepterer i øjeblikket ingen hændelser. Du kan ændre dette i bunden af din hoved side.';
-$strYouMissedARequiredField = 'Du mangler et påkrævet feldt';
 $strYouMustEnterYourNewPasswordTwice = 'Du skal angive din adgangskode 2 gange';
 $strYouMustSelectAmaintenanceContract = 'Du skal vælge en kontrakt';
 $strYouMustSelectAsupportContact = 'Du skal vælge en support kontakt';

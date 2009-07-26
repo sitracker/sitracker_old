@@ -59,7 +59,7 @@ else
     if (empty($rolename))
     {
         $errors++;
-        $_SESSION['formerrors']['role_add']['rolename']= "{$strYouMissedARequiredField}</p>\n";
+        $_SESSION['formerrors']['role_add']['rolename']= sprintf($strFieldMustNotBeBlank, $strName);
     }
     
     $sql = "SELECT * FROM `{$dbRoles}` WHERE rolename = '{$rolename}'";

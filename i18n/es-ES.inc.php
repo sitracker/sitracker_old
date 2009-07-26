@@ -1223,7 +1223,6 @@ $strYesterday = 'Ayer';
 $strYou = 'Usted';
 $strYouShouldNowDefineSubstituteEngineers = 'Ahora deberá definir un ingeniero substituto para cada una de las habilidades';
 $strYouACurrentlyNotAccepting = 'Usted no está aceptando incidentes actualmente. Puede cambiar esto en el pie de la página principal';
-$strYouMissedARequiredField = 'No informó un campo requerido';
 $strYouMustEnterYourNewPasswordTwice = 'Debe introducir su nueva contraseña dos vces';
 $strYourClosedIncidents = 'Sus incidentes cerrados';
 $strYourCurrentIncidents = 'Sus incidentes actuales';

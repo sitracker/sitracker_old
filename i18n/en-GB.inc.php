@@ -1879,7 +1879,6 @@ $strYesterday = 'Yesterday';
 $strYou = 'You';
 $strYouShouldNowDefineSubstituteEngineers = 'You should now define a substitute engineer for each skill';
 $strYouACurrentlyNotAccepting = 'You are currently not accepting incidents. You can change this at the bottom of the main page.';
-$strYouMissedARequiredField = 'You missed a required field';
 $strYouMustEnterYourNewPasswordTwice = 'You must enter your new password twice';
 $strYouMustSelectAmaintenanceContract = 'You must select a maintenance contract';
 $strYouMustSelectAsupportContact = 'You must select a support contact';

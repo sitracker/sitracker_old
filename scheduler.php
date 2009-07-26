@@ -420,6 +420,7 @@ switch ($_REQUEST['mode'])
             echo "</table>\n";
 
             // Debug time issues
+            // Temporary debugging output, doesn't need i18n
             if ($CONFIG['debug'])
             {
                 echo "<h2>Debug Time Issues</h2>";

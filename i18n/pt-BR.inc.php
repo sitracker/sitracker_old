@@ -1147,7 +1147,6 @@ $strYearView = 'Ver Ano';
 $strYes = 'Sim';
 $strYesterday = 'Ontem';
 $strYou = 'Você';
-$strYouMissedARequiredField = 'Você esqueceu um campo obrigatório';
 $strYouMustEnterYourNewPasswordTwice = 'Você deve digitar sua nova senha duas vezes';
 $strYourClosedIncidents = 'Incidentes fechados por você';
 $strYourCurrentIncidents = 'Seus Incidentes Atuais';

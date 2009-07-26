@@ -1604,7 +1604,6 @@ $strYesterday = 'strYesterday';
 $strYou = 'strYou';
 $strYouShouldNowDefineSubstituteEngineers = 'strYouShouldNowDefineSubstituteEngineers';
 $strYouACurrentlyNotAccepting = 'strYouACurrentlyNotAccepting';
-$strYouMissedARequiredField = 'strYouMissedARequiredField';
 $strYouMustEnterYourNewPasswordTwice = 'strYouMustEnterYourNewPasswordTwice';
 $strYourClosedIncidents = 'strYourClosedIncidents';
 $strYourCurrentIncidents = 'strYourCurrentIncidents';

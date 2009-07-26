@@ -528,7 +528,7 @@ else
         !preg_match('/[a-z0-9]+/i', $bodytext)))
     {
         //FIXME 3.40 make this two errors and i18n for
-        $_SESSION['formerrors']['update'][] = $strYouMissedARequiredField;
+        $_SESSION['formerrors']['update'][] = sprintf($strFieldMustNotBeBlank, $strUpdate);
         html_redirect($_SERVER['PHP_SELF']."?id={$id}", FALSE);
         exit;
     }

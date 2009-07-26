@@ -1465,7 +1465,6 @@ $strYesterday = 'Hier';
 $strYou = 'Vous';
 $strYouShouldNowDefineSubstituteEngineers = 'Vous devriez maintenant définir un ingénieur de remplacement pour chaque compétence';
 $strYouACurrentlyNotAccepting = 'Vous n\'acceptez aucun Ticket pour le moment. Vous pouvez modifier ceci tout en bas de la page principale.';
-$strYouMissedARequiredField = 'Il manque un champ obligatoire';
 $strYouMustEnterYourNewPasswordTwice = 'Vous devez entrer DEUX fois votre nouveau mot de passe';
 $strYourClosedIncidents = 'Vos Tickets Clôturés';
 $strYourCurrentIncidents = 'Vos Tickets en cours';
