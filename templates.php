@@ -350,14 +350,22 @@ elseif ($action == "edit")
         if (!is_array($required)) echo "<p class='info'>{$strSomeOfTheseIdentifiers}</p>";
 
         echo "<dl>";
+
         foreach ($ttvararray AS $identifier => $ttvar)
         {
             $showtvar = FALSE;
-            if (empty($ttvar['requires']) AND empty($ttvar['show']))
+
+            // if we're a multiply-defined variable, get the actual data
+            if (!isset($ttvar['name']) AND !isset($ttvar['description']))
+            {
+                $ttvar = $ttvar[0];
+            }
+
+            if (empty($ttvar['requires']) AND $ttvar['show'] !== FALSE)
             {
                 $showtvar = TRUE;
             }
-            elseif ($ttvar['show'] == FALSE)
+            elseif ($ttvar['show'] === FALSE)
             {
                 $showtvar = FALSE;
             }
@@ -380,6 +388,7 @@ elseif ($action == "edit")
                 echo "<br />";
             }
         }
+
         echo "</dl>";
         plugin_do('emailtemplate_list');
         echo "</table>\n";
