@@ -26,6 +26,9 @@ class Form
         $this->tableName = $tableName;
         $this->type = $type;
         $this->formheading = $formheading;
+        
+        $this->returnURLSuccess = $_SERVER['PHP_SELF'];
+        $this->returnURLFailure = $_SERVER['PHP_SELF'];
     }
 
 
