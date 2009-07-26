@@ -338,7 +338,6 @@ $strContractsExpiredXdaysAgo = 'Contracts that expired up to %s days ago';
 $strContractsExpiringWithinXdays = 'Contracts expiring within %s days';
 $strContractsSLA = 'The service level of the contract';
 $strControlPanel = 'Control Panel';
-$strConvertedMessageEncodingFrom = 'Converted message encoding from';
 $strComplete = 'Complete';
 $strCompleted = 'Completed';
 $strCompletion = 'Completion';
@@ -1854,8 +1853,6 @@ $strWorkingFromHome = 'Working From Home';
 $strWorkStatus = 'Work Status';
 $strWebsite = 'Website';
 $strWithheld = 'Withheld';
-$strWritingAttachmentToDisk = 'Writing attachment to disk';
-
 $strXDays = '%s days';
 $strXIncidentsLoggedViaPortal = '%s Incidents Logged via the Portal';
 $strXIncidentsLeft = '%s Incidents Left';
