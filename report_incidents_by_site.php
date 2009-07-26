@@ -46,7 +46,7 @@ if (empty($_REQUEST['mode']))
     echo "<tr><th align='right'>{$strOutput}:</th>";
     echo "<td width='400'>";
     echo "<label><input type='checkbox' name='showsitetotals' value='yes' /> {$strShowSiteTotals}</label><br />";
-    echo "<label><input type='checkbox' name='showtotals' value='yes' />{$strShowTotals}</label><br /><br />";
+    echo "<label><input type='checkbox' name='showtotals' value='yes' /> {$strShowTotals}</label><br /><br />";
     echo "<select name='output'>";
     echo "<option value='screen'>{$strScreen}</option>";
     echo "<option value='csv'>{$strCSVfile}</option>";

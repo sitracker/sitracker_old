@@ -21,13 +21,16 @@
 
 
 $permission = 37; // Run Reports
-$title = 'Yearly Engineer/Incident Report';
+
 require ('core.php');
 require (APPLICATION_LIBPATH . 'functions.inc.php');
 
 // This page requires authentication
 require (APPLICATION_LIBPATH . 'auth.inc.php');
 
+$title = $strIncidentsByEngineer;
+
+// External variables
 $startdate = cleanvar($_POST['startdate']);
 $enddate = cleanvar($_POST['enddate']);
 $type = cleanvar($_POST['type']);
@@ -330,13 +333,13 @@ elseif ($_REQUEST['mode'] == 'report')
     {
         $incarray = array_values(array_diff($inc, $exc));  // don't include anything excluded
     }
-    
+
     $includecount = count($incarray);
     if ($includecount >= 1)
     {
         // $html .= "<strong>Include:</strong><br />";
         $incsql .= "(";
-	    $incsql_esc .= "(";
+        $incsql_esc .= "(";
         for ($i = 0; $i < $includecount; $i++)
         {
             // $html .= "<strong>Include:</strong><br />";

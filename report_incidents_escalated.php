@@ -20,6 +20,7 @@ require ('core.php');
 include (APPLICATION_LIBPATH . 'functions.inc.php');
 require (APPLICATION_LIBPATH . 'auth.inc.php');
 
+$title = $strExternalEngineerCallDistribution;
 
 include (APPLICATION_INCPATH . 'htmlheader.inc.php');
 
