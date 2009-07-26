@@ -21,6 +21,7 @@ $submit = cleanvar($_REQUEST['submit']);
 
 if (empty($submit))
 {
+    $title = $strAddRole;
     include (APPLICATION_INCPATH . 'htmlheader.inc.php');
     echo show_form_errors('role_add');
     clear_form_errors('role_add');

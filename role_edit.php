@@ -23,6 +23,7 @@ $submit = cleanvar($_REQUEST['submit']);
 
 if (empty($submit))
 {
+    $title = $strEditRole;
     include (APPLICATION_INCPATH . 'htmlheader.inc.php');
 
     echo show_form_errors('role_edit');
