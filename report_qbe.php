@@ -126,7 +126,7 @@ elseif ($_REQUEST['mode'] == 'selectfields')
     echo "</td></tr>";
     echo "</table>";
     echo "<p align='center'>";
-    echo "<input type='hidden' name='table1' value='{$_POST['table1']}' />";
+    echo "<input type='hidden' name='table1' value='".cleanvar($_POST['table1'])."' />";
     echo "<input type='hidden' name='mode' value='report' />";
     echo "<input type='submit' value='{$strRunReport}' />";
     echo "</p>";
