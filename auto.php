@@ -784,8 +784,7 @@ function saction_ldapSync()
                         for ($i = 0; $i < $attributes[$CONFIG['ldap_grpattributegrp']]['count']; $i++)
                         {
                             $member = $attributes[$CONFIG['ldap_grpattributegrp']][$i];
-
-                        	if (endsWith($member, $CONFIG['ldap_base']) AND $CONFIG['ldap_grpfulldn'])
+                        	if (endsWith(strtolower($member), strtolower($CONFIG['ldap_user_base'])) AND $CONFIG['ldap_grpfulldn'])
                             {
                                 $users[$member] = $member;
                             }
@@ -821,7 +820,34 @@ function saction_ldapSync()
                 if ($e)
                 {
                     $user_attributes = ldap_get_attributes($ldap_conn, $e);
-                	
+
+                    if (isset($CONFIG['ldap_logindisabledattribute']))
+                    {
+                    	// Directory supports disabling
+                        if ($sit_db_users[$user_attributes[$CONFIG['ldap_userattribute']][0]]->status == USERSTATUS_ACCOUNT_DISABLED)
+                        {
+                        	// User disabled in SIT check if needs renameding
+                            if (!empty($user_attributes[$CONFIG['ldap_logindisabledattribute']]))
+                            {
+                            	if (strtolower($user_attributes[$CONFIG['ldap_logindisabledattribute']][0]) != strtolower($CONFIG['ldap_logindisabledvalue']))
+                                {
+                                	// We want to enable
+                                    $sit_db_users[$user_attributes[$CONFIG['ldap_userattribute']][0]]->status = $CONFIG['ldap_default_user_status'];
+                                    $sit_db_users[$user_attributes[$CONFIG['ldap_userattribute']][0]]->edit();
+                                }
+                            }
+                        }
+                        elseif (!empty($user_attributes[$CONFIG['ldap_logindisabledattribute']]))
+                        {
+                        	// User not disabled in SiT though attribite is available to us
+                            if (strtolower($user_attributes[$CONFIG['ldap_logindisabledattribute']][0]) == strtolower($CONFIG['ldap_logindisabledvalue']))
+                            {
+                                // We want to disable
+                                 $sit_db_users[$user_attributes[$CONFIG['ldap_userattribute']][0]]->disable();
+                            }
+                        }
+                    }
+                    
                     $userid = 0;
                     if (!empty($sit_db_users[$user_attributes[$CONFIG['ldap_userattribute']][0]]))
                     {
@@ -831,6 +857,7 @@ function saction_ldapSync()
                     
                     if (!ldap_storeDetails('', $userid, TRUE, TRUE, $ldap_conn, $user_attributes))
                     {
+                        
                     	trigger_warning ("Failed to store details for userid {$userid}");
                     }
                 }
@@ -853,7 +880,7 @@ function saction_ldapSync()
             $contacts = array();
             if (!empty($CONFIG["ldap_customer_group"]))
             {
-                debug-log ("CONTACTS");
+                debug_log ("CONTACTS");
                 $sr = ldap_search($ldap_conn, $CONFIG["ldap_customer_group"], $filter, $attributesToGet);
                 if (ldap_count_entries($ldap_conn, $sr) != 1)
                 {
@@ -866,7 +893,7 @@ function saction_ldapSync()
                     for ($i = 0; $i < $attributes[$CONFIG['ldap_grpattributegrp']]['count']; $i++)
                     {
                         $member = $attributes[$CONFIG['ldap_grpattributegrp']][$i];
-                        if (endsWith($member, $CONFIG['ldap_base']) AND $CONFIG['ldap_grpfulldn'])
+                        if (endsWith(strtolower($member), strtolower($CONFIG['ldap_user_base'])) AND $CONFIG['ldap_grpfulldn'])
                         {
                             $contacts[$member] = $member;
                         }
@@ -899,6 +926,33 @@ function saction_ldapSync()
                     if ($e)
                     {
                         $contact_attributes = ldap_get_attributes($ldap_conn, $e);
+                        
+                        if (isset($CONFIG['ldap_logindisabledattribute']))
+                        {
+                            // Directory supports disabling
+                            if ($sit_db_contacts[$contact_attributes[$CONFIG['ldap_userattribute']][0]]->status == 'false')
+                            {
+                                // User disabled in SIT check if needs renameding
+                                if (!empty($contact_attributes[$CONFIG['ldap_logindisabledattribute']]))
+                                {
+                                    if (strtolower($contact_attributes[$CONFIG['ldap_logindisabledattribute']][0]) != strtolower($CONFIG['ldap_logindisabledvalue']))
+                                    {
+                                        // We want to enable
+                                        $sit_db_contacts[$contact_attributes[$CONFIG['ldap_userattribute']][0]]->active = 'true';
+                                        $sit_db_contacts[$contact_attributes[$CONFIG['ldap_userattribute']][0]]->edit();
+                                    }
+                                }
+                            }
+                            elseif (!empty($contact_attributes[$CONFIG['ldap_logindisabledattribute']]))
+                            {
+                                // User not disabled in SiT though attribite is available to us
+                                if (strtolower($contact_attributes[$CONFIG['ldap_logindisabledattribute']][0]) == strtolower($CONFIG['ldap_logindisabledvalue']))
+                                {
+                                    // We want to disable
+                                     $sit_db_contacts[$contact_attributes[$CONFIG['ldap_userattribute']][0]]->disable();
+                                }
+                            }
+                        }
                         
                         $contactid = 0;
                         if (!empty($sit_db_contacts[$contact_attributes[$CONFIG['ldap_userattribute']][0]]))

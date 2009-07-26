@@ -114,7 +114,7 @@ $CFGCAT['ldap'] = array('use_ldap',
                         'ldap_security',
                         'ldap_bind_user',
                         'ldap_bind_pass',
-                        'ldap_dn_base',
+                        'ldap_user_base',
                         'ldap_default_user_status',
                         'ldap_admin_group',
                         'ldap_manager_group',
@@ -467,8 +467,8 @@ $CFGVAR['ldap_default_user_status']['title'] = 'LDAP User status';
 $CFGVAR['ldap_default_user_status']['help'] = 'The initial status that will be given to LDAP users';
 $CFGVAR['ldap_default_user_status']['type'] = 'userstatusselect';
 
-$CFGVAR['ldap_dn_base']['title'] = 'LDAP Base DN';
-$CFGVAR['ldap_dn_base']['help'] = 'The LDAP Base DN for user lookups e.g. <code>ou=people,ou=sitracker,o=org</code>';
+$CFGVAR['ldap_user_base']['title'] = 'LDAP Base DN';
+$CFGVAR['ldap_user_base']['help'] = 'The LDAP Base DN for user lookups e.g. <code>ou=people,ou=sitracker,o=org</code>';
 
 $CFGVAR['ldap_host']['title'] = 'LDAP Host Name';
 $CFGVAR['ldap_host']['help'] = "This should be your <abbr title='Lightweight Directory Access Protocol'>LDAP</abbr> IP address or hostname, e.g.: ldap.example.com";

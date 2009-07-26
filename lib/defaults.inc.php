@@ -298,7 +298,7 @@ $CONFIG['ldap_bind_pass'] = "";
 $CONFIG['ldap_security'] = 'NONE';
 
 // The LDAP Base DN for user lookups
-$CONFIG['ldap_dn_base'] = "ou=Users,dc=example,dc=com";
+$CONFIG['ldap_user_base'] = "ou=Users,dc=example,dc=com";
 
 // Default user values
 // LDAP user status (1 = In Office)

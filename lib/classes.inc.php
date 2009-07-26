@@ -13,13 +13,31 @@ class Holiday {
 }
 
 
+/**
+ * Highest level within SiT! all entities within SiT! should extend from this class 
+ * this provides a common interface exposing values and functiosn which are common across all entities
+ * @author Paul Heaney
+ */
+abstract class SitEntity {
+    var $id;
+        
+    /**
+     * Adds the entity to SiT
+     */
+    abstract function add();
+    
+    /**
+     * Edits an existing entity in sit
+     */
+    abstract function edit();	
+}
+
 
 /** 
  * Base class for all types of people, this contains the core attributes common for all people
  * @author Paul Heaney
  */
-class Person {
-    var $id;
+abstract class Person extends SitEntity {
     var $username;
     var $password;
     var $jobtitle;
@@ -132,7 +150,7 @@ class User extends Person{
      * @author Paul Heaney
      * @return bool True if updated sucessfully false otherwise
      */
-    function update()
+    function edit()
     {
         global $now;
         $toReturn = false;
@@ -369,7 +387,7 @@ class Contact extends Person {
      * @author Paul Heaney
      * @return bool. true on sucess, false otherwise
      */
-    function update()
+    function edit()
     {
         global $now;
 
@@ -445,9 +463,9 @@ class Contact extends Person {
     function disable()
     {
         $toReturn = true;
-        if (!empty($this->id) AND $this->status != 0)
+        if (!empty($this->id))
         {
-           $sql = "UPDATE `{$GLOBALS['dbContacts']}` SET active = 0'false'WHERE id = {$this->id}";
+           $sql = "UPDATE `{$GLOBALS['dbContacts']}` SET active = 'false' WHERE id = {$this->id}";
         
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);

@@ -27,16 +27,11 @@ define ('LDAP_USERTYPE_USER',3);
 define ('LDAP_USERTYPE_CUSTOMER',4);
 
 // LDAP ATTRIBUTES
-/*
-$attributes = array("realname","forenames","jobtitle","email","mobile",
-                        "surname", "fax","phone");
- */
-
 define ('LDAP_EDIR_SURNAME', 'sn');
 define ('LDAP_EDIR_FORENAMES', 'givenName');
 define ('LDAP_EDIR_REALNAME', 'fullName');
 define ('LDAP_EDIR_JOBTITLE', 'title');
-define ('LDAP_EDIR_EMAILADDRESS', 'mail');
+define ('LDAP_EDIR_EMAIL', 'mail');
 define ('LDAP_EDIR_MOBILE', 'mobile');
 define ('LDAP_EDIR_TELEPHONE', 'telephoneNumber');
 define ('LDAP_EDIR_FAX', 'facsimileTelephoneNumber');
@@ -45,7 +40,7 @@ define ('LDAP_EDIR_GRPONUSER', TRUE); // Is group membership contained on the us
 define ('LDAP_EDIR_GRPFULLDN', TRUE); // Is the membership stored as a full DN or just the CN? ONLY Used when checking group
 define ('LDAP_EDIR_USERATTRIBUTE', 'cn'); // Attribute to locate user with
 define ('LDAP_EDIR_USEROBJECTTYPE', 'inetOrgPerson');
-define ('LDAP_EDIR_USERGRPTYPE', 'groupOfNames');
+define ('LDAP_EDIR_GRPOBJECTTYPE', 'groupOfNames');
 define ('LDAP_EDIR_GRPATTRIBUTEUSER', 'groupMembership');  // On user
 define ('LDAP_EDIR_GRPATTRIBUTEGRP', 'member');  // On group
 define ('LDAP_EDIR_ADDRESS1', 'street');
@@ -54,13 +49,13 @@ define ('LDAP_EDIR_COUNTY', 'st'); // State in the US
 define ('LDAP_EDIR_POSTCODE', 'postalCode');
 define ('LDAP_EDIR_COURTESYTITLE', 'generationQualifier');
 define ('LDAP_EDIR_LOGINDISABLEDATTRIBUTE', 'loginDisabled');
-define ('LDAP_EDIR_LOGINDISABLEVALUE', 'true');  // The value when login is disabled
+define ('LDAP_EDIR_LOGINDISABLEDVALUE', 'true');  // The value when login is disabled
 
 define ('LDAP_AD_SURNAME', 'sn');
 define ('LDAP_AD_FORENAMES', 'givenName');
 define ('LDAP_AD_REALNAME', 'displayName');
 define ('LDAP_AD_JOBTITLE', 'title');
-define ('LDAP_AD_EMAILADDRESS', 'mail');
+define ('LDAP_AD_EMAIL', 'mail');
 define ('LDAP_AD_MOBILE', 'mobile');
 define ('LDAP_AD_TELEPHONE', 'telephoneNumber');
 define ('LDAP_AD_FAX', 'facsimileTelephoneNumber');
@@ -69,7 +64,7 @@ define ('LDAP_AD_GRPONUSER', TRUE); // Is group membership contained on the user
 define ('LDAP_AD_GRPFULLDN', TRUE); // Is the membership stored as a full DN or just the CN?
 define ('LDAP_AD_USERATTRIBUTE', 'sAMAccountName'); // Attribute to locate user with
 define ('LDAP_AD_USEROBJECTTYPE', 'user');
-define ('LDAP_AD_USERGRPTYPE', 'group');
+define ('LDAP_AD_GRPOBJECTTYPE', 'group');
 define ('LDAP_AD_GRPATTRIBUTEUSER', 'memberOf'); // On User
 define ('LDAP_AD_GRPATTRIBUTEGRP', 'member');  // On group
 define ('LDAP_AD_ADDRESS1', 'streetAddress');
@@ -77,15 +72,21 @@ define ('LDAP_AD_CITY', 'l');
 define ('LDAP_AD_COUNTY', 'st');
 define ('LDAP_AD_POSTCODE', 'postalCode');
 define ('LDAP_AD_COURTESYTITLE', 'generationQualifier'); // Doesn't seem to have'
-define ('LDAP_AD_LOGINDISABLEDATTRIBUTE', 'loginDisabled');  // CHECK
-define ('LDAP_AD_LOGINDISABLEVALUE', 'true');  // The value when login is disabled 
+/* 
+ * NOTE: Given the way LoginDisabled works in AD this will only work in a limited number of circumstances
+ * It will only work on NORMAL_ACCOUNT + ACCOUNTDISABLED
+ * http://support.microsoft.com/kb/305144
+ * TODO add support for a mask to handle this
+ */
+define ('LDAP_AD_LOGINDISABLEDATTRIBUTE', 'userAccountControl');  // CHECK
+define ('LDAP_AD_LOGINDISABLEDVALUE', '514');  // This is soley NORMAL_ACCOUNT + ACCOUNTDISABLED   
 
 // TODO check
 define ('LDAP_OPENLDAP_SURNAME', 'sn');
 define ('LDAP_OPENLDAP_FORENAMES', 'givenName');
 define ('LDAP_OPENLDAP_REALNAME', 'cn');
 define ('LDAP_OPENLDAP_JOBTITLE', 'title');
-define ('LDAP_OPENLDAP_EMAILADDRESS', 'mail');
+define ('LDAP_OPENLDAP_EMAIL', 'mail');
 define ('LDAP_OPENLDAP_MOBILE', 'mobile');
 define ('LDAP_OPENLDAP_TELEPHONE', 'telephoneNumber');
 define ('LDAP_OPENLDAP_FAX', 'facsimileTelephoneNumber');
@@ -94,7 +95,7 @@ define ('LDAP_OPENLDAP_GRPONUSER', FALSE); // Is group membership contained on t
 define ('LDAP_OPENLDAP_GRPFULLDN', FALSE); // Is the membership stored as a full DN or just the CN?
 define ('LDAP_OPENLDAP_USERATTRIBUTE', 'uid'); // Attribute to locate user with
 define ('LDAP_OPENLDAP_USEROBJECTTYPE', 'inetOrgPerson');
-define ('LDAP_OPENLDAP_USERGRPTYPE', 'posixGroup');
+define ('LDAP_OPENLDAP_GRPOBJECTTYPE', 'posixGroup');
 // Not LDAP_OPENLDAP_USERGROUPUSER not present as users dont store groups membership
 define ('LDAP_OPENLDAP_GRPATTRIBUTEGRP', 'memberUid'); // On group
 define ('LDAP_OPENLDAP_ADDRESS1', 'postalAddress');
@@ -103,72 +104,49 @@ define ('LDAP_OPENLDAP_COUNTY', 'st'); // NOT PRESENT all in one attribute
 define ('LDAP_OPENLDAP_POSTCODE', 'postalCode'); // NOT PRESENT all in one attribute
 define ('LDAP_OPENLDAP_COURTESYTITLE', 'personalTitle');
 
+/*  You need to uncomment and adjust these values if you intend to use custom mapping
+// TODO move these to a config option 
+define ('LDAP_CUSTOM_SURNAME', 'sn2");
+define ('LDAP_CUSTOM_FORENAMES', 'givenName');
+define ('LDAP_CUSTOM_REALNAME', 'cn');
+define ('LDAP_CUSTOM_JOBTITLE', 'title');
+define ('LDAP_CUSTOM_EMAIL', 'mail');
+define ('LDAP_CUSTOM_MOBILE', 'mobile');
+define ('LDAP_CUSTOM_TELEPHONE', 'telephoneNumber');
+define ('LDAP_CUSTOM_FAX', 'facsimileTelephoneNumber');
+define ('LDAP_CUSTOM_DESCRIPTION', 'description');
+define ('LDAP_CUSTOM_GRPONUSER', FALSE); // Is group membership contained on the user (more optimal) 
+define ('LDAP_CUSTOM_GRPFULLDN', FALSE); // Is the membership stored as a full DN or just the CN?
+define ('LDAP_CUSTOM_USERATTRIBUTE', 'uid'); // Attribute to locate user with
+define ('LDAP_CUSTOM_USEROBJECTTYPE', 'inetOrgPerson');
+define ('LDAP_CUSTOM_GRPOBJECTTYPE', 'posixGroup');
+// Not LDAP_CUSTOM_USERGROUPUSER not present as users dont store groups membership
+define ('LDAP_CUSTOM_GRPATTRIBUTEGRP', 'memberUid'); // On group
+define ('LDAP_CUSTOM_ADDRESS1', 'postalAddress');
+define ('LDAP_CUSTOM_CITY', 'l');
+define ('LDAP_CUSTOM_COUNTY', 'st'); // NOT PRESENT all in one attribute
+define ('LDAP_CUSTOM_POSTCODE', 'postalCode'); // NOT PRESENT all in one attribute
+define ('LDAP_CUSTOM_COURTESYTITLE', 'personalTitle');
+*/
+
 $CONFIG['ldap_type'] = strtoupper($CONFIG['ldap_type']);
 
-if ($CONFIG['use_ldap'] AND $CONFIG['ldap_type'] != 'CUSTOM')
-{
-    $CONFIG['ldap_surname'] = constant("LDAP_{$CONFIG['ldap_type']}_SURNAME");
-    $CONFIG['ldap_forenames'] = constant("LDAP_{$CONFIG['ldap_type']}_FORENAMES");
-    $CONFIG['ldap_realname'] = constant("LDAP_{$CONFIG['ldap_type']}_REALNAME");
-    $CONFIG['ldap_jobtitle'] = constant("LDAP_{$CONFIG['ldap_type']}_JOBTITLE");
-    $CONFIG['ldap_email'] = constant("LDAP_{$CONFIG['ldap_type']}_EMAILADDRESS");
-    $CONFIG['ldap_mobile'] = constant("LDAP_{$CONFIG['ldap_type']}_MOBILE");
-    $CONFIG['ldap_telephone'] = constant("LDAP_{$CONFIG['ldap_type']}_TELEPHONE");
-    $CONFIG['ldap_fax'] = constant("LDAP_{$CONFIG['ldap_type']}_FAX");
-    $CONFIG['ldap_description'] = constant("LDAP_{$CONFIG['ldap_type']}_DESCRIPTION");
-    $CONFIG['ldap_grponuser'] = constant("LDAP_{$CONFIG['ldap_type']}_GRPONUSER");
-    $CONFIG['ldap_grpfulldn'] = constant("LDAP_{$CONFIG['ldap_type']}_GRPFULLDN");
-    $CONFIG['ldap_userattribute'] = constant("LDAP_{$CONFIG['ldap_type']}_USERATTRIBUTE");
-    $CONFIG['ldap_userobjecttype'] = constant("LDAP_{$CONFIG['ldap_type']}_USEROBJECTTYPE");
-    $CONFIG['ldap_grpobjecttype'] = constant("LDAP_{$CONFIG['ldap_type']}_USERGRPTYPE");
-    if (defined ("LDAP_{$CONFIG['ldap_type']}_GRPATTRIBUTEUSER"))
+$ldap_vars = array("SURNAME", "FORENAMES", "REALNAME", "JOBTITLE", "EMAIL", "MOBILE",
+                    "TELEPHONE", "FAX", "DESCRIPTION", "GRPONUSER", "GRPFULLDN", "USERATTRIBUTE",
+                    "USEROBJECTTYPE", "GRPOBJECTTYPE", "GRPATTRIBUTEUSER", "GRPATTRIBUTEGRP", 
+                    "ADDRESS1", "CITY", "COUNTY", "POSTCODE", "COURTESYTITLE", "LOGINDISABLEDATTRIBUTE",
+                    "LOGINDISABLEDVALUE");
+
+
+if ($CONFIG['use_ldap'])
+{   
+    foreach ($ldap_vars AS $var)
     {
-    $CONFIG['ldap_grpattributeuser'] = constant("LDAP_{$CONFIG['ldap_type']}_GRPATTRIBUTEUSER");
+    	if (defined ("LDAP_{$CONFIG['ldap_type']}_{$var}"))
+        {
+            $CONFIG[strtolower("ldap_{$var}")] = constant("LDAP_{$CONFIG['ldap_type']}_{$var}");
+        }
     }
-    
-    if (defined ("LDAP_{$CONFIG['ldap_type']}_GRPATTRIBUTEGRP"))
-    {
-        $CONFIG['ldap_grpattributegrp'] = constant("LDAP_{$CONFIG['ldap_type']}_GRPATTRIBUTEGRP");
-    }
-    $CONFIG['ldap_address1'] = constant("LDAP_{$CONFIG['ldap_type']}_ADDRESS1");
-    $CONFIG['ldap_city'] = constant("LDAP_{$CONFIG['ldap_type']}_CITY");
-    $CONFIG['ldap_county'] = constant("LDAP_{$CONFIG['ldap_type']}_COUNTY"); // State in the US
-    $CONFIG['ldap_postcode'] = constant("LDAP_{$CONFIG['ldap_type']}_POSTCODE");
-    $CONFIG['ldap_courtesytitle'] = constant("LDAP_{$CONFIG['ldap_type']}_COURTESYTITLE");
-    if (defined ("LDAP_{$CONFIG['ldap_type']}_LOGINDISABLEDATTRIBUTE"))
-    {
-        $CONFIG['ldap_loginDisabled'] = constant("LDAP_{$CONFIG['ldap_type']}_LOGINDISABLEDATTRIBUTE");
-    }
-    if (defined ("LDAP_{$CONFIG['ldap_type']}_LOGINDISABLEDVALUE"))
-    {
-        $CONFIG['ldap_loginDisabledValue'] = constant("LDAP_{$CONFIG['ldap_type']}_LOGINDISABLEDVALUE");
-    }
-}
-elseif ($CONFIG['use_ldap'])
-{
-	// Handle custom
-    // TODO todo change from hardcoded to DB
-    $CONFIG['ldap_surname'] = "surname";
-    $CONFIG['ldap_forenames'] = "forenames";
-    $CONFIG['ldap_realname'] = "realname";
-    $CONFIG['ldap_jobtitle'] = "jobtitle";
-    $CONFIG['ldap_email'] = "email";
-    $CONFIG['ldap_mobile'] = "mobile";
-    $CONFIG['ldap_telephone'] = "phone";
-    $CONFIG['ldap_fax'] = "fax";
-    $CONFIG['ldap_description'] = "notes";
-    $CONFIG['ldap_grponuser'] = false;
-    $CONFIG['ldap_grpfulldn'] = false;
-    $CONFIG['ldap_userattribute'] = "cn";
-    $CONFIG['ldap_userobjecttype'] = "person";
-    $CONFIG['ldap_grpobjecttype'] = "group";
-    $CONFIG['ldap_grpattributeuser'] = "member";
-    $CONFIG['ldap_grpattributegrp'] = "member";
-    $CONFIG['ldap_address1'] = "address1";
-    $CONFIG['ldap_city'] = "city";
-    $CONFIG['ldap_county'] = "county"; // State in the US
-    $CONFIG['ldap_postcode'] = "postalCode";
-    $CONFIG['ldap_courtesytitle'] = "generationQualifier";
 }
 
 
@@ -237,8 +215,6 @@ function ldapOpen($host='', $port='', $protocol='', $security='', $user='', $pas
             if ( ! $r )
             {
                 // Could not bind!
-    //             $setupvars['use_ldap'] = FALSE;
-    //             cfgSave($setupvars);
                 trigger_error("Could not bind to LDAP server with credentials", E_USER_WARNING);
             }
             else
@@ -408,7 +384,7 @@ function ldap_storeDetails($password, $id = 0, $user=TRUE, $populateOnly=FALSE, 
             {
                 // Modify
                 $user->id = $id;
-                $status = $user->update();
+                $status = $user->edit();
             }
             
             if ($status) $toReturn = true;
@@ -445,7 +421,7 @@ function ldap_storeDetails($password, $id = 0, $user=TRUE, $populateOnly=FALSE, 
             {
                 debug_log ("MODIFY CONTACT {$id}");
                 $contact->id = $id;
-                $status = $contact->update();
+                $status = $contact->edit();
             }
             
             if ($status)  $toReturn = true;
@@ -463,11 +439,11 @@ function ldap_storeDetails($password, $id = 0, $user=TRUE, $populateOnly=FALSE, 
 
 function ldap_getDetails($username, $searchOnEmail, &$ldap_conn)
 {
-    global $CONFIG;
+    global $CONFIG, $ldap_vars;
     $toReturn = false;
 
-    $base = $CONFIG['ldap_dn_base']; 
-    
+    $base = $CONFIG['ldap_user_base']; 
+
     if (strpos($username, ",") != FALSE)
     {
     	$filter = "(ObjectClass={$CONFIG['ldap_userobjecttype']})";
@@ -481,16 +457,10 @@ function ldap_getDetails($username, $searchOnEmail, &$ldap_conn)
     {
         $filter = "(&(ObjectClass={$CONFIG['ldap_userobjecttype']})({$CONFIG['ldap_email']}={$username}))";
     }
-    
-    $attributes= array ($CONFIG['ldap_surname'], $CONFIG['ldap_forenames'],
-                                $CONFIG['ldap_realname'],$CONFIG['ldap_jobtitle'], 
-                                $CONFIG['ldap_email'], $CONFIG['ldap_mobile'],  $CONFIG['ldap_telephone'],
-                                $CONFIG['ldap_fax'],  $CONFIG['ldap_description'], 
-                                $CONFIG['ldap_address1'], $CONFIG['ldap_city'] , $CONFIG['ldap_county'], 
-                                $CONFIG['ldap_postcode'], $CONFIG['ldap_courtesytitle'], $CONFIG['ldap_userattribute']);
-    if ($CONFIG['ldap_grponuser'])
+
+    foreach ($ldap_vars AS $var)
     {
-        $attributes[] = $CONFIG['ldap_grpattributeuser'];
+    	$attributes[] = $CONFIG[strtolower("ldap_{$var}")];
     }
 
     debug_log ("Filter: {$filter}");
@@ -509,7 +479,7 @@ function ldap_getDetails($username, $searchOnEmail, &$ldap_conn)
         debug_log ("One entry found");
         $toReturn  = ldap_first_entry($ldap_conn, $sr);
     }
-    
+
     return $toReturn;
 }
 
