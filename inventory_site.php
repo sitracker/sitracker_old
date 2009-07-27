@@ -82,9 +82,19 @@ if (is_numeric($_GET['id']))
             {
                 echo " (inactive)";
             }
-            echo "</td>";
-            echo "<td><a href='inventory_view.php?id={$row->id}'>{$strView}</a> &nbsp; ";
-            echo "<a href='inventory_edit.php?id={$row->id}'>{$strEdit}</td></tr>";
+            echo "</td><td>";
+            
+            if (($row->privacy == 'private' AND $sit[2] != $row->createdby) OR
+                 $row->privacy == 'adminonly' AND !user_permission($sit[2], 22))
+            {
+                echo "{$strView}</a> &nbsp; ";
+                echo "{$strEdit}</td></tr>";
+            }
+            else
+            {    
+                echo "<a href='inventory_view.php?id={$row->id}'>{$strView}</a> &nbsp; ";
+                echo "<a href='inventory_edit.php?id={$row->id}'>{$strEdit}</td></tr>";
+            }
             if ($shade == 'shade1') $shade = 'shade2';
             else $shade = 'shade1';
         }
