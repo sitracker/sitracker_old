@@ -82,6 +82,13 @@ else
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
     $row = mysql_fetch_object($result);
+
+    if (($row->privacy == 'private' AND $sit[2] != $row->createdby) OR
+            $row->privacy == 'adminonly' AND !user_permission($sit[2], 22))
+    {
+        html_redirect('inventory.php', FALSE);
+        exit;
+    }
     echo "<h2>".icon('edit', 32)." {$strEdit}</h2>";
     
     echo "<form action='{$_SERVER['PHP_SELF']}?id={$id}&site={$row->siteid}' method='post'>";

@@ -30,8 +30,6 @@ if (is_numeric($_GET['id']))
         $filter = cleanvar($_REQUEST['filter']);
     }
 
-    echo "<h2>".icon('inventory', 32)." {$strInventory}</h2>";
-
     $sql = "SELECT *, i.name AS name , i.id AS id, ";
     $sql .= "i.notes AS notes, ";
     $sql .= "i.active AS active ";
@@ -44,6 +42,15 @@ if (is_numeric($_GET['id']))
     if (mysql_num_rows($result) > 0)
     {
         $row = mysql_fetch_object($result);
+        if (($row->privacy == 'private' AND $sit[2] != $row->createdby) OR
+             $row->privacy == 'adminonly' AND !user_permission($sit[2], 22))
+        {
+            html_redirect('inventory.php', FALSE);
+            exit;
+        }
+            
+        echo "<h2>".icon('inventory', 32)." {$strInventory}</h2>";
+
         echo "<div id='container' style='width: 40%'>";
         echo "<h3>{$row->name}";
 
@@ -103,6 +110,7 @@ if (is_numeric($_GET['id']))
     }
     else
     {
+        echo "<h2>".icon('inventory', 32)." {$strInventory}</h2>";
         echo "<p class='info'>{$strNoRecords}</p>";
     }
     include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
