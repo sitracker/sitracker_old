@@ -755,11 +755,19 @@ while ($update = mysql_fetch_object($result))
 
         if ($updatebodylen > 5)
         {
-            echo nl2br($updatebody);
+        	/*
+        	 * @modifier: Rick Bonkestoter
+        	 * @desc: some webmail systems use the wrong encodeing (\r\n) instead of (\n\r)
+        	 */
+            echo str_replace('\r\n', "<br>", nl2br($updatebody));
         }
         else
         {
-            echo $updatebody;
+        	/*
+        	 * @modifier: Rick Bonkestoter
+        	 * @desc: some webmail systems use the wrong encodeing (\r\n) instead of (\n\r)
+        	 */
+            echo str_replace('\r\n', "<br>", nl2br($updatebody));
         }
 
         if (!empty($update->nextaction) OR $update->duration != 0)
