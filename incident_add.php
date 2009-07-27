@@ -14,10 +14,11 @@
 $permission = 5;
 require ('core.php');
 require (APPLICATION_LIBPATH . 'functions.inc.php');
-$title = $strAddIncident;
 
 // This page requires authentication
 require (APPLICATION_LIBPATH . 'auth.inc.php');
+
+$title = $strAddIncident;
 
 function to_row($contactrow)
 {
