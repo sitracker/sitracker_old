@@ -71,7 +71,8 @@ if (is_numeric($_GET['id']))
     if (mysql_num_rows($result) > 0)
     {
         echo "<table align='center'>";
-        echo "<tr><th>{$strInventoryItems}</th><th>{$strActions}</th></tr>";
+        echo "<tr><th>{$strInventoryItems}</th><th>{$strPrivacy}</th>";
+        echo "<th>{$strOwner}</th><th>{$strActions}</th></tr>";
         $shade = 'shade1';
         while ($row = mysql_fetch_object($result))
         {
@@ -82,8 +83,16 @@ if (is_numeric($_GET['id']))
             {
                 echo " (inactive)";
             }
-            echo "</td><td>";
-            
+            echo "</td><td align='center'>";
+            if ($row->privacy == 'private')
+            {
+                echo icon('private', 16);
+            }
+            elseif ($row->privacy == 'adminonly')
+            {
+                echo icon('review', 16, $strAdmin);
+            }
+            echo "</td><td>".user_realname($row->createdby)."</td><td>";
             if (($row->privacy == 'private' AND $sit[2] != $row->createdby) OR
                  $row->privacy == 'adminonly' AND !user_permission($sit[2], 22))
             {
