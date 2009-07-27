@@ -362,6 +362,7 @@ p.trigger
     text-decoration: none; color: #CC0000;
 
 }
+.helplink a span em { color: white; font-weight: bolder;}
 /* .helplink a:hover span { display: block; } */
 
 /* Incident Queues */
