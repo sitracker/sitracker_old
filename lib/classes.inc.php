@@ -14,29 +14,29 @@ class Holiday {
 
 
 /**
- * Highest level within SiT! all entities within SiT! should extend from this class 
- * this provides a common interface exposing values and functiosn which are common across all entities
- * @author Paul Heaney
- */
+* Highest level within SiT! all entities within SiT! should extend from this class
+* this provides a common interface exposing values and functiosn which are common across all entities
+* @author Paul Heaney
+*/
 abstract class SitEntity {
     var $id;
-        
+
     /**
-     * Adds the entity to SiT
-     */
+    * Adds the entity to SiT
+    */
     abstract function add();
-    
+
     /**
-     * Edits an existing entity in sit
-     */
-    abstract function edit();	
+    * Edits an existing entity in sit
+    */
+    abstract function edit();
 }
 
 
-/** 
- * Base class for all types of people, this contains the core attributes common for all people
- * @author Paul Heaney
- */
+/**
+* Base class for all types of people, this contains the core attributes common for all people
+* @author Paul Heaney
+*/
 abstract class Person extends SitEntity {
     var $username;
     var $password;
@@ -45,14 +45,14 @@ abstract class Person extends SitEntity {
     var $phone;
     var $mobile;
     var $fax;
-    var $source; // default: sit, ldap etc
+    var $source; ///< default: sit, ldap etc
 }
 
 
 /**
- * Represents a user adding the additional details possible for a user
- * @author Paul Heaney
- */
+* Represents a user adding the additional details possible for a user
+* @author Paul Heaney
+*/
 class User extends Person{
     var $realname;
     var $roleid;
@@ -75,13 +75,13 @@ class User extends Person{
     var $utc_offset;
     var $emoticons;
     var $startdate;
-    
+
     /**
-     * Adds a user to SiT! this performs a number of checks to ensure uniqueness and mandertory details are present
-     * 
-     * @return mixed int for user ID if sucessful else false
-     * @author Paul Heaney
-     */
+    * Adds a user to SiT! this performs a number of checks to ensure uniqueness and mandertory details are present
+    *
+    * @return mixed int for user ID if sucessful else FALSE
+    * @author Paul Heaney
+    */
     function add()
     {
         global $CONFIG, $now;
@@ -89,20 +89,20 @@ class User extends Person{
         $this->style = $CONFIG['default_interface_style'];
         $this->startdate = $now;
         if (empty($this->source)) $this->source = 'sit';
-        
+
         if (empty($this->password)) $this->password = generate_password(16);
-        
-        $toReturn = false;
-        
+
+        $toReturn = FALSE;
+
         $sql = "SELECT * FROM `{$GLOBALS['dbUsers']}` WHERE username = '{$this->username}'";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
-        
+
         if (mysql_num_rows($result) != 0)
         {
             // Already exists
             trigger_error($GLOBALS['strUsernameNotUnique'], E_USER_ERROR);
-            $toReturn = false;
+            $toReturn = FALSE;
         }
         else
         {
@@ -121,7 +121,7 @@ class User extends Person{
                 $toReturn = false;
             }
             $toReturn = mysql_insert_id();
-            
+
             if ($toReturn != FALSE)
             {
                 // Create permissions (set to none)
@@ -135,32 +135,32 @@ class User extends Person{
                     mysql_query($psql);
                     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
                 }
-                
+
                 setup_user_triggers($toReturn);
                 trigger('TRIGGER_NEW_USER', array('userid' => $toReturn));
             }
         }
-        
+
         return $toReturn;
     }
 
-    
+
     /**
-     * Updates the details of a user within SiT!
-     * @author Paul Heaney
-     * @return bool True if updated sucessfully false otherwise
-     */
+    * Updates the details of a user within SiT!
+    * @author Paul Heaney
+    * @return bool True if updated sucessfully FALSE otherwise
+    */
     function edit()
     {
         global $now;
         $toReturn = false;
-        
-    	if (!empty($this->id) AND is_number($this>id))
+
+        if (!empty($this->id) AND is_number($this>id))
         {
-        	$sql = "SELECT username FROM `{$GLOBALS['dbUsers']}` WHERE id = {$this->id}";
+            $sql = "SELECT username FROM `{$GLOBALS['dbUsers']}` WHERE id = {$this->id}";
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
-            
+
             if (mysql_num_rows($result) != 0)
             {
                 // Exists
@@ -184,11 +184,11 @@ class User extends Person{
                     if ($this->accepting) $s[] = "accepting = 'Yes'";
                     else $s[] = "accepting = 'No'";
                 }
-                if (!empty($this->holiday_entitlement)) $s[] = "holiday_entitlement = {$this->holiday_entitlement}"; 
+                if (!empty($this->holiday_entitlement)) $s[] = "holiday_entitlement = {$this->holiday_entitlement}";
                 if (!empty($this->holiday_resetdate)) $s[] = "holiday_restdate = '{$this->holiday_resetdate}'";
                 if (!empty($this->qualifications)) $s[] = "qualifications = '{$this->qualifications}'";
-                
-                if (!empty($this->incident_refresh)) $s[] = "var_incident_refresh = {$this->incident_refresh}"; 
+
+                if (!empty($this->incident_refresh)) $s[] = "var_incident_refresh = {$this->incident_refresh}";
                 if (!empty($this->update_order)) $s[] = "var_update_order = '{$this->update_order}'";
                 if (!empty($this->num_updates_view)) $s[] = "var_num_updates_view = {$this->num_updates_view}";
                 if (!empty($this->style)) $s[] = "var_style = {$this->style}";
@@ -206,59 +206,61 @@ class User extends Person{
                 if (mysql_affected_rows() != 1)
                 {
                     trigger_error("Failed to update user", E_USER_WARNING);
-                    $toReturn = false;
+                    $toReturn = FALSE;
                 }
                 else
                 {
-                	$toReturn = true;
+                    $toReturn = TRUE;
                 }
             }
             else
             {
-            	$toReturn = false;
+                $toReturn = FALSE;
             }
         }
-        
+
         return $toReturn;
     }
-    
-    
+
+
     /**
-     * Disabled this user in SiT!
-     * @author Paul Heaney
-     * @return bool True if disabled, false otherwise
-     */
+    * Disabled this user in SiT!
+    * @author Paul Heaney
+    * @return bool
+    * @retval TRUE user disabled
+    * @retval FALSE user not disabled
+    */
     function disable()
     {
         $toReturn = true;
         if (!empty($this->id) AND $this->status != 0)
         {
-    	   $sql = "UPDATE `{$GLOBALS['dbUsers']}` SET status = 0 WHERE id = {$this->id}";
-        
+        $sql = "UPDATE `{$GLOBALS['dbUsers']}` SET status = 0 WHERE id = {$this->id}";
+
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
             if (mysql_affected_rows() != 1)
             {
                 trigger_error("Failed to disable user {$this->username}", E_USER_WARNING);
-                $toReturn = false;
+                $toReturn = FALSE;
             }
             else
             {
-                $toReturn = true;
+                $toReturn = TRUE;
             }
         }
-        
+
         return $toReturn;
     }
 }
 
 
 /**
- * Represents a contact within SiT! adding the necessary details unique to contacts
- * @author Paul Heaney
- */
+* Represents a contact within SiT! adding the necessary details unique to contacts
+* @author Paul Heaney
+*/
 class Contact extends Person {
-	var $notify_contact;
+    var $notify_contact;
     var $forenames;
     var $surname;
     var $courtesytitle;
@@ -270,84 +272,84 @@ class Contact extends Person {
     var $county;
     var $country;
     var $postcode;
-    var $dataprotection_email; // boolean
-    var $dataprotection_phone; // boolean
-    var $dataprotection_address; // boolean
+    var $dataprotection_email; ///< boolean
+    var $dataprotection_phone; ///< boolean
+    var $dataprotection_address; ///< boolean
     var $notes;
     var $active;
-    
-    
+
+
     /**
-     * Checks to see if the required fields are present and optionally that the user is unique
-     * @author Paul Heaney
-     * @param bool $duplicate Whether to check if this contact is a duplicate, defaults to true
-     * @return bool true indicates valid contact, false otherwise
-     */
+    * Checks to see if the required fields are present and optionally that the user is unique
+    * @author Paul Heaney
+    * @param bool $duplicate Whether to check if this contact is a duplicate, defaults to true
+    * @return bool true indicates valid contact, false otherwise
+    */
     function check_valid($duplicate=true)
     {
         $errors = 0;
-    	if (empty($this->siteid))
+        if (empty($this->siteid))
         {
             $errors++;
             trigger_error($GLOBALS['strMustSelectCustomerSite'], E_USER_ERROR);
         }
-        
-         if (empty($this->surname))
-         {
+
+        if (empty($this->surname))
+        {
             $errors++;
             trigger_error($GLOBALS['strMustEnterSurname'], E_USER_ERROR);
-         }
-         
+        }
+
         if ($duplicate AND $this->is_duplicate())
         {
             $errors++;
             trigger_error($GLOBALS['strContactRecordExists'], E_USER_ERROR);
         }
-        
+
         if ($errors > 0) return false;
         else return true;
     }
-    
-    
+
+
     /**
-     * Generates an array of insertable values for the contacts data protection settings
-     * @author Paul Heaney
-     * @return array an array with keys email, phone, address with either Yes or No as values
-     */
+    * Generates an array of insertable values for the contacts data protection settings
+    * @author Paul Heaney
+    * @return array an array with keys email, phone, address with either Yes or No as values
+    */
     function get_dataprotection()
     {
-    	$dp['email'] = 'Yes';
+        $dp['email'] = 'Yes';
         $dp['phone'] = 'Yes';
         $dp['address'] = 'Yes';
-        
+
         if (!$this->dataprotection_email) $dp['email'] = 'No';
         if (!$this->dataprotection_phone) $dp['phone'] = 'No';
         if (!$this->dataprotection_address) $dp['address'] = 'No';
-        
+
         return $dp;
     }
-    
-    
+
+
     /**
-     * Performs the addition of the contact to SiT! this performs validity checks before adding the contact
-     * @author Paul Heaney
-     * @return mixed int for contactID if sucsesful, false otherwise
-     */
+    * Performs the addition of the contact to SiT! this performs validity checks before adding the contact
+    * @author Paul Heaney
+    * @return mixed int for contactID if sucsesful, false otherwise
+    */
     function add()
     {
         global $now;
         $toReturn = false;
         $generate_username = false;
-        
+
         if ($this->check_valid())
         {
             $dp = $this->get_dataprotection();
-            
+
             if (empty($this->source)) $this->source = 'sit';
 
             if (empty($this->username))
             {
-            	$generate_username = true;
+                $generate_username = true;
                 $this->username = strtolower($this->surname).$now;
             }
 
@@ -363,11 +365,11 @@ class Contact extends Person {
             $sql .= "'{$dp['phone']}', '{$dp['address']}', '{$now}', '{$now}', NOW(), '{$_SESSION['userid']}', NOW(), '{$_SESSION['userid']}', '{$this->source}')";
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-    
+
             $newid = mysql_insert_id();
-            
+
             $toReturn = $newid;
-            
+
             if ($generate_username)
             {
                 // concatenate username with insert id to make unique
@@ -377,26 +379,26 @@ class Contact extends Person {
                 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
             }
         }
-        
+
         return $toReturn;
     }
 
 
     /**
-     * Updates the details of an existing contact within SiT!
-     * @author Paul Heaney
-     * @return bool. true on sucess, false otherwise
-     */
+    * Updates the details of an existing contact within SiT!
+    * @author Paul Heaney
+    * @return bool. true on sucess, false otherwise
+    */
     function edit()
     {
         global $now;
 
         $toReturn = false;
-        
+
         if (!empty($this->id) AND is_numeric($this->id))
         {
             $dp = $this->get_dataprotection();
-            
+
             if (!empty($this->username)) $s[] = "username = '{$this->username}'";
             if (!empty($this->password)) $s[] = "password = MD5('{$this->password}')";
             if (!empty($this->jobtitle)) $s[] = "jobtitle = '{$this->jobtitle}'";
@@ -424,7 +426,7 @@ class Contact extends Person {
             if (!empty($this->active))
             {
                 if ($this->active) $s[] = "active = 'true'";
-                else $s[] = "active = 'false'";	
+                else $s[] = "active = 'false'";
             }
             $s[] = "modified = NOW()";
             $s[] = "timestamp_modified = {$now}";
@@ -433,7 +435,7 @@ class Contact extends Person {
                 // If LDAP is doing this then we dont have the details
                 $s[] = "modifiedby = {$_SESSION['userid']}";
             }
-            
+
             $sql = "UPDATE `{$GLOBALS['dbContacts']}` SET ".implode(", ", $s)." WHERE id = {$this->id}";
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
@@ -449,24 +451,24 @@ class Contact extends Person {
         }
         else
         {
-        	$toReturn = false;
+            $toReturn = false;
         }
-        
+
         return $toReturn;
     }
-    
+
     /**
-     * Disabled this contact in SiT!
-     * @author Paul Heaney
-     * @return bool True if disabled, false otherwise
-     */
+    * Disabled this contact in SiT!
+    * @author Paul Heaney
+    * @return bool True if disabled, false otherwise
+    */
     function disable()
     {
         $toReturn = true;
         if (!empty($this->id))
         {
-           $sql = "UPDATE `{$GLOBALS['dbContacts']}` SET active = 'false' WHERE id = {$this->id}";
-        
+        $sql = "UPDATE `{$GLOBALS['dbContacts']}` SET active = 'false' WHERE id = {$this->id}";
+
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
             if (mysql_affected_rows() != 1)
@@ -479,18 +481,18 @@ class Contact extends Person {
                 $toReturn = true;
             }
         }
-        
+
         return $toReturn;
     }
-    
+
     /**
-     * Checks to see if the contact is a duplicate within SiT!
-     * @author Paul Heaney
-     * @return bool. true for duplicate, false otherwise
-     */
+    * Checks to see if the contact is a duplicate within SiT!
+    * @author Paul Heaney
+    * @return bool. true for duplicate, false otherwise
+    */
     function is_duplicate()
     {
-	    // Check this is not a duplicate
+        // Check this is not a duplicate
         $sql = "SELECT id FROM `{$GLOBALS['dbContacts']}` WHERE email='{$this->email}' AND LCASE(surname)=LCASE('{$this->surname}') LIMIT 1";
         $result = mysql_query($sql);
         if (mysql_num_rows($result) >= 1) return true;
