@@ -6275,6 +6275,7 @@ function contract_details($id, $mode='internal')
             $html .="<table align='center'>";
             while ($software = mysql_fetch_object($result))
             {
+                $software->lifetime_end = mysql2date($software->lifetime_end);
                 $html .= "<tr><td> ".icon('skill', 16)." ";
                 if ($software->lifetime_end > 0 AND $software->lifetime_end < $now)
                 {
