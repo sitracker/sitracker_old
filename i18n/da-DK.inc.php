@@ -1039,6 +1039,7 @@ $strNoteAddedBy = 'Note tilføjet af %s';
 $strNoteInsertExternalID = 'Note: indsæt \'%externalid%\' for automatisk hændelses nummerering';
 $strNotes = 'Noter';
 $strNothingToDisplay = 'Intet at vise';
+$strNothingToLink = 'Intet at linke';
 $strNotice = 'Meddelelse';
 $strNoticeIncidentAssignedDesc = 'Meddeler om en hændelse tildeles til en tekniker';
 $strNoticeIncidentAssigned = '{incidentpriority} prioritets hændelse {incidentid} - {incidenttitle} logget af {contactname} fra {sitename} er blevet tildelt til {userrealname}';

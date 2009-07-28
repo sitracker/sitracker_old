@@ -1129,6 +1129,7 @@ $strNoteAddedBy = 'Note added by %s';
 $strNoteInsertExternalID = 'Note: insert \'%externalid%\' for automatic incident number insertion';
 $strNotes = 'Notes';
 $strNothingToDisplay = 'Nothing to Display';
+$strNothingToLink = 'Nothing to link';
 $strNotice = 'Notice';
 $strNoticeIncidentAssignedDesc = 'Notifies of an incident assigned to an engineer';
 $strNoticeIncidentAssigned = '{incidentpriority} priority incident {incidentid} - {incidenttitle} logged by {contactname} of {sitename} has been assigned to {userrealname}';
