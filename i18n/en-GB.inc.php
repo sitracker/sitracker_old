@@ -658,6 +658,7 @@ $strFileVersion = 'File Version';
 # e.g. File filename.txt (Text file 100 bytes) uploaded OK
 $strFileXUploadedOK = 'File %s (%s %d bytes) uploaded OK';
 $strFilter = 'Filter';
+$strFilterActiveOnlyShowingIncidentsForX = 'Filter active: only displaying incidents for %s';
 $strFinalUpdate = 'Final Update';
 $strFindContact = 'Find Contact';
 $strFirstCustomerVisibleUpdate = 'The first customer visible update in the incident log';
@@ -803,6 +804,7 @@ $strIncidentsContactEmail = 'Email address of incident contact';
 $strIncidentsDailySummary = 'Incidents Daily Summary';
 $strIncidentsForEngineer = 'Incidents for %s (Engineer)';
 $strIncidentsinQueue = 'Incidents in Queue';
+$strIncidentsList = 'Incidents List';
 $strIncidentsLoggedOpenClosed = 'Incidents Logged (Open/Closed)';
 $strIncidentsLoggedToday = '%s Incidents Logged Today';
 $strIncidentsMulti = '%s Incidents';

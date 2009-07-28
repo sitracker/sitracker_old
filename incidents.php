@@ -13,7 +13,7 @@
 
 
 $permission = 6; // View Incidents
-$title = 'Incidents List';
+
 
 require ('core.php');
 require (APPLICATION_LIBPATH . 'functions.inc.php');
@@ -28,6 +28,7 @@ $queue = cleanvar($_REQUEST['queue']);
 $sort = cleanvar($_REQUEST['sort']);
 $order = cleanvar($_REQUEST['order']);
 $maintexclude = cleanvar($_REQUEST['maintexclude']);
+$title = $strIncidentsList;
 
 // Defaults
 if (empty($type)) $type='support';
@@ -219,8 +220,8 @@ switch ($type)
             echo sprintf($strOnlyShowNewerThan, $CONFIG['hide_closed_incidents_older_than'])."</a></p>";
         }
 
-        if (!empty($softwareid)) echo "<p align='center'>Filter active: only displaying incidents for ".software_name($softwareid)."</p>";
-        if ($user=='all') echo "<p align='center'>There are <strong>{$rowcount}</strong> incidents in this list.</p>";
+        if (!empty($softwareid)) echo "<p align='center'>".sprintf($strFilterActiveOnlyShowingIncidentsForX, software_name($softwareid))."</p>";
+        if ($user=='all') echo "<p align='center'>".sptintf($strThereAreXIncidentsInThisList, $rowcount)."</p>";
         else echo "<br />";
 
         // Print message if no incidents were listed
