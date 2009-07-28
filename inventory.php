@@ -13,8 +13,10 @@ require ('core.php');
 require (APPLICATION_LIBPATH . 'functions.inc.php');
 // This page requires authentication
 require (APPLICATION_LIBPATH . 'auth.inc.php');
+$title = $strInventory;
 
 include (APPLICATION_INCPATH . 'htmlheader.inc.php');
+
 
 if(!$CONFIG['inventory_enabled']) 
 {

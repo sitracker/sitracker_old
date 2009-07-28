@@ -12,7 +12,10 @@ $permission = 0;
 require ('core.php');
 require (APPLICATION_LIBPATH . 'functions.inc.php');
 require (APPLICATION_LIBPATH . 'auth.inc.php');
+
+$title = "$strInventory - $strView";
 include (APPLICATION_INCPATH . 'htmlheader.inc.php');
+
 
 if(!$CONFIG['inventory_enabled'])
 {
