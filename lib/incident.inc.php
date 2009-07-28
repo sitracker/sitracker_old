@@ -259,7 +259,7 @@ function suggest_reassign_userid($incidentid, $exceptuserid = 0)
         // Fallback to all users if we have no results from above
         if (mysql_num_rows($result) < 1)
         {
-            $sql = "SELECT id AS userid, status, lastseen FROM `{$dbUsers}` WHERE status > 0 ";
+            $sql = "SELECT id AS userid, status, lastseen FROM `{$dbUsers}` AS u WHERE status > 0 AND u.accepting='Yes' ";
             if ($exceptuserid > 0) $sql .= "AND id != '$exceptuserid' ";
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
