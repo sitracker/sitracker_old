@@ -1443,6 +1443,7 @@ $strSelect = 'Select';
 $strSelectAction = 'Select action';
 $strSelectAFieldForTemplates = 'Select a field that supports template variables, then click a variable to insert it';
 $strSelectDays = 'Select Days';
+$strSelectKBSections = 'Select the sections you\'d like to include in the article by checking the boxes beside each heading, you can add further sections later.  You don\'t need to include all sections, just use the ones that are relevant.';
 $strSelectNoneAssumesAll = 'Select none assumes all';
 $strSelectSkillsApplyToArticle = 'Select the skills that apply to this article';
 $strSelectYourSkills = 'Select your skills. Having skills means that you are available to receive incidents with those skills.';

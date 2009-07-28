@@ -83,7 +83,8 @@ if (empty($_REQUEST['process']))
             document.closeform.additional.disabled=false;
             document.closeform.increferences.disabled=false;
             document.closeform.references.disabled=false;
-            $('helptext').innerHTML = "Select the sections you'd like to include in the article by checking the boxes beside each heading, you can add further sections later.  You don't need to include all sections, just use the ones that are relevant.<br /><strong>Knowledge Base Article</strong>:";
+            $('helptext').innerHTML = strSelectKBSections;
+            $('helptext').innerHTML = $('helptext').innerHTML + "<br /><strong>" + strKnowledgeBaseArticle + "</strong>:";
             // Show the table rows for KB article
             $('titlerow').show();
             $('distributionrow').show();
@@ -133,7 +134,9 @@ if (empty($_REQUEST['process']))
             document.closeform.incworkaround.checked=false;
             document.closeform.incworkaround.disabled=true;
             document.closeform.workaround.disabled=true;
-            $('helptext').innerHTML = "Enter some details about the incident to be stored in the incident log for future use.  You should provide a summary of the problem and information about how it was resolved.<br /><strong>Final Update</strong>:";
+            $('helptext').innerHTML = strEnterDetailsAboutIncidentToBeStoredInLog;
+            $('helptext').innerHTML + $('helptext').innerHTML = ' '  + strSummaryOfProblemAndResolution;
+            $('helptext').innerHTML = $('helptext').innerHTML + "<br /><strong>" + strFinalUpdate + "</strong>:";
             // Hide the table rows for KB article
             $('titlerow').hide();
             $('distributionrow').hide();
@@ -346,7 +349,7 @@ else
             if (!$bill)
             {
                 $addition_errors = 1;
-                $addition_errors_string .= "<p class='error'>Addition of billable incident to transactions failed</p>\n";
+                $addition_errors_string .= "<p class='error'>{$strBilling}: {$strAdditionFail}</p>\n";
             }
             else
             {
@@ -360,7 +363,7 @@ else
         if (!$result)
         {
             $addition_errors = 1;
-            $addition_errors_string .= "<p class='error'>Update of incident failed</p>\n";
+            $addition_errors_string .= "<p class='error'>{$strIncident}: {$strUpdateFailed}</p>\n";
         }
 
         // add update(s)
@@ -533,7 +536,7 @@ else
                 $docid = mysql_insert_id();
 
                 // Update the incident to say that a KB article was created, with the KB Article number
-                $update = "<b>Knowledge base article</b> created from this incident, see: {$CONFIG['kb_id_prefix']}".leading_zero(4,$docid);
+                $update = "<b>{$_SESSION['syslang']['strKnowledgeBaseArticleCreated']}: {$CONFIG['kb_id_prefix']}".leading_zero(4,$docid);
                 $sql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, bodytext, timestamp) ";
                 $sql .= "VALUES ('$id', '$sit[2]', 'default', '$update', '$now')";
                 $result = mysql_query($sql);

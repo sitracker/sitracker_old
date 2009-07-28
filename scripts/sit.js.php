@@ -40,6 +40,11 @@ var strDecAbbr = '{$strDecAbbr}';
 
 var strAreYouSureUpdateLastBilled = '{$strAreYouSureUpdateLastBilled}';
 var strYouMustEnterIncidentTitle = '{$strYouMustEnterIncidentTitle}';
+var strKnowledgeBaseArticle = '{$strKnowledgeBaseArticle}';
+var strSelectKBSections = '{$strSelectKBSections}';
+var strFinalUpdate = '{$strFinalUpdate}';
+var strEnterDetailsAboutIncidentToBeStoredInLog = '{$strEnterDetailsAboutIncidentToBeStoredInLog}';
+var strSummaryOfProblemAndResolution = '{$strSummaryOfProblemAndResolution}';
 
 /* Please don't add functions here, these functions below need moving to webtrack.js
    this file is to make i18n keys available in javascript
