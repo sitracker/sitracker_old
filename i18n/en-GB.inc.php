@@ -439,6 +439,7 @@ $strDetails = 'Details';
 $strDetailsAndLog = 'Details and Log';
 $strDetailsSend = 'Details sent';
 $strDidYouPasteFullURL = 'Did you paste the full URL you received in the email?';
+$strDidYourBrowserBlockPopupWindow = 'Did your browser block the popup windows?';
 $strDifference = 'Difference';
 $strDisassociateSkillWithProduct = 'Disassociate skill with a product';
 $strDisable = 'Disable';

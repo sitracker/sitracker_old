@@ -42,7 +42,7 @@ elseif ($_REQUEST['win'] == 'jump')
             echo "</head><body onload=\"\"><a href=\"$return\">{$strPleaseWaitRedirect}</a>";
             echo "<script type='text/javascript'>\n//<![CDATA[\n";
             echo "var popwin = incident_details_window($incidentid,'win', true);\n";
-            echo "if (!popwin) alert('Did your browser block the popup window?');\n";
+            echo "if (!popwin) alert('{$strDidYourBrowserBlockPopupWindow}');\n";
             echo "else window.location='{$return}';\n";
             echo "\n//]]>\n</script>\n";
             echo "</body></html>";
@@ -53,7 +53,7 @@ elseif ($_REQUEST['win'] == 'jump')
             echo "</head><body onload=\"\"><a href=\"{$_SERVER['HTTP_REFERER']}\"{$strPleaseWaitRedirect}</a>";
             echo "<script type='text/javascript'>\n//<![CDATA[\n";
             echo "var popwin = incident_details_window($incidentid,'win', true);\n";
-            echo "if (!popwin) alert('Did your browser block the popup window?');\n";
+            echo "if (!popwin) alert('{$strDidYourBrowserBlockPopupWindow}');\n";
             //echo "else window.location='{$_SERVER['HTTP_REFERER']}';\n";
             echo "else history.go(-1);\n";
             echo "\n//]]>\n</script>\n";
