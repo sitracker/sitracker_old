@@ -27,6 +27,7 @@ $backupid = cleanvar($_REQUEST['backupid']);
 $originalid = cleanvar($_REQUEST['originalid']);
 $reason = cleanvar($_REQUEST['reason']);
 $action = cleanvar($_REQUEST['action']);
+$title = $strReassignIncident;
 
 switch ($action)
 {
@@ -112,7 +113,7 @@ switch ($action)
         // add update
         if (strtolower(user_accepting($userid)) != "yes")
         {
-            $bodytext = "(Incident assignment was forced because the user was not accepting)<hr>\n" . $bodytext;   // FIXME i18n forced assign bodytext
+            $bodytext = "({$strIncidentAssignmentWasForcedUserNotAccept})<hr>\n" . $bodytext;   
         }
 
         if ($temporary == 'yes') $assigntype = 'tempassigning';

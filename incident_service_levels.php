@@ -21,7 +21,7 @@ require (APPLICATION_LIBPATH . 'auth.inc.php');
 $incidentid = cleanvar($_REQUEST['id']);
 $id = $incidentid;
 
-$title = 'Service Levels';
+$title = $strServiceLevels;
 
 // Retrieve incident
 // extract incident details
@@ -80,7 +80,7 @@ if (count($slahistory) >= 1)
     }
     echo "</table>\n";
 }
-else echo "<p align='center'>There is no history to display.<p>";
+else echo "<p align='center'>{$strNothingToDisplay}.<p>";
 
 //start status summary
 $sql = "SELECT u.id AS updatesid, incidentid, userid, type, timestamp, currentstatus, is.id, is.name AS name ";

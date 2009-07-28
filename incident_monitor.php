@@ -14,12 +14,12 @@
 
 
 $permission = 14; // View Users
-// $title = "Incident Monitor";
 require ('core.php');
 require (APPLICATION_LIBPATH . 'functions.inc.php');
 
 // This page requires authentication
 require (APPLICATION_LIBPATH . 'auth.inc.php');
+$title = $strIncidentMonitor;
 ?>
 <html>
 <head>
@@ -140,7 +140,7 @@ echo "</tr></table>";
 <TR>
 <td class='incidents'>
 <?php
-echo "Today's totals: <span style='color: #8a2be2;'>$supportopen Open<span>, <span style='color: #0000AA;'>$waiting Waiting</span>, <span style='color: #00DD00;'>$todaysincidents Opened</span>, <span style='color: #BB00AA;'>$todaysupdated updated</span>, <span style='color: #000000;'>$todaysclosed closed</span>.";
+echo "Today's totals: <span style='color: #8a2be2;'>$supportopen $strOpen<span>, <span style='color: #0000AA;'>$waiting $strWaiting</span>, <span style='color: #00DD00;'>$todaysincidents $strOpened</span>, <span style='color: #BB00AA;'>$todaysupdated $strupdated</span>, <span style='color: #000000;'>$todaysclosed $strclosed</span>.";
 ?>
 </td>
 </tr>

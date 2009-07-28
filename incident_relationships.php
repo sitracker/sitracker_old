@@ -110,7 +110,7 @@ switch ($action)
         mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
-        echo "<br /><p class='info' align='center'>Relationship removed</p>";
+        echo "<br /><p class='info' align='center'>{$strRelationshipRemoved}</p>";
     break;
 
     default:
