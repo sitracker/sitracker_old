@@ -34,13 +34,13 @@ switch ($action)
         // Input validation
         // Validate input
         $error=array();
-        if (empty($link)) $error[] = 'Link must not be zero or blank';
-        if (empty($refid)) $error[] = 'Refid must not be zero or blank';
-        if (empty($bodytext)) $error[] = 'Note must not be blank';
+        if (empty($link)) $error[] = sprintf($strFieldMustNotBeBlank, $strLink);
+        if (empty($refid)) $error[] = sprintf($strFieldMustNotBeBlank, $strRefid);
+        if (empty($bodytext)) $error[] = sprintf($strFieldMustNotBeBlank, $strNote);
         if (count($error) >= 1)
         {
             include (APPLICATION_INCPATH . 'htmlheader.inc.php');
-            echo "<p class='error'>Please check the data you entered</p>";
+            echo "<p class='error'>{$strCheckEnteredData}</p>";
             echo "<ul class='error'>";
             foreach ($error AS $err)
             {

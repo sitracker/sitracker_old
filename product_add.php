@@ -83,12 +83,12 @@ else
     if ($name == '')
     {
         $errors++;
-        $_SESSION['formerrors']['add_product']['name'] = "Product name cannot be blank";
+        $_SESSION['formerrors']['add_product']['name'] = sprintf($strFieldMustNotBeBlank, $strProduct);
     }
     if ($vendor == '' OR $vendor == "0")
     {
         $errors++;
-        $_SESSION['formerrors']['add_product']['vendor'] = "Vendor cannot be blank";
+        $_SESSION['formerrors']['add_product']['vendor'] = sprintf($strFieldMustNotBeBlank, $strVendor);
     }
     // add product if no errors
     if ($errors == 0)
@@ -97,7 +97,7 @@ else
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
-        if (!$result) echo "<p class='error'>Addition of Product Failed\n";
+        if (!$result) echo "<p class='error'>".sprintf($strAddXfailed, $strProduct)."\n";
         else
         {
             $id = mysql_insert_id();

@@ -24,7 +24,7 @@ require (APPLICATION_LIBPATH . 'auth.inc.php');
 $product = cleanvar($_REQUEST['product']);
 $information = cleanvar($_POST['information']);
 $moreinformation = cleanvar($_POST['moreinformation']);
-
+$title = $strAddProductInformation
 
 // Show add product information form
 if (empty($_REQUEST['submit']))
@@ -49,6 +49,7 @@ else
 
     // Add product information
     $errors = 0;
+    include (APPLICATION_INCPATH . 'htmlheader.inc.php');
     // check for blank product
     if ($product == 0)
     {
@@ -70,7 +71,7 @@ else
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
-        if (!$result) echo "<p class='error'>Addition of product information failed\n";
+        if (!$result) echo "<p class='error'>".sprintf($strAddXfailed, $strProductInformation)."\n";
         else
         {
             journal(CFG_LOGGING_NORMAL, 'Product Info Added', "Info was added to Product $product", CFG_JOURNAL_PRODUCTS, $product);
@@ -78,5 +79,6 @@ else
             exit;
         }
     }
+    include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
 }
 ?>
