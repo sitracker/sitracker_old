@@ -16,7 +16,6 @@
 
 set_time_limit(60);
 
-$title = 'Average Incident Duration';
 $permission = 37; // Run Reports
 
 require ('core.php');
@@ -27,6 +26,7 @@ require (APPLICATION_LIBPATH.'auth.inc.php');
 
 $id = cleanvar($_REQUEST['id']);
 $mode = cleanvar($_REQUEST['mode']);
+$title = $strAverageIncidentDuration;
 
 // Increment selects the number of months to group together
 if (empty($_REQUEST['increment']))
