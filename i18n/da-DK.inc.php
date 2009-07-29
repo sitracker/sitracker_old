@@ -1532,6 +1532,7 @@ $strTarget = 'Mål';
 $strTask = 'Opgave';
 $strTaskDue = 'Opgave forfalder';
 $strTaskDueDesc = 'Opstår når en opgave nærmersig sin forfalds dato';
+$strTaskMarkedCompleteByX = 'Opgaven er markeret 100% færdig af %s';
 $strTasks = 'Opgaver';
 $strTaskList = 'Opgave liste';
 $strTaskPrivateError = 'Du kan ikke se denne opgave, da den er markeret som privat og du er ikke ejeren';
