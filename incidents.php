@@ -221,7 +221,7 @@ switch ($type)
         }
 
         if (!empty($softwareid)) echo "<p align='center'>".sprintf($strFilterActiveOnlyShowingIncidentsForX, software_name($softwareid))."</p>";
-        if ($user=='all') echo "<p align='center'>".sptintf($strThereAreXIncidentsInThisList, $rowcount)."</p>";
+        if ($user=='all') echo "<p align='center'>".sprintf($strThereAreXIncidentsInThisList, $rowcount)."</p>";
         else echo "<br />";
 
         // Print message if no incidents were listed
