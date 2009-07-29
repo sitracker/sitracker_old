@@ -415,7 +415,7 @@ function give_overview()
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     list($todaysclosed) = mysql_fetch_row($result);
 
-    $string .= "<h4>".sprintf($$GLOBALS['strIncidentsClosedToday'], $todaysclosed)".</h4>";
+    $string .= "<h4>".sprintf($$GLOBALS['strIncidentsClosedToday'], $todaysclosed)."</h4>";
     if ($todaysclosed > 0)
     {
         $sql = "SELECT COUNT(i.id) AS count, realname, u.id AS owner FROM `{$GLOBALS['dbIncidents']}` AS i ";
