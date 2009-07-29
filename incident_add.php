@@ -996,8 +996,8 @@ elseif ($action == 'reassign')
     $incidentnum = "<a href=\"javascript:incident_details_window('$incidentid','incident{$incidentid}');\">{$strIncident} {$incidentid}</a>";
     $queuename = "<strong style='color: red'>{$strActionNeeded}</strong>";
     $name = user_realname($uid);
-    printf($strHasBeenMovedToX, $incidentnum, $name, $queuename);
-    echo "</p>";
+    printf($strHasBeenAutoMovedToX, $incidentnum, $name, $queuename);
+    echo help_link('AutoAssignIncidents')."</p><br /><br />";
     $userphone = user_phone($userid);
     if ($userphone!='') echo "<p align='center'>{$strTelephone}: {$userphone}</p>";
     $sql = "UPDATE `{$dbIncidents}` SET owner='$uid', lastupdated='$now' WHERE id='$incidentid'";
