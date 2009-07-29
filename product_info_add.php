@@ -24,7 +24,7 @@ require (APPLICATION_LIBPATH . 'auth.inc.php');
 $product = cleanvar($_REQUEST['product']);
 $information = cleanvar($_POST['information']);
 $moreinformation = cleanvar($_POST['moreinformation']);
-$title = $strAddProductInformation
+$title = $strAddProductInformation;
 
 // Show add product information form
 if (empty($_REQUEST['submit']))

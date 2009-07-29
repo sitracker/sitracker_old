@@ -74,7 +74,7 @@ switch ($mode)
         echo "<tr><th>{$strFileVersion}:</th><td>";
         echo "<input type='text' size='40' name='fileversion' value='{$obj->fileversion}' />";
         echo "</td></tr>\n";
-        echo "<tr><th>{$strFileDate}:</th><td>".ldate('D jS M Y @ g:i A',$obj->filedate)." "{$strby}" ".user_realname($obj->userid,TRUE). "</td></tr>\n";
+        echo "<tr><th>{$strFileDate}:</th><td>".ldate('D jS M Y @ g:i A',$obj->filedate)." {$strby} ".user_realname($obj->userid,TRUE). "</td></tr>\n";
 
         if ($obj->expiry>0)
         {
