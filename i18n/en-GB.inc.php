@@ -95,7 +95,8 @@ $strAddsIncidentBasedOnEmail = 'Add an incident based on the contents of an emai
 # i.e. Physical site
 $strAddSite = 'Add Site';
 $strAddSiteFailed = 'Addition of site failed';
-$strAddXfailed = 'Addition of %s failed';
+# i.e. Addition of site failed
+$strAddXfailed = 'Addition of %s Failed';
 $strAddSiteSupportIncident = 'Add Site Support Incident';
 $strAddSkill = 'Add Skill';
 $strAddTask = 'Add Task';
@@ -1049,7 +1050,6 @@ $strNewestAtBottom = 'Newest at the bottom';
 $strNewestAtTop = 'Newest at the top';
 $strNewIncidentStatus = 'New Incident Status';
 $strNewKBArticle = 'New Article';
-$strNewNoteBy = 'New note by';
 $strNewPassword = 'New Password';
 $strNewProduct = 'New Product';
 $strNewReseller = 'New Reseller';
@@ -1462,6 +1462,7 @@ $strSelect = 'Select';
 $strSelectAction = 'Select action';
 $strSelectAFieldForTemplates = 'Select a field that supports template variables, then click a variable to insert it';
 $strSelectDays = 'Select Days';
+$strSelectionXmustNotBeEmpty = 'Selection %s Must Not Be Empty';
 $strSelectKBSections = 'Select the sections you\'d like to include in the article by checking the boxes beside each heading, you can add further sections later.  You don\'t need to include all sections, just use the ones that are relevant.';
 $strSelectNoneAssumesAll = 'Select none assumes all';
 $strSelectSkillsApplyToArticle = 'Select the skills that apply to this article';

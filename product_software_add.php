@@ -80,13 +80,13 @@ elseif ($action == "add")
     if ($productid == 0)
     {
         $errors = 1;
-        $errors_string .= "<p class='error'>You must select a product</p>\n";
+        $errors_string .= "<p class='error'>".sprintf($strSelectionXmustNotBeEmpty, $strProduct)."</p>\n";
     }
     // check for blank software id
     if ($softwareid == 0)
     {
         $errors = 1;
-        $errors_string .= "<p class='error'>Skill ID cannot be blank</p>\n";
+        $errors_string .= "<p class='error'>".sprintf($strSelectionXmustNotBeEmpty, $strSkill)."</p>\n";
     }
 
     // add record if no errors
