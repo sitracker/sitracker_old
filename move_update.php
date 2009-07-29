@@ -69,75 +69,75 @@ if ($incidentid == '')
         switch ($updates['type'])
         {
             case 'opening':
-                echo sprintf($strOpenedby), "<strong>".user_realname($updates['userid'],TRUE)."</strong>";
-                if ($updates['customervisibility'] == 'show') echo " ({$strCustomerVisible}e)";
+                echo "Opened by <strong>".user_realname($updates['userid'],TRUE)."</strong>";
+                if ($updates['customervisibility'] == 'show') echo " (Customer Visible)";
             break;
 
             case 'reassigning':
-                echo sprintf($strReassignedToBy), "<strong>".user_realname($updates['userid'],TRUE)."</strong>";
+                echo "Reassigned by <strong>".user_realname($updates['userid'],TRUE)."</strong>";
                 if ($updates['currentowner'] != 0)  // only say who it was assigned to if the currentowner field is filled in
                 {
-                    echo " {$strTo} <strong>".user_realname($updates['currentowner'],TRUE)."</strong>";
+                    echo " To <strong>".user_realname($updates['currentowner'],TRUE)."</strong>";
                 }
             break;
 
             case 'email':
-                echo sprintf($strEmailsentby), "<strong>".user_realname($updates['userid'],TRUE)."</strong>";
-                if ($updates['customervisibility'] == 'show') echo " ({$strCustomerVisible})";
+                echo "Email Sent by <strong>".user_realname($updates['userid'],TRUE)."</strong>";
+                if ($updates['customervisibility'] == 'show') echo " (Customer Visible)";
             break;
 
             case 'closing':
-                echo sprintf($strClosedbyX), "<strong>".user_realname($updates['userid'],TRUE)."</strong>";
-                if ($updates['customervisibility'] == 'show') echo " ({$strCustomerVisible})";
+                echo "Closed by <strong>".user_realname($updates['userid'],TRUE)."</strong>";
+                if ($updates['customervisibility'] == 'show') echo " (Customer Visible)";
             break;
 
             case 'reopening':
-                echo sprintf($strReopenedby), "<strong>".user_realname($updates['userid'],TRUE)."</strong>";
-                if ($updates['customervisibility'] == 'show') echo " ({$strCustomerVisible})";
+                echo "Reopened by <strong>".user_realname($updates['userid'],TRUE)."</strong>";
+                if ($updates['customervisibility'] == 'show') echo " (Customer Visible)";
             break;
 
             case 'phonecallout':
-                echo sprintf($strPhonecallmadeby), "<strong>".user_realname($updates['userid'],TRUE)."</strong>";
+                echo "Call made by <strong>".user_realname($updates['userid'],TRUE)."</strong>";
             break;
 
             case 'phonecallin':
-                echo sprintf($strPhonecalltakenby), "<strong>".user_realname($updates['userid'],TRUE)."</strong>";
+                echo "Call taken by <strong>".user_realname($updates['userid'],TRUE)."</strong>";
             break;
 
             case 'research':
-                echo sprintf($strResearchedby), "<strong>".user_realname($updates['userid'],TRUE)."</strong>";
+                echo "Researched by <strong>".user_realname($updates['userid'],TRUE)."</strong>";
             break;
 
             case 'webupdate':
-                echo sprintf($strWebupdateBy), "<strong>".user_realname($updates['userid'],TRUE)."</strong>";
+                echo "Web Update by <strong>".user_realname($updates['userid'],TRUE)."</strong>";
             break;
 
             case 'emailout':
-                echo sprintf($strEmailsentby), "<strong>".user_realname($updates['userid'],TRUE)."</strong>";
+                echo "Email sent by <strong>".user_realname($updates['userid'],TRUE)."</strong>";
             break;
 
             case 'emailin':
-                echo sprintf($strEmailreceivedby), "<strong>".user_realname($updates['userid'],TRUE)."</strong>";
+                echo "Email received by <strong>".user_realname($updates['userid'],TRUE)."</strong>";
             break;
 
             case 'externalinfo':
-                echo sprintf($strExternalInfoAddedBy), "<strong>".user_realname($updates['userid'],TRUE)."</strong>";
+                echo "External info added by <strong>".user_realname($updates['userid'],TRUE)."</strong>";
             break;
 
             case 'probdef':
-                echo sprintf($strProblemDefinitionby), "<strong>".user_realname($updates['userid'],TRUE)."</strong>";
+                echo "Problem Definition by <strong>".user_realname($updates['userid'],TRUE)."</strong>";
             break;
 
             case 'solution':
-                echo sprintf($strFinalSolutionby), "<strong>".user_realname($updates['userid'],TRUE)."</strong>";
+                echo "Final Solution by <strong>".user_realname($updates['userid'],TRUE)."</strong>";
             break;
 
             default:
-                echo sprintf($strUpdatedby), "<strong>".user_realname($updates['userid'],TRUE)."</strong>";
-                if ($updates['customervisibility'] == 'show') echo " ({$strCustomerVisible})";
+                echo "Updated by <strong>".user_realname($updates['userid'],TRUE)."</strong>";
+                if ($updates['customervisibility'] == 'show') echo " (Customer Visible)";
             break;
         }
-        if ($updates['nextaction']!='') echo " {$strNextAction}: <strong>".$updates['nextaction'].'</strong>';
+        if ($updates['nextaction']!='') echo " Next Action: <strong>".$updates['nextaction'].'</strong>';
 
         echo " - {$update_timestamp_string}</th></tr>";
         echo "<tr><td class='shade2' width='100%'>";
