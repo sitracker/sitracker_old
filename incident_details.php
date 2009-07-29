@@ -705,20 +705,20 @@ while ($update = mysql_fetch_object($result))
 
     if (array_key_exists($update->type, $updatetypes))
     {
-        if (!empty($update->sla) AND $update->type=='slamet')
-        {
-            echo icon($slatypes[$update->sla]['icon'], 16, $update->type);
-        }
-        echo icon($updatetypes[$update->type]['icon'], 16, $update->type);
-
         if ($update->customervisibility == 'show')
         {
-            echo "<span>{$strHideInPortal}</span>";
+            $showhide = $strHideInPortal;
         }
         else
         {
-            echo "<span>{$strMakeVisibleInPortal}</span>";
+            $showhide = $strMakeVisibleInPortal;
         }
+
+        if (!empty($update->sla) AND $update->type=='slamet')
+        {
+            echo icon($slatypes[$update->sla]['icon'], 16, $showhide);
+        }
+        echo icon($updatetypes[$update->type]['icon'], 16, $showhide);
 
         echo "</a> {$updateheadertext}";
     }
