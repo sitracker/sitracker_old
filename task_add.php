@@ -92,7 +92,7 @@ else
             $errors = 0;
             if ($name=='')
             {
-                $_SESSION['formerrors']['add_task']['name'] = "Title must not be blank";
+                $_SESSION['formerrors']['add_task']['name'] = sprintf($strFieldMustNotBeBlank, $strTitle);
                 $errors++;
             }
 
