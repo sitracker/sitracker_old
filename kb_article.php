@@ -43,12 +43,12 @@ if (isset($_POST['submit']))
     $errors = 0;
     if ($kbtitle == '')
     {
-        $_SESSION['formerrors']['kb_add_article']['title'] = "Title cannot be empty";
+        $_SESSION['formerrors']['kb_add_article']['title'] = sprintf($strFieldMustNotBeBlank, $strTitle);
         $errors++;
     }
     if ($keywords == '')
     {
-        $_SESSION['formerrors']['kb_add_article']['keywords'] = "Keywords cannot be empty";
+        $_SESSION['formerrors']['kb_add_article']['keywords'] = sprintf($strFieldMustNotBeBlank, $strKeywords);
         $errors++;
     }
 

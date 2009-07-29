@@ -32,7 +32,7 @@ function setup_exec_sql($sqlquerylist)
             if (mysql_error())
             {
                 $html .= "<p><strong>{$strFailed}:</strong> ".htmlspecialchars($sql)."</p>";
-                // FIXME i18n
+                // FIXME i18n - Probably needs to be trigger_error() instead / CJ 29Jul09
                 $html .= "<p class='error'>".mysql_error()."<br />A MySQL error occurred, this could be because the MySQL user '{$CONFIG['db_username']}' does not have appropriate permission to modify the database schema.<br />";
                 //echo "The SQL command was:<br /><code>$sql</code><br />";
                 $html .= "An error might also be caused by an attempt to upgrade a version that is not supported by this script.<br />";
