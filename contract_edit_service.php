@@ -257,11 +257,11 @@ switch ($mode)
 
             if ($sucess)
             {
-                html_redirect("{$CONFIG['application_webpath']}contract_details.php?id={$contractid}", TRUE, '{$strSuccessfullyUpdated}');
+                html_redirect("{$CONFIG['application_webpath']}contract_details.php?id={$contractid}", TRUE, $strSuccessfullyUpdated);
             }
             else
             {
-                html_redirect("{$CONFIG['application_webpath']}contract_details.php?id={$contractid}", FALSE, '{$strNotUpdated}');
+                html_redirect("{$CONFIG['application_webpath']}contract_details.php?id={$contractid}", FALSE, $strNotUpdated);
             }
 
 

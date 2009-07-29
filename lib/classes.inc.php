@@ -1,4 +1,16 @@
 <?php
+// classes.inc.php - The classes used by SiT
+//
+// SiT (Support Incident Tracker) - Support call tracking system
+// Copyright (C) 2000-2009 Salford Software Ltd. and Contributors
+//
+// This software may be used and distributed according to the terms
+// of the GNU General Public License, incorporated herein by reference.
+//
+
+// Author:  Ivan Lucas <ivanlucas[at]users.sourceforge.net> 
+//             Paul Heaney <paul[at]sitracker.org>
+
 
 // Prevent script from being run directly (ie. it must always be included
 if (realpath(__FILE__) == realpath($_SERVER['SCRIPT_FILENAME']))
@@ -14,29 +26,29 @@ class Holiday {
 
 
 /**
-* Highest level within SiT! all entities within SiT! should extend from this class
-* this provides a common interface exposing values and functiosn which are common across all entities
-* @author Paul Heaney
+ * Highest level within SiT! all entities within SiT! should extend from this class
+ * this provides a common interface exposing values and functiosn which are common across all entities
+ * @author Paul Heaney
 */
 abstract class SitEntity {
     var $id;
 
     /**
-    * Adds the entity to SiT
-    */
+     * Adds the entity to SiT
+     */
     abstract function add();
 
     /**
-    * Edits an existing entity in sit
-    */
+     * Edits an existing entity in sit
+     */
     abstract function edit();
 }
 
 
 /**
-* Base class for all types of people, this contains the core attributes common for all people
-* @author Paul Heaney
-*/
+ * Base class for all types of people, this contains the core attributes common for all people
+ * @author Paul Heaney
+ */
 abstract class Person extends SitEntity {
     var $username;
     var $password;
@@ -50,9 +62,9 @@ abstract class Person extends SitEntity {
 
 
 /**
-* Represents a user adding the additional details possible for a user
-* @author Paul Heaney
-*/
+ * Represents a user adding the additional details possible for a user
+ * @author Paul Heaney
+ */
 class User extends Person{
     var $realname;
     var $roleid;
@@ -77,11 +89,11 @@ class User extends Person{
     var $startdate;
 
     /**
-    * Adds a user to SiT! this performs a number of checks to ensure uniqueness and mandertory details are present
-    *
-    * @return mixed int for user ID if sucessful else FALSE
-    * @author Paul Heaney
-    */
+     * Adds a user to SiT! this performs a number of checks to ensure uniqueness and mandertory details are present
+     *
+     * @return mixed int for user ID if sucessful else FALSE
+     * @author Paul Heaney
+     */
     function add()
     {
         global $CONFIG, $now;
@@ -146,10 +158,10 @@ class User extends Person{
 
 
     /**
-    * Updates the details of a user within SiT!
-    * @author Paul Heaney
-    * @return bool True if updated sucessfully FALSE otherwise
-    */
+     * Updates the details of a user within SiT!
+     * @author Paul Heaney
+     * @return bool True if updated sucessfully FALSE otherwise
+     */
     function edit()
     {
         global $now;
@@ -224,12 +236,12 @@ class User extends Person{
 
 
     /**
-    * Disabled this user in SiT!
-    * @author Paul Heaney
-    * @return bool
-    * @retval TRUE user disabled
-    * @retval FALSE user not disabled
-    */
+     * Disabled this user in SiT!
+     * @author Paul Heaney
+     * @return bool
+     * @retval TRUE user disabled
+     * @retval FALSE user not disabled
+     */
     function disable()
     {
         $toReturn = true;
@@ -256,9 +268,9 @@ class User extends Person{
 
 
 /**
-* Represents a contact within SiT! adding the necessary details unique to contacts
-* @author Paul Heaney
-*/
+ * Represents a contact within SiT! adding the necessary details unique to contacts
+ * @author Paul Heaney
+ */
 class Contact extends Person {
     var $notify_contact;
     var $forenames;
@@ -280,11 +292,11 @@ class Contact extends Person {
 
 
     /**
-    * Checks to see if the required fields are present and optionally that the user is unique
-    * @author Paul Heaney
-    * @param bool $duplicate Whether to check if this contact is a duplicate, defaults to true
-    * @return bool true indicates valid contact, false otherwise
-    */
+     * Checks to see if the required fields are present and optionally that the user is unique
+     * @author Paul Heaney
+     * @param bool $duplicate Whether to check if this contact is a duplicate, defaults to true
+     * @return bool true indicates valid contact, false otherwise
+     */
     function check_valid($duplicate=true)
     {
         $errors = 0;
@@ -312,10 +324,10 @@ class Contact extends Person {
 
 
     /**
-    * Generates an array of insertable values for the contacts data protection settings
-    * @author Paul Heaney
-    * @return array an array with keys email, phone, address with either Yes or No as values
-    */
+     * Generates an array of insertable values for the contacts data protection settings
+     * @author Paul Heaney
+     * @return array an array with keys email, phone, address with either Yes or No as values
+     */
     function get_dataprotection()
     {
         $dp['email'] = 'Yes';
@@ -331,10 +343,10 @@ class Contact extends Person {
 
 
     /**
-    * Performs the addition of the contact to SiT! this performs validity checks before adding the contact
-    * @author Paul Heaney
-    * @return mixed int for contactID if sucsesful, false otherwise
-    */
+     * Performs the addition of the contact to SiT! this performs validity checks before adding the contact
+     * @author Paul Heaney
+     * @return mixed int for contactID if sucsesful, false otherwise
+     */
     function add()
     {
         global $now;
@@ -385,10 +397,10 @@ class Contact extends Person {
 
 
     /**
-    * Updates the details of an existing contact within SiT!
-    * @author Paul Heaney
-    * @return bool. true on sucess, false otherwise
-    */
+     * Updates the details of an existing contact within SiT!
+     * @author Paul Heaney
+     * @return bool. true on sucess, false otherwise
+     */
     function edit()
     {
         global $now;
@@ -458,10 +470,10 @@ class Contact extends Person {
     }
 
     /**
-    * Disabled this contact in SiT!
-    * @author Paul Heaney
-    * @return bool True if disabled, false otherwise
-    */
+     * Disabled this contact in SiT!
+     * @author Paul Heaney
+     * @return bool True if disabled, false otherwise
+     */
     function disable()
     {
         $toReturn = true;
@@ -486,10 +498,10 @@ class Contact extends Person {
     }
 
     /**
-    * Checks to see if the contact is a duplicate within SiT!
-    * @author Paul Heaney
-    * @return bool. true for duplicate, false otherwise
-    */
+     * Checks to see if the contact is a duplicate within SiT!
+     * @author Paul Heaney
+     * @return bool. true for duplicate, false otherwise
+     */
     function is_duplicate()
     {
         // Check this is not a duplicate

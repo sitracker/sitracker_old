@@ -83,17 +83,31 @@ $server->wsdl->addComplexType('incident_list_response',
                                             )
                                         );
 
+
+/**
+ * The class which represents the status which SiT! always returns when using the SOAP API
+ * @author Paul Heaney
+ */
 class SoapStatus
 {
     var $value;
     var $name;
     var $description;
 
-    function SoapStatus()
+    /**
+     * Creates a new SoapStatus object.
+     * @author Paul Heaney
+     */
+    function __construct()
     {
         $this->set_error('no_error');
     }
 
+    /**
+     * Sets the error code for this object
+     * @param string $name. Name of the error as defined in soap_error_definitions
+     * @author Paul Heaney
+     */
     function set_error($name)
     {
         global $soap_errors;
@@ -111,13 +125,22 @@ class SoapStatus
         }
     }
 
+    /**
+     * Generate the array to be returned by nusoap
+     * @return array. Status array
+     * @author Paul Heaney
+     */
     function get_array()
     {
         return array('value' => $this->value, 'name' => $this->name, 'description' => $this->description);
     }
 }
 
-
+/**
+ * Incident class for SiT, represents a single incident within SiT
+ * @author Paul Heaney
+ * @todo FIXME move out of this file into incidents in SiT3.60, extend SitEntity and make more useful
+ */
 class Incident
 {
     var $incidentid = -1;
@@ -137,6 +160,12 @@ class Incident
     var $currentstatusexternal = "no status";
     var $servicelevel = "no service level";
 
+
+    /**
+     * Returns the array of the incident required by nusoap
+     * @return array. Array for NUSOAP
+     * @author Paul Heaney 
+     */
     function get_array()
     {
         debug_log("get_array ".$this->incidentid );

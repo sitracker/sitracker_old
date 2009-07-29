@@ -8,6 +8,8 @@
 // of the GNU General Public License, incorporated herein by reference.
 //
 
+// Author: Paul Heaney <paul[at]sitracker.org>
+
 $soap_errors = array(
             'no_error' => array ('value' => 0, 'name' => 'No error', 'description' => 'No Error'),
             'login_failed' => array ('value' => 1, 'name' => 'Login details incorrect', 'description' => 'Username and password supplied are invalid'),
