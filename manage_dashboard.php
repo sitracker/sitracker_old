@@ -55,7 +55,7 @@ switch ($_REQUEST['action'])
 
         echo "<h2>".icon('dashboard', 32)." ";
         echo $strInstallDashboardComponents."</h2>";
-        echo "<p align='center'>Please note the component must has been placed in the dashboard directory and named <var>dashboard_NAME</var></p>";
+        echo "<p align='center'>{$strComponentMustBePlacedInDashboardDir} <var>dashboard_NAME</var></p>";
         while ($dashboardnames = mysql_fetch_object($result))
         {
             $dashboard[$dashboardnames->name] = $dashboardnames->name;
