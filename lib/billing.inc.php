@@ -1134,7 +1134,7 @@ function contract_service_table($contractid, $billing)
                 $awaitingapproval = service_transaction_total($service->serviceid, BILLING_AWAITINGAPPROVAL) * -1;
                 $reserved = service_transaction_total($service->serviceid, BILLING_RESERVED) * -1;
 
-                $span = "<strong>{$GLOBALS['strServiceID']}:</strong> {$service->serviceid}<br />";                
+                $span = "<strong>{$GLOBALS['strServiceID']}:</strong> {$service->serviceid}<br />";
                 if (!empty($service->title))
                 {
                     $span .= "<strong>{$GLOBALS['strTitle']}</strong>: {$service->title}<br />";
@@ -1223,12 +1223,14 @@ function contract_service_table($contractid, $billing)
 
 
 /**
-* Make a billing array for a incident
-* @author Paul Heaney
-* @param int $incidentid - Incident number of the incident to create the array from
-* @todo Can this be merged into make_incident_billing_array? Does it serve any purpose on its own?
-*   -- I would prefer to keep seperate - INL 23Jan09
-**/
+ * Creates a billing array containing an entry for every activity that has happened
+ * for the duration of the incident specfified.
+ * @author Paul Heaney
+ * @param int $incidentid - Incident number of the incident to create the array from
+ * @returns array
+ * @note The $billing array lists the owner of each activity with start time and
+ * @note duration.  Used for calculating billing totals.
+ */
 function get_incident_billing_details($incidentid)
 {
     /*
@@ -1266,19 +1268,19 @@ function get_incident_billing_details($incidentid)
 
 
 /**
-* Takes an array of engineer/times of services and groups them so we have only periods which should be charged for.
-* This takes into account tasks started in the same period by the same engineer e.g. task started at 17:00 for 10 mins
-* another at 17:30 for 10 mins with a period of 60mins only one is reported
-* @author Paul Heaney
-* @param array $count The element to return into
-* @param string $countType The counttype we are doing so either engineer or customer
-* @param array $activity The current activity
-* @param int $period The billing period to group to
-* @return $count is passed in by reference so nothing is returned
-**/
+ * Takes an array of engineer/times of services and groups them so we have only periods which should be charged for.
+ * This takes into account tasks started in the same period by the same engineer e.g. task started at 17:00 for 10 mins
+ * another at 17:30 for 10 mins with a period of 60mins only one is reported
+ * @author Paul Heaney
+ * @param array $count (Passed by reference) The array to return into, either the 'engineer' or 'customer' element see $countType
+ * @param string $countType The counttype we are doing so either engineer or customer
+ * @param array $activity The current activity
+ * @param int $period The billing period to group to (in seconds)
+ * @return $count is passed in by reference so nothing is returned
+ */
 function group_billing_periods(&$count, $countType, $activity, $period)
 {
-    $duration = $activity['duration'];
+    $duration = $activity['duration'] * 60;
     $startTime = $activity['starttime'];
 
     if (!empty($count[$countType]))
@@ -1309,6 +1311,7 @@ function group_billing_periods(&$count, $countType, $activity, $period)
                 }
             }
             //echo "Saved: {$saved}<br />";
+            // This section runs when there are no engineer or customer billing period totals yet (first iteration)
             if ($saved == "false" AND $activity['duration'] > 0)
             {
                 //echo "BB:".$activity['starttime'].":SAVED:{$saved}:DUR:{$activity['duration']}<br />";
@@ -1324,7 +1327,7 @@ function group_billing_periods(&$count, $countType, $activity, $period)
     else
     {
         $count[$countType][$activity['starttime']] = $activity['starttime'];
-        $localDur = $activity['duration'] - $period;
+        $localDur = $duration - $period;
 
         while ($localDur > 0)
         {
@@ -1337,11 +1340,12 @@ function group_billing_periods(&$count, $countType, $activity, $period)
 
 
 /**
-* @author Paul Heaney
-* @note  based on periods
+ * @author Paul Heaney
+ * @note  based on periods
 */
 function make_incident_billing_array($incidentid, $totals=TRUE)
 {
+
     $billing = get_incident_billing_details($incidentid);
 
 // echo "<pre>";
@@ -1397,6 +1401,9 @@ function make_incident_billing_array($incidentid, $totals=TRUE)
 
         $count = array();
 
+
+        // Loop over each activity that happened during the duration of the incident
+        // Grouped by Engineer - and then calculate totals
         foreach ($billing AS $engineer)
         {
             /*
@@ -1600,14 +1607,14 @@ function contract_unit_balance($contractid, $includenonapproved = FALSE, $includ
     $unitbalance = 0;
 
     $sql = "SELECT * FROM `{$dbService}` WHERE contractid = {$contractid} ";
-    
+
     if ($showonlycurrentlyvalid)
     {
         $sql .= "AND UNIX_TIMESTAMP(startdate) <= {$now} ";
         $sql .= "AND UNIX_TIMESTAMP(enddate) >= {$now}  ";
     }
     $sql .= "ORDER BY enddate DESC";
-    
+
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
 
@@ -1650,14 +1657,14 @@ function contract_balance($contractid, $includenonapproved = FALSE, $includerese
     $unitbalance = 0;
 
     $sql = "SELECT * FROM `{$dbService}` WHERE contractid = {$contractid} ";
-    
+
     if ($showonlycurrentlyvalid)
     {
         $sql .= "AND UNIX_TIMESTAMP(startdate) <= {$now} ";
         $sql .= "AND UNIX_TIMESTAMP(enddate) >= {$now}  ";
     }
     $sql .= "ORDER BY enddate DESC";
-    
+
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
 
