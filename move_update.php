@@ -13,6 +13,7 @@
 $permission = 8; // Update Incidents
 require ('core.php');
 require (APPLICATION_LIBPATH . 'functions.inc.php');
+require (APPLICATION_LIBPATH . 'incident.inc.php');
 
 // This page requires authentication
 require (APPLICATION_LIBPATH . 'auth.inc.php');
