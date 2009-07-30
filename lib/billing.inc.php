@@ -1251,7 +1251,7 @@ function get_incident_billing_details($incidentid)
             if ($obj->duration > 0)
             {
                 $temparray['owner'] = $obj->userid;
-                $temparray['starttime'] = ($obj->timestamp-$obj->duration);
+                $temparray['starttime'] = ($obj->timestamp-($obj->duration*60));
                 $temparray['duration'] = $obj->duration;
                 $billing[$obj->userid][] = $temparray;
             }
