@@ -673,4 +673,30 @@ function sla_target_content($incidentid, $target)
     return $rtn;
 }
 
+/**
+ * Returns a Yes or No when a incident is open or closed
+ * @author Rick Bonkestoter
+ * @param $incidentid int The incident id
+ * @return string Yes or No
+ */
+ 
+function incident_open($incidentid)
+{
+	global $dbIncidents;
+	$return = "";
+	$incidentid = cleanvar($incidentid);
+	$sql = "SELECT closed FROM `{$dbIncidents}` ";
+	$sql .= "WHERE incidentid = '{$incidentid}'";
+	$results = mysql_query($sql);
+	if(mysql_error()) trigger_error(mysql_error(), E_USER_WARNING);
+	$fetch = mysql_fetch_assoc($results);
+	if($fetch['closed'] == 0)
+	{
+		$return = "Yes";
+	} else {
+		$return = "No";
+	}
+	return $return;
+}
+
 ?>
