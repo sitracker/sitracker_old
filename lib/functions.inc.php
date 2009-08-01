@@ -4702,22 +4702,28 @@ function parse_updatebody($updatebody, $striptags = TRUE)
 }
 
 
+/**
+ * Produces a HTML form for adding a note to an item 
+ * @param $linkid int The link type to be used
+ * @param $refid int The ID of the item this note if for
+ * @return string The HTML to display
+ */
 function add_note_form($linkid, $refid)
 {
     global $now, $sit, $iconset;
     $html = "<form name='addnote' action='note_add.php' method='post'>";
     $html .= "<div class='detailhead note'> <div class='detaildate'>".readable_date($now)."</div>\n";
     $html .= icon('note', 16, $GLOBALS['strNote ']);
-    $html .= " New Note by ".user_realname($sit[2])."</div>\n";
+    $html .= " ".sprintf($GLOBALS['strNewNoteByX'], user_realname($sit[2]))."</div>\n";
     $html .= "<div class='detailentry note'>";
     $html .= "<textarea rows='3' cols='40' name='bodytext' style='width: 94%; margin-top: 5px; margin-bottom: 5px; margin-left: 3%; margin-right: 3%; background-color: transparent; border: 1px dashed #A2A86A;'></textarea>";
     if (!empty($linkid))
     {
-        $html .= "<input type='hidden' name='link' value='$linkid' />";
+        $html .= "<input type='hidden' name='link' value='{$linkid}' />";
     }
     else
     {
-        $html .= "&nbsp;Link <input type='text' name='link' size='3' />";
+        $html .= "&nbsp;{$GLOBALS['strLInk']} <input type='text' name='link' size='3' />";
     }
 
     if (!empty($refid))
@@ -4726,7 +4732,7 @@ function add_note_form($linkid, $refid)
     }
     else
     {
-        $html .= "&nbsp;Ref ID <input type='text' name='refid' size='4' />";
+        $html .= "&nbsp;{$GLOBALS['strRefID']} <input type='text' name='refid' size='4' />";
     }
 
     $html .= "<input type='hidden' name='action' value='addnote' />";
@@ -4738,6 +4744,13 @@ function add_note_form($linkid, $refid)
 }
 
 
+/**
+ * Produces HTML of all notes assigned to an item
+ * @param $linkid int The link type
+ * @param $refid int The ID of the item the notes are linked to
+ * @param $delete bool Whether its possible to delet notes (default TRUE)
+ * @return string HTML of the notes
+ */
 function show_notes($linkid, $refid, $delete = TRUE)
 {
     global $sit, $iconset, $dbNotes;

@@ -1050,6 +1050,7 @@ $strNewestAtBottom = 'Newest at the bottom';
 $strNewestAtTop = 'Newest at the top';
 $strNewIncidentStatus = 'New Incident Status';
 $strNewKBArticle = 'New Article';
+$strNewNoteByX = 'New Note by %s';
 $strNewPassword = 'New Password';
 $strNewProduct = 'New Product';
 $strNewReseller = 'New Reseller';
@@ -1343,6 +1344,8 @@ $strRecentIncidents = 'Recent Incidents';
 $strReducedPrioritySLA = 'Reduced from %s according to SLA';
 $strReferences = 'References';
 $strRefresh = 'Refresh';
+#Abbreviation for Reference ID
+$strRefID = 'Ref ID';
 $strRegister = 'Register';
 $strRelated = 'Related';
 $strRelatedContracts = 'Related Contracts';
