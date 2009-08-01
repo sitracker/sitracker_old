@@ -298,6 +298,7 @@ else
     $references = cleanvar($_POST['references']);
     $wait = cleanvar($_POST['wait']);
     $send_email = cleanvar($_POST['send_email']);
+    $send_engineer_email = cleanvar($_POST['send_engineer_email']);
 
     // Close the incident
     $errors = 0;

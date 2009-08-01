@@ -4485,6 +4485,13 @@ return ($html);
 }
 
 
+/**
+ * Identifies whether feedback should be send for this contract, 
+ * This checks against $CONFIG['no_feedback_contracts'] to see if the contract is set to receive no feedback
+ * @param $contractid int The contract ID to check
+ * @return bool TRUE if feedback should be sent, false otherwise
+ * @author Paul Heaney
+ */
 function send_feedback($contractid)
 {
     global $CONFIG;
@@ -4499,7 +4506,12 @@ function send_feedback($contractid)
     return TRUE;
 }
 
-// Creates a blank feedback form response
+/**
+ * Creates a blank feedback form response
+ * @param $formid int The feedback form to use
+ * @param $incidentid int The incident to generate the form for
+ * @return int The form ID
+ */
 function create_incident_feedback($formid, $incidentid)
 {
     global $dbFeedbackRespondents;
@@ -4513,7 +4525,7 @@ function create_incident_feedback($formid, $incidentid)
     $sql .= "'".mysql_real_escape_string($incidentid)."') ";
     mysql_query($sql);
     if (mysql_error()) trigger_error ("MySQL Error: ".mysql_error(), E_USER_ERROR);
-    $blankformid=mysql_insert_id();
+    $blankformid = mysql_insert_id();
     return $blankformid;
 }
 
