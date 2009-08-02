@@ -17,6 +17,7 @@ require (APPLICATION_LIBPATH . 'functions.inc.php');
 // This page requires authentication
 require (APPLICATION_LIBPATH . 'auth.inc.php');
 
+$title = $strManageDashboardComponents;
 // A duplicate of that in setup.php - Probably wants moving to functions.inc.php eventually PH 9/12/07
 function setup_exec_sql($sqlquerylist)
 {
