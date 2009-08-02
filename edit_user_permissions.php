@@ -118,13 +118,16 @@ elseif ($action == "edit" && (!empty($user) OR !empty($role)))
     }
     if (!empty($user))
     {
-        $object = "user: ".user_realname($user);
+    // Echo lines have been moved to simplify i18n - Tomse 02Aug09
+    //        $object = "user: ".user_realname($user);
+    echo "<h2>".sprintf($strSetPermissionsForUserX, user_realname($user))."</h2>";
     }
     else
     {
-        $object = "role: ".db_read_column('rolename', $dbRoles, $role);
+//        $object = "role: ".db_read_column('rolename', $dbRoles, $role);
+    echo "<h2>".sprintf($strSetPermissionsForRoleX, db_read_column('rolename', $dbRoles, $role))."</h2>";
     }
-    echo "<h2>Set Permissions for {$object}</h2>";
+//    echo "<h2>".sprintf($strSetPermissionsForUserX, user_realname($user))."</h2>";
     if (!empty($user)) echo "<p align='center'>{$strPermissionsInhereitedCannotBeChanged}</p>";
 
     // Next lookup the permissions
