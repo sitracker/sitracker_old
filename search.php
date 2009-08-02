@@ -738,7 +738,7 @@ echo "(<a href='search_incidents_advanced.php'>{$strAdvanced}</a> | <a href='vie
 echo "</td>";
 echo "</tr>\n";
 echo "</table>\n";
-echo "<p><input type='submit' value='";
+echo "<p align=center><input type='submit' value='";
 if (empty($q))
 {
     echo $strSearch;
