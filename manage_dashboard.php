@@ -243,7 +243,10 @@ switch ($_REQUEST['action'])
 
             echo "<tr class='shade2'><td>{$dashboardnames->id}</td>";
             echo "<td>{$dashboardnames->name}</td>";
-            echo "<td><a href='".$_SERVER['PHP_SELF']."?action=enable&amp;id={$dashboardnames->id}&amp;enable={$opposite}'>{$dashboardnames->enabled}</a></td>";
+            echo "<td><a href='".$_SERVER['PHP_SELF']."?action=enable&amp;id={$dashboardnames->id}&amp;enable={$opposite}'>";
+            if ($dashboardnames->enabled == 'true') echo $strYes;
+            else echo $strNo;
+            echo "</a></td>";
 
             echo "<td>{$dashboardnames->version}</td>";
             echo "<td>";
