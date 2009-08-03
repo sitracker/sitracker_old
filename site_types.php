@@ -83,7 +83,7 @@ elseif ($mode == 'edit')
     {
         list($typename) = mysql_fetch_array($result);
     }
-    $form = new Form("sitetypes", $strAdd, $dbSiteTypes, "update", $strEditSiteType);
+    $form = new Form("sitetypes", $strEdit, $dbSiteTypes, "update", $strEditSiteType);
     $form->setReturnURLFailure($_SERVER['PHP_SELF']);
     $form->setReturnURLSuccess($_SERVER['PHP_SELF']);
     $c1 = new Cell();
