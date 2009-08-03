@@ -8,7 +8,7 @@
 // of the GNU General Public License, incorporated herein by reference.
 //
 // Author: Paul Heaney <paul[at]sitracker.org>
-// 
+//
 
 $permission = 56; // Add software
 
@@ -16,7 +16,7 @@ require ('core.php');
 require (APPLICATION_LIBPATH . 'functions.inc.php');
 // This page requires authentication
 require (APPLICATION_LIBPATH . 'auth.inc.php');
-require (APPLICATION_LIBPATH.'sitform.inc.php');
+require (APPLICATION_LIBPATH . 'sitform.inc.php');
 
 $title = $strSiteTypes;
 
@@ -83,7 +83,7 @@ elseif ($mode == 'edit')
     {
         list($typename) = mysql_fetch_array($result);
     }
-    $form = new Form("sitetypes", $strAdd, "sitetypes", "update", $strEditSiteType);
+    $form = new Form("sitetypes", $strAdd, $dbSiteTypes, "update", $strEditSiteType);
     $form->setReturnURLFailure($_SERVER['PHP_SELF']);
     $form->setReturnURLSuccess($_SERVER['PHP_SELF']);
     $c1 = new Cell();
