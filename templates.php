@@ -89,7 +89,7 @@ if (empty($action) OR $action == 'showform' OR $action == 'list')
         echo "<td><a href='{$editurl}'>{$template['name']}</a>";
         if (!empty($template['desc']))
         {
-            if (substr('str', 0, 3))
+            if (substr_compare($template->description, 'str', 0, 3) === 0)
             {
                 echo "<br />{$GLOBALS[$template['desc']]}";
                 $system = TRUE;
@@ -243,7 +243,7 @@ elseif ($action == "edit")
         if (strlen($template->description) > 3 AND substr_compare($template->description, 'str', 0, 3) === 0)
         {
              echo " readonly='readonly' ";
-             $template->description = $SYSLANG[$template->description];
+             $template->description = ${$template->description};
          }
         echo ">{$template->description}</textarea></td></tr>\n";
         switch ($templatetype)
