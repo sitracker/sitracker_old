@@ -1167,6 +1167,7 @@ $strNoticeNewHeldEmail = 'There is a new email in the holding queue';
 $strNoticeNewContractDesc = 'Notifies of a new contract';
 $strNoticeNewContract = '{contractproduct} contract has been added to {sitename} by {userrealname}';
 $strNoticeNewSite = 'New site {sitename} has been added by {userrealname}';
+$strNoticeNewSiteDesc = 'Notifies when a new site has been added';
 $strNoticeNewUserDesc = 'Notifies of a new system user';
 $strNoticeNewUser = '{userrealname} has been added as a new user to {applicationshortname}';
 $strNotices = 'Notices';
