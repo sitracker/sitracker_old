@@ -89,7 +89,7 @@ if (empty($action) OR $action == 'showform' OR $action == 'list')
         echo "<td><a href='{$editurl}'>{$template['name']}</a>";
         if (!empty($template['desc']))
         {
-            if (substr_compare($template->description, 'str', 0, 3) === 0)
+            if (substr_compare($template['desc'], 'str', 0, 3) === 0)
             {
                 echo "<br />{$GLOBALS[$template['desc']]}";
                 $system = TRUE;
