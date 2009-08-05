@@ -859,6 +859,16 @@ switch ($_REQUEST['action'])
         {
             echo "<h2>Attachments Directory</h2>";
             echo "<p>SiT! requires that the attachments directory is writable by the web server.</p>";
+            if (DIRECTORY_SEPARATOR == '/')
+            {
+                echo "<br />You can run the following shell command to make it writable.<br /><br /><var>chmod ugo+w {$CONFIG['attachment_fspath']}</var>";
+            }
+            else
+            {
+                echo "<br />You may need to set windows file permissions to set the folder <var>{$CONFIG['attachment_fspath']}</var> writable.";
+            }
+            echo "</p>";
+
             echo setup_button('checkatttdiragain', 'Next');
         }
         else
