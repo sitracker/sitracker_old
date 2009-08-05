@@ -657,7 +657,8 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
                                 // this appears to be required by some email clients - INL
 
             $mime = new MIME_mail($fromfield, $tofield, html_entity_decode($subjectfield), '', $extra_headers, $mailerror);
-            $mime -> attach($bodytext, '', "text/plain; charset={$GLOBALS['i18ncharset']}", 'base64', 'inline');
+            // INL 5 Aug 09, quoted-printable seems to split lines in unexpected places, base64 seems to work ok
+            $mime -> attach($bodytext, 'bodytext', "text/plain; charset={$GLOBALS['i18ncharset']}", 'quoted-printable', 'inline');
 
             // check for attachment
             //        if ($_FILES['attachment']['name']!='' || strlen($filename) > 3)
