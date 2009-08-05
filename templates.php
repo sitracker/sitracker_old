@@ -151,7 +151,10 @@ elseif ($action == "edit")
             var start = $(element).selectionStart;
             var end = $(element).selectionEnd;
 //             alert('start:' + start + '  end: ' + end + 'len: ' + $(element).textLength);
-            $(element).value = $(element).value.substring(0, start) + tvar + $(element).value.substring(end, $(element).textLength);
+            if ($(element).readAttribute('readonly') != 'readonly')
+            {
+                $(element).value = $(element).value.substring(0, start) + tvar + $(element).value.substring(end, $(element).textLength);
+            }
         }
         else
         {

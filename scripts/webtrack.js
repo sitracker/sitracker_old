@@ -683,7 +683,10 @@ function insertBBCode(element, tag, endtag)
         var start = $(element).selectionStart;
         var end = $(element).selectionEnd;
         //             alert('start:' + start + '  end: ' + end + 'len: ' + $(element).textLength);
-        $(element).value = $(element).value.substring(0, start) + tag + $(element).value.substring(start, end) + endtag + $(element).value.substring(end, $(element).textLength);
+        if ($(element).readAttribute('readonly') != 'readonly')
+        {
+            $(element).value = $(element).value.substring(0, start) + tag + $(element).value.substring(start, end) + endtag + $(element).value.substring(end, $(element).textLength);
+        }
     }
     $(element).focus();
     var caret = end + tag.length + endtag.length;
