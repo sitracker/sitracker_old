@@ -196,7 +196,7 @@ class MIME_mail
     {
         $this->errstr = '';
         $msg = '';
-        $boundary = 'SIT'.chr(rand(65, 91)).'------'.md5(uniqid(rand()));    # Boundary marker
+        $boundary = 'SITMIME200908'.chr(rand(65, 91)).md5(uniqid(rand()));    # Boundary marker
         $nparts = sizeof($this->mimeparts);
 
         if (is_array($this->mimeparts) && ($nparts > 1))
