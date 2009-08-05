@@ -207,7 +207,8 @@ class MIME_mail
             debug_log("case1, $nparts");
             $c_ver = "MIME-Version: 1.0".CRLF;
             $c_type = 'Content-Type: multipart/mixed;'.CRLF."\tboundary=\"$boundary\"".CRLF;
-            $c_enc = "Content-Transfer-Encoding: ".BIT7.CRLF;
+            //INL   $c_enc = "Content-Transfer-Encoding: ".BIT7.CRLF;
+            $c_enc = '';
             $c_desc = $c_desc?"Content-Description: $c_desc".CRLF:"";
             $warning = CRLF.WARNING.CRLF.CRLF ;
 
