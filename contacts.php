@@ -137,7 +137,8 @@ else
 
                 if ($search_string_len <= 2)
                 {
-                    $sql .= "SUBSTRING(c.surname,1,$search_string_len)=('$search_string') ";
+                    // $sql .= "SUBSTRING(c.surname,1,$search_string_len)=('$search_string') ";
+                    $sql .= "c.surname LIKE '{$search_string}%' ";
                 }
                 else
                 {
@@ -151,9 +152,9 @@ else
                 $sql .= " AND c.active = 'true' AND s.active = 'true'";
             }
             $sql .= " ORDER BY surname ASC";
-
             // execute query
             $result = mysql_query($sql);
+            debug_log($sql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
         }
 

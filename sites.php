@@ -54,7 +54,8 @@ if ($submit_value == "go")
             }
             else
             {
-                $sql .= "SUBSTRING(name,1,1)=('$search_string') ";
+                // $sql .= "SUBSTRING(name,1,1)=('$search_string') ";
+                $sql .= "name LIKE '{$search_string}%' ";
             }
         }
         else
@@ -198,7 +199,7 @@ if ($errors == 0)
     else
     {
         $countsites = mysql_num_rows($result);
-        
+
         echo "<p align='center'>{$strDisplaying} $countsites ";
 
         if ($countsites == 1)
