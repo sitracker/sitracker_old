@@ -173,8 +173,10 @@ class MIME_mail
                 $emsg = chunk_split($emsg);
         }
         //Check if content-type is text/plain and if charset is not specified append default CHARSET
-        if (preg_match("!^".TEXT."!i", $contenttype) && !preg_match("!;charset=!i", $contenttype))
+        if (preg_match("/^".TEXT."/i", $contenttype) && !preg_match("/;charset=/i", $contenttype))
+        {
             $contenttype .= ";".CRLF."\tcharset=".CHARSET ;
+        }
         $msg = sprintf("Content-Type: %sContent-Transfer-Encoding: %s%s%s%s",
         $contenttype.CRLF,
         $encoding.CRLF,
