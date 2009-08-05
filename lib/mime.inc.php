@@ -88,7 +88,6 @@ class MIME_mail
         {
             $headers = preg_replace("!(from:\ ?.+?[\r\n]?\b)!i", '', $headers);
         }
-    //     $headers .= CRLF; // INL
         $this->headers = chop($headers);
         $this->mimeparts[] = '' ;   //Bump up location 0;
         $this->errstr = '';
@@ -182,7 +181,7 @@ class MIME_mail
         ((($description) && (BODY != $description)) ? "Content-Description: $description".CRLF:""),
         ($disp ? "Content-Disposition: $disp".CRLF:""),
         CRLF.$emsg.CRLF);
-        BODY==$description ? $this->mimeparts[0] = $msg : $this->mimeparts[] = $msg;
+        BODY == $description ? $this->mimeparts[0] = $msg : $this->mimeparts[] = $msg;
         return sizeof($this->mimeparts);
     }
 
@@ -197,34 +196,44 @@ class MIME_mail
     {
         $this->errstr = '';
         $msg = '';
-        $boundary = 'PM'.chr(rand(65, 91)).'------'.md5(uniqid(rand()));    # Boundary marker
+        $boundary = 'SIT'.chr(rand(65, 91)).'------'.md5(uniqid(rand()));    # Boundary marker
         $nparts = sizeof($this->mimeparts);
 
-    // Case 1: Attachment list is there.  Therefore MIME Message header must have multipart/mixed
-        if (is_array($this->mimeparts) && ($nparts > 1)):
+        if (is_array($this->mimeparts) && ($nparts > 1))
+        {
+            // Case 1: Attachment list is there.  Therefore MIME Message header must have multipart/mixed
+            debug_log("case1, $nparts");
             $c_ver = "MIME-Version: 1.0".CRLF;
             $c_type = 'Content-Type: multipart/mixed;'.CRLF."\tboundary=\"$boundary\"".CRLF;
             $c_enc = "Content-Transfer-Encoding: ".BIT7.CRLF;
             $c_desc = $c_desc?"Content-Description: $c_desc".CRLF:"";
             $warning = CRLF.WARNING.CRLF.CRLF ;
 
-    // Since we are here, it means we do have attachments => body must become an attachment too.
+            // Since we are here, it means we do have attachments => body must become an attachment too.
             if (!empty($this->body))
             {
                 $this->attach($this->body, BODY, TEXT, BIT7);
             }
 
-    // Now create the MIME parts of the email!
+            // Now create the MIME parts of the email!
             for ($i=0 ; $i < $nparts; $i++)
             {
                 if (!empty($this->mimeparts[$i]))
+                {
                     $msg .= CRLF.'--'.$boundary.CRLF.$this->mimeparts[$i].CRLF;
+                }
             }
             $msg .= '--'.$boundary.'--'.CRLF;
             $msg = $c_ver.$c_type.$c_enc.$c_desc.$warning.$msg;
-        else:
+            debug_log("Message: $msg");
+        }
+        else
+        {
+            // Case 2: No attachments list
+            debug_log('case2');
             if (!empty($this->body)) $msg .= $this->body.CRLF.CRLF;
-        endif;
+        }
+
         return $msg;
     }
 
