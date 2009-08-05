@@ -627,19 +627,19 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
         if ($tofield == '')
         {
             $errors = 1;
-            $error_string .= "<p class='error'>{$strFieldMustNotBeBlank}: '{$strTo}'</p>\n";
+            $error_string .= "<p class='error'>".sprintf($strFieldMustNotBeBlank, $strTo)."</p>\n";
         }
         // check from field
         if ($fromfield == '')
         {
             $errors = 1;
-            $error_string .= "<p class='error'>{$strFieldMustNotBeBlank}: '{$strFrom}'</p>\n";
+            $error_string .= "<p class='error'>".sprintf($strFieldMustNotBeBlank, $strFrom)."</p>\n";
         }
         // check reply to field
         if ($replytofield == '')
         {
             $errors = 1;
-            $error_string .= "<p class='error'>{$strFieldMustNotBeBlank}: '{$strReplyTo}' field</p>\n";
+            $error_string .= "<p class='error'>".sprintf($strFieldMustNotBeBlank, $strReplyTo)."</p>\n";
         }
         // Store email body in session if theres been an error
         if ($errors > 0) $_SESSION['temp-emailbody'] = $bodytext;
