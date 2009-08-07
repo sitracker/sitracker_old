@@ -1624,7 +1624,7 @@ function contract_unit_balance($contractid, $includenonapproved = FALSE, $includ
         {
             $multiplier = get_billable_multiplier(strtolower(date('D', $now)), date('G', $now));
             $unitamount = $service->unitrate * $multiplier;
-            if ($unitamount > 0) $unitbalance += round($service->balance / $unitamount);
+            if ($unitamount > 0 AND $service->balance != 0) $unitbalance += round($service->balance / $unitamount);
         }
     }
 
