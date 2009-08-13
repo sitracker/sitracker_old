@@ -327,7 +327,6 @@ $CFGVAR['email_servertype']['type'] = 'select';
 
 $CFGVAR['email_username']['help'] = "Only fill in this and the following options if you have selected 'POP/IMAP email retrieval";
 $CFGVAR['email_username']['title'] = "Incoming email account username";
-$CFGVAR['email_username']['title'] = "Incoming email account username";
 
 $CFGVAR['enable_inbound_mail']['help'] = "Normal users should choose 'POP/IMAP' and fill in the details below', advanced users can choose to pipe straight to SiT from their MTA, please read the docs for help on this.";
 $CFGVAR['enable_inbound_mail']['options'] = "disabled|POP/IMAP|MTA";

@@ -8000,6 +8000,7 @@ function cfgVarInput($setupvar, $showvarnames = FALSE)
         }
         if ($setupvar=='db_password' AND $_REQUEST['action']!='reconfigure') $value='';
     }
+    $value = stripslashes($value);
     switch ($CFGVAR[$setupvar]['type'])
     {
         case 'select':
