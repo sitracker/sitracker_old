@@ -2,149 +2,6 @@
 /* by Ivan Lucas, ivan.lucas@users_sourceforge.net - December 2004 */
 /* Neoteric now uses the base style with no modifications */
 
-p, table, td, center, input, textarea, select
-{
-  font-size: 8pt;
-  color: #000000;
-}
-
-td textarea {width: 100%;}
-
-a
-{
-  font-weight: bold;
-  text-decoration: none;
-  color: #3366CC;
-}
-
-a em { font-style: normal; text-decoration: underline; color: #224488; }
-
-a:hover
-{
-  font-weight: bold;
-  text-decoration: underline;
-  color: #3366CC;
-}
-
-a:active
-{
-  font-weight: bold;
-  text-decoration: underline;
-  color: #3366CC;
-}
-
-/* tooltip */
-a.info img { border: 0px; text-decoration:none;}
-a.info span { display: none; z-index: 15; }
-a.info:hover { text-decoration: none; }
-a.info:hover span
-{
-  display: block;
-  position:absolute;
-  background: white;
-  width: 34em;
-  padding: 1px;
-  border:1px solid InfoText;
-  text-decoration: none;
-  font-weight: normal;
-  /*background-color:InfoBackground; color:InfoText ;*/
-  background-color:#FFFF99; color:#000000 ;
-  text-align: left;
-  -moz-border-radius: 7px;
-  -khtml-border-radius: 7px;
-  border-radius: 7px;
-  filter:alpha(opacity=85);
-  opacity: 0.85;
-  -moz-opacity:0.85;
-}
-
-code { background: #F7F7F7; }
-abbr { cursor: help; }
-
-th, td { padding: 1px 5px; }
-th, tfoot td { background: #F2F2F2; }
-
-h1,h2,h3,h4,h5 { text-align: center; }
-h1 { font-size: 16pt; font-weight: bold; color: #FFF; background-color: #203894; margin: 0px; padding: 3px 0px 3px 0px; }
-h2 { font-size: 14pt; }
-h3 { font-size: 150%; }
-h4 { font-size: 125%; }
-h5 { font-size: 100%; font-weight: normal; }
-h2 img, h3 img { vertical-align: bottom; }
-
-hr { height: 1px; background-color: #CDCDCD; color: #CDCDCD; margin:0px;padding:0px; }
-
-form table.vertical { margin-left: auto; margin-right: auto; }
-form table.vertical th { text-align: right; background-color: #CCCCFF; }
-form table.vertical td { background-color: #DEDEFF; }
-form p { text-align: center; }
-
-table.vertical { border: 1px solid #CCCCFF; }
-table.vertical th { text-align: right; }
-
-a img { border: 0px;}
-
-div.windowbox
-{
-    margin-left: auto;
-    margin-right: auto;
-    margin-bottom: 5%;
-    margin-top: 5%;
-    border: 1px solid #205D94;
-    max-width: 500px;
-}
-div.windowtitle
-{
-    cursor: pointer;
-    width: 100%;
-    background: #205D94;
-    color: white;
-    padding: 1px;
-}
-.windowtitle img { vertical-align: middle; border: 0px; }
-.windowtitle div { padding-right: 3px; }
-.windowtitle a { color: white; font-weight: normal;}
-div.window
-{
-    padding: 3px;
-    overflow: hidden;
-}
-
-input[type=submit], input[type=button], input[type=reset]
-{
-    margin-top: 4px;
-    background: #185594;
-    color: white; border:
-    1px solid #185594;
-    /*text-transform: uppercase;*/
-    -moz-border-radius: 3px;
-    -webkit-border-radius: 3px;
-    border-radius: 3px;
-}
-input[type=reset] {margin-left: 4px; margin-right:4px;}
-input[type=submit]:hover, input[type=button]:hover, input[type=reset]:hover
-{
-    background: #EEF6FF; border: 1px solid #205D94; color: #185594;
-}
-
-
-#menumenu { background-color: #000; color: #BBB; text-align: center; padding: 2px 0px 2px 0px; margin-bottom: 5px;}
-#menumenu a { text-decoration: none; color: #FFF; }
-#menumenu a:hover { text-decoration: underline; }
-#menumenu a:active { text-decoration: underline; }
-
-#actionmenu { color: #aaa; margin-bottom: 5px; }
-#actionmenu a:link { color: #E76666; }
-#actionmenu a:hover { background: #203894; color: white; }
-
-#mainframe { margin: 0px 1em; }
-
-#statusbar { clear: both; background-color: #203894; color: #FFF; text-align: center; padding: 2px 0px 2px 0px; margin-top: 1em;}
-#statusbar a { text-decoration: none; color: #FFF; }
-#statusbar a:hover { text-decoration: underline; }
-#statusbar a:active { text-decoration: underline; }
-
-#userbar,#footerbar { text-align: center; padding: 2px 0px 2px 0px; }
 
 #tabcontainer
     {
@@ -194,95 +51,13 @@ input[type=submit]:hover, input[type=button]:hover, input[type=reset]:hover
         background: #fff;
     }
 
-div.iheader { color: #666; margin-bottom:5px;}
 
-/* Information and Errors */
-sup.red { color: #F00; font-size: 125%; } /* FIXME doesn't need a class for this */
-td sup { color: #444; }
-p.tip,p.info, p.warning, p.error, p.trigger, h5.warning, h5.error
-{
-  background-position: 3px 2px;
-  background-repeat: no-repeat;
-  padding: 3px 3px 3px 22px;
-  min-height: 16px;
-  -moz-border-radius: 5px;
-  /* display: inline; */
-  border: 1px solid #000;
-  margin-left: 2em;
-  margin-right: 2em;
-  width: auto;
-  text-align: left;
-}
-p.tip
-{
-  background-image: url('../images/icons/oxygen/16x16/tip.png');
-  color: black;
-  border: 1px solid black;;
-  background-color: #FFFFEB;
-}
-p.info
-{
-  background-image: url('../images/icons/oxygen/16x16/info.png');
-  color: #17446B;
-  border: 1px solid #17446B;
-  background-color: #F4F6FF;
-}
-p.info span, p.error span, p.warning span { float: right; margin-right: 10px; }
-p.warning, h5.warning
-{
-  background-image: url('../images/icons/oxygen/16x16/warning.png');
-  color: #5A3612;
-  border: 1px solid #A26120;
-  background-color: #FFECD7;
-}
-p.error, h5.error
-{
-  background-image: url('../images/icons/oxygen/16x16/error.png');
-  color: #f00;
-  border: 1px solid #f00;
-  background-color: #FFE1E1;
-}
-p.error span a { color: #f00; }
-p.warning span a { color: #5A3612; }
-
-strong.info,em.info,u.info,span.info
-{
-   background: #E1FFFF; border: 1px solid #BFD8D8; padding: 2px; cursor: help;
-}
-
-h2.error,h3.error,h4.error,h5.error,p.error { color: red; }
-input.error, textarea.error, select.error { border: 2px solid red; }
-
-p.alert { border-style: inset; }
 
 /* Classes, try and avoid these where possible use other selectors instead  */
-
-/* bright red #FF4433; */
-/* expired was #DDDDDF; */
-
-/* Shading for tables*/
-.mainshade { background-color: #FFF; } /* white - is this used? */
-.shade1 { background-color: #CCCCFF; } /* medium blue - alt shade1 */
-.shade2 { background-color: #DDDDFF; } /* light blue - alt shade 2 */
-.urgent { background-color: #f08080; color: black; } /* #E8B7DD; */
-.notice { color: black; background-color: #FFFFBC; } /* yellow -- was #ffbbaa; mild red */
-h1.notice { background-image: url('../images/top_yellow.png'); }
-.critical { background-color: #ff4500; } /* fire-engine red */
-h1.critical { background-image: url('../images/top_red.png'); }
-.expired { background-color: #D6D6D6; } /* grey */
-.review { background-color: #7AC5CD; } /* teal */
-.idle     { background-color: #CCffCC; } /* green - #90ee90; */
-.visible { background-color: #DDFFE1; } /* #C9EBD8 light green - visible to customer */
 
 /* Depreciated stuff, this needs some HTML changes */
 
 /* New stuff */
-tr.shade1 { background-color: #CCCCFF; }
-tr.shade2 { background-color: #DDDDFF; }
-tr.critical { background-color: #FF4433; }
-tr.urgent { background-color: #f08080; }
-tr.expired { background-color: #DDDDDF; }
-tr.notice { background-color: #FFFFB0; }
 
 
 .success { color: #669900; }
@@ -570,8 +345,6 @@ div.img-dec img
 margin: 5px;
 border: 1px solid #808080;
 }
-
-th.subhead { font-variant: small-caps; font-size: 120%; text-align: right; }
 
 #detailsummary
 {
