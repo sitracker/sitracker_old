@@ -178,7 +178,6 @@ hr { height: 1px; background-color: #CDCDCD; color: #CDCDCD; margin:0px;padding:
   background-color: #FFF;
 }
 
-
 #menu a {
   display: block;
   text-decoration: none;
@@ -202,6 +201,9 @@ hr { height: 1px; background-color: #CDCDCD; color: #CDCDCD; margin:0px;padding:
   position: absolute;
   z-index: 10;
   color: #000;
+  border-bottom-width: 1px;
+  border-bottom-style: solid;
+  border-bottom-color: #C5C5C5;
   background-color: #FFFFFF;
   /*padding-top: 14px; */
   padding-bottom: 0px;
@@ -871,4 +873,6 @@ table.vertical th { text-align: right; }
 
 .droptarget { border: 2px dashed #ccc;}
 
+.success { color: #669900; }
+.failure { color: #f08080; }
 
