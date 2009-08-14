@@ -615,6 +615,18 @@ a.info:hover span
   -moz-opacity:0.85;
 }
 
+div#help
+{
+    width: 80%; margin-left: auto; margin-right: auto;
+    background-color: #F2F2F2;
+    -moz-border-radius: 7px;
+    padding: 1em;
+}
+#help h1, #help h2, #help h3, #help h4
+{
+    text-align: left;
+    margin-bottom: 0.3em;
+}
 
 div.detailentry, div.detailentryhidden
 {
@@ -634,18 +646,6 @@ div.detailentry, div.detailentryhidden
 
 .detailentry table tr:hover { color: white; }
 .detailentry table td { background-color: transparent; }
-
-div.detailhead, div.detailinfo, div.detailheadhidden, div.detailinfohidden
-{
-    border: 1px solid #CDCEFF;
-    background: #F0F0FF;  /* #C5B2D5; */
-    padding: 0.2em 0.7em;
-    font-size: 120%;
-    margin-top: 10px;
-    -moz-border-radius: 6px;
-    top: 10px;
-    margin-left: 7%;
-}
 
 div.detailentryhidden, div.detailheadhidden { background: transparent; }
 
@@ -686,6 +686,35 @@ div.detailfoot
     margin-left: 60%;
 }
 
+#detailsummary
+{
+    background: #F7FAFF;
+    margin-left: auto;
+    margin-right: auto;
+    border-bottom: 3px solid #203894;
+}
+#detailsummary table, .detailentry table
+{
+    width: 100%;
+    background-color: transparent;
+}
+#detailsummary table td
+{
+    vertical-align: top;
+}
+#detailsummary h1
+{
+    font-size: 150%;
+    margin: 0px;
+    padding: 0px;
+    text-align: center;
+}
+#detailsummary img
+{
+    vertical-align: text-top;
+}
+
+
 .statusline { color: green; }
 
 #tail { background:#AAA; color: #fff; padding: 10px 10px; overflow: hidden; }
@@ -696,10 +725,25 @@ div.portalfileicon
     float: left; margin-right: 5px;
 }
 
+/* Tags */
+div.taglist
+{
+    border: 1px solid #808080;
+    background: #F7FAFF;  /* #C5B2D5; */
+    padding: 0.2em 0.7em;
+    font-size: 120%;
+    -moz-border-radius: 6px;
+}
+
+.tagcloud
+{
+    word-spacing: 7px;
+}
 .taglevel1 { color: #7AA3CC; } /*#518BFF;  */
 .taglevel2 { color: #3A64B8; }
 .taglevel3 { color: #27437B; }
 .taglevel4 { color: #1F3663; }
+
 
 #contentpanel
 {
@@ -877,3 +921,56 @@ table.vertical th { text-align: right; }
 .success { color: #669900; }
 .failure { color: #f08080; }
 
+div.note { font-size: 98%; background-color: #FFFFA2; border-color: #A2A86A; margin-top: 0px; }
+div.appointment:hover { background-color: #FFFFA2; cursor: pointer; }
+div.appointmentdata
+{
+    visibility: hidden;
+    display: none;
+    z-index: 2; width: 150px; height: 30px;
+    background: white; position:absolute; top: 5px; left: 5px;
+    border: 1px solid black;
+    filter:alpha(opacity=85);
+    opacity: 0.85;
+    -moz-opacity:0.85;
+    padding: 2px;
+}
+div.appointmentdata h2 { font-size: 100%; font-style: bold; background-color: #CCCCFF; padding: 0px; margin: 0px;}
+div.appointmentdata h2 a {color: red; float: right; }
+div.appointmentdata h2 a:hover {background: white;}
+
+.deleted { text-decoration: line-through; }
+
+.dojoComboBox { height: 1.5em; }
+
+div.img-dec img
+{
+  margin: 5px;
+  border: 1px solid #808080;
+}
+
+span.quoteirrel { color: grey; }
+span.quote1 { color: #749BC2; }
+span.quote2 { color: green; }
+span.quote3 { color: magenta; }
+span.quote4 { color: #FF9933; }
+span.sig { color: red; }
+.on {background-color:#84C1DF;}
+.off {background-color:white;}
+
+#navmenu
+{
+    color: white;
+    background: #203894;
+    padding-left: 20px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    text-align: center;
+}
+#navmenu a { color: white; }
+#navmenu a em { color: #ddd; }
+
+@media print
+{
+    #menu, #statusbar, h1#apptitle, #menulist, .contextmenu {visibility:hidden; display:none;}
+}
