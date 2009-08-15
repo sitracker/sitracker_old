@@ -117,7 +117,8 @@ else
         mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
     }
-    html_redirect("edit_user_skills.php", TRUE, $strUpdateSuccessful);
+    if ($_REQUEST['user'] == $sit[2]) html_redirect("edit_user_skills.php", TRUE);
+    else html_redirect("manage_users.php");
 }
 
 ?>

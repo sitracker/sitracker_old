@@ -173,7 +173,7 @@ else
     $lacking=mysql_num_rows($result);
     if ($lacking >= 1)
     {
-        html_redirect("edit_backup_users.php?user={$_POST['userid']}", TRUE, $strYouShouldNowDefineSubstituteEngineers);
+        html_redirect("edit_backup_users.php?user={$user}", TRUE, $strYouShouldNowDefineSubstituteEngineers);
     }
     else
     {
