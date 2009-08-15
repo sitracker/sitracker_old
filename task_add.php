@@ -200,20 +200,20 @@ else
             echo "<td>";
             if ($_SESSION['formdata']['add_task']['distribution'] == 'public')
             {
-                echo "<input type='radio' name='distribution' checked='checked'";
-                echo " value='public' /> {$strPublic}<br />";
-                echo "<input type='radio' name='distribution' value='private' />";
+                echo "<label><input type='radio' name='distribution' checked='checked'";
+                echo " value='public' /> {$strPublic}</label><br />";
+                echo "<label><input type='radio' name='distribution' value='private' />";
                 echo " {$strPrivate} ";
                 echo icon('private', 16, $strPrivate, "{$strPublic}/{$strPrivate}");
-                echo "</td></tr>";
+                echo "</label></td></tr>";
             }
 
             else
             {
-                echo "<input type='radio' name='distribution' value='public' /> {$strPublic}<br />";
-                echo "<input type='radio' name='distribution' checked='checked' value='private' /> {$strPrivate} ";
+                echo "<label><input type='radio' name='distribution' value='public' /> {$strPublic}</label><br />";
+                echo "<label><input type='radio' name='distribution' checked='checked' value='private' /> {$strPrivate} ";
                 echo icon('private', 16, $strPrivate, "{$strPublic}/{$strPrivate}");
-                echo "</td></tr>";
+                echo "</label></td></tr>";
             }
             echo "</table>";
             echo "<p><input name='submit' type='submit' value='{$strAddTask}' /></p>";
