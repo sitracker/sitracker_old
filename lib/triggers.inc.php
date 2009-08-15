@@ -325,6 +325,7 @@ function replace_vars(&$ttvar, &$triggerid, &$identifier, &$paramarray, $require
             if (!$eresult)
             {
                 trigger_error("Error in variable replacement for <strong>{$identifier}</strong>, check that this variable is available for the template that uses it.", E_USER_WARNING);
+                debug_log("Replacement: {$ttvar[replacement]}");
             }
         }
         $trigger_replace = $res;
