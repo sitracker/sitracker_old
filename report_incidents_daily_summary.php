@@ -17,10 +17,12 @@ require ('core.php');
 require (APPLICATION_LIBPATH . 'functions.inc.php');
 
 $permission = 67; // Run Reports
-$title = $strIncidentsDailySummary;
+
 
 // This page requires authentication
 require (APPLICATION_LIBPATH . 'auth.inc.php');
+
+$title = $strIncidentsDailySummary;
 
 include (APPLICATION_INCPATH . 'htmlheader.inc.php');
 
