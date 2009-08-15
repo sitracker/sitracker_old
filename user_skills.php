@@ -61,18 +61,20 @@ while ($users = mysql_fetch_array($result))
     echo "<td class='$class'>";
     $ssql = "SELECT * FROM `{$dbUserSoftware}` AS us, `{$dbSoftware}` AS s WHERE us.softwareid = s.id AND us.userid='{$users['id']}' ORDER BY s.name ";
     $sresult = mysql_query($ssql);
-    $countskills=mysql_num_rows($sresult);
-    $nobackup=0;
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+    $countskills = mysql_num_rows($sresult);
+    $nobackup = 0;
     if ($countskills >= 1)
     {
         $c=1;
         while ($software = mysql_fetch_object($sresult))
         {
+//             echo "<pre>".print_r($software,true)."</pre>";
              //echo "<em>{$software->name}</em>";
             //echo "<span class='info' title='{$strSubstitute}: ".user_realname($software->backupid,TRUE)."'>{$software->name}</span>";
             echo "{$software->name}";
             if ($software->backupid > 0) echo " <em style='color: #555;'>(".user_realname($software->backupid,TRUE).")</em>";
-            if ($software->backupid==0) $nobackup++;
+            if ($software->backupid == 0) $nobackup++;
             if ($c < $countskills) echo ", ";
             else
             {

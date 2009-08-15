@@ -108,7 +108,10 @@ else
     $user=cleanvar($_REQUEST['user']);
     foreach ($backup AS $key=>$backupid)
     {
-        $sql = "UPDATE `{$dbUserSoftware}` SET backupid='$backupid' WHERE userid='$user' AND softwareid='{$softlist[$key]}' LIMIT 1 ";
+        if ($backupid > 0)
+        {
+            $sql = "UPDATE `{$dbUserSoftware}` SET backupid='$backupid' WHERE userid='$user' AND softwareid='{$softlist[$key]}' LIMIT 1 ";
+        }
         // echo "{$softlist[$key]} -- $key -- $value<br />";
         //echo "$sql <br />";
         mysql_query($sql);

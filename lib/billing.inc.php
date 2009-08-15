@@ -476,26 +476,27 @@ function get_contract_balance($contractid, $includenonapproved = FALSE, $showonl
 function get_overdraft($contractid)
 {
     $rtnvalue = FALSE;
-	$sql = "SELECT DISTINCT sl.id, sl.tag FROM `{$GLOBALS['dbServiceLevels']}` AS sl, `{$GLOBALS['dbMaintenance']}` AS m ";
+    $sql = "SELECT DISTINCT sl.id, sl.tag FROM `{$GLOBALS['dbServiceLevels']}` AS sl, `{$GLOBALS['dbMaintenance']}` AS m ";
     $sql .= "WHERE m.servicelevelid = sl.id AND m.id = {$contractid}";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("Error getting servicelevel details. ".mysql_error(), E_USER_WARNING);
 
     if (mysql_num_rows($result) == 1)
     {
-    	list($id, $tag) = mysql_fetch_row($result);
+        list($id, $tag) = mysql_fetch_row($result);
         $sql = "SELECT DISTINCT limit FROM `{$GLOBALS['dbBillingPeriods']}` ";
         $sql .= "WHERE servicelevelid = $id AND tag = '{$tag}'";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error("Error getting servicelevel details. ".mysql_error(), E_USER_WARNING);
         if (mysql_num_rows($result) == 1)
         {
-        	list($rtnvalue) = mysql_fetch_row($result);
+            list($rtnvalue) = mysql_fetch_row($result);
         }
     }
 
     return $rtnvalue;
 }
+
 
 /**
  * Reserve monies from a serviceid
