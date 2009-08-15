@@ -172,6 +172,7 @@ $strArticle = 'Article';
 $strAssign = 'Assign';
 $strAssignedAsFollows = 'Assigned as follows:';
 $strAssignTemporarily = 'Assign Temporarily';
+$strAssignTemporarilyTo = 'Assign Temporarily To';
 $strAssignTo = 'Assign To';
 $strAssignToBackup = 'Assign to Backup';
 $strAssignToOther = 'Assign to Other';

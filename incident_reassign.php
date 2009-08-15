@@ -344,7 +344,7 @@ switch ($action)
                 // $incident->towner < 1 AND
                 echo "<tr><th>{$strTemporaryOwner}:</th><td>";
                 echo "<label><input type='checkbox' name='temporary' value='yes' onchange=\"$('reassignlist').toggle();\" /> ";
-                echo "{$strAssignTemporarily} to <strong>{$strYou}</strong> ({$_SESSION['realname']})</label><br />";
+                echo "{$strAssignTemporarilyTo} <strong>{$strYou}</strong> ({$_SESSION['realname']})</label><br />";
                 echo "<label><input type='checkbox' name='tempnewowner' value='yes'  /> ";
                 echo "{$strAssignTemporarily}</label>";
                 echo "</td></tr>";
