@@ -649,6 +649,17 @@ div.detailentry, div.detailentryhidden
 
 div.detailentryhidden, div.detailheadhidden { background: transparent; }
 
+div.detailhead, div.detailinfo, div.detailheadhidden, div.detailinfohidden
+{
+    border: 1px solid #CDCEFF;
+    background: #F0F0FF;  /* #C5B2D5; */
+    padding: 0.2em 0.7em;
+    font-size: 120%;
+    margin-top: 10px;
+    -moz-border-radius: 6px;
+    top: 10px;
+    margin-left: 7%; 
+}
 div.detailhead, div.detailheadhidden
 {
     max-width: 80%;
