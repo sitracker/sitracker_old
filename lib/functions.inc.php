@@ -1810,10 +1810,10 @@ function priority_icon($id)
     global $CONFIG;
     switch ($id)
     {
-        case 1: $html = "<img src='{$CONFIG['application_webpath']}images/low_priority.gif' width='10' height='16' alt='{$strLowPriority}' title='Low Priority' />"; break;
-        case 2: $html = "<img src='{$CONFIG['application_webpath']}images/med_priority.gif' width='10' height='16' alt='{$strMediumPriority}' title='Medium Priority' />"; break;
-        case 3: $html = "<img src='{$CONFIG['application_webpath']}images/high_priority.gif' width='10' height='16' alt='{$strHighPriority}' title='High Priority' />"; break;
-        case 4: $html = "<img src='{$CONFIG['application_webpath']}images/crit_priority.gif' width='16' height='16' alt='{$strCriticalPriority}' title='Critical Priority' />"; break;
+        case 1: $html = "<img src='{$CONFIG['application_webpath']}images/low_priority.gif' width='10' height='16' alt='{$GLOBALS['strLowPriority']}' title='{$GLOBALS['strLowPriority']}' />"; break;
+        case 2: $html = "<img src='{$CONFIG['application_webpath']}images/med_priority.gif' width='10' height='16' alt='{$GLOBALS['strMediumPriority']}' title='{$GLOBALS['strMediumPriority']}' />"; break;
+        case 3: $html = "<img src='{$CONFIG['application_webpath']}images/high_priority.gif' width='10' height='16' alt='{$GLOBALS['strHighPriority']}' title='{$GLOBALS['strHighPriority']}' />"; break;
+        case 4: $html = "<img src='{$CONFIG['application_webpath']}images/crit_priority.gif' width='16' height='16' alt='{$GLOBALS['strCriticalPriority']}' title='{$GLOBALS['strCriticalPriority']}' />"; break;
         default: $html = '?'; break;
     }
     return $html;

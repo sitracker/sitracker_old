@@ -607,11 +607,11 @@ function user_online_icon($user)
     $users = mysql_fetch_object($result);
     if (mysql2date($users->lastseen) > $startofsession)
     {
-        return icon('online', 16);
+        return icon('online', 16, $strOnline);
     }
     else
     {
-        return icon('offline', 16);
+        return icon('offline', 16, $strOffline);
     }
 }
 
