@@ -196,6 +196,15 @@ elseif ($CONFIG['portal'] == TRUE)
         $_SESSION['auth'] = FALSE;
         $_SESSION['contact_source'] = $contact->contact_source;
 
+        if ($language!='default')
+        {
+            $_SESSION['lang'] = $language;
+        }
+        else
+        {
+            $_SESSION['lang'] = '';
+        }
+
         //get admin contracts
         if (admin_contact_contracts($_SESSION['contactid'], $_SESSION['siteid']) != NULL)
         {
