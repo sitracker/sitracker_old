@@ -22,11 +22,11 @@ require (APPLICATION_LIBPATH . 'functions.inc.php');
 require (APPLICATION_LIBPATH . 'auth.inc.php');
 
 // External Variables
-$submit = $_REQUEST['submit'];
-$title = $strEditUserSkills;
-
-if (empty($_REQUEST['user']) || $_REQUEST['user'] == 'current') $user=$sit[2];
+$submit = cleanvar($_REQUEST['submit']);
+if (empty($_REQUEST['user']) || $_REQUEST['user'] == 'current') $user = $sit[2];
 else $user = cleanvar($_REQUEST['user']);
+
+$title = $strEditUserSkills;
 
 if (empty($submit))
 {
@@ -91,7 +91,7 @@ if (empty($submit))
     }
     echo "<option value=''></option>"; // Always have at least one option
     echo "</select>";
-    echo "<input type='hidden' name='userid' value='{$user}' />";
+    echo "<input type='hidden' name='user' value='{$user}' />";
     echo "</td></tr>\n";
 
     echo "</table>";
@@ -128,15 +128,17 @@ else
         $expertise = array_unique($expertise);
         foreach ($expertise AS $value)
         {
-            $checksql = "SELECT userid FROM `{$dbUserSoftware}` WHERE userid='{$_POST['userid']}' AND softwareid='$value' LIMIT 1";
+            $checksql = "SELECT userid FROM `{$dbUserSoftware}` WHERE userid='{$user}' AND softwareid='$value' LIMIT 1";
             $checkresult=mysql_query($checksql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
             if (mysql_num_rows($checkresult)< 1)
             {
-                $sql = "INSERT DELAYED INTO `{$dbUserSoftware}` (userid, softwareid) VALUES ('{$_POST['userid']}', '$value')";
-                // echo "$sql <br />";
-                mysql_query($sql);
-                if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+                if ($value > 0)
+                {
+                    $sql = "INSERT DELAYED INTO `{$dbUserSoftware}` (userid, softwareid) VALUES ('{$user}', '$value')";
+                    mysql_query($sql);
+                    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+                }
             }
             $softlist[]=$value;
         }
@@ -149,12 +151,12 @@ else
         foreach ($noskills AS $value)
         {
             // Remove the software listed that we don't support
-            $sql = "DELETE FROM `{$dbUserSoftware}` WHERE userid='{$_POST['userid']}' AND softwareid='$value' LIMIT 1";
+            $sql = "DELETE FROM `{$dbUserSoftware}` WHERE userid='{$user}' AND softwareid='{$value}' LIMIT 1";
             mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
             // If we are providing backup for a skill we don't have - reset that back to nobody providing backup
-            $sql = "UPDATE `{$dbUserSoftware}` SET backupid='0' WHERE backupid='{$_POST['userid']}' AND softwareid='$value' LIMIT 1";
+            $sql = "UPDATE `{$dbUserSoftware}` SET backupid='0' WHERE backupid='{$user}' AND softwareid='$value' LIMIT 1";
             mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
         }
@@ -163,7 +165,7 @@ else
     journal(CFG_LOGGING_MAX,'Skillset Updated',"Users Skillset was Changed",CFG_JOURNAL_USER,0);
 
     // Have a look to see if any of the software we support is lacking a backup/substitute engineer
-    $sql = "SELECT userid FROM `{$dbUserSoftware}` WHERE userid='{$_POST['userid']}' AND backupid='0' LIMIT 1";
+    $sql = "SELECT userid FROM `{$dbUserSoftware}` WHERE userid='{$user}' AND backupid='0' LIMIT 1";
     $result=mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
     $lacking=mysql_num_rows($result);
@@ -173,7 +175,7 @@ else
     }
     else
     {
-        if ($_POST['userid'] == $sit[2]) html_redirect("edit_user_skills.php?user={$_POST['userid']}");
+        if ($_REQUEST['user'] == $sit[2]) html_redirect("edit_user_skills.php?user={$user}");
         else html_redirect("manage_users.php");
     }
 }
