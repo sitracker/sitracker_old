@@ -154,7 +154,7 @@ for ($year = $startyear; $year < $lastyear; $year++)
         }
 
         echo "{$strGrandTotal}: <strong style='color: $openedcolour;'>$grandtotal</strong> {$strOpened}. ";
-        echo "<strong style='color: $closedcolour;'>$grandtotalclosed</strong> {$strOpened}. {$strDifference} <strong>$diff</strong></p></td></tr>\n";
+        echo "<strong style='color: $closedcolour;'>$grandtotalclosed</strong> {$strClosed}. {$strDifference} <strong>$diff</strong></p></td></tr>\n";
     }
     if ($startmonth > 1)
     {
