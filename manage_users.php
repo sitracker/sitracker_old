@@ -60,7 +60,7 @@ echo "(<a href='{$_SERVER['PHP_SELF']}?sort=username'>{$strUsername}</a>)</th>";
 echo "<th><a href='{$_SERVER['PHP_SELF']}?sort=email'>{$strEmail}</a></th>";
 echo "<th><a href='{$_SERVER['PHP_SELF']}?sort=role'>{$strRole}</a></th>";
 echo "<th>{$strStatus}</th>";
-echo "<th>{$strSource}</th>";
+echo "<th>{$strSource}".help_link('UserSource')."</th>";
 echo "<th>{$strOperation}</th>";
 
 echo "</tr>\n";
@@ -93,11 +93,22 @@ while ($users = mysql_fetch_object($result))
     }
     else echo "-";
 
-    echo "</td>";
-    
-    echo "<td>{$users->user_source}</td>";
+    echo "</td><td>";
 
-    echo "<td>";
+	if ($users->user_source == 'sit')
+	{
+		echo $CONFIG['application_shortname'];
+	}
+	elseif ($users->user_source == 'ldap')
+	{
+		echo $strLDAP;
+	}
+	else
+	{
+		echo $strUnknown;
+	}
+
+    echo "</td><td>";
     echo "<a href='user_profile_edit.php?userid={$users->userid}'>{$strEdit}</a>";
     if ($users->status > 0)
     {
