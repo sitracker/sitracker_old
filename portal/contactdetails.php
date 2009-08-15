@@ -272,11 +272,15 @@ else
     echo "<input type='submit' value='{$strUpdate}' /></p></form>";
 
     echo "<br />".user_contracts_table($id, 'external');
-    echo "<h4>{$strAssociateContactWithContract}</h4>";
-    echo "<form method='post' action='{$_SERVER['PHP_SELF']}?id={$id}'>";
-    $exclude = contact_contracts($id, $_SESSION['siteid'], FALSE);
-    echo "<p align='center'>".maintenance_drop_down('maintid', 0, $_SESSION['siteid'], $exclude, TRUE)."<br />";
-    echo "<input type='submit' name='add' value='{$strAdd}' /></form></p>";
+
+    if ($_SESSION['usertype'] == 'admin')
+    {
+        echo "<h4>{$strAssociateContactWithContract}</h4>";
+        echo "<form method='post' action='{$_SERVER['PHP_SELF']}?id={$id}'>";
+        $exclude = contact_contracts($id, $_SESSION['siteid'], FALSE);
+        echo "<p align='center'>".maintenance_drop_down('maintid', 0, $_SESSION['siteid'], $exclude, TRUE, FALSE, $sit[2])."<br />";
+        echo "<input type='submit' name='add' value='{$strAdd}' /></form></p>";
+    }
     include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
 }
 ?>

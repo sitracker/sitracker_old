@@ -2562,7 +2562,7 @@ function site_name($id)
  * @param bool $return. Whether to return to HTML or echo
  * @param bool $showonlyactive. True show only active (with a future expiry date), false shows all
  */
-function maintenance_drop_down($name, $id, $siteid = '', $excludes = '', $return = FALSE, $showonlyactive = FALSE)
+function maintenance_drop_down($name, $id, $siteid = '', $excludes = '', $return = FALSE, $showonlyactive = FALSE, $adminid = '')
 {
     global $GLOBALS, $now;
     // TODO make maintenance_drop_down a hierarchical selection box sites/contracts
@@ -2576,6 +2576,12 @@ function maintenance_drop_down($name, $id, $siteid = '', $excludes = '', $return
     {
         $sql .= "AND (m.expirydate > {$now} OR m.expirydate = -1) ";
     }
+
+    if ($adminid != '')
+    {
+      $sql .= "AND admincontact = '{$adminid}' ";
+    }
+
     $sql .= "ORDER BY s.name ASC";
     $result = mysql_query($sql);
     $results = 0;
