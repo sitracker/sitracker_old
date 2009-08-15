@@ -128,6 +128,7 @@ else
         $expertise = array_unique($expertise);
         foreach ($expertise AS $value)
         {
+            $value = cleanvar($value);
             $checksql = "SELECT userid FROM `{$dbUserSoftware}` WHERE userid='{$user}' AND softwareid='$value' LIMIT 1";
             $checkresult=mysql_query($checksql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
@@ -150,6 +151,7 @@ else
         $noskills = array_unique($noskills);
         foreach ($noskills AS $value)
         {
+            $value = cleanvar($value);
             // Remove the software listed that we don't support
             $sql = "DELETE FROM `{$dbUserSoftware}` WHERE userid='{$user}' AND softwareid='{$value}' LIMIT 1";
             mysql_query($sql);
