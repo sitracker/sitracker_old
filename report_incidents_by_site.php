@@ -30,7 +30,7 @@ if (empty($_REQUEST['mode']))
     echo "<p align='center'>".sprintf($strReportListsIncidentsLoggedThatEachSiteLoggedOverPastXMonths, 12)."</p>";
     echo "<form action='{$_SERVER['PHP_SELF']}' method='post'>";
     echo "<table summary='Site Selection Table' class='vertical'>";
-    echo "<tr><th colspan='2' align='center'>{$strInclude}</th></tr>";
+    echo "<tr><th colspan='2' align='center'>{$strInclude}".help_link('CTRLAddRemove')."</th></tr>";
     echo "<tr><td align='center' colspan='2'>";
     $sql = "SELECT * FROM `{$dbSites}` ORDER BY name";
     $result = mysql_query($sql);

@@ -31,7 +31,7 @@ if (empty($_REQUEST['mode']))
     echo "<table align='center' class='vertical'>";
     echo "<tr><th>{$strFilter}: {$strTag}</th><td><input type='text' ";
     echo "name='filtertags' value='' size='15' /></td></tr>";
-    echo "<tr><th>{$strInclude}: {$strProducts}</th>";
+    echo "<tr><th>{$strInclude}: {$strProducts}".help_link('CTRLAddRemove')."</th>";
     echo "<td>";
     $sql   = "SELECT * FROM `{$dbProducts}` ORDER BY name";
     $result = mysql_query($sql);
@@ -44,7 +44,7 @@ if (empty($_REQUEST['mode']))
     echo "</select>";
     echo "</td></tr>\n";
     echo "<tr>";
-    echo "<th>{$strExclude}: {$strProducts}</th>";
+    echo "<th>{$strExclude}: {$strProducts}".help_link('CTRLAddRemove')."</th>";
     echo "<td>";
     $sql = "SELECT * FROM `{$dbProducts}` ORDER BY name";
     $result = mysql_query($sql);
@@ -62,7 +62,7 @@ if (empty($_REQUEST['mode']))
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
     if (mysql_num_rows($result) > 0)
     {
-        echo "<tr><th>{$strSiteType}</th><td>";
+        echo "<tr><th>{$strSiteType}".help_link('CTRLAddRemove')."</th><td>";
         echo "<select name='sitetype[]' multiple='multiple' size='6'>";
         while ($obj = mysql_fetch_object($result))
         {

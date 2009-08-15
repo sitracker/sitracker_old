@@ -42,7 +42,7 @@ if (empty($_REQUEST['mode']))
     echo "<h2>{$strCustomerExport}</h2>";
     echo "<form action='{$_SERVER['PHP_SELF']}' method='post'>";
     echo "<table class='vertical'>";
-    echo "<tr><th colspan='2' align='center'>{$strInclude}</th></tr>";
+    echo "<tr><th colspan='2' align='center'>{$strInclude}".help_link('CTRLAddRemove')."</th></tr>";
     // echo "<th align='center' width='300' class='shade1'>Exclude</th>";
     echo "<tr><td align='center' colspan='2'>";
     $sql = "SELECT * FROM `{$dbSites}` ORDER BY name";

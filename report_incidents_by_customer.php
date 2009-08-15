@@ -83,7 +83,7 @@ if (empty($mode))
     echo "</td></tr>\n";
     echo "<tr><th>{$strShowSitesThatHaveLoggedNoIncidents}</th><td><input type='checkbox' name='zerologged' id='zerologged' /></td></tr>\n";
 
-    echo "<tr><th>{$strExcludeSitesWith}</th><td>\n";
+    echo "<tr><th>{$strExcludeSitesWith}".help_link('CTRLAddRemove')."</th><td>\n";
 
     $sql = "SELECT DISTINCT id, tag FROM `{$dbServiceLevels}`";
     $result = mysql_query($sql);

@@ -57,7 +57,7 @@ if (empty($_REQUEST['mode']))
     echo "<label><input type='radio' name='type' value='closed' />{$strClosed}</label> ";
     echo "<label><input type='radio' name='type' value='both' checked='checked' />{$strBoth}</label>";
     echo "</td></tr>";
-    echo "<tr><th colspan='2'>{$strInclude}</th></tr>";
+    echo "<tr><th colspan='2'>{$strInclude}".help_link('CTRLAddRemove')."</th></tr>";
     echo "<tr><td align='center' colspan='2'>";
     $sql = "SELECT * FROM `{$dbUsers}` WHERE status > 0 ORDER BY username";
     $result = mysql_query($sql);
