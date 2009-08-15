@@ -48,7 +48,7 @@ if (empty($action) OR $action=='edit')
         }
         echo "' /> ";
         echo date_picker('editsoftware.lifetime_start');
-        echo " To: ";
+        echo $strTo.": ";
         echo "<input type='text' name='lifetime_end' id='lifetime_end' size='10' value='";
         if ($software->lifetime_end > 1)
         {
