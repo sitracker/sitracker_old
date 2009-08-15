@@ -459,7 +459,7 @@ elseif ($action=='incidentform')
         if ($type == 'free')
         {
             echo "<label>{$strServiceLevel}".serviceleveltag_drop_down('servicelevel',$CONFIG['default_service_level'], TRUE)."</label><br />";
-            echo "<label>{$strSkill}: ".software_drop_down('software', 0)."</label>";
+            echo "<label>{$strSkill}: ".skill_drop_down('software', 0)."</label>";
         }
         else
         {
@@ -556,7 +556,7 @@ elseif ($action=='incidentform')
         if ($type == 'free')
         {
             echo "<th>{$strServiceLevel}</th><td>".serviceleveltag_drop_down('servicelevel',$CONFIG['default_service_level'], TRUE)."</td>";
-            echo "<th>{$strSkill}</th><td>".software_drop_down('software', 0)."</td></tr>";
+            echo "<th>{$strSkill}</th><td>".skill_drop_down('software', 0)."</td></tr>";
         }
         else
         {

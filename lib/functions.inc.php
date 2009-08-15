@@ -1033,7 +1033,7 @@ function product_drop_down($name, $id, $required = FALSE)
  * @param int $id. Software ID
  * @returns HTML select
  */
-function software_drop_down($name, $id)
+function skill_drop_down($name, $id)
 {
     global $now, $dbSoftware, $strEOL;
 
@@ -4472,11 +4472,12 @@ function return_bytes($val)
 }
 
 
+// FIXME use this instead of hardcoding tabs
 function draw_tabs($tabsarray, $selected='')
 {
     if ($selected=='') $selected=key($tabsarray);
-    $html .= "<div id='tabcontainer'>";
-    $html .= "<ul id='tabnav'>";
+    $html .= "<div class='tabcontainer'>";
+    $html .= "<ul class='tabnav'>";
     foreach ($tabsarray AS $tab => $url)
     {
         $html .= "<li><a href='$url'";

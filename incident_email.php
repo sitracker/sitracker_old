@@ -1,5 +1,5 @@
 <?php
-// email_incident.php
+// incident_email.php
 //
 // SiT (Support Incident Tracker) - Support call tracking system
 // Copyright (C) 2000-2009 Salford Software Ltd. and Contributors

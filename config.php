@@ -96,6 +96,7 @@ include (APPLICATION_INCPATH . 'htmlheader.inc.php');
 echo "<h2>".icon('settings', 32, $strConfiguration);
 echo " {$CONFIG['application_shortname']} {$strConfiguration}</h2>";
 
+// FIXME see draw_tabs()
 echo "<div class='tabcontainer'>";
 echo "<ul>";
 foreach ($CFGTAB AS $tab => $cat)
