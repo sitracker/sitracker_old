@@ -17,11 +17,7 @@ session_start();
 
 $_SESSION['auth'] = FALSE;
 
-if (function_exists('session_regenerate_id'))
-{
-    if (!version_compare(phpversion(),"5.1.0",">=")) session_regenerate_id(TRUE);
-    else session_regenerate_id();
-}
+session_regenerate();
 
 setcookie(session_name(), session_id(),ini_get("session.cookie_lifetime"), "/");
 
