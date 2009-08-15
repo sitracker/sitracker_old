@@ -515,7 +515,7 @@ array('description' => $strSalespersonAssignedToContactsSiteEmail,
 $ttvararray['{salespersonemail}'][] =
 array('description' => $strSalespersonAssignedToContactsSiteEmail,
       'requires' => 'contractid',
-      'replacement' => 'user_email(db_read_column(\'owner\', $GLOBALS[\'dbSites\'], maintenance_siteid($paramarray[\'contractid\']));'
+      'replacement' => 'user_email(db_read_column(\'owner\', $GLOBALS[\'dbSites\'], maintenance_siteid($paramarray[\'contractid\'])));'
       );
 
 $ttvararray['{schedulertask}'] =
