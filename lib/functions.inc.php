@@ -5926,21 +5926,6 @@ function valid_username($username)
 
 
 /**
-* Update the current session id with a newly generated one
-* @author Ivan Lucas
-* @note Wrap the php function for different versions of php
-**/
-function session_regenerate()
-{
-//     if (function_exists('session_regenerate_id'))
-//     {
-//         if (!version_compare(phpversion(),"5.1.0",">=")) session_regenerate_id(FALSE);
-//         else session_regenerate_id();
-//     }
-}
-
-
-/**
 * Finds the software associated with a contract
 * @author Ivan Lucas
 * @note Wrap the php function for different versions of php
