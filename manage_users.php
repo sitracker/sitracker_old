@@ -17,7 +17,11 @@ require (APPLICATION_LIBPATH . 'functions.inc.php');
 // This page requires authentication
 require (APPLICATION_LIBPATH . 'auth.inc.php');
 
+$title = $strManageUsers;
+
 include (APPLICATION_INCPATH . 'htmlheader.inc.php');
+
+$sort = $_REQUEST['sort'];
 
 $sql  = "SELECT *,u.id AS userid FROM `{$dbUsers}` AS u, `{$dbRoles}` AS r ";
 $sql .= "WHERE u.roleid = r.id ";
