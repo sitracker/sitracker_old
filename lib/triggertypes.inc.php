@@ -506,16 +506,16 @@ array('description' => $strSalesperson,
       'replacement' => 'user_realname(db_read_column(\'owner\', $GLOBALS[\'dbSites\'], $paramarray[\'siteid\']));'
       );
 
-$ttvararray['{salespersonemail}'] =
+$ttvararray['{salespersonemail}'][] =
 array('description' => $strSalespersonAssignedToContactsSiteEmail,
       'requires' => 'siteid',
       'replacement' => 'user_email(db_read_column(\'owner\', $GLOBALS[\'dbSites\'], $paramarray[\'siteid\']));'
       );
 
-$ttvararray['{salespersonemail}'] =
+$ttvararray['{salespersonemail}'][] =
 array('description' => $strSalespersonAssignedToContactsSiteEmail,
       'requires' => 'contractid',
-      'replacement' => 'user_email(db_read_column(\'owner\', $GLOBALS[\'dbSites\'], maintenance_siteid($paramarray[\'contractid\]));'
+      'replacement' => 'user_email(db_read_column(\'owner\', $GLOBALS[\'dbSites\'], maintenance_siteid($paramarray[\'contractid\']));'
       );
 
 $ttvararray['{schedulertask}'] =
