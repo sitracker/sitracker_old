@@ -12,9 +12,12 @@
 require ('..'.DIRECTORY_SEPARATOR.'core.php');
 require (APPLICATION_LIBPATH . 'functions.inc.php');
 
+session_name($CONFIG['session_name']);
+session_start();
+
 $accesslevel = 'any';
 
-if ($CONFIG['portal_kb_enabled'] !== 'Public')
+if ($CONFIG['portal_kb_enabled'] !== 'Public' OR $_SESSION['portalauth'] == TRUE)
 {
     include (APPLICATION_LIBPATH . 'portalauth.inc.php');
     $view = $_GET['view'];
