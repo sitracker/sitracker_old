@@ -54,14 +54,16 @@ if (empty($action) OR $action == "showform")
         $cresult = mysql_query($csql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
         if ($cresult AND mysql_num_rows($cresult) > 0)
-        if (empty($seltab)) $seltab = 1;
-        while ($pcat = mysql_fetch_object($cresult))
-        {
-            echo "<li";
-            if ($seltab == $pcat->id) echo " class='active'";
-            echo "><a href='{$_SERVER['PHP_SELF']}?tab={$pcat->id}'>{$GLOBALS[$pcat->category]}</a></li>";
-            $cat[$pcat->id] = $pcat->category;
-        }
+		{
+        	if (empty($seltab)) $seltab = 1;
+       		while ($pcat = mysql_fetch_object($cresult))
+        	{
+            	echo "<li";
+            	if ($seltab == $pcat->id) echo " class='active'";
+            	echo "><a href='{$_SERVER['PHP_SELF']}?tab={$pcat->id}'>{$GLOBALS[$pcat->category]}</a></li>";
+            	$cat[$pcat->id] = $pcat->category;
+        	}
+		}
         echo "</ul>";
         echo "</div>";
 
