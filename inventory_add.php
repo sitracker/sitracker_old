@@ -29,7 +29,7 @@ if (!empty($_GET['site']))
 }
 $newsite = cleanvar($_GET['newsite']);
 
-if (!empty($_POST['submit']) AND !empty($_POST['name']))
+if (!empty($_POST['submit']) AND !empty($_POST['name']) AND $_POST['site'] != 0)
 {
     $post = cleanvar($_POST);
 
@@ -52,6 +52,10 @@ else
     if (!empty($_POST['submit']) AND empty($_POST['name']))
     {
         echo "<p class='error'>".sprintf($strFieldMustNotBeBlank, $strName)."</p>";
+    }
+    elseif (!empty($_POST['submit']) AND $_POST['site'] == 0)
+    {
+        echo "<p class='error'>".sprintf($strFieldMustNotBeBlank, $strSite)."</p>";
     }
     echo "<h2>".icon('add', 32)." {$strAdd}</h2>";
     
