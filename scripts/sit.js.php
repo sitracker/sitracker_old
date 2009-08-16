@@ -14,7 +14,7 @@
 //
 
 $permission = 0; // not required
-require ('..'.DIRECTORY_SEPARATOR.'core.php');
+require ('..' . DIRECTORY_SEPARATOR . 'core.php');
 
 session_name($CONFIG['session_name']);
 session_start();
