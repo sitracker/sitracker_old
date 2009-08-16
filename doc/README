@@ -57,13 +57,13 @@ Installing
     Requirements:
         A web server (Apache recommended)
         PHP >= 5.0 (Released July 2004)
-        MySQL >= 4.0.18
+        MySQL >= 4.1 (Released October 2004)
 
     Instructions:
 
         - Copy the files to a directory on your web server
 
-        - Make the main sit/ directory your web root
+        - (optionally) Make the main sit/ directory your web root
 
         - In your browser visit setup.php which will prompt you
           for a few important settings and take you through the
@@ -113,9 +113,9 @@ Getting Help
 ------------
 If you need help installing or using Support Incident Tracker
 please feel welcome to join our mailing list
-sitracker-devel@lists.sourceforge.net. You can subscribe herein
-https://lists.sourceforge.net/lists/listinfo/sitracker-devel
-or post a message on our forum at http://sourceforge.net/forum/?group_id=160319
+sitracker-devel-discuss@lists.sourceforge.net. You can subscribe herein
+https://lists.sourceforge.net/lists/listinfo/sitracker-devel-discuss
+or post a message on our forum at http://sitracker.org/forum
 
 We also have an IRC channel.  #sit on the freenode network, we'd love
 for you to join us, see here http://sitracker.org/wiki/IRC
@@ -153,7 +153,7 @@ As you see, there are many ways in which you can contribute. All of
 them are very important and everyone is welcome to participate.
 
 The Support Incident Tracker developers can be reached via the mailing
-list, see here for more info http://sourceforge.net/mail/?group_id=160319
+list, see here for more info http://sitracker.org/wiki/MailingList
 
 We also now have an IRC channel.  #sit on the freenode network, we'd
 love for you to join us, see here http://sitracker.org/wiki/IRC
