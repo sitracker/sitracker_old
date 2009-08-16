@@ -61,6 +61,7 @@ if (isset($_POST['submit']))
     $sql .= "notes='{$post['notes']}', modified=NOW(), ";
     $sql .= "modifiedby='{$sit[2]}', ";
     $sql .= "name='{$post['name']}', ";
+    $sql .= "siteid='{$post['site']}', ";
     $sql .= "contactid='{$post['owner']}', identifier='{$post['identifier']}' ";
 
     if (isset($post['privacy']))
@@ -94,7 +95,7 @@ else
     }
     echo "<h2>".icon('edit', 32)." {$strEdit}</h2>";
     
-    echo "<form action='{$_SERVER['PHP_SELF']}?id={$id}&site={$row->siteid}' method='post'>";
+    echo "<form action='{$_SERVER['PHP_SELF']}?id={$id}' method='post'>";
     
     echo "<table class='vertical' align='center'>";
     echo "<tr><th>{$strName}</th>";
