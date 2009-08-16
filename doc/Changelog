@@ -1,3 +1,193 @@
+Changes in v3.50 released xx August 2008
+
+* 0000860: [i18n] Inc/ folder needs to be run through to be i18n (Tomse) - resolved.
+* 0000791: [LDAP] User status is reset upon LDAP login (paulh) - resolved.
+* 0000766: [LDAP] Cant change details on SiT created users if LDAP is enabled (paulh) - resolved.
+* 0000677: [inbound email] Bug: Inbox.php when message locked (paulh) - resolved.
+* 0000635: [config] Option for defining a LDAP port in the config page (paulh) - resolved.
+* 0000752: [incidents] close solution default text...not right (paulh) - resolved.
+* 0000739: [authentication] lib reference (kieran) - resolved.
+* 0000737: [authentication] group checking doesn't work with some directories (paulh) - resolved.
+* 0000645: [other] Draft error with long email (paulh) - resolved.
+* 0000725: [knowledge base] Additional Info concatenated (kieran) - resolved.
+* 0000425: [triggers] Add trigger when opening the close incident page (kieran) - resolved.
+* 0000767: [LDAP] remove $CONFIG['ldap_attr_map'] (paulh) - resolved.
+* 0000768: [LDAP] make caching passwords configurable (paulh) - resolved.
+* 0000774: [inbound email] Attachments with accented characters like "é" in the filename do not get imported (kieran) - resolved.
+* 0000790: [LDAP] Managing LDAP users within SiT is confusing (paulh) - resolved.
+* 0000572: [triggers] Trigger "TRIGGER_INCIDENT_UPDATED_EXTERNAL" fires when there are mails with incident id=0 (kieran) - resolved.
+* 0000558: [calendar] Switching group jumps to day view (paulh) - resolved.
+* 0000589: [i18n] 3.50 svn5217 - Static language - Triggers page & System incidents - resolved.
+* 0000591: [i18n] 3.50 svn5217 - Static language - Browse feedback --> and missing page (paulh) - resolved.
+* 0000542: [permissions] add task appears on menu even when you dont have permission to it (paulh) - resolved.
+* 0000580: [triggers] Auto-assign Incident is not working (kieran) - resolved.
+* 0000606: [feedback] broken links (paulh) - resolved.
+* 0000533: [outbound email] When sending mail the mail body gets sent as an attachment (ivan) - resolved.
+* 0000616: [inbound email] Empty ($CONFIG['spam_email_subject']) causes warnings in holding queue - resolved.
+* 0000717: [triggers] Bug in auto.php considering the 'Mark for Closure' items in the support system (kieran) - resolved.
+* 0000711: [dashboard] Unable to order dashlets (ivan) - resolved.
+* 0000699: [holidays] Cancelling holidays does not cancel them (ivan) - resolved.
+* 0000666: [billing] Billing Summary totals are in the wrong columns (paulh) - resolved.
+* 0000141: [incidents] Cant do a full reassign when theres a temp owner (kieran) - resolved.
+* 0000127: [SLAs] SLA loops after final resolution (kieran) - resolved.
+* 0000101: [contracts] wrong url on 'Add New site Contact' button - resolved.
+* 0000668: [holidays] Crash on approve all (ivan) - resolved.
+* 0000673: [triggers] Trigger "TRIGGER_WAITING_HELD_EMAIL" logic (ivan) - resolved.
+* 0000034: [other] Use checkboxes for boolean input - resolved.
+* 0000032: [incidents] Auto-reassign ignores not-accepting status (kieran) - resolved.
+* 0000031: [outbound email] Email encoding breaks sending mail - resolved.
+* 0000025: [portal] incident_lastupdate() fails for portal incidents (kieran) - resolved.
+* 0000148: [triggers] Need a trigger when a site drops below a certain percent of the service (kieran) - resolved.
+* 0000678: [incidents] Bug: customer add incident fails (kieran) - resolved.
+* 0000381: [incidents] Action missing on incident closure (kieran) - resolved.
+* 0000657: [incidents] Incident Updates per page - Zero is none, not unlimited as stated (paulh) - resolved.
+* 0000658: [triggers] Have trigger type in the DB (kieran) - resolved.
+* 0000549: [triggers] Reassign trigger issue (kieran) - resolved.
+* 0000693: [incidents] Paging view changing visibility takes you back to first page (paulh) - resolved.
+* 0000346: [authentication] LDAP sync should never touch admin user (paulh) - resolved.
+* 0000692: [incidents] In show all mode changing visibility reverts back to paging (paulh) - resolved.
+* 0000682: [profiles] Bug: Wrong link in emails. When resetting password (ivan) - resolved.
+* 0000228: [i18n] Ability to translate from a language other than en-GB (kieran) - resolved.
+* 0000679: [inbound email] Bug: Cannot unlock message - resolved.
+* 0000609: [i18n] feedback_form_editquestions needs i18n (Tomse) - resolved.
+* 0000727: [triggers] Adding a contract notice trigger gives an error about {salespersonemail} (kieran) - resolved.
+* 0000707: [permissions] Problem n edit_user_permissions (kieran) - resolved.
+* 0000876: [portal] site contact is able to bind herself to contracts (kieran) - resolved.
+* 0000595: [i18n] 3.50 svn5217 - Static language - Add contract (Tomse) - resolved.
+* 0000839: [triggers] notice_new_site needs a descriptive text - triggers.php (kieran) - resolved.
+* 0000808: [knowledge base] Contact browsing knowledgebase - menu disappear (ivan) - resolved.
+* 0000859: [reports] Several pages needs a "?" sign with help text - press CTRL for adding more (Tomse) - resolved.
+* 0000853: [sites & contacts] site drop downs show expired sites (paulh) - resolved.
+* 0000435: [other] remove session_regenerate (ivan) - resolved.
+* 0000861: [theme] Recent theme changes broke updates log styling (Tomse) - resolved.
+* 0000820: [incidents] Hovering over icon makes 2 help texts occur (kieran) - resolved.
+* 0000866: [i18n] Icons ALT text when hovering needs i18n (kieran) - resolved.
+* 0000842: [Skills] i18n user_skills.php strange symbols & and wrong info given (ivan) - resolved.
+* 0000870: [Skills] Editing a skill for another users redirects to edit_backup_users.php?user= (self) (ivan) - resolved.
+* 0000871: [other] manage_users.php sorting doesn't work (Tomse) - resolved.
+* 0000841: [dashboard] true/false might need i18n - manage_dashboard.php (paulh) - resolved.
+* 0000076: [authentication] Directory integration - LDAP (paulh) - resolved.
+* 0000071: [billing] One time service balance editor - resolved.
+* 0000836: [incidents] Send closure email to escalation doesn't work (paulh) - resolved.
+* 0000875: [i18n] help_text doesn't use the da-DK/SiteIncidentVisibility.txt in portal/admin.php (ivan) - resolved.
+* 0000856: [config] inbound email account user with a '\' (ivan) - resolved.
+* 0000869: [Skills] edit_user_skills.php does not properly sanitise input (ivan) - resolved.
+* 0000776: [sites & contacts] quick link to google maps (kieran) - resolved.
+* 0000798: [i18n] cannot find any contact by clicking on its first letter (in russian) (ivan) - resolved.
+* 0000851: [incidents] Double quote in incident title displayed incorrectly (ivan) - resolved.
+* 0000823: [i18n] add_new_note in functions.inc.php needs i18n (paulh) - resolved.
+* 0000849: [setup/config] attachments folder should be writeable - help text wanted (ivan) - resolved.
+* 0000844: [sites & contacts] When editing a site type the button says "Add" (kieran) - resolved.
+* 0000843: [sites & contacts] adding a new site type generates an error (ivan) - resolved.
+* 0000831: [incidents] move_update.php cannot check if incident is open (paulh) - resolved.
+* 0000648: [outbound email] Accented characters in the email subject get stripped away (ivan) - resolved.
+* 0000815: [incidents] Possible for auto-assign to assign to a user who is marked "not accepting". (kieran) - resolved.
+* 0000814: [incidents] Auto assign of incidents, assigns to people with no skills, and who are not accepting:on holiday (ivan) - resolved.
+* 0000770: [LDAP] Update LDAP documentation (Tomse) - resolved.
+* 0000806: [other] test_form.php needs removing before release (paulh) - resolved.
+* 0000354: [dashboard] watch_incidents dashlet uses html_redirect (ivan) - resolved.
+* 0000792: [LDAP] periodic LDAP sync (paulh) - resolved.
+* 0000735: [authentication] log in error (paulh) - resolved.
+* 0000804: [reports] Making a report with no dates creates errors - report_incidents_billable.php (paulh) - resolved.
+* 0000746: [i18n] Triggers --> variables page (kieran) - resolved.
+* 0000600: [i18n] 3.50 svn5217 - Static language - Site product matrix (Tomse) - resolved.
+* 0000610: [i18n] feedback_form_addquestions.php needs i18n (ivan) - resolved.
+* 0000601: [i18n] 3.50 svn5217 - Static language - Site contracts (ivan) - resolved.
+* 0000602: [i18n] Static language - Engineer usage (ivan) - resolved.
+* 0000496: [knowledge base] RSS Feed for KB (ivan) - resolved.
+* 0000597: [i18n] 3.50 svn5217 - Static language - Show expired (Tomse) - resolved.
+* 0000599: [i18n] 3.50 svn5217 - Static language - Incidents Daily Summary (ivan) - resolved.
+* 0000594: [i18n] Static language - View maintenance (ivan) - resolved.
+* 0000799: [contracts] search_expired.php returns only as "Non terminated" and no results (Tomse) - resolved.
+* 0000592: [i18n] 3.50 svn5217 - Static language - View sites (Tomse) - resolved.
+* 0000786: [i18n] localisation bugs (ivan) - resolved.
+* 0000764: [other] Email address validation is broken (ivan) - resolved.
+* 0000794: [setup/config] Setup doesn't offer create admin user option if config file is writable (ivan) - resolved.
+* 0000773: [setup/config] upgrading to svn 3.50 - error (ivan) - resolved.
+* 0000793: [sites & contacts] Unable to add contact address (ivan) - resolved.
+* 0000783: [config] 2 slashes in 'application webpath' (ivan) - resolved.
+* 0000655: [setup/config] Wrong permissions on attachments directory (previously 605) (ivan) - resolved.
+* 0000753: [inbound email] email assign to contact (ivan) - resolved.
+* 0000778: [i18n] not localised - resolved.
+* 0000146: [scheduler] Month and year schedules show next run as 1 second past epoch (ivan) - resolved.
+* 0000775: [inbound email] incoming email script refers to inbox - resolved.
+* 0000757: [incidents] Attachment paths wrong sometimes (kieran) - resolved.
+* 0000674: [setup/config] Upgrade from 3.41 to 3.45 does not create config table (ivan) - resolved.
+* 0000596: [i18n] 3.50 svn5217 - Static language - Show renewals (ivan) - resolved.
+* 0000587: [templates] 3.50 svn5217 - missing description (ivan) - resolved.
+* 0000761: [incidents] Client cannot add incident from customer portal (Bonkie) - resolved.
+* 0000762: [incidents] Customer cannot use 'Add incident' (Bonkie) - resolved.
+* 0000350: [portal] Open incident via portal gives an eval error (ivan) - resolved.
+* 0000760: [knowledge base] content within chevrons (angle brackets) is lost (ivan) - resolved.
+* 0000765: [setup/config] SQL errors on fresh install of 3.50beta2 (ivan) - resolved.
+* 0000743: [notices] Error in noticetemplate upgrade SQL (kieran) - resolved.
+* 0000728: [portal] Portal entitlement blank (paulh) - resolved.
+* 0000736: [scheduler] scheduler time check (ivan) - resolved.
+* 0000583: [i18n] 3.50 svn5217 - Trigger action static language (kieran) - resolved.
+* 0000729: [setup/config] 3.50Beta2 - Database creation error (ivan) - resolved.
+* 0000375: [search] Searching for a number other than an incident number doesn't work (kieran) - resolved.
+* 0000654: [templates] Held email template wording is wrong (kieran) - resolved.
+* 0000500: [triggers] Possible to create two identical triggers (kieran) - resolved.
+* 0000493: [knowledge base] Make portal KB publically accessible (kieran) - resolved.
+* 0000716: [plugins] upgrade dashboard_incoming (ivan) - resolved.
+* 0000607: [other] Forgot Password script uses HTTP_REFERER for URI in emails (ivan) - resolved.
+* 0000625: [i18n] svn 5301 - running Incident reports (paulh) - resolved.
+* 0000647: [inbound email] Attachment can be stored in wrong place (paulh) - resolved.
+* 0000631: [i18n] Bug with russian word in mysql table (ivan) - resolved.
+* 0000653: [incidents] 'All incidents' missing doesn't show owner and temp owner (paulh) - resolved.
+* 0000708: [portal] Portal KB page is missing the menu (ivan) - resolved.
+* 0000709: [dashboard] Menu does not work in IE7 (ivan) - resolved.
+* 0000638: [incidents] Inventory dropdown in wrong place while adding incident (paulh) - resolved.
+* 0000180: [incidents] Strikeout causes double tooltip (ivan) - resolved.
+* 0000683: [other] user id as tinyint (ivan) - resolved.
+* 0000566: [triggers] The trigger TRIGGER_INCIDENT_UPDATED_EXTERNAL does not pass the incident id (ivan) - resolved.
+* 0000701: [other] Missing icon sit/16x16/billing.png (ivan) - resolved.
+* 0000703: [incidents] Bug in incident detail screen (ivan) - resolved.
+* 0000206: [plugins] Mechanism to allow plugins to add i18n (ivan) - resolved.
+* 0000628: [other] autocomplete breaks with non-english characters (ivan) - resolved.
+* 0000644: [other] Edit inventory details (paulh) - resolved.
+* 0000696: [search] + stripped when paging searchs (ivan) - resolved.
+* 0000697: [profiles] Setting language to 'default' in profile gives an error (ivan) - resolved.
+* 0000559: [sites & contacts] Interface to add site types (paulh) - resolved.
+* 0000664: [sites & contacts] site_details should group on active/inactive (paulh) - resolved.
+* 0000663: [other] SIT! limited to 127 users (paulh) - resolved.
+* 0000662: [profiles] MySQL Query Error Incorrect date value: '' for column 'user_startdate' at row 1 in user_profile_edit.php @ line 454 (ivan) - resolved.
+* 0000395: [other] Variable for last seen (ivan) - resolved.
+* 0000659: [i18n] Incorrect internationalisation saved in DB (ivan) - resolved.
+* 0000652: [inbound email] New mail from "unrecognised" contact, cannot be linked to an existing case (ivan) - resolved.
+* 0000656: [incidents] Closing incidents doesn't set the SLA of solution (paulh) - resolved.
+* 0000406: [inbound email] Inbound email with ' in the email address - email is deleted and not imported to the holding queue (ivan) - resolved.
+* 0000370: [inbound email] Escaped characters in DB affects other sit functions. (ivan) - resolved.
+* 0000029: [inbound email] Inbound email strips HTML-like terms (ivan) - resolved.
+* 0000620: [inbound email] Text within < and > is stripped from incoming emails (ivan) - resolved.
+* 0000641: [inbound email] Pictures inside the emailbody are not imported as in previous vesions (ivan) - resolved.
+* 0000636: [billing] Remaing units shows expired units (paulh) - resolved.
+* 0000640: [incidents] Note lost when reopening incident (paulh) - resolved.
+* 0000632: [billing] Billing report should show contract expiry (paulh) - resolved.
+* 0000584: [other] 3.50 svn5217 - report error (request open in new window/tab) (paulh) - resolved.
+* 0000270: [inbound email] Accented characters truncate inbound email body (ivan) - resolved.
+* 0000254: [inbound email] Special international characters in email is shown as ? (ivan) - resolved.
+* 0000626: [config] chmod 444 on config.inc.php + re-check buttons + goto index page (ivan) - resolved.
+* 0000622: [setup/config] A blank config.inc.php makes install impossible (ivan) - resolved.
+* 0000621: [setup/config] 3.45 doesn't install schema if a blank DB exists (ivan) - resolved.
+* 0000593: [i18n] 3.50 svn5217 - Static language - View contacts - resolved.
+* 0000617: [scheduler] Editing a disabled scheduled task re-enables it (ivan) - resolved.
+* 0000567: [reports] Error in the QBE report (paulh) - resolved.
+* 0000555: [incidents] Error on reopen (paulh) - resolved.
+* 0000543: [permissions] Statistics page permission (paulh) - resolved.
+* 0000532: [permissions] Configurable roles (paulh) - resolved.
+* 0000487: [reports] Incidents by skill report uses dojo (paulh) - resolved.
+* 0000008: [dashboard] Dashlet reordering broken in IE (ivan) - resolved.
+* 0000486: [dashboard] Dashboard uses dojo (ivan) - resolved.
+* 0000540: [permissions] Role info (paulh) - resolved.
+* 0000564: [permissions] Have a description on a role (paulh) - resolved.
+* 0000530: [incidents] Indication on incident that there are drafts awaiting (paulh) - resolved.
+* 0000489: [sites & contacts] Sites lookup uses dojo (ivan) - resolved.
+* 0000485: [incidents] Incident lookup uses dojo (ivan) - resolved.
+* 0000484: [sites & contacts] Contacts lookup uses dojo (ivan) - resolved.
+* 0000547: [search] From the main menu (dashboard), the link to the advanced search page is incorrect (ivan) - resolved.
+* 0000541: [permissions] sort edit_user_permissions (paulh) - resolved.
+
 Changes in v3.45 - Released 27 February 2009
 -----------------------------------------------------------------------
 - 0000471: [setup/config] When changing settings on the "Service levels" page, the incorrect flags are written to the DB - resolved.
