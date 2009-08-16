@@ -46,7 +46,7 @@ if (isset($_POST['submit']) AND isset($_POST['name']))
 }
 else
 {
-    if (isset($_POST['submit'] AND !isset($_POST['name'])))
+    if (isset($_POST['submit']) AND !isset($_POST['name']))
     {
         echo "<p class='error'>".sprintf($strFieldMustNotBeBlank, $strName)."</p>";
     }
