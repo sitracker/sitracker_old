@@ -23,13 +23,13 @@ if(!$CONFIG['inventory_enabled'])
     exit;
 }
 
-if (isset($_GET['site']))
+if (!empty($_GET['site']))
 {
     $siteid = cleanvar($_GET['site']);
 }
 $newsite = cleanvar($_GET['newsite']);
 
-if (isset($_POST['submit']) AND isset($_POST['name']))
+if (!empty($_POST['submit']) AND !empty($_POST['name']))
 {
     $post = cleanvar($_POST);
 
@@ -49,14 +49,14 @@ if (isset($_POST['submit']) AND isset($_POST['name']))
 }
 else
 {
-    if (isset($_POST['submit']) AND !isset($_POST['name']))
+    if (!empty($_POST['submit']) AND empty($_POST['name']))
     {
         echo "<p class='error'>".sprintf($strFieldMustNotBeBlank, $strName)."</p>";
     }
     echo "<h2>".icon('add', 32)." {$strAdd}</h2>";
     
     $url = "{$_SERVER['PHP_SELF']}?action=new";
-    if (isset($_GET['site']))
+    if (!empty($_GET['site']))
     {
         $siteid = intval($_GET['site']);
         $url = $url."&site={$siteid}";
@@ -81,7 +81,7 @@ else
     }
     else
     {
-        echo "<input type='hidden' id='site' value='{$siteid}' />";
+        echo "<input type='hidden' id='site' name='site' value='{$siteid}' />";
         echo "<tr><th>{$strOwner}</th><td>";
         echo contact_site_drop_down('owner', $row->contactid, $siteid, NULL, FALSE);
         echo "</td></tr>";
