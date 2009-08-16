@@ -22,10 +22,9 @@ if (realpath(__FILE__) == realpath($_SERVER['SCRIPT_FILENAME']))
 $formid = $CONFIG['feedback_form'];
 
 echo "<div style='margin: 20px'>";
-echo "<h2>Average <a href='{$CONFIG['application_webpath']}reports/feedback.php'>Feedback</a> Scores: By Engineer</h2>";
+echo "<h2><a href='{$CONFIG['application_webpath']}reports/feedback.php'>{$strFeedback}</a> {$strScores}: {$strByEngineer}</h2>";
 echo feedback_between_dates();
-echo "<p>This report shows average customer responses and a percentage figure indicating the overall positivity of customers toward ";
-echo "incidents logged by the user(s) shown:</p>";
+echo "<p>{$strCustomerFeedbackReportSiteMsg}:</p>";
 
 $usql = "SELECT * FROM `{$dbUsers}` WHERE status > 0 ";
 if ($_REQUEST['userid'] > 0) $usql .= "AND id='".mysql_real_escape_string($_REQUEST['userid'])."' ";
@@ -117,7 +116,7 @@ if (mysql_num_rows($uresult) >= 1)
             $total_average = number_format($totalresult/$numquestions,2);
             $total_percent = number_format((($total_average -1) * (100 / ($CONFIG['feedback_max_score'] -1))), 0);
             if ($total_percent < 0) $total_percent=0;
-            $html .= "<p>Positivity: {$total_average} <strong>({$total_percent}%)</strong> after $numresults surveys.</p>";
+            $html .= "<p>{$strPositivity}: {$total_average} <strong>({$total_percent}%)</strong> ".sprintf($strAfterXSurveys, $numresults)."</p>";
             $surveys += $numresults;
             $html .= "<hr />\n";
 
@@ -127,13 +126,13 @@ if (mysql_num_rows($uresult) >= 1)
         }
         else
         {
-            echo user_alert('No feedback found for '.ucfirst($user->realname), E_USER_WARNING);
+            echo user_alert($strNoFeedbackFound, E_USER_WARNING);
         }
     }
 }
 else
 {
-    echo user_alert('Found no users to report on', E_USER_WARNING);;
+    echo user_alert($strFoundNoUsersToReport, E_USER_WARNING);;
 }
 echo "</div>\n";
 

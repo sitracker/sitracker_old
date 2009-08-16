@@ -13,10 +13,10 @@ if (realpath(__FILE__) == realpath($_SERVER['SCRIPT_FILENAME']))
 
 
 echo "<div style='margin: 20px'>";
-echo "<h2><a href='{$CONFIG['application_webpath']}reports/feedback.php'>Feedback</a> Scores: By Product</h2>";
+echo "<h2><a href='{$CONFIG['application_webpath']}reports/feedback.php'>{$strFeedback}</a> {$strScores}: {$strByProduct}</h2>";
 echo feedback_between_dates();
-echo "<p>This report shows customer responses and a percentage figure indicating the overall positivity of customers toward ";
-echo "incidents logged by the user(s) shown:</p>";
+echo "<p>{$strCustomerFeedbackReportSiteMsg}:</p>";
+
 
 $qsql = "SELECT * FROM `{$dbFeedbackQuestions}` WHERE formid='{$formid}' AND type='rating' ORDER BY taborder";
 $qresult = mysql_query($qsql);
@@ -112,7 +112,7 @@ if (mysql_num_rows($mresult) >= 1)
                 $total_percent=number_format((($total_average -1) * (100 / ($CONFIG['feedback_max_score'] -1))), 0);
 
                 ## ($gtotal)($c)
-                $html .= "<p>Positivity: {$total_average} <strong>({$total_percent}%)</strong>, after $surveys surveys</p>";
+                $html .= "<p>{$strPositivity}: {$total_average} <strong>({$total_percent}%)</strong>, ".sprintf($strAfterXSurveys,$surveys)."</p>";
                 //print_r($storeone);
                 //print_r($storetwo);
             }
@@ -279,7 +279,7 @@ if (mysql_num_rows($mresult) >= 1)
 }
 else
 {
-    echo user_alert('No feedback found', E_USER_WARNING);
+    echo user_alert($strNoFeedbackFound, E_USER_WARNING);
 }
 echo "</div>\n";
 

@@ -33,10 +33,9 @@ function incident_details_window(incidentid,win)
 ";
 echo "\n//]]>\n</script>";
 echo "<div style='margin: 20px'>";
-echo "<h2><a href='{$CONFIG['application_webpath']}report_feedback.php'>Feedback</a> Scores: By Contact</h2>";
+echo "<h2><a href='{$CONFIG['application_webpath']}report_feedback.php'>{$strFeedback}</a> {$strScores}: {$strByContact}</h2>";
 echo feedback_between_dates();
-echo "<p>This report shows customer responses and a percentage figure indicating the overall positivity of customers toward ";
-echo "incidents logged by the user(s) shown:</p>";
+echo "<p>{$strCustomerFeedbackReportSiteMsg}:</p>";
 
 $qsql = "SELECT * FROM `{$dbFeedbackQuestions}` WHERE formid='{$formid}' AND type='rating' ORDER BY taborder";
 $qresult = mysql_query($qsql);
@@ -124,7 +123,7 @@ if (mysql_num_rows($mresult) >= 1)
                 $total_percent=number_format((($total_average -1) * (100 / ($maxscore -1))), 0);
                 if ($total_percent < 0) $total_percent=0;
 
-                $html .= "<p>Positivity: {$total_average} <strong>({$total_percent}%)</strong>, after $surveys survey";
+                $html .= "<p>{$strPositivity}: {$total_average} <strong>({$total_percent}%)</strong>, ".sprintf($strAfterXSurveys,$surveys)."</p>";
                 if ($surveys<>1) $html.='s';
                 $html .= "</p><br /><br />";
             }
@@ -276,7 +275,7 @@ if (mysql_num_rows($mresult) >= 1)
 
         $prevcontactid=$mrow->contactid;
     }
-    echo "<h2>{$strSummary}</h2><p>This graph shows different levels of positivity of the contacts shown above:</p>";
+    echo "<h2>{$strSummary}</h2><p>{$strShowPositivityGraph}:</p>";
 
 
     $adjust=13;
@@ -300,7 +299,7 @@ if (mysql_num_rows($mresult) >= 1)
 }
 else
 {
-    echo user_alert("No feedback found", E_USER_WARNING);
+    echo user_alert($strNoFeedbackFound, E_USER_WARNING);
 }
 
 echo "</div>\n";
