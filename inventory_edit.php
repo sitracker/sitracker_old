@@ -104,7 +104,7 @@ else
     echo "<td>".array_drop_down($CONFIG['inventory_types'], 'type', $row->type, '', TRUE)."</td></tr>";
 
     echo "<tr><th>{$strSite}</th><td>";
-    echo site_drop_down('siteid', $row->siteid, TRUE);
+    echo site_drop_down('site', $row->siteid, TRUE);
     echo " <span class='required'>{$strRequired}</td>";
     echo "<tr><th>{$strOwner}</th><td>";
     echo contact_site_drop_down('owner', '');
