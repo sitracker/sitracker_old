@@ -24,7 +24,7 @@ if(!$CONFIG['inventory_enabled'])
 }
 
 $id = cleanvar($_GET['id']);
-$siteid = cleanvar($_REQUEST['siteid']);
+$siteid = cleanvar($_REQUEST['site']);
 
 // if (!empty($_GET['newsite']))
 // {
