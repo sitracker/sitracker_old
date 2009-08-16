@@ -26,7 +26,7 @@ if(!$CONFIG['inventory_enabled'])
 $siteid = cleanvar($_GET['site']);
 $newsite = cleanvar($_GET['newsite']);
 
-if (isset($_POST['submit']) AND isset($POST['name']))
+if (isset($_POST['submit']) AND isset($_POST['name']))
 {
     $post = cleanvar($_POST);
 
