@@ -23,7 +23,10 @@ if(!$CONFIG['inventory_enabled'])
     exit;
 }
 
-$siteid = cleanvar($_GET['site']);
+if (isset($_GET['site']))
+{
+    $siteid = cleanvar($_GET['site']);
+}
 $newsite = cleanvar($_GET['newsite']);
 
 if (isset($_POST['submit']) AND isset($_POST['name']))
@@ -36,7 +39,7 @@ if (isset($_POST['submit']) AND isset($_POST['name']))
     $sql .= "'{$post['username']}', '{$post['password']}', ";
     $sql .= "'{$post['type']}', ";
     $sql .= "'{$post['notes']}', NOW(), '{$sit[2]}', NOW(), ";
-    $sql .= "'{$sit[2]}', '1', '{$post['name']}', '{$post['siteid']}', ";
+    $sql .= "'{$sit[2]}', '1', '{$post['name']}', '{$post['site']}', ";
     $sql .= "'{$post['privacy']}', '{$post['identifier']}')";
 
     mysql_query($sql);
@@ -51,9 +54,15 @@ else
         echo "<p class='error'>".sprintf($strFieldMustNotBeBlank, $strName)."</p>";
     }
     echo "<h2>".icon('add', 32)." {$strAdd}</h2>";
-    $siteid = intval($_GET['site']);
-
-    echo "<form action='{$_SERVER['PHP_SELF']}?action=new&site={$siteid}' method='post'>";
+    
+    $url = "{$_SERVER['PHP_SELF']}?action=new";
+    if (isset($_GET['site']))
+    {
+        $siteid = intval($_GET['site']);
+        $url = $url."&site={$siteid}";
+    }
+    
+    echo "<form action='{$url}' method='post'>";
     echo "<table class='vertical' align='center'>";
     echo "<tr><th>{$strName}</th>";
     echo "<td><input class='required' name='name' value='{$row->name}' />";
