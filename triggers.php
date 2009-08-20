@@ -191,14 +191,7 @@ switch ($_REQUEST['mode'])
         echo notice_templates('noticetemplate');
         echo "</div>\n";
         echo "<div id='emailtemplatesbox' style='display:none;'>";
-        if ($selecteduser == 0)
-        {
-            echo email_templates('emailtemplate', 'system');
-        }
-        else
-        {
-            echo email_templates('emailtemplate', 'user');
-        }
+	echo email_templates('emailtemplate');
         echo "</div>\n";
         echo "<div id='journalbox' style='display:none;'>{$strNone}</div>";
         echo "<div id='none'>{$strNone}</div>";
