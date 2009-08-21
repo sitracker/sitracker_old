@@ -45,21 +45,21 @@ class User extends Person{
     var $utc_offset;
     var $emoticons;
     var $startdate;
-    
+
     // Legacy
     var $icq;
     var $aim;
     var $msn;
-    
+
     function User($id=0)
     {
-    	if ($id > 0)
+        if ($id > 0)
         {
             $this->id = $id;
             $this->retrieveDetails();
         }
     }
-    
+
     function retrieveDetails()
     {
         trigger_error("User.retrieveDetails() not yet implemented");
@@ -68,10 +68,10 @@ class User extends Person{
         $sql .= "WHERE u.id = {$this->id} AND u.roleid = r.id";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
-        
+
         if (mysql_num_rows($result) == 1)
         {
-        	$obj = mysql_fetch_object($result);
+            $obj = mysql_fetch_object($result);
             $this->username = $obj->username;
             $this->realname = $obj->realname;
             $this->roleid = $obj->roleid;
@@ -326,7 +326,7 @@ class User extends Person{
     
     function getSOAPArray()
     {
-    	trigger_error("User.getSOAPArray() not yet implemented");
+        trigger_error("User.getSOAPArray() not yet implemented");
     }
 }
 

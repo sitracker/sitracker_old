@@ -265,7 +265,7 @@ class Contact extends Person {
         if (mysql_num_rows($result) >= 1) return true;
         else return false;
     }
-    
+
 
     function getSOAPArray()
     {

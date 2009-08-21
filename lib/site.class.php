@@ -15,9 +15,9 @@ class Site extends SitEntity {
 
     function Site($id=0)
     {
-    	if ($id > 0)
+        if ($id > 0)
         {
-	    $this->id = $id;
+        $this->id = $id;
             $this->retrieveDetails();
         }
     }
@@ -27,22 +27,22 @@ class Site extends SitEntity {
     {
         trigger_error("Site.retrieveDetails() not yet implemented");
     }
-    
-    
+
+
     function add()
     {
-    	trigger_error("Site.add() not yet implemented");
+        trigger_error("Site.add() not yet implemented");
     }
-    
-    
+
+
     function edit()
     {
-    	trigger_error("Site.edit() not yet implemented");
+        trigger_error("Site.edit() not yet implemented");
     }
-    
+
     function getSOAPArray()
     {
-    	trigger_error("Site.getSOAPArray() not yet implemented");
+        trigger_error("Site.getSOAPArray() not yet implemented");
     }
 }
 ?>

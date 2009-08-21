@@ -15,9 +15,9 @@ class Task extends SitEntity {
 
     function Task($id=0)
     {
-    	if ($id > 0)
+        if ($id > 0)
         {
-	    $this->id = $id;
+        $this->id = $id;
             $this->retrieveDetails();
         }
     }
@@ -27,22 +27,22 @@ class Task extends SitEntity {
     {
         trigger_error("Task.retrieveDetails() not yet implemented");
     }
-    
-    
+
+
     function add()
     {
-    	trigger_error("Task.add() not yet implemented");
+        trigger_error("Task.add() not yet implemented");
     }
-    
-    
+
+
     function edit()
     {
-    	trigger_error("Task.edit() not yet implemented");
+        trigger_error("Task.edit() not yet implemented");
     }
-    
+
     function getSOAPArray()
     {
-    	trigger_error("Task.getSOAPArray() not yet implemented");
+        trigger_error("Task.getSOAPArray() not yet implemented");
     }
 }
 ?>

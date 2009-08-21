@@ -15,17 +15,17 @@ class Group extends SitEntity {
 
     var $name;
     var $imageurl;
-    
+
     function Group($id=0)
     {
-    	if ($id > 0)
+        if ($id > 0)
         {
-        	$this->id = $id;
+            $this->id = $id;
             $this->retrieveDetails();
         }
         else
         {
-        	$this->name = $GLOBALS['strNotSet'];
+            $this->name = $GLOBALS['strNotSet'];
         }
     }
 
@@ -37,7 +37,7 @@ class Group extends SitEntity {
             $sql = "SELECT * FROM `{$GLOBALS['dbGroups']}` WHERE id = {$this->id}";
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
-            
+
             if (mysql_num_rows($result) == 1)
             {
                 $obj = mysql_fetch_object($result);
@@ -51,22 +51,22 @@ class Group extends SitEntity {
             }
         }
     }
-    
-    
+
+
     function add()
     {
-    	trigger_error("Group.add() not yet implemented");
+        trigger_error("Group.add() not yet implemented");
     }
-    
-    
+
+
     function edit()
     {
-    	trigger_error("Group.edit() not yet implemented");
+        trigger_error("Group.edit() not yet implemented");
     }
-    
+
     function getSOAPArray()
     {
-    	trigger_error("Group.getSOAPArray() not yet implemented");
+        trigger_error("Group.getSOAPArray() not yet implemented");
     }
 }
 ?>
