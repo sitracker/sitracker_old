@@ -43,7 +43,7 @@ class Contact extends Person {
 
     function retrieveDetails()
     {
-        trigger_error("Contact.retreiveDetails() not yet implemented");
+        trigger_error("Contact.retrieveDetails() not yet implemented");
     }
 
     /**
