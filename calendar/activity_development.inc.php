@@ -20,7 +20,7 @@ if (realpath(__FILE__) == realpath($_SERVER['SCRIPT_FILENAME']))
 
 foreach(array('level', 'data', 'ws' ) as $var)
 {
-	eval("\$$var=cleanvar(\$_REQUEST['$var']);");
+    eval("\$$var=cleanvar(\$_REQUEST['$var']);");
 }
 
 if ($level == '')
