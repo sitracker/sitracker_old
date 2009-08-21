@@ -56,13 +56,13 @@ class User extends Person{
     	if ($id > 0)
         {
             $this->id = $id;
-            $this->retreiveDetails();
+            $this->retrieveDetails();
         }
     }
     
-    function retreiveDetails()
+    function retrieveDetails()
     {
-        trigger_error("User.retreiveDetails() not yet implemented");
+        trigger_error("User.retrieveDetails() not yet implemented");
         $sql = "SELECT u.*, r.rolename ";
         $sql .= "FROM `{$GLOBALS['dbUsers']}` AS u, `{$GLOBALS['dbRoles']}` AS r ";
         $sql .= "WHERE u.id = {$this->id} AND u.roleid = r.id";

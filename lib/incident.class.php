@@ -41,9 +41,9 @@ class Incident extends SitEntity
     var $currentstatusexternal = "no status";
     var $servicelevel = "no service level";
 
-    function retreiveDetails()
+    function retrieveDetails()
     {
-    	trigger_error("Incident.retreiveDetails() not yet implemented");
+    	trigger_error("Incident.retrieveDetails() not yet implemented");
     }
 
     function add()

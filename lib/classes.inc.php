@@ -36,7 +36,7 @@ abstract class SitEntity {
     /**
      * Retreives details of the entity from the database
      */
-    abstract protected function retreiveDetails();
+    abstract protected function retrieveDetails();
 
     /**
      * Adds the entity to SiT

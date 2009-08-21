@@ -18,14 +18,14 @@ class Task extends SitEntity {
     	if ($id > 0)
         {
 	    $this->id = $id;
-            $this->retreiveDetails(); 
+            $this->retrieveDetails();
         }
     }
 
 
-    function retreiveDetails()
+    function retrieveDetails()
     {
-        trigger_error("Task.retreiveDetails() not yet implemented");
+        trigger_error("Task.retrieveDetails() not yet implemented");
     }
     
     

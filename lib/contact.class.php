@@ -41,7 +41,7 @@ class Contact extends Person {
     var $notes;
     var $active;
 
-    function retreiveDetails()
+    function retrieveDetails()
     {
         trigger_error("Contact.retreiveDetails() not yet implemented");
     }

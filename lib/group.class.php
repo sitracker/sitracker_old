@@ -21,7 +21,7 @@ class Group extends SitEntity {
     	if ($id > 0)
         {
         	$this->id = $id;
-            $this->retreiveDetails(); 
+            $this->retrieveDetails();
         }
         else
         {
@@ -30,7 +30,7 @@ class Group extends SitEntity {
     }
 
 
-    function retreiveDetails()
+    function retrieveDetails()
     {
         if ($this->id > 0)
         {

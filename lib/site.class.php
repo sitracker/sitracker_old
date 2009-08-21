@@ -18,14 +18,14 @@ class Site extends SitEntity {
     	if ($id > 0)
         {
 	    $this->id = $id;
-            $this->retreiveDetails(); 
+            $this->retrieveDetails();
         }
     }
 
 
-    function retreiveDetails()
+    function retrieveDetails()
     {
-        trigger_error("Site.retreiveDetails() not yet implemented");
+        trigger_error("Site.retrieveDetails() not yet implemented");
     }
     
     
