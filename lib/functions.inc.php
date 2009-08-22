@@ -2456,7 +2456,7 @@ function debug_log($logentry, $debugmodeonly = FALSE)
     global $CONFIG;
 
     if ($debugmodeonly == FALSE
-        OR ($debugmodeonly == TRUE AND $CONFIG['debug_mode'] == TRUE))
+        OR ($debugmodeonly == TRUE AND $CONFIG['debug'] == TRUE))
     {
         $logentry = $_SERVER["SCRIPT_NAME"] . ' ' .$logentry;
 
