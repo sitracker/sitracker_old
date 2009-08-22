@@ -25,8 +25,10 @@ include (APPLICATION_INCPATH . 'htmlheader.inc.php');
 
 echo "<div id='aboutsit'>";
 echo "<img src='images/sitlogo_270x100.png' width='270' height='100' alt='SiT! Support Incident Tracker' />";
-echo "<p align='center'>{$strVersion}: {$application_version} {$application_revision}</p>";
-
+echo "<p align='center'>{$strVersion}: {$application_version} {$application_revision}";
+if ($CONFIG['debug'] == TRUE) echo " (debug mode)";
+echo "</p>";
+debug_log("{$strVersion}: {$application_version} {$application_revision}", TRUE);
 
 echo "<table summary='by Ivan Lucas' align='center' width='65%'>\n";
 // echo "<tr><td class='shade1' colspan='2'>{$strAbout} {$CONFIG['application_shortname']}&hellip;</td></tr>\n";
