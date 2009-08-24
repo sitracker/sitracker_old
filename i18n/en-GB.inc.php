@@ -533,6 +533,7 @@ $strEmailOK = 'Email OK';
 $strEmailReceivedAbbrev = 'Email Rx';
 $strEmailreceivedby = 'Email received by %s';
 $strEmailsentby = 'Email sent by %s';
+$strEmailSendFeedbackDesc = 'Sends a request to the incident owner to complete a feedback form.';
 $strEmailSent = 'Email Sent';
 $strEmailSettings = 'Email Settings';
 $strEmailSignature = 'Email Signature';
