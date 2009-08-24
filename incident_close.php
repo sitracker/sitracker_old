@@ -516,8 +516,8 @@ else
                                                      'userid' => $sit[2],
                                                      'notifyexternal' => $notifyexternal,
                                                      'notifycontact' => $notifycontact,
-                                                     'awaitingclosure' => $awaitingclosure
-                                                     'sendfeedback' => $send_feedback,
+                                                     'awaitingclosure' => $awaitingclosure,
+                                                     'sendfeedback' => $send_feedback
                                                     ));
 
             // Tidy up drafts i.e. delete
