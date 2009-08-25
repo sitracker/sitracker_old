@@ -450,6 +450,10 @@ function ldap_storeDetails($password, $id = 0, $user=TRUE, $populateOnly=FALSE, 
 }
 
 
+/**
+ * @author Paul Heaney
+ * @todo TODO document this function
+*/
 function ldap_getDetails($username, $searchOnEmail, &$ldap_conn)
 {
     global $CONFIG, $ldap_vars;
