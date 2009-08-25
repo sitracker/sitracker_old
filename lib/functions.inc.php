@@ -225,7 +225,7 @@ function authenticate($username, $password)
 function authenticateContact($username, $password)
 {
     debug_log ("authenticateContact called");
-	global $CONFIG;
+    global $CONFIG;
     $toReturn = false;
 
     $sql = "SELECT id, password, contact_source, active FROM `{$GLOBALS['dbContacts']}` WHERE username = '{$username}'";
@@ -233,7 +233,7 @@ function authenticateContact($username, $password)
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     if (mysql_num_rows($result) == 1)
     {
-        debug_log ("Just one in db");
+        debug_log ("Authenticate: Just one contact in db");
         // Exists in SiT DB
         $obj = mysql_fetch_object($result);
         if ($obj->contact_source == 'sit')
@@ -287,7 +287,7 @@ function authenticateContact($username, $password)
     }
     else
     {
-        debug_log ("non in db");
+        debug_log ("Authenticate: No matching contact found in db");
         // Don't exist, check LDAP etc
         if ($CONFIG['use_ldap'])
         {
@@ -4505,7 +4505,7 @@ return ($html);
 
 
 /**
- * Identifies whether feedback should be send for this contract, 
+ * Identifies whether feedback should be send for this contract,
  * This checks against $CONFIG['no_feedback_contracts'] to see if the contract is set to receive no feedback
  * @param $contractid int The contract ID to check
  * @return bool TRUE if feedback should be sent, false otherwise
@@ -4734,7 +4734,7 @@ function parse_updatebody($updatebody, $striptags = TRUE)
 
 
 /**
- * Produces a HTML form for adding a note to an item 
+ * Produces a HTML form for adding a note to an item
  * @param $linkid int The link type to be used
  * @param $refid int The ID of the item this note if for
  * @return string The HTML to display
