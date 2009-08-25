@@ -831,7 +831,7 @@ function saction_ldapSync()
                     // If the directory supports disabling of users
                     if (!empty($CONFIG['ldap_logindisabledattribute']))
                     {
-                        if ($sit_db_users[$user_attributes[$CONFIG['ldap_userattribute']][0]]->status == USERSTATUS_ACCOUNT_DISABLED)
+                        if ($sit_db_users[$user_attributes[$CONFIG['ldap_userattribute']][0]]->status === USERSTATUS_ACCOUNT_DISABLED)
                         {
                             // User is disabled in the SIT db, check to see if we need to re-enable
                             if (!empty($user_attributes[$CONFIG['ldap_logindisabledattribute']]))
