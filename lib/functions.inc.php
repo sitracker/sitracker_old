@@ -5704,8 +5704,6 @@ function schedule_actions_due()
         }
     }
 
-    echo $sql;
-
     // Month
     $sql = "SELECT * FROM `{$dbScheduler}` WHERE status = 'enabled' AND type = 'date' ";
     $sql .= "AND UNIX_TIMESTAMP(start) <= $now AND (UNIX_TIMESTAMP(end) >= $now OR UNIX_TIMESTAMP(end) = 0) ";
@@ -5740,8 +5738,6 @@ function schedule_actions_due()
             $actions[$action->action] = $actions->params;
         }
     }
-
-    debug_log('actions'.print_r($actions,true));
 
     return $actions;
 }
