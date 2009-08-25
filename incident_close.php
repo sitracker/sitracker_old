@@ -510,11 +510,14 @@ else
                 }
             }
 
+            //FIXME move the FALSE->0 hack into triggers
+            if (!$send_feedback) $send_feedback = '0';
             trigger('TRIGGER_INCIDENT_CLOSED', array('incidentid' => $incidentid,
                                                      'userid' => $sit[2],
                                                      'notifyexternal' => $notifyexternal,
                                                      'notifycontact' => $notifycontact,
-                                                     'awaitingclosure' => $awaitingclosure
+                                                     'awaitingclosure' => $awaitingclosure,
+                                                     'sendfeedback' => $send_feedback
                                                     ));
 
             // Tidy up drafts i.e. delete

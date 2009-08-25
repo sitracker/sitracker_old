@@ -1831,7 +1831,7 @@ function transactions_report($serviceid, $startdate, $enddate, $sites, $display,
                     }
                 }
 
-                $str = "\"{$transaction->date}\",";
+                $str = "\"{$transaction->dateupdated}\",";
                 $str .= "\"{$transaction->transactionid}\",";
                 $str .= "\"{$transaction->serviceid}\",\"";
                 $str .= site_name($transaction->site)."\",";
