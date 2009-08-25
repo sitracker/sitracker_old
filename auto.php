@@ -739,6 +739,8 @@ function saction_CheckTasksDue()
 function saction_ldapSync()
 {
     global $CONFIG;
+    $success = FALSE;
+
     if ($CONFIG['use_ldap'])
     {
         $ldap_conn = ldapOpen();
@@ -853,6 +855,11 @@ function saction_ldapSync()
                     if (!ldap_storeDetails('', $userid, TRUE, TRUE, $ldap_conn, $user_attributes))
                     {
                         trigger_error("Failed to store details for userid {$userid}", E_USER_WARNING);
+                        $success = FALSE;
+                    }
+                    else
+                    {
+                        $success = TRUE;
                     }
                 }
                 else
@@ -943,7 +950,7 @@ function saction_ldapSync()
                                 if (strtolower($contact_attributes[$CONFIG['ldap_logindisabledattribute']][0]) == strtolower($CONFIG['ldap_logindisabledvalue']))
                                 {
                                     // We want to disable
-                                     $sit_db_contacts[$contact_attributes[$CONFIG['ldap_userattribute']][0]]->disable();
+                                    $sit_db_contacts[$contact_attributes[$CONFIG['ldap_userattribute']][0]]->disable();
                                 }
                             }
                         }
@@ -958,6 +965,7 @@ function saction_ldapSync()
                         if (!ldap_storeDetails('', $contactid, FALSE, TRUE, $ldap_conn, $contact_attributes))
                         {
                             trigger_error("Failed to store details for userid {$contactid}", E_USER_WARNING);
+                            $success = FALSE;
                         }
                     }
                 }
@@ -966,12 +974,17 @@ function saction_ldapSync()
                 // TODO reassign incidents?
                 foreach ($sit_db_contacts AS $c)
                 {
-                    debug_log ("Disabling {$c->username}");
+                    debug_log ("Disabling {$c->username}", TRUE);
                     $c->disable();
                 }
             }
         }
     }
+    else
+    {
+        $success = TRUE;
+    }
+    return $success;
 }
 
 // =======================================================================================
