@@ -236,6 +236,10 @@ function ldapOpen($host='', $port='', $protocol='', $security='', $user='', $pas
 }
 
 
+/**
+ * @author Paul Heaney
+ * @todo TODO document this function
+*/
 function ldap_storeDetails($password, $id = 0, $user=TRUE, $populateOnly=FALSE, &$ldap_conn, $user_attributes)
 {
     global $CONFIG;
@@ -401,7 +405,8 @@ function ldap_storeDetails($password, $id = 0, $user=TRUE, $populateOnly=FALSE, 
         elseif ($usertype == LDAP_USERTYPE_CUSTOMER AND !$user)
         {
             // Contact
-            debug_log("Adding contact TYPE {$usertype} {$user}", TRUE);
+            debug_log("Adding contact TYPE {$usertype} USER {$user}", TRUE);
+            debug_log("User attributes: ".print_r($user_attributes, TRUE), TRUE);
             $contact = new Contact();
             $contact->username = $user_attributes[$CONFIG['ldap_userattribute']][0];
             if ($CONFIG['ldap_cache_passwords']) $contact->password = $password;
@@ -478,13 +483,13 @@ function ldap_getDetails($username, $searchOnEmail, &$ldap_conn)
     if (ldap_count_entries($ldap_conn, $sr) != 1)
     {
         // Multiple or zero
-        trigger_error("Unable to locate user", E_USER_ERROR);
+        trigger_error("LDAP unable to locate object: '$username', or multiple matches where found", E_USER_ERROR);
         $toReturn = false;
     }
     else
     {
         // just one
-        debug_log("LDAP got details for user '$username'", TRUE);
+        debug_log("LDAP got details for object: '$username'", TRUE);
         $toReturn  = ldap_first_entry($ldap_conn, $sr);
     }
 
