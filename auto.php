@@ -59,7 +59,16 @@ function saction_CloseIncidents($closure_delay)
         $success = FALSE;
     }
 
-    //if ($CONFIG['debug']) debug_log("Found ".mysql_num_rows($result)." Incidents to close");
+    // Billing
+    $sql = "SELECT id, owner, status FROM `{$dbIncidents}` WHERE status='".STATUS_CLOSING."' ";
+    $sql .= "AND (({$now} - lastupdated) > '{$closure_delay}') ";
+    $sql .= "AND (timeofnextaction='0' OR timeofnextaction<='{$now}') ";
+    $result = mysql_query($sql);
+    if (mysql_error())
+    {
+        trigger_error(mysql_error(),E_USER_WARNING);
+        $success = FALSE;
+    }
 
     while ($obj = mysql_fetch_object($result))
     {
@@ -67,18 +76,6 @@ function saction_CloseIncidents($closure_delay)
 
         if ($bill)
         {
-            $sqlb = "UPDATE `{$dbIncidents}` SET lastupdated='{$now}', ";
-            $sqlb .= "closed='{$now}', status='".STATUS_CLOSED."', closingstatus='4', ";
-            $sqlb .= "timeofnextaction='0' WHERE id='{$obj->id}'";
-            $resultb = mysql_query($sqlb);
-            if (mysql_error())
-            {
-                trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
-                $success = FALSE;
-            }
-
-            if ($CONFIG['debug']) //debug_log("  Incident {$obj->id} closed");
-
             $sqlc = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, currentowner, currentstatus, bodytext, timestamp, nextaction, customervisibility) ";
             $sqlc .= "VALUES ('{$obj->id}', '0', 'closing', '{$obj->owner}', '{$obj->status}', 'Incident Closed by {$CONFIG['application_shortname']}', '{$now}', '', 'show' ) ";
             $resultc = mysql_query($sqlc);
@@ -90,7 +87,7 @@ function saction_CloseIncidents($closure_delay)
         }
         else
         {
-        	$success = FALSE;
+            $success = FALSE;
         }
     }
     return $success;
