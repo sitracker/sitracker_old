@@ -58,19 +58,19 @@ class Contact extends Person {
         if (empty($this->siteid))
         {
             $errors++;
-            trigger_error($GLOBALS['strMustSelectCustomerSite'], E_USER_ERROR);
+            trigger_error('Site ID was empty', E_USER_ERROR);
         }
 
         if (empty($this->surname))
         {
             $errors++;
-            trigger_error($GLOBALS['strMustEnterSurname'], E_USER_ERROR);
+            trigger_error('Surname was blank', E_USER_ERROR);
         }
 
         if ($duplicate AND $this->is_duplicate())
         {
             $errors++;
-            trigger_error($GLOBALS['strContactRecordExists'], E_USER_ERROR);
+            trigger_error('Record already exists', E_USER_ERROR);
         }
 
         if ($errors > 0) return false;
