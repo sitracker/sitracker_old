@@ -165,7 +165,7 @@ if ($CONFIG['use_ldap'])
 */
 function ldapOpen($host='', $port='', $protocol='', $security='', $user='', $password='')
 {
-    debug_log("ldapOpen");
+    debug_log("ldapOpen", TRUE);
     global $CONFIG, $ldap_conn;
 
     if (empty($host)) $host = $CONFIG['ldap_host'];
@@ -191,7 +191,7 @@ function ldapOpen($host='', $port='', $protocol='', $security='', $user='', $pas
     	$ldap_url = "ldaps://{$host}:{$port}";
     }
 
-    debug_log ("LDAP URL: {$ldap_url}");
+    debug_log ("LDAP URL: {$ldap_url}", TRUE);
     $ldap_conn = @ldap_connect($ldap_url);
 
 
@@ -254,14 +254,14 @@ function ldap_storeDetails($password, $id = 0, $user=TRUE, $populateOnly=FALSE, 
     if (!$user_bind)
     {
         // Auth failed
-        debug_log ("LDAP Invalid credentials {$_SESSION['ldap_user_dn']} pwd: '{$password}'");
+        debug_log("LDAP Invalid credentials {$_SESSION['ldap_user_dn']}", TRUE);
         $toReturn = false;
     }
     else
     {
         // Sucessfull
-        debug_log ("LDAP Valid Credentials");
-        $usertype = LDAP_INVALID_USER;
+        debug_log("LDAP Valid Credentials", TRUE);
+        $usertype= LDAP_INVALID_USER;
 
         if ($CONFIG['ldap_grponuser'])
         {
@@ -317,28 +317,28 @@ function ldap_storeDetails($password, $id = 0, $user=TRUE, $populateOnly=FALSE, 
 
             if ($user)
             {
-                debug_log ("USER: {$filter}");
+                debug_log("USER: {$filter}" , TRUE);
                 /*
                  * Locate
                  */
                 if (ldap_count_entries($ldap_conn, ldap_search($ldap_conn, $CONFIG['ldap_admin_group'], $filter)))
                 {
                     $usertype = LDAP_USERTYPE_ADMIN;
-                    debug_log ("ADMIN");
+                    debug_log("ADMIN", TRUE);
                 }
                 elseif (ldap_count_entries($ldap_conn, ldap_search($ldap_conn, $CONFIG['ldap_manager_group'], $filter)))
                 {
                     $usertype = LDAP_USERTYPE_MANAGER;
-                    debug_log ("MANAGER");
+                    debug_log("MANAGER", TRUE);
                 }
                 elseif (ldap_count_entries($ldap_conn, ldap_search($ldap_conn, $CONFIG['ldap_user_group'], $filter)))
                 {
                     $usertype = LDAP_USERTYPE_USER;
-                    debug_log ("USER");
+                    debug_log("USER", TRUE);
                 }
                 else
                 {
-                    debug_log ("INVALID USER");
+                    debug_log("INVALID USER", TRUE);
                 }
             }
             else
@@ -348,11 +348,11 @@ function ldap_storeDetails($password, $id = 0, $user=TRUE, $populateOnly=FALSE, 
                 if (ldap_count_entries($ldap_conn, $result))
                 {
                     $usertype = LDAP_USERTYPE_CUSTOMER;
-                    debug_log ("CUSTOMER");
+                    debug_log("CUSTOMER", TRUE);
                 }
                 else
                 {
-                    debug_log ("INVALID CUSTOMER");
+                    debug_log("INVALID CUSTOMER", TRUE);
                 }
             }
         }
@@ -401,7 +401,7 @@ function ldap_storeDetails($password, $id = 0, $user=TRUE, $populateOnly=FALSE, 
         elseif ($usertype == LDAP_USERTYPE_CUSTOMER AND !$user)
         {
             // Contact
-            debug_log("Adding contact TYPE {$usertype} {$user}");
+            debug_log("Adding contact TYPE {$usertype} {$user}", TRUE);
             $contact = new Contact();
             $contact->username = $user_attributes[$CONFIG['ldap_userattribute']][0];
             if ($CONFIG['ldap_cache_passwords']) $contact->password = $password;
@@ -427,7 +427,7 @@ function ldap_storeDetails($password, $id = 0, $user=TRUE, $populateOnly=FALSE, 
             }
             else
             {
-                debug_log ("MODIFY CONTACT {$id}");
+                debug_log("MODIFY CONTACT {$id}", TRUE);
                 $contact->id = $id;
                 $status = $contact->edit();
             }
@@ -471,20 +471,20 @@ function ldap_getDetails($username, $searchOnEmail, &$ldap_conn)
         $attributes[] = $CONFIG[strtolower("ldap_{$var}")];
     }
 
-    debug_log ("Filter: {$filter}");
-    debug_log ("Base: {$base}");
+    debug_log("Filter: {$filter}", TRUE);
+    debug_log("Base: {$base}". TRUE);
     $sr = ldap_search($ldap_conn, $base, $filter, $attributes);
 
     if (ldap_count_entries($ldap_conn, $sr) != 1)
     {
         // Multiple or zero
-        trigger_error("Unable to locate user"); // FIXME i18n
+        trigger_error("Unable to locate user", E_USER_ERROR);
         $toReturn = false;
     }
     else
     {
         // just one
-        debug_log ("LDAP got details for user '$username'");
+        debug_log("LDAP got details for user '$username'", TRUE);
         $toReturn  = ldap_first_entry($ldap_conn, $sr);
     }
 
@@ -507,7 +507,7 @@ function ldap_getDetails($username, $searchOnEmail, &$ldap_conn)
 */
 function authenticateLDAP($username, $password, $id = 0, $user=TRUE, $populateOnly=FALSE, $searchOnEmail=FALSE)
 {
-    debug_log("authenticateLDAP {$username}");
+    debug_log("authenticateLDAP {$username}", TRUE);
 
     global $CONFIG;
 
@@ -526,13 +526,13 @@ function authenticateLDAP($username, $password, $id = 0, $user=TRUE, $populateOn
         if (!$entry)
         {
             // Multiple or zero
-            trigger_error("Unable to locate user"); // FIXME i18n
+            trigger_error("Unable to locate user", E_USER_ERROR);
             $toReturn = false;
         }
         else
         {
             // just one
-            debug_log ("One entry found");
+            debug_log("One entry found", TRUE);
 
             $_SESSION['ldap_user_dn'] = ldap_get_dn($ldap_conn, $entry);
             $user_attributes = ldap_get_attributes($ldap_conn, $entry);
@@ -579,45 +579,16 @@ function ldapImportCustomerFromEmail($email)
 {
     global $CONFIG;
     $toReturn = false;
-    /*
-    global $dbContacts;
 
-    $r = getContactDetailsFromDBByEmail($email);
-
-    if( ! empty($r) )
+    debug_log ("ldapImportCustomerFromEmail {$email}", TRUE);
+    if (!empty($email))
     {
-        // This contact already exists
-        return;
-    }
-
-    // Create user
-    $details = ldapGetCustomerDetailsFromEmail(email);
-
-
-    ldapCreateContact($details);
-    */
-
-    /*
-     * Check if contact exists
-     * is contact sit
-     *   return
-     * if ldap enabled
-     *   is contact ldap
-     *     sync
-     *   else
-     *     try and find in LDAP
-     *
-     */
-     debug_log ("ldapImportCustomerFromEmail {$email}");
-     if (!empty($email))
-     {
         $sql = "SELECT id, username, contact_source FROM `{$GLOBALS['dbContacts']}` WHERE email = '{$email}'";
-        debug_log ($sql);
+        debug_log($sql, TRUE);
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
         if (mysql_num_rows($result) == 1)
         {
-            debug_log ("just one");
             // Can only deal with the case where one exists, if multiple contacts have the same email address its difficult to deal with
             $obj = mysql_fetch_object($result);
 
@@ -637,13 +608,12 @@ function ldapImportCustomerFromEmail($email)
         }
         elseif (mysql_num_rows($result) > 1)
         {
-            debug_log ("More than one");
+            debug_log ("More than one contact was found in LDAP with this address '{$email}', not importing", TRUE);
             // Contact does exists with these details, just theres more than one of them
             $toReturn = true;
         }
         else
         {
-            debug_log ("Zero");
             // Zero found
             if ($CONFIG['use_ldap'])
             {
@@ -651,9 +621,9 @@ function ldapImportCustomerFromEmail($email)
                 if (authenticateLDAP($email, '', 0, false, true, true)) $toReturn = true;
             }
         }
-     }
+    }
 
-     return $toReturn;
+    return $toReturn;
 }
 
 
@@ -678,8 +648,8 @@ function ldapCheckGroupExists($dn, $mapping)
 
     $filter = "(ObjectClass={$o})";
 
-    debug_log ("Filter: {$filter}");
-    debug_log ("Object: {$dn}");
+    debug_log("Filter: {$filter}", TRUE);
+    debug_log("Object: {$dn}", TRUE);
     $sr = ldap_search($ldap_conn, $dn, $filter);
 
     if (ldap_count_entries($ldap_conn, $sr) != 1)

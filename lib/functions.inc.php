@@ -5683,6 +5683,7 @@ function open_activities_for_site($siteid)
 /**
  * Finds out which scheduled tasks should be run right now
  * @author Ivan Lucas, Paul Heaney
+ * @returns array
  */
 function schedule_actions_due()
 {
