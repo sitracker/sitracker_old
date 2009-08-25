@@ -107,6 +107,10 @@ function trigger($triggerid, $paramarray='')
             if (!trigger_checks($triggerobj->checks, $paramarray))
             {
                 $checks = trigger_replace_specials($triggerid, $triggerobj->checks, $paramarray);
+                // FIXME hack to fix bug 901
+                $checks = str_replace("AND", "&&", $checks);
+                $checks = str_replace("OR", "||", $checks);
+
                 $eresult = @eval("\$value = $checks;return TRUE;");
                 if (!$eresult) trigger_error("Error in trigger rule for {$triggerid}, check your <a href='triggers.php'>trigger rules</a>.", E_USER_WARNING);
                 if ($value === FALSE)
