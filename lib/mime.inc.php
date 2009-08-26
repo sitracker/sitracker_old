@@ -210,7 +210,7 @@ class MIME_mail
             //INL   $c_enc = "Content-Transfer-Encoding: ".BIT7.CRLF;
             $c_enc = '';
             $c_desc = $c_desc?"Content-Description: $c_desc".CRLF:"";
-            $warning = CRLF.WARNING.CRLF.CRLF ;
+            $warning = CRLF.CRLF.WARNING.CRLF.CRLF ;
 
             // Since we are here, it means we do have attachments => body must become an attachment too.
             if (!empty($this->body))
