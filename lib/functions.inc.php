@@ -6767,6 +6767,7 @@ function kb_article($id, $mode='internal')
  */
 function show_edit_site($site, $mode='internal')
 {
+    global $CONFIG;
     $sql = "SELECT * FROM `{$GLOBALS['dbSites']}` WHERE id='$site' ";
     $siteresult = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
