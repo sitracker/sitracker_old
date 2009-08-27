@@ -197,13 +197,7 @@ switch ($mode)
                     $respondentarr=explode('-',$resp->respondent);
                     $responserefarr=explode('-',$resp->responseref);
 
-                    $hashtext=urlencode($resp->formid)."&&".urlencode($resp->contactid)."&&".urlencode($resp->incidentid);
-                    // $hashcode=urlencode(trim(base64_encode(gzcompress(str_rot13($hashtext)))));
-                    $hashcode4=str_rot13($hashtext);
-                    $hashcode3=gzcompress($hashcode4);
-                    $hashcode2=base64_encode($hashcode3);
-                    $hashcode1=trim($hashcode2);
-                    $hashcode=urlencode($hashcode1);
+                    $hashcode = feedback_hash($resp->formid, $resp->contactid, $resp->incidentid);
                     echo "<tr class='$shade'>";
                     echo "<td>".ldate($CONFIG['dateformat_datetime'],mysqlts2date($resp->created))."</td>";
                     echo "<td><a href='contact_details.php?id={$resp->contactid}' title='{$resp->email}'>".contact_realname($resp->contactid)."</a></td>";
