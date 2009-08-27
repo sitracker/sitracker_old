@@ -155,6 +155,7 @@ function html_checkbox($name, $state, $value ='', $attributes = '')
   * @param int $size - Size in pixels (Default 32)
   * @param bool $hyperlink - Make a link back to gravatar.com, default TRUE
   * @returns string - HTML img tag
+  * @note See http://en.gravatar.com/site/implement/ for implementation guide
  */
 function gravatar($email, $size = 32, $hyperlink = TRUE)
 {
