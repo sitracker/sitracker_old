@@ -180,7 +180,7 @@ else
     echo "<form action='$_SERVER[PHP_SELF]?action=update' method='post'>";
     echo "<table align='center' class='vertical'>";
 
-    if ($CONFIG['portal_usernames_can_be_changed'] && $_SESSION['contact_source'] != 'sit' )
+    if ($CONFIG['portal_usernames_can_be_changed'] && $_SESSION['contact_source'] == 'sit' )
     {
         echo "<tr><th>{$strUsername}</th><td>";
         echo "<input class='required' name='username' value='{$user->username}' />";

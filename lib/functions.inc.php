@@ -8249,6 +8249,26 @@ function is_kb_article($id, $mode)
 }
 
 
+/**
+ * Generates a feedback form hash
+ * @author Kieran Hogg
+ * @param $formid int ID of the form to use
+ * @param $contactid int ID of the contact to send it to
+ * @param $incidentid int ID of the incident the feedback is about
+ * @return string the hash
+*/
+function feedback_hash($formid, $contactid, $incidentid)
+{
+    $hashtext = urlencode($formid)."&&".urlencode($contactid)."&&".urlencode($incidentid);
+    $hashcode4 = str_rot13($hashtext);
+    $hashcode3 = gzcompress($hashcode4);
+    $hashcode2 = base64_encode($hashcode3);
+    $hashcode1 = trim($hashcode2);
+    $hashcode = urlencode($hashcode1);
+    return $hashcode;
+}
+
+
 // ** Place no more function defs below this **
 
 

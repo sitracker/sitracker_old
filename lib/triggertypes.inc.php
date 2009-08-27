@@ -308,10 +308,17 @@ array('description' => $strContactsUsername,
       'replacement' => 'contact_username($paramarray[\'contactid\']);'
       );
 
-$ttvararray['{contractid}'] =
+$ttvararray['{contractid}'][] =
 array('description' => $strContractID,
       'requires' => 'contractid',
       'replacement' => '$paramarray[\'contractid\'];',
+      'show' => FALSE
+      );
+
+$ttvararray['{contractid}'][] =
+array('description' => $strContractID,
+      'requires' => 'contractid',
+      'replacement' => 'incident_owner($paramarray[\'incidentid\']);',
       'show' => FALSE
       );
 
@@ -336,7 +343,7 @@ array('description' => $strCurrentLanguage,
 $ttvararray['{feedbackurl}'] =
 array('description' => $strFeedbackURL,
       'requires' => 'incidentid',
-      'replacement' => '$baseurl.\'feedback.php?ax=\'.urlencode(trim(base64_encode(gzcompress(str_rot13(urlencode($CONFIG[\'feedback_form\']).\'&&\'.urlencode($contactid).\'&&\'.urlencode($incidentid))))));'
+      'replacement' => 'application_url()."feedback.php?ax=".feedback_hash($CONFIG[\'feedback_form\'], incident_owner($paramarray[\'incidentid\']), $paramarray[\'incidentid\']);'
       );
 
 $ttvararray['{globalsignature}'] =
@@ -528,6 +535,11 @@ array('description' => $strSendOpeningEmailDesc,
       'replacement' => '$paramarray[\'sendemail\'];',
       'show' => FALSE
      );
+
+$ttvararray['{sendfeedback}'] = 
+array('description' => $strSendFeedbackDesc,
+      'replacement' => '$paramarray[\'sendfeedback\']',
+      'show' => FALSE);
 
 $ttvararray['{serviceremaining}'] =
 array('description' => $strServiceBalanceInfo,

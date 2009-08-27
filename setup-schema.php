@@ -54,6 +54,7 @@ INSERT INTO `{$dbTriggers}` (`triggerid`, `userid`, `action`, `template`, `param
 INSERT INTO `{$dbTriggers}` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_INCIDENT_CLOSED', 0, 'ACTION_EMAIL', 'EMAIL_EXTERNAL_INCIDENT_CLOSURE', '', '{notifyexternal} == 1');
 INSERT INTO `{$dbTriggers}` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_SERVICE_LIMIT' , 0, 'ACTION_EMAIL', 'EMAIL_SERVICE_LEVEL', '', '{serviceremaining} <= 0.2');
 INSERT INTO `{$dbTriggers}` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_SCHEDULER_TASK_FAILED', 1, 'ACTION_NOTICE', 'NOTICE_SCHEDULER_TASK_FAILED', '', '{schedulertask} == \'CheckIncomingMail\'');
+INSERT INTO `{$dbTriggers}` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_INCIDENT_CLOSED', 0, 'ACTION_EMAIL', 'EMAIL_SEND_FEEDBACK', '', '{sendfeedback} == 1');
 ";
 
 $schema = "
@@ -273,6 +274,7 @@ INSERT INTO `{$dbEmailTemplates}` (`name`, `type`, `description`, `tofield`, `fr
 INSERT INTO `{$dbEmailTemplates}` (`name`, `type`, `description`, `tofield`, `fromfield`, `replytofield`, `ccfield`, `bccfield`, `subjectfield`, `body`, `customervisibility`, `storeinlog`, `created`, `createdby`, `modified`, `modifiedby`) VALUES('EMAIL_HOLIDAYS_REQUESTED', 'system', 'strEmailHolidaysRequestedDesc', '{approvaluseremail}', '{supportemail}', '{supportemail}', NULL, NULL, '{applicationshortname}: Holiday approval request', 'Hi,\r\n\r\n{userrealname} has requested that you approve the following holidays:\r\n\r\n{listofholidays}\r\n\r\nPlease point your browser to {applicationurl}holiday_request.php?user={userid}&mode=approval to approve or decline these requests.\r\nRegards\r\n{applicationname}\r\n\r\n-- \r\n{todaysdate} - {applicationshortname} {applicationversion}\r\n{globalsignature}\r\n{triggersfooter}', 'hide', 'No', NULL, NULL, NULL, NULL);
 INSERT INTO `{$dbEmailTemplates}` (`name`, `type`, `description`, `tofield`, `fromfield`, `replytofield`, `ccfield`, `bccfield`, `subjectfield`, `body`, `customervisibility`, `storeinlog`, `created`, `createdby`, `modified`, `modifiedby`) VALUES('EMAIL_SERVICE_LEVEL', 'system', 'strEmailServiceLevelDesc', '{salespersonemail}', '{supportemail}', '{supportemail}', NULL, NULL, '{sitename}\'s service credit low', 'Hi, {sitename}''s total service credit is now standing at {serviceremainingstring}.\r\n\r\nRegards\r\n{applicationname}\r\n\r\n-- \r\n{todaysdate} - {applicationshortname} {applicationversion}\r\n{globalsignature}\r\n{triggersfooter}', 'show', 'No', NULL, NULL, NULL, NULL);
 INSERT INTO `{$dbEmailTemplates}` (`name`, `type`, `description`, `tofield`, `fromfield`, `replytofield`, `ccfield`, `bccfield`, `subjectfield`, `body`, `customervisibility`, `storeinlog`, `created`, `createdby`, `modified`, `modifiedby`) VALUES('EMAIL_INCIDENT_UPDATED_CUSTOMER', 'system', 'strEmailIncidentUpdatedCustomerDesc', '{contactemail}', '{supportemail}', '{supportemail}', '', '', '{applicationshortname} [{incidentid}] - {incidenttitle} updated', 'Hi {contactfirstname},\r\n\r\nYour incident [{incidentid}] - {incidentid} has been updated, please log into the portal to view the update and respond.\r\n \r\nDO NOT respond to this e-mail directly, use the portal for your responses.\r\n\r\nLog into the portal at: {applicationurl}, where you can also reset your details if you do not know them.\r\n\r\nRegards,\r\n{signature}\r\n\r\n{globalsignature}', 'hide', 'No', NULL, NULL, NULL, NULL);
+INSERT INTO `{$dbEmailTemplates}` (`name`, `type`, `description`, `tofield`, `fromfield`, `replytofield`, `ccfield`, `bccfield`, `subjectfield`, `body`, `customervisibility`, `storeinlog`, `created`, `createdby`, `modified`, `modifiedby`) VALUES('EMAIL_SEND_FEEDBACK', 'system', 'strEmailSendFeedbackDesc', '{contactemail}', '{supportemail}', '{supportemail}', '', '', '{applicationshortname} [{incidentid}] - {incidenttitle}: feedback requested', 'Hi {contactfirstname},\r\n\r\nWe would very much value your feedback relating to Incident #{incidentid} - {incidenttitle}.\r\n \r\nDO NOT respond to this e-mail directly, use the portal for your responses.\r\n\r\nPlease visit the following URL to complete our short questionnaire.\r\n\r\n{feedbackurl}\r\n\r\nRegards,\r\n{signature}\r\n\r\n{globalsignature}', 'hide', 'No', NULL, NULL, NULL, NULL);
 
 
 CREATE TABLE `{$dbEscalationPaths}` (
@@ -1593,11 +1595,1191 @@ INSERT INTO `{$dbProducts}` VALUES (1,1,'Example Product','This is an example pr
 INSERT INTO `{$dbResellers}` VALUES (2,'Example Reseller');
 ";
 
-// Upgrading from versions prior to 3.90 won't be possible via setup.php
-$upgrade_schema[390] = "";
+
 
 // ********************************************************************
 
+$upgrade_schema[321] = "CREATE TABLE `{$dbSystem}`
+  (`id` INT( 1 ) NOT NULL ,
+  `version` FLOAT( 3, 2 ) DEFAULT '0.00' NOT NULL ,
+  PRIMARY KEY ( `id` )) ENGINE=MyISAM;
+
+CREATE TABLE `{$dbFeedbackForms}`` (
+  `id` int(5) NOT NULL auto_increment,
+  `name` varchar(255) NOT NULL default '',
+  `introduction` text NOT NULL,
+  `thanks` text NOT NULL,
+  `description` text NOT NULL,
+  `multi` enum('yes','no') NOT NULL default 'no',
+  PRIMARY KEY  (`id`),
+  KEY `multi` (`multi`)
+) ENGINE=MyISAM;
+ALTER TABLE `{$dbFeedbackRespondents}` CHANGE `respondent` `contactid` INT( 11 ) NOT NULL;
+ALTER TABLE `{$dbFeedbackRespondents}` CHANGE `responseref` `incidentid` INT( 11 ) NOT NULL;
+ALTER TABLE `{$dbFeedbackReport}` CHANGE `respondent` `respondent` INT( 11 ) NOT NULL;
+ALTER TABLE `{$CONFIG['db_tableprefix']}emailtype` ADD `customervisibility` ENUM( 'show', 'hide' ) DEFAULT 'show' NOT NULL ;
+";
+
+$upgrade_schema[322] = "CREATE TABLE `{$dbRoles}` (
+`id` INT( 5 ) NOT NULL AUTO_INCREMENT ,
+`rolename` VARCHAR( 255 ) NOT NULL ,
+PRIMARY KEY ( `id` )
+) ENGINE=MyISAM;
+
+INSERT INTO `{$dbRoles}` ( `id` , `rolename` ) VALUES ('1', 'Administrator');
+INSERT INTO `{$dbRoles}` ( `id` , `rolename` ) VALUES ('2', 'Manager');
+INSERT INTO `{$dbRoles}` ( `id` , `rolename` ) VALUES ('3', 'User');
+
+CREATE TABLE `{$dbRolePermissions}` (
+`roleid` tinyint( 4 ) NOT NULL default '0',
+`permissionid` int( 5 ) NOT NULL default '0',
+`granted` enum( 'true', 'false' ) NOT NULL default 'false',
+PRIMARY KEY ( `roleid` , `permissionid` )
+) ENGINE=MyISAM;
+
+ALTER TABLE `{$dbUsers}` ADD `roleid` INT( 5 ) NOT NULL DEFAULT '1' AFTER `realname` ;
+ALTER TABLE `{$dbUsers}` DROP `accesslevel` ;
+";
+
+$upgrade_schema[323] = "CREATE TABLE `{$dbRelatedIncidents}` (
+`id` int(5) NOT NULL auto_increment,
+`incidentid` int(5) NOT NULL default '0',
+`relation` enum('child','sibling') NOT NULL default 'child',
+`relatedid` int(5) NOT NULL default '0',
+`owner` int(5) NOT NULL default '0',
+PRIMARY KEY  (`id`),
+KEY `incidentid` (`incidentid`,`relatedid`)
+) ENGINE=MyISAM;
+
+ALTER TABLE `{$dbSites}` CHANGE `notes` `notes` TEXT NOT NULL ;
+
+ALTER TABLE `{$dbSites}` DROP `ftnpassword`;
+
+UPDATE `{$dbPermissions}` SET `name` = 'View Products and Software' WHERE `id` =28 LIMIT 1 ;
+UPDATE `{$dbPermissions}` SET `name` = 'Edit Products' WHERE `id` =29 LIMIT 1 ;
+UPDATE `{$dbPermissions}` SET `name` = 'Add Feedback Forms' WHERE `id` =48 LIMIT 1 ;
+UPDATE `{$dbPermissions}` SET `name` = 'Edit Feedback Forms' WHERE `id` =49 LIMIT 1 ;
+UPDATE `{$dbPermissions}` SET `name` = 'View Feedback' WHERE `id` =51 LIMIT 1 ;
+UPDATE `{$dbPermissions}` SET `name` = 'Edit Service Levels' WHERE `id` =53 LIMIT 1 ;
+
+INSERT INTO `{$dbIncidentStatus}` VALUES (10, 'Active (Unassigned)', 'Active');
+UPDATE `{$dbIncidentStatus}` SET `id` = '0' WHERE `id` =10 LIMIT 1 ;
+";
+
+$upgrade_schema[324] = "ALTER TABLE `{$dbUsers}` ADD `groupid` INT( 5 ) NULL AFTER `roleid` ;
+ALTER TABLE `{$dbUsers}` ADD INDEX ( `groupid` ) ;
+ALTER TABLE `{$dbSoftware}` ADD `lifetime_start` DATE NULL, ADD `lifetime_end` DATE NULL ;
+ALTER TABLE `{$CONFIG['db_tableprefix']}emailtype` ADD `storeinlog` ENUM( 'No', 'Yes' ) NOT NULL DEFAULT 'Yes';
+ALTER TABLE `{$dbUpdates}`
+  DROP `timesincesla`,
+  DROP `timesincereview`,
+  DROP `reviewcalculated`,
+  DROP `slacalculated`;
+ALTER TABLE `{$dbUsers}` ADD `var_notify_on_reassign` ENUM( 'true', 'false' ) NOT NULL DEFAULT 'false' AFTER `var_monitor`;
+UPDATE `{$dbUsers}` SET `var_notify_on_reassign` = 'false';
+INSERT INTO `{$CONFIG['db_tableprefix']}emailtype` (`name`, `type`, `description`, `tofield`, `fromfield`,
+`replytofield`, `ccfield`, `bccfield`, `subjectfield`, `body`, `customervisibility`,
+`storeinlog`) VALUES ('INCIDENT_REASSIGNED_USER_NOTIFY', 'system', 'Notify user when call assigned to them',
+'<useremail>', '<supportemail>','<supportemail>', '', '',
+'A <incidentpriority> priority call ([<incidentid>] - <incidenttitle>) has been reassigned to you',
+'Hi,\r\n\r\nIncident [<incidentid>] entitled <incidenttitle> has been reassigned to you.\r\n\r\nThe details of this incident are:\r\n\r\nPriority: <incidentpriority>\r\nContact: <contactname>\r\nSite: <sitename>\r\n\r\n\r\nRegards\r\n<applicationname>\r\n\r\n\r\n---\r\n<todaysdate> - <applicationshortname> <applicationversion>',
+'hide', 'No');
+UPDATE `{$CONFIG['db_tableprefix']}emailtype` SET `toField` = '<useremail>' WHERE `name` =  'INCIDENT_REASSIGNED_USER_NOTIFY';
+
+CREATE TABLE `{$dbTasks}` (
+  `id` int(11) NOT NULL auto_increment,
+  `name` varchar(255) default NULL,
+  `description` text NOT NULL,
+  `priority` tinyint(4) default NULL,
+  `owner` tinyint(4) NOT NULL default '0',
+  `duedate` datetime default NULL,
+  `startdate` datetime default NULL,
+  `completion` tinyint(4) default NULL,
+  `value` float(6,2) default NULL,
+  `distribution` enum('public','private') NOT NULL default 'public',
+  `created` datetime NOT NULL default '0000-00-00 00:00:00',
+  `lastupdated` timestamp,
+  PRIMARY KEY  (`id`),
+  KEY `owner` (`owner`)
+) ENGINE=MyISAM  ;
+
+ALTER TABLE `{$dbTempIncoming}` ADD `lockeduntil` DATETIME NULL AFTER `locked` ;
+INSERT INTO `{$dbPermissions}` VALUES (63, 'Add Reseller');
+
+CREATE TABLE `{$dbNotes}` (
+  `id` int(11) NOT NULL auto_increment,
+  `userid` int(11) NOT NULL default '0',
+  `timestamp` timestamp,
+  `bodytext` text NOT NULL,
+  `link` int(11) NOT NULL default '0',
+  `refid` int(11) NOT NULL default '0',
+  PRIMARY KEY  (`id`),
+  KEY `refid` (`refid`),
+  KEY `userid` (`userid`),
+  KEY `link` (`link`)
+) ENGINE=MyISAM ;
+
+CREATE TABLE `{$dbEscalationPaths}` (
+  `id` int(11) NOT NULL auto_increment,
+  `name` varchar(255) default NULL,
+  `track_url` varchar(255) default NULL,
+  `home_url` varchar(255) NOT NULL default '',
+  `url_title` varchar(255) default NULL,
+  `email_domain` varchar(255) default NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM ;
+
+ALTER TABLE `{$dbIncidents}` ADD `escalationpath` INT( 11 ) NULL AFTER `id` ;
+INSERT INTO `{$dbPermissions}` VALUES (64, 'Manage Escalation Paths');
+
+CREATE TABLE `{$dbDashboard}` (
+  `id` int(11) NOT NULL auto_increment,
+  `name` varchar(100) NOT NULL default '',
+  `enabled` enum('true','false') NOT NULL default 'false',
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM ;
+
+INSERT INTO `{$dbDashboard}` (`id`, `name`, `enabled`) VALUES (1, 'random_tip', 'true'),
+(2, 'statistics', 'true'),
+(3, 'tasks', 'true'),
+(4, 'user_incidents', 'true');
+
+UPDATE `{$dbInterfaceStyles}` SET `name` = 'Light Blue' WHERE `id` =1 LIMIT 1 ;
+";
+
+
+/*
+ 3.25 (Actual release was 3.30)
+*/
+$upgrade_schema[325] = "
+ALTER TABLE `{$dbInterfaceStyles}` ADD `iconset` VARCHAR( 255 ) NOT NULL DEFAULT 'sit' AFTER `cssurl` ;
+ALTER TABLE `{$dbSites}` ADD `websiteurl` VARCHAR( 255 ) NULL AFTER `email` ;
+
+CREATE TABLE `tags` (
+  `tagid` int(11) NOT NULL auto_increment,
+  `name` varchar(255) NOT NULL default '',
+  PRIMARY KEY  (`tagid`)
+) ENGINE=MyISAM;
+
+CREATE TABLE `{$dbSetTags}` (
+`id` INT NOT NULL ,
+`type` MEDIUMINT NOT NULL ,
+`tagid` INT NOT NULL ,
+PRIMARY KEY ( `id` , `type` , `tagid` )
+) ENGINE=MYISAM;
+
+CREATE TABLE `{$dbLinks}` (
+     `linktype` int(11) NOT NULL default '0',
+     `origcolref` int(11) NOT NULL default '0',
+     `linkcolref` int(11) NOT NULL default '0',
+     `direction` enum('left','right','bi') NOT NULL default 'left',
+     `userid` tinyint(4) NOT NULL default '0',
+     PRIMARY KEY  (`linktype`,`origcolref`,`linkcolref`),
+     KEY `userid` (`userid`)
+   ) ENGINE=MyISAM ;
+
+CREATE TABLE `{$dbLinkTypes}` (
+     `id` int(11) NOT NULL auto_increment,
+     `name` varchar(255) NOT NULL default '',
+     `lrname` varchar(255) NOT NULL default '',
+     `rlname` varchar(255) NOT NULL default '',
+     `origtab` varchar(255) NOT NULL default '',
+     `origcol` varchar(255) NOT NULL default '',
+     `linktab` varchar(255) NOT NULL default '',
+     `linkcol` varchar(255) NOT NULL default 'id',
+     `selectionsql` varchar(255) NOT NULL default '',
+     `filtersql` varchar(255) NOT NULL default '',
+     `viewurl` varchar(255) NOT NULL default '',
+     PRIMARY KEY  (`id`),
+     KEY `origtab` (`origtab`),
+     KEY `linktab` (`linktab`)
+   ) ENGINE=MyISAM;
+
+INSERT INTO `{$dbLinkTypes}` VALUES (1,'Task','Subtask','Parent Task','tasks','id','tasks','id','name','','view_task.php?id=%id%'),(2,'Contact','Contact','Contact Task','tasks','id','contacts','id','forenames','','contact_details.php?id=%id%'),(3,'Site','Site','Site Task','tasks','id','sites','id','name','','site_details.php?id=%id%'),(4,'Incident','Incident','Task','tasks','id','incidents','id','title','','incident_details.php?id=%id%');
+
+ALTER TABLE `{$dbUsers}` ADD `var_num_updates_view` INT NOT NULL DEFAULT '15' AFTER `var_update_order` ;
+-- emailtype is not a variable
+INSERT INTO `{$CONFIG['db_tableprefix']}emailtype` (`id`, `type`, `description`, `tofield`, `fromfield`, `replytofield`, `ccfield`, `bccfield`, `subjectfield`, `body`, `customervisibility`, `storeinlog`) VALUES ('NEARING_SLA', 'system', 'Notification when an incident nears its SLA target', '<supportmanageremail>', '<supportemail>', '<supportemail>', '<useremail>', '', '<applicationshortname> SLA: Incident <incidentid> about to breach SLA', 'This is an automatic notification that this incident is about to breach it\'s SLA.  The SLA target <info1> will expire in <info2> minutes.\r\n\r\nIncident: [<incidentid>] - <incidenttitle>\r\nOwner: <incidentowner>\r\nPriority: <incidentpriority>\r\nExternal Id: <incidentexternalid>\r\nExternal Engineer: <incidentexternalengineer>\r\nSite: <sitename>\r\nContact: <contactname>\r\n\r\n--\r\n<applicationshortname> v<applicationversion>\r\n<todaysdate>\r\n', 'hide', 'Yes');
+
+INSERT INTO `{$dbPermissions}` VALUES (65, 'Delete Products');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (1, 65, 'true');
+INSERT INTO `{$dbUserPermissions}` VALUES (1, 65, 'true');
+
+ALTER TABLE `{$dbUsers}` ADD `dashboard` VARCHAR( 255 ) NOT NULL DEFAULT '0-3,1-1,1-2,2-4';
+
+INSERT INTO `{$dbPermissions}` VALUES (66, 'Install Dashboard Components');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (1, 66, 'true');
+INSERT INTO `{$dbUserPermissions}` VALUES (1, 66, 'true');
+INSERT INTO `{$dbClosingStatus}` ( `id` , `name` ) VALUES ( NULL , 'Escalated' );
+ALTER TABLE `{$dbTasks}` ADD `enddate` DATETIME NULL AFTER `startdate` ;
+
+INSERT INTO `{$dbPermissions}` VALUES (67, 'Run Management Reports');
+
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (1, 67, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (2, 67, 'true');
+INSERT INTO `{$dbUserPermissions}` VALUES (1, 67, 'true');
+
+INSERT INTO `{$dbPermissions}` VALUES (68, 'Manage Holidays');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (1, 68, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (2, 68, 'true');
+INSERT INTO `{$dbUserPermissions}` VALUES (1, 68, 'true');
+
+ALTER TABLE `{$dbSites}` ADD `active` ENUM( 'true', 'false' ) NOT NULL DEFAULT 'true';
+
+ALTER TABLE `{$dbContacts}` ADD `active` ENUM( 'true', 'false' ) NOT NULL DEFAULT 'true';
+
+-- beta 3
+UPDATE `{$dbInterfaceStyles}` SET `iconset` = 'sit';
+
+ALTER TABLE `{$dbUpdates}` CHANGE `type` `type` ENUM( 'default', 'editing', 'opening', 'email', 'reassigning', 'closing', 'reopening', 'auto', 'phonecallout', 'phonecallin', 'research', 'webupdate', 'emailout', 'emailin', 'externalinfo', 'probdef', 'solution', 'actionplan', 'slamet', 'reviewmet', 'tempassigning', 'auto_chase_email', 'auto_chase_phone', 'auto_chase_manager', 'auto_chased_phone','auto_chased_manager','auto_chase_managers_manager') NULL DEFAULT 'default';
+";
+
+$upgrade_schema[331] = "
+ALTER TABLE `{$dbUpdates}` CHANGE `type` `type` ENUM( 'default', 'editing', 'opening', 'email', 'reassigning', 'closing', 'reopening', 'auto', 'phonecallout', 'phonecallin', 'research', 'webupdate', 'emailout', 'emailin', 'externalinfo', 'probdef', 'solution', 'actionplan', 'slamet', 'reviewmet', 'tempassigning', 'auto_chase_email', 'auto_chase_phone', 'auto_chase_manager', 'auto_chased_phone','auto_chased_manager','auto_chase_managers_manager','customerclosurerequest') NULL DEFAULT 'default';
+
+CREATE TABLE IF NOT EXISTS `{$dbDrafts}` (
+  `id` int(11) NOT NULL auto_increment,
+  `userid` int(11) NOT NULL,
+  `incidentid` int(11) NOT NULL,
+  `type` enum('update','email') NOT NULL,
+  `content` text NOT NULL,
+  `meta` text NOT NULL,
+  `lastupdate` int(11) NOT NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM ;
+
+ALTER TABLE `{$dbSoftware}` ADD `vendorid` INT( 5 ) NOT NULL AFTER `name` ;
+
+CREATE TABLE IF NOT EXISTS `{$dbNotices}` (
+  `id` int(11) NOT NULL auto_increment,
+  `userid` int(11) NOT NULL,
+  `gid` text,
+  `type` tinyint(4) NOT NULL,
+  `text` tinytext NOT NULL,
+  `linktext` varchar(50) default NULL,
+  `link` varchar(100) NOT NULL,
+  `referenceid` int(11) default NULL,
+  `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+  `durability` enum('sticky','session') NOT NULL default 'sticky',
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=1 ;
+
+ALTER TABLE `{$dbServiceLevels}` ADD `timed` enum('yes','no') NOT NULL DEFAULT 'no' ;
+
+ALTER TABLE `{$dbUsers}` ADD `var_i18n` VARCHAR( 20 ) NULL AFTER `var_notify_on_reassign` ;
+
+ALTER TABLE `{$dbUpdates}` ADD `duration` INT NULL ;
+
+INSERT INTO `{$dbPermissions}` VALUES (69, 'Post Notices');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (1, 69, 'true');
+INSERT INTO `{$dbUserPermissions}` (`userid`, `permissionid`, `granted`) VALUES (1, 69, 'true');
+
+ALTER TABLE `{$dbUsers}` ADD `lastseen` TIMESTAMP NOT NULL ;
+
+ALTER TABLE `{$dbTasks}` CHANGE `distribution` `distribution` ENUM( 'public', 'private', 'incident' ) NOT NULL DEFAULT 'public' ;
+
+ALTER TABLE `{$dbUpdates}` CHANGE `type` `type` ENUM( 'default', 'editing', 'opening', 'email', 'reassigning', 'closing', 'reopening', 'auto', 'phonecallout', 'phonecallin', 'research', 'webupdate', 'emailout', 'emailin', 'externalinfo', 'probdef', 'solution', 'actionplan', 'slamet', 'reviewmet', 'tempassigning', 'auto_chase_email', 'auto_chase_phone', 'auto_chase_manager', 'auto_chased_phone', 'auto_chased_manager', 'auto_chase_managers_manager', 'customerclosurerequest', 'fromtask' ) NULL DEFAULT 'default' ;
+
+
+-- KMH 15Nov07
+ALTER TABLE `{$dbMaintenance}` ADD `supportedcontacts` INT( 255 ) NOT NULL DEFAULT '0';
+ALTER TABLE `{$dbMaintenance}` ADD `allcontactssupported` ENUM( 'No', 'Yes' ) NOT NULL DEFAULT 'No';
+
+-- INL 25Nov07
+DROP TABLE `{$CONFIG['db_tableprefix']}holidaytypes`;
+
+-- PH 26Nov07
+CREATE TABLE `{$dbBillingPeriods}` (
+`servicelevelid` INT( 5 ) NOT NULL ,
+`engineerperiod` INT NOT NULL COMMENT 'In minutes',
+`customerperiod` INT NOT NULL COMMENT 'In minutes',
+PRIMARY KEY r( `servicelevelid` )
+) ENGINE = MYISAM ;
+
+-- KMH 26/11/07
+ALTER TABLE `{$dbIncidents}` ADD `slanotice` TINYINT(1) NOT NULL DEFAULT '0' AFTER `slaemail` ;
+
+-- PH 1/12/07
+ALTER TABLE `{$dbBillingPeriods}` ADD `{$dbPriority}` INT( 4 ) NOT NULL AFTER `servicelevelid` ;
+ALTER TABLE `{$dbBillingPeriods}` ADD `tag` VARCHAR( 10 ) NOT NULL AFTER `{$dbPriority}` ;
+ALTER TABLE `{$dbBillingPeriods}` DROP PRIMARY KEY, ADD PRIMARY KEY ( `servicelevelid` , `{$dbPriority}` ) ;
+
+-- KMH 4/12/07
+ALTER TABLE `{$dbUserStatus}` DROP INDEX `id` ;
+
+-- PH 9/12/07
+ALTER TABLE `{$dbDashboard}` ADD `version` MEDIUMINT NOT NULL DEFAULT '1' AFTER `name` ;
+
+-- INL 10/12/07
+ALTER TABLE `{$dbUpdates}` ADD INDEX ( `customervisibility` );
+DELETE FROM `{$dbIncidentStatus}` WHERE id = 0 OR id = 10;
+INSERT INTO `{$dbIncidentStatus}` VALUES (10, 'Active (Unassigned)', 'Active');
+";
+
+$upgrade_schema[332] = "
+-- INL 12Jan08
+ALTER TABLE `{$dbContacts}` CHANGE `salutation` `courtesytitle` VARCHAR( 50 ) NOT NULL COMMENT 'Was ''salutation'' before 3.32';
+-- INL 13Jan08
+UPDATE `{$dbIncidentStatus}` SET `name` = 'strActive' WHERE `id` =1 LIMIT 1 ;
+UPDATE `{$dbIncidentStatus}` SET `name` = 'strClosed' WHERE `id` =2 LIMIT 1 ;
+UPDATE `{$dbIncidentStatus}` SET `name` = 'strResearchNeeded' WHERE `id` =3 LIMIT 1 ;
+UPDATE `{$dbIncidentStatus}` SET `name` = 'strCalledAndLeftMessage' WHERE `id` =4 LIMIT 1 ;
+UPDATE `{$dbIncidentStatus}` SET `name` = 'strAwaitingColleagueResponse' WHERE `id` =5 LIMIT 1 ;
+UPDATE `{$dbIncidentStatus}` SET `name` = 'strAwaitingSupportResponse' WHERE `id` =6 LIMIT 1 ;
+UPDATE `{$dbIncidentStatus}` SET `name` = 'strAwaitingClosure' WHERE `id` =7 LIMIT 1 ;
+UPDATE `{$dbIncidentStatus}` SET `name` = 'strAwaitingCustomerAction' WHERE `id` =8 LIMIT 1 ;
+UPDATE `{$dbIncidentStatus}` SET `name` = 'strUnsupported' WHERE `id` =9 LIMIT 1 ;
+-- INL 24Jan08
+ALTER TABLE `{$dbUsers}` ADD `var_utc_offset` INT NOT NULL DEFAULT '0' COMMENT 'Offset from UTC (timezone) in minutes' AFTER `var_i18n` ;
+INSERT INTO `{$dbUserStatus}` (`id` ,`name`) VALUES ('0', 'Account Disabled');
+";
+
+$upgrade_schema[335] = "
+-- INL 25Jul08 fix upgrade issues for 3.40
+CREATE TABLE IF NOT EXISTS `{$dbLinkTypes}` (
+     `id` int(11) NOT NULL auto_increment,
+     `name` varchar(255) NOT NULL default '',
+     `lrname` varchar(255) NOT NULL default '',
+     `rlname` varchar(255) NOT NULL default '',
+     `origtab` varchar(255) NOT NULL default '',
+     `origcol` varchar(255) NOT NULL default '',
+     `linktab` varchar(255) NOT NULL default '',
+     `linkcol` varchar(255) NOT NULL default 'id',
+     `selectionsql` varchar(255) NOT NULL default '',
+     `filtersql` varchar(255) NOT NULL default '',
+     `viewurl` varchar(255) NOT NULL default '',
+     PRIMARY KEY  (`id`),
+     KEY `origtab` (`origtab`),
+     KEY `linktab` (`linktab`)
+   ) ENGINE=MyISAM;
+
+
+DROP TABLE IF EXISTS `{$CONFIG['db_tableprefix']}contactflags`;
+DROP TABLE IF EXISTS `{$CONFIG['db_tableprefix']}contactproducts`;
+
+-- KMH 06/01/08
+ALTER TABLE `{$CONFIG['db_tableprefix']}emailtype` ADD `triggerid` INT( 11 ) NULL ;
+INSERT INTO `{$CONFIG['db_tableprefix']}emailtype` (`id` ,`type` ,`description` ,`tofield` ,`fromfield` ,`replytofield` ,`ccfield` ,`bccfield` ,`subjectfield` ,`body` ,`customervisibility` ,
+`storeinlog` ,`triggerid`)VALUES ('TRIGGER_INCIDENT_LOGGED', 'system', 'Trigger email sent when a new incident is logged.', '<useremail>', '<supportemail>', NULL , NULL , NULL , '[<incidentid>] - <incidenttitle>', 'Hello <contactfirstname>,\r\n\r\nIncident <incidentid> - <incidenttitle> has been logged.\r\n\r\n<signature> <globalsignature>\r\n-------------\r\nThis email is sent as a result of a system trigger. If you do not want to receive these emails, you can disable them from the ''Triggers'' page.', 'hide', 'No', '1');
+
+-- KMH 09/01/08
+INSERT INTO `{$CONFIG['db_tableprefix']}emailtype` (`id`, `type`, `description`, `tofield`, `fromfield`, `replytofield`, `ccfield`, `bccfield`, `subjectfield`, `body`, `customervisibility`, `storeinlog`) VALUES
+('TRIGGER_INCIDENT_CREATED', 'system', 'Trigger email sent when a new incident is logged.', '<useremail>', '<supportemail>', NULL, NULL, NULL, '[<incidentid>] - <incidenttitle>', 'Hello <contactfirstname>,\r\n\r\nIncident <incidentid> - <incidenttitle> has been logged.\r\n\r\n<signature> <globalsignature>\r\n-------------\r\nThis email is sent as a result of a system trigger. If you do not want to receive these emails, you can disable them from the ''Triggers'' page.', 'hide', 'No'),
+('TRIGGER_INCIDENT_NEARING_SLA', 'system', 'Trigger email sent when an incident is nearing its SLA.', '<useremail>', '<supportemail>', NULL, NULL, NULL, '[<incidentid>] - <incidenttitle>: SLA approaching', 'Hello <contactfirstname>,\r\n\r\nIncident <incidentid> - <incidenttitle> is approaching its SLA.\r\n\r\n<signature> <globalsignature>\r\n-------------\r\nThis email is sent as a result of a system trigger. If you do not want to receive these emails, you can disable them from the ''Triggers'' page.', 'hide', 'No'),
+('TRIGGER_INCIDENT_ASSIGNED', 'user', 'Notify user when call assigned to them', '<useremail>', '<supportemail>', NULL, NULL, NULL, '[<incidentid>] - <incidenttitle>: has been assigned to you', 'Hello <contactfirstname>,\r\n\r\nIncident <incidentid> - <incidenttitle> has been assigned to you.\r\n\r\n<signature> <globalsignature>\r\n-------------\r\nThis email is sent as a result of a system trigger. If you do not want to receive these emails, you can disable them from the ''Triggers'' page.', 'show', 'Yes');
+
+-- KMH 17/01/08
+ALTER TABLE `{$dbNotices}` CHANGE `gid` `template` VARCHAR( 255 ) NULL DEFAULT NULL;
+-- INL 22/01/08
+ALTER TABLE `{$dbTasks}` CHANGE `distribution` `distribution` ENUM( 'public', 'private', 'incident', 'event' );
+
+-- KMHO 25/01/08
+ALTER TABLE `{$CONFIG['db_tableprefix']}emailtype` CHANGE `type` `type` ENUM( 'usertemplate', 'system', 'contact', 'site', 'incident', 'kb', 'user') NOT NULL COMMENT 'usertemplate is personal template owned by a user, user is a template relating to a user' DEFAULT 'user';
+
+-- INL 25Jan08
+UPDATE `{$CONFIG['db_tableprefix']}emailtype` SET `type` = 'incident' WHERE `id` = 'INCIDENT_CLOSURE' ;
+UPDATE `{$CONFIG['db_tableprefix']}emailtype` SET `type` = 'incident' WHERE `id` = 'INCIDENT_LOGGED_CALL' ;
+UPDATE `{$CONFIG['db_tableprefix']}emailtype` SET `type` = 'incident' WHERE `id` = 'INCIDENT_CLOSED' ;
+UPDATE `{$CONFIG['db_tableprefix']}emailtype` SET `type` = 'incident' WHERE `id` = 'OUT_OF_SLA' ;
+UPDATE `{$CONFIG['db_tableprefix']}emailtype` SET `type` = 'incident' WHERE `id` = 'OUT_OF_REVIEW' ;
+UPDATE `{$CONFIG['db_tableprefix']}emailtype` SET `type` = 'incident' WHERE `id` = 'INCIDENT UPDATED' ;
+UPDATE `{$CONFIG['db_tableprefix']}emailtype` SET `type` = 'incident' WHERE `id` = 'INCIDENT CLOSED EXTERNAL' ;
+UPDATE `{$CONFIG['db_tableprefix']}emailtype` SET `type` = 'incident' WHERE `id` = 'INCIDENT_LOGGED_EMAIL' ;
+
+-- INL 29/01/08
+ALTER TABLE `{$dbContacts}` ADD `created` DATETIME NULL ,
+ADD `createdby` INT NULL ,
+ADD `modified` DATETIME NULL ,
+ADD `modifiedby` INT NULL ;
+
+ALTER TABLE `{$dbSites}` ADD `created` DATETIME NULL ,
+ADD `createdby` INT NULL ,
+ADD `modified` DATETIME NULL ,
+ADD `modifiedby` INT NULL ;
+
+-- INL 14Feb08
+CREATE TABLE IF NOT EXISTS `{$dbScheduler}` (
+  `id` int(11) NOT NULL auto_increment,
+  `action` varchar(50) NOT NULL,
+  `params` varchar(255) NOT NULL,
+  `paramslabel` varchar(255) default NULL,
+  `description` tinytext NOT NULL,
+  `status` enum('enabled','disabled') NOT NULL default 'enabled',
+  `start` datetime NOT NULL,
+  `end` datetime NOT NULL,
+  `interval` int(11) NOT NULL,
+  `lastran` datetime NOT NULL,
+  `success` tinyint(1) NOT NULL default '1',
+  PRIMARY KEY  (`id`),
+  KEY `job` (`action`)
+) ENGINE=MyISAM  ;
+
+INSERT INTO `{$dbScheduler}` (`id`, `action`, `params`, `paramslabel`, `description`, `status`, `start`, `end`, `interval`, `lastran`, `success`) VALUES (1, 'CloseIncidents', '554400', 'closure_delay', 'Close incidents that have been marked for closure for longer than the <var>closure_delay</var> parameter (which is in seconds)', 'enabled', '2008-01-01 00:00:00', '0000-00-00 00:00:00', 60, '0000-00-00 00:00:00', 1);
+INSERT INTO `{$dbScheduler}` (`id`, `action`, `params`, `paramslabel`, `description`, `status`, `start`, `end`, `interval`, `lastran`, `success`) VALUES (2, 'SetUserStatus', '', NULL, '(EXPERIMENTAL) This will set users status                         based on data from their holiday calendar.                        e.g. Out of Office/Away sick.', 'enabled', '2008-01-01 00:00:00', '0000-00-00 00:00:00', 60, '0000-00-00 00:00:00', 1);
+INSERT INTO `{$dbScheduler}` (`id`, `action`, `params`, `paramslabel`, `description`, `status`, `start`, `end`, `interval`, `lastran`, `success`) VALUES (3, 'PurgeJournal', '', NULL, 'Delete old journal entries according to the config setting <var>\$CONFIG[''journal_purge_after'']</var>', 'enabled', '2008-01-01 00:00:00', '0000-00-00 00:00:00', 300, '0000-00-00 00:00:00', 1);
+INSERT INTO `{$dbScheduler}` (`id`, `action`, `params`, `paramslabel`, `description`, `status`, `start`, `end`, `interval`, `lastran`, `success`) VALUES (4, 'TimeCalc', '', NULL, 'Calculate SLA Target Times and trigger                        OUT_OF_SLA and OUT_OF_REVIEW system email templates where appropriate.', 'enabled', '2008-01-01 00:00:00', '0000-00-00 00:00:00', 60, '0000-00-00 00:00:00', 1);
+INSERT INTO `{$dbScheduler}` (`id`, `action`, `params`, `paramslabel`, `description`, `status`, `start`, `end`, `interval`, `lastran`, `success`) VALUES (5, 'ChaseCustomers', '', NULL, 'Chase customers', 'disabled', '2008-01-01 00:00:00', '0000-00-00 00:00:00', 3600, '0000-00-00 00:00:00', 1);
+INSERT INTO `{$dbScheduler}` (`id`, `action`, `params`, `paramslabel`, `description`, `status`, `start`, `end`, `interval`, `lastran`, `success`) VALUES (6, 'CheckWaitingEmail', '', NULL, 'Checks the holding queue for emails and fires the TRIGGER_WAITING_HELD_EMAIL trigger when it finds some.', 'enabled', '2008-01-01 00:00:00', '0000-00-00 00:00:00', 60, '0000-00-00 00:00:00', 1);
+
+
+-- KMH 31/03/08
+UPDATE `{$dbIncidentStatus}` SET `name` = 'strActiveUnassigned' WHERE `id` =10 LIMIT 1 ;
+
+UPDATE `{$dbIncidentStatus}` SET `ext_name` = 'strActive' WHERE `id` =1 LIMIT 1 ;
+UPDATE `{$dbIncidentStatus}` SET `ext_name` = 'strClosed' WHERE `id` =2 LIMIT 1 ;
+UPDATE `{$dbIncidentStatus}` SET `ext_name` = 'strResearching' WHERE `id` =3 LIMIT 1 ;
+UPDATE `{$dbIncidentStatus}` SET `ext_name` = 'strCalledAndLeftMessage' WHERE `id` =4 LIMIT 1 ;
+UPDATE `{$dbIncidentStatus}` SET `ext_name` = 'strInternalEscalation' WHERE `id` =5 LIMIT 1 ;
+UPDATE `{$dbIncidentStatus}` SET `ext_name` = 'strExternalEscalation' WHERE `id` =6 LIMIT 1 ;
+UPDATE `{$dbIncidentStatus}` SET `ext_name` = 'strAwaitingClosure' WHERE `id` =7 LIMIT 1 ;
+UPDATE `{$dbIncidentStatus}` SET `ext_name` = 'strYouHaveAction' WHERE `id` =8 LIMIT 1 ;
+UPDATE `{$dbIncidentStatus}` SET `ext_name` = 'strUnsupported' WHERE `id` =9 LIMIT 1 ;
+UPDATE `{$dbIncidentStatus}` SET `ext_name` = 'strActive' WHERE `id` =10 LIMIT 1 ;
+
+-- KMH 03/04/08
+UPDATE `{$dbInterfaceStyles}` SET `cssurl` = 'sit1.css' WHERE `id` = 1 LIMIT 1;
+UPDATE `{$dbInterfaceStyles}` SET `cssurl` = 'sit2.css' WHERE `id` = 2 LIMIT 1;
+UPDATE `{$dbInterfaceStyles}` SET `cssurl` = 'sit3.css' WHERE `id` = 3 LIMIT 1;
+UPDATE `{$dbInterfaceStyles}` SET `cssurl` = 'sit4.css' WHERE `id` = 4 LIMIT 1;
+UPDATE `{$dbInterfaceStyles}` SET `cssurl` = 'sit5.css' WHERE `id` = 5 LIMIT 1;
+UPDATE `{$dbInterfaceStyles}` SET `cssurl` = 'sit_ph2.css' WHERE `id` = 6 LIMIT 1;
+UPDATE `{$dbInterfaceStyles}` SET `cssurl` = 'sit7.css' WHERE `id` = 7 LIMIT 1;
+UPDATE `{$dbInterfaceStyles}` SET `cssurl` = 'sit8.css' WHERE `id` = 8 LIMIT 1;
+UPDATE `{$dbInterfaceStyles}` SET `cssurl` = 'sit9.css' WHERE `id` = 9 LIMIT 1;
+UPDATE `{$dbInterfaceStyles}` SET `cssurl` = 'sit_ph.css' WHERE `id` = 10 LIMIT 1;
+UPDATE `{$dbInterfaceStyles}` SET `cssurl` = 'sit10.css' WHERE `id` = 11 LIMIT 1;
+UPDATE `{$dbInterfaceStyles}` SET `cssurl` = 'sit11.css' WHERE `id` = 12 LIMIT 1;
+UPDATE `{$dbInterfaceStyles}` SET `cssurl` = 'sit12.css' WHERE `id` = 13 LIMIT 1;
+UPDATE `{$dbInterfaceStyles}` SET `cssurl` = 'sit13.css' WHERE `id` = 14 LIMIT 1;
+UPDATE `{$dbInterfaceStyles}` SET `cssurl` = 'sit14.css' WHERE `id` = 15 LIMIT 1;
+UPDATE `{$dbInterfaceStyles}` SET `iconset` = 'oxygen' WHERE `id` =8 LIMIT 1 ;
+
+ALTER TABLE `{$dbMaintenance}`
+ADD `var_incident_visible_contacts` ENUM( 'yes', 'no' ) NOT NULL DEFAULT 'no',
+ADD `var_incident_visible_all` ENUM( 'yes', 'no' ) NOT NULL DEFAULT 'no';
+
+-- KMH 08/04/08
+ALTER TABLE `{$dbKBArticles}` CHANGE `distribution` `distribution` ENUM( 'public', 'private', 'restricted' ) NOT NULL DEFAULT 'public' COMMENT 'public appears in the portal, private is info never to be released to the public, restricted is info that is sensitive but could be mentioned if asked, for example' ;
+UPDATE `{$dbKBArticles}` SET `distribution`='public' ;
+
+-- KMH 12/04/08
+ ALTER TABLE `{$dbKBContent}` ADD FULLTEXT (`content`) ;
+ ALTER TABLE `{$dbContacts}` ADD FULLTEXT (`forenames`, `surname`);
+ ALTER TABLE `{$dbSites}` ADD FULLTEXT (`name`) ;
+
+-- KMH 17/04/08
+UPDATE `{$dbPermissions}` SET `name` = 'View your tasks' WHERE `id` =69 ;
+INSERT INTO `{$dbPermissions}` VALUES (70, 'Create/Edit your Tasks');
+INSERT INTO `{$dbPermissions}` VALUES (71, 'Manage your Triggers');
+INSERT INTO `{$dbPermissions}` VALUES (72, 'Manage System Triggers');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (1, 70, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (1, 71, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (1, 72, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (2, 70, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (2, 71, 'true');
+
+-- PH 20/04/08 Permissions for billing (for custardpie branch)
+INSERT INTO `{$dbPermissions}` VALUES (73, 'Approve Billable Incidents');
+INSERT INTO `{$dbPermissions}` VALUES (74, 'Set duration without timed task (for billable incidents)');
+INSERT INTO `{$dbPermissions}` VALUES (75, 'Set negative time for duration on incidents (for billable incidents - refunds)');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (1, 73, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (1, 74, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (1, 75, 'true');
+
+-- INL 22/04/08 More permissions for billing (custardpie)
+INSERT INTO `{$dbPermissions}` VALUES (76, 'View Transactions');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (1, 76, 'true');
+
+-- INL 23Apr08 timestamps for all user data tables
+ALTER TABLE `{$dbBillingPeriods}` ADD `created` DATETIME NULL ,
+ADD `createdby` INT NULL ,
+ADD `modified` DATETIME NULL ,
+ADD `modifiedby` INT NULL ;
+
+ALTER TABLE `{$dbEmailSig}` ADD `created` DATETIME NULL ,
+ADD `createdby` INT NULL ,
+ADD `modified` DATETIME NULL ,
+ADD `modifiedby` INT NULL ;
+
+ALTER TABLE `{$dbEscalationPaths}` ADD `created` DATETIME NULL ,
+ADD `createdby` INT NULL ,
+ADD `modified` DATETIME NULL ,
+ADD `modifiedby` INT NULL ;
+
+ALTER TABLE `{$dbFeedbackForms}` ADD `created` DATETIME NULL ,
+ADD `createdby` INT NULL ,
+ADD `modified` DATETIME NULL ,
+ADD `modifiedby` INT NULL ;
+
+ALTER TABLE `{$dbFeedbackQuestions}` ADD `created` DATETIME NULL ,
+ADD `createdby` INT NULL ,
+ADD `modified` DATETIME NULL ,
+ADD `modifiedby` INT NULL ;
+
+ALTER TABLE `{$dbFeedbackResults}` ADD `created` DATETIME NULL ,
+ADD `createdby` INT NULL ,
+ADD `modified` DATETIME NULL ,
+ADD `modifiedby` INT NULL ;
+
+ALTER TABLE `{$dbFiles}` ADD `created` DATETIME NULL ,
+ADD `createdby` INT NULL ,
+ADD `modified` DATETIME NULL ,
+ADD `modifiedby` INT NULL ;
+
+ALTER TABLE `{$dbGroups}` ADD `created` DATETIME NULL ,
+ADD `createdby` INT NULL ,
+ADD `modified` DATETIME NULL ,
+ADD `modifiedby` INT NULL ;
+
+ALTER TABLE `{$dbIncidentProductInfo}` ADD `created` DATETIME NULL ,
+ADD `createdby` INT NULL ,
+ADD `modified` DATETIME NULL ,
+ADD `modifiedby` INT NULL ;
+
+ALTER TABLE `{$dbIncidents}` ADD `created` DATETIME NULL ,
+ADD `createdby` INT NULL ,
+ADD `modified` DATETIME NULL ,
+ADD `modifiedby` INT NULL ;
+
+DROP TABLE IF EXISTS `{$CONFIG['db_tableprefix']}flags`;
+
+-- PH  04/05/08
+INSERT INTO `{$dbScheduler}` (`id`, `action`, `params`, `paramslabel`, `description`, `status`, `start`, `end`, `interval`, `lastran`, `success`) VALUES (7, 'PurgeExpiredFTPItems', '', NULL, 'purges files which have expired from the FTP site when run.', 'enabled', '2008-01-01 00:00:00', '0000-00-00 00:00:00', 216000, '0000-00-00 00:00:00', 1);
+
+-- KMH 06/05/08
+ALTER TABLE `{$dbMaintenance}` CHANGE `allcontactssupported` `allcontactssupported` ENUM( 'no', 'yes' ) NOT NULL DEFAULT 'no' ;
+
+-- KHM 10/05/08
+ALTER TABLE `{$dbUsers}` DROP `var_collapse`, DROP `var_notify_on_reassign`;
+ALTER TABLE `{$dbMaintenance}` CHANGE `licence_type` `licence_type` INT( 11 ) NULL DEFAULT NULL ;
+
+-- KMH 13/05/08
+INSERT INTO `{$dbLinkTypes}` (`name` ,`lrname` ,`rlname` ,`origtab` ,`origcol` ,`linktab` ,`linkcol` ,`selectionsql` ,`filtersql` ,`viewurl`)
+VALUES('Attachments', 'Update', 'File', 'updates', 'id', 'files', 'id', 'filename', '', 'incident_details.php?updateid=%id%&tab=files');
+
+-- KMH 14/05/08
+ALTER TABLE `{$dbFiles}` CHANGE `filedate` `filedate` DATETIME NOT NULL ;
+ALTER TABLE `{$dbFiles}` CHANGE `expiry` `expiry` DATETIME NOT NULL ;
+ALTER TABLE `{$dbFiles}` CHANGE `longdescription` `longdescription` TEXT ;
+ALTER TABLE `{$dbFiles}` ADD `usertype` ENUM( 'user', 'contact' ) NOT NULL DEFAULT 'user' AFTER `userid` ;
+
+-- PH 18/05/08
+UPDATE `{$dbLinkTypes}` SET `selectionsql` = 'CONCAT(forenames, \" \", surname)' WHERE `{$dbLinktypes}`.`id` = 2 LIMIT 1;
+
+CREATE TABLE IF NOT EXISTS `{$dbEmailTemplates}` (
+  `id` int(11) NOT NULL auto_increment,
+  `name` varchar(50) NOT NULL,
+  `type` enum('usertemplate','system','contact','site','incident','kb','user') NOT NULL default 'user' COMMENT 'usertemplate is personal template owned by a user, user is a template relating to a user',
+  `description` text NOT NULL,
+  `tofield` varchar(100) default NULL,
+  `fromfield` varchar(100) default NULL,
+  `replytofield` varchar(100) default NULL,
+  `ccfield` varchar(100) default NULL,
+  `bccfield` varchar(100) default NULL,
+  `subjectfield` varchar(255) default NULL,
+  `body` text,
+  `customervisibility` enum('show','hide') NOT NULL default 'show',
+  `storeinlog` enum('No','Yes') NOT NULL default 'Yes',
+  `created` datetime default NULL,
+  `createdby` int(11) default NULL,
+  `modified` datetime default NULL,
+  `modifiedby` int(11) default NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM;
+
+INSERT INTO `$dbEmailTemplates` (`name`, `type`, `description`, `tofield`, `fromfield`, `replytofield`, `ccfield`, `bccfield`, `subjectfield`, `body`, `customervisibility`, `storeinlog`, `created`, `createdby`, `modified`, `modifiedby`) VALUES('Support Email', 'incident', 'Used by default when you send an email from an incident.', '{contactemail}', '{supportemail}', '{supportemail}', '', '{triggeruseremail}', '[{incidentid}] - {incidenttitle}', 'Hi {contactfirstname},\r\n\r\n{signature}\r\n{globalsignature}', 'show', 'Yes', NULL, NULL, NULL, NULL);
+INSERT INTO `$dbEmailTemplates` (`name`, `type`, `description`, `tofield`, `fromfield`, `replytofield`, `ccfield`, `bccfield`, `subjectfield`, `body`, `customervisibility`, `storeinlog`, `created`, `createdby`, `modified`, `modifiedby`) VALUES('EMAIL_INCIDENT_CLOSURE', 'system', 'Notify contact that the incident has been marked for closure and will be closed shortly', '{contactemail}', '{supportemail}', '{supportemail}', '', '{triggeruseremail}', 'Closure Notification: [{incidentid}] - {incidenttitle}', '{contactfirstname},\r\n\r\nIncident {incidentid} has been marked for closure. If you still have outstanding issues relating to this incident then please reply with details, otherwise it will be closed in the next seven days.\r\n\r\n{signature}\r\n{globalsignature}', 'show', 'Yes', NULL, NULL, NULL, NULL);
+INSERT INTO `$dbEmailTemplates` (`name`, `type`, `description`, `tofield`, `fromfield`, `replytofield`, `ccfield`, `bccfield`, `subjectfield`, `body`, `customervisibility`, `storeinlog`, `created`, `createdby`, `modified`, `modifiedby`) VALUES('EMAIL_INCIDENT_LOGGED_CONTACT', 'system', 'Acknowledge the contact\'s contact and notify them of the new incident number', '{contactemail}', '{supportemail}', '{supportemail}', '', '{triggeruseremail}', '[{incidentid}] - {incidenttitle}', 'Thank you for contacting us. The incident {incidentid} has been generated and your details stored in our tracking system. \r\n\r\nYou will be receiving a response from one of our product specialists as soon as possible. When referring to this incident please remember to quote incident {incidentid} in all communications. \r\n\r\nFor all email communications please title your email as [{incidentid}] - {incidenttitle}\r\n\r\n{globalsignature}\r\n', 'hide', 'No', NULL, NULL, NULL, NULL);
+INSERT INTO `$dbEmailTemplates` (`name`, `type`, `description`, `tofield`, `fromfield`, `replytofield`, `ccfield`, `bccfield`, `subjectfield`, `body`, `customervisibility`, `storeinlog`, `created`, `createdby`, `modified`, `modifiedby`) VALUES('EMAIL_INCIDENT_OUT_OF_SLA', 'user', 'Notify when an incident has gone out of SLA', '{supportmanager}', '{supportemail}', '{supportemail}', '{triggeruseremail}', '', '{applicationshortname}: Incident {incidentid} now outside SLA', 'This is an automatic notification that this incident has gone outside its SLA.  The SLA target nextsla expired {nextslatime} minutes ago.\r\n\r\nIncident: [{incidentid}] - {incidenttitle}\r\nOwner: {incidentowner}\r\nPriority: {incidentpriority}\r\nExternal Id: {incidentexternalid}\r\nExternal Engineer: {incidentexternalengineer}\r\nSite: {sitename}\r\nContact: {contactname}\r\n\r\nRegards\r\n{applicationname}\r\n\r\n\r\n---\r\n{todaysdate} - {applicationshortname} {applicationversion}\r\n{globalsignature}\r\n{triggersfooter}', 'hide', 'No', NULL, NULL, NULL, NULL);
+INSERT INTO `$dbEmailTemplates` (`name`, `type`, `description`, `tofield`, `fromfield`, `replytofield`, `ccfield`, `bccfield`, `subjectfield`, `body`, `customervisibility`, `storeinlog`, `created`, `createdby`, `modified`, `modifiedby`) VALUES('EMAIL_INCIDENT_OUT_OF_REVIEW', 'user', '', '{supportmanager}', '{supportemail}', '{supportemail}', '{triggeruseremail}', '', '{applicationshortname} Review: Incident {incidentid} due for review soon', 'This is an automatic notification that this incident [{incidentid}] will soon be due for review.\r\n\r\nIncident: [{incidentid}] - {incidenttitle}\r\nEngineer: {incidentowner}\r\nPriority: {incidentpriority}\r\nExternal Id: {incidentexternalid}\r\nExternal Engineer: {incidentexternalengineer}\r\nSite: {sitename}\r\nContact: {contactname}\r\n\r\nRegards\r\n{applicationname}\r\n\r\n-- \r\n{todaysdate} - {applicationshortname} {applicationversion}\r\n{globalsignature}\r\n{triggersfooter}', 'hide', 'No', NULL, NULL, NULL, NULL);
+INSERT INTO `$dbEmailTemplates` (`name`, `type`, `description`, `tofield`, `fromfield`, `replytofield`, `ccfield`, `bccfield`, `subjectfield`, `body`, `customervisibility`, `storeinlog`, `created`, `createdby`, `modified`, `modifiedby`) VALUES('EMAIL_INCIDENT_CREATED_USER', 'user', 'Notify a user that an incident has been logged', '{triggeruseremail}', '{supportemail}', '{supportemail}', '', '', '[{incidentid}] - {incidenttitle}', 'Hi,\r\n\r\nIncident [{incidentid}] {incidenttitle} has been logged.\r\n\r\nThe details of this incident are:\r\n\r\nPriority: {incidentpriority}\r\nContact: {contactname}\r\nSite: {sitename}\r\n\r\n\r\nRegards\r\n{applicationname}\r\n\r\n-- \r\n{todaysdate} - {applicationshortname} {applicationversion}\r\n{globalsignature}\r\n{triggersfooter}', 'hide', 'No', NULL, NULL, NULL, NULL);
+INSERT INTO `$dbEmailTemplates` (`name`, `type`, `description`, `tofield`, `fromfield`, `replytofield`, `ccfield`, `bccfield`, `subjectfield`, `body`, `customervisibility`, `storeinlog`, `created`, `createdby`, `modified`, `modifiedby`) VALUES('EMAIL_INCIDENT_REASSIGNED_USER_NOTIFY', 'user', 'Notify user when call assigned to them', '{triggeruseremail}', '{supportemail}', '{supportemail}', '', '', '{incidentpriority} priority call ([{incidentid}] - {incidenttitle}) has been reassigned to you', 'Hi,\r\n\r\nIncident [{incidentid}] entitled {incidenttitle} has been reassigned to you.\r\n\r\nThe details of this incident are:\r\n\r\nPriority: {incidentpriority}\r\nContact: {contactname}\r\nSite: {sitename}\r\n\r\n\r\nRegards\r\n{applicationname}\r\n\r\n-- \r\n{todaysdate} - {applicationshortname} {applicationversion}\r\n{globalsignature}\r\n{triggersfooter}', 'hide', 'No', NULL, NULL, NULL, NULL);
+INSERT INTO `$dbEmailTemplates` (`name`, `type`, `description`, `tofield`, `fromfield`, `replytofield`, `ccfield`, `bccfield`, `subjectfield`, `body`, `customervisibility`, `storeinlog`, `created`, `createdby`, `modified`, `modifiedby`) VALUES('EMAIL_INCIDENT_NEARING_SLA', 'user', 'Notification when an incident nears its SLA target', '{supportmanageremail}', '{supportemail}', '{supportemail}', '{triggeruseremail}', '', '{applicationshortname} SLA: Incident {incidentid} about to breach SLA', 'This is an automatic notification that this incident is about to breach its SLA.  The SLA target {nextsla} will expire in {nextslatime} minutes.\r\n\r\nIncident: [{incidentid}] - {incidenttitle}\r\nOwner: {incidentowner}\r\nPriority: {incidentpriority}\r\nExternal Id: {incidentexternalid}\r\nExternal Engineer: {incidentexternalengineer}\r\nSite: {sitename}\r\nContact: {contactname}\r\n\r\nRegards\r\n{applicationname}\r\n\r\n-- \r\n{todaysdate} - {applicationshortname} {applicationversion}\r\n{globalsignature}\r\n{triggersfooter}', 'hide', 'No', NULL, NULL, NULL, NULL);
+INSERT INTO `$dbEmailTemplates` (`name`, `type`, `description`, `tofield`, `fromfield`, `replytofield`, `ccfield`, `bccfield`, `subjectfield`, `body`, `customervisibility`, `storeinlog`, `created`, `createdby`, `modified`, `modifiedby`) VALUES('EMAIL_CONTACT_RESET_PASSWORD', 'system', 'Sent to a contact to reset their password.', '{contactemail}', '{supportemail}', '{supportemail}', '', '', '{applicationshortname} - password reset', 'Hi {contactfirstname},\r\n\r\nThis is a email to reset your contact portal password for {applicationname}. If you did not request this, please ignore this email.\r\n\r\nTo complete your password reset please visit the following url:\r\n\r\n{passwordreseturl}\r\n\r\n\r\n{globalsignature}', 'hide', 'No', NULL, NULL, NULL, NULL);
+INSERT INTO `$dbEmailTemplates` (`name`, `type`, `description`, `tofield`, `fromfield`, `replytofield`, `ccfield`, `bccfield`, `subjectfield`, `body`, `customervisibility`, `storeinlog`, `created`, `createdby`, `modified`, `modifiedby`) VALUES('EMAIL_USER_RESET_PASSWORD', 'system', 'Sent when a user resets their email', '{useremail}', '{supportemail}', '{supportemail}', '', '', '{applicationshortname} - password reset', 'Hi,\r\n\r\nThis is a email to reset your user account password for {applicationname}. If you did not request this, please ignore this email.\r\n\r\nTo complete your password reset please visit the following url:\r\n\r\n{passwordreseturl}\r\n\r\nRegards\r\n{applicationname}\r\n\r\n-- \r\n{todaysdate} - {applicationshortname} {applicationversion}\r\n{globalsignature}\r\n{triggersfooter}', 'hide', 'No', NULL, NULL, NULL, NULL);
+INSERT INTO `$dbEmailTemplates` (`name`, `type`, `description`, `tofield`, `fromfield`, `replytofield`, `ccfield`, `bccfield`, `subjectfield`, `body`, `customervisibility`, `storeinlog`, `created`, `createdby`, `modified`, `modifiedby`) VALUES('EMAIL_NEW_CONTACT_DETAILS', 'system', 'Sent when a new contact is created', '{contactemail}', '{supportemail}', '', '', '', '{applicationshortname} - portal details', 'Hello {contactfirstname},\r\nYou have just been added as a contact on {applicationname} ({applicationurl}).\r\n\r\nThese details allow you to the login to the portal, where you can create, update and close your incidents, as well as view your sites\' incidents.\r\n\r\nYour details are as follows:\r\n\r\nusername: {contactusername}\r\npassword: {prepassword}\r\nPlease note, this password cannot be recovered, only reset. You may change it in the portal.\r\n\r\n{globalsignature}', 'hide', 'No', NULL, NULL, NULL, NULL);
+INSERT INTO `$dbEmailTemplates` (`name`, `type`, `description`, `tofield`, `fromfield`, `replytofield`, `ccfield`, `bccfield`, `subjectfield`, `body`, `customervisibility`, `storeinlog`, `created`, `createdby`, `modified`, `modifiedby`) VALUES('EMAIL_INCIDENT_REVIEW_DUE', 'user', 'Email sent when a review is due for an incident.', '{supportmanageremail}', '{supportemail}', '{supportemail}', NULL, NULL, '{applicationshortname}: review due', 'Hi,\r\n\r\nThe review for incident {incidentid} - {incidenttitle} is now due for review.\r\n\r\nYou can view the incident at {applicationurl}incident_details.php?id={incidentid}\r\n\r\nRegards\r\n{applicationname}\r\n\r\n-- \r\n{todaysdate} - {applicationshortname} {applicationversion}\r\n{globalsignature}\r\n{triggersfooter}', 'hide', 'No', NULL, NULL, NULL, NULL);
+INSERT INTO `$dbEmailTemplates` (`name`, `type`, `description`, `tofield`, `fromfield`, `replytofield`, `ccfield`, `bccfield`, `subjectfield`, `body`, `customervisibility`, `storeinlog`, `created`, `createdby`, `modified`, `modifiedby`) VALUES('EMAIL_KB_ARTICLE_CREATED', 'user', 'Informs a user when a new knowledge base article is created', '{triggeruseremail}', '{supportemail}', '{supportemail}', NULL, NULL, '{applicationshortname}: {kbid} KB article created', 'Hi,\r\n\r\nKB article {kbprefix}{kbid} - {kbtitle} has been created by {userrealname}. You can view it at {applicationurl}kb_article.php?id={kbid} : \r\n\r\nRegards\r\n{applicationname}\r\n\r\n-- \r\n{todaysdate} - {applicationshortname} {applicationversion}\r\n{globalsignature}\r\n{triggersfooter}', 'hide', 'No', NULL, NULL, NULL, NULL);
+INSERT INTO `$dbEmailTemplates` (`name`, `type`, `description`, `tofield`, `fromfield`, `replytofield`, `ccfield`, `bccfield`, `subjectfield`, `body`, `customervisibility`, `storeinlog`, `created`, `createdby`, `modified`, `modifiedby`) VALUES('EMAIL_HELD_EMAIL_RECEIVED', 'user', 'Notifies of a new holding email', '{triggeruseremail}', '{supportemail}', '{supportemail}', NULL, NULL, 'New held email', 'Hi,\r\n\r\nThere\'s a new email in the holding queue. You can view it at: {applicationurl}holding_queue.php\r\n\r\n\r\nRegards\r\n{applicationname}\r\n\r\n-- \r\n{todaysdate} - {applicationshortname} {applicationversion}\r\n{globalsignature}\r\n{triggersfooter}', 'hide', 'No', NULL, NULL, NULL, NULL);
+INSERT INTO `$dbEmailTemplates` (`name`, `type`, `description`, `tofield`, `fromfield`, `replytofield`, `ccfield`, `bccfield`, `subjectfield`, `body`, `customervisibility`, `storeinlog`, `created`, `createdby`, `modified`, `modifiedby`) VALUES('EMAIL_HELD_EMAIL_MINS', 'user', 'Notifies when there\'s been an email in the holding queue for X minutes.', '{triggeruseremail}', '{supportemail}', '{supportemail}', NULL, NULL, 'New held email', 'Hi,\r\n\r\nThere\'s been an email in the holding queue for {holdingemailmins}. You can view it at {applicationurl}holding_queue.php\r\n\r\nRegards\r\n{applicationname}\r\n\r\n-- \r\n{todaysdate} - {applicationshortname} {applicationversion}\r\n{globalsignature}\r\n{triggersfooter}', 'hide', 'No', NULL, NULL, NULL, NULL);
+INSERT INTO `$dbEmailTemplates` (`name`, `type`, `description`, `tofield`, `fromfield`, `replytofield`, `ccfield`, `bccfield`, `subjectfield`, `body`, `customervisibility`, `storeinlog`, `created`, `createdby`, `modified`, `modifiedby`) VALUES('EMAIL_USER_CHANGED_STATUS', 'user', 'Notifies that a watched engineer has changed their status.', '{triggeruseremail}', '{supportemail}', '{supportemail}', NULL, NULL, '{watcheduserrealname} has changed status', 'Hi,\r\n\r\n{userrealname} has set their status to {userstatus} and is {useraccepting} incidents.\r\n\r\nRegards\r\n{applicationname}\r\n\r\n-- \r\n{todaysdate} - {applicationshortname} {applicationversion}\r\n{globalsignature}\r\n{triggersfooter}', 'hide', 'No', NULL, NULL, NULL, NULL);
+INSERT INTO `$dbEmailTemplates` (`name`, `type`, `description`, `tofield`, `fromfield`, `replytofield`, `ccfield`, `bccfield`, `subjectfield`, `body`, `customervisibility`, `storeinlog`, `created`, `createdby`, `modified`, `modifiedby`) VALUES('EMAIL_SIT_UPGRADED', 'user', 'Notifies of system upgrade', '{triggeruseremail}', '{supportemail}', '{supportemail}', NULL, NULL, '{applicationshortname} upgraded', 'Hi,\r\n\r\n{applicationshortname} has been upgraded to {applicationversion}. You can view the changelog at {applicationurl}releasenotes.php?v={applicationversion}\r\n\r\n\r\nRegards\r\n{applicationname}\r\n\r\n-- \r\n{todaysdate} - {applicationshortname} {applicationversion}\r\n{globalsignature}\r\n{triggersfooter}', 'hide', 'No', NULL, NULL, NULL, NULL);
+INSERT INTO `$dbEmailTemplates` (`name`, `type`, `description`, `tofield`, `fromfield`, `replytofield`, `ccfield`, `bccfield`, `subjectfield`, `body`, `customervisibility`, `storeinlog`, `created`, `createdby`, `modified`, `modifiedby`) VALUES('EMAIL_CONTACT_CREATED', 'user', 'Notifies of a new contact', '{triggeruseremail}', '{supportemail}', '{supportemail}', NULL, NULL, 'New contact added', 'Hi,\r\n\r\n{contactname} has been added as a contact to {sitename} by {userealname}.\r\n\r\nRegards\r\n{applicationname}\r\n\r\n-- \r\n{todaysdate} - {applicationshortname} {applicationversion}\r\n{globalsignature}\r\n{triggersfooter}', 'hide', 'No', NULL, NULL, NULL, NULL);
+INSERT INTO `$dbEmailTemplates` (`name`, `type`, `description`, `tofield`, `fromfield`, `replytofield`, `ccfield`, `bccfield`, `subjectfield`, `body`, `customervisibility`, `storeinlog`, `created`, `createdby`, `modified`, `modifiedby`) VALUES('EMAIL_INCIDENT_CLOSED_CONTACT', 'system', 'Notify the contact that the incident is closed', '{contactemail}', '{supportemail}', '{supportemail}', NULL, NULL, '[{incidentid}] - {incidenttitle} - Closed', 'Hi {contactfirstname},\r\n\r\nIncident {incidentid} has now been closed. \r\n\r\n\r\n{globalsignature}', 'show', 'Yes', NULL, NULL, NULL, NULL);
+INSERT INTO `$dbEmailTemplates` (`name`, `type`, `description`, `tofield`, `fromfield`, `replytofield`, `ccfield`, `bccfield`, `subjectfield`, `body`, `customervisibility`, `storeinlog`, `created`, `createdby`, `modified`, `modifiedby`) VALUES('EMAIL_INCIDENT_CLOSED_USER', 'user', '', '{triggeruseremail}', '{supportemail}', '{supportemail}', NULL, NULL, '[{incidentid}] - {incidenttitle} - Closed', 'Hi,\r\n\r\nIncident {incidentid} has now been closed.\r\n\r\n\r\nRegards\r\n{applicationname}\r\n\r\n-- \r\n{todaysdate} - {applicationshortname} {applicationversion}\r\n{globalsignature}\r\n{triggersfooter}', 'show', 'Yes', NULL, NULL, NULL, NULL);
+INSERT INTO `$dbEmailTemplates` (`name`, `type`, `description`, `tofield`, `fromfield`, `replytofield`, `ccfield`, `bccfield`, `subjectfield`, `body`, `customervisibility`, `storeinlog`, `created`, `createdby`, `modified`, `modifiedby`) VALUES('EMAIL_CONTRACT_ADDED', 'user', 'Notifies of when an new contract is added', '{triggeruseremail}', '{supportemail}', '{supportemail}', NULL, NULL, 'New contract added to {sitename}', 'Hi,\r\n\r\nA new {contractproduct} contract ID{contractid} has been added to {sitename} by {userealname}. You can view it at {applicationurl}contract_details.php?id={contractid}\r\nRegards\r\n{applicationname}\r\n\r\n-- \r\n{todaysdate} - {applicationshortname} {applicationversion}\r\n{globalsignature}\r\n{triggersfooter}', 'hide', 'No', NULL, NULL, NULL, NULL);
+INSERT INTO `$dbEmailTemplates` (`name`, `type`, `description`, `tofield`, `fromfield`, `replytofield`, `ccfield`, `bccfield`, `subjectfield`, `body`, `customervisibility`, `storeinlog`, `created`, `createdby`, `modified`, `modifiedby`) VALUES('EMAIL_USER_CREATED', 'user', 'Notifies when a new system user is added', '{triggeruseremail}', '{supportemail}', '{supportemail}', NULL, NULL, 'New user {userrealname} added', 'Hi,\r\n\r\n{userrealname} has just been added as a new user to the {usergroup} group.\r\n\r\n\r\nRegards\r\n{applicationname}\r\n\r\n-- \r\n{todaysdate} - {applicationshortname} {applicationversion}\r\n{globalsignature}\r\n{triggersfooter}', 'hide', 'No', NULL, NULL, NULL, NULL);
+INSERT INTO `$dbEmailTemplates` (`name`, `type`, `description`, `tofield`, `fromfield`, `replytofield`, `ccfield`, `bccfield`, `subjectfield`, `body`, `customervisibility`, `storeinlog`, `created`, `createdby`, `modified`, `modifiedby`) VALUES('EMAIL_SITE_CREATED', 'user', 'Notifies when a new site is added', '{triggeruseremail}', '{supportemail}', '{supportemail}', NULL, NULL, 'New site {sitename} added', 'Hi,\r\n\r\n{sitename} has just been added by {userrealname}. The admin contact is {admincontact}.\r\n\r\nRegards\r\n{applicationname}\r\n\r\n-- \r\n{todaysdate} - {applicationshortname} {applicationversion}\r\n{globalsignature}\r\n{triggersfooter}', 'hide', 'No', NULL, NULL, NULL, NULL);
+INSERT INTO `$dbEmailTemplates` (`name`, `type`, `description`, `tofield`, `fromfield`, `replytofield`, `ccfield`, `bccfield`, `subjectfield`, `body`, `customervisibility`, `storeinlog`, `created`, `createdby`, `modified`, `modifiedby`) VALUES('EMAIL_EXTERNAL_INCIDENT_CLOSURE', 'system', 'Notifies an external engineer of an incident being closed.', '{incidentexternalemail}', '{supportemail}', '{supportemail}', NULL, NULL, 'Service Request #{incidentexternalid}  - {incidenttitle} CLOSED - [{incidentid}]', 'Hi {incidentexternalengineerfirstname},\r\n\r\nThis is an automatic email generated from {applicationname}, our call tracking system.\r\n\r\nIncident {incidentexternalid} has been closed.\r\n\r\nMany thanks for your help.\r\n\r\n{signature}\r\n{globalsignature}', 'show', 'Yes', NULL, NULL, NULL, NULL);
+INSERT INTO `$dbEmailTemplates` (`name`, `type`, `description`, `tofield`, `fromfield`, `replytofield`, `ccfield`, `bccfield`, `subjectfield`, `body`, `customervisibility`, `storeinlog`, `created`, `createdby`, `modified`, `modifiedby`) VALUES('EMAIL_HOLIDAYS_REQUESTED', 'system', 'Notifies a user that they need to approve holidays', '{approvaluseremail}', '{supportemail}', '{supportemail}', NULL, NULL, '{applicationshortname}: Holiday approval request', 'Hi,\r\n\r\n{userrealname} has requested that you approve the following holidays:\r\n\r\n{listofholidays}\r\n\r\nPlease point your browser to {applicationurl}holiday_request.php?user={userid}&mode=approval to approve or decline these requests.\r\nRegards\r\n{applicationname}\r\n\r\n-- \r\n{todaysdate} - {applicationshortname} {applicationversion}\r\n{globalsignature}\r\n{triggersfooter}', 'hide', 'No', NULL, NULL, NULL, NULL);
+
+CREATE TABLE IF NOT EXISTS `{$dbNoticeTemplates}` (
+  `id` int(11) NOT NULL auto_increment,
+  `name` varchar(255) NOT NULL,
+  `type` tinyint(4) NOT NULL,
+  `description` varchar(255) NOT NULL,
+  `text` tinytext NOT NULL,
+  `linktext` varchar(50) default NULL,
+  `link` varchar(100) default NULL,
+  `durability` enum('sticky','session') NOT NULL default 'sticky',
+  `refid` int(11) NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM  ;
+
+INSERT INTO `$dbNoticeTemplates` (`name`, `type`, `description`, `text`, `linktext`, `link`, `durability`, `refid`) VALUES('NOTICE_INCIDENT_CREATED', 3, 'strNoticeIncidentCreatedDesc', 'strNoticeIncidentCreated', 'strViewIncident', 'javascript:incident_details_window({incidentid})', 'sticky', '{incidentid}');
+INSERT INTO `$dbNoticeTemplates` (`name`, `type`, `description`, `text`, `linktext`, `link`, `durability`, `refid`) VALUES('NOTICE_INCIDENT_ASSIGNED', 3, 'strNoticeIncidentAssignedDesc', 'strNoticeIncidentAssigned', 'strViewIncident', 'javascript:incident_details_window({incidentid})', 'sticky', '{incidentid}');
+INSERT INTO `$dbNoticeTemplates` (`name`, `type`, `description`, `text`, `linktext`, `link`, `durability`, `refid`) VALUES('NOTICE_INCIDENT_NEARING_SLA', 3, 'strNoticeIncidentNearingSLADesc', 'strNoticeIncidentNearingSLA', 'strViewIncident', 'javascript:incident_details_window({incidentid})', 'sticky','{incidentid}');
+INSERT INTO `$dbNoticeTemplates` (`name`, `type`, `description`, `text`, `linktext`, `link`, `durability`, `refid`) VALUES('NOTICE_LANGUAGE_DIFFERS', 3, 'strNoticeLanguageDiffersDesc', 'strNoticeLanguageDiffers', 'strKeepCurrentLanguage', '{applicationurl}edit_profile.php?mode=savesessionlang', 'session', '{currentlang}');
+INSERT INTO `$dbNoticeTemplates` (`name`, `type`, `description`, `text`, `linktext`, `link`, `durability`, `refid`) VALUES('NOTICE_NEW_CONTACT', 3, 'strNoticeNewContactDesc', 'strNoticeNewContact', 'strViewContact', '{applicationurl}contact_details.php?id={contactid}', 'sticky','{contactid}');
+INSERT INTO `$dbNoticeTemplates` (`name`, `type`, `description`, `text`, `linktext`, `link`, `durability`, `refid`) VALUES('NOTICE_INCIDENT_REVIEW_DUE', 3, 'strNoticeIncidentReviewDueDesc', 'strNoticeIncidentReviewDue', 'strViewIncident', 'javascript:incident_details_window({incidentid})', 'sticky', '{incidentid}');
+INSERT INTO `$dbNoticeTemplates` (`name`, `type`, `description`, `text`, `linktext`, `link`, `durability`, `refid`) VALUES('NOTICE_KB_CREATED', 3, 'strNoticeKBCreatedDesc', 'strNoticeKBCreated', 'strViewArticle', '{applicationurl}kbarticle?id={kbid}', 'sticky', '{kbid}');
+INSERT INTO `$dbNoticeTemplates` (`name`, `type`, `description`, `text`, `linktext`, `link`, `durability`, `refid`) VALUES('NOTICE_NEW_HELD_EMAIL', 3, 'strNoticeNewHeldEmailDesc', 'strNoticeNewHeldEmail', 'strViewHoldingQueue', '{applicationurl}holding_queue.php', 'sticky', '{holdingemailid}');
+INSERT INTO `$dbNoticeTemplates` (`name`, `type`, `description`, `text`, `linktext`, `link`, `durability`, `refid`) VALUES('NOTICE_MINS_HELD_EMAIL', 3, 'strNoticeNewUserDesc', 'strNoticeNewUser', 'strViewHoldingQueue', '{applicationurl}holding_queue.php', 'sticky', '{holdingemailid}');
+INSERT INTO `$dbNoticeTemplates` (`name`, `type`, `description`, `text`, `linktext`, `link`, `durability`, `refid`) VALUES('NOTICE_SIT_UPGRADED', 3, 'strNoticeSitUpgradedDesc', 'strNoticeSitUpgraded', 'strWhatsNew', '{applicationurl}releasenotes.php?v={applicationversion}', 'sticky', '{applicationversion}');
+INSERT INTO `$dbNoticeTemplates` (`name`, `type`, `description`, `text`, `linktext`, `link`, `durability`, `refid`) VALUES('NOTICE_USER_CHANGED_STATUS', 3, 'strNoticeUserChangedStatusDesc', 'strNoticeUserChangedStatus', NULL, '', 'sticky', '{userid}');
+INSERT INTO `$dbNoticeTemplates` (`name`, `type`, `description`, `text`, `linktext`, `link`, `durability`, `refid`) VALUES('NOTICE_NEW_USER', 3, 'strNoticeNewUserDesc', 'strNoticeNewUser', NULL, NULL, 'sticky', '{userid}');
+INSERT INTO `$dbNoticeTemplates` (`name`, `type`, `description`, `text`, `linktext`, `link`, `durability`, `refid`) VALUES('NOTICE_INCIDENT_CLOSED', 3, 'strNoticeIncidentClosedDesc', 'strNoticeIncidentClosed', NULL, NULL, 'sticky', '{incidentid}');
+INSERT INTO `$dbNoticeTemplates` (`name`, `type`, `description`, `text`, `linktext`, `link`, `durability`, `refid`) VALUES('NOTICE_NEW_CONTRACT', 3, 'strNoticeNewContractDesc', 'strNoticeNewContract', 'strViewContract', '{applicationurl}contract_details.php?id={contractid}', 'sticky', '{contractid}');
+INSERT INTO `$dbNoticeTemplates` (`name`, `type`, `description`, `text`, `linktext`, `link`, `durability`, `refid`) VALUES('NOTICE_NEW_SITE', 3, 'strNoticeNewSiteDesc', 'strNoticeNewSite', 'strViewSite', '{applicationurl}site_details.php?id={siteid}', 'sticky', '{siteid}');
+
+CREATE TABLE IF NOT EXISTS `{$dbTriggers}` (
+  `id` int(11) NOT NULL auto_increment,
+  `triggerid` varchar(50) NOT NULL,
+  `userid` tinyint(4) NOT NULL,
+  `action` enum('ACTION_NONE','ACTION_EMAIL','ACTION_NOTICE','ACTION_JOURNAL') NOT NULL default 'ACTION_NONE',
+  `template` varchar(255) default NULL,
+  `parameters` varchar(255) default NULL,
+  `checks` varchar(255) default NULL,
+  PRIMARY KEY  (`id`),
+  KEY `triggerid` (`triggerid`),
+  KEY `userid` (`userid`)
+) ENGINE=MyISAM;
+
+INSERT INTO `{$dbTriggers}` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_INCIDENT_CREATED', 0, 'ACTION_JOURNAL', 0, '', '');
+INSERT INTO `{$dbTriggers}` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_INCIDENT_CREATED', 0, 'ACTION_EMAIL', 'EMAIL_INCIDENT_LOGGED_CONTACT', '', '');
+INSERT INTO `{$dbTriggers}` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_INCIDENT_CREATED', 0, 'ACTION_EMAIL', 'EMAIL_INCIDENT_LOGGED_CONTACT', '', '');
+INSERT INTO `{$dbTriggers}` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_INCIDENT_ASSIGNED', 0, 'ACTION_JOURNAL', 0, '', '');
+INSERT INTO `{$dbTriggers}` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_INCIDENT_ASSIGNED_WHILE_AWAY', 0, 'ACTION_JOURNAL', 0, '', '');
+INSERT INTO `{$dbTriggers}` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_INCIDENT_ASSIGNED_WHILE_OFFLINE', 0, 'ACTION_JOURNAL', 0, '', '');
+INSERT INTO `{$dbTriggers}` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_INCIDENT_NEARING_SLA', 0, 'ACTION_JOURNAL', 0, '', '');
+INSERT INTO `{$dbTriggers}` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_INCIDENT_REVIEW_DUE', 0, 'ACTION_JOURNAL', 0, '', '');
+INSERT INTO `{$dbTriggers}` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_KB_CREATED', 0, 'ACTION_JOURNAL', 0, '', '');
+INSERT INTO `{$dbTriggers}` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_NEW_HELD_EMAIL', 0, 'ACTION_JOURNAL', 0, '', '');
+INSERT INTO `{$dbTriggers}` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_WAITING_HELD_EMAIL', 0, 'ACTION_JOURNAL', 0, '', '');
+INSERT INTO `{$dbTriggers}` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_USER_SET_TO_AWAY', 0, 'ACTION_JOURNAL', 0, '', '');
+INSERT INTO `{$dbTriggers}` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_USER_RETURNS', 0, 'ACTION_JOURNAL', 0, '', '');
+INSERT INTO `{$dbTriggers}` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_SIT_UPGRADED', 0, 'ACTION_JOURNAL', 0, '', '');
+INSERT INTO `{$dbTriggers}` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_INCIDENT_OWNED_CLOSED_BY_USER', 0, 'ACTION_JOURNAL', 0, '', '');
+INSERT INTO `{$dbTriggers}` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_LANGUAGE_DIFFERS', 0, 'ACTION_JOURNAL', 0, '', '');
+INSERT INTO `{$dbTriggers}` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_CONTACT_RESET_PASSWORD', 0, 'ACTION_JOURNAL', 0, '', '');
+INSERT INTO `{$dbTriggers}` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_USER_RESET_PASSWORD', 0, 'ACTION_JOURNAL', 0, '', '');
+INSERT INTO `{$dbTriggers}` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_NEW_CONTACT', 0, 'ACTION_JOURNAL', 0, '', '');
+INSERT INTO `{$dbTriggers}` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_INCIDENT_CLOSED', 0, 'ACTION_JOURNAL', 0, '', '');
+INSERT INTO `{$dbTriggers}` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_INCIDENT_CLOSED', 0, 'ACTION_EMAIL', 'EMAIL_INCIDENT_CLOSED_CONTACT', '', '( {notifycontact} == 1 ) AND ( {awaitingclosure} == 0 )');
+INSERT INTO `{$dbTriggers}` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_CONTACT_ADDED', 0, 'ACTION_JOURNAL', 0, '', '');
+INSERT INTO `{$dbTriggers}` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_CONTACT_ADDED', 0, 'ACTION_EMAIL', 'EMAIL_NEW_CONTACT_DETAILS', '', '');
+INSERT INTO `{$dbTriggers}` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_NEW_CONTRACT', 0, 'ACTION_JOURNAL', 0, '', '');
+INSERT INTO `{$dbTriggers}` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_INCIDENT_ASSIGNED', 1, 'ACTION_NOTICE', 'NOTICE_INCIDENT_ASSIGNED', '', '{userid} == 1');
+INSERT INTO `{$dbTriggers}` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_SIT_UPGRADED', 1, 'ACTION_NOTICE', 'NOTICE_SIT_UPGRADED', '', '');
+INSERT INTO `{$dbTriggers}` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_INCIDENT_CLOSED', 1, 'ACTION_NOTICE', 'NOTICE_INCIDENT_CLOSED', '', '{userid} != 1');
+INSERT INTO `{$dbTriggers}` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_INCIDENT_NEARING_SLA', 1, 'ACTION_NOTICE', 'NOTICE_INCIDENT_NEARING_SLA', '', '{ownerid} == 1 OR {townerid} == 1');
+INSERT INTO `{$dbTriggers}` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_LANGUAGE_DIFFERS', 1, 'ACTION_NOTICE', 'NOTICE_LANGUAGE_DIFFERS', '', '');
+INSERT INTO `{$dbTriggers}` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_NEW_CONTACT', 0, 'ACTION_EMAIL', 'EMAIL_NEW_CONTACT_DETAILS', '', '');
+INSERT INTO `{$dbTriggers}` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_USER_RESET_PASSWORD', 0, 'ACTION_EMAIL', 'EMAIL_USER_RESET_PASSWORD', '', '');
+INSERT INTO `{$dbTriggers}` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_CONTACT_RESET_PASSWORD', 0, 'ACTION_EMAIL', 'EMAIL_CONTACT_RESET_PASSWORD', '', '');
+INSERT INTO `{$dbTriggers}` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_HOLIDAY_REQUESTED', 0, 'ACTION_EMAIL', 'EMAIL_HOLIDAY_REQUESTED', '', '');
+INSERT INTO `{$dbTriggers}` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_INCIDENT_CLOSED', 0, 'ACTION_EMAIL', 'EMAIL_INCIDENT_CLOSURE', '', '( {notifycontact} == 1 ) AND ( {awaitingclosure} == 1 )');
+INSERT INTO `{$dbTriggers}` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_INCIDENT_CLOSED', 0, 'ACTION_EMAIL', 'EMAIL_EXTERNAL_INCIDENT_CLOSURE', '', '{notifyexternal} == 1');
+
+-- INL 22May08
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (1, 77, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (2, 73, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (2, 76, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (2, 77, 'true');
+INSERT INTO `{$dbUserPermissions}` VALUES (1, 77, 'true');
+
+ALTER TABLE `{$dbFiles}` CHANGE `filename` `filename` varchar(255) NULL default '';
+ALTER TABLE `{$dbFiles}` CHANGE `shortdescription` `shortdescription` varchar(255) NULL default '';
+ALTER TABLE `{$dbFiles}` CHANGE `webcategory` `webcategory` varchar(255) NULL default '';
+ALTER TABLE `{$dbFiles}` CHANGE `path` `path` varchar(255) NULL default '';
+ALTER TABLE `{$dbFiles}` CHANGE `expiry` `expiry` DATETIME NULL;
+ALTER TABLE `{$dbFiles}` CHANGE `fileversion` `fileversion` varchar(50) NULL default '';
+
+REPLACE INTO `{$dbInterfaceStyles}` (`id` ,`name` ,`cssurl` ,`iconset` ,`headerhtml`) VALUES ('16', 'Cake', 'sit_cake.css', 'sit', '');
+INSERT INTO `{$dbPermissions}` VALUES (78, 'Post System Notices');
+
+UPDATE `{$dbPermissions}` SET `name` = 'Add Templates' WHERE `id` =16;
+UPDATE `{$dbPermissions}` SET `name` = 'Edit Templates' WHERE `id` =17;
+
+-- KMH 18/06/08
+ALTER TABLE `{$dbMaintenance}` ADD INDEX ( `expirydate` ) ;
+UPDATE `{$dbInterfaceStyles}` SET iconset='oxygen' WHERE id=8;
+ALTER TABLE `{$dbKBArticles}` ADD FULLTEXT(title);
+ALTER TABLE `{$dbContacts}` ADD FULLTEXT(forenames, surname);
+ALTER TABLE `{$dbSites}` ADD FULLTEXT(name);
+ALTER TABLE `{$dbUpdates}` ADD FULLTEXT(bodytext);
+ALTER TABLE `{$dbIncidents}` ADD FULLTEXT(title);
+ALTER TABLE `{$dbMaintenance}` ADD INDEX ( `var_incident_visible_all` );
+ALTER TABLE `{$dbMaintenance}` ADD INDEX ( `var_incident_visible_contacts` ) ;
+
+ALTER DATABASE `{$CONFIG['db_database']}` DEFAULT CHARACTER SET utf8;
+
+-- PH 21/06/2008
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (1, 78, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (1, 79, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (1, 80, 'true');
+INSERT INTO `{$dbUserPermissions}` VALUES (1, 78, 'true');
+INSERT INTO `{$dbUserPermissions}` VALUES (1, 79, 'true');
+INSERT INTO `{$dbUserPermissions}` VALUES (1, 80, 'true');
+
+--  !!WARNING!! can take a while on large tables
+ALTER TABLE `{$dbUpdates}` ADD FULLTEXT ( `bodytext`) ;
+
+-- INL 2008-07-02
+ ALTER TABLE `users` CHANGE `lastseen` `lastseen` DATETIME NOT NULL;
+
+-- KMH 04/07/08 Fix for 3.33 bug
+DROP TABLE userstatus;
+CREATE TABLE `{$dbUserStatus}` (
+  `id` int(11) NOT NULL,
+  `name` varchar(50) default NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM;
+INSERT INTO `{$dbUserStatus}` VALUES (0, 'strAccountDisabled');
+INSERT INTO `{$dbUserStatus}` VALUES (1, 'strInOffice');
+INSERT INTO `{$dbUserStatus}` VALUES (2, 'strNotInOffice');
+INSERT INTO `{$dbUserStatus}` VALUES (3, 'strInMeeting');
+INSERT INTO `{$dbUserStatus}` VALUES (4, 'strAtLunch');
+INSERT INTO `{$dbUserStatus}` VALUES (5, 'strOnHoliday');
+INSERT INTO `{$dbUserStatus}` VALUES (6, 'strWorkingFromHome');
+INSERT INTO `{$dbUserStatus}` VALUES (7, 'strOnTrainingCourse');
+INSERT INTO `{$dbUserStatus}` VALUES (8, 'strAbsentSick');
+INSERT INTO `{$dbUserStatus}` VALUES (9, 'strWorkingAway');
+
+";
+
+$upgrade_schema[340] = "
+CREATE TABLE IF NOT EXISTS `{$dbBillingMatrix}` (
+  `id` int(11) NOT NULL,
+  `hour` smallint(6) NOT NULL,
+  `mon` float NOT NULL,
+  `tue` float NOT NULL,
+  `wed` float NOT NULL,
+  `thu` float NOT NULL,
+  `fri` float NOT NULL,
+  `sat` float NOT NULL,
+  `sun` float NOT NULL,
+  `holiday` float NOT NULL,
+  PRIMARY KEY  (`id`,`hour`)
+) ENGINE=MyISAM;
+
+INSERT INTO `{$dbBillingMatrix}` (`id`, `hour`, `mon`, `tue`, `wed`, `thu`, `fri`, `sat`, `sun`, `holiday`) VALUES
+(1, 0, 2, 2, 2, 2, 2, 2, 2, 2),
+(1, 1, 2, 2, 2, 2, 2, 2, 2, 2),
+(1, 2, 2, 2, 2, 2, 2, 2, 2, 2),
+(1, 6, 2, 2, 2, 2, 2, 2, 2, 2),
+(1, 3, 2, 2, 2, 2, 2, 2, 2, 2),
+(1, 4, 2, 2, 2, 2, 2, 2, 2, 2),
+(1, 5, 2, 2, 2, 2, 2, 2, 2, 2),
+(1, 7, 2, 2, 2, 2, 2, 2, 2, 2),
+(1, 8, 1, 1, 1, 1, 1, 1.5, 2, 2),
+(1, 9, 1, 1, 1, 1, 1, 1.5, 2, 2),
+(1, 10, 1, 1, 1, 1, 1, 1.5, 2, 2),
+(1, 11, 1, 1, 1, 1, 1, 1.5, 2, 2),
+(1, 12, 1, 1, 1, 1, 1, 1.5, 2, 2),
+(1, 13, 1, 1, 1, 1, 1, 1.5, 2, 2),
+(1, 14, 1, 1, 1, 1, 1, 1.5, 2, 2),
+(1, 15, 1, 1, 1, 1, 1, 1.5, 2, 2),
+(1, 16, 1, 1, 1, 1, 1, 1.5, 2, 2),
+(1, 17, 1, 1, 1, 1, 1, 1.5, 2, 2),
+(1, 18, 1.5, 1.5, 1.5, 1.5, 1.5, 2, 2, 2),
+(1, 19, 1.5, 1.5, 1.5, 1.5, 1.5, 2, 2, 2),
+(1, 20, 1.5, 1.5, 1.5, 1.5, 1.5, 2, 2, 2),
+(1, 21, 1.5, 1.5, 1.5, 1.5, 1.5, 2, 2, 2),
+(1, 22, 2, 2, 2, 2, 2, 2, 2, 2),
+(1, 23, 2, 2, 2, 2, 2, 2, 2, 2);
+
+ CREATE TABLE `{$dbTransactions}` (
+`transactionid` INT NOT NULL AUTO_INCREMENT ,
+`serviceid` INT NOT NULL ,
+`amount` FLOAT NOT NULL ,
+`description` VARCHAR( 255 ) NOT NULL ,
+`userid` TINYINT NOT NULL ,
+`date` DATETIME NOT NULL ,
+PRIMARY KEY ( `transactionid` )
+) ENGINE = MYISAM;
+
+
+
+CREATE TABLE IF NOT EXISTS `{$dbService}` (
+  `serviceid` int(11) NOT NULL auto_increment,
+  `contractid` int(11) NOT NULL,
+  `startdate` date NOT NULL,
+  `enddate` date NOT NULL,
+  `lastbilled` datetime NOT NULL,
+  `creditamount` float NOT NULL default '0',
+  `balance` float NOT NULL default '0',
+  `unitrate` float NOT NULL default '0',
+  `incidentrate` float NOT NULL default '0',
+  `dailyrate` float NOT NULL default '0',
+  `billingmatrix` int(11) NOT NULL default '1',
+  `priority` smallint(6) NOT NULL default '0',
+  `notes` TEXT NOT NULL,
+  PRIMARY KEY  (`serviceid`)
+) ENGINE=MyISAM;
+
+ALTER TABLE `{$dbBillingPeriods}` ADD `limit` FLOAT NOT NULL DEFAULT '0';
+
+
+ALTER TABLE `{$dbServiceLevels}` ADD `allow_reopen` ENUM( 'yes', 'no' ) NOT NULL DEFAULT 'yes' COMMENT 'Allow incidents to be reopened?';
+
+INSERT INTO `{$dbLinkTypes}` (`id`, `name`, `lrname`, `rlname`, `origtab`, `origcol`, `linktab`, `linkcol`, `selectionsql`, `filtersql`, `viewurl`) VALUES
+(6, 'Incident', 'Transaction', 'Incidents', 'transactions', 'transactionid', 'incidents', 'id', '', '', '');
+
+INSERT INTO `{$dbPermissions}` (`id` ,`name`) VALUES (79 , 'Edit service balances'), (80 , 'Edit service details');
+
+UPDATE `{$dbClosingStatus}` SET `name` = 'strSentInformation' WHERE `id` = 1;
+UPDATE `{$dbClosingStatus}` SET `name` =  'strSolvedProblem' WHERE `id` = 2;
+UPDATE `{$dbClosingStatus}` SET `name` =  'strReportedBug' WHERE `id` = 3;
+UPDATE `{$dbClosingStatus}` SET `name` =  'strActionTaken' WHERE `id` = 4;
+UPDATE `{$dbClosingStatus}` SET `name` =  'strDuplicate' WHERE `id` = 5;
+UPDATE `{$dbClosingStatus}` SET `name` =  'strNoLongerRelevant' WHERE `id` = 6;
+UPDATE `{$dbClosingStatus}` SET `name` =  'strUnsupported' WHERE `id` = 7;
+UPDATE `{$dbClosingStatus}` SET `name` =  'strSupportExpired' WHERE `id` = 8;
+UPDATE `{$dbClosingStatus}` SET `name` =  'strUnsolved' WHERE `id` = 9;
+UPDATE `{$dbClosingStatus}` SET `name` =  'strEscalated' WHERE `id` = 10;
+
+-- PH 2008-07-12
+ALTER TABLE `{$dbScheduler}` ADD `type` ENUM( 'interval', 'date' ) NOT NULL DEFAULT 'interval' AFTER `end` ;
+ALTER TABLE `{$dbScheduler}` ADD `date_type` ENUM( 'month', 'year' ) NOT NULL COMMENT 'For type date the type' AFTER `interval` ,
+ADD `date_offset` INT NOT NULL COMMENT 'off set into the period' AFTER `date_type` ,
+ADD `date_time` TIME NOT NULL COMMENT 'Time to perform action' AFTER `date_offset` ;
+
+-- INL 2008-07-21
+ALTER TABLE `{$dbEscalationPaths}` ADD `type` ENUM( 'internal', 'external' ) NOT NULL DEFAULT 'internal' AFTER `name` ;
+
+-- PH 2008-08-17
+ALTER TABLE `{$dbTempIncoming}` ADD `reason_user` INT NOT NULL AFTER `reason` ,
+ADD `reason_time` DATETIME NOT NULL AFTER `reason_user` ;
+
+-- PH 2008-08-18
+ALTER TABLE `{$dbService}` ADD `foc` ENUM( 'yes', 'no' ) NOT NULL DEFAULT 'no' COMMENT 'Free of charge (customer not charged)';
+
+-- KMH 2008-08-22
+CREATE TABLE IF NOT EXISTS `{$dbInventory}` (
+  `id` int(11) NOT NULL auto_increment,
+  `identifier` varchar(255) default NULL,
+  `name` varchar(255) NOT NULL,
+  `siteid` int(11) NOT NULL,
+  `contactid` int(11) NOT NULL,
+  `address` varchar(255) NOT NULL,
+  `url` varchar(255) default NULL,
+  `username` varchar(255) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `type` varchar(255) NOT NULL,
+  `notes` text,
+  `createdby` int(11) NOT NULL,
+  `created` datetime NOT NULL,
+  `modified` datetime NOT NULL,
+  `modifiedby` int(11) NOT NULL,
+  `active` tinyint(1) NOT NULL default '1',
+  `privacy` enum('none','adminonly','private') NOT NULL default 'none',
+  PRIMARY KEY  (`id`),
+  KEY `siteid` (`siteid`,`contactid`)
+) ENGINE=MyISAM;
+
+-- KMH 2008-08-28
+INSERT INTO `{$dbEmailTemplates}` (`name`, `type`, `description`, `tofield`, `fromfield`, `replytofield`, `ccfield`, `bccfield`, `subjectfield`, `body`, `customervisibility`, `storeinlog`, `created`, `createdby`, `modified`, `modifiedby`) VALUES('EMAIL_SERVICE_LEVEL', 'system', 'Sent to the site\'s salesperson when the value drops below a certain limit', '{salespersonemail}', '{supportemail}', '{supportemail}', NULL , NULL , '{sitename}\'s service credit low', 'Hi, {sitename}\'s total service credit is now standing at {serviceremainingstring}.\r\n\r\nRegards\r\n{applicationname}\r\n\r\n-- \r\n{todaysdate} - {applicationshortname} {applicationversion}\r\n{globalsignature}\r\n{triggersfooter}', 'show', 'No', NULL , NULL , NULL , NULL);
+INSERT INTO `{$dbTriggers}` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_SERVICE_LIMIT', 0, 'ACTION_EMAIL', 'EMAIL_SERVICE_LEVEL', '', '{serviceremaining} <= 0.2');
+
+-- KMH 2008-10-08
+INSERT INTO `{$dbScheduler}` (`action`, `params`, `paramslabel`, `description`, `status`, `start`, `end`, `interval`, `lastran`, `success`) VALUES ('CheckIncomingMail', '', NULL, 'Check incoming support mailbox.', 'enabled', '2008-01-01 00:00:00', '0000-00-00 00:00:00', 60, '0000-00-00 00:00:00', 1);
+
+-- PH 2008-10-60
+ALTER TABLE `{$dbScheduler}` ADD `laststarted` DATETIME NOT NULL AFTER `date_time` ;
+
+-- KMH 2008-10-15
+INSERT INTO `{$dbScheduler}` (`action`, `params`, `paramslabel`, `description`, `status`, `start`, `end`, `interval`, `lastran`, `success`) VALUES ('CheckTasksDue', '', NULL, 'Checks for due tasks.', 'enabled', '2008-01-01 00:00:00', '0000-00-00 00:00:00', 3600, '0000-00-00 00:00:00', 1);
+INSERT INTO `$dbNoticeTemplates` (`name`, `type`, `description`, `text`, `linktext`, `link`, `durability`, `refid`) VALUES('NOTICE_TASK_DUE', 3, 'strNoticeTaskDueDesc', 'strNoticeTaskDue', 'strViewTask', '{applicationurl}view_task.php?id={taskid}', 'sticky', '{taskid}');
+
+INSERT INTO `$dbEmailTemplates` (`name`, `type`, `description`, `tofield`, `fromfield`, `replytofield`, `ccfield`, `bccfield`, `subjectfield`, `body`, `customervisibility`, `storeinlog`, `created`, `createdby`, `modified`, `modifiedby`) VALUES
+('EMAIL_INCIDENT_UPDATED_CUSTOMER', 'user', 'Sent to a customer when an engineer updated an incident', '{contactemail}', '{supportemail}', '{supportemail}', '', '', '{applicationshortname} [{incidentid}] - {incidenttitle} updated', 'Hi {contactfirstname},\r\n\r\nYour incident [{incidentid}] - {incidentid} has been updated, please log into the portal to view the update and respond.\r\n \r\nDO NOT respond to this e-mail directly, use the portal for your responses.\r\n\r\nLog into the portal at: {applicationurl}, where you can also reset your details if you do not know them.\r\n\r\nRegards,\r\n{signature}\r\n\r\n{globalsignature}', 'hide', 'No', NULL, NULL, NULL, NULL);
+
+-- KMH 2008-11-05
+INSERT INTO `$dbNoticeTemplates` (`name`, `type`, `description`, `text`, `linktext`, `link`, `durability`, `refid`) VALUES('NOTICE_SCHEDULER_TASK_FAILED', 3, 'strNoticeSchedulerTaskFailedDesc', 'strNoticeSchedulerTaskFailed', '', '', 'sticky', '');
+INSERT INTO `$dbTriggers` (triggerid, userid, action, template, parameters, checks) VALUES('TRIGGER_SCHEDULER_TASK_FAILED', 1, 'ACTION_NOTICE', 'NOTICE_SCHEDULER_TASK_FAILED', '', '{schedulertask} == \'CheckIncomingMail\'');
+";
+
+$upgrade_schema[341] = "
+-- PH 2008-11-22
+INSERT INTO `{$dbPermissions}` (`id` ,`name`) VALUES ('81', 'Adjust durations on activities');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (1, 81, 'true');
+
+-- KH 2008-11-26
+ALTER TABLE `{$dbUsers}` CHANGE `roleid` `roleid` INT( 5 ) NOT NULL DEFAULT '3';
+
+-- INL 2008-11-28
+CREATE TABLE IF NOT EXISTS `{$dbConfig}` (
+  `config` varchar(255) NOT NULL,
+  `value` text,
+  PRIMARY KEY  (`config`)
+) TYPE=MyISAM COMMENT='SiT configuration';
+
+-- KH 2008-12-07
+ALTER TABLE `{$dbTriggers}` CHANGE `action` `action` ENUM( 'ACTION_NONE', 'ACTION_EMAIL', 'ACTION_NOTICE', 'ACTION_JOURNAL', 'ACTION_CREATE_INCIDENT' ) NOT NULL DEFAULT 'ACTION_NONE';
+";
+
+$upgrade_schema[345] = "
+-- PH 2008-12-24
+ALTER TABLE `{$dbUsers}` ADD `var_emoticons` ENUM( 'true', 'false' ) NOT NULL DEFAULT 'false' AFTER `var_utc_offset` ;
+
+-- INL 2009-01-08
+ALTER TABLE `{$dbUsers}` ADD `holiday_resetdate` DATE NULL AFTER `holiday_entitlement` ;
+ALTER TABLE `{$dbUsers}` ADD `user_startdate` DATE NULL AFTER `accepting` ;
+ALTER TABLE `{$dbHolidays}` ADD `date` DATE NULL AFTER `startdate` ;
+UPDATE `{$dbHolidays}` SET `date` = FROM_UNIXTIME( `startdate` ) WHERE 1 ;
+ALTER TABLE `{$dbHolidays}` DROP `startdate` ;
+
+-- PH 2009-01-10
+ALTER TABLE `{$dbService}` ADD `cust_ref` VARCHAR( 255 ) NULL AFTER `priority` ,
+ADD `cust_ref_date` DATE NULL AFTER `cust_ref` ,
+ADD `title` VARCHAR( 255 ) NULL AFTER `cust_ref_date` ;
+
+-- INL 2009-01-11
+DROP TABLE `{$CONFIG['db_tableprefix']}spellcheck`;
+
+-- PH 2009-01-19
+ALTER TABLE `{$dbTransactions}` ADD `transactionstatus` SMALLINT NOT NULL DEFAULT '5' ;
+UPDATE `{$dbTransactions}` SET transactionstatus = '0';
+ALTER TABLE `{$dbTransactions}` ADD `totalunits` INT NOT NULL AFTER `serviceid` ;
+ALTER TABLE `{$dbTransactions}` ADD `totalbillableunits` INT NOT NULL AFTER `serviceid` ;
+ALTER TABLE `{$dbTransactions}` ADD `totalrefunds` INT NOT NULL AFTER `totalbillableunits` ;
+ALTER TABLE `{$dbTransactions}` CHANGE `date` `dateupdated` DATETIME NOT NULL ;
+
+-- KMH 2009-01-30
+UPDATE `{$dbEmailSig}` SET `signature` = '-- ... Powered by Open Source Software: Support Incident Tracker (SiT!) is available free from http://sitracker.org/'
+WHERE `id` =1 AND `signature` LIKE '%Powered by Open Source Software: Support Incident Tracker%';
+
+-- KMH 2009-01-31
+ALTER TABLE `{$dbTempIncoming}` ADD `reason_id` TINYINT( 1 ) NOT NULL DEFAULT '1' AFTER `reason_time` ,
+ ADD `incident_id` INT( 11 ) NOT NULL DEFAULT '0' AFTER `reason_id` ;
+
+-- KMH 2009-02-11
+ ALTER TABLE `{$dbUsers}` CHANGE `var_i18n` `var_i18n` VARCHAR( 5 ) NOT NULL DEFAULT 'en-GB';
+
+-- INL 2009-02-14
+UPDATE `{$dbLinkTypes}` SET origtab = 'incidents', linktab='tasks' WHERE id = 4;
+";
+
+
+$upgrade_schema[350] = "
+-- PH 2009-03-08
+ALTER TABLE `{$dbRoles}` ADD `description` TEXT NOT NULL;
+
+-- INL 2009-03-09
+ CREATE TABLE `{$dbPermissionCategories}` (
+`id` INT( 5 ) NOT NULL AUTO_INCREMENT ,
+`category` VARCHAR( 255 ) NOT NULL ,
+PRIMARY KEY ( `id` )
+) ENGINE = MYISAM ;
+
+
+INSERT INTO `{$dbPermissionCategories}` (`id`, `category`) VALUES(1, 'strSupport');
+INSERT INTO `{$dbPermissionCategories}` (`id`, `category`) VALUES(2, 'strCustomers');
+INSERT INTO `{$dbPermissionCategories}` (`id`, `category`) VALUES(3, 'strContracts');
+INSERT INTO `{$dbPermissionCategories}` (`id`, `category`) VALUES(4, 'strTasks');
+INSERT INTO `{$dbPermissionCategories}` (`id`, `category`) VALUES(5, 'strKBabbr');
+INSERT INTO `{$dbPermissionCategories}` (`id`, `category`) VALUES(6, 'strPortal');
+INSERT INTO `{$dbPermissionCategories}` (`id`, `category`) VALUES(7, 'strConfiguration');
+INSERT INTO `{$dbPermissionCategories}` (`id`, `category`) VALUES(8, 'strBilling');
+INSERT INTO `{$dbPermissionCategories}` (`id`, `category`) VALUES(9, 'strReports');
+INSERT INTO `{$dbPermissionCategories}` (`id`, `category`) VALUES(10, 'strHolidays');
+INSERT INTO `{$dbPermissionCategories}` (`id`, `category`) VALUES(11, 'strOther');
+
+ALTER TABLE `{$dbPermissions}` ADD `categoryid` INT( 5 ) NOT NULL AFTER `id` ;
+ALTER TABLE `{$dbPermissions}` ADD INDEX ( `categoryid` ) ;
+
+TRUNCATE TABLE `{$dbPermissions}`;
+INSERT INTO `{$dbPermissions}` VALUES(1, 2, 'Add new contacts');
+INSERT INTO `{$dbPermissions}` VALUES(2, 2, 'Add new sites');
+INSERT INTO `{$dbPermissions}` VALUES(3, 2, 'Edit existing site details');
+INSERT INTO `{$dbPermissions}` VALUES(4, 7, 'Edit your profile');
+INSERT INTO `{$dbPermissions}` VALUES(5, 1, 'Add Incidents');
+INSERT INTO `{$dbPermissions}` VALUES(6, 1, 'View Incidents');
+INSERT INTO `{$dbPermissions}` VALUES(7, 1, 'Edit Incidents');
+INSERT INTO `{$dbPermissions}` VALUES(8, 1, 'Update Incidents');
+INSERT INTO `{$dbPermissions}` VALUES(9, 7, 'Edit User Permissions');
+INSERT INTO `{$dbPermissions}` VALUES(10, 2, 'Edit contacts');
+INSERT INTO `{$dbPermissions}` VALUES(11, 2, 'View Sites');
+INSERT INTO `{$dbPermissions}` VALUES(12, 2, 'View Contacts');
+INSERT INTO `{$dbPermissions}` VALUES(13, 1, 'Reassign Incidents');
+INSERT INTO `{$dbPermissions}` VALUES(14, 11, 'View Users');
+INSERT INTO `{$dbPermissions}` VALUES(15, 3, 'Add Supported Products');
+INSERT INTO `{$dbPermissions}` VALUES(16, 7, 'Add Templates');
+INSERT INTO `{$dbPermissions}` VALUES(17, 7, 'Edit Templates');
+INSERT INTO `{$dbPermissions}` VALUES(18, 1, 'Close Incidents');
+INSERT INTO `{$dbPermissions}` VALUES(19, 3, 'View Maintenance Contracts');
+INSERT INTO `{$dbPermissions}` VALUES(20, 7, 'Add Users');
+INSERT INTO `{$dbPermissions}` VALUES(21, 3, 'Edit Maintenance Contracts');
+INSERT INTO `{$dbPermissions}` VALUES(22, 7, 'Administrate');
+INSERT INTO `{$dbPermissions}` VALUES(23, 7, 'Edit User');
+INSERT INTO `{$dbPermissions}` VALUES(24, 3, 'Add Product');
+INSERT INTO `{$dbPermissions}` VALUES(25, 3, 'Add Product Information');
+INSERT INTO `{$dbPermissions}` VALUES(26, 11, 'Get Help');
+INSERT INTO `{$dbPermissions}` VALUES(27, 10, 'View Your Calendar');
+INSERT INTO `{$dbPermissions}` VALUES(28, 3, 'View Products and Software');
+INSERT INTO `{$dbPermissions}` VALUES(29, 3, 'Edit Products');
+INSERT INTO `{$dbPermissions}` VALUES(30, 3, 'View Supported Products');
+INSERT INTO `{$dbPermissions}` VALUES(32, 3, 'Edit Supported Products');
+INSERT INTO `{$dbPermissions}` VALUES(33, 11, 'Send Emails');
+INSERT INTO `{$dbPermissions}` VALUES(34, 1, 'Reopen Incidents');
+INSERT INTO `{$dbPermissions}` VALUES(35, 11, 'Set your status');
+INSERT INTO `{$dbPermissions}` VALUES(36, 2, 'Set contact flags');
+INSERT INTO `{$dbPermissions}` VALUES(37, 9, 'Run Reports');
+INSERT INTO `{$dbPermissions}` VALUES(38, 1, 'View Sales Incidents');
+INSERT INTO `{$dbPermissions}` VALUES(39, 3, 'Add Maintenance Contract');
+INSERT INTO `{$dbPermissions}` VALUES(40, 1, 'Reassign Incident when user not accepting');
+INSERT INTO `{$dbPermissions}` VALUES(41, 11, 'View Status');
+INSERT INTO `{$dbPermissions}` VALUES(42, 1, 'Review/Delete Incident updates');
+INSERT INTO `{$dbPermissions}` VALUES(43, 7, 'Edit Global Signature');
+INSERT INTO `{$dbPermissions}` VALUES(44, 11, 'Publish files to FTP site');
+INSERT INTO `{$dbPermissions}` VALUES(45, 11, 'View Mailing List Subscriptions');
+INSERT INTO `{$dbPermissions}` VALUES(46, 11, 'Edit Mailing List Subscriptions');
+INSERT INTO `{$dbPermissions}` VALUES(47, 11, 'Administrate Mailing Lists');
+INSERT INTO `{$dbPermissions}` VALUES(48, 7, 'Add Feedback Forms');
+INSERT INTO `{$dbPermissions}` VALUES(49, 7, 'Edit Feedback Forms');
+INSERT INTO `{$dbPermissions}` VALUES(50, 10, 'Approve Holidays');
+INSERT INTO `{$dbPermissions}` VALUES(51, 1, 'View Feedback');
+INSERT INTO `{$dbPermissions}` VALUES(52, 1, 'View Hidden Updates');
+INSERT INTO `{$dbPermissions}` VALUES(53, 7, 'Edit Service Levels');
+INSERT INTO `{$dbPermissions}` VALUES(54, 5, 'View KB Articles');
+INSERT INTO `{$dbPermissions}` VALUES(55, 2, 'Delete Sites/Contacts');
+INSERT INTO `{$dbPermissions}` VALUES(56, 3, 'Add Software');
+INSERT INTO `{$dbPermissions}` VALUES(57, 7, 'Disable User Accounts');
+INSERT INTO `{$dbPermissions}` VALUES(58, 7, 'Edit your Software Skills');
+INSERT INTO `{$dbPermissions}` VALUES(59, 7, 'Manage users software skills');
+INSERT INTO `{$dbPermissions}` VALUES(60, 11, 'Perform Searches');
+INSERT INTO `{$dbPermissions}` VALUES(61, 1, 'View Incident Details');
+INSERT INTO `{$dbPermissions}` VALUES(62, 1, 'View Incident Attachments');
+INSERT INTO `{$dbPermissions}` VALUES(63, 3, 'Add Reseller');
+INSERT INTO `{$dbPermissions}` VALUES(64, 7, 'Manage Escalation Paths');
+INSERT INTO `{$dbPermissions}` VALUES(65, 3, 'Delete Products');
+INSERT INTO `{$dbPermissions}` VALUES(66, 7, 'Install Dashboard Components');
+INSERT INTO `{$dbPermissions}` VALUES(67, 9, 'Run Management Reports');
+INSERT INTO `{$dbPermissions}` VALUES(68, 10, 'Manage Holidays');
+INSERT INTO `{$dbPermissions}` VALUES(69, 4, 'View your Tasks');
+INSERT INTO `{$dbPermissions}` VALUES(70, 4, 'Create/Edit your Tasks');
+INSERT INTO `{$dbPermissions}` VALUES(71, 7, 'Manage your Triggers');
+INSERT INTO `{$dbPermissions}` VALUES(72, 7, 'Manage System Triggers');
+INSERT INTO `{$dbPermissions}` VALUES(73, 8, 'Approve Billable Incidents');
+INSERT INTO `{$dbPermissions}` VALUES(74, 8, 'Set duration without activity (for billable incidents)');
+INSERT INTO `{$dbPermissions}` VALUES(75, 8, 'Set negative time for duration on incidents (for billable incidents - refunds)');
+INSERT INTO `{$dbPermissions}` VALUES(76, 8, 'View Transactions');
+INSERT INTO `{$dbPermissions}` VALUES(77, 8, 'View Billing Information');
+INSERT INTO `{$dbPermissions}` VALUES(78, 11, 'Post System Notices');
+INSERT INTO `{$dbPermissions}` VALUES(79, 8, 'Edit Service Balances');
+INSERT INTO `{$dbPermissions}` VALUES(80, 8, 'Edit Service Details');
+INSERT INTO `{$dbPermissions}` VALUES(81, 8, 'Adjust durations on activities');
+
+-- INL 2009-04-03
+ALTER TABLE `{$dbContacts}` CHANGE `notes` `notes` TEXT CHARACTER SET utf8 COLLATE utf8_bin NOT NULL  ;
+
+-- INL 2009-04-09
+CREATE TABLE IF NOT EXISTS `{$dbUserConfig}` (
+  `userid` int(5) NOT NULL,
+  `config` varchar(255) NOT NULL,
+  `value` text,
+  PRIMARY KEY  (`userid`,`config`)
+) TYPE=MyISAM COMMENT='User configuration';
+
+-- INL 2009-04-23
+UPDATE `{$dbNoticeTemplates}` SET `link` = '{applicationurl}user_profile_edit.php?mode=savesessionlang' WHERE `{$dbNoticeTemplates}`.`id` =4 LIMIT 1 ;
+
+-- PH 2009-0425
+ALTER TABLE `{$dbUsers}` CHANGE `id` `id` SMALLINT(6) NOT NULL AUTO_INCREMENT;
+
+-- INL 2009-05-19 (Mantis 674)
+CREATE TABLE IF NOT EXISTS `{$dbConfig}` (
+  `config` varchar(255) NOT NULL,
+  `value` text,
+  PRIMARY KEY  (`config`)
+) TYPE=MyISAM COMMENT='SiT configuration';
+
+-- INL 2009-05-20
+ALTER TABLE `{$dbIncidents}` CHANGE `owner` `owner` SMALLINT( 6 ) NULL DEFAULT NULL;
+ALTER TABLE `{$dbIncidents}` CHANGE `towner` `towner` SMALLINT( 6 ) NOT NULL DEFAULT '0';
+ALTER TABLE `{$dbLinks}` CHANGE `userid` `userid` SMALLINT( 6 ) NOT NULL DEFAULT '0';
+ALTER TABLE `{$dbTransactions}` CHANGE `userid` `userid` SMALLINT( 6 ) NOT NULL;
+ALTER TABLE `{$dbTriggers}` CHANGE `userid` `userid` SMALLINT( 6 ) NOT NULL;
+ALTER TABLE `{$dbUserGroups}` CHANGE `userid` `userid` SMALLINT( 6 ) NOT NULL DEFAULT '0';
+ALTER TABLE `{$dbUserPermissions}` CHANGE `userid` `userid` SMALLINT( 6 ) NOT NULL DEFAULT '0';
+ALTER TABLE `{$dbUserSoftware}` CHANGE `userid` `userid` SMALLINT( 6 ) NOT NULL DEFAULT '0';
+ALTER TABLE `{$dbBillingPeriods}` CHANGE `createdby` `createdby` SMALLINT( 6 ) NULL DEFAULT NULL;
+ALTER TABLE `{$dbBillingPeriods}` CHANGE `modifiedby` `modifiedby` SMALLINT( 6 ) NULL DEFAULT NULL;
+ALTER TABLE `{$dbContacts}` CHANGE `createdby` `createdby` SMALLINT( 6 ) NULL DEFAULT NULL;
+ALTER TABLE `{$dbContacts}` CHANGE `modifiedby` `modifiedby` SMALLINT( 6 ) NULL DEFAULT NULL;
+ALTER TABLE `{$dbDrafts}` CHANGE `userid` `userid` SMALLINT( 6 ) NOT NULL ;
+ALTER TABLE `{$dbEmailTemplates}` CHANGE `createdby` `createdby` SMALLINT( 6 ) NULL DEFAULT NULL ,
+CHANGE `modifiedby` `modifiedby` SMALLINT( 6 ) NULL DEFAULT NULL;
+ALTER TABLE `{$dbEscalationPaths}` CHANGE `createdby` `createdby` SMALLINT( 6 ) NULL DEFAULT NULL ,
+CHANGE `modifiedby` `modifiedby` SMALLINT( 6 ) NULL DEFAULT NULL ;
+ALTER TABLE `{$dbFeedbackForms}` CHANGE `createdby` `createdby` SMALLINT( 6 ) NULL DEFAULT NULL ,
+CHANGE `modifiedby` `modifiedby` SMALLINT( 6 ) NULL DEFAULT NULL ;
+ALTER TABLE `{$dbFeedbackQuestions}` CHANGE `createdby` `createdby` SMALLINT( 6 ) NULL DEFAULT NULL ,
+ CHANGE `modifiedby` `modifiedby` SMALLINT( 6 ) NULL DEFAULT NULL ;
+ALTER TABLE `{$dbFeedbackResults}` CHANGE `createdby` `createdby` SMALLINT( 6 ) NULL DEFAULT NULL ,
+ CHANGE `modifiedby` `modifiedby` SMALLINT( 6 ) NULL DEFAULT NULL ;
+ALTER TABLE `{$dbFiles}` CHANGE `createdby` `createdby` SMALLINT( 6 ) NULL DEFAULT NULL ,
+ CHANGE `modifiedby` `modifiedby` SMALLINT( 6 ) NULL DEFAULT NULL ;
+ALTER TABLE `{$dbGroups}` CHANGE `createdby` `createdby` SMALLINT( 6 ) NULL DEFAULT NULL ,
+ CHANGE `modifiedby` `modifiedby` SMALLINT( 6 ) NULL DEFAULT NULL ;
+ALTER TABLE `{$dbHolidays}` CHANGE `userid` `userid` SMALLINT( 6 ) NOT NULL DEFAULT '0',
+ CHANGE `approvedby` `approvedby` SMALLINT( 6 ) NOT NULL DEFAULT '0' ;
+ALTER TABLE `{$dbIncidentProductInfo}` CHANGE `createdby` `createdby` SMALLINT( 6 ) NULL DEFAULT NULL ,
+ CHANGE `modifiedby` `modifiedby` SMALLINT( 6 ) NULL DEFAULT NULL ;
+ALTER TABLE `{$dbIncidents}` CHANGE `createdby` `createdby` SMALLINT( 6 ) NULL DEFAULT NULL ,
+ CHANGE `modifiedby` `modifiedby` SMALLINT( 6 ) NULL DEFAULT NULL ;
+ALTER TABLE `{$dbInventory}` CHANGE `createdby` `createdby` SMALLINT( 6 ) NOT NULL ,
+ CHANGE `modifiedby` `modifiedby` SMALLINT( 6 ) NOT NULL ;
+ALTER TABLE `{$dbJournal}` CHANGE `userid` `userid` SMALLINT( 6 ) NOT NULL DEFAULT '0' ;
+ALTER TABLE `{$dbKBArticles}` CHANGE `reviewer` `reviewer` SMALLINT( 6 ) NOT NULL DEFAULT '0' ;
+ALTER TABLE `{$dbKBContent}` CHANGE `ownerid` `ownerid` SMALLINT( 6 ) NOT NULL DEFAULT '0' ;
+ALTER TABLE `{$dbNotes}` CHANGE `userid` `userid` SMALLINT( 6 ) NOT NULL DEFAULT '0' ;
+ALTER TABLE `{$dbNotices}` CHANGE `userid` `userid` SMALLINT( 6 ) NOT NULL;
+ALTER TABLE `{$dbRelatedIncidents}` CHANGE `owner` `owner` SMALLINT( 6 ) NOT NULL DEFAULT '0' ;
+ALTER TABLE `{$dbSites}` CHANGE `owner` `owner` SMALLINT( 6 ) NOT NULL DEFAULT '0' ;
+ALTER TABLE `{$dbTasks}` CHANGE `owner` `owner` SMALLINT( 6 ) NOT NULL DEFAULT '0' ;
+ALTER TABLE `{$dbTempAssigns}` CHANGE `originalowner` `originalowner` SMALLINT( 6 ) NOT NULL DEFAULT '0';
+ALTER TABLE `{$dbTempIncoming}` CHANGE `locked` `locked` SMALLINT( 6 ) NULL DEFAULT NULL  ;
+ALTER TABLE `{$dbUpdates}` CHANGE `userid` `userid` SMALLINT( 6 ) NULL DEFAULT NULL  ;
+ALTER TABLE `{$dbUpdates}` CHANGE `currentowner` `currentowner` SMALLINT( 6 ) NOT NULL DEFAULT '0';
+
+-- KMH 2009-06-12
+ALTER TABLE `{$dbSupportContacts}` DROP `id`;
+ALTER TABLE `{$dbSupportContacts}` ADD PRIMARY KEY ( `maintenanceid` , `contactid` ) ;
+ALTER TABLE `{$dbTriggers}` ADD `defined` ENUM( 'custom', 'built-in' ) NOT NULL DEFAULT 'custom' ;
+UPDATE `{$dbTriggers}` SET `defined` = 'built-in' WHERE id < 35 ;
+UPDATE `{$dbNoticeTemplates}` SET `description` = 'strNoticeMinsHeldEmailDesc', `text` = 'strNoticeMinsHeldEmail' WHERE `name` = 'NOTICE_MINS_HELD_EMAIL' AND `description` = 'strNoticeNewUserDesc' AND `text` = 'strNoticeNewUser' ;
+UPDATE `{$dbEmailTemplates}` SET `type` = 'system' WHERE id < 28 AND id > 1 AND type != 'incident' ;
+
+-- PH 2009-06-28
+ALTER TABLE `{$dbUsers}` ADD `user_source` VARCHAR( 32 ) NOT NULL DEFAULT 'sit';
+ALTER TABLE `{$dbContacts}` ADD `contact_source` VARCHAR( 32 ) NOT NULL DEFAULT 'sit';
+
+-- INL 2009-07-12
+UPDATE `{$dbEmailTemplates}` SET `description` = 'strSupportEmailDesc' WHERE `id` =1 LIMIT 1 ;
+
+-- PH 2009-07-22
+INSERT INTO `{$dbScheduler}` (`action`, `params`, `paramslabel`, `description`, `status`, `start`, `end`, `type`, `interval`, `date_type`, `date_offset`, `date_time`, `laststarted`, `lastran`, `success`) VALUES ('ldapSync', '', NULL, 'Sync users and customers from LDAP', 'enabled', '2008-01-01 00:00:00', '0000-00-00 00:00:00', 'interval', 60, 'month', 0, '00:00:00', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 1);
+
+-- PH 2009-08-01
+UPDATE `{$dbEmailTemplates}` SET tofield = '{incidentexternalemail}' WHERE name = 'EMAIL_EXTERNAL_INCIDENT_CLOSURE';
+
+-- KMH 2009-08-24
+INSERT INTO `{$dbTriggers}` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_INCIDENT_CLOSED', 0, 'ACTION_EMAIL', 'EMAIL_SEND_FEEDBACK', '', '{sendfeedback} == 1');
+INSERT INTO `{$dbEmailTemplates}` (`name`, `type`, `description`, `tofield`, `fromfield`, `replytofield`, `ccfield`, `bccfield`, `subjectfield`, `body`, `customervisibility`, `storeinlog`, `created`, `createdby`, `modified`, `modifiedby`) VALUES('EMAIL_SEND_FEEDBACK', 'system', 'strEmailSendFeedbackDesc', '{contactemail}', '{supportemail}', '{supportemail}', '', '', '{applicationshortname} [{incidentid}] - {incidenttitle}: feedback requested', 'Hi {contactfirstname},\r\n\r\nWe would very much value your feedback relating to Incident #{incidentid} - {incidenttitle}.\r\n \r\nDO NOT respond to this e-mail directly, use the portal for your responses.\r\n\r\nPlease visit the following URL to complete our short questionnaire.\r\n\r\n{feedbackurl}\r\n\r\nRegards,\r\n{signature}\r\n\r\n{globalsignature}', 'hide', 'No', NULL, NULL, NULL, NULL);
+
+";
 
 // Important: When making changes to the schema you must add SQL to make the alterations
 // to existing databases in $upgrade_schema[] *AND* you must also change $schema[] for
