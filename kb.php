@@ -50,7 +50,7 @@ echo "<br />";
 // ---------------------------------------------
 // SQL Queries:
 
-if (strlen($search_string) > 4)
+if (strlen(utf8_decode($search_string)) > 4)
 {
     // Find Software
     $sql = "SELECT * FROM `{$dbSoftware}` WHERE name LIKE '%{$search_string}%' LIMIT 20";

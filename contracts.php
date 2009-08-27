@@ -87,7 +87,7 @@ if ($activeonly=='yes')
 
 if ($search_string != '*')
 {
-    if (strlen($search_string)==1)
+    if (strlen(utf8_decode($search_string))==1)
     {
         // $sql .= "AND SUBSTRING(s.name,1,1)=('$search_string') ";
         $sql .= "AND s.name LIKE '{$search_string}%' ";

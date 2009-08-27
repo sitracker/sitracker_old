@@ -37,7 +37,7 @@ if ($submit_value == "go")
     elseif ($search_string != '*')
     {
         $sql .= "WHERE ";
-        if (strlen($search_string)==1)
+        if (strlen(utf8_decode($search_string))==1)
         {
             if ($search_string=='0')
             {
@@ -154,7 +154,7 @@ if ($errors == 0)
         elseif ($search_string != '*')
         {
             $sql .= "WHERE ";
-            if (strlen($search_string)==1)
+            if (strlen(utf8_decode($search_string))==1)
             {
                 if ($search_string=='0')
                 {
@@ -171,7 +171,8 @@ if ($errors == 0)
                 }
                 else
                 {
-                    $sql .= "SUBSTRING(name,1,1)=('$search_string') ";
+                    //$sql .= "SUBSTRING(name,1,1)=('$search_string') ";
+                    $sql .= "name LIKE '{$search_string}%' ";
                 }
             }
             else
