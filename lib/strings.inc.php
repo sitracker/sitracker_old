@@ -230,7 +230,7 @@ $hmenu[70] + $hmenu[70] =
                    50=> array ( 'perm'=> 41, 'name'=> $strHelpAbout, 'url'=>"{$CONFIG['application_webpath']}about.php")
 );
 
-if ($_SESSION['auth']) plugin_do('define_menu');
+if ($_SESSION['auth'] == TRUE AND function_exists('plugin_do')) plugin_do('define_menu');
 
 // Sort the top level menu, so that plugin menus appear in the right place
 ksort($hmenu[0], SORT_NUMERIC);
