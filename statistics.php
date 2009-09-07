@@ -445,7 +445,7 @@ function give_overview()
                 $string .= "<tr><th><a href=\"javascript:incident_details_window('{$irow->id}', 'incident{$irow->id}')\" title='[{$irow->id}] - {$irow->title}'>{$irow->id}</a></th>";
                 $string .= "<td class='shade2' align='left'>{$irow->title}</td>";
                 $string .= "<td class='shade2' align='left'>{$row->realname}</td>";
-                $string .= "<td class='shade2'>{$irow->name}</td></tr>\n";
+                $string .= "<td class='shade2'>{$GLOBALS[$irow->name]}</td></tr>\n";
             }
         }
         $string .= "</table>\n\n";
