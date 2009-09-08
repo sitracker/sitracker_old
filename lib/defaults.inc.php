@@ -343,4 +343,6 @@ $CONFIG['soap_portal_enabled'] = FALSE;
 
 $CONFIG['inventory_enabled'] = TRUE;
 
+$CONFIG['currency_symbol'] = '&pound;';
+
 ?>
