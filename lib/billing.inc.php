@@ -1191,6 +1191,7 @@ function contract_service_table($contractid, $billing)
                     $span .= "<strong>{$GLOBALS['strFreeOfCharge']}</strong>";
                 }
 
+    
                 $html .= "<td><a href='transactions.php?serviceid={$service->serviceid}' class='info'>".icon('billing', 16);
                 if (!empty($span))
                 {
@@ -1204,10 +1205,18 @@ function contract_service_table($contractid, $billing)
                 }
                 $html .= "</a></td>";
             }
+            else
+            {
+                $html .= "<td>".ldate($CONFIG['dateformat_date'],$service->startdate);
+                $html .= "</td>";
+            }
             $html .= "<td>";
             $html .= ldate($CONFIG['dateformat_date'], $service->enddate)."</td>";
 
-            $html .= "<td>{$CONFIG['currency_symbol']}".number_format($balance, 2)."</td>";
+            if ($billing)
+            {
+                $html .= "<td>{$CONFIG['currency_symbol']}".number_format($balance, 2)."</td>";
+            }
             $html .= "<td><a href='contract_edit_service.php?mode=editservice&amp;serviceid={$service->serviceid}&amp;contractid={$contractid}'>{$GLOBALS['strEditService']}</a>";
             if ($billing)
             {
