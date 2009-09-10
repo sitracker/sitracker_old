@@ -70,6 +70,7 @@ $systemhash = md5(date('Y-m-d') . $_SERVER['REMOTE_ADDR']
                 . $_SERVER['SCRIPT_FILENAME'] . $_SERVER['HTTP_USER_AGENT']
                 . $CONFIG['attachment_fspath'] . $_SERVER['SERVER_SIGNATURE'] );
 
+
 /**
     * Array filter callback to check to see if a config file is a recognised file
     * @author Ivan Lucas
@@ -484,6 +485,11 @@ function setup_button($action, $label, $extrahtml='')
 
 session_name($CONFIG['session_name']);
 session_start();
+
+// Force logout
+$_SESSION['auth'] = FALSE;
+$_SESSION['portalauth'] = FALSE;
+
 
 echo "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\"\n";
 echo " \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">\n";

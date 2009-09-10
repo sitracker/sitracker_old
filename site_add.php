@@ -77,9 +77,9 @@ if ($action == "showform" OR $action == '')
     echo "value='{$_SESSION['formdata']['add_site']['telephone']}' /></td></tr>\n";
 
     echo "<tr><th>{$strEmail}</th><td>";
-    echo "<input class='required' maxlength='255' name='email' size='30'";
+    echo "<input maxlength='255' name='email' size='30'";
     echo "value='{$_SESSION['formdata']['add_site']['email']}' />";
-    echo " <span class='required'>{$strRequired}</span></td></tr>\n";
+    echo "</td></tr>\n";
 
     echo "<tr><th></th><td><a href=\"javascript:void(0);\" onclick=\"$('hidden').toggle();\">{$strMore}</a></td></tr>\n";
     echo "<tbody id='hidden' class='hidden' style='display:none'>";
@@ -150,17 +150,12 @@ elseif ($action == "add")
     if ($name == '')
     {
         $errors++;
-        $_SESSION['formerrors']['add_site']['name'] = user_alert(sprintf($strFieldMustNotBeBlank, "'{$strSiteName}'"), E_USER_ERROR);
+        $_SESSION['formerrors']['add_site']['name'] = sprintf($strFieldMustNotBeBlank, "'{$strSiteName}'");
     }
     if ($address1 == '')
     {
         $errors++;
-        $_SESSION['formerrors']['add_site']['address1'] = user_alert(sprintf($strFieldMustNotBeBlank, "'{$strAddress1}'"), E_USER_ERROR);
-    }
-    if ($email == '')
-    {
-        $errors++;
-        $_SESSION['formerrors']['add_site']['email'] = user_alert(sprintf($strFieldMustNotBeBlank, "'{$strEmail}'"), E_USER_ERROR);
+        $_SESSION['formerrors']['add_site']['address1'] = sprintf($strFieldMustNotBeBlank, "'{$strAddress1}'");
     }
 
     // add site if no errors
