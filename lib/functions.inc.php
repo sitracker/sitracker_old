@@ -5691,7 +5691,7 @@ function schedule_actions_due()
     global $dbScheduler;
 
     $actions = FALSE;
-    $sql = "SELECT * FROM `{$dbScheduler}` WHERE status = 'enabled' AND type = 'interval' ";
+    $sql = "SELECT * FROM `{$dbScheduler}` WHERE `status` = 'enabled' AND type = 'interval' ";
     $sql .= "AND UNIX_TIMESTAMP(start) <= $now AND (UNIX_TIMESTAMP(end) >= $now OR UNIX_TIMESTAMP(end) = 0) ";
     $sql .= "AND IF(UNIX_TIMESTAMP(lastran) > 0, UNIX_TIMESTAMP(lastran) + `interval` <= $now, 1=1) ";
     $sql .= "AND IF(laststarted > 0, laststarted <= lastran, 1=1)";
@@ -5706,7 +5706,7 @@ function schedule_actions_due()
     }
 
     // Month
-    $sql = "SELECT * FROM `{$dbScheduler}` WHERE status = 'enabled' AND type = 'date' ";
+    $sql = "SELECT * FROM `{$dbScheduler}` WHERE `status` = 'enabled' AND type = 'date' ";
     $sql .= "AND UNIX_TIMESTAMP(start) <= $now AND (UNIX_TIMESTAMP(end) >= $now OR UNIX_TIMESTAMP(end) = 0) ";
     $sql .= "AND ((date_type = 'month' AND (DAYOFMONTH(CURDATE()) > date_offset OR (DAYOFMONTH(CURDATE()) = date_offset AND CURTIME() >= date_time)) ";
     $sql .= "AND DATE_FORMAT(CURDATE(), '%Y-%m') != DATE_FORMAT(lastran, '%Y-%m') ) ) ";  // not run this month
@@ -5722,7 +5722,7 @@ function schedule_actions_due()
     }
 
     // Year TODO CHECK
-    $sql = "SELECT * FROM `{$dbScheduler}` WHERE status = 'enabled' ";
+    $sql = "SELECT * FROM `{$dbScheduler}` WHERE `status` = 'enabled' ";
     $sql .= "AND type = 'date' AND UNIX_TIMESTAMP(start) <= $now ";
     $sql .= "AND (UNIX_TIMESTAMP(end) >= $now OR UNIX_TIMESTAMP(end) = 0) ";
     $sql .= "AND ((date_type = 'year' AND (DAYOFYEAR(CURDATE()) > date_offset ";
@@ -5739,6 +5739,8 @@ function schedule_actions_due()
             $actions[$action->action] = $actions->params;
         }
     }
+
+    debug_log('actions'.print_r($actions,true));
 
     return $actions;
 }
