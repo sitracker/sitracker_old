@@ -5704,6 +5704,7 @@ function schedule_actions_due()
             $actions[$action->action] = $actions->params;
         }
     }
+echo "\n\n$sql\n\n";
 
     // Month
     $sql = "SELECT * FROM `{$dbScheduler}` WHERE `status` = 'enabled' AND type = 'date' ";
@@ -5787,8 +5788,7 @@ function schedule_action_done($doneaction, $success = TRUE)
         trigger('TRIGGER_SCHEDULER_TASK_FAILED', array('schedulertask' => $doneaction));
     }
 
-    $nowdate = date('Y-m-d H:i:s', $now);
-    $sql = "UPDATE `{$dbScheduler}` SET lastran = '$nowdate' ";
+    $sql = "UPDATE `{$dbScheduler}` SET lastran = FROM_UNIXTIME($now) ";
     if ($success == FALSE) $sql .= ", success=0, status='disabled' ";
     else $sql .= ", success=1 ";
     $sql .= "WHERE action = '{$doneaction}'";
