@@ -511,8 +511,8 @@ $CFGVAR['plugins']['title'] = "Load Plugins";
 $CFGVAR['plugins']['help'] = "Comma separated list of plugins to load. e.g. 'magic_plugin,lookup_plugin'";
 $CFGVAR['plugins']['type'] = '1darray';
 
-$CFGVAR['portal_creates_incidents']['help'] = "TRUE if customers can create incidents from the portal, FALSE if they can just create emails";
-$CFGVAR['portal_creates_incidents']['title'] = "Portal can create Incidents?";
+$CFGVAR['portal_creates_incidents']['help'] = "TRUE if customers can create incidents from the portal, FALSE if they can just create emails that arrive in the holding queue";
+$CFGVAR['portal_creates_incidents']['title'] = "Portal users can create incidents directly?";
 $CFGVAR['portal_creates_incidents']['type'] = 'select';
 $CFGVAR['portal_creates_incidents']['options'] = 'TRUE|FALSE';
 
