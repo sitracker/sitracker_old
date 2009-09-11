@@ -421,7 +421,7 @@ elseif ($action=='incidentform')
     </script>
     <?php
     echo "<form action='{$_SERVER['PHP_SELF']}?action=assign'";
-    echo " method='post' name='supportdetails' onsubmit=\"return validateForm(this)\">";
+    echo " method='post' id='supportdetails' name='supportdetails' onsubmit=\"return validateForm(this)\">";
     echo "<input type='hidden' name='type' value=\"{$type}\" />";
     echo "<input type='hidden' name='contactid' value=\"{$contactid}\" />";
     echo "<input type='hidden' name='productid' value=\"{$productid}\" />";
@@ -571,7 +571,7 @@ elseif ($action=='incidentform')
     }
     echo "<tr><td><strong>{$strNextAction}</strong><br />";
 //     echo "<input type='text' name='nextaction' maxlength='50' size='30' value='Initial Response' /><br /><br />";
-    echo show_next_action();
+    echo show_next_action('supportdetails');
     echo "</td>";
     echo "<td colspan='2'>";
     echo "<strong>{$strVisibleToCustomer}</strong><br />\n";
