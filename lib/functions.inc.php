@@ -5704,7 +5704,6 @@ function schedule_actions_due()
             $actions[$action->action] = $actions->params;
         }
     }
-echo "\n\n$sql\n\n";
 
     // Month
     $sql = "SELECT * FROM `{$dbScheduler}` WHERE `status` = 'enabled' AND type = 'date' ";
