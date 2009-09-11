@@ -44,7 +44,23 @@ function saction_CloseIncidents($closure_delay)
 
     if ($closure_delay < 1) $closure_delay = 554400; // Default  six days and 10 hours
 
-    $sql = "SELECT * FROM `{$dbIncidents}` WHERE status='".STATUS_CLOSING."' ";
+    // Code added back in to fix mark as closure incidents
+    // http://bugs.sitracker.org/view.php?id=717
+    $sql = "UPDATE `{$dbIncidents}` SET lastupdated='{$now}', ";
+    $sql .= "closed='{$now}', status='".STATUS_CLOSED."', closingstatus='4', ";
+    $sql .= "timeofnextaction='0' WHERE status='".STATUS_CLOSING."' ";
+    $sql .= "AND (({$now} - lastupdated) > '{$closure_delay}') ";
+    $sql .= "AND (timeofnextaction='0' OR timeofnextaction <= '{$now}')";
+
+    $result = mysql_query($sql);
+    if (mysql_error())
+    {
+        trigger_error(mysql_error(),E_USER_WARNING);
+        $success = FALSE;
+    }
+
+    // Billing
+    $sql = "SELECT id, owner, status FROM `{$dbIncidents}` WHERE status='".STATUS_CLOSING."' ";
     $sql .= "AND (({$now} - lastupdated) > '{$closure_delay}') ";
     $sql .= "AND (timeofnextaction='0' OR timeofnextaction<='{$now}') ";
     $result = mysql_query($sql);
@@ -54,41 +70,12 @@ function saction_CloseIncidents($closure_delay)
         $success = FALSE;
     }
 
-    // Code added back in to fix mark as closure incidents
-    // http://bugs.sitracker.org/view.php?id=717
-    $sql = "UPDATE `{$dbIncidents}` SET lastupdated='{$now}', ";
-    $sql .= "closed='{$now}', status='".STATUS_CLOSED."', closingstatus='4', ";
-    $sql .= "timeofnextaction='0' WHERE status='".STATUS_CLOSING."' ";
-    $sql .= "AND (({$now} - lastupdated) > '{$closure_delay}') ";
-    $sql .= "AND (timeofnextaction='0' OR timeofnextaction <= '{$now}')";
-   
-    $result = mysql_query($sql);
-    if (mysql_error())
-    {
-        trigger_error(mysql_error(),E_USER_WARNING);
-        $success = FALSE;
-    }
-
-    //if ($CONFIG['debug']) debug_log("Found ".mysql_num_rows($result)." Incidents to close");
-
     while ($obj = mysql_fetch_object($result))
     {
         $bill = close_billable_incident($obj->id); // Do the close tasks if necessary
 
         if ($bill)
         {
-            $sqlb = "UPDATE `{$dbIncidents}` SET lastupdated='{$now}', ";
-            $sqlb .= "closed='{$now}', status='".STATUS_CLOSED."', closingstatus='4', ";
-            $sqlb .= "timeofnextaction='0' WHERE id='{$obj->id}'";
-            $resultb = mysql_query($sqlb);
-            if (mysql_error())
-            {
-                trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
-                $success = FALSE;
-            }
-
-            if ($CONFIG['debug']) //debug_log("  Incident {$obj->id} closed");
-
             $sqlc = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, currentowner, currentstatus, bodytext, timestamp, nextaction, customervisibility) ";
             $sqlc .= "VALUES ('{$obj->id}', '0', 'closing', '{$obj->owner}', '{$obj->status}', 'Incident Closed by {$CONFIG['application_shortname']}', '{$now}', '', 'show' ) ";
             $resultc = mysql_query($sqlc);
@@ -100,7 +87,7 @@ function saction_CloseIncidents($closure_delay)
         }
         else
         {
-        	$success = FALSE;
+            $success = FALSE;
         }
     }
     return $success;
@@ -108,7 +95,7 @@ function saction_CloseIncidents($closure_delay)
 
 
 /**
-    * @author Ivan Lucas
+ * @author Ivan Lucas
 **/
 function saction_PurgeJournal()
 {
@@ -650,10 +637,11 @@ function saction_PurgeExpiredFTPItems()
 /**
  *
  * @author Paul Heaney
+ * @todo TODO document this
 */
 function saction_MailPreviousMonthsTransactions()
 {
-	global $CONFIG;
+    global $CONFIG;
     /*
      Get todays date
      Subtract one from the month and find last month
@@ -743,60 +731,66 @@ function saction_CheckTasksDue()
 
 
 /**
- * Perform the periodic sync of users and contacts from LDAP
+ * Perform the periodic sync of existing user and contact details from LDAP
  * @author Paul Heaney
- */
+ * @note This function does not create users or contacts it simply updates existing
+ * @note details.
+*/
 function saction_ldapSync()
 {
     global $CONFIG;
+    $success = FALSE;
+
     if ($CONFIG['use_ldap'])
     {
         $ldap_conn = ldapOpen();
-    
+
         if ($ldap_conn)
         {
             // NOTE TODO FIXME would be more optimal to pass the user type into the create as in the case where the group membership isn't stored its looked up again
-    
+
             // Search for members of each group and then unique the members and loop through
-    
+            // Populate an array ($users) with a list of SIT users in LDAP
+
             // Only want GROUPS
             $filter = "(objectClass={$CONFIG['ldap_grpobjecttype']})";
             $attributesToGet = array($CONFIG['ldap_grpattributegrp']);
-    
+
             $users = array();
-            
+
             $userGrps = array($CONFIG['ldap_admin_group'], $CONFIG['ldap_manager_group'], $CONFIG['ldap_user_group'] );
 
             foreach ($userGrps AS $grp)
-            {            
+            {
                 if (!empty($grp))
                 {
                     $sr = ldap_search($ldap_conn, $grp, $filter, $attributesToGet);
                     if (ldap_count_entries($ldap_conn, $sr) != 1)
                     {
-                    	trigger_error ("Group {$grp} not found in LDAP");
+                        trigger_error ("Group {$grp} not found in LDAP");
                     }
                     else
                     {
-                    	$entry = ldap_first_entry($ldap_conn, $sr);
+                        $entry = ldap_first_entry($ldap_conn, $sr);
                         $attributes = ldap_get_attributes($ldap_conn, $entry);
-                        
+
                         for ($i = 0; $i < $attributes[$CONFIG['ldap_grpattributegrp']]['count']; $i++)
                         {
                             $member = $attributes[$CONFIG['ldap_grpattributegrp']][$i];
-                        	if (endsWith(strtolower($member), strtolower($CONFIG['ldap_user_base'])) AND $CONFIG['ldap_grpfulldn'])
+                            if (endsWith(strtolower($member), strtolower($CONFIG['ldap_user_base'])) AND $CONFIG['ldap_grpfulldn'])
                             {
                                 $users[$member] = $member;
                             }
                             elseif (!$CONFIG['ldap_grpfulldn'])
                             {
-                            	 $users[$member] = $member;
+                                $users[$member] = $member;
                             }
                         }
                     }
                 }
             }
-            
+
+            // Populate an array with the LDAP users already in the SiT database
             $sit_db_users = array();
             $sql = "SELECT id, username, status FROM `{$GLOBALS['dbUsers']}` WHERE user_source = 'ldap'";
             $result = mysql_query($sql);
@@ -812,71 +806,78 @@ function saction_ldapSync()
                     $sit_db_users[$obj->username] = $user_obj;
                 }
             }
-            
+
             foreach ($users AS $u)
             {
-            	$e = ldap_getDetails($u, FALSE, $ldap_conn);
-                
+                $e = ldap_getDetails($u, FALSE, $ldap_conn);
+
                 if ($e)
                 {
                     $user_attributes = ldap_get_attributes($ldap_conn, $e);
+                    debug_log("user attributes: ".print_r($user_attributes, true), TRUE);
+                    debug_log("db users: ".print_r($sit_db_users, true), TRUE);
 
-                    if (isset($CONFIG['ldap_logindisabledattribute']))
+                    // If the directory supports disabling of users
+                    if (!empty($CONFIG['ldap_logindisabledattribute']))
                     {
-                    	// Directory supports disabling
-                        if ($sit_db_users[$user_attributes[$CONFIG['ldap_userattribute']][0]]->status == USERSTATUS_ACCOUNT_DISABLED)
+                        if ($sit_db_users[$user_attributes[$CONFIG['ldap_userattribute']][0]]->status === USERSTATUS_ACCOUNT_DISABLED)
                         {
-                        	// User disabled in SIT check if needs renameding
+                            // User is disabled in the SIT db, check to see if we need to re-enable
                             if (!empty($user_attributes[$CONFIG['ldap_logindisabledattribute']]))
                             {
-                            	if (strtolower($user_attributes[$CONFIG['ldap_logindisabledattribute']][0]) != strtolower($CONFIG['ldap_logindisabledvalue']))
+                                if (strtolower($user_attributes[$CONFIG['ldap_logindisabledattribute']][0]) != strtolower($CONFIG['ldap_logindisabledvalue']))
                                 {
-                                	// We want to enable
+                                    // The user is enabled in LDAP so we want to enable
+                                    debug_log("Re-enabling user '{$u}' in the SiT users database", TRUE);
                                     $sit_db_users[$user_attributes[$CONFIG['ldap_userattribute']][0]]->status = $CONFIG['ldap_default_user_status'];
                                     $sit_db_users[$user_attributes[$CONFIG['ldap_userattribute']][0]]->edit();
                                 }
                             }
                         }
-                        elseif (!empty($user_attributes[$CONFIG['ldap_logindisabledattribute']]))
+                        else
                         {
-                        	// User not disabled in SiT though attribite is available to us
+                            // User is not disabled in the SiT database, check to see if we need to disable
                             if (strtolower($user_attributes[$CONFIG['ldap_logindisabledattribute']][0]) == strtolower($CONFIG['ldap_logindisabledvalue']))
                             {
-                                // We want to disable
-                                 $sit_db_users[$user_attributes[$CONFIG['ldap_userattribute']][0]]->disable();
+                                // User is disabled in LDAP so we want to disable
+                                $sit_db_users[$user_attributes[$CONFIG['ldap_userattribute']][0]]->disable();
                             }
                         }
                     }
-                    
+
                     $userid = 0;
                     if (!empty($sit_db_users[$user_attributes[$CONFIG['ldap_userattribute']][0]]))
                     {
-                    	$userid = $sit_db_users[$user_attributes[$CONFIG['ldap_userattribute']][0]]->id;
+                        $userid = $sit_db_users[$user_attributes[$CONFIG['ldap_userattribute']][0]]->id;
                         unset ($sit_db_users[$user_attributes[$CONFIG['ldap_userattribute']][0]]);
                     }
-                    
+
                     if (!ldap_storeDetails('', $userid, TRUE, TRUE, $ldap_conn, $user_attributes))
                     {
-                        
-                    	trigger_warning ("Failed to store details for userid {$userid}");
+                        trigger_error("Failed to store details for userid {$userid}", E_USER_WARNING);
+                        $success = FALSE;
+                    }
+                    else
+                    {
+                        $success = TRUE;
                     }
                 }
                 else
                 {
-                	debug_log ("Failed to get details for {$u}");
+                    debug_log ("Failed to get details for {$u}");
                 }
             }
-            
+
             // Disable users we no longer know about
             // TODO reassign incidents?
             foreach ($sit_db_users AS $u)
             {
                 debug_log ("Disabling {$u->username}");
-            	$u->disable();
+                $u->disable();
             }
-            
+
             /** CONTACTS */
-            
+
             $contacts = array();
             if (!empty($CONFIG["ldap_customer_group"]))
             {
@@ -908,25 +909,25 @@ function saction_ldapSync()
                 $sql = "SELECT id, username, active FROM `{$GLOBALS['dbContacts']}` WHERE contact_source = 'ldap'";
                 $result = mysql_query($sql);
                 if (mysql_error()) trigger_error("MySQL Query Error".mysql_error(), E_USER_WARNING);
-                if (mysql_num_rows($result) > 0)               
+                if (mysql_num_rows($result) > 0)
                 {
                     while ($obj = mysql_fetch_object($result))
                     {
-                    	$c = new Contact();
+                        $c = new Contact();
                         $c->id = $obj->id;
                         $c->username = $obj->username;
                         $c->status = $obj->active;
                         $sit_db_contacts[$c->username] = $c;
                     }
                 }
-                
+
                 foreach ($contacts AS $c)
                 {
                     $e = ldap_getDetails($c, FALSE, $ldap_conn);
                     if ($e)
                     {
                         $contact_attributes = ldap_get_attributes($ldap_conn, $e);
-                        
+
                         if (isset($CONFIG['ldap_logindisabledattribute']))
                         {
                             // Directory supports disabling
@@ -949,11 +950,11 @@ function saction_ldapSync()
                                 if (strtolower($contact_attributes[$CONFIG['ldap_logindisabledattribute']][0]) == strtolower($CONFIG['ldap_logindisabledvalue']))
                                 {
                                     // We want to disable
-                                     $sit_db_contacts[$contact_attributes[$CONFIG['ldap_userattribute']][0]]->disable();
+                                    $sit_db_contacts[$contact_attributes[$CONFIG['ldap_userattribute']][0]]->disable();
                                 }
                             }
                         }
-                        
+
                         $contactid = 0;
                         if (!empty($sit_db_contacts[$contact_attributes[$CONFIG['ldap_userattribute']][0]]))
                         {
@@ -963,21 +964,27 @@ function saction_ldapSync()
 
                         if (!ldap_storeDetails('', $contactid, FALSE, TRUE, $ldap_conn, $contact_attributes))
                         {
-                            trigger_warning ("Failed to store details for userid {$contactid}");
+                            trigger_error("Failed to store details for userid {$contactid}", E_USER_WARNING);
+                            $success = FALSE;
                         }
                     }
                 }
-                
+
                 // Disable users we no longer know about
                 // TODO reassign incidents?
                 foreach ($sit_db_contacts AS $c)
                 {
-                    debug_log ("Disabling {$c->username}");
+                    debug_log ("Disabling {$c->username}", TRUE);
                     $c->disable();
                 }
             }
-        }  
+        }
     }
+    else
+    {
+        $success = TRUE;
+    }
+    return $success;
 }
 
 // =======================================================================================

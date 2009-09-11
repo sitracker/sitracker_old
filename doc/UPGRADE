@@ -18,6 +18,12 @@ Further instructions and notes about specific upgrades follow, if you
 upgrading and skipping several versions listed below you should read
 everything carefully to make sure you've met all the requirements:
 
+Upgrading to 3.50
+-----------------
+    *  The portal knowledge base is now publicly accessible by default. A link is placed on the SiT! login screen to the knowledgebase where all articles with a distribution of 'Public' will be shown. If you do not want this, you can disable this by changing Configure | Features | Portal | Portal/Public Knowledge base.
+    * The LDAP code has been extended and rewritten, if you are already using LDAP you should be aware that you will have to reconfigure this after upgrading to 3.50.
+
+
 Upgrading to 3.45
 -----------------
     ** Please read these instructions carefully **

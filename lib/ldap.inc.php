@@ -26,6 +26,14 @@ define ('LDAP_USERTYPE_MANAGER',2);
 define ('LDAP_USERTYPE_USER',3);
 define ('LDAP_USERTYPE_CUSTOMER',4);
 
+// LDAP Checking
+define ('LDAP_PASSWORD_INCORRECT', 0);
+define ('LDAP_ADMIN_GROUP_INCORRECT', 1);
+define ('LDAP_MANAGER_GROUP_INCORRECT', 2);
+define ('LDAP_USER_GROUP_INCORRECT', 3);
+define ('LDAP_CUSTOMER_GROUP_INCORRECT', 4);
+define ('LDAP_CORRECT', 5);
+
 // LDAP ATTRIBUTES
 define ('LDAP_EDIR_SURNAME', 'sn');
 define ('LDAP_EDIR_FORENAMES', 'givenName');
@@ -36,7 +44,7 @@ define ('LDAP_EDIR_MOBILE', 'mobile');
 define ('LDAP_EDIR_TELEPHONE', 'telephoneNumber');
 define ('LDAP_EDIR_FAX', 'facsimileTelephoneNumber');
 define ('LDAP_EDIR_DESCRIPTION', 'description');
-define ('LDAP_EDIR_GRPONUSER', TRUE); // Is group membership contained on the user (more optimal) 
+define ('LDAP_EDIR_GRPONUSER', TRUE); // Is group membership contained on the user (more optimal)
 define ('LDAP_EDIR_GRPFULLDN', TRUE); // Is the membership stored as a full DN or just the CN? ONLY Used when checking group
 define ('LDAP_EDIR_USERATTRIBUTE', 'cn'); // Attribute to locate user with
 define ('LDAP_EDIR_USEROBJECTTYPE', 'inetOrgPerson');
@@ -60,7 +68,7 @@ define ('LDAP_AD_MOBILE', 'mobile');
 define ('LDAP_AD_TELEPHONE', 'telephoneNumber');
 define ('LDAP_AD_FAX', 'facsimileTelephoneNumber');
 define ('LDAP_AD_DESCRIPTION', 'description');
-define ('LDAP_AD_GRPONUSER', TRUE); // Is group membership contained on the user (more optimal) 
+define ('LDAP_AD_GRPONUSER', TRUE); // Is group membership contained on the user (more optimal)
 define ('LDAP_AD_GRPFULLDN', TRUE); // Is the membership stored as a full DN or just the CN?
 define ('LDAP_AD_USERATTRIBUTE', 'sAMAccountName'); // Attribute to locate user with
 define ('LDAP_AD_USEROBJECTTYPE', 'user');
@@ -72,26 +80,26 @@ define ('LDAP_AD_CITY', 'l');
 define ('LDAP_AD_COUNTY', 'st');
 define ('LDAP_AD_POSTCODE', 'postalCode');
 define ('LDAP_AD_COURTESYTITLE', 'generationQualifier'); // Doesn't seem to have'
-/* 
+/*
  * NOTE: Given the way LoginDisabled works in AD this will only work in a limited number of circumstances
  * It will only work on NORMAL_ACCOUNT + ACCOUNTDISABLED
  * http://support.microsoft.com/kb/305144
  * TODO add support for a mask to handle this
  */
 define ('LDAP_AD_LOGINDISABLEDATTRIBUTE', 'userAccountControl');  // CHECK
-define ('LDAP_AD_LOGINDISABLEDVALUE', '514');  // This is soley NORMAL_ACCOUNT + ACCOUNTDISABLED   
+define ('LDAP_AD_LOGINDISABLEDVALUE', '514');  // This is soley NORMAL_ACCOUNT + ACCOUNTDISABLED
 
 // TODO check
 define ('LDAP_OPENLDAP_SURNAME', 'sn');
 define ('LDAP_OPENLDAP_FORENAMES', 'givenName');
 define ('LDAP_OPENLDAP_REALNAME', 'cn');
 define ('LDAP_OPENLDAP_JOBTITLE', 'title');
-define ('LDAP_OPENLDAP_EMAIL', 'mail');
+/// define ('LDAP_OPENLDAP_EMAIL', 'mail');
 define ('LDAP_OPENLDAP_MOBILE', 'mobile');
 define ('LDAP_OPENLDAP_TELEPHONE', 'telephoneNumber');
 define ('LDAP_OPENLDAP_FAX', 'facsimileTelephoneNumber');
 define ('LDAP_OPENLDAP_DESCRIPTION', 'description');
-define ('LDAP_OPENLDAP_GRPONUSER', FALSE); // Is group membership contained on the user (more optimal) 
+define ('LDAP_OPENLDAP_GRPONUSER', FALSE); // Is group membership contained on the user (more optimal)
 define ('LDAP_OPENLDAP_GRPFULLDN', FALSE); // Is the membership stored as a full DN or just the CN?
 define ('LDAP_OPENLDAP_USERATTRIBUTE', 'uid'); // Attribute to locate user with
 define ('LDAP_OPENLDAP_USEROBJECTTYPE', 'inetOrgPerson');
@@ -105,7 +113,7 @@ define ('LDAP_OPENLDAP_POSTCODE', 'postalCode'); // NOT PRESENT all in one attri
 define ('LDAP_OPENLDAP_COURTESYTITLE', 'personalTitle');
 
 /*  You need to uncomment and adjust these values if you intend to use custom mapping
-// TODO move these to a config option 
+// TODO move these to a config option
 define ('LDAP_CUSTOM_SURNAME', 'sn2");
 define ('LDAP_CUSTOM_FORENAMES', 'givenName');
 define ('LDAP_CUSTOM_REALNAME', 'cn');
@@ -115,7 +123,7 @@ define ('LDAP_CUSTOM_MOBILE', 'mobile');
 define ('LDAP_CUSTOM_TELEPHONE', 'telephoneNumber');
 define ('LDAP_CUSTOM_FAX', 'facsimileTelephoneNumber');
 define ('LDAP_CUSTOM_DESCRIPTION', 'description');
-define ('LDAP_CUSTOM_GRPONUSER', FALSE); // Is group membership contained on the user (more optimal) 
+define ('LDAP_CUSTOM_GRPONUSER', FALSE); // Is group membership contained on the user (more optimal)
 define ('LDAP_CUSTOM_GRPFULLDN', FALSE); // Is the membership stored as a full DN or just the CN?
 define ('LDAP_CUSTOM_USERATTRIBUTE', 'uid'); // Attribute to locate user with
 define ('LDAP_CUSTOM_USEROBJECTTYPE', 'inetOrgPerson');
@@ -133,16 +141,16 @@ $CONFIG['ldap_type'] = strtoupper($CONFIG['ldap_type']);
 
 $ldap_vars = array("SURNAME", "FORENAMES", "REALNAME", "JOBTITLE", "EMAIL", "MOBILE",
                     "TELEPHONE", "FAX", "DESCRIPTION", "GRPONUSER", "GRPFULLDN", "USERATTRIBUTE",
-                    "USEROBJECTTYPE", "GRPOBJECTTYPE", "GRPATTRIBUTEUSER", "GRPATTRIBUTEGRP", 
+                    "USEROBJECTTYPE", "GRPOBJECTTYPE", "GRPATTRIBUTEUSER", "GRPATTRIBUTEGRP",
                     "ADDRESS1", "CITY", "COUNTY", "POSTCODE", "COURTESYTITLE", "LOGINDISABLEDATTRIBUTE",
                     "LOGINDISABLEDVALUE");
 
 
 if ($CONFIG['use_ldap'])
-{   
+{
     foreach ($ldap_vars AS $var)
     {
-    	if (defined ("LDAP_{$CONFIG['ldap_type']}_{$var}"))
+        if (defined ("LDAP_{$CONFIG['ldap_type']}_{$var}"))
         {
             $CONFIG[strtolower("ldap_{$var}")] = constant("LDAP_{$CONFIG['ldap_type']}_{$var}");
         }
@@ -157,7 +165,7 @@ if ($CONFIG['use_ldap'])
 */
 function ldapOpen($host='', $port='', $protocol='', $security='', $user='', $password='')
 {
-    debug_log("ldapOpen");
+    debug_log("ldapOpen", TRUE);
     global $CONFIG, $ldap_conn;
 
     if (empty($host)) $host = $CONFIG['ldap_host'];
@@ -183,7 +191,7 @@ function ldapOpen($host='', $port='', $protocol='', $security='', $user='', $pas
     	$ldap_url = "ldaps://{$host}:{$port}";
     }
 
-    debug_log ("LDAP URL: {$ldap_url}");
+    debug_log ("LDAP URL: {$ldap_url}", TRUE);
     $ldap_conn = @ldap_connect($ldap_url);
 
 
@@ -192,7 +200,7 @@ function ldapOpen($host='', $port='', $protocol='', $security='', $user='', $pas
         // Set protocol version
         ldap_set_option($ldap_conn, LDAP_OPT_PROTOCOL_VERSION, $protocol);
         ldap_set_option($ldap_conn, LDAP_OPT_REFERRALS,0);
-    
+
         if ( $security == 'TLS' )
         {
             // Protocol V3 required for start_tls
@@ -208,7 +216,7 @@ function ldapOpen($host='', $port='', $protocol='', $security='', $user='', $pas
                 trigger_error("LDAP Protocol v3 required for TLS", E_USER_ERROR);
             }
         }
-    
+
         if ( isset($user) && strlen($user) > 0 )
         {
             $r = @ldap_bind($ldap_conn, $user, $password);
@@ -228,32 +236,36 @@ function ldapOpen($host='', $port='', $protocol='', $security='', $user='', $pas
 }
 
 
+/**
+ * @author Paul Heaney
+ * @todo TODO document this function
+*/
 function ldap_storeDetails($password, $id = 0, $user=TRUE, $populateOnly=FALSE, &$ldap_conn, $user_attributes)
 {
     global $CONFIG;
     $toReturn = false;
-    
-	if ($populateOnly)
+
+    if ($populateOnly)
     {
-        $user_bind = true; 
+        $user_bind = true;
     }
     else
     {
         // Authentocate
         $user_bind = @ldap_bind($ldap_conn, $_SESSION['ldap_user_dn'], $password);
     }
-    
+
     if (!$user_bind)
     {
         // Auth failed
-        debug_log ("Invalid credentials {$_SESSION['ldap_user_dn']} pwd: '{$password}'");
+        debug_log("LDAP Invalid credentials {$_SESSION['ldap_user_dn']}", TRUE);
         $toReturn = false;
     }
     else
     {
         // Sucessfull
-        debug_log ("Valid Credentials");
-        $usertype = LDAP_INVALID_USER;
+        debug_log("LDAP Valid Credentials", TRUE);
+        $usertype= LDAP_INVALID_USER;
 
         if ($CONFIG['ldap_grponuser'])
         {
@@ -296,7 +308,7 @@ function ldap_storeDetails($password, $id = 0, $user=TRUE, $populateOnly=FALSE, 
         {
             ldap_close($ldap_conn);
             $ldap_conn = ldapOpen(); // Need to get an admin thread
-            
+
             if ($CONFIG['ldap_grpfulldn'])
             {
                 $filter = "(&(objectClass={$CONFIG['ldap_grpobjecttype']})({$CONFIG['ldap_grpattributegrp']}={$_SESSION['ldap_user_dn']}))";
@@ -305,50 +317,50 @@ function ldap_storeDetails($password, $id = 0, $user=TRUE, $populateOnly=FALSE, 
             {
                 $filter = "(&(objectClass={$CONFIG['ldap_grpobjecttype']})({$CONFIG['ldap_grpattributegrp']}={$user_attributes[$CONFIG['ldap_userattribute']][0]}))";
             }
-            
-            
+
+
             if ($user)
             {
-                debug_log ("USER: {$filter}");
-                /* 
-                 * Locate 
+                debug_log("USER: {$filter}" , TRUE);
+                /*
+                 * Locate
                  */
                 if (ldap_count_entries($ldap_conn, ldap_search($ldap_conn, $CONFIG['ldap_admin_group'], $filter)))
                 {
                     $usertype = LDAP_USERTYPE_ADMIN;
-                    debug_log ("ADMIN");
+                    debug_log("ADMIN", TRUE);
                 }
                 elseif (ldap_count_entries($ldap_conn, ldap_search($ldap_conn, $CONFIG['ldap_manager_group'], $filter)))
                 {
                     $usertype = LDAP_USERTYPE_MANAGER;
-                    debug_log ("MANAGER");
+                    debug_log("MANAGER", TRUE);
                 }
                 elseif (ldap_count_entries($ldap_conn, ldap_search($ldap_conn, $CONFIG['ldap_user_group'], $filter)))
                 {
                     $usertype = LDAP_USERTYPE_USER;
-                    debug_log ("USER");
+                    debug_log("USER", TRUE);
                 }
                 else
                 {
-                    debug_log ("INVALID USER");
+                    debug_log("INVALID USER", TRUE);
                 }
             }
             else
             {
-                // get back customer group    
+                // get back customer group
                 $result = ldap_search($ldap_conn, $CONFIG['ldap_customer_group'], $filter);
                 if (ldap_count_entries($ldap_conn, $result))
                 {
                     $usertype = LDAP_USERTYPE_CUSTOMER;
-                    debug_log ("CUSTOMER");
+                    debug_log("CUSTOMER", TRUE);
                 }
                 else
                 {
-                    debug_log ("INVALID CUSTOMER");
+                    debug_log("INVALID CUSTOMER", TRUE);
                 }
             }
         }
-        
+
         if ($usertype != LDAP_INVALID_USER AND $user)
         {
             // get attributes
@@ -364,7 +376,7 @@ function ldap_storeDetails($password, $id = 0, $user=TRUE, $populateOnly=FALSE, 
             $user->message = $user_attributes[$CONFIG['ldap_description']][0];
             $user->holiday_entitlement = $CONFIG['default_entitlement'];
             $user->source = 'ldap';
-            
+
             // TODO FIXME this doesn't take into account custom roles'
             switch ($usertype)
             {
@@ -372,9 +384,9 @@ function ldap_storeDetails($password, $id = 0, $user=TRUE, $populateOnly=FALSE, 
                     break;
                 case LDAP_USERTYPE_MANAGER: $user->roleid = 2;
                     break;
-                default: $user->roleid = 3;    
+                default: $user->roleid = 3;
             }
-            
+
             if ($id == 0)
             {
                 $user->status = $CONFIG['ldap_default_user_status'];
@@ -386,14 +398,15 @@ function ldap_storeDetails($password, $id = 0, $user=TRUE, $populateOnly=FALSE, 
                 $user->id = $id;
                 $status = $user->edit();
             }
-            
+
             if ($status) $toReturn = true;
             else $toReturn = false;
         }
         elseif ($usertype == LDAP_USERTYPE_CUSTOMER AND !$user)
         {
-            // Contact  
-            debug_log("Adding contact TYPE {$usertype} {$user}");
+            // Contact
+            debug_log("Adding contact TYPE {$usertype} USER {$user}", TRUE);
+            debug_log("User attributes: ".print_r($user_attributes, TRUE), TRUE);
             $contact = new Contact();
             $contact->username = $user_attributes[$CONFIG['ldap_userattribute']][0];
             if ($CONFIG['ldap_cache_passwords']) $contact->password = $password;
@@ -410,20 +423,20 @@ function ldap_storeDetails($password, $id = 0, $user=TRUE, $populateOnly=FALSE, 
             $contact->county = $user_attributes[$CONFIG['ldap_county']][0];
             $contact->postcode = $user_attributes[$CONFIG['ldap_postcode']][0];
             $contact->courtesytitle = $user_attributes[$CONFIG['ldap_courtesytitle']][0];
-            
+
             $contact->source = 'ldap';
-        
+
             if ($id == 0)
             {
                 $status = $contact->add();
             }
             else
             {
-                debug_log ("MODIFY CONTACT {$id}");
+                debug_log("MODIFY CONTACT {$id}", TRUE);
                 $contact->id = $id;
                 $status = $contact->edit();
             }
-            
+
             if ($status)  $toReturn = true;
             else $toReturn = false;
         }
@@ -432,21 +445,25 @@ function ldap_storeDetails($password, $id = 0, $user=TRUE, $populateOnly=FALSE, 
             $toReturn = false;
         }
     }
-    
+
     return $toReturn;
 }
 
 
+/**
+ * @author Paul Heaney
+ * @todo TODO document this function
+*/
 function ldap_getDetails($username, $searchOnEmail, &$ldap_conn)
 {
     global $CONFIG, $ldap_vars;
     $toReturn = false;
 
-    $base = $CONFIG['ldap_user_base']; 
+    $base = $CONFIG['ldap_user_base'];
 
     if (strpos($username, ",") != FALSE)
     {
-    	$filter = "(ObjectClass={$CONFIG['ldap_userobjecttype']})";
+        $filter = "(ObjectClass={$CONFIG['ldap_userobjecttype']})";
         $base = $username;
     }
     else if (!$searchOnEmail)
@@ -460,23 +477,23 @@ function ldap_getDetails($username, $searchOnEmail, &$ldap_conn)
 
     foreach ($ldap_vars AS $var)
     {
-    	$attributes[] = $CONFIG[strtolower("ldap_{$var}")];
+        $attributes[] = $CONFIG[strtolower("ldap_{$var}")];
     }
 
-    debug_log ("Filter: {$filter}");
-    debug_log ("Base: {$base}");
+    debug_log("Filter: {$filter}", TRUE);
+    debug_log("Base: {$base}". TRUE);
     $sr = ldap_search($ldap_conn, $base, $filter, $attributes);
-    
+
     if (ldap_count_entries($ldap_conn, $sr) != 1)
     {
         // Multiple or zero
-        trigger_error("Unable to locate user"); // FIXME i18n
+        trigger_error("LDAP unable to locate object: '$username', or multiple matches where found", E_USER_ERROR);
         $toReturn = false;
     }
     else
-    {            
+    {
         // just one
-        debug_log ("One entry found");
+        debug_log("LDAP got details for object: '$username'", TRUE);
         $toReturn  = ldap_first_entry($ldap_conn, $sr);
     }
 
@@ -499,7 +516,7 @@ function ldap_getDetails($username, $searchOnEmail, &$ldap_conn)
 */
 function authenticateLDAP($username, $password, $id = 0, $user=TRUE, $populateOnly=FALSE, $searchOnEmail=FALSE)
 {
-    debug_log("authenticateLDAP {$username}");
+    debug_log("authenticateLDAP {$username}", TRUE);
 
     global $CONFIG;
 
@@ -514,17 +531,17 @@ function authenticateLDAP($username, $password, $id = 0, $user=TRUE, $populateOn
         * Verify roles
         */
         $entry = ldap_getDetails($username, $searchOnEmail, $ldap_conn);
-        
+
         if (!$entry)
         {
-        	// Multiple or zero
-            trigger_error("Unable to locate user"); // FIXME i18n
+            // Multiple or zero
+            trigger_error("Unable to locate user", E_USER_ERROR);
             $toReturn = false;
         }
         else
-        {            
-        	// just one
-            debug_log ("One entry found");
+        {
+            // just one
+            debug_log("One entry found", TRUE);
 
             $_SESSION['ldap_user_dn'] = ldap_get_dn($ldap_conn, $entry);
             $user_attributes = ldap_get_attributes($ldap_conn, $entry);
@@ -534,9 +551,9 @@ function authenticateLDAP($username, $password, $id = 0, $user=TRUE, $populateOn
     }
     else
     {
-    	$toReturn = -1;
+        $toReturn = -1;
     }
-    
+
     @ldap_close($ldap_conn);
 
     return $toReturn;
@@ -571,81 +588,91 @@ function ldapImportCustomerFromEmail($email)
 {
     global $CONFIG;
     $toReturn = false;
-    /*
-    global $dbContacts;
 
-    $r = getContactDetailsFromDBByEmail($email);
-
-    if( ! empty($r) )
+    debug_log ("ldapImportCustomerFromEmail {$email}", TRUE);
+    if (!empty($email))
     {
-        // This contact already exists
-        return;
-    }
-
-    // Create user
-    $details = ldapGetCustomerDetailsFromEmail(email);
-
-
-    ldapCreateContact($details);
-    */
-    
-    /*
-     * Check if contact exists
-     * is contact sit
-     *   return
-     * if ldap enabled
-     *   is contact ldap
-     *     sync
-     *   else
-     *     try and find in LDAP
-     * 
-     */
-     debug_log ("ldapImportCustomerFromEmail {$email}");
-     if (!empty($email))
-     {
         $sql = "SELECT id, username, contact_source FROM `{$GLOBALS['dbContacts']}` WHERE email = '{$email}'";
-        debug_log ($sql);
+        debug_log($sql, TRUE);
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
         if (mysql_num_rows($result) == 1)
         {
-            debug_log ("just one");
-        	// Can only deal with the case where one exists, if multiple contacts have the same email address its difficult to deal with
+            // Can only deal with the case where one exists, if multiple contacts have the same email address its difficult to deal with
             $obj = mysql_fetch_object($result);
-            
+
             if ($obj->contact_source == 'sit')
             {
-            	$toReturn = true;
+                $toReturn = true;
             }
             elseif ($obj->contact_source == 'ldap')
             {
-            	if (authenticateLDAP($obj->username, '', $obj->id, false, true, false)) $toReturn = true;
+                if (authenticateLDAP($obj->username, '', $obj->id, false, true, false)) $toReturn = true;
             }
             else
             {
-            	// Exists but of some other type
+                // Exists but of some other type
                 $toReturn = true;
             }
         }
         elseif (mysql_num_rows($result) > 1)
         {
-            debug_log ("More than one");
+            debug_log ("More than one contact was found in LDAP with this address '{$email}', not importing", TRUE);
             // Contact does exists with these details, just theres more than one of them
-        	$toReturn = true;
+            $toReturn = true;
         }
         else
         {
-            debug_log ("Zero");
-        	// Zero found
+            // Zero found
             if ($CONFIG['use_ldap'])
             {
-            	// Try and search
+                // Try and search
                 if (authenticateLDAP($email, '', 0, false, true, true)) $toReturn = true;
-            } 
+            }
         }
-     }
-     
-     return $toReturn;
+    }
+
+    return $toReturn;
+}
+
+
+/**
+ * Checks if a group exists in LDAP
+ * @auther Paul Heaney
+ * @param string $dn the DN of the group to check it exists
+ * @param string $mapping the LDAP name mapping to use
+ * @return bool TRUE for exists, FALSE otherwise
+ */
+function ldapCheckGroupExists($dn, $mapping)
+{
+	global $CONFIG, $ldap_vars;
+    $toReturn = false;
+
+    $ldap_conn = ldapOpen(); // Need to get an admin thread
+
+    $mapping = strtoupper($mapping);
+    // $CONFIG[strtolower("ldap_{$var}")] = constant("LDAP_{$CONFIG['ldap_type']}_{$var}");
+
+    $o = constant("LDAP_{$mapping}_GRPOBJECTTYPE");
+
+    $filter = "(ObjectClass={$o})";
+
+    debug_log("Filter: {$filter}", TRUE);
+    debug_log("Object: {$dn}", TRUE);
+    $sr = ldap_search($ldap_conn, $dn, $filter);
+
+    if (ldap_count_entries($ldap_conn, $sr) != 1)
+    {
+        // Multiple or zero
+        $toReturn = false;
+    }
+    else
+    {
+        // just one
+        $toReturn  = true;
+    }
+
+    return $toReturn;
 }
 
 ?>

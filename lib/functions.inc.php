@@ -24,6 +24,12 @@ if (realpath(__FILE__) == realpath($_SERVER['SCRIPT_FILENAME']))
 }
 
 include (APPLICATION_LIBPATH . 'classes.inc.php');
+
+include (APPLICATION_LIBPATH . 'group.class.php');
+include (APPLICATION_LIBPATH . 'user.class.php');
+include (APPLICATION_LIBPATH . 'contact.class.php');
+include (APPLICATION_LIBPATH . 'incident.class.php');
+
 include (APPLICATION_LIBPATH . 'ldap.inc.php');
 include (APPLICATION_LIBPATH . 'base.inc.php');
 include_once (APPLICATION_LIBPATH . 'billing.inc.php');
@@ -219,7 +225,7 @@ function authenticate($username, $password)
 function authenticateContact($username, $password)
 {
     debug_log ("authenticateContact called");
-	global $CONFIG;
+    global $CONFIG;
     $toReturn = false;
 
     $sql = "SELECT id, password, contact_source, active FROM `{$GLOBALS['dbContacts']}` WHERE username = '{$username}'";
@@ -227,7 +233,7 @@ function authenticateContact($username, $password)
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     if (mysql_num_rows($result) == 1)
     {
-        debug_log ("Just one in db");
+        debug_log ("Authenticate: Just one contact in db");
         // Exists in SiT DB
         $obj = mysql_fetch_object($result);
         if ($obj->contact_source == 'sit')
@@ -281,7 +287,7 @@ function authenticateContact($username, $password)
     }
     else
     {
-        debug_log ("non in db");
+        debug_log ("Authenticate: No matching contact found in db");
         // Don't exist, check LDAP etc
         if ($CONFIG['use_ldap'])
         {
@@ -2450,7 +2456,7 @@ function debug_log($logentry, $debugmodeonly = FALSE)
     global $CONFIG;
 
     if ($debugmodeonly == FALSE
-        OR ($debugmodeonly == TRUE AND $CONFIG['debug_mode'] == TRUE))
+        OR ($debugmodeonly == TRUE AND $CONFIG['debug'] == TRUE))
     {
         $logentry = $_SERVER["SCRIPT_NAME"] . ' ' .$logentry;
 
@@ -4499,7 +4505,7 @@ return ($html);
 
 
 /**
- * Identifies whether feedback should be send for this contract, 
+ * Identifies whether feedback should be send for this contract,
  * This checks against $CONFIG['no_feedback_contracts'] to see if the contract is set to receive no feedback
  * @param $contractid int The contract ID to check
  * @return bool TRUE if feedback should be sent, false otherwise
@@ -4728,7 +4734,7 @@ function parse_updatebody($updatebody, $striptags = TRUE)
 
 
 /**
- * Produces a HTML form for adding a note to an item 
+ * Produces a HTML form for adding a note to an item
  * @param $linkid int The link type to be used
  * @param $refid int The ID of the item this note if for
  * @return string The HTML to display
@@ -5088,7 +5094,7 @@ function show_create_links($table, $ref)
     * Create a PNG chart
     * @author Ivan Lucas
     * @param string $type. The type of chart to draw. (e.g. 'pie').
-    * @returns a PNG image resource
+    * @return resource a PNG image resource
     * @note Currently only has proper support for pie charts (type='pie')
     * @todo TODO Support for bar and line graphs
 */
@@ -5392,11 +5398,11 @@ function implode_assoc($glue1, $glue2, $array)
 
 
 /**
-    * @author Kieran Hogg
-    * @param string $name. name of the html entity
-    * @param string $time. the time to set it to, format 12:34
-    * @returns string. HTML
-*/
+ * @author Kieran Hogg
+ * @param string $name. name of the html entity
+ * @param string $time. the time to set it to, format 12:34
+ * @returns string. HTML
+ */
 function time_dropdown($name, $time='')
 {
     if ($time)
@@ -5436,10 +5442,10 @@ function time_dropdown($name, $time='')
 
 
 /**
-    * @author Kieran Hogg
-    * @param int $seconds. Number of seconds
-    * @returns string. Readable time in seconds
-*/
+ * @author Kieran Hogg
+ * @param int $seconds. Number of seconds
+ * @returns string. Readable time in seconds
+ */
 function exact_seconds($seconds)
 {
     $days = floor($seconds / (24 * 60 * 60));
@@ -5460,10 +5466,10 @@ function exact_seconds($seconds)
 
 
 /**
-    * Shows errors from a form, if any
-    * @author Kieran Hogg
-    * @returns string. HTML of the form errors stored in the users session
-*/
+ * Shows errors from a form, if any
+ * @author Kieran Hogg
+ * @returns string. HTML of the form errors stored in the users session
+ */
 function show_form_errors($formname)
 {
     if ($_SESSION['formerrors'][$formname])
@@ -5478,21 +5484,21 @@ function show_form_errors($formname)
 
 
 /**
-    * Cleans form errors
-    * @author Kieran Hogg
-    * @returns nothing
-*/
+ * Cleans form errors
+ * @author Kieran Hogg
+ * @returns nothing
+ */
 function clear_form_errors($formname)
-{
+	{
     unset($_SESSION['formerrors'][$formname]);
 }
 
 
 /**
-    * Cleans form data
-    * @author Kieran Hogg
-    * @returns nothing
-*/
+ * Cleans form data
+ * @author Kieran Hogg
+ * @returns nothing
+ */
 function clear_form_data($formname)
 {
     unset($_SESSION['formdata'][$formname]);
@@ -5500,16 +5506,16 @@ function clear_form_data($formname)
 
 
 /**
-    * Returns a localised and translated date
-    * @author Ivan Lucas
-    * @param string $format. date() format
-    * @param int $date.  UNIX timestamp.  Uses 'now' if ommitted
-    * @param bool $utc bool. Is the timestamp being passed as UTC or system time
-                        TRUE = passed as UTC
-                        FALSE = passed as system time
-    * @returns string. An internationised date/time string
-    * @todo  th/st and am/pm maybe?
-*/
+ * Returns a localised and translated date
+ * @author Ivan Lucas
+ * @param string $format. date() format
+ * @param int $date.  UNIX timestamp.  Uses 'now' if ommitted
+ * @param bool $utc bool. Is the timestamp being passed as UTC or system time
+ TRUE = passed as UTC
+ FALSE = passed as system time
+ * @returns string. An internationised date/time string
+ * @todo  th/st and am/pm maybe?
+ */
 function ldate($format, $date = '', $utc = TRUE)
 {
     if ($date == '') $date = $GLOBALS['now'];
@@ -5593,11 +5599,11 @@ function ldate($format, $date = '', $utc = TRUE)
 
 
 /**
-    * Returns an array of open activities/timed tasks for an incident
-    * @author Paul Heaney
-    * @param int $incidentid. Incident ID you want
-    * @returns array - with the task id
-*/
+ * Returns an array of open activities/timed tasks for an incident
+ * @author Paul Heaney
+ * @param int $incidentid. Incident ID you want
+ * @returns array - with the task id
+ */
 function open_activities_for_incident($incientid)
 {
     global $dbLinks, $dbLinkTypes, $dbTasks;
@@ -5644,11 +5650,11 @@ function open_activities_for_incident($incientid)
 
 
 /**
-    * Returns the number of open activities/timed tasks for a site
-    * @author Paul Heaney
-    * @param int $siteid. Site ID you want
-    * @returns int. Number of open activities for the site (0 if non)
-*/
+ * Returns the number of open activities/timed tasks for a site
+ * @author Paul Heaney
+ * @param int $siteid. Site ID you want
+ * @returns int. Number of open activities for the site (0 if non)
+ */
 function open_activities_for_site($siteid)
 {
     global $dbIncidents, $dbContacts;
@@ -5675,19 +5681,20 @@ function open_activities_for_site($siteid)
 
 
 /**
-    * Finds out which scheduled tasks should be run right now
-    * @author Ivan Lucas, Paul Heaney
-**/
+ * Finds out which scheduled tasks should be run right now
+ * @author Ivan Lucas, Paul Heaney
+ * @returns array
+ */
 function schedule_actions_due()
 {
     global $now;
     global $dbScheduler;
 
     $actions = FALSE;
-    $sql = "SELECT * FROM `{$dbScheduler}` WHERE status = 'enabled' AND type = 'interval' ";
+    $sql = "SELECT * FROM `{$dbScheduler}` WHERE `status` = 'enabled' AND type = 'interval' ";
     $sql .= "AND UNIX_TIMESTAMP(start) <= $now AND (UNIX_TIMESTAMP(end) >= $now OR UNIX_TIMESTAMP(end) = 0) ";
-    $sql .= "AND IF(UNIX_TIMESTAMP(lastran) > 0, UNIX_TIMESTAMP(lastran) + `interval` <= $now, UNIX_TIMESTAMP(NOW())) ";
-    $sql .= "AND laststarted <= lastran";
+    $sql .= "AND IF(UNIX_TIMESTAMP(lastran) > 0, UNIX_TIMESTAMP(lastran) + `interval` <= $now, 1=1) ";
+    $sql .= "AND IF(laststarted > 0, laststarted <= lastran, 1=1)";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     if (mysql_num_rows($result) > 0)
@@ -5699,11 +5706,11 @@ function schedule_actions_due()
     }
 
     // Month
-    $sql = "SELECT * FROM `{$dbScheduler}` WHERE status = 'enabled' AND type = 'date' ";
+    $sql = "SELECT * FROM `{$dbScheduler}` WHERE `status` = 'enabled' AND type = 'date' ";
     $sql .= "AND UNIX_TIMESTAMP(start) <= $now AND (UNIX_TIMESTAMP(end) >= $now OR UNIX_TIMESTAMP(end) = 0) ";
     $sql .= "AND ((date_type = 'month' AND (DAYOFMONTH(CURDATE()) > date_offset OR (DAYOFMONTH(CURDATE()) = date_offset AND CURTIME() >= date_time)) ";
     $sql .= "AND DATE_FORMAT(CURDATE(), '%Y-%m') != DATE_FORMAT(lastran, '%Y-%m') ) ) ";  // not run this month
-    $sql .= "AND laststarted <= lastran";
+    $sql .= "AND IF(laststarted > 0, laststarted <= lastran, 1=1)";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     if (mysql_num_rows($result) > 0)
@@ -5715,13 +5722,13 @@ function schedule_actions_due()
     }
 
     // Year TODO CHECK
-    $sql = "SELECT * FROM `{$dbScheduler}` WHERE status = 'enabled' ";
+    $sql = "SELECT * FROM `{$dbScheduler}` WHERE `status` = 'enabled' ";
     $sql .= "AND type = 'date' AND UNIX_TIMESTAMP(start) <= $now ";
     $sql .= "AND (UNIX_TIMESTAMP(end) >= $now OR UNIX_TIMESTAMP(end) = 0) ";
     $sql .= "AND ((date_type = 'year' AND (DAYOFYEAR(CURDATE()) > date_offset ";
     $sql .= "OR (DAYOFYEAR(CURDATE()) = date_offset AND CURTIME() >= date_time)) ";
     $sql .= "AND DATE_FORMAT(CURDATE(), '%Y') != DATE_FORMAT(lastran, '%Y') ) ) ";  // not run this year
-    $sql .= "AND laststarted <= lastran";
+    $sql .= "AND IF(laststarted > 0, laststarted <= lastran, 1=1)";
 
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
@@ -5733,17 +5740,18 @@ function schedule_actions_due()
         }
     }
 
+    debug_log('actions'.print_r($actions,true));
 
     return $actions;
 }
 
 
 /**
-* Marks a schedule action as started
-* @author Paul Heaney
-* @param string $action. Name of scheduled action
-* @return boolean Success of update
-*/
+ * Marks a schedule action as started
+ * @author Paul Heaney
+ * @param string $action. Name of scheduled action
+ * @return boolean Success of update
+ */
 function schedule_action_started($action)
 {
     global $now;
@@ -5764,11 +5772,11 @@ function schedule_action_started($action)
 
 
 /**
-    * Mark a schedule action as done
-    * @author Ivan Lucas
-    * @param string $doneaction. Name of scheduled action
-    * @param bool $success. Was the run successful, TRUE = Yes, FALSE = No
-**/
+ * Mark a schedule action as done
+ * @author Ivan Lucas
+ * @param string $doneaction. Name of scheduled action
+ * @param bool $success. Was the run successful, TRUE = Yes, FALSE = No
+ */
 function schedule_action_done($doneaction, $success = TRUE)
 {
     global $now;
@@ -5779,8 +5787,7 @@ function schedule_action_done($doneaction, $success = TRUE)
         trigger('TRIGGER_SCHEDULER_TASK_FAILED', array('schedulertask' => $doneaction));
     }
 
-    $nowdate = date('Y-m-d H:i:s', $now);
-    $sql = "UPDATE `{$dbScheduler}` SET lastran = '$nowdate' ";
+    $sql = "UPDATE `{$dbScheduler}` SET lastran = FROM_UNIXTIME($now) ";
     if ($success == FALSE) $sql .= ", success=0, status='disabled' ";
     else $sql .= ", success=1 ";
     $sql .= "WHERE action = '{$doneaction}'";
@@ -5796,11 +5803,11 @@ function schedule_action_done($doneaction, $success = TRUE)
 
 
 /**
-* Return an array of contacts allowed to use this contract
-* @author Kieran Hogg
-* @param int $maintid - ID of the contract
-* @returns array of supported contacts, NULL if none
-**/
+ * Return an array of contacts allowed to use this contract
+ * @author Kieran Hogg
+ * @param int $maintid - ID of the contract
+ * @return array of supported contacts, NULL if none
+ **/
 function supported_contacts($maintid)
 {
     global $dbSupportContacts, $dbContacts;
@@ -5823,12 +5830,12 @@ function supported_contacts($maintid)
 
 
 /**
-* Return an array of contracts which the contact is an admin contact for
-* @author Kieran Hogg
-* @param int $maintid - ID of the contract
-* @param int $siteid - The ID of the site
-* @returns array of contract ID's for which the given contactid is an admin contact, NULL if none
-**/
+ * Return an array of contracts which the contact is an admin contact for
+ * @author Kieran Hogg
+ * @param int $maintid - ID of the contract
+ * @param int $siteid - The ID of the site
+ * @return array of contract ID's for which the given contactid is an admin contact, NULL if none
+ */
 function admin_contact_contracts($contactid, $siteid)
 {
     $sql = "SELECT DISTINCT m.id ";
@@ -5851,11 +5858,11 @@ function admin_contact_contracts($contactid, $siteid)
 
 
 /**
-* Return an array of contracts which the contact is an named contact for
-* @author Kieran Hogg
-* @param int $maintid - ID of the contract
-* @returns array of supported contracts, NULL if none
-**/
+ * Return an array of contracts which the contact is an named contact for
+ * @author Kieran Hogg
+ * @param int $maintid - ID of the contract
+ * @return array of supported contracts, NULL if none
+ */
 function contact_contracts($contactid, $siteid, $checkvisible = TRUE)
 {
     $sql = "SELECT DISTINCT m.id AS id
@@ -5882,11 +5889,11 @@ function contact_contracts($contactid, $siteid, $checkvisible = TRUE)
 
 
 /**
-* Return an array of contracts which non-contract contacts can see incidents
-* @author Kieran Hogg
-* @param int $maintid - ID of the contract
-* @returns array of supported contracts, NULL if none
-**/
+ * Return an array of contracts which non-contract contacts can see incidents
+ * @author Kieran Hogg
+ * @param int $maintid - ID of the contract
+ * @return array of supported contracts, NULL if none
+ **/
 function all_contact_contracts($contactid, $siteid)
 {
     $sql = "SELECT DISTINCT m.id AS id
@@ -5906,11 +5913,11 @@ function all_contact_contracts($contactid, $siteid)
 
 
 /**
-* Checks is a given username is unique
-* @author Kieran Hogg
-* @param string $username - username
-* @returns bool TRUE if valid, FALSE if not
-**/
+ * Checks is a given username is unique
+ * @author Kieran Hogg
+ * @param string $username - username
+ * @return bool TRUE if valid, FALSE if not
+ */
 function valid_username($username)
 {
     $username = cleanvar($username);
@@ -5932,10 +5939,10 @@ function valid_username($username)
 
 
 /**
-* Update the current session id with a newly generated one
-* @author Ivan Lucas
-* @note Wrap the php function for different versions of php
-**/
+ * Update the current session id with a newly generated one
+ * @author Ivan Lucas
+ * @note Wrap the php function for different versions of php
+ */
 function session_regenerate()
 {
     if (function_exists('session_regenerate_id'))
@@ -5947,10 +5954,10 @@ function session_regenerate()
 
 
 /**
-* Finds the software associated with a contract
-* @author Ivan Lucas
-* @note Wrap the php function for different versions of php
-**/
+ * Finds the software associated with a contract
+ * @author Ivan Lucas
+ * @note Wrap the php function for different versions of php
+ */
 function contract_software()
 {
     $contract = intval($contract);
@@ -5985,12 +5992,12 @@ function contract_software()
 
 
 /**
-* HTML for an ajax help link
-* @author Ivan Lucas
-* @param string $context. The base filename of the popup help file in
-                          help/en-GB/ (without the .txt extension)
-* @returns string HTML
-**/
+ * HTML for an ajax help link
+ * @author Ivan Lucas
+ * @param string $context. The base filename of the popup help file in
+ help/en-GB/ (without the .txt extension)
+ * @return string HTML
+ */
 function help_link($context)
 {
     global $strHelpChar;
@@ -6006,12 +6013,12 @@ function help_link($context)
 
 
 /**
-* Function to return an user error message when a file fails to upload
-* @author Paul Heaney
-* @param errorcode The error code from $_FILES['file']['error']
-* @param name The file name which was uploaded from $_FILES['file']['name']
-* @return String containing the error message (in HTML)
-*/
+ * Function to return an user error message when a file fails to upload
+ * @author Paul Heaney
+ * @param errorcode The error code from $_FILES['file']['error']
+ * @param name The file name which was uploaded from $_FILES['file']['name']
+ * @return String containing the error message (in HTML)
+ */
 function get_file_upload_error_message($errorcode, $name)
 {
     $str = "<div class='detailinfo'>\n";
@@ -6036,12 +6043,11 @@ function get_file_upload_error_message($errorcode, $name)
 
 
 /**
-* Function to produce a user readable file size i.e 2048 bytes 1KB etc
-* @author Paul Heaney
-* @param filesize - filesize in bytes
-* @return String filesize in readable format
-*
-*/
+ * Function to produce a user readable file size i.e 2048 bytes 1KB etc
+ * @author Paul Heaney
+ * @param filesize - filesize in bytes
+ * @return String filesize in readable format
+ */
 function readable_file_size($filesize)
 {
     global $strBytes, $strKBytes, $strMBytes, $strGBytes, $strTBytes;
@@ -6059,13 +6065,13 @@ function readable_file_size($filesize)
 
 
 /**
-* Return the html of contract detatils
-* @author Kieran Hogg
-* @param int $maintid - ID of the contract
-* @param string $mode. 'internal' or 'external'
-* @returns array of supported contracts, NULL if none
-* @todo FIXME not quite generic enough for a function ?
-**/
+ * Return the html of contract detatils
+ * @author Kieran Hogg
+ * @param int $maintid - ID of the contract
+ * @param string $mode. 'internal' or 'external'
+ * @return array of supported contracts, NULL if none
+ * @todo FIXME not quite generic enough for a function ?
+ */
 function contract_details($id, $mode='internal')
 {
     global $CONFIG, $iconset, $dbMaintenance, $dbSites, $dbResellers, $dbLicenceTypes, $now;
@@ -6340,13 +6346,13 @@ function contract_details($id, $mode='internal')
 
 
 /**
-* Uploads a file
-* @author Kieran Hogg
-* @param mixed $file file to upload
-* @param int $incidentd
-* @returns string path of file
-* @todo FIXME this function doesn't seem to make use of $updateid and is never called, is it still used?'
-**/
+ * Uploads a file
+ * @author Kieran Hogg
+ * @param mixed $file file to upload
+ * @param int $incidentd
+ * @return string path of file
+ * @todo FIXME this function doesn't seem to make use of $updateid and is never called, is it still used?'
+ */
 function upload_file($file, $incidentid, $updateid, $type='public')
 {
     global $CONFIG, $now;
@@ -6410,15 +6416,15 @@ function upload_file($file, $incidentid, $updateid, $type='public')
 
 
 /**
-* Function to return a HTML table row with two columns.
-* Giving radio boxes for groups and if the level is 'management' then you are able to view the users (de)selcting
-* @param string $title - text to go in the first column
-* @param string $level either management or engineer, management is able to (de)select users
-* @param int $groupid  Defalt group to select
-* @param string $type - Type of buttons to use either radio or checkbox
-* @return table row of format <tr><th /><td /></tr>
-* @author Paul Heaney
-*/
+ * Function to return a HTML table row with two columns.
+ * Giving radio boxes for groups and if the level is 'management' then you are able to view the users (de)selcting
+ * @param string $title - text to go in the first column
+ * @param string $level either management or engineer, management is able to (de)select users
+ * @param int $groupid  Defalt group to select
+ * @param string $type - Type of buttons to use either radio or checkbox
+ * @return table row of format <tr><th /><td /></tr>
+ * @author Paul Heaney
+ */
 function group_user_selector($title, $level="engineer", $groupid, $type='radio')
 {
     global $dbUsers, $dbGroups;
@@ -6492,12 +6498,12 @@ function group_user_selector($title, $level="engineer", $groupid, $type='radio')
 
 
 /**
-* Output html for the 'time to next action' box
-* Used in add incident and update incident
-* @return $html string html to output
-* @author Kieran Hogg
-* @TODO populate $id
-*/
+ * Output html for the 'time to next action' box
+ * Used in add incident and update incident
+ * @return $html string html to output
+ * @author Kieran Hogg
+ * @TODO populate $id
+ */
 function show_next_action()
 {
     global $now, $strAM, $strPM;
@@ -6580,13 +6586,13 @@ function show_next_action()
 
 
 /**
-* Output the html for a KB article
-*
-* @param int $id ID of the KB article
-* @param string $mode whether this is internal or external facing, defaults to internal
-* @returns string $html kb article html
-* @author Kieran Hogg
-*/
+ * Output the html for a KB article
+ *
+ * @param int $id ID of the KB article
+ * @param string $mode whether this is internal or external facing, defaults to internal
+ * @return string $html kb article html
+ * @author Kieran Hogg
+ */
 function kb_article($id, $mode='internal')
 {
     global $CONFIG, $iconset;
@@ -6753,15 +6759,16 @@ function kb_article($id, $mode='internal')
 }
 
 /**
-* Output the html for the edit site form
-*
-* @param int $site ID of the site
-* @param string $mode whether this is internal or external facing, defaults to internal
-* @return string $html edit site form html
-* @author Kieran Hogg
-*/
+ * Output the html for the edit site form
+ *
+ * @param int $site ID of the site
+ * @param string $mode whether this is internal or external facing, defaults to internal
+ * @return string $html edit site form html
+ * @author Kieran Hogg
+ */
 function show_edit_site($site, $mode='internal')
 {
+    global $CONFIG;
     $sql = "SELECT * FROM `{$GLOBALS['dbSites']}` WHERE id='$site' ";
     $siteresult = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
@@ -6850,13 +6857,13 @@ function show_edit_site($site, $mode='internal')
 
 
 /**
-* Output the html for an add contact form
-*
-* @param int $siteid - the site you want to add the contact to
-* @param string $mode - whether this is internal or external facing, defaults to internal
-* @return string $html add contact form html
-* @author Kieran Hogg
-*/
+ * Output the html for an add contact form
+ *
+ * @param int $siteid - the site you want to add the contact to
+ * @param string $mode - whether this is internal or external facing, defaults to internal
+ * @return string $html add contact form html
+ * @author Kieran Hogg
+ */
 function show_add_contact($siteid = 0, $mode = 'internal')
 {
     global $CONFIG;
@@ -7020,10 +7027,10 @@ function show_add_contact($siteid = 0, $mode = 'internal')
 
 
 /**
-* Procceses a new contact
-*
-* @author Kieran Hogg
-*/
+ * Procceses a new contact
+ *
+ * @author Kieran Hogg
+ */
 function process_add_contact($mode = 'internal')
 {
     global $now, $CONFIG, $dbContacts, $sit;
@@ -7202,12 +7209,12 @@ function process_add_contact($mode = 'internal')
 
 
 /**
-* Outputs the name of a KB article, used for triggers
-*
-* @param int $kbid ID of the KB article
-* @return string $name kb article name
-* @author Kieran Hogg
-*/
+ * Outputs the name of a KB article, used for triggers
+ *
+ * @param int $kbid ID of the KB article
+ * @return string $name kb article name
+ * @author Kieran Hogg
+ */
 function kb_name($kbid)
 {
     $kbid = intval($kbid);
@@ -7255,12 +7262,12 @@ function application_url()
 
 
 /**
-* Outputs the product name of a contract
-*
-* @param int $maintid ID of the contract
-* @return string the name of the product
-* @author Kieran Hogg
-*/
+ * Outputs the product name of a contract
+ *
+ * @param int $maintid ID of the contract
+ * @return string the name of the product
+ * @author Kieran Hogg
+ */
 function contract_product($maintid)
 {
     $maintid = intval($maintid);
@@ -7280,12 +7287,12 @@ function contract_product($maintid)
 
 
 /**
-* Outputs the contract's site name
-*
-* @param int $maintid ID of the contract
-* @return string name of the site
-* @author Kieran Hogg
-*/
+ * Outputs the contract's site name
+ *
+ * @param int $maintid ID of the contract
+ * @return string name of the site
+ * @author Kieran Hogg
+ */
 function contract_site($maintid)
 {
     $maintid = intval($maintid);
@@ -7306,12 +7313,12 @@ function contract_site($maintid)
 
 
 /**
-* Sets up default triggers for new users or upgraded users
-*
-* @param int $userid ID of the user
-* @return bool TRUE on success, FALSE if not
-* @author Kieran Hogg
-*/
+ * Sets up default triggers for new users or upgraded users
+ *
+ * @param int $userid ID of the user
+ * @return bool TRUE on success, FALSE if not
+ * @author Kieran Hogg
+ */
 function setup_user_triggers($userid)
 {
     $return = TRUE;
@@ -7352,12 +7359,12 @@ function setup_user_triggers($userid)
 
 
 /**
-* Returns the SLA ID of a contract
-*
-* @param int $maintid ID of the contract
-* @return int ID of the SLA
-* @author Kieran Hogg
-*/
+ * Returns the SLA ID of a contract
+ *
+ * @param int $maintid ID of the contract
+ * @return int ID of the SLA
+ * @author Kieran Hogg
+ */
 function contract_slaid($maintid)
 {
     $maintid = intval($maintid);
@@ -7367,12 +7374,12 @@ function contract_slaid($maintid)
 
 
 /**
-* Returns the salesperson ID of a site
-*
-* @param int $siteid ID of the site
-* @return int ID of the salesperson
-* @author Kieran Hogg
-*/
+ * Returns the salesperson ID of a site
+ *
+ * @param int $siteid ID of the site
+ * @return int ID of the salesperson
+ * @author Kieran Hogg
+ */
 function site_salespersonid($siteid)
 {
     $siteid = intval($siteid);
@@ -7382,12 +7389,12 @@ function site_salespersonid($siteid)
 
 
 /**
-* Returns the salesperson's name of a site
-*
-* @param int $siteid ID of the site
-* @return string name of the salesperson
-* @author Kieran Hogg
-*/
+ * Returns the salesperson's name of a site
+ *
+ * @param int $siteid ID of the site
+ * @return string name of the salesperson
+ * @author Kieran Hogg
+ */
 function site_salesperson($siteid)
 {
     $siteid = intval($siteid);
@@ -7397,9 +7404,9 @@ function site_salesperson($siteid)
 
 
 /**
-* Function to return currently running SiT! version
-* @return String - Currently running application version
-*/
+ * Function to return currently running SiT! version
+ * @return String - Currently running application version
+ */
 function application_version_string()
 {
     global $application_version_string;
@@ -7408,10 +7415,10 @@ function application_version_string()
 
 
 /**
-* Returns the currently running schema version
-* @author Paul Heaney
-* @return String - currently running schema version
-*/
+ * Returns the currently running schema version
+ * @author Paul Heaney
+ * @return String - currently running schema version
+ */
 function database_schema_version()
 {
     $return = '';
@@ -7435,12 +7442,12 @@ function database_schema_version()
 
 
 /**
-* Returns the contacts's portal username
-*
-* @param int $userid ID of the contact
-* @return string username
-* @author Kieran Hogg
-*/
+ * Returns the contacts's portal username
+ *
+ * @param int $userid ID of the contact
+ * @return string username
+ * @author Kieran Hogg
+ */
 function contact_username($userid)
 {
     $userid = intval($userid);
@@ -7449,12 +7456,12 @@ function contact_username($userid)
 
 
 /**
-* Populates $_SESSION['syslang], system language strings
-*
-* @author Kieran Hogg
-*/
+ * Populates $_SESSION['syslang], system language strings
+ *
+ * @author Kieran Hogg
+ */
 function populate_syslang()
-{
+	{
     global $CONFIG;
     // Populate $SYSLANG with system lang
     $file = APPLICATION_I18NPATH . "{$CONFIG['default_i18n']}.inc.php";
@@ -7488,12 +7495,12 @@ function populate_syslang()
 
 
 /**
-* Outputs a contact's contract associate, if the viewing user is allowed
-* @author Kieran Hogg
-* @param int $userid ID of the contact
-* @retval string output html
-* @todo TODO should this be renamed, it has nothing to do with users
-*/
+ * Outputs a contact's contract associate, if the viewing user is allowed
+ * @author Kieran Hogg
+ * @param int $userid ID of the contact
+ * @return string output html
+ * @todo TODO should this be renamed, it has nothing to do with users
+ */
 function user_contracts_table($userid, $mode = 'internal')
 {
     global $now, $CONFIG, $sit;
@@ -7637,13 +7644,13 @@ if (is_array($CONFIG['plugins']))
 
 
 /**
-  * Register a plugin context handler function
-  * @author Ivan Lucas
-  * @param string $context - A valid plugin context
-  * @param string $action - Your plugin context handler function name
-  * @note see http://sitracker.org/wiki/CreatingPlugins for help and a list
-  *  of contexts
-*/
+ * Register a plugin context handler function
+ * @author Ivan Lucas
+ * @param string $context - A valid plugin context
+ * @param string $action - Your plugin context handler function name
+ * @note see http://sitracker.org/wiki/CreatingPlugins for help and a list
+ *  of contexts
+ */
 function plugin_register($context, $action)
 {
     global $PLUGINACTIONS;
@@ -7652,16 +7659,16 @@ function plugin_register($context, $action)
 
 
 /**
-    * Call a plugin function that handles a given context
-    * @author Ivan Lucas
-    * @param string $context - Plugin context,
-    * @param string $optparms - Optional parameters
-    * @retval mixed - Whatever the plugin function returns
-    * @note This function calls a plugin function or multiple plugin
-    *  functions, if they exist.
-    *  see http://sitracker.org/wiki/CreatingPlugins for help and a list
-    *  of contexts
-*/
+ * Call a plugin function that handles a given context
+ * @author Ivan Lucas
+ * @param string $context - Plugin context,
+ * @param string $optparms - Optional parameters
+ * @return mixed - Whatever the plugin function returns
+ * @note This function calls a plugin function or multiple plugin
+ *  functions, if they exist.
+ *  see http://sitracker.org/wiki/CreatingPlugins for help and a list
+ *  of contexts
+ */
 function plugin_do($context, $optparams = FALSE)
 {
     global $PLUGINACTIONS;
@@ -7700,11 +7707,11 @@ function plugin_do($context, $optparams = FALSE)
 
 
 /**
-* Function passed a day, month and year to identify if this day is defined as a public holiday
-* @author Paul Heaney
-* FIXME this is horribily inefficient, we should load a table ONCE with all the public holidays
-        and then just check that with this function
-*/
+ * Function passed a day, month and year to identify if this day is defined as a public holiday
+ * @author Paul Heaney
+ * FIXME this is horribily inefficient, we should load a table ONCE with all the public holidays
+ and then just check that with this function
+ */
 function is_day_bank_holiday($day, $month, $year)
 {
     global $dbHolidays;
@@ -7725,13 +7732,13 @@ function is_day_bank_holiday($day, $month, $year)
 
 
 /**
-* Outputs a table or csv file based on csv-based array
-* @author Kieran Hogg
-* @param array $data Array of data, see @note for format
-* @param string $ouput Whether to show a table or create a csv file
-* @return string $html The html to produce the output
-* @note format: $array[] = 'Colheader1,Colheader2'; $array[] = 'data1,data2';
-*/
+ * Outputs a table or csv file based on csv-based array
+ * @author Kieran Hogg
+ * @param array $data Array of data, see @note for format
+ * @param string $ouput Whether to show a table or create a csv file
+ * @return string $html The html to produce the output
+ * @note format: $array[] = 'Colheader1,Colheader2'; $array[] = 'data1,data2';
+ */
 function create_report($data, $output = 'table', $filename = 'report.csv')
 {
     if ($output == 'table')
@@ -7788,11 +7795,11 @@ function create_report($data, $output = 'table', $filename = 'report.csv')
 
 
 /**
-* HTML for an alphabetical index of links
-* @author Ivan Lucas
-* @param string $baseurl start of a URL, the letter will be appended to this
-* @returns HTML
-*/
+ * HTML for an alphabetical index of links
+ * @author Ivan Lucas
+ * @param string $baseurl start of a URL, the letter will be appended to this
+ * @return HTML
+ */
 function alpha_index($baseurl = '#')
 {
     global $i18nAlphabet;
@@ -7814,11 +7821,11 @@ function alpha_index($baseurl = '#')
 
 
 /**
-    * Converts emoticon text to HTML
-    * @author Kieran Hogg
-    * @param string $text. Text with smileys in it
-    * @returns string HTML
-*/
+ * Converts emoticon text to HTML
+ * @author Kieran Hogg
+ * @param string $text. Text with smileys in it
+ * @return string HTML
+ */
 function emoticons($text)
 {
     global $CONFIG;
@@ -7941,7 +7948,7 @@ function create_temp_incoming($updateid, $from, $subject, $emailfrom,
  * Detect whether an array is associative
  * @param array $array
  * @note From http://uk.php.net/manual/en/function.is-array.php#77744
-**/
+ */
 function is_assoc($array)
 {
     return is_array($array) && count($array) !== array_reduce(array_keys($array), 'is_assoc_callback', 0);
@@ -7968,7 +7975,7 @@ function is_assoc_callback($a, $b)
  * @param string $setupvar The setup variable key name
  * @param bool $showvarnames Whether to display the config variable name
  * @returns string HTML
-**/
+ */
 function cfgVarInput($setupvar, $showvarnames = FALSE)
 {
     global $CONFIG, $CFGVAR;
@@ -8151,7 +8158,7 @@ function cfgVarInput($setupvar, $showvarnames = FALSE)
  * @param array $setupvars. An array of setup variables $setupvars['setting'] = 'foo';
  * @todo  TODO, need to make setup.php use this  INL 5Dec08
  * @author Ivan Lucas
-**/
+ */
 function cfgSave($setupvars)
 {
     global $dbConfig;
@@ -8168,7 +8175,7 @@ function cfgSave($setupvars)
 /**
  * HTML for a hyperlink to hide/reveal a password field
  * @author Ivan Lucas
-**/
+ */
 function password_reveal_link($id)
 {
     $html = "<a href=\"javascript:password_reveal('$id')\" id=\"link{$id}\">{$GLOBALS['strReveal']}</a>";
@@ -8216,7 +8223,7 @@ function num_unread_emails()
  * @param $id int ID of the KB article
  * @param $mode string 'public' for portal users, 'private' for internal users
  * @return bool Whether we are allowed to see it or not
-*/
+ */
 function is_kb_article($id, $mode)
 {
     $rtn = FALSE;

@@ -102,7 +102,7 @@ $win = cleanvar($_REQUEST['win']);
 
 if (!empty($incomingid) AND empty($updateid)) $updateid = db_read_column('updateid', $dbTempIncoming, $incomingid);
 
-if (empty($action) OR $action=='showform')
+if (empty($action) OR $action == 'showform')
 {
     $pagescripts = array('scriptaculous/scriptaculous.js','AutoComplete.js');
     include (APPLICATION_INCPATH . 'htmlheader.inc.php');

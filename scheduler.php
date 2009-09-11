@@ -239,7 +239,7 @@ switch ($_REQUEST['mode'])
         {
             echo "<table align='center'>";
             echo "<tr><th>{$strAction}</th><th>{$strStartDate}</th><th>{$strInterval}</th>";
-            echo "<th>{$strEndDate}</th><th>{$strLastRan}</th><th>Next Run</th></tr>\n";
+            echo "<th>{$strEndDate}</th><th>{$strLastRan}</th><th>Next Run</th></tr>\n"; // i18n Next Run
             $shade = 'shade1';
             while ($schedule = mysql_fetch_object($result))
             {
@@ -414,10 +414,19 @@ switch ($_REQUEST['mode'])
 
                 echo "</td>";
                 echo "</tr>";
-                if ($shade == 'shade1') $shade = 'shade2';
+                if ($shade == 'eshade1') $shade = 'shade2';
                 else $shade = 'shade1';
             }
             echo "</table>\n";
+
+            // Legend
+            echo "<br />";
+            echo "<table class='incidentkey'><tr>";
+            echo "<td class='shade1'>{$strOK}</td>";
+            echo "<td class='notice'>{$strDueNow}</td>";
+            echo "<td class='expired'>{$strDisabled}</td>";
+            echo "<td class='critical'>{$strFailed}</td>";
+            echo "</tr></table>";
 
             // Debug time issues
             // Temporary debugging output, doesn't need i18n
