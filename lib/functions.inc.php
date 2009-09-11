@@ -6499,11 +6499,12 @@ function group_user_selector($title, $level="engineer", $groupid, $type='radio')
 /**
  * Output html for the 'time to next action' box
  * Used in add incident and update incident
+ * @param string $formid. HTML ID of the form containing the controls
  * @return $html string html to output
  * @author Kieran Hogg
  * @TODO populate $id
  */
-function show_next_action()
+function show_next_action($formid)
 {
     global $now, $strAM, $strPM;
     $html = "{$GLOBALS['strPlaceIncidentInWaitingQueue']}<br />";
@@ -6563,7 +6564,7 @@ function show_next_action()
     $html .= "<div id='ttnadate' style='display: none;'>";
     $html .= "<input name='date' id='timetonextaction_date' size='10' value='{$date}' ";
     $html .= "onclick=\"$('ttna_date').checked = true;\" /> ";
-    $html .= date_picker('updateform.timetonextaction_date');
+    $html .= date_picker("{$formid}.timetonextaction_date");
     $html .= " <select name='timeoffset' id='timeoffset' ";
     $html .= "onclick=\"$('ttna_date').checked = true;\" >";
     $html .= "<option value='0'></option>";

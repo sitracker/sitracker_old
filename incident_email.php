@@ -307,7 +307,7 @@ switch ($step)
         echo "</td></tr>\n";
         echo "<tr><th>{$strTimeToNextAction}:</th>";
         echo "<td>";
-        echo show_next_action();
+        echo show_next_action('updateform');
         echo "</td>";
         echo "<br />";
         echo "</td></tr>";
