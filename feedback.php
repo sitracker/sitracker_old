@@ -371,7 +371,7 @@ body { font:10pt Arial, Helvetica, sans-serif; }
         echo "<title>{$strThankYou}</title>\n";
         echo "</head>\n";
         echo "<body>\n";
-        echo "<div id='pagecontent'><h1>{$strThankYou}</h1>";
+        echo "<div id='pagecontent'><h2>{$strThankYou}</h2>";
         echo "<p>{$strThankYouCompleteForm}</p>";
         //echo "<!-- \n {$sqltext} \n\n\n {$debugtext} -->";
         echo "</div>\n</body>\n";
@@ -413,9 +413,10 @@ body { font:10pt Arial, Helvetica, sans-serif; }
             while ($form = mysql_fetch_object($result))
             {
                 echo "<form action='feedback.php' method='post'>\n";
-                echo "<h1>{$form->name}</h1>\n";
+                echo "<h2>{$form->name}</h2>\n";
                 echo "<p>{$strRelatingToIncident} <strong>#{$incidentid}</strong> &mdash; <strong>".incident_title($incidentid)."</strong><br />";
                 echo sprintf($strOpenedbyXonY, contact_realname(incident_contact($incidentid)), ldate($CONFIG['dateformat_date'],db_read_column('opened', $dbIncidents, $incidentid)));
+                echo ' &nbsp; ';
                 echo sprintf($strClosedOnX, ldate($CONFIG['dateformat_date'],db_read_column('closed', $dbIncidents, $incidentid))).".</p>";
 
                 if (!empty($_REQUEST['error']))
