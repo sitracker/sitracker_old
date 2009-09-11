@@ -7862,7 +7862,7 @@ function emoticons($text)
 
 
 /**
- * Inserts a new update
+ * Inserts a new incident update
  * @param int $incidentid ID of the incident to add the update to
  * @param string $text The text of the update
  * @param enum $type (Optional) Update type (Default: 'default'), types:
