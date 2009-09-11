@@ -433,7 +433,7 @@ else
 
             //notify related inicdents this has been closed
             $sql = "SELECT distinct (relatedid) AS relateid FROM `{$dbRelatedIncidents}` AS r, `{$dbIncidents}` AS i WHERE incidentid = '$id' ";
-            $sql .= "AND i.id = r.relatedid AND i.status != 2";
+            $sql .= "AND i.id = r.relatedid AND i.status != ".STATUS_CLOSED." AND i.status != ".STATUS_CLOSING;
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
 
@@ -445,7 +445,7 @@ else
             }
 
             $sql = "SELECT distinct (incidentid) AS relateid FROM `{$dbRelatedIncidents}` AS r, `{$dbIncidents}` AS i WHERE relatedid = '$id' ";
-            $sql .= "AND i.id = r.incidentid AND i.status != 2";
+            $sql .= "AND i.id = r.incidentid AND i.status != ".STATUS_CLOSED." AND i.status != ".STATUS_CLOSING;
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
 
@@ -468,7 +468,7 @@ else
                         $result = mysql_query($sql);
                         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
-                        $sql = "UPDATE `{$dbIncidents}` SET status = 1, lastupdated = '{$now}', timeofnextaction = '0' ";
+                        $sql = "UPDATE `{$dbIncidents}` SET status = ".STATUS_ACTIVE.", lastupdated = '{$now}', timeofnextaction = '0' ";
                         $sql .= "WHERE id = '{$relatedid}' ";
                         $result = mysql_query($sql);
                         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
