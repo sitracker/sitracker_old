@@ -46,20 +46,12 @@ else
 $end = $start + $perpage;
 $filter = array('start' => $start, 'view' => $view);
 
-// $sql = "SELECT k.*, s.name FROM `{$dbKBArticles}` AS k,
-//                                $dbKBSoftware,
-//                                 `{$dbSoftware}` as s
-//         WHERE ((k.docid = kbs.docid AND kbs.softwareid = s.id) OR 1=1) AND k.distribution = 'public' ";
-// $sql = "
-// SELECT k.*, s.name FROM `{$dbKBArticles}` AS k,
-// LEFT OUTER JOIN `$dbKBSoftware`, `{$dbSoftware}`
-// ON k.docid = kbs.docid AND kbs.softwareid = s.id ";
-
-
-$sql = "SELECT k.*, s.name FROM `{$dbKBArticles}` AS k, `{$dbSoftware}` as s ";
+$sql = "SELECT k.*, s.name FROM (`{$dbKBArticles}` AS k) ";
 $sql .= "LEFT OUTER JOIN `{$dbKBSoftware}` as kbs ";
+$sql .= "ON kbs.docid = k.docid ";
+$sql .= "LEFT JOIN `{$dbSoftware}` as s ";
 $sql .= "ON kbs.softwareid=s.id ";
-$sql .= "WHERE (k.docid = kbs.docid OR 1=1) AND k.distribution='public' ";
+$sql .= "WHERE k.distribution='public' ";
 if ($CONFIG['portal_kb_enabled'] != 'Public')
 {
     if ($view != 'all')
@@ -103,6 +95,8 @@ else
     $sql .= " ORDER BY k.docid DESC ";
 }
 $sql .= " LIMIT {$start}, {$perpage} ";
+
+echo $sql;
 
 if ($result = mysql_query($sql))
 {
@@ -175,6 +169,7 @@ if ($result = mysql_query($sql))
 }
 else
 {
+    if (mysql_error()) trigger_error(mysql_error(), E_USER_WARNING);
     echo "<p align='center'>{$strNoRecords}</p>";
 }
 
