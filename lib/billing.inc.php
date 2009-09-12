@@ -1124,8 +1124,8 @@ function contract_service_table($contractid, $billing)
         $html .= "</tr>\n";
         while ($service = mysql_fetch_object($result))
         {
-            $service->startdate = mysql2date($service->startdate);
-            $service->enddate = mysql2date($service->enddate);
+            $service->startdate = mysql2date($service->startdate . '09:00');
+            $service->enddate = mysql2date($service->enddate . '17:00');
             $service->lastbilled = mysql2date($service->lastbilled);
             $html .= "<tr class='{$shade}'>";
 
@@ -1191,7 +1191,6 @@ function contract_service_table($contractid, $billing)
                     $span .= "<strong>{$GLOBALS['strFreeOfCharge']}</strong>";
                 }
 
-    
                 $html .= "<td><a href='transactions.php?serviceid={$service->serviceid}' class='info'>".icon('billing', 16);
                 if (!empty($span))
                 {
