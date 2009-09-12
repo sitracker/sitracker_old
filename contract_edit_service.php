@@ -53,7 +53,7 @@ switch ($mode)
             {
                 $obj = mysql_fetch_object($result);
                 $timed = is_contract_timed($contractid);
-                
+
                 echo "<h2>{$strEditService}</h2>";
 
                 echo "<form id='serviceform' name='serviceform' action='{$_SERVER['PHP_SELF']}' method='post' onsubmit='return confirm_submit(\"{$strAreYouSureMakeTheseChanges}\");'>";
@@ -163,7 +163,7 @@ switch ($mode)
 
         break;
     case 'doupdate':
-        $sucess = true;
+        $success = true;
         if (user_permission($sit[2], 80) == FALSE)
         {
             header("Location: {$CONFIG['application_webpath']}noaccess.php?id=80");
@@ -218,13 +218,13 @@ switch ($mode)
             if (mysql_error())
             {
                 trigger_error(mysql_error(),E_USER_ERROR);
-                $sucess = false;
+                $success = false;
             }
 
             if (mysql_affected_rows() < 1)
             {
                 trigger_error("Insert failed",E_USER_ERROR);
-                $sucess = false;
+                $success = false;
             }
 
             $sql = "SELECT expirydate FROM `{$dbMaintenance}` WHERE id = {$contractid}";
@@ -244,20 +244,20 @@ switch ($mode)
                     if (mysql_error())
                     {
                         trigger_error(mysql_error(),E_USER_ERROR);
-                        $sucess = false;
+                        $success = false;
                     }
 
                     if (mysql_affected_rows() < 1)
                     {
                         trigger_error("Expiry of contract update failed",E_USER_ERROR);
-                        $sucess = false;
+                        $success = false;
                     }
                 }
             }
 
-            if ($sucess)
+            if ($success)
             {
-                html_redirect("{$CONFIG['application_webpath']}contract_details.php?id={$contractid}", TRUE, $strSuccessfullyUpdated);
+                html_redirect("{$CONFIG['application_webpath']}contract_details.php?id={$contractid}", TRUE);
             }
             else
             {
@@ -316,7 +316,7 @@ switch ($mode)
             }
             else
             {
-	                echo "</td></tr>";
+                echo "</td></tr>";
             }
 
             echo "<tr><th>{$strAmountToEditBy}</th><td><input type='text' name='amount' id='amount' /></td></tr>";
