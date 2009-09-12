@@ -96,8 +96,6 @@ else
 }
 $sql .= " LIMIT {$start}, {$perpage} ";
 
-echo $sql;
-
 if ($result = mysql_query($sql))
 {
     $countresult = mysql_query($countsql);
