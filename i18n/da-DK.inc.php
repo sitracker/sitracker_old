@@ -487,6 +487,7 @@ $strEmailOK = 'Email OK';
 $strEmailReceivedAbbrev = 'Email Rx';
 $strEmailreceivedby = 'Email modtaget af %s';
 $strEmailsentby = 'Email sendt af %s';
+$strEmailSendFeedbackDesc = 'Sender en forespørgsel til ejeren af hændelsen, beder om at udfylde en feedback form.';
 $strEmailSent = 'Email Sendt';
 $strEmailSettings = 'Email indstillinger';
 $strEmailSignature = 'Email signatur';
