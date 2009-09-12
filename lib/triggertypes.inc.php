@@ -343,7 +343,7 @@ array('description' => $strCurrentLanguage,
 $ttvararray['{feedbackurl}'] =
 array('description' => $strFeedbackURL,
       'requires' => 'incidentid',
-      'replacement' => 'application_url()."feedback.php?ax=".feedback_hash($CONFIG[\'feedback_form\'], incident_owner($paramarray[\'incidentid\']), $paramarray[\'incidentid\']);'
+      'replacement' => 'application_url()."feedback.php?ax=".feedback_hash($CONFIG[\'feedback_form\'], incident_contact($paramarray[\'incidentid\']), $paramarray[\'incidentid\']);'
       );
 
 $ttvararray['{globalsignature}'] =

@@ -261,7 +261,7 @@ else
     }
     echo "</td></tr>\n";
 
-    if ( $_SESSION['contact_source'] != 'sit' )
+    if ( $_SESSION['contact_source'] == 'sit' )
     {
         echo "<tr><th>{$strNewPassword}</th><td><input name='newpassword' value='' type='password' /></td></tr>\n";
         echo "<tr><th>{$strRepeat}</th><td><input name='newpassword2' value='' type='password' /></td></tr>\n";
