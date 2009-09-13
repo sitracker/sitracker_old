@@ -221,12 +221,6 @@ switch ($mode)
                 $success = false;
             }
 
-            if (mysql_affected_rows() < 1)
-            {
-                trigger_error("Insert failed",E_USER_ERROR);
-                $success = false;
-            }
-
             $sql = "SELECT expirydate FROM `{$dbMaintenance}` WHERE id = {$contractid}";
 
             $result = mysql_query($sql);
