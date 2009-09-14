@@ -111,8 +111,16 @@ echo "<a href=\"mailto:{$incident->email}\">{$incident->email}</a><br />\n";
 if ($incident->ccemail != '') echo "CC: <a href=\"mailto:{$incident->ccemail}\">{$incident->ccemail}</a><br />\n";
 if ($incident->phone!='' OR $incident->phone!='')
 {
-    if ($incident->phone != '') echo "{$strTel}: {$incident->phone}";
-    if ($incident->mobile != '') echo " {$strMob}: {$incident->mobile}";
+    if ($incident->phone != '')
+    {
+        echo "{$strTel}: {$incident->phone} ";
+        plugin_do('incident_details_phone');
+    }
+    if ($incident->mobile != '')
+    {
+        echo " {$strMob}: {$incident->mobile} ";
+        plugin_do('incident_details_mobile');
+    }
     echo "<br />\n";
 }
 if ($incident->externalid != '' OR $incident->escalationpath > 0)
