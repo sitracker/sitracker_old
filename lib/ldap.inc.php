@@ -79,7 +79,7 @@ define ('LDAP_AD_ADDRESS1', 'streetAddress');
 define ('LDAP_AD_CITY', 'l');
 define ('LDAP_AD_COUNTY', 'st');
 define ('LDAP_AD_POSTCODE', 'postalCode');
-define ('LDAP_AD_COURTESYTITLE', 'generationQualifier'); // Doesn't seem to have'
+define ('LDAP_AD_COURTESYTITLE', 'personalTitle');
 /*
  * NOTE: Given the way LoginDisabled works in AD this will only work in a limited number of circumstances
  * It will only work on NORMAL_ACCOUNT + ACCOUNTDISABLED
