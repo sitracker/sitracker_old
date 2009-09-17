@@ -199,7 +199,7 @@ function authenticate($username, $password)
     elseif (mysql_num_rows($result) > 1)
     {
     	// Multiple this should NEVER happen
-        trigger_error($GLOBALS['strUsernameNotUnique'], E_USER_ERROR);
+        trigger_error("Username not unique", E_USER_ERROR);
         $toReturn = false;
     }
     else
@@ -215,9 +215,14 @@ function authenticate($username, $password)
     if ($toReturn)
     {
     	journal(CFG_LOGGING_MAX,'User Authenticated',"{$username} authenticated from " . getenv('REMOTE_ADDR'),CFG_JOURNAL_LOGIN,0);
+		debug_log ("Authenticate: User authenticated",TRUE);
+	}
+	else
+	{
+		debug_log ("authenticate: User NOT authenticated",TRUE);
     }
 
-    debug_log ("authenticate returning {$toReturn}");
+    
     return $toReturn;
 }
 
@@ -287,9 +292,9 @@ function authenticateContact($username, $password)
     }
     else
     {
-        debug_log ("Authenticate: No matching contact found in db");
+        debug_log ("Authenticate: No matching contact '$username' found in db");
         // Don't exist, check LDAP etc
-        if ($CONFIG['use_ldap'])
+        if ($CONFIG['use_ldap'] AND !empty($CONFIG['ldap_customer_group']))
         {
             $toReturn =  authenticateLDAP($username, $password, 0, false);
             if ($toReturn === -1) $toReturn = false;
