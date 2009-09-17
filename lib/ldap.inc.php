@@ -223,7 +223,7 @@ function ldapOpen($host='', $port='', $protocol='', $security='', $user='', $pas
             if ( ! $r )
             {
                 // Could not bind!
-                trigger_error("Could not bind to LDAP server with credentials", E_USER_WARNING);
+                trigger_error("Could not bind to LDAP server with credentials '$user'", E_USER_WARNING);
             }
             else
             {
@@ -480,14 +480,14 @@ function ldap_getDetails($username, $searchOnEmail, &$ldap_conn)
         $attributes[] = $CONFIG[strtolower("ldap_{$var}")];
     }
 
-    debug_log("Filter: {$filter}", TRUE);
-    debug_log("Base: {$base}". TRUE);
+    debug_log("ldap_getDetails Filter: {$filter}", TRUE);
+    debug_log("ldap_getDetails Base: {$base}", TRUE);
     $sr = ldap_search($ldap_conn, $base, $filter, $attributes);
 
     if (ldap_count_entries($ldap_conn, $sr) != 1)
     {
         // Multiple or zero
-        trigger_error("LDAP unable to locate object: '$username', or multiple matches where found", E_USER_ERROR);
+        trigger_error("LDAP unable to locate object: '$username', or multiple matches where found. filter: {$filter}", E_USER_ERROR);
         $toReturn = false;
     }
     else
