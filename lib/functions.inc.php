@@ -5506,6 +5506,24 @@ function clear_form_data($formname)
 
 
 /**
+ * Adjust a timezoned date/time to UTC
+ * @author Ivan Lucas
+ * @param int UNIX timestamp.  Uses 'now' if ommitted
+ * @returns int UNIX timestamp (in UTC)
+*/
+function utc_time($time = '')
+{
+    if ($time == '') $time = $GLOBALS['now'];
+    $tz = strftime('%z', $time);
+    $tzmins = (substr($tz, -4, 2) * 60) + substr($tz, -2, 2);
+    $tzsecs = $tzmins * 60; // convert to seconds
+    if (substr($tz, 0, 1) == '+') $time -= $tzsecs;
+    else $time += $tzsecs;
+    return $time;
+}
+
+
+/**
  * Returns a localised and translated date
  * @author Ivan Lucas
  * @param string $format. date() format
@@ -5524,11 +5542,7 @@ function ldate($format, $date = '', $utc = TRUE)
         if (!$utc)
         {
             // Adjust the date back to UTC
-            $tz = strftime('%z', $date);
-            $tzmins = (substr($tz, -4, 2) * 60) + substr($tz, -2, 2);
-            $tzsecs = $tzmins * 60; // convert to seconds
-            if (substr($tz, 0, 1) == '+') $date -= $tzsecs;
-            else $date += $tzsecs;
+            $date = utc_time($date);
         }
         // Adjust the display time to the users local timezone
         $useroffsetsec = $_SESSION['utcoffset'] * 60;
