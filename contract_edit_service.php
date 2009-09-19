@@ -221,7 +221,6 @@ switch ($mode)
                 $success = false;
             }
 
-                $success = false;
             $sql = "SELECT expirydate FROM `{$dbMaintenance}` WHERE id = {$contractid}";
 
             $result = mysql_query($sql);
