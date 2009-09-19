@@ -62,7 +62,6 @@ class User extends Person{
 
     function retrieveDetails()
     {
-        trigger_error("User.retrieveDetails() not yet implemented");
         $sql = "SELECT u.*, r.rolename ";
         $sql .= "FROM `{$GLOBALS['dbUsers']}` AS u, `{$GLOBALS['dbRoles']}` AS r ";
         $sql .= "WHERE u.id = {$this->id} AND u.roleid = r.id";
