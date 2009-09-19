@@ -5494,7 +5494,7 @@ function show_form_errors($formname)
  * @returns nothing
  */
 function clear_form_errors($formname)
-	{
+{
     unset($_SESSION['formerrors'][$formname]);
 }
 
