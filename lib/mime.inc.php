@@ -283,7 +283,7 @@ class MIME_mail
             $this->errstr = "To Address not specified";
             return 0;
         }
-        if (is_array($this->mailer) && (1 ==  sizeof($this->mailer)) ) {
+        if (is_array($this->mailer) && (1 == sizeof($this->mailer)) ) {
             $mail_obj = $this->mailer['name'];
             $mail_method = $this->mailer['method'];
             if (empty($mail_obj)) {
@@ -294,7 +294,8 @@ class MIME_mail
             eval("$ret = \$$mail_obj".'->'."$mail_method;");
             return $ret;
         }
-        return mail($this->to, $this->subject, "", $email);
+        $splitmsg = explode(CRLF.CRLF, $email, 2);
+        return mail($this->to, $this->subject, $splitmsg[1], $splitmsg[0]);
     }
 }
 
