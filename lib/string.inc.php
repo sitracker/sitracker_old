@@ -258,8 +258,11 @@ function quote_message($message)
 }
 
 /**
-  * Encode email subject
+  * Encode email subject as per RFC 2047
   * @author Ivan Lucas
+  * @param string $subject. Non-encoded subject
+  * @param string $charset. Character set that's in use
+  * @return string. Encoded subject
 */
 function encode_email_subject($subject, $charset)
 {
@@ -268,10 +271,11 @@ function encode_email_subject($subject, $charset)
     {
         $end = "?=";
         $start = "=?" . $charset . "?B?";
-        $spacer = $end . "\r\n " . $start;
+        $spacer = $end . "\r\n\t" . $start;
         $len = floor((75 - strlen($start) - strlen($end))/2) * 2;
         $encoded_subject = base64_encode($subject);
-        $encoded_subject = chunk_split($encoded_subject, $len, $spacer);
+// Don't split chunks doesn't seem to be necessary and in fact causes garbling of subjects - See Mantis bug 959
+//         $encoded_subject = chunk_split($encoded_subject, $len, $spacer);
         $spacer = preg_quote($spacer);
         $encoded_subject = preg_replace("/" . $spacer . "$/", "", $encoded_subject);
         $encoded_subject = $start . $encoded_subject . $end;
