@@ -38,7 +38,7 @@ if (empty($mode))
     $title = $strEditProfile;
     include (APPLICATION_INCPATH . 'htmlheader.inc.php');
 
-    /* 
+    /*
     $sql = "SELECT u.*, r.rolename FROM `{$dbUsers}` AS u, `{$dbRoles}` AS r  ";
     $sql .= "WHERE u.id='{$edituserid}' AND u.roleid = r.id LIMIT 1";
     $result = mysql_query($sql);
@@ -47,7 +47,7 @@ if (empty($mode))
     if (mysql_num_rows($result) < 1) trigger_error("$sql No such user ".strip_tags($edituserid),E_USER_WARNING);
     $user = mysql_fetch_object($result);
     */
-    
+
     $user = new User($edituserid);
 
     echo "<h2>".icon('user', 32)." ";
@@ -81,7 +81,7 @@ if (empty($mode))
     echo "<tr><th>{$strRealName}</th><td>";
     if ($_SESSION['user_source'] != 'sit' AND !empty($CONFIG['ldap_realname']))
     {
-        echo "<input name='realname' type='hidden' value=\"{$user->realname}\" '/>{$user->realname}";
+        echo "<input name='realname' type='hidden' value=\"{$user->realname}\" />{$user->realname}";
     }
     else
     {
@@ -305,13 +305,13 @@ elseif ($mode == 'save')
     // External variables
     $user = new User();
     $user->id = cleanvar($_POST['userid']);
-    
+
     $edituserid = cleanvar($_POST['userid']); // remove when tested
-    
+
     $user->message = cleanvar($_POST['message']);
     $user->realname = cleanvar($_POST['realname']);
     $user->qualifications = cleanvar($_POST['qualifications']);
-    
+
     $user->email = cleanvar($_POST['email']);
     $user->jobtitle = cleanvar($_POST['jobtitle']);
     $user->phone = cleanvar($_POST['phone']);
@@ -361,7 +361,7 @@ elseif ($mode == 'save')
 
     // Update user profile
     $errors = 0;
-    
+
     // check for change of password
     if ($password != '' && $newpassword1 != '' && $newpassword2 != '')
     {
@@ -420,7 +420,7 @@ elseif ($mode == 'save')
         	$error_string .= $result;
         }
     }
-    
+
     if ($errors > 0)
     {
         html_redirect($redirecturl, FALSE, $error_string);
