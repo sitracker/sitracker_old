@@ -263,7 +263,7 @@ if ($emails > 0)
 
         $incident_open = (incident_status($incidentid) == STATUS_ACTIVE);
 
-        plugin_do('email_arrived');
+        plugin_do('email_arrived', array('incidentid' => $incidentid));
 
         $customer_visible = 'No';
         $part = 1;
