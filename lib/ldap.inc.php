@@ -26,14 +26,6 @@ define ('LDAP_USERTYPE_MANAGER',2);
 define ('LDAP_USERTYPE_USER',3);
 define ('LDAP_USERTYPE_CUSTOMER',4);
 
-// LDAP Checking
-define ('LDAP_PASSWORD_INCORRECT', 0);
-define ('LDAP_ADMIN_GROUP_INCORRECT', 1);
-define ('LDAP_MANAGER_GROUP_INCORRECT', 2);
-define ('LDAP_USER_GROUP_INCORRECT', 3);
-define ('LDAP_CUSTOMER_GROUP_INCORRECT', 4);
-define ('LDAP_CORRECT', 5);
-
 // LDAP ATTRIBUTES
 define ('LDAP_EDIR_SURNAME', 'sn');
 define ('LDAP_EDIR_FORENAMES', 'givenName');
@@ -94,7 +86,7 @@ define ('LDAP_OPENLDAP_SURNAME', 'sn');
 define ('LDAP_OPENLDAP_FORENAMES', 'givenName');
 define ('LDAP_OPENLDAP_REALNAME', 'cn');
 define ('LDAP_OPENLDAP_JOBTITLE', 'title');
-/// define ('LDAP_OPENLDAP_EMAIL', 'mail');
+define ('LDAP_OPENLDAP_EMAIL', 'mail');
 define ('LDAP_OPENLDAP_MOBILE', 'mobile');
 define ('LDAP_OPENLDAP_TELEPHONE', 'telephoneNumber');
 define ('LDAP_OPENLDAP_FAX', 'facsimileTelephoneNumber');
@@ -630,46 +622,6 @@ function ldapImportCustomerFromEmail($email)
                 if (authenticateLDAP($email, '', 0, false, true, true)) $toReturn = true;
             }
         }
-    }
-
-    return $toReturn;
-}
-
-
-/**
- * Checks if a group exists in LDAP
- * @auther Paul Heaney
- * @param string $dn the DN of the group to check it exists
- * @param string $mapping the LDAP name mapping to use
- * @return bool TRUE for exists, FALSE otherwise
- */
-function ldapCheckGroupExists($dn, $mapping)
-{
-	global $CONFIG, $ldap_vars;
-    $toReturn = false;
-
-    $ldap_conn = ldapOpen(); // Need to get an admin thread
-
-    $mapping = strtoupper($mapping);
-    // $CONFIG[strtolower("ldap_{$var}")] = constant("LDAP_{$CONFIG['ldap_type']}_{$var}");
-
-    $o = constant("LDAP_{$mapping}_GRPOBJECTTYPE");
-
-    $filter = "(ObjectClass={$o})";
-
-    debug_log("Filter: {$filter}", TRUE);
-    debug_log("Object: {$dn}", TRUE);
-    $sr = ldap_search($ldap_conn, $dn, $filter);
-
-    if (ldap_count_entries($ldap_conn, $sr) != 1)
-    {
-        // Multiple or zero
-        $toReturn = false;
-    }
-    else
-    {
-        // just one
-        $toReturn  = true;
     }
 
     return $toReturn;
