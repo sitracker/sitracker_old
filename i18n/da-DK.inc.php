@@ -979,6 +979,7 @@ $strNewTemplate = 'Ny email skabelon';
 $strNewUser = 'Ny bruger';
 $strNext = 'Næste';
 $strNextAction = 'Næste hændelse';
+$strNextRun = 'Næste kørsel';
 $strNextSLATarget = 'Næste SLA mål';
 $strNextUpdate = 'Næste opdatering';
 $strNo = 'Nej';
