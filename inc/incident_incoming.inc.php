@@ -44,7 +44,7 @@ if (mysql_num_rows($result) > 0)
         $sql = "UPDATE `{$dbTempIncoming}` SET locked='{$sit[2]}', lockeduntil='{$lockeduntil}' WHERE id='{$incomingid}' AND (locked = 0 OR locked IS NULL)";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-        $lockedbyname = "you";
+        $lockedbyname = $strYou;
     }
     elseif ($incoming->locked != $sit[2])
     {
@@ -59,7 +59,7 @@ if (mysql_num_rows($result) > 0)
     }
     else
     {
-        $lockedbyname = "you";
+        $lockedbyname = $strYou;
     }
 
     echo "<div class='detailinfo'>";
