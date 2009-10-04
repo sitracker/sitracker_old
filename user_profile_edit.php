@@ -245,10 +245,10 @@ if (empty($mode))
     echo "<tr><th>{$strUTCOffset}</th><td>";
     foreach ($availabletimezones AS $offset=>$tz)
     {
-        $tz = $tz . '  ('.ldate('H:i',utc_time($now) + ($offset*60), FALSE).')';
+        $tz = $tz . '  ('.date('H:i',utc_time($now) + ($offset*60)).')';
         $availtz[$offset] = $tz;
     }
-    echo array_drop_down($availtz, 'utcoffset', $user->utc_offset, '', TRUE)."</td></tr>\n";
+    echo array_drop_down($availtz, 'utcoffset', $user->var_utc_offset, '', TRUE)."</td></tr>\n";
 
     echo "<tr><th>{$strInterfaceStyle}</th><td>".interfacestyle_drop_down('style', $user->var_style)."</td></tr>\n";
     echo "<tr><th>{$strIncidentRefresh}</th>";

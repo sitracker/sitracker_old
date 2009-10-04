@@ -98,9 +98,13 @@ function generate_row($update)
     $html_row .= htmlentities($update['subject'],ENT_QUOTES, $GLOBALS['i18ncharset']);
     $html_row .= '<span>'.parse_updatebody($updatebodytext).'</span></a></td>';
 
-    $span = sprintf($GLOBALS['strByX'], user_realname($update['reason_user']))."<br />";
-    $span .= sprintf($GLOBALS['strOnxAtY'], ldate($CONFIG['dateformat_date'], mysql2date($update['reason_time'])), ldate($CONFIG['dateformat_time'], mysql2date($update['reason_time'])));
-
+    $span = sprintf($GLOBALS['strByX'], user_realname($update['reason_user']));
+    if (mysql2date($update['reason_time']) > 0)
+    {
+        $span .= "<br />".sprintf($GLOBALS['strOnxAtY'],
+                            ldate($CONFIG['dateformat_date'], mysql2date($update['reason_time'])),
+                            ldate($CONFIG['dateformat_time'], mysql2date($update['reason_time'])));
+    }
     $html_row .= "<td align='center' width='20%'><a class='info'>{$update['reason']}<span>{$span}</span></a></td>";
     $html_row .= "<td align='center' width='20%'>";
     if (($update['locked'] != $sit[2]) && ($update['locked'] > 0))

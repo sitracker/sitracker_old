@@ -442,6 +442,7 @@ switch ($_REQUEST['mode'])
                 echo "LDate now (from system): ".ldate('r', $GLOBALS['now'], FALSE)."<br />";
                 $utcnow = utc_time($GLOBALS['now']);
                 echo "LDate now (from utc): ".ldate('r', $utcnow, TRUE)."<br />";
+                echo "UTC: ".date('D, d M Y  H:i:s', $utcnow).' +0000';
                 echo "</p></div>";
 
             }

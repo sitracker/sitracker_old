@@ -5533,7 +5533,7 @@ function utc_time($time = '')
     * @returns string. An internationised date/time string
     * @todo  th/st and am/pm maybe?
 */
-function ldate($format, $date = '', $utc = TRUE)
+function ldate($format, $date = '', $utc = FALSE)
 {
     if ($date == '') $date = $GLOBALS['now'];
     if ($_SESSION['utcoffset'] != '')
