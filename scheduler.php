@@ -239,7 +239,7 @@ switch ($_REQUEST['mode'])
         {
             echo "<table align='center'>";
             echo "<tr><th>{$strAction}</th><th>{$strStartDate}</th><th>{$strInterval}</th>";
-            echo "<th>{$strEndDate}</th><th>{$strLastRan}</th><th>Next Run</th></tr>\n"; // i18n Next Run
+            echo "<th>{$strEndDate}</th><th>{$strLastRan}</th><th>{$strNextRun}</th></tr>\n";
             $shade = 'shade1';
             while ($schedule = mysql_fetch_object($result))
             {

@@ -1071,6 +1071,8 @@ $strNewTemplate = 'New Email Template';
 $strNewUser = 'New User';
 $strNext = 'Next';
 $strNextAction = 'Next Action';
+# Next time a scheduled task is scheduled to run
+$strNextRun = 'Next Run';
 $strNextSLATarget = 'The next SLA target';
 $strNextUpdate = 'Next Update';
 $strNo = 'No';
