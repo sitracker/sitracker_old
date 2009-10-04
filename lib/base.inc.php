@@ -104,6 +104,7 @@ define ('SITE_HAS_BILLABLE_CONTRACT', 2);
 define ("REASON_POSSIBLE_NEW_INCIDENT", 1);
 define ("REASON_INCIDENT_CLOSED", 2);
 
+
 /**
   * Begin global variable definitions
 **/

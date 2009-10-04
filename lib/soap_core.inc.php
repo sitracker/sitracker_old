@@ -40,6 +40,7 @@ function login($username, $password, $applicationname='noname')
         $sessionid = session_id();
         
         // FIXME TODO all this was copied from login.php this probably wants making into a function
+        
         $_SESSION['auth'] = TRUE;
         
         // Retrieve users profile
@@ -88,6 +89,7 @@ function login($username, $password, $applicationname='noname')
                 $_SESSION['userconfig'][$conf->config] = $conf->value;
             }
         }
+        
         
         if ($user->var_i18n != $CONFIG['default_i18n'] AND $_SESSION['lang'] == '')
         {
@@ -139,7 +141,7 @@ function login($username, $password, $applicationname='noname')
     	$status->set_error('login_failed');
     }
 
-    return array('sessionid' => $sessionid, 'status' => $status->getSOAPArray());;
+    return array('sessionid' => $sessionid, 'status' => $status->get_array());
 }
 
 
@@ -181,7 +183,7 @@ function logout($sessionid)
     	$status->set_error('session_not_valid');
     }
     
-    return array('status' => $status->getSOAPArray());
+    return array('status' => $status->get_array());
 }
 
 

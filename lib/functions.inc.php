@@ -24,12 +24,6 @@ if (realpath(__FILE__) == realpath($_SERVER['SCRIPT_FILENAME']))
 }
 
 include (APPLICATION_LIBPATH . 'classes.inc.php');
-
-include (APPLICATION_LIBPATH . 'group.class.php');
-include (APPLICATION_LIBPATH . 'user.class.php');
-include (APPLICATION_LIBPATH . 'contact.class.php');
-include (APPLICATION_LIBPATH . 'incident.class.php');
-
 include (APPLICATION_LIBPATH . 'ldap.inc.php');
 include (APPLICATION_LIBPATH . 'base.inc.php');
 include_once (APPLICATION_LIBPATH . 'billing.inc.php');
@@ -5099,7 +5093,7 @@ function show_create_links($table, $ref)
     * Create a PNG chart
     * @author Ivan Lucas
     * @param string $type. The type of chart to draw. (e.g. 'pie').
-    * @return resource a PNG image resource
+    * @returns a PNG image resource
     * @note Currently only has proper support for pie charts (type='pie')
     * @todo TODO Support for bar and line graphs
 */
@@ -5403,11 +5397,11 @@ function implode_assoc($glue1, $glue2, $array)
 
 
 /**
- * @author Kieran Hogg
- * @param string $name. name of the html entity
- * @param string $time. the time to set it to, format 12:34
- * @returns string. HTML
- */
+    * @author Kieran Hogg
+    * @param string $name. name of the html entity
+    * @param string $time. the time to set it to, format 12:34
+    * @returns string. HTML
+*/
 function time_dropdown($name, $time='')
 {
     if ($time)
@@ -5447,10 +5441,10 @@ function time_dropdown($name, $time='')
 
 
 /**
- * @author Kieran Hogg
- * @param int $seconds. Number of seconds
- * @returns string. Readable time in seconds
- */
+    * @author Kieran Hogg
+    * @param int $seconds. Number of seconds
+    * @returns string. Readable time in seconds
+*/
 function exact_seconds($seconds)
 {
     $days = floor($seconds / (24 * 60 * 60));
@@ -5471,10 +5465,10 @@ function exact_seconds($seconds)
 
 
 /**
- * Shows errors from a form, if any
- * @author Kieran Hogg
- * @returns string. HTML of the form errors stored in the users session
- */
+    * Shows errors from a form, if any
+    * @author Kieran Hogg
+    * @returns string. HTML of the form errors stored in the users session
+*/
 function show_form_errors($formname)
 {
     if ($_SESSION['formerrors'][$formname])
@@ -5489,10 +5483,10 @@ function show_form_errors($formname)
 
 
 /**
- * Cleans form errors
- * @author Kieran Hogg
- * @returns nothing
- */
+    * Cleans form errors
+    * @author Kieran Hogg
+    * @returns nothing
+*/
 function clear_form_errors($formname)
 {
     unset($_SESSION['formerrors'][$formname]);
@@ -5500,10 +5494,10 @@ function clear_form_errors($formname)
 
 
 /**
- * Cleans form data
- * @author Kieran Hogg
- * @returns nothing
- */
+    * Cleans form data
+    * @author Kieran Hogg
+    * @returns nothing
+*/
 function clear_form_data($formname)
 {
     unset($_SESSION['formdata'][$formname]);
@@ -5529,16 +5523,16 @@ function utc_time($time = '')
 
 
 /**
- * Returns a localised and translated date
- * @author Ivan Lucas
- * @param string $format. date() format
- * @param int $date.  UNIX timestamp.  Uses 'now' if ommitted
- * @param bool $utc bool. Is the timestamp being passed as UTC or system time
- TRUE = passed as UTC
- FALSE = passed as system time
- * @returns string. An internationised date/time string
- * @todo  th/st and am/pm maybe?
- */
+    * Returns a localised and translated date
+    * @author Ivan Lucas
+    * @param string $format. date() format
+    * @param int $date.  UNIX timestamp.  Uses 'now' if ommitted
+    * @param bool $utc bool. Is the timestamp being passed as UTC or system time
+                        TRUE = passed as UTC
+                        FALSE = passed as system time
+    * @returns string. An internationised date/time string
+    * @todo  th/st and am/pm maybe?
+*/
 function ldate($format, $date = '', $utc = TRUE)
 {
     if ($date == '') $date = $GLOBALS['now'];
@@ -5618,11 +5612,11 @@ function ldate($format, $date = '', $utc = TRUE)
 
 
 /**
- * Returns an array of open activities/timed tasks for an incident
- * @author Paul Heaney
- * @param int $incidentid. Incident ID you want
- * @returns array - with the task id
- */
+    * Returns an array of open activities/timed tasks for an incident
+    * @author Paul Heaney
+    * @param int $incidentid. Incident ID you want
+    * @returns array - with the task id
+*/
 function open_activities_for_incident($incientid)
 {
     global $dbLinks, $dbLinkTypes, $dbTasks;
@@ -5669,11 +5663,11 @@ function open_activities_for_incident($incientid)
 
 
 /**
- * Returns the number of open activities/timed tasks for a site
- * @author Paul Heaney
- * @param int $siteid. Site ID you want
- * @returns int. Number of open activities for the site (0 if non)
- */
+    * Returns the number of open activities/timed tasks for a site
+    * @author Paul Heaney
+    * @param int $siteid. Site ID you want
+    * @returns int. Number of open activities for the site (0 if non)
+*/
 function open_activities_for_site($siteid)
 {
     global $dbIncidents, $dbContacts;
@@ -5700,10 +5694,9 @@ function open_activities_for_site($siteid)
 
 
 /**
- * Finds out which scheduled tasks should be run right now
- * @author Ivan Lucas, Paul Heaney
- * @returns array
- */
+    * Finds out which scheduled tasks should be run right now
+    * @author Ivan Lucas, Paul Heaney
+**/
 function schedule_actions_due()
 {
     global $now;
@@ -5712,8 +5705,8 @@ function schedule_actions_due()
     $actions = FALSE;
     $sql = "SELECT * FROM `{$dbScheduler}` WHERE `status` = 'enabled' AND type = 'interval' ";
     $sql .= "AND UNIX_TIMESTAMP(start) <= $now AND (UNIX_TIMESTAMP(end) >= $now OR UNIX_TIMESTAMP(end) = 0) ";
-    $sql .= "AND IF(UNIX_TIMESTAMP(lastran) > 0, UNIX_TIMESTAMP(lastran) + `interval` <= $now, 1=1) ";
-    $sql .= "AND IF(laststarted > 0, laststarted <= lastran, 1=1)";
+    $sql .= "AND IF(UNIX_TIMESTAMP(lastran) > 0, UNIX_TIMESTAMP(lastran) + `interval` <= $now, UNIX_TIMESTAMP(NOW())) ";
+    $sql .= "AND laststarted <= lastran";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     if (mysql_num_rows($result) > 0)
@@ -5766,11 +5759,11 @@ function schedule_actions_due()
 
 
 /**
- * Marks a schedule action as started
- * @author Paul Heaney
- * @param string $action. Name of scheduled action
- * @return boolean Success of update
- */
+* Marks a schedule action as started
+* @author Paul Heaney
+* @param string $action. Name of scheduled action
+* @return boolean Success of update
+*/
 function schedule_action_started($action)
 {
     global $now;
@@ -5791,11 +5784,11 @@ function schedule_action_started($action)
 
 
 /**
- * Mark a schedule action as done
- * @author Ivan Lucas
- * @param string $doneaction. Name of scheduled action
- * @param bool $success. Was the run successful, TRUE = Yes, FALSE = No
- */
+    * Mark a schedule action as done
+    * @author Ivan Lucas
+    * @param string $doneaction. Name of scheduled action
+    * @param bool $success. Was the run successful, TRUE = Yes, FALSE = No
+**/
 function schedule_action_done($doneaction, $success = TRUE)
 {
     global $now;
@@ -7995,7 +7988,7 @@ function is_assoc_callback($a, $b)
  * @param string $setupvar The setup variable key name
  * @param bool $showvarnames Whether to display the config variable name
  * @returns string HTML
- */
+**/
 function cfgVarInput($setupvar, $showvarnames = FALSE)
 {
     global $CONFIG, $CFGVAR;
@@ -8178,7 +8171,7 @@ function cfgVarInput($setupvar, $showvarnames = FALSE)
  * @param array $setupvars. An array of setup variables $setupvars['setting'] = 'foo';
  * @todo  TODO, need to make setup.php use this  INL 5Dec08
  * @author Ivan Lucas
- */
+**/
 function cfgSave($setupvars)
 {
     global $dbConfig;
@@ -8195,7 +8188,7 @@ function cfgSave($setupvars)
 /**
  * HTML for a hyperlink to hide/reveal a password field
  * @author Ivan Lucas
- */
+**/
 function password_reveal_link($id)
 {
     $html = "<a href=\"javascript:password_reveal('$id')\" id=\"link{$id}\">{$GLOBALS['strReveal']}</a>";
@@ -8243,7 +8236,7 @@ function num_unread_emails()
  * @param $id int ID of the KB article
  * @param $mode string 'public' for portal users, 'private' for internal users
  * @return bool Whether we are allowed to see it or not
- */
+*/
 function is_kb_article($id, $mode)
 {
     $rtn = FALSE;

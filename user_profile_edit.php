@@ -38,7 +38,6 @@ if (empty($mode))
     $title = $strEditProfile;
     include (APPLICATION_INCPATH . 'htmlheader.inc.php');
 
-    /*
     $sql = "SELECT u.*, r.rolename FROM `{$dbUsers}` AS u, `{$dbRoles}` AS r  ";
     $sql .= "WHERE u.id='{$edituserid}' AND u.roleid = r.id LIMIT 1";
     $result = mysql_query($sql);
@@ -46,9 +45,6 @@ if (empty($mode))
 
     if (mysql_num_rows($result) < 1) trigger_error("$sql No such user ".strip_tags($edituserid),E_USER_WARNING);
     $user = mysql_fetch_object($result);
-    */
-
-    $user = new User($edituserid);
 
     echo "<h2>".icon('user', 32)." ";
     echo sprintf($strEditProfileFor, $user->realname).' '.gravatar($user->email)."</h2>";
@@ -81,7 +77,7 @@ if (empty($mode))
     echo "<tr><th>{$strRealName}</th><td>";
     if ($_SESSION['user_source'] != 'sit' AND !empty($CONFIG['ldap_realname']))
     {
-        echo "<input name='realname' type='hidden' value=\"{$user->realname}\" />{$user->realname}";
+        echo "<input name='realname' type='hidden' value=\"{$user->realname}\" '/>{$user->realname}";
     }
     else
     {
@@ -90,17 +86,17 @@ if (empty($mode))
         echo " <span class='required'>{$strRequired}</span>";
     }
     echo "</td></tr>\n";
-    echo "<tr><th>{$strSource}</th><td>{$user->source}</td></th>";
+    echo "<tr><th>{$strSource}</th><td>{$user->user_source}</td></th>";
     echo "<tr><th>{$strJobTitle}</th>";
     echo "<td>";
     if ($_SESSION['user_source'] != 'sit' AND !empty($CONFIG['ldap_jobtitle']))
     {
-        echo $user->jobtitle;
+        echo $user->title;
     }
     else
     {
         echo "<input maxlength='50' name='jobtitle' size='30' type='text' ";
-        echo "value=\"{$user->jobtitle}\" />";
+        echo "value=\"{$user->title}\" />";
     }
     echo "</td></tr>\n";
     echo "<tr><th>{$strQualifications} ".help_link('QualificationsTip')."</th>";
@@ -139,7 +135,19 @@ if (empty($mode))
     }
 
     echo "<tr><th>{$strGroupMembership}</th><td valign='top'>";
-    echo $user->group->name;
+
+    if ($user->groupid >= 1)
+    {
+        $sql = "SELECT name FROM `{$dbGroups}` WHERE id='{$user->groupid}' ";
+        $result = mysql_query($sql);
+        if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+        $group = mysql_fetch_object($result);
+        echo $group->name;
+    }
+    else
+    {
+        echo $strNotSet;
+    }
     echo "</td></tr>";
     echo "<tr><th colspan='2'>{$strWorkStatus}</th></tr>";
 
@@ -222,9 +230,9 @@ if (empty($mode))
         $available_languages = available_languages();
     }
     $available_languages = array_merge(array(''=>$strDefault),$available_languages);
-    if (!empty($user->i18n))
+    if (!empty($user->var_i18n))
     {
-        $selectedlang = $user->i18n;
+        $selectedlang = $user->var_i18n;
     }
     else
     {
@@ -233,8 +241,8 @@ if (empty($mode))
     echo array_drop_down($available_languages, 'vari18n',$selectedlang, '', TRUE);
     echo "</td></tr>\n";
 
-    if ($user->utc_offset == '') $user->utc_offset = 0;
-    echo "<tr><th>{$strUTCOffset}</th><td>";
+    if ($user->var_utc_offset == '') $user->var_utc_offset = 0;
+    echo "<tr><th>{$strUTCOffset}</th><td>".array_drop_down($availabletimezones, 'utcoffset', $user->var_utc_offset, '', TRUE)."</td></tr>\n";
     foreach ($availabletimezones AS $offset=>$tz)
     {
         $tz = $tz . '  ('.ldate('H:i',utc_time($now) + ($offset*60)).')';
@@ -242,21 +250,21 @@ if (empty($mode))
     }
     echo array_drop_down($availtz, 'utcoffset', $user->utc_offset, '', TRUE)."</td></tr>\n";
 
-    echo "<tr><th>{$strInterfaceStyle}</th><td>".interfacestyle_drop_down('style', $user->style)."</td></tr>\n";
+    echo "<tr><th>{$strInterfaceStyle}</th><td>".interfacestyle_drop_down('style', $user->var_style)."</td></tr>\n";
     echo "<tr><th>{$strIncidentRefresh}</th>";
-    echo "<td><input maxlength='10' name='incidentrefresh' size='3' type='text' value=\"{$user->incident_refresh}\" /> {$strSeconds}</td></tr>\n";
+    echo "<td><input maxlength='10' name='incidentrefresh' size='3' type='text' value=\"{$user->var_incident_refresh}\" /> {$strSeconds}</td></tr>\n";
 
     echo "<tr><th>{$strIncidentLogOrder}</th><td>";
     echo "<select name='updateorder'>";
     echo "<option ";
-    if ($user->update_order == "desc")
+    if ($user->var_update_order == "desc")
     {
         echo "selected='selected'";
     }
 
     echo " value='desc'>{$strNewestAtTop}</option>\n";
     echo "<option ";
-    if ($user->update_order == "asc")
+    if ($user->var_update_order == "asc")
     {
         echo "selected='selected'";
     }
@@ -267,11 +275,11 @@ if (empty($mode))
 
     echo "<tr><th>{$strIncidentUpdatesPerPage}</th>";
     echo "<td><input maxlength='5' name='updatesperpage' size='3' type='text' ";
-    echo "value=\"".$user->num_updates_view."\" /> ({$str0MeansUnlimited})</td></tr>\n";
+    echo "value=\"".$user->var_num_updates_view."\" /> ({$str0MeansUnlimited})</td></tr>\n";
 
     echo "<tr><th>{$strShowEmoticons}</th>";
     echo "<td><input type='checkbox' name='emoticons' id='emoticons' value='true' ";
-    if ($user->emoticons == 'true') echo "checked='checked' ";
+    if ($user->var_emoticons == 'true') echo "checked='checked' ";
     echo "/></td></tr>\n";
 
     echo "<tr><th colspan='2'>{$strNotifications}</th></tr>\n";
@@ -300,53 +308,49 @@ if (empty($mode))
 
     include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
 }
-elseif ($mode == 'save')
+elseif ($mode=='save')
 {
     // External variables
-    $user = new User();
-    $user->id = cleanvar($_POST['userid']);
-
-    $edituserid = cleanvar($_POST['userid']); // remove when tested
-
-    $user->message = cleanvar($_POST['message']);
-    $user->realname = cleanvar($_POST['realname']);
-    $user->qualifications = cleanvar($_POST['qualifications']);
-
-    $user->email = cleanvar($_POST['email']);
-    $user->jobtitle = cleanvar($_POST['jobtitle']);
-    $user->phone = cleanvar($_POST['phone']);
-    $user->mobile = cleanvar($_POST['mobile']);
-    $user->aim = cleanvar($_POST['aim']);
-    $user->icq = cleanvar($_POST['icq']);
-    $user->msn = cleanvar($_POST['msn']);
-    $user->fax = cleanvar($_POST['fax']);
-    $user->incident_refresh = cleanvar($_POST['incidentrefresh']);
-    $user->update_order = cleanvar($_POST['updateorder']);
-    $user->num_updates_view = cleanvar($_POST['updatesperpage']);
-    $user->signature = cleanvar($_POST['signature']);
-    $user->status = cleanvar($_POST['status']);
-
-    $user->style = cleanvar($_POST['style']);
-    $user->i18n = cleanvar($_POST['vari18n']);
-    $user->utc_offset = cleanvar($_POST['utcoffset']);
-    $user->emoticons = cleanvar($_POST['emoticons']);
-    if (cleanvar($_POST['accepting']) == 'Yes') $user->accepting = true;
-    else $user->accepting = false;
-    $user->roleid = cleanvar($_POST['roleid']);
-    $user->holiday_entitlement = cleanvar($_POST['holiday_entitlement']);
+    $message = cleanvar($_POST['message']);
+    $realname = cleanvar($_POST['realname']);
+    $qualifications = cleanvar($qualifications);
+    $edituserid = cleanvar($_POST['userid']);
+    $email = cleanvar($_POST['email']);
+    $jobtitle = cleanvar($_POST['jobtitle']);
+    $qualifications = cleanvar($_POST['qualifications']);
+    $phone = cleanvar($_POST['phone']);
+    $mobile = cleanvar($_POST['mobile']);
+    $aim = cleanvar($_POST['aim']);
+    $icq = cleanvar($_POST['icq']);
+    $msn = cleanvar($_POST['msn']);
+    $fax = cleanvar($_POST['fax']);
+    $incidentrefresh = cleanvar($_POST['incidentrefresh']);
+    $updateorder = cleanvar($_POST['updateorder']);
+    $updatesperpage = cleanvar($_POST['updatesperpage']);
+    $signature = cleanvar($_POST['signature']);
+    $message = cleanvar($_POST['message']);
+    $status = cleanvar($_POST['status']);
+    $collapse = cleanvar($_POST['collapse']);
+    $style = cleanvar($_POST['style']);
+    $vari18n = cleanvar($_POST['vari18n']);
+    $utcoffset = cleanvar($_POST['utcoffset']);
+    $emoticons = cleanvar($_POST['emoticons']);
+    $accepting = cleanvar($_POST['accepting']);
+    $roleid = cleanvar($_POST['roleid']);
+    $holiday_entitlement = cleanvar($_POST['holiday_entitlement']);
     if (!empty($_POST['startdate']))
     {
-        $user->startdate = date('Y-m-d',strtotime($_POST['startdate']));
+        $startdate = date('Y-m-d',strtotime($_POST['startdate']));
     }
     else
     {
-        $user->startdate = date('Y-m-d',0);
+        $startdate = date('Y-m-d',0);
     }
     $password = cleanvar($_POST['oldpassword']);
     $newpassword1 = cleanvar($_POST['newpassword1']);
     $newpassword2 = cleanvar($_POST['newpassword2']);
 
-    if (empty($user->emoticons)) $user->emoticons = 'false';
+    if (empty($emoticons)) $emoticons = 'false';
 
     // Some extra checking here so that users can't edit other peoples profiles
     $edituserpermission = user_permission($sit[2],23); // edit user
@@ -356,20 +360,30 @@ elseif ($mode == 'save')
         exit;
     }
 
+    $sql = "SELECT * FROM `{$dbUsers}` AS u WHERE id = {$edituserid}";
     // If users status is set to 0 (disabled) force 'accepting' to no
-    if ($user->status==0) $user->accepting='No';
+    if ($status==0) $accepting='No';
 
     // Update user profile
     $errors = 0;
+    $result = mysql_query($sql);
+    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
+    $userdetails = mysql_fetch_row($result);
 
     // check for change of password
     if ($password != '' && $newpassword1 != '' && $newpassword2 != '')
     {
         // verify password fields
-        $passwordMD5 = md5($password);
-        if ($newpassword1 == $newpassword2 AND strcasecmp($passwordMD5, user_password($edituserid)) == 0)
+        $password = md5($password);
+        if ($newpassword1 == $newpassword2 AND strcasecmp($password, user_password($edituserid)) == 0)
         {
-            $user->password = $password;
+            $newpassword1 = md5($newpassword1);
+            $newpassword2 = md5($newpassword2);
+            $sql = "UPDATE `{$dbUsers}` SET password='$newpassword1' WHERE id='{$edituserid}'";
+            $result = mysql_query($sql);
+            if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+
+            $confirm_message = "<h2>{$strPasswordReset}</h2>";
         }
         else
         {
@@ -377,33 +391,102 @@ elseif ($mode == 'save')
             $error_string .= "<h5 class='error'>{$strPasswordsDoNotMatch}</h5>";
         }
     }
+    // check for blank real name
+    if ($realname == '')
+    {
+        $errors = 1;
+        $error_string .= user_alert(sprintf($strFieldMustNotBeBlank, "'{$strName}'"), E_USER_ERROR);
+    }
+    // check for blank email address
+    if ($email == '')
+    {
+        $errors = 1;
+        $error_string .= user_alert(sprintf($strFieldMustNotBeBlank, "'{$strEmail}'"), E_USER_ERROR);
+    }
 
+    // Check email address is unique (discount disabled accounts)
+    $sql = "SELECT COUNT(id) FROM `{$dbUsers}` WHERE status > 0 AND email='$email'";
+    $result = mysql_query($sql);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+    list($countexisting) = mysql_fetch_row($result);
+    if ($countexisting > 1)
+    {
+        $errors++;
+        $error_string .= "<h5 class='error'>{$strEmailMustBeUnique}</h5>\n";
+    }
     // update database if no errors
     if ($errors == 0)
     {
-        $result = $user->edit();
+        if (!empty($collapse))
+        {
+            $collapse = 'true';
+        }
+        else
+        {
+            $collapse = 'false';
+        }
+
+        $oldstatus = $userdetails['status'];
+
+        if (!empty($emailonreassign))
+        {
+            $emailonreassign = 'true';
+        }
+        else
+        {
+            $emailonreassign = 'false';
+        }
+
+        $sql  = "UPDATE `{$dbUsers}` SET realname='{$realname}', title='{$jobtitle}', email='{$email}', qualifications='{$qualifications}', ";
+        $sql .= "phone='{$phone}', mobile='{$mobile}', aim='{$aim}', icq='{$icq}', msn='{$msn}', fax='{$fax}', var_incident_refresh='{$incidentrefresh}', ";
+        $sql .= "var_emoticons='{$emoticons}', ";
+        if ($edituserid != 1 AND !empty($_REQUEST['roleid']) AND $edituserpermission==TRUE)
+        {
+            $sql .= "roleid='{$roleid}', ";
+        }
+
+        if (!empty($holiday_entitlement) AND $edituserpermission == TRUE)
+        {
+            $sql .= "holiday_entitlement='{$holiday_entitlement}', ";
+        }
+        if ($edituserpermission == TRUE)
+        {
+            $sql .= "user_startdate='{$startdate}', ";
+        }
+        $sql .= "var_update_order='$updateorder', var_num_updates_view='$updatesperpage', var_style='$style', signature='$signature', message='$message', status='$status', accepting='$accepting', ";
+        $sql .= "var_i18n='{$vari18n}', var_utc_offset='{$utcoffset}' ";
+        $sql .= "WHERE id='$edituserid' LIMIT 1";
+        $result = mysql_query($sql);
+        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
         // If this is the current user, update the profile in the users session
         if ($edituserid == $_SESSION['userid'])
         {
-            $_SESSION['style'] = $user->style;
-            $_SESSION['realname'] = $user->realname;
-            $_SESSION['email'] = $user->email;
-            $_SESSION['incident_refresh'] = $user->incident_refresh;
-            $_SESSION['update_order'] = $user->update_order;
-            $_SESSION['num_update_view'] = $user->num_updates_view;
-            $_SESSION['lang'] = $user->i18n;
-            $_SESSION['utcoffset'] = $user->utc_offset;
+            $_SESSION['style'] = $style;
+            $_SESSION['realname'] = $realname;
+            $_SESSION['email'] = $email;
+            $_SESSION['incident_refresh'] = $incidentrefresh;
+            $_SESSION['update_order'] = $updateorder;
+            $_SESSION['num_update_view'] = $updatesperpage;
+            $_SESSION['lang'] = $vari18n;
+            $_SESSION['utcoffset'] = $utcoffset;
         }
 
-        if ($result === FALSE)
+        //only want to reassign to backup if you've changed you status
+        //(i.e. In Office -> On Holiday rather than when youve updated your message) or changes from accepting to not accepting
+        if ($oldstatus != $status)
+        {
+            // reassign the users incidents if appropriate
+            incident_backup_switchover($edituserid, $accepting);
+        }
+
+        if (!$result)
         {
             include (APPLICATION_INCPATH . 'htmlheader.inc.php');
             trigger_error("!Error while updating users table", E_USER_WARNING);
             include (APPLICATION_INCPATH . 'htmlfooter.inc.php');
-            exit;
         }
-        elseif ($result === TRUE)
+        else
         {
             if ($edituserid==$sit[2]) $redirecturl='index.php';
             else $redirecturl='manage_users.php';
@@ -412,18 +495,15 @@ elseif ($mode == 'save')
             // password was not changed
             if (isset($confirm_message)) html_redirect($redirecturl, TRUE, $confirm_message);
             else html_redirect($redirecturl);
-            exit;
-        }
-        else
-        {
-            $errors++;
-        	$error_string .= $result;
         }
     }
-
-    if ($errors > 0)
+    else
     {
         html_redirect($redirecturl, FALSE, $error_string);
+/*        // print error string
+        include (APPLICATION_INCPATH . 'htmlheader.inc.php');
+        echo $error_string;
+        include (APPLICATION_INCPATH . 'htmlfooter.inc.php');*/
     }
 }
 elseif ($mode == 'savesessionlang')
