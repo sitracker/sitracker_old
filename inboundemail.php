@@ -265,7 +265,7 @@ if ($emails > 0)
 
         plugin_do('email_arrived', array('incidentid' => $incidentid,
                                          'contactid' => $contactid,
-                                         'subject' => $subject
+                                         'subject' => $subject,
                                          'decoded' => $decoded));
 
         $customer_visible = 'No';
