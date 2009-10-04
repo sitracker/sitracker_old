@@ -5544,7 +5544,7 @@ function ldate($format, $date = '', $utc = TRUE)
     if ($date == '') $date = $GLOBALS['now'];
     if ($_SESSION['utcoffset'] != '')
     {
-        if (!$utc)
+        if ($utc === FALSE)
         {
             // Adjust the date back to UTC
             $date = utc_time($date);
@@ -5553,7 +5553,7 @@ function ldate($format, $date = '', $utc = TRUE)
         $useroffsetsec = $_SESSION['utcoffset'] * 60;
         $date += $useroffsetsec;
     }
-    $datestring = gmdate($format, $date);
+    $datestring = date($format, $date);
 
     // Internationalise date endings (e.g. st)
     if (strpos($format, 'S') !== FALSE)
@@ -7692,6 +7692,7 @@ function plugin_register($context, $action)
 function plugin_do($context, $optparams = FALSE)
 {
     global $PLUGINACTIONS;
+    foreach ($GLOBALS as $key => $val) { global $$key; }
     $rtnvalue = '';
     if (is_array($PLUGINACTIONS[$context]))
     {

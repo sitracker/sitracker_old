@@ -293,7 +293,7 @@ switch ($_REQUEST['mode'])
                 $lastruntime = mysql2date($schedule->lastran);
                 if ($lastruntime > 0)
                 {
-                    echo ldate($CONFIG['dateformat_datetime'], $lastruntime);
+                    echo ldate($CONFIG['dateformat_datetime'], $lastruntime, FALSE);
                 }
 
                 else echo $strNever;
@@ -405,7 +405,7 @@ switch ($_REQUEST['mode'])
                         }
                     }
 
-                    echo ldate($CONFIG['dateformat_datetime'], $nextruntime);
+                    echo ldate($CONFIG['dateformat_datetime'], $nextruntime, FALSE);
                 }
                 else
                 {
@@ -438,9 +438,10 @@ switch ($_REQUEST['mode'])
                 echo "User UTC offset: {$_SESSION['utcoffset']}<br />";
                 echo "Date: ".date('r')."<br />";
                 echo "Date now: ".date('r', $GLOBALS['now'])."<br />";
-                echo "LDate: ".ldate('r')."<br />";
-                echo "LDate now (system): ".ldate('r', $GLOBALS['now'], FALSE)."<br />";
-                echo "LDate now (utc): ".ldate('r', $GLOBALS['now'], TRUE)."<br />";
+                echo "LDate: ".ldate('r', NULL, FALSE)."<br />";
+                echo "LDate now (from system): ".ldate('r', $GLOBALS['now'], FALSE)."<br />";
+                $utcnow = utc_time($GLOBALS['now']);
+                echo "LDate now (from utc): ".ldate('r', $utcnow, TRUE)."<br />";
                 echo "</p></div>";
 
             }
