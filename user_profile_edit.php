@@ -245,7 +245,7 @@ if (empty($mode))
     echo "<tr><th>{$strUTCOffset}</th><td>".array_drop_down($availabletimezones, 'utcoffset', $user->var_utc_offset, '', TRUE)."</td></tr>\n";
     foreach ($availabletimezones AS $offset=>$tz)
     {
-        $tz = $tz . '  ('.ldate('H:i',utc_time($now) + ($offset*60)).')';
+        $tz = $tz . '  ('.ldate('H:i',utc_time($now) + ($offset*60), FALSE).')';
         $availtz[$offset] = $tz;
     }
     echo array_drop_down($availtz, 'utcoffset', $user->utc_offset, '', TRUE)."</td></tr>\n";
