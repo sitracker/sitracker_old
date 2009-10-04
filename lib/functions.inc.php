@@ -5706,7 +5706,7 @@ function schedule_actions_due()
     $sql = "SELECT * FROM `{$dbScheduler}` WHERE `status` = 'enabled' AND type = 'interval' ";
     $sql .= "AND UNIX_TIMESTAMP(start) <= $now AND (UNIX_TIMESTAMP(end) >= $now OR UNIX_TIMESTAMP(end) = 0) ";
     $sql .= "AND IF(UNIX_TIMESTAMP(lastran) > 0, UNIX_TIMESTAMP(lastran) + `interval` <= $now, UNIX_TIMESTAMP(NOW())) ";
-    $sql .= "AND laststarted <= lastran";
+    $sql .= "AND IF(laststarted > 0, laststarted <= lastran, 1=1)";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     if (mysql_num_rows($result) > 0)
