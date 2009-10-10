@@ -261,7 +261,7 @@ if ($emails > 0)
             }
         }
 
-        $incident_open = (incident_status($incidentid) == STATUS_ACTIVE);
+        $incident_open = (incident_status($incidentid) != STATUS_CLOSED AND incident_status($incidentid) != STATUS_CLOSING);
 
         plugin_do('email_arrived', array('incidentid' => $incidentid,
                                          'contactid' => $contactid,
@@ -395,11 +395,13 @@ if ($emails > 0)
             $updateid = mysql_insert_id();
 
             //new call
+            if (!$GLOBALS['plugin_reason']) $reason = $SYSLANG['strPossibleNewIncident'];
+            else $reason = $GLOBALS['plugin_reason'];
             $sql = "INSERT INTO `{$dbTempIncoming}` (updateid, incidentid, `from`, emailfrom, subject, reason, contactid) ";
             $sql.= "VALUES ('{$updateid}', '0', '".mysql_real_escape_string($from_email)."', ";
             $sql .= "'".mysql_real_escape_string($from_name)."', ";
             $sql .= "'".mysql_real_escape_string($subject)."', ";
-            $sql .= "'{$SYSLANG['strPossibleNewIncident']}', '{$contactid}' )";
+            $sql .= "'{$reason}', '{$contactid}' )";
             mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
             $holdingemailid = mysql_insert_id();
@@ -472,10 +474,12 @@ if ($emails > 0)
                     else
                     {
                         //new call
+                        if (!$GLOBALS['plugin_reason']) $reason = $SYSLANG['strPossibleNewIncident'];
+                        else $reason = $GLOBALS['plugin_reason'];
                         $sql = "INSERT INTO `{$dbTempIncoming}` (updateid, incidentid, `from`, emailfrom, subject, reason, contactid) ";
                         $sql .= "VALUES ('{$updateid}', '0', '".mysql_real_escape_string($from_email)."',";
                         $sql .= "'".mysql_real_escape_string($from_name)."', '".mysql_real_escape_string($subject);
-                        $sql .= "', '{$SYSLANG['strPossibleNewIncident']}', '{$contactid}' )";
+                        $sql .= "', '{$reason}', '{$contactid}' )";
                         mysql_query($sql);
                         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
                     }
