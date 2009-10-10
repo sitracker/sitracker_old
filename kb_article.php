@@ -56,7 +56,7 @@ if (isset($_POST['submit']))
     if (empty($kbid))
     {
         // If the KB ID is blank, we assume we're creating a new article
-        $author = user_realname($_SESSION['userid']);
+        $author = $_SESSION['userid'];
         $pubdate = date('Y-m-d h:i:s');
 
         $sqlinsert = "INSERT INTO `{$dbKBArticles}` (title, keywords, distribution, author, published) ";
