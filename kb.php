@@ -116,6 +116,8 @@ if (mysql_num_rows($result) >= 1)
     {
         if (empty($kbarticle->title)) $kbarticle->title = $strUntitled;
         else $kbarticle->title = $kbarticle->title;
+         if (is_number($kbarticle->author)) $kbarticle->author = user_realname($kbarticle->author);
+ 	     else $kbarticle->author = $kbarticle->author;
         echo "<tr class='{$shade}'>";
         echo "<td>".icon('kb', 16)." {$CONFIG['kb_id_prefix']}".leading_zero(4,$kbarticle->docid)."</td>";
         echo "<td>";
@@ -149,7 +151,7 @@ if (mysql_num_rows($result) >= 1)
         echo "</a>";
         echo "</td>";
         echo "<td>".ldate($CONFIG['dateformat_date'], mysql2date($kbarticle->published))."</td>";
-        echo "<td>".user_realname($kbarticle->author)."</td>";
+        echo "<td>".$kbarticle->author."</td>";
         echo "<td>{$kbarticle->keywords}</td>";
         echo "</tr>\n";
         if ($shade == 'shade1') $shade = 'shade2';
