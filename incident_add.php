@@ -493,7 +493,7 @@ elseif ($action=='incidentform')
         if ($contact_inv_count > 0)
         {
             echo "<tr><td><label for='inventory'>{$strInventoryItems}:</label><br />";
-            echo array_drop_down($items_array, 'inventory', '', '', TRUE)."</td><td><td></tr>";
+            echo array_drop_down($items_array, 'inventory', '', '', TRUE)."</td><td></td></tr>";
         }
 
         // Insert pre-defined per-product questions from the database, these should be required fields
