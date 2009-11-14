@@ -673,4 +673,25 @@ function sla_target_content($incidentid, $target)
     return $rtn;
 }
 
+
+/**
+ * Retreive the service level tag of the incident
+ * @author Paul Heaney
+ * @param $incidentid int The incident ID to retreive
+ * @return String The service level tag
+ * @todo Remove as of 4.0 in favour of incidents class
+ */
+function incident_service_level($incidentid)
+{
+    global $dbIncidents;
+    $servicelevel = '';
+
+    $sql = "SELECT servicelevel FROM `{$dbIncidents}` WHERE id = {$incidentid}";
+    $result = mysql_query($sql);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+    list($servicelevel) = mysql_fetch_array($result);
+
+    return $servicelevel;
+}
+
 ?>

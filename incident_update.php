@@ -19,7 +19,6 @@ $disable_priority = TRUE;
 require (APPLICATION_LIBPATH . 'auth.inc.php');
 
 // External Variables
-// $bodytext = cleanvar($_REQUEST['bodytext'],FALSE,FALSE);
 $bodytext = cleanvar($_REQUEST['bodytext'], FALSE, TRUE);
 $id = cleanvar($_REQUEST['id']);
 $incidentid = $id;
@@ -379,11 +378,7 @@ function display_update_page($draftid=-1)
     echo "<tr><th align='right'>{$GLOBALS['strNewPriority']}</th>";
     echo "<td class='shade1'>";
 
-//    // FIXME fix maximum priority
-//    $servicelevel=maintenance_servicelevel(incident_maintid($id));
-//    if ($servicelevel == 2 || $servicelevel == 5) $maxpriority = 4;
-//    else $maxpriority = 3;
-    $maxpriority = 4;
+    $maxpriority = servicelevel_maxpriority(incident_service_level($id));
 
     $setPriorityTo = incident_priority($id);
 

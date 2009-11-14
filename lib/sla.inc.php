@@ -238,10 +238,10 @@ function servicelevel_name($id)
 
 
 /**
-    * Find whether a given servicelevel is timed
-    * @author Ivan Lucas
-    * @param string Service level tag
-    * @returns. bool. TRUE if any part of the service level is timed, otherwise returns FALSE
+ * Find whether a given servicelevel is timed
+ * @author Ivan Lucas
+ * @param string Service level tag
+ * @return. bool. TRUE if any part of the service level is timed, otherwise returns FALSE
 */
 function servicelevel_timed($sltag)
 {
@@ -260,10 +260,28 @@ function servicelevel_timed($sltag)
 
 
 /**
-    * @author Ivan Lucas
-    * @deprecated
-    * @note DEPRECATED service level tags should be used in favour of service level ID's
-    * @note Temporary solution, eventually we will move away from using servicelevel id's  and just use tags instead
+ * Find the maximum priority of a service level
+ * @author Paul Heaney
+ * @param string $slatag The SLA to find the max priority of
+ * @return int The maximum priority of an SLA, 0 if invalid SLA
+ */
+function servicelevel_maxpriority($slatag)
+{
+    global $dbServiceLevels;
+    $priority = 0;
+
+    $sql = "SELECT MAX(priority) FROM `{$dbServiceLevels}` WHERE tag = '{$slatag}'";
+    $result = mysql_query($sql);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+    list($priority) = mysql_fetch_row($result);
+    return $priority;
+}
+
+/**
+ * @author Ivan Lucas
+ * @deprecated
+ * @note DEPRECATED service level tags should be used in favour of service level ID's
+ * @note Temporary solution, eventually we will move away from using servicelevel id's  and just use tags instead
 */
 function servicelevel_id2tag($id)
 {
